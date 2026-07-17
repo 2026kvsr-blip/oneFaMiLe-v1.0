@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const menuBtn =
 document.getElementById("menuBtn");
@@ -2001,14 +2000,12 @@ class="back-btn">
 `);
 document.getElementById("expenseMainReports").onclick=()=>{
 
-reportCategory("Expenses");
-
+reportCategory("Expenses", true);
 };
 
 document.getElementById("activityMainReports").onclick=()=>{
 
-reportCategory("Activities");
-
+reportCategory("Activities", true);
 };
 
 document.getElementById("loanMainReports").onclick=()=>{
@@ -2019,20 +2016,17 @@ loanReportsMenu();
 
 document.getElementById("incomeMainReports").onclick=()=>{
 
-reportCategory("Income");
-
+reportCategory("Income", true);
 };
 
 document.getElementById("healthMainReports").onclick=()=>{
 
-reportCategory("Health");
-
+reportCategory("Health", true);
 };
 
 document.getElementById("memoryMainReports").onclick=()=>{
 
-reportCategory("Memories");
-
+reportCategory("Memories", true);
 };
 document.getElementById(
 "reportsBack"
@@ -2213,7 +2207,8 @@ reportCategory(moduleName);
 
 }
 
-function reportCategory(module){
+
+function reportCategory(module, fromBottomReports = false){
 
 showPage(`
 
@@ -2306,12 +2301,41 @@ openSensitive(module,"All Reports");
 
 };
 
-document.getElementById("catBack").onclick=()=>{
+document.getElementById("catBack").onclick = ()=>{
 
-reportsBtn.click();
+    if(fromBottomReports){
+
+        reportsBtn.click();
+
+    }else{
+
+        switch(module){
+
+            case "Expenses":
+                expensesBtn.click();
+                break;
+
+            case "Activities":
+                activitiesBtn.click();
+                break;
+
+            case "Income":
+                incomeBtn.click();
+                break;
+
+            case "Health":
+                healthBtn.click();
+                break;
+
+            case "Memories":
+                memoriesBtn.click();
+                break;
+
+        }
+
+    }
 
 };
-
 }
 
 
