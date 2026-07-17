@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const menuBtn =
 document.getElementById("menuBtn");
@@ -248,7 +247,7 @@ activitiesBtn.onclick = ()=>{
 
 pageTitle(
 "Activities",
-"images/navigation/Activities1.png"
+"images/colorbtns/Activities1.png"
 )
 
 +`
@@ -256,7 +255,7 @@ pageTitle(
 <button class="grid-btn" id="addActivitiesBtn">
 
 <img
-src="images/activities/AddActivities.png"
+src="images/colorbtns/Add1.png"
 class="btn-icon">
 
 <span>
@@ -271,7 +270,7 @@ Add Activity
 <button class="grid-btn" id="reportsActivitiesBtn">
 
 <img
-src="images/activities/ReportsActivities.png"
+src="images/colorbtns/Reports1.png"
 class="btn-icon">
 
 <span>
@@ -286,7 +285,7 @@ Reports
 <button class="grid-btn" id="sensitiveActivitiesBtn">
 
 <img
-src="images/activities/SensitiveActivities.png"
+src="images/colorbtns/SensitiveReports1.png"
 class="btn-icon">
 
 <span>
@@ -301,7 +300,7 @@ Sensitive Reports
 <button class="grid-btn" id="allReportsActivitiesBtn">
 
 <img
-src="images/activities/AllReportsActivities.png"
+src="images/colorbtns/AllReports1.png"
 class="btn-icon">
 
 <span>
@@ -316,7 +315,7 @@ All Reports
 <button class="grid-btn" id="searchActivitiesBtn">
 
 <img
-src="images/activities/SearchActivities.png"
+src="images/colorbtns/CustomSearch1.png"
 class="btn-icon">
 
 <span>
@@ -331,7 +330,7 @@ Custom Search
 <button class="grid-btn" id="aboutActivitiesBtn">
 
 <img
-src="images/activities/AboutActivities.png"
+src="images/colorbtns/About1.png"
 class="btn-icon">
 
 <span>
