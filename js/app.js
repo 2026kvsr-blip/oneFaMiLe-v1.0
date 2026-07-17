@@ -5,6 +5,7 @@ Part 1A.3
 
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const menuBtn =
 document.getElementById("menuBtn");
@@ -369,18 +370,34 @@ document.getElementById("reportsActivitiesBtn").onclick = ()=>{
     );
 
 };
+
+    
 document.getElementById("sensitiveActivitiesBtn").onclick = ()=>{
 
-    openSensitive("Activities","Sensitive Reports");
+    openSensitive(
+
+        "Activities",
+
+        "Sensitive Reports",
+
+        ()=>activitiesBtn.click()
+
+    );
 
 };
-
 document.getElementById("allReportsActivitiesBtn").onclick = ()=>{
 
-    openSensitive("Activities","All Reports");
+    openSensitive(
 
-};
-    
+        "Activities",
+
+        "All Reports",
+
+        ()=>activitiesBtn.click()
+
+    );
+
+};    
 document.getElementById("activitiesBackBtn").onclick = showHome;
 
 };
@@ -520,15 +537,31 @@ document.getElementById("incomeReports").onclick=()=>{
 
 };
 
-document.getElementById("incomeSensitive").onclick=()=>{
+document.getElementById("incomeSensitive").onclick = ()=>{
 
-    openSensitive("Income","Sensitive Reports");
+    openSensitive(
+
+        "Income",
+
+        "Sensitive Reports",
+
+        ()=>incomeBtn.click()
+
+    );
 
 };
 
-document.getElementById("incomeAll").onclick=()=>{
+document.getElementById("incomeAll").onclick = ()=>{
 
-    openSensitive("Income","All Reports");
+    openSensitive(
+
+        "Income",
+
+        "All Reports",
+
+        ()=>incomeBtn.click()
+
+    );
 
 };
 
@@ -677,16 +710,31 @@ document.getElementById("healthReports").onclick = ()=>{
 
 document.getElementById("healthSensitive").onclick = ()=>{
 
-    openSensitive("Health","Sensitive Reports");
+    openSensitive(
+
+        "Health",
+
+        "Sensitive Reports",
+
+        ()=>healthBtn.click()
+
+    );
 
 };
 
 document.getElementById("healthAll").onclick = ()=>{
 
-    openSensitive("Health","All Reports");
+    openSensitive(
+
+        "Health",
+
+        "All Reports",
+
+        ()=>healthBtn.click()
+
+    );
 
 };
-
 document.getElementById("healthBack").onclick = showHome;
 
 };
@@ -1423,13 +1471,29 @@ reportsLayout(
 
 document.getElementById("expenseSensitive").onclick = ()=>{
 
-    openSensitive("Expenses","Sensitive Reports");
+    openSensitive(
+
+        "Expenses",
+
+        "Sensitive Reports",
+
+        ()=>expensesBtn.click()
+
+    );
 
 };
 
 document.getElementById("expenseAll").onclick = ()=>{
 
-    openSensitive("Expenses","All Reports");
+    openSensitive(
+
+        "Expenses",
+
+        "All Reports",
+
+        ()=>expensesBtn.click()
+
+    );
 
 };
 
@@ -1745,13 +1809,29 @@ document.getElementById("memoryReports").onclick = ()=>{
 
 document.getElementById("memorySensitive").onclick = ()=>{
 
-    openSensitive("Memory","Sensitive Reports");
+    openSensitive(
+
+        "Memory",
+
+        "Sensitive Reports",
+
+        ()=>memoriesBtn.click()
+
+    );
 
 };
 
 document.getElementById("memoryAll").onclick = ()=>{
 
-    openSensitive("Memory","All Reports");
+    openSensitive(
+
+        "Memory",
+
+        "All Reports",
+
+        ()=>memoriesBtn.click()
+
+    );
 
 };
 
@@ -2147,8 +2227,7 @@ class="back-btn">
 
 document.getElementById("reportBack").onclick = backFunction;}
 
-function openSensitive(moduleName, reportType){
-
+function openSensitive(moduleName, reportType, backFunction){
 showPage(`
 
 <h2 class="page-title">
@@ -2207,22 +2286,24 @@ const pass=document.getElementById("passCode").value;
 
 if(pass==="123456"){
 
-reportsLayout(moduleName+" - "+reportType);
+    reportsLayout(
 
-}else{
+        moduleName + " - " + reportType,
 
-alert("Wrong Sensitive Pass Code");
+        backFunction
+
+    );
+
+}
+else{
+
+    alert("Wrong Sensitive Pass Code");
 
 }
 
 };
 
-document.getElementById("passBack").onclick = ()=>{
-
-reportCategory(moduleName);
-
-};
-
+document.getElementById("passBack").onclick = backFunction;
 }
 
 
