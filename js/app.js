@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const menuBtn =
 document.getElementById("menuBtn");
@@ -1472,7 +1471,7 @@ class="btn-icon">
 
 <span>
 
-Add Family
+Add Tree
 
 </span>
 
