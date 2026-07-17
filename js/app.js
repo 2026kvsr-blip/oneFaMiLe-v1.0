@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const menuBtn =
 document.getElementById("menuBtn");
@@ -1439,7 +1438,7 @@ familyBtn.onclick = ()=>{
 
 pageTitle(
 "Family",
-"images/navigation/Family1.png"
+"images/colorbtns/Family1.png"
 )
 
 +`
@@ -1450,7 +1449,7 @@ id="addMemberBtn"
 class="grid-btn">
 
 <img
-src="images/family/AddMember.png"
+src="images/colorbtns/AddMember1.png"
 class="btn-icon">
 
 <span>
@@ -1467,7 +1466,7 @@ id="addFamilyBtn"
 class="grid-btn">
 
 <img
-src="images/family/AddFamily.png"
+src="images/colorbtns/AddFamily1.png"
 class="btn-icon">
 
 <span>
@@ -1484,7 +1483,7 @@ id="searchMemberBtn"
 class="grid-btn">
 
 <img
-src="images/family/SearchMember.png"
+src="images/colorbtns/CustomSearch1.png"
 class="btn-icon">
 
 <span>
@@ -1501,7 +1500,7 @@ id="relationsBtn"
 class="grid-btn">
 
 <img
-src="images/family/Relations.png"
+src="images/colorbtns/Relations1.png"
 class="btn-icon">
 
 <span>
@@ -1518,7 +1517,7 @@ id="treeViewBtn"
 class="grid-btn">
 
 <img
-src="images/family/TreeView.png"
+src="images/colorbtns/TreeView1.png"
 class="btn-icon">
 
 <span>
@@ -1535,7 +1534,7 @@ id="familyAboutBtn"
 class="grid-btn">
 
 <img
-src="images/family/AboutFamily.png"
+src="images/colorbtns/About1.png"
 class="btn-icon">
 
 <span>
