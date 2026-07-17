@@ -23,8 +23,6 @@ const logoutMenuBtn =
 document.getElementById("logoutMenuBtn");
 
 
-
-
 const welcomeHeading=
 document.getElementById("welcomeHeading");
 
