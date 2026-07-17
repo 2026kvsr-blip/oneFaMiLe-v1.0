@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const menuBtn =
 document.getElementById("menuBtn");
@@ -687,7 +686,7 @@ Loans
 <button id="paymentsBtn" class="grid-btn">
 
 <img
-src="images/colorbtns/Payments.png"
+src="images/colorbtns/Payments1.png"
 class="btn-icon">
 
 <span>
