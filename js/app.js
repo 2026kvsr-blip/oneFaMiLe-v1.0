@@ -3,7 +3,6 @@
 oneFaMiLe V1
 Part 1A.3
 
-
 ===================================== */
 
 /* WELCOME SCREEN */
@@ -1256,7 +1255,7 @@ showPage(
 
 pageTitle(
 "Expenses",
-"images/colorbtn/Expenses1.png"
+"images/colorbtns/Expenses1.png"
 )
 
 +`
@@ -1265,7 +1264,7 @@ pageTitle(
 <button class="grid-btn">
 
 <img
-src="images/colorbtn/Add1.png"
+src="images/colorbtns/Add1.png"
 class="btn-icon">
 
 <span>
@@ -1282,7 +1281,7 @@ id="expenseReports"
 class="grid-btn">
 
 <img
-src="images/colorbtn/Reports1.png"
+src="images/colorbtns/Reports1.png"
 class="btn-icon">
 
 <span>
@@ -1299,7 +1298,7 @@ id="expenseSensitive"
 class="grid-btn">
 
 <img
-src="images/colorbtn/SensitiveReports1.png"
+src="images/colorbtns/SensitiveReports1.png"
 class="btn-icon">
 
 <span>
@@ -1316,7 +1315,7 @@ id="expenseAll"
 class="grid-btn">
 
 <img
-src="images/colorbtn/AllReports1.png"
+src="images/colorbtns/AllReports1.png"
 class="btn-icon">
 
 <span>
@@ -1330,7 +1329,7 @@ All Reports
 <button class="grid-btn">
 
 <img
-src="images/colorbtn/CustomSearch1.png"
+src="images/colorbtns/CustomSearch1.png"
 class="btn-icon">
 
 <span>
@@ -1342,7 +1341,7 @@ Custom Search
 <button class="grid-btn">
 
 <img
-src="images/colorbtn/About1.png"
+src="images/colorbtns/About1.png"
 class="btn-icon">
 
 <span>
