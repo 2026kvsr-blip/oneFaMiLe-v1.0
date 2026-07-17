@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const menuBtn =
 document.getElementById("menuBtn");
@@ -2126,14 +2125,13 @@ class="back-btn">
 
 `);
 
-document.getElementById(
-"reportBack"
-).onclick=()=>{
+document.getElementById("reportBack").onclick = ()=>{
 
-homeBtn.click();
+reportCategory(
+title.replace(" Reports","")
+);
 
 };
-
 }
 
 function openSensitive(moduleName, reportType){
@@ -2206,9 +2204,9 @@ alert("Wrong Sensitive Pass Code");
 
 };
 
-document.getElementById("passBack").onclick=()=>{
+document.getElementById("passBack").onclick = ()=>{
 
-homeBtn.click();
+reportCategory(moduleName);
 
 };
 
