@@ -5,6 +5,7 @@ Part 1A.3
 
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const menuBtn =
 document.getElementById("menuBtn");
@@ -2229,7 +2230,7 @@ id="catReports"
 class="grid-btn">
 
 <img
-src="images/reports/Reports.png"
+src="images/colorbtns/Reports1.png"
 class="btn-icon">
 
 <span>
@@ -2245,7 +2246,7 @@ id="catSensitive"
 class="grid-btn">
 
 <img
-src="images/reports/SensitiveReports.png"
+src="images/colorbtns/SensitiveReports1.png"
 class="btn-icon">
 
 <span>
@@ -2261,7 +2262,7 @@ id="catAll"
 class="grid-btn">
 
 <img
-src="images/reports/AllReports.png"
+src="images/colorbtns/AllReports1.png"
 class="btn-icon">
 
 <span>
