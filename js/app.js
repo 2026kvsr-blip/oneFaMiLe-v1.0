@@ -5,6 +5,7 @@ Part 1A.3
 
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const menuBtn =
 document.getElementById("menuBtn");
@@ -369,7 +370,7 @@ incomeBtn.onclick = ()=>{
 
 pageTitle(
 "Income",
-"images/navigation/Income1.png"
+"images/colorbtns/Income1.png"
 )
 
 +`
@@ -378,7 +379,7 @@ pageTitle(
 <button class="grid-btn" id="addIncomeBtn">
 
 <img
-src="images/income/AddIncome.png"
+src="images/colorbtns/Add1.png"
 class="btn-icon">
 
 <span>
@@ -394,7 +395,7 @@ id="incomeReports"
 class="grid-btn">
 
 <img
-src="images/income/ReportsIncome.png"
+src="images/colorbtns/Reports1.png"
 class="btn-icon">
 
 <span>
@@ -410,7 +411,7 @@ id="incomeSensitive"
 class="grid-btn">
 
 <img
-src="images/income/SensitiveIncome.png"
+src="images/colorbtns/SensitiveReports1.png"
 class="btn-icon">
 
 <span>
@@ -426,7 +427,7 @@ id="incomeAll"
 class="grid-btn">
 
 <img
-src="images/income/AllReportsIncome.png"
+src="images/colorbtns/AllReports1.png"
 class="btn-icon">
 
 <span>
@@ -442,7 +443,7 @@ id="incomeSearch"
 class="grid-btn">
 
 <img
-src="images/income/SearchIncome.png"
+src="images/colorbtns/CustomSearch1.png"
 class="btn-icon">
 
 <span>
@@ -458,7 +459,7 @@ id="incomeAbout"
 class="grid-btn">
 
 <img
-src="images/income/AboutIncome.png"
+src="images/colorbtns/About1.png"
 class="btn-icon">
 
 <span>
@@ -513,7 +514,7 @@ document.getElementById("incomeBack").onclick=showHome;
 
 pageTitle(
 "Health",
-"images/navigation/Health1.png"
+"images/colorbtns/Health1.png"
 )
 
 +`
@@ -522,7 +523,7 @@ pageTitle(
 <button class="grid-btn" id="addHealthBtn">
 
 <img
-src="images/health/AddHealth.png"
+src="images/colorbtns/Add1.png"
 class="btn-icon">
 
 <span>
@@ -539,7 +540,7 @@ id="healthReports"
 class="grid-btn">
 
 <img
-src="images/health/ReportsHealth.png"
+src="images/colorbtns/Reports1.png"
 class="btn-icon">
 
 <span>
@@ -556,7 +557,7 @@ id="healthSensitive"
 class="grid-btn">
 
 <img
-src="images/health/SensitiveHealth.png"
+src="images/colorbtns/SensitiveReports1.png"
 class="btn-icon">
 
 <span>
@@ -573,7 +574,7 @@ id="healthAll"
 class="grid-btn">
 
 <img
-src="images/health/AllReportsHealth.png"
+src="images/colorbtns/AllReports1.png"
 class="btn-icon">
 
 <span>
@@ -590,7 +591,7 @@ id="healthSearch"
 class="grid-btn">
 
 <img
-src="images/health/SearchHealth.png"
+src="images/health/CustomSearch1.png"
 class="btn-icon">
 
 <span>
@@ -607,7 +608,7 @@ id="healthAbout"
 class="grid-btn">
 
 <img
-src="images/health/AboutHealth.png"
+src="images/colorbtns/About1.png"
 class="btn-icon">
 
 <span>
@@ -1573,7 +1574,7 @@ memoriesBtn.onclick = ()=>{
 
 pageTitle(
 "Memories",
-"images/navigation/Memories1.png"
+"images/colorbtns/Memories1.png"
 )
 
 +`
@@ -1582,7 +1583,7 @@ pageTitle(
 <button class="grid-btn" id="addMemoryBtn">
 
 <img
-src="images/memories/AddMemories.png"
+src="images/colorbtns/Add1.png"
 class="btn-icon">
 
 <span>
@@ -1599,7 +1600,7 @@ id="memoryReports"
 class="grid-btn">
 
 <img
-src="images/memories/ReportsMemories.png"
+src="images/colorbtns/Reports1.png"
 class="btn-icon">
 
 <span>
@@ -1616,7 +1617,7 @@ id="memorySensitive"
 class="grid-btn">
 
 <img
-src="images/memories/SensitiveMemories.png"
+src="images/colorbtns/SensitiveReports1.png"
 class="btn-icon">
 
 <span>
@@ -1633,7 +1634,7 @@ id="memoryAll"
 class="grid-btn">
 
 <img
-src="images/memories/AllReportsMemories.png"
+src="images/colorbtns/AllReports1.png"
 class="btn-icon">
 
 <span>
@@ -1650,7 +1651,7 @@ id="memorySearch"
 class="grid-btn">
 
 <img
-src="images/memories/SearchMemories.png"
+src="images/colorbtns/CustomSearch1.png"
 class="btn-icon">
 
 <span>
@@ -1667,7 +1668,7 @@ id="memoryAbout"
 class="grid-btn">
 
 <img
-src="images/memories/AboutMemories.png"
+src="images/colorbtns/About1.png"
 class="btn-icon">
 
 <span>
@@ -1725,7 +1726,7 @@ chartsBtn.onclick = ()=>{
 
 pageTitle(
 "Charts",
-"images/navigation/Charts1.png"
+"images/colorbtns/Charts1.png"
 )
 
 +`
@@ -1736,7 +1737,7 @@ id="expensesChartBtn"
 class="grid-btn">
 
 <img
-src="images/charts/ExpensesCharts.png"
+src="images/colorbtns/Expenses1.png"
 class="btn-icon">
 
 <span>
@@ -1752,7 +1753,7 @@ id="activitiesChartBtn"
 class="grid-btn">
 
 <img
-src="images/charts/ActivityCharts.png"
+src="images/colorbtns/Activities1.png"
 class="btn-icon">
 
 <span>
@@ -1768,7 +1769,7 @@ id="incomeChartBtn"
 class="grid-btn">
 
 <img
-src="images/charts/IncomeCharts.png"
+src="images/colorbtns/Income1.png"
 class="btn-icon">
 
 <span>
@@ -1785,7 +1786,7 @@ id="loansChartBtn"
 class="grid-btn">
 
 <img
-src="images/charts/LoansCharts.png"
+src="images/colorbtns/Loans1.png"
 class="btn-icon">
 
 <span>
@@ -1802,7 +1803,7 @@ id="healthChartBtn"
 class="grid-btn">
 
 <img
-src="images/charts/HealthCharts.png"
+src="images/colorbtns/Health1.png"
 class="btn-icon">
 
 <span>
@@ -1821,7 +1822,7 @@ id="chartsAboutBtn"
 class="grid-btn">
 
 <img
-src="images/charts/AboutCharts.png"
+src="images/colorbtns/About1.png"
 class="btn-icon">
 
 <span>
@@ -1862,7 +1863,7 @@ showPage(
 
 pageTitle(
 "Reports",
-"images/navigation/Reports1.png"
+"images/colorbtns/Reports1.png"
 )
 
 +`
@@ -1871,7 +1872,7 @@ pageTitle(
 <button id="expenseMainReports" class="grid-btn">
 
 <img
-src="images/reports/ExpensesReports.png"
+src="images/colorbtns/Expenses1.png"
 class="btn-icon">
 
 <span>
@@ -1885,7 +1886,7 @@ Expenses Reports
 <button id="activityMainReports" class="grid-btn">
 
 <img
-src="images/reports/ActivitiesReports.png"
+src="images/colorbtns/Activities1.png"
 class="btn-icon">
 
 <span>
@@ -1899,7 +1900,7 @@ Activities Reports
 <button id="loanMainReports" class="grid-btn">
 
 <img
-src="images/reports/LoansReports.png"
+src="images/colorbtns/Loans1.png"
 class="btn-icon">
 
 <span>
@@ -1913,7 +1914,7 @@ Loan Reports
 <button id="incomeMainReports" class="grid-btn">
 
 <img
-src="images/reports/IncomeReports.png"
+src="images/colorbtns/Income1.png"
 class="btn-icon">
 
 <span>
@@ -1927,7 +1928,7 @@ Income Reports
 <button id="healthMainReports" class="grid-btn">
 
 <img
-src="images/reports/HealthReports.png"
+src="images/colorbtns/Health1.png"
 class="btn-icon">
 
 <span>
@@ -1941,7 +1942,7 @@ Health Reports
 <button id="memoryMainReports" class="grid-btn">
 
 <img
-src="images/reports/MemoriesReports.png"
+src="images/colorbtns/Memories1.png"
 class="btn-icon">
 
 <span>
@@ -1955,7 +1956,7 @@ Memories Reports
 <button class="grid-btn">
 
 <img
-src="images/reports/ReportsAbout.png"
+src="images/colorbtns/About1.png"
 class="btn-icon">
 
 <span>
