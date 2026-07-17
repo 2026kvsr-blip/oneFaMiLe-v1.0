@@ -5,6 +5,7 @@ Part 1A.3
 
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const menuBtn =
 document.getElementById("menuBtn");
@@ -358,6 +359,24 @@ class="back-btn">
 
 `);
 
+document.getElementById("reportsActivitiesBtn").onclick = ()=>{
+
+    reportsLayout("Activities Reports");
+
+};
+
+document.getElementById("sensitiveActivitiesBtn").onclick = ()=>{
+
+    openSensitive("Activities","Sensitive Reports");
+
+};
+
+document.getElementById("allReportsActivitiesBtn").onclick = ()=>{
+
+    openSensitive("Activities","All Reports");
+
+};
+    
 document.getElementById("activitiesBackBtn").onclick = showHome;
 
 };
