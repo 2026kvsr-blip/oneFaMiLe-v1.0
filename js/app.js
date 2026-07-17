@@ -5,6 +5,7 @@ Part 1A.3
 
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const menuBtn =
 document.getElementById("menuBtn");
@@ -663,7 +664,7 @@ showPage(
 
 pageTitle(
 "Loans",
-"images/navigation/Loans1.png"
+"images/colorbtns/Loans1.png"
 )
 
 +`
@@ -672,7 +673,7 @@ pageTitle(
 <button id="loanBtn" class="grid-btn">
 
 <img
-src="images/navigation/Loans1.png"
+src="images/colorbtns/Loans1.png"
 class="btn-icon">
 
 <span>
@@ -686,7 +687,7 @@ Loans
 <button id="paymentsBtn" class="grid-btn">
 
 <img
-src="images/navigation/Payments.png"
+src="images/colorbtns/Payments.png"
 class="btn-icon">
 
 <span>
@@ -747,15 +748,15 @@ showPage(`
 ${pageTitle(
 type,
 type === "Loan"
-? "images/navigation/Loans.png"
-: "images/navigation/Payments.png"
+? "images/colorbtns/Loans1.png"
+: "images/colorbtns/Payments1.png"
 )}
 <div class="grid-2">
 
 <button id="lendBtn" class="grid-btn">
 
 <img
-src="images/loans/Lend.png"
+src="images/colorbtns/LoansLend1.png"
 class="btn-icon">
 
 <span>
@@ -769,7 +770,7 @@ Lend
 <button id="borrowBtn" class="grid-btn">
 
 <img
-src="images/loans/Borrowed.png"
+src="images/colorbtns/LoansBorrowed1.png"
 class="btn-icon">
 
 <span>
@@ -811,8 +812,8 @@ showPage(`
 ${pageTitle(
 type + " - Lend",
 type === "Loan"
-? "images/navigation/Loans.png"
-: "images/navigation/Payments.png"
+? "images/colorbtns/Loans1.png"
+: "images/colorbtns/Payments1.png"
 )}
 
 <div class="grid-3x2">
@@ -820,7 +821,7 @@ type === "Loan"
 <button class="grid-btn">
 
 <img
-src="images/loans/AddLend.png"
+src="images/colorbtns/Add1.png"
 class="btn-icon">
 
 <span>
@@ -834,7 +835,7 @@ Add Lend
 <button id="lendReports" class="grid-btn">
 
 <img
-src="images/loans/Reports.png"
+src="images/colorbtns/Reports1.png"
 class="btn-icon">
 
 <span>
@@ -848,7 +849,7 @@ Reports
 <button id="lendSensitive" class="grid-btn">
 
 <img
-src="images/loans/SensitiveReports.png"
+src="images/colorbtns/SensitiveReports1.png"
 class="btn-icon">
 
 <span>
@@ -862,7 +863,7 @@ Sensitive Reports
 <button id="lendAll" class="grid-btn">
 
 <img
-src="images/loans/AllReports.png"
+src="images/colorbtns/AllReports1.png"
 class="btn-icon">
 
 <span>
@@ -876,7 +877,7 @@ All Reports
 <button class="grid-btn">
 
 <img
-src="images/loans/CustomSearch.png"
+src="images/colorbtns/CustomSearch1.png"
 class="btn-icon">
 
 <span>
@@ -890,7 +891,7 @@ Custom Search
 <button class="grid-btn">
 
 <img
-src="images/loans/About.png"
+src="images/colorbtns/About1.png"
 class="btn-icon">
 
 <span>
@@ -964,8 +965,8 @@ showPage(`
 ${pageTitle(
 type + " - Borrowed",
 type === "Loan"
-? "images/navigation/Loans.png"
-: "images/navigation/Payments.png"
+? "images/colorbtns/Loans1.png"
+: "images/colorbtns/Payments.png"
 )}
 
 <div class="grid-3x2">
@@ -973,7 +974,7 @@ type === "Loan"
 <button class="grid-btn">
 
 <img
-src="images/loans/AddBorrowed.png"
+src="images/colorbtns/Add1.png"
 class="btn-icon">
 
 <span>
@@ -989,7 +990,7 @@ id="borrowReports"
 class="grid-btn">
 
 <img
-src="images/loans/Reports.png"
+src="images/colorbtns/Reports1.png"
 class="btn-icon">
 
 <span>
@@ -1005,7 +1006,7 @@ id="borrowSensitive"
 class="grid-btn">
 
 <img
-src="images/loans/SensitiveReports.png"
+src="images/colorbtns/SensitiveReports1.png"
 class="btn-icon">
 
 <span>
@@ -1021,7 +1022,7 @@ id="borrowAll"
 class="grid-btn">
 
 <img
-src="images/loans/AllReports.png"
+src="images/colorbtns/AllReports1.png"
 class="btn-icon">
 
 <span>
@@ -1035,7 +1036,7 @@ All Reports
 <button class="grid-btn">
 
 <img
-src="images/loans/CustomSearch.png"
+src="images/colorbtns/CustomSearch1.png"
 class="btn-icon">
 
 <span>
@@ -1049,7 +1050,7 @@ Custom Search
 <button class="grid-btn">
 
 <img
-src="images/loans/About.png"
+src="images/colorbtns/About1.png"
 class="btn-icon">
 
 <span>
