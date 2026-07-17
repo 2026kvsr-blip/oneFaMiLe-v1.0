@@ -3,9 +3,7 @@
 oneFaMiLe V1
 Part 1A.3
 
-
 ===================================== */
-
 
 /* WELCOME SCREEN */
 const menuBtn =
@@ -748,28 +746,41 @@ function showLendBorrow(type){
 
 showPage(`
 
-<h2 class="page-title">
-
-${type}
-
-</h2>
-
+${pageTitle(
+type,
+type === "Loan"
+? "images/navigation/Loans.png"
+: "images/navigation/Payments.png"
+)}
 <div class="grid-2">
 
-<button id="lendBtn"
-class="grid-btn">
+<button id="lendBtn" class="grid-btn">
+
+<img
+src="images/loans/Lend.png"
+class="btn-icon">
+
+<span>
 
 Lend
 
+</span>
+
 </button>
 
-<button id="borrowBtn"
-class="grid-btn">
+<button id="borrowBtn" class="grid-btn">
+
+<img
+src="images/loans/Borrowed.png"
+class="btn-icon">
+
+<span>
 
 Borrowed
 
-</button>
+</span>
 
+</button>
 </div>
 
 <div align="center">
@@ -799,53 +810,96 @@ document.getElementById(
 
 showPage(`
 
-<h2 class="page-title">
-
-${type} - Lend
-
-</h2>
+${pageTitle(
+type + " - Lend",
+type === "Loan"
+? "images/navigation/Loans.png"
+: "images/navigation/Payments.png"
+)}
 
 <div class="grid-3x2">
 
 <button class="grid-btn">
 
+<img
+src="images/loans/AddLend.png"
+class="btn-icon">
+
+<span>
+
 Add Lend
+
+</span>
 
 </button>
 
-<button
-id="lendReports"
-class="grid-btn">
+<button id="lendReports" class="grid-btn">
+
+<img
+src="images/loans/Reports.png"
+class="btn-icon">
+
+<span>
 
 Reports
 
+</span>
+
 </button>
 
-<button
-id="lendSensitive"
-class="grid-btn">
+<button id="lendSensitive" class="grid-btn">
+
+<img
+src="images/loans/SensitiveReports.png"
+class="btn-icon">
+
+<span>
 
 Sensitive Reports
 
+</span>
+
 </button>
 
-<button
-id="lendAll"
-class="grid-btn">
+<button id="lendAll" class="grid-btn">
+
+<img
+src="images/loans/AllReports.png"
+class="btn-icon">
+
+<span>
 
 All Reports
 
+</span>
+
 </button>
 
 <button class="grid-btn">
+
+<img
+src="images/loans/CustomSearch.png"
+class="btn-icon">
+
+<span>
 
 Custom Search
 
+</span>
+
 </button>
 
 <button class="grid-btn">
 
+<img
+src="images/loans/About.png"
+class="btn-icon">
+
+<span>
+
 About
+
+</span>
 
 </button>
 
@@ -909,17 +963,26 @@ document.getElementById(
 
 showPage(`
 
-<h2 class="page-title">
-
-${type} - Borrowed
-
-</h2>
+${pageTitle(
+type + " - Borrowed",
+type === "Loan"
+? "images/navigation/Loans.png"
+: "images/navigation/Payments.png"
+)}
 
 <div class="grid-3x2">
 
 <button class="grid-btn">
 
+<img
+src="images/loans/AddBorrowed.png"
+class="btn-icon">
+
+<span>
+
 Add Borrowed
+
+</span>
 
 </button>
 
@@ -927,7 +990,15 @@ Add Borrowed
 id="borrowReports"
 class="grid-btn">
 
+<img
+src="images/loans/Reports.png"
+class="btn-icon">
+
+<span>
+
 Reports
+
+</span>
 
 </button>
 
@@ -935,7 +1006,15 @@ Reports
 id="borrowSensitive"
 class="grid-btn">
 
+<img
+src="images/loans/SensitiveReports.png"
+class="btn-icon">
+
+<span>
+
 Sensitive Reports
+
+</span>
 
 </button>
 
@@ -943,24 +1022,47 @@ Sensitive Reports
 id="borrowAll"
 class="grid-btn">
 
+<img
+src="images/loans/AllReports.png"
+class="btn-icon">
+
+<span>
+
 All Reports
+
+</span>
 
 </button>
 
 <button class="grid-btn">
+
+<img
+src="images/loans/CustomSearch.png"
+class="btn-icon">
+
+<span>
 
 Custom Search
 
+</span>
+
 </button>
 
 <button class="grid-btn">
 
+<img
+src="images/loans/About.png"
+class="btn-icon">
+
+<span>
+
 About
+
+</span>
 
 </button>
 
 </div>
-
 <div align="center">
 
 <button
