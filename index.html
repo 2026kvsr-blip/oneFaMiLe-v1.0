@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<title>oneFaMiLe</title>
+
+<link rel="stylesheet"
+href="css/style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+
+</head>
+   <body>
+<div id="logoutMessage" class="logout-message">
+
+Scroll from bottom to top to close the app
+
+</div>
+ 
+  
+<!-- TOP BAR -->
+
+<header class="topbar">
+
+<div
+id="menuBtn"
+class="menu-btn">
+
+<i class="fa-solid fa-bars"></i>
+
+</div>
+
+
+<div class="app-title">
+
+oneFaMiLe
+
+</div>
+
+
+<div class="language">
+
+<select id="languageSelect">
+
+<option>English</option>
+
+<option>తెలుగు</option>
+
+<option>हिन्दी</option>
+
+<option>ಕನ್ನಡ</option>
+
+<option>தமிழ்</option>
+
+<option>മലയാളം</option>
+
+</select>
+
+</div>
+
+</header>
+<!-- SIDE MENU -->
+
+<div id="sideMenu" class="side-menu">
+
+<div class="menu-header">
+
+<span>oneFaMiLe</span>
+
+<button id="closeMenuBtn">✖</button>
+
+</div>
+
+<button id="profileMenuBtn">👤 My Profile</button>
+
+<button id="settingsMenuBtn">⚙️ Settings</button>
+
+<button id="languageMenuBtn">🌐 Language</button>
+
+<button id="passcodeMenuBtn">🔒 Change Sensitive Pass Code</button>
+
+<button id="backupMenuBtn">💾 Backup</button>
+
+<button id="restoreMenuBtn">📥 Restore</button>
+
+<button id="aboutMenuBtn">ℹ️ About</button>
+
+<button id="logoutMenuBtn">🚪 Logout</button>
+
+</div>
+
+<div id="menuOverlay" class="menu-overlay"></div>
+
+
+<!-- WELCOME SCREEN -->
+
+<section id="welcomePage">
+
+<div class="welcome-box">
+
+<h2 id="welcomeHeading">
+
+Welcome to oneFaMiLe
+
+</h2>
+
+<p id="welcomeSlogan">
+
+oneFaMiLe
+<br>
+one Structure
+<br>
+one Code
+
+</p>
+
+<div id="welcomeContent">
+
+<div id="welcomeAbout">
+
+</div>
+
+</div>
+
+</div>
+
+<div class="auth-buttons">
+
+<button id="loginBtn">
+
+Login
+
+</button>
+
+
+<button id="signupBtn">
+
+SignUp
+
+</button>
+
+</div>
+
+</section>
+
+
+
+<!-- LOGIN SCREEN -->
+
+<section
+
+id="loginPage"
+
+class="hidden">
+
+<h3>
+
+Mobile Number
+
+</h3>
+
+
+<input
+
+type="tel"
+
+placeholder="Enter Mobile Number">
+
+
+<button
+
+id="sendOTPBtn">
+
+Send OTP
+
+</button>
+
+
+<button
+
+id="backLoginBtn">
+
+← Back
+
+</button>
+
+</section>
+
+
+
+
+<!-- OTP SCREEN -->
+
+<section
+
+id="otpPage"
+
+class="hidden">
+
+<h3>
+
+Verify OTP
+
+</h3>
+
+
+<input
+
+type="text"
+
+placeholder="Enter OTP">
+
+
+<button
+
+id="verifyOTPBtn">
+
+Verify OTP
+
+</button>
+
+
+<button
+
+id="backOTPBtn">
+
+← Back
+
+</button>
+
+</section>
+
+<!-- SIGNUP -->
+<section
+id="signupPage"
+class="hidden">
+
+<h3>
+
+Sign Up
+
+</h3>
+
+<input
+type="text"
+id="loginUserName"
+placeholder="Login User Name">
+
+<input
+type="text"
+id="surName"
+placeholder="Surname">
+
+<input
+type="text"
+id="middleName"
+placeholder="Middle Name">
+
+<input
+type="text"
+id="lastName"
+placeholder="Last Name">
+
+<input
+type="email"
+id="emailId"
+placeholder="Email ID">
+
+<input
+type="tel"
+id="mobileNo"
+placeholder="Mobile Number">
+
+<button
+id="signupOTPBtn">
+
+Send OTP
+
+</button>
+
+<button
+id="backSignupBtn">
+
+← Back
+
+</button>
+
+</section> 
+     <!-- SIGNUP OTP -->
+
+<section
+id="signupOTPPage"
+class="hidden">
+
+<h3>
+
+Verify OTP
+
+</h3>
+
+
+<input
+type="text"
+placeholder="Enter OTP">
+
+
+<input
+maxlength="6"
+type="password"
+placeholder="Sensitive Pass Code">
+
+
+<input
+maxlength="6"
+type="password"
+placeholder="Confirm Pass Code">
+
+
+<button
+id="registerBtn">
+
+Register
+
+</button>
+
+
+<button
+id="backSignupOTPBtn">
+
+← Back
+
+</button>
+
+</section>
+
+
+
+  
+<!-- DASHBOARD -->
+
+<section
+
+id="dashboard"
+
+class="hidden">
+
+
+<div
+
+id="topContainer"
+
+class="top-container">
+
+<button id="expensesBtn">
+
+<img
+src="images/navigation/Expenses.png"
+data-normal="images/navigation/Expenses.png"
+data-active="images/navigation/expenses-active.png"
+class="nav-icon">
+
+<span>Expenses</span>
+
+</button>
+
+
+<button id="activitiesBtn">
+
+<img
+src="images/navigation/Activities.png"
+data-normal="images/navigation/Activities.png"
+data-active="images/navigation/activities-active.png"
+
+  
+class="nav-icon">
+
+<span>
+
+Activities
+
+</span>
+
+</button>
+
+
+<button id="loansBtn">
+
+<img
+src="images/navigation/Loans.png"
+data-normal="images/navigation/Loans.png"
+data-active="images/navigation/loans-active.png"
+  
+class="nav-icon">
+
+<span>
+
+Loans
+
+</span>
+
+</button>
+
+
+<button id="incomeBtn">
+
+<img
+src="images/navigation/Income.png"
+data-normal="images/navigation/Income.png"
+data-active="images/navigation/income-active.png"
+  
+class="nav-icon">
+
+<span>
+
+Income
+
+</span>
+
+</button>
+
+
+<button id="healthBtn">
+
+<img
+src="images/navigation/Health.png"
+data-normal="images/navigation/Health.png"
+data-active="images/navigation/health-active.png"  
+class="nav-icon">
+
+<span>
+
+Health
+
+</span>
+
+</button>
+
+</div>
+
+
+<div id="homeContent">
+
+<div class="welcome-box">
+
+<h2 id="homeWelcomeHeading"></h2>
+
+<p id="homeWelcomeSlogan"></p>
+
+<div id="homeWelcomeContent">
+
+<div id="homeWelcomeAbout"></div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+
+<div class="bottom-container">
+
+<button
+id="homeBtn">
+
+<img
+src="images/navigation/Home.png"
+ data-normal="images/navigation/Home.png"
+data-active="images/navigation/home-active.png" 
+class="nav-icon">
+
+<span>
+
+Home
+
+</span>
+
+</button>
+
+
+<button
+id="familyBtn">
+
+<img
+src="images/navigation/Family.png"
+ data-normal="images/navigation/Family.png"
+data-active="images/navigation/family-active.png" 
+class="nav-icon">
+
+<span>
+
+Family
+
+</span>
+
+</button>
+
+
+<button
+id="memoriesBtn">
+
+<img
+src="images/navigation/Memories.png"
+data-normal="images/navigation/Memories.png"
+data-active="images/navigation/memories-active.png"
+  
+class="nav-icon">
+
+<span>
+
+Memories
+
+</span>
+
+</button>
+
+<button
+id="chartsBtn">
+
+<img
+src="images/navigation/Charts.png"
+  data-normal="images/navigation/Charts.png"
+data-active="images/navigation/charts-active.png"
+class="nav-icon">
+
+<span>
+
+Charts
+
+</span>
+
+</button>
+
+<button
+id="reportsBtn">
+
+<img
+src="images/navigation/Reports.png"
+data-normal="images/navigation/Reports.png"
+data-active="images/navigation/reports-active.png"  
+class="nav-icon">
+
+<span>
+
+Reports
+
+</span>
+
+</button>
+
+</div>
+
+
+</section>
+
+
+
+<script src="js/language.js"></script>
+
+<script src="js/app.js"></script>
+
+</body>
+
+</html>
