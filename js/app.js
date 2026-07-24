@@ -5,6 +5,7 @@ Part 1A.3
 
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const menuBtn =
 document.getElementById("menuBtn");
