@@ -6,7 +6,6 @@ Part 1A.3
 ===================================== */
 
 
-
 /* WELCOME SCREEN */
 const API_URL = "https://script.google.com/macros/s/AKfycbyAneSEAW5sY8ZseXBLT8cSmV2PSXD0eRdBYsL5EMdw2ZRQQlm2LrwdymxcCljiHmqOnw/exec";
 
@@ -1351,13 +1350,25 @@ registerBtn.onclick = async ()=>{
 
     };
 
-    const response = await fetch(API_URL,{
+    const formData = new FormData();
 
-        method:"POST",
+formData.append("action","register");
+formData.append("loginUserName",data.loginUserName);
+formData.append("surName",data.surName);
+formData.append("middleName",data.middleName);
+formData.append("lastName",data.lastName);
+formData.append("email",data.email);
+formData.append("mobile",data.mobile);
+formData.append("passCode",data.passCode);
 
-        body:JSON.stringify(data)
+const response = await fetch(API_URL,{
 
-    });
+    method:"POST",
+    body:formData
+
+});
+
+const result = await response.json();
 
     const result = await response.json();
 
