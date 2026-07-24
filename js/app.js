@@ -6,7 +6,6 @@ Part 1A.3
 ===================================== */
 
 
-
 /* WELCOME SCREEN */
 const API_URL = "https://script.google.com/macros/s/AKfycbxXndlRSWBjElYOEIAxf8A-ezlt6lP8CxBu95tXaeinlEc1o2PhEyokyl4RkmNJmVpHKQ/exec";
 
