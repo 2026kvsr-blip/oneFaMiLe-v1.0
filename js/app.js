@@ -7,7 +7,7 @@ Part 1A.3
 
 
 /* WELCOME SCREEN */
-const API_URL = "https://script.google.com/macros/s/AKfycbxXndlRSWBjElYOEIAxf8A-ezlt6lP8CxBu95tXaeinlEc1o2PhEyokyl4RkmNJmVpHKQ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
 
 const menuBtn =
