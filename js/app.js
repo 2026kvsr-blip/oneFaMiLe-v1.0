@@ -184,8 +184,6 @@ function showPage(html){
     window.scrollTo(0,0);
 
     homeContent.innerHTML = html;
-    scrollTopPage();
-
 
 }
 function pageTitle(title,image){
@@ -570,7 +568,10 @@ document.getElementById("incomeAll").onclick = ()=>{
 document.getElementById("incomeBack").onclick=showHome;
 
 };
+
+
 healthBtn.onclick = ()=>{
+    
 
     setActiveButton(healthBtn);
 
@@ -841,7 +842,7 @@ type === "Loan"
 <button id="lendBtn" class="grid-btn">
 
 <img
-src="images/colorbtns/LoansLend1.png"
+src="images/colorbtns/Lend1.png"
 class="btn-icon">
 
 <span>
@@ -855,7 +856,7 @@ Lend
 <button id="borrowBtn" class="grid-btn">
 
 <img
-src="images/colorbtns/LoansBorrowed1.png"
+src="images/colorbtns/Borrowed1.png"
 class="btn-icon">
 
 <span>
@@ -1031,6 +1032,7 @@ document.getElementById("lendAll").onclick = ()=>{
     );
 
 };
+    
 document.getElementById(
 "lendBack"
 ).onclick=()=>{
@@ -2147,12 +2149,8 @@ homeBtn.click();
 };
 
 function reportsLayout(title, backFunction){
-    
 homeContent.scrollTop = 0;
     window.scrollTo(0,0);
-
-
-    
 showPage(`
 
 <h2 class="page-title">
@@ -2390,21 +2388,31 @@ class="back-btn">
 
 `);
 
-document.getElementById("catReports").onclick=()=>{
+document.getElementById("catReports").onclick = ()=>{
 
-reportsLayout(module+" Reports");
-
-};
-
-document.getElementById("catSensitive").onclick=()=>{
-
-openSensitive(module,"Sensitive Reports");
+    reportsLayout(
+        module + " Reports",
+        ()=>reportCategory(module, fromBottomReports)
+    );
 
 };
 
-document.getElementById("catAll").onclick=()=>{
+document.getElementById("catSensitive").onclick = ()=>{
 
-openSensitive(module,"All Reports");
+    openSensitive(
+        module,
+        "Sensitive Reports",
+        ()=>reportCategory(module, fromBottomReports)
+    );
+
+};
+document.getElementById("catAll").onclick = ()=>{
+
+    openSensitive(
+        module,
+        "All Reports",
+        ()=>reportCategory(module, fromBottomReports)
+    );
 
 };
 
@@ -2444,18 +2452,7 @@ document.getElementById("catBack").onclick = ()=>{
 
 };
 }
-//helper function//
-function scrollTopPage(){
 
-    homeContent.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-    window.scrollTo({
-        top:0,
-        behavior:"instant"
-    });
-
-}
 
 function loanReportsMenu(){
 
@@ -2543,25 +2540,27 @@ class="back-btn">
 
 document.getElementById("loanLendRpt").onclick=()=>{
 
-reportCategory("Loan - Lend");
+reportCategory("Loan - Lend", true);
+
 
 };
 
 document.getElementById("loanBorrowRpt").onclick=()=>{
 
-reportCategory("Loan - Borrowed");
+reportCategory("Loan - Borrowed", true);
 
 };
 
 document.getElementById("paymentLendRpt").onclick=()=>{
 
-reportCategory("Payments - Lend");
+reportCategory("Payments - Lend", true);
+
 
 };
 
 document.getElementById("paymentBorrowRpt").onclick=()=>{
 
-reportCategory("Payments - Borrowed");
+reportCategory("Payments - Borrowed", true);
 
 };
 
