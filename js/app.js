@@ -6,6 +6,7 @@ Part 1A.3
 ===================================== */
 
 
+
 /* WELCOME SCREEN */
 const API_URL = "https://script.google.com/macros/s/AKfycbyAneSEAW5sY8ZseXBLT8cSmV2PSXD0eRdBYsL5EMdw2ZRQQlm2LrwdymxcCljiHmqOnw/exec";
 
@@ -1328,15 +1329,47 @@ END
 ====================== */
 
 
-registerBtn.onclick = ()=>{
+registerBtn.onclick = async ()=>{
 
-alert("Registration Successful");
+    const data = {
 
-signupOTPPage.classList.add("hidden");
+        action: "register",
 
-signupPage.classList.add("hidden");
+        loginUserName: document.getElementById("loginUserName").value,
 
-welcomePage.classList.remove("hidden");
+        surName: document.getElementById("surName").value,
+
+        middleName: document.getElementById("middleName").value,
+
+        lastName: document.getElementById("lastName").value,
+
+        email: document.getElementById("emailId").value,
+
+        mobile: document.getElementById("mobileNo").value,
+
+        passCode: document.getElementById("passCode").value
+
+    };
+
+    const response = await fetch(API_URL,{
+
+        method:"POST",
+
+        body:JSON.stringify(data)
+
+    });
+
+    const result = await response.json();
+
+    alert(result.message);
+
+    if(result.status=="success"){
+
+        signupOTPPage.classList.add("hidden");
+        signupPage.classList.add("hidden");
+        welcomePage.classList.remove("hidden");
+
+    }
 
 };
 expensesBtn.onclick=()=>{
