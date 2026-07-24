@@ -7,6 +7,9 @@ Part 1A.3
 
 
 /* WELCOME SCREEN */
+const API_URL = "https://script.google.com/macros/s/AKfycbyAneSEAW5sY8ZseXBLT8cSmV2PSXD0eRdBYsL5EMdw2ZRQQlm2LrwdymxcCljiHmqOnw/exec";
+
+
 const menuBtn =
 document.getElementById("menuBtn");
 
