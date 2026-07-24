@@ -179,8 +179,9 @@ if(homeHeading){
 }
 function showPage(html){
 
-    homeContent.scrollTop = 0;
+   hideNavigation();
 
+    homeContent.scrollTop = 0;
     window.scrollTo(0,0);
 
     homeContent.innerHTML = html;
@@ -820,8 +821,7 @@ document.getElementById(
 "loanBack"
 ).onclick = ()=>{
 
-homeBtn.click();
-
+showHome();
 };
 
 };
@@ -1511,8 +1511,8 @@ document.getElementById(
 
 .onclick=()=>{
 
+showHome();
 
-homeBtn.click();
 
 
 };
@@ -1520,6 +1520,7 @@ homeBtn.click();
 
 };
 homeBtn.onclick = ()=>{
+    showNavigation();
 
     setActiveButton(homeBtn);
 
@@ -1531,6 +1532,8 @@ homeBtn.onclick = ()=>{
 
 };
 function showHome(){
+
+    showNavigation();
 
     homeBtn.click();
 
@@ -1667,7 +1670,9 @@ class="back-btn">
 
 `);
 
-document.getElementById("familyBack").onclick = showHome;
+document.getElementById("familyBack").onclick = 
+    
+    showHome;
 
 };
 
@@ -2141,8 +2146,8 @@ reportCategory("Memories", true);
 document.getElementById(
 "reportsBack"
 ).onclick=()=>{
-
-homeBtn.click();
+    
+showHome();
 
 };
 
@@ -2738,4 +2743,18 @@ logoutMenuBtn.onclick = ()=>{
     },2000);
 
 };
+
+function hideNavigation(){
+
+    document.querySelector(".top-container").style.display = "none";
+    document.querySelector(".bottom-container").style.display = "none";
+
+}
+
+function showNavigation(){
+
+    document.querySelector(".top-container").style.display = "flex";
+    document.querySelector(".bottom-container").style.display = "flex";
+
+}
  updateWelcomePage();
