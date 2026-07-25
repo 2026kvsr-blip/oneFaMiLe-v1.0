@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -80,8 +79,8 @@ document.getElementById("loginBtn");
 const signupBtn =
 document.getElementById("signupBtn");
 
-const sendOTPBtn =
-document.getElementById("sendOTPBtn");
+const loginSubmitBtn =
+document.getElementById("loginSubmitBtn");
 
 const verifyOTPBtn =
 document.getElementById("verifyOTPBtn");
@@ -1378,6 +1377,66 @@ const result = await response.json();
         signupOTPPage.classList.add("hidden");
         signupPage.classList.add("hidden");
         welcomePage.classList.remove("hidden");
+
+    }
+
+};
+loginSubmitBtn.onclick = async ()=>{
+
+    const loginId =
+    document.getElementById("loginId").value.trim();
+
+    const passCode =
+    document.getElementById("loginPassCode").value.trim();
+
+    if(loginId==""){
+        alert("Enter Login ID");
+        return;
+    }
+
+    if(passCode==""){
+        alert("Enter Pass Code");
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("action","login");
+    formData.append("loginId",loginId);
+    formData.append("passCode",passCode);
+
+    try{
+
+        const response = await fetch(API_URL,{
+            method:"POST",
+            body:formData
+        });
+
+        const result = await response.json();
+
+        if(result.status=="success"){
+
+            sessionStorage.setItem(
+                "user",
+                JSON.stringify(result)
+            );
+
+            loginPage.classList.add("hidden");
+            welcomePage.classList.add("hidden");
+            dashboard.classList.remove("hidden");
+
+            homeBtn.click();
+
+        }else{
+
+            alert(result.message);
+
+        }
+
+    }catch(err){
+
+        alert("Unable to connect to server.");
+        console.log(err);
 
     }
 
