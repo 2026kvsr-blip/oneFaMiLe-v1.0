@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -2856,3 +2855,27 @@ function showNavigation(){
 
 }
  updateWelcomePage();
+/* ======================
+
+AUTO LOGIN
+
+====================== */
+
+const loggedUser =
+sessionStorage.getItem("user");
+
+if(loggedUser){
+
+    welcomePage.classList.add("hidden");
+
+    loginPage.classList.add("hidden");
+
+    signupPage.classList.add("hidden");
+
+    signupOTPPage.classList.add("hidden");
+
+    dashboard.classList.remove("hidden");
+
+    homeBtn.click();
+
+}
