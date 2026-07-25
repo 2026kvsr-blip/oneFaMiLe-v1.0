@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -1338,8 +1337,7 @@ registerBtn.onclick = async ()=>{
 
         mobile: document.getElementById("mobileNo").value,
 
-        passCode: document.getElementById("passCode").value.trim()
-    };
+        passCode: document.getElementById("sensitivePassCode").value.trim()    };
 
     const formData = new FormData();
 
@@ -2354,7 +2352,7 @@ ${reportType}
 </h3>
 
 <input
-id="passCode"
+id="sensitivePassCode"
 type="password"
 placeholder="Enter Sensitive Pass Code"
 style="
