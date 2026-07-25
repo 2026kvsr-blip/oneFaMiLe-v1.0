@@ -6,6 +6,7 @@ Part 1A.3
 ===================================== */
 
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -2394,13 +2395,9 @@ document.getElementById("verifyPass").onclick = () => {
 
     const input = document.getElementById("sensitivePassCode");
 
-    alert("Input Element = " + input);
+    alert("Typed = [" + input.value + "]");
 
-    if(input){
-        alert("Typed Value = [" + input.value + "]");
-    }
-
-    const pass = input ? input.value.trim() : "";
+    const pass = input.value.trim();
 
     const savedPass = sessionStorage.getItem("passCode");
 
@@ -2414,7 +2411,6 @@ document.getElementById("verifyPass").onclick = () => {
     }else{
         alert("Wrong Sensitive Pass Code");
     }
-
 };
     document.getElementById("passBack").onclick = backFunction;
 }
