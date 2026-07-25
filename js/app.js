@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -1413,7 +1412,10 @@ loginSubmitBtn.onclick = async ()=>{
                 "user",
                 JSON.stringify(result)
             );
-
+            sessionStorage.setItem(
+        "passCode",
+        passCode
+            );
             loginPage.classList.add("hidden");
             welcomePage.classList.add("hidden");
             dashboard.classList.remove("hidden");
@@ -2391,9 +2393,13 @@ class="back-btn">
 
 document.getElementById("verifyPass").onclick=()=>{
 
-const pass=document.getElementById("passCode").value;
+const pass =
+document.getElementById("passCode").value;
 
-if(pass==="123456"){
+const savedPass =
+sessionStorage.getItem("passCode");
+
+if(pass === savedPass){
 
     reportsLayout(
 
