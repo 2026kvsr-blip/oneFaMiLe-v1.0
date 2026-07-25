@@ -2827,8 +2827,6 @@ menuOverlay.onclick = ()=>{
 };
 
 
-let logoutTimer;
-
 logoutMenuBtn.onclick = ()=>{
 
     sessionStorage.removeItem("user");
