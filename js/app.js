@@ -3,6 +3,7 @@
 oneFaMiLe V1
 Part 1A.3
 
+
 ===================================== */
 
 /* WELCOME SCREEN */
@@ -2399,8 +2400,7 @@ document.getElementById("passCode").value;
 const savedPass =
 sessionStorage.getItem("passCode");
 
-if(pass === savedPass){
-
+if(pass === user.passCode){
     reportsLayout(
 
         moduleName + " - " + reportType,
