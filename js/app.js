@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -2395,22 +2394,13 @@ document.getElementById("verifyPass").onclick = () => {
 
     const input = document.getElementById("sensitivePassCode");
 
-    alert("Typed = [" + input.value + "]");
+    input.style.background = "yellow";
+    input.focus();
 
-    const pass = input.value.trim();
+    alert(document.activeElement.id);
 
-    const savedPass = sessionStorage.getItem("passCode");
+    return;
 
-    alert("Saved = [" + savedPass + "]");
-
-    if(pass === savedPass){
-        reportsLayout(
-            moduleName + " - " + reportType,
-            backFunction
-        );
-    }else{
-        alert("Wrong Sensitive Pass Code");
-    }
 };
     document.getElementById("passBack").onclick = backFunction;
 }
