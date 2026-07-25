@@ -4,6 +4,8 @@ oneFaMiLe V1
 Part 1A.3
 
 ===================================== */
+console.log("APP.JS VERSION 25-JULY");
+alert("NEW APP.JS LOADED");
 
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
