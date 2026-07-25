@@ -3,6 +3,7 @@
 oneFaMiLe V1
 Part 1A.3
 
+
 ===================================== */
 
 /* WELCOME SCREEN */
@@ -2393,6 +2394,8 @@ class="back-btn">
 document.getElementById("verifyPass").onclick = () => {
 
     const input = document.getElementById("sensitivePassCode");
+    alert("OuterHTML:\n" + input.outerHTML);
+    alert("Value = [" + input.value + "]");
 
     input.style.background = "yellow";
     input.focus();
