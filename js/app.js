@@ -5,6 +5,7 @@ Part 1A.3
 
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -2389,38 +2390,33 @@ class="back-btn">
 
 `);
 
-document.getElementById("verifyPass").onclick=()=>{
+document.getElementById("verifyPass").onclick = () => {
 
-const pass =
-document.getElementById("sensitivePassCode").value;
+    const input = document.getElementById("sensitivePassCode");
 
-const savedPass =
-sessionStorage.getItem("passCode").trim();
+    alert("Input Element = " + input);
 
-console.log("Entered Pass :", pass);
-console.log("Saved Pass   :", savedPass);
-    
+    if(input){
+        alert("Typed Value = [" + input.value + "]");
+    }
 
-    
-if(pass === savedPass){
-    reportsLayout(
+    const pass = input ? input.value.trim() : "";
 
-        moduleName + " - " + reportType,
+    const savedPass = sessionStorage.getItem("passCode");
 
-        backFunction
+    alert("Saved = [" + savedPass + "]");
 
-    );
-
-}
-else{
-
-    alert("Wrong Sensitive Pass Code");
-
-}
+    if(pass === savedPass){
+        reportsLayout(
+            moduleName + " - " + reportType,
+            backFunction
+        );
+    }else{
+        alert("Wrong Sensitive Pass Code");
+    }
 
 };
-
-document.getElementById("passBack").onclick = backFunction;
+    document.getElementById("passBack").onclick = backFunction;
 }
 
 
