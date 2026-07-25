@@ -6,7 +6,6 @@ Part 1A.3
 ===================================== */
 
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -2395,7 +2394,7 @@ class="back-btn">
 document.getElementById("verifyPass").onclick=()=>{
 
 const pass =
-document.getElementById("passCode").value;
+document.getElementById("sensitivePassCode").value;
 
 const savedPass =
 sessionStorage.getItem("passCode").trim();
