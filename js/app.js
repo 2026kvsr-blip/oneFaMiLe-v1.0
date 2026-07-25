@@ -2823,24 +2823,29 @@ let logoutTimer;
 
 logoutMenuBtn.onclick = ()=>{
 
-    sideMenu.classList.remove("open");
+    sessionStorage.removeItem("user");
 
+    sideMenu.classList.remove("open");
     menuOverlay.classList.remove("show");
+
+    dashboard.classList.add("hidden");
+    loginPage.classList.add("hidden");
+    signupPage.classList.add("hidden");
+    signupOTPPage.classList.add("hidden");
+
+    welcomePage.classList.remove("hidden");
 
     const msg = document.getElementById("logoutMessage");
 
     msg.style.display = "block";
 
-    clearTimeout(logoutTimer);
-
-    logoutTimer = setTimeout(()=>{
+    setTimeout(()=>{
 
         msg.style.display = "none";
 
-    },2000);
+    },1500);
 
 };
-
 function hideNavigation(){
 
     document.querySelector(".top-container").style.display = "none";
