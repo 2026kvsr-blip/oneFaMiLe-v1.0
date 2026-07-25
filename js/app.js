@@ -5,9 +5,12 @@ Part 1A.3
 
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
+const loginSubmitBtn =
+document.getElementById("loginSubmitBtn");
 
 const menuBtn =
 document.getElementById("menuBtn");
@@ -78,9 +81,6 @@ document.getElementById("loginBtn");
 
 const signupBtn =
 document.getElementById("signupBtn");
-
-const loginSubmitBtn =
-document.getElementById("loginSubmitBtn");
 
 const verifyOTPBtn =
 document.getElementById("verifyOTPBtn");
@@ -1257,13 +1257,6 @@ SEND OTP
 
 ====================== */
 
-sendOTPBtn.onclick = ()=>{
-
-loginPage.classList.add("hidden");
-
-otpPage.classList.remove("hidden");
-
-};
 
 backSignupBtn.onclick = ()=>{
 
