@@ -6,6 +6,7 @@ Part 1A.3
 ===================================== */
 
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -1338,8 +1339,7 @@ registerBtn.onclick = async ()=>{
 
         mobile: document.getElementById("mobileNo").value,
 
-        passCode: document.getElementById("passCode").value
-
+        passCode: document.getElementById("passCode").value.trim()
     };
 
     const formData = new FormData();
@@ -2398,8 +2398,7 @@ const pass =
 document.getElementById("passCode").value;
 
 const savedPass =
-sessionStorage.getItem("passCode");
-
+sessionStorage.getItem("passCode").trim();
 
 console.log("Entered Pass :", pass);
 console.log("Saved Pass   :", savedPass);
