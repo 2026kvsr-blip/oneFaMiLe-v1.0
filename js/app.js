@@ -2947,14 +2947,14 @@ class="back-btn">
 `
     );
 
+    
 document.getElementById("savePassCodeBtn").onclick = () => {
 
-    alert(document.getElementById("oldPassCode"));
-    alert(document.getElementById("newPassCode"));
-    alert(document.getElementById("confirmPassCode"));
+    alert("Old = [" + document.getElementById("oldPassCode").value + "]");
+    alert("New = [" + document.getElementById("newPassCode").value + "]");
+    alert("Confirm = [" + document.getElementById("confirmPassCode").value + "]");
 
-};
-    
+};    
     document.getElementById("changePassBackBtn").onclick = ()=>{
 
     homeBtn.click();
