@@ -5,6 +5,7 @@ Part 1A.3
 
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -2948,31 +2949,9 @@ class="back-btn">
 
 document.getElementById("savePassCodeBtn").onclick = () => {
 
-    const oldPass =
-    document.getElementById("oldPassCode").value.trim();
-
-    const newPass =
-    document.getElementById("newPassCode").value.trim();
-
-    const confirmPass =
-    document.getElementById("confirmPassCode").value.trim();
-
-    if(oldPass === "" || newPass === "" || confirmPass === ""){
-        alert("Please fill all fields.");
-        return;
-    }
-
-    if(oldPass !== sessionStorage.getItem("passCode")){
-        alert("Old Pass Code is incorrect.");
-        return;
-    }
-
-    if(newPass !== confirmPass){
-        alert("New Pass Code and Confirm Pass Code do not match.");
-        return;
-    }
-
-    alert("Validation Successful");
+    alert(document.getElementById("oldPassCode"));
+    alert(document.getElementById("newPassCode"));
+    alert(document.getElementById("confirmPassCode"));
 
 };
     
