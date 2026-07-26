@@ -2415,6 +2415,7 @@ document.getElementById("changePassBtn").onclick = () => {
     openChangeSensitivePassCode();
 
 };
+
     
     document.getElementById("passBack").onclick = backFunction;
 }
