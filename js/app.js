@@ -2258,35 +2258,20 @@ function reportsLayout(title, backFunction){
 homeContent.scrollTop = 0;
     window.scrollTo(0,0);
 showPage(`
-
 <h2 class="page-title">
-
 ${title}
-
 </h2>
-
 <div class="report-grid">
-
 <button class="report-btn">
-
 Today
-
 </button>
-
 <button class="report-btn">
-
 This Week
-
 </button>
-
 <button class="report-btn">
-
 This Month
-
 </button>
-
 <button class="report-btn">
-
 This Year
 
 </button>
@@ -2394,26 +2379,10 @@ class="back-btn">
 
 document.getElementById("verifyPass").onclick = () => {
 
-    const enteredPass =
-        document.getElementById("sensitivePassCode").value.trim();
+    const all =
+        document.querySelectorAll("#sensitivePassCode");
 
-    const savedPass =
-        sessionStorage.getItem("passCode");
-
-    if(enteredPass === ""){
-        alert("Enter Sensitive Pass Code");
-        return;
-    }
-
-    if(enteredPass !== savedPass){
-        alert("Wrong Sensitive Pass Code");
-        return;
-    }
-
-    reportsLayout(
-        moduleName + " " + reportType,
-        backFunction
-    );
+    alert("Total Inputs = " + all.length);
 
 };
     document.getElementById("passBack").onclick = backFunction;
