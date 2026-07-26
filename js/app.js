@@ -6,6 +6,7 @@ Part 1A.3
 ===================================== */
 
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -2827,9 +2828,12 @@ menuOverlay.onclick = ()=>{
 
 passcodeMenuBtn.onclick = () => {
 
-    alert("Button Clicked");
-
     openChangeSensitivePassCode();
+
+    setTimeout(() => {
+        sideMenu.classList.remove("open");
+        menuOverlay.classList.remove("show");
+    }, 50);
 
 };
 logoutMenuBtn.onclick = ()=>{
