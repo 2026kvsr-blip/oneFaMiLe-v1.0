@@ -3,11 +3,13 @@
 oneFaMiLe V1
 Part 1A.3
 
+
 ===================================== */
 
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
+const formData = new FormData();
 const loginSubmitBtn =
 document.getElementById("loginSubmitBtn");
 
@@ -2947,8 +2949,8 @@ class="back-btn">
     );
 
     
-document.getElementById("savePassCodeBtn").onclick = () => {
-
+document.getElementById("savePassCodeBtn").onclick = async () => {
+    
     const oldPass = document.getElementById("oldPassCode").value.trim();
     const newPass = document.getElementById("newPassCode").value.trim();
     const confirmPass = document.getElementById("confirmPassCode").value.trim();
@@ -2968,7 +2970,10 @@ document.getElementById("savePassCodeBtn").onclick = () => {
         return;
     }
 
-    alert("Validation Successful");
+    const user =
+JSON.parse(
+sessionStorage.getItem("user")
+);
 };
     
     document.getElementById("changePassBackBtn").onclick = ()=>{
