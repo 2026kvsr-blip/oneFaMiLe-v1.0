@@ -5,6 +5,7 @@ Part 1A.3
 
 ===================================== */
 
+
 console.log("APP.JS VERSION 25-JULY");
 alert("NEW APP.JS LOADED");
 
@@ -1340,7 +1341,7 @@ registerBtn.onclick = async ()=>{
 
         mobile: document.getElementById("mobileNo").value,
 
-        passCode: document.getElementById("sensitivePassCode").value.trim()    };
+        passCode: document.getElementById("reportPassCode").value.trim()    };
 
     const formData = new FormData();
 
@@ -2339,7 +2340,7 @@ ${reportType}
 </h3>
 
 <input
-id="sensitivePassCode"
+id="reportPassCode"
 type="password"
 placeholder="Enter Sensitive Pass Code"
 style="
