@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 console.log("APP.JS VERSION 25-JULY");
 alert("NEW APP.JS LOADED");
 
