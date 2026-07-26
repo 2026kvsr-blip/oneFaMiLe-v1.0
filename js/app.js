@@ -3,6 +3,7 @@
 oneFaMiLe V1
 Part 1A.3
 
+
 ===================================== */
 
 
@@ -2363,6 +2364,16 @@ Verify
 <br><br>
 
 <button
+id="changePassBtn"
+class="grid-btn">
+
+Change Sensitive Pass Code
+
+</button>
+
+<br><br>
+
+<button
 id="passBack"
 class="back-btn">
 
@@ -2398,6 +2409,12 @@ document.getElementById("verifyPass").onclick = () => {
     );
 
 };
+document.getElementById("changePassBtn").onclick = () => {
+
+    openChangeSensitivePassCode();
+
+};
+    
     document.getElementById("passBack").onclick = backFunction;
 }
 
