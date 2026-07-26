@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 console.log("APP.JS VERSION 25-JULY");
 alert("NEW APP.JS LOADED");
 
@@ -2256,6 +2255,8 @@ showHome();
 };
 
 function reportsLayout(title, backFunction){
+        alert("reportsLayout CALLED");
+
 homeContent.scrollTop = 0;
     window.scrollTo(0,0);
 showPage(`
@@ -2385,9 +2386,21 @@ document.getElementById("verifyPass").onclick = () => {
     const savedPass =
         sessionStorage.getItem("passCode");
 
-    alert(
-        "Entered = [" + enteredPass + "]\n" +
-        "Saved = [" + savedPass + "]"
+    if (enteredPass === "") {
+        alert("Enter Sensitive Pass Code");
+        return;
+    }
+
+    if (enteredPass !== savedPass) {
+        alert("Wrong Sensitive Pass Code");
+        return;
+    }
+
+    alert("PASS VERIFIED");
+
+    reportsLayout(
+        moduleName + " " + reportType,
+        backFunction
     );
 
 };
