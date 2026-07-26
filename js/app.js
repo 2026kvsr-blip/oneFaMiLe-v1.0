@@ -6,6 +6,7 @@ Part 1A.3
 ===================================== */
 
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -2950,11 +2951,16 @@ class="back-btn">
     
 document.getElementById("savePassCodeBtn").onclick = () => {
 
-    alert("Old = [" + document.getElementById("oldPassCode").value + "]");
-    alert("New = [" + document.getElementById("newPassCode").value + "]");
-    alert("Confirm = [" + document.getElementById("confirmPassCode").value + "]");
+    const oldInput = document.getElementById("oldPassCode");
+    const newInput = document.getElementById("newPassCode");
+    const confirmInput = document.getElementById("confirmPassCode");
 
-};    
+    alert("Old = [" + oldInput.value + "]");
+    alert("New = [" + newInput.value + "]");
+    alert("Confirm = [" + confirmInput.value + "]");
+};
+
+    
     document.getElementById("changePassBackBtn").onclick = ()=>{
 
     homeBtn.click();
