@@ -3,13 +3,13 @@
 oneFaMiLe V1
 Part 1A.3
 
-
 ===================================== */
 
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
-
 const formData = new FormData();
+
+
 const loginSubmitBtn =
 document.getElementById("loginSubmitBtn");
 
@@ -1343,8 +1343,7 @@ registerBtn.onclick = async ()=>{
 
         passCode: document.getElementById("reportPassCode").value.trim()    };
 
-    const formData = new FormData();
-
+   
 formData.append("action","register");
 formData.append("loginUserName",data.loginUserName);
 formData.append("surName",data.surName);
@@ -1393,7 +1392,6 @@ loginSubmitBtn.onclick = async ()=>{
         return;
     }
 
-    const formData = new FormData();
 
     formData.append("action","login");
     formData.append("loginId",loginId);
@@ -2974,6 +2972,52 @@ document.getElementById("savePassCodeBtn").onclick = async () => {
 JSON.parse(
 sessionStorage.getItem("user")
 );
+
+
+formData.append(
+    "action",
+    "changeSensitivePassCode"
+);
+
+formData.append(
+    "loginId",
+    user.loginUserName
+);
+
+formData.append(
+    "newPassCode",
+    newPass
+);
+
+const response =
+await fetch(API_URL,{
+
+    method:"POST",
+
+    body:formData
+
+});
+
+const result =
+await response.json();
+
+if(result.status=="success"){
+
+    sessionStorage.setItem(
+        "passCode",
+        newPass
+    );
+
+    alert(result.message);
+
+    homeBtn.click();
+
+}else{
+
+    alert(result.message);
+
+}
+
 };
     
     document.getElementById("changePassBackBtn").onclick = ()=>{
