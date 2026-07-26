@@ -3,7 +3,6 @@
 oneFaMiLe V1
 Part 1A.3
 
-
 ===================================== */
 console.log("APP.JS VERSION 25-JULY");
 alert("NEW APP.JS LOADED");
@@ -2395,17 +2394,27 @@ class="back-btn">
 
 document.getElementById("verifyPass").onclick = () => {
 
-    const all = document.querySelectorAll("#sensitivePassCode");
+    const enteredPass =
+        document.getElementById("sensitivePassCode").value.trim();
 
-alert("Count = " + all.length);
+    const savedPass =
+        sessionStorage.getItem("passCode");
 
-all.forEach((e, i) => {
-    alert(
-        "Input " + i +
-        "\nType = " + e.type +
-        "\nValue = [" + e.value + "]"
+    if(enteredPass === ""){
+        alert("Enter Sensitive Pass Code");
+        return;
+    }
+
+    if(enteredPass !== savedPass){
+        alert("Wrong Sensitive Pass Code");
+        return;
+    }
+
+    reportsLayout(
+        moduleName + " " + reportType,
+        backFunction
     );
-});
+
 };
     document.getElementById("passBack").onclick = backFunction;
 }
