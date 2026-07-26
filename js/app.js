@@ -5,8 +5,7 @@ Part 1A.3
 
 ===================================== */
 
-console.log("APP.JS VERSION 25-JULY");
-alert("NEW APP.JS LOADED");
+
 
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
@@ -2255,7 +2254,6 @@ showHome();
 };
 
 function reportsLayout(title, backFunction){
-        alert("reportsLayout CALLED");
 
 homeContent.scrollTop = 0;
     window.scrollTo(0,0);
@@ -2353,7 +2351,6 @@ border-radius:10px;
 padding-left:15px;
 font-size:16px;
 ">
-
 <div align="center">
 
 <button
@@ -2395,8 +2392,6 @@ document.getElementById("verifyPass").onclick = () => {
         alert("Wrong Sensitive Pass Code");
         return;
     }
-
-    alert("PASS VERIFIED");
 
     reportsLayout(
         moduleName + " " + reportType,
