@@ -2342,7 +2342,7 @@ ${reportType}
 <input
 id="reportPassCode"
 type="password"
-placeholder="Enter Sensitive Pass Code"
+placeholder="Enter Pass Code"
 style="
 width:90%;
 height:50px;
@@ -2368,7 +2368,7 @@ Verify
 id="changePassBtn"
 class="grid-btn">
 
-Change Sensitive Pass Code
+Change Pass Code
 
 </button>
 
@@ -2395,12 +2395,12 @@ document.getElementById("verifyPass").onclick = () => {
         sessionStorage.getItem("passCode");
 
     if (enteredPass === "") {
-        alert("Enter Sensitive Pass Code");
+        alert("Enter Pass Code");
         return;
     }
 
     if (enteredPass !== savedPass) {
-        alert("Wrong Sensitive Pass Code");
+        alert("Wrong Pass Code");
         return;
     }
 
@@ -2875,7 +2875,7 @@ function openChangeSensitivePassCode(){
     showPage(
 
         pageTitle(
-            "Change Sensitive Pass Code",
+            "Change Pass Code",
             "images/colorbtns/SensitiveReports1.png"
         )
 
@@ -2885,7 +2885,7 @@ function openChangeSensitivePassCode(){
 id="oldPassCode"
 type="password"
 maxlength="6"
-placeholder="Enter Old Sensitive Pass Code"
+placeholder="Enter Old Pass Code"
 style="
 width:90%;
 height:50px;
@@ -2900,7 +2900,7 @@ font-size:16px;
 id="newPassCode"
 type="password"
 maxlength="6"
-placeholder="Enter New Sensitive Pass Code"
+placeholder="Enter New Pass Code"
 style="
 width:90%;
 height:50px;
@@ -2915,7 +2915,7 @@ font-size:16px;
 id="confirmPassCode"
 type="password"
 maxlength="6"
-placeholder="Confirm New Sensitive Pass Code"
+placeholder="Confirm New Pass Code"
 style="
 width:90%;
 height:50px;
