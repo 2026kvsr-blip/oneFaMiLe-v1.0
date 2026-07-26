@@ -3,12 +3,11 @@
 oneFaMiLe V1
 Part 1A.3
 
+
 ===================================== */
 
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
-const formData = new FormData();
-
 
 const loginSubmitBtn =
 document.getElementById("loginSubmitBtn");
@@ -2948,11 +2947,18 @@ class="back-btn">
 
     
 document.getElementById("savePassCodeBtn").onclick = async () => {
-    
-    const oldPass = document.getElementById("oldPassCode").value.trim();
-    const newPass = document.getElementById("newPassCode").value.trim();
-    const confirmPass = document.getElementById("confirmPassCode").value.trim();
 
+    // Read Values
+    const oldPass =
+        document.getElementById("oldPassCode").value.trim();
+
+    const newPass =
+        document.getElementById("newPassCode").value.trim();
+
+    const confirmPass =
+        document.getElementById("confirmPassCode").value.trim();
+
+    // Validation
     if (oldPass === "" || newPass === "" || confirmPass === "") {
         alert("Please fill all the fields.");
         return;
@@ -2968,58 +2974,63 @@ document.getElementById("savePassCodeBtn").onclick = async () => {
         return;
     }
 
+    // Logged-in User
     const user =
-JSON.parse(
-sessionStorage.getItem("user")
-);
+        JSON.parse(sessionStorage.getItem("user"));
 
+    // FormData
+    const formData = new FormData();
 
-formData.append(
-    "action",
-    "changeSensitivePassCode"
-);
+    formData.append(
+        "action",
+        "changeSensitivePassCode"
+    );
 
-formData.append(
-    "loginId",
-    user.loginUserName
-);
+    formData.append(
+        "loginId",
+        user.loginUserName
+    );
 
-formData.append(
-    "newPassCode",
-    newPass
-);
-
-const response =
-await fetch(API_URL,{
-
-    method:"POST",
-
-    body:formData
-
-});
-
-const result =
-await response.json();
-
-if(result.status=="success"){
-
-    sessionStorage.setItem(
-        "passCode",
+    formData.append(
+        "newPassCode",
         newPass
     );
 
-    alert(result.message);
+    try {
 
-    homeBtn.click();
+        const response = await fetch(API_URL, {
+            method: "POST",
+            body: formData
+        });
 
-}else{
+        const result = await response.json();
 
-    alert(result.message);
+        if (result.status == "success") {
 
-}
+            sessionStorage.setItem(
+                "passCode",
+                newPass
+            );
 
-};
-    
+            alert(result.message);
+
+            homeBtn.click();
+
+        } else {
+
+            alert(result.message);
+
+        }
+
+    } catch (err) {
+
+        alert("Unable to connect to server.");
+
+        console.log(err);
+
+    }
+
+};    
     document.getElementById("changePassBackBtn").onclick = ()=>{
 
     homeBtn.click();
