@@ -5,6 +5,7 @@ Part 1A.3
 
 ===================================== */
 
+
 console.log("APP.JS VERSION 25-JULY");
 alert("NEW APP.JS LOADED");
 
@@ -2378,9 +2379,16 @@ class="back-btn">
 
 document.getElementById("verifyPass").onclick = () => {
 
-    const input = document.getElementById("reportPassCode");
+    const enteredPass =
+        document.getElementById("reportPassCode").value.trim();
 
-    alert("Entered = [" + input.value + "]");
+    const savedPass =
+        sessionStorage.getItem("passCode");
+
+    alert(
+        "Entered = [" + enteredPass + "]\n" +
+        "Saved = [" + savedPass + "]"
+    );
 
 };
     document.getElementById("passBack").onclick = backFunction;
