@@ -6,6 +6,7 @@ Part 1A.3
 ===================================== */
 
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -2846,17 +2847,12 @@ logoutMenuBtn.onclick = ()=>{
     loginPage.classList.add("hidden");
     signupPage.classList.add("hidden");
     signupOTPPage.classList.add("hidden");
-
     welcomePage.classList.remove("hidden");
-
     const msg = document.getElementById("logoutMessage");
-
     msg.style.display = "block";
-
     setTimeout(()=>{
         msg.style.display = "none";
     },1500);
-
 };
 function hideNavigation(){
 
@@ -2954,7 +2950,7 @@ class="back-btn">
 
     document.getElementById("changePassBackBtn").onclick = ()=>{
 
-        showNavigation();
+    homeBtn.click();
 
     };
 
