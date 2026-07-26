@@ -2379,10 +2379,9 @@ class="back-btn">
 
 document.getElementById("verifyPass").onclick = () => {
 
-    const all =
-        document.querySelectorAll("#sensitivePassCode");
+    const input = document.getElementById("reportPassCode");
 
-    alert("Total Inputs = " + all.length);
+    alert("Entered = [" + input.value + "]");
 
 };
     document.getElementById("passBack").onclick = backFunction;
