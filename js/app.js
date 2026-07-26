@@ -4,6 +4,7 @@ oneFaMiLe V1
 Part 1A.3
 
 ===================================== */
+
 console.log("APP.JS VERSION 25-JULY");
 alert("NEW APP.JS LOADED");
 
@@ -2355,10 +2356,8 @@ ${reportType}
 
 <input
 id="sensitivePassCode"
-type="text"
-value="123123"
-placeholder="Enter Sensitive Pass Code"
-style="
+type="password"
+placeholder="Enter Sensitive Pass Code">style="
 width:90%;
 height:50px;
 margin:20px auto;
