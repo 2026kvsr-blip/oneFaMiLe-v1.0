@@ -2357,7 +2357,8 @@ ${reportType}
 <input
 id="sensitivePassCode"
 type="password"
-placeholder="Enter Sensitive Pass Code">style="
+placeholder="Enter Sensitive Pass Code"
+style="
 width:90%;
 height:50px;
 margin:20px auto;
