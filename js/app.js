@@ -6,6 +6,7 @@ Part 1A.3
 
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -2872,10 +2873,93 @@ function showNavigation(){
 }
 function openChangeSensitivePassCode(){
 
-    alert("Change Sensitive Pass Code");
+    showPage(
+
+        pageTitle(
+            "Change Sensitive Pass Code",
+            "images/colorbtns/SensitiveReports1.png"
+        )
+
+        +`
+
+<input
+id="oldPassCode"
+type="password"
+maxlength="6"
+placeholder="Enter Old Sensitive Pass Code"
+style="
+width:90%;
+height:50px;
+margin:15px auto;
+display:block;
+border-radius:10px;
+padding-left:15px;
+font-size:16px;
+">
+
+<input
+id="newPassCode"
+type="password"
+maxlength="6"
+placeholder="Enter New Sensitive Pass Code"
+style="
+width:90%;
+height:50px;
+margin:15px auto;
+display:block;
+border-radius:10px;
+padding-left:15px;
+font-size:16px;
+">
+
+<input
+id="confirmPassCode"
+type="password"
+maxlength="6"
+placeholder="Confirm New Sensitive Pass Code"
+style="
+width:90%;
+height:50px;
+margin:15px auto;
+display:block;
+border-radius:10px;
+padding-left:15px;
+font-size:16px;
+">
+
+<div align="center">
+
+<button
+id="savePassCodeBtn"
+class="grid-btn">
+
+Save
+
+</button>
+
+<br><br>
+
+<button
+id="changePassBackBtn"
+class="back-btn">
+
+← Back
+
+</button>
+
+</div>
+
+`
+    );
+
+    document.getElementById("changePassBackBtn").onclick = ()=>{
+
+        showNavigation();
+
+    };
 
 }
- updateWelcomePage();
+updateWelcomePage();
 /* ======================
 
 AUTO LOGIN
