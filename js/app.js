@@ -6,7 +6,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbwWKppI9nuXOgscF4_XfigRW0xlwaPgSxvFTutBFrgPYb1QwBlBF1snTMxkS-O-kklK3g/exec";
 
@@ -28,6 +27,8 @@ document.getElementById("closeMenuBtn");
 const logoutMenuBtn =
 document.getElementById("logoutMenuBtn");
 
+const passcodeMenuBtn =
+document.getElementById("passcodeMenuBtn");
 
 const welcomeHeading=
 document.getElementById("welcomeHeading");
@@ -2823,7 +2824,16 @@ menuOverlay.onclick = ()=>{
 
 };
 
+passcodeMenuBtn.onclick = () => {
 
+    // Side Menu close
+    sideMenu.classList.remove("open");
+    menuOverlay.classList.remove("show");
+
+    // Open Change Pass Code Screen
+    openChangeSensitivePassCode();
+
+};
 logoutMenuBtn.onclick = ()=>{
 
     sessionStorage.removeItem("user");
@@ -2858,6 +2868,11 @@ function showNavigation(){
 
     document.querySelector(".top-container").style.display = "flex";
     document.querySelector(".bottom-container").style.display = "flex";
+
+}
+function openChangeSensitivePassCode(){
+
+    alert("Change Sensitive Pass Code");
 
 }
  updateWelcomePage();
