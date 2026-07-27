@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 
@@ -2957,7 +2956,8 @@ document.getElementById("savePassCodeBtn").onclick = async () => {
 
     const confirmPass =
         document.getElementById("confirmPassCode").value.trim();
-
+console.log("Old Entered =", oldPass);
+console.log("Session Pass =", sessionStorage.getItem("passCode"));
     // Validation
     if (oldPass === "" || newPass === "" || confirmPass === "") {
         alert("Please fill all the fields.");
