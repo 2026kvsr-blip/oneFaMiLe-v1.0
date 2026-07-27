@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 
@@ -3061,3 +3060,12 @@ if(loggedUser){
     homeBtn.click();
 
 }
+function updateMenuButtons() {
+
+    const isLoggedIn = sessionStorage.getItem("user") !== null;
+
+    passcodeMenuBtn.disabled = !isLoggedIn;
+    logoutMenuBtn.disabled = !isLoggedIn;
+
+}
+updateMenuButtons();
