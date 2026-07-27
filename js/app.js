@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 
@@ -3011,7 +3010,8 @@ console.log("Equal:", oldPass === sessionStorage.getItem("passCode"));
         });
 
         const result = await response.json();
-
+console.log(result);
+alert(JSON.stringify(result));
         if (result.status == "success") {
 
             sessionStorage.setItem(
