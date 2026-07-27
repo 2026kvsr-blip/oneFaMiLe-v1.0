@@ -5,6 +5,7 @@ Part 1A.3
 
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 
@@ -1623,8 +1624,7 @@ homeBtn.onclick = ()=>{
 
     homeContent.innerHTML = homeTemplate;
 
-    console.log(document.getElementById("homeWelcomeHeading"));
-
+    
     updateWelcomePage();
 
 };
@@ -2834,7 +2834,7 @@ passcodeMenuBtn.onclick = (e) => {
 logoutMenuBtn.onclick = ()=>{
 
     sessionStorage.removeItem("user");
-
+    sessionStorage.removeItem("passCode"); 
     sideMenu.classList.remove("open");
     menuOverlay.classList.remove("show");
 
@@ -2955,19 +2955,12 @@ document.getElementById("savePassCodeBtn").onclick = async () => {
 
     const confirmPass =
         document.getElementById("confirmPassCode").value.trim();
-console.log("Old Entered =", oldPass);
-console.log("Session Pass =", sessionStorage.getItem("passCode"));
-
-
     
     // Validation
     if (oldPass === "" || newPass === "" || confirmPass === "") {
         alert("Please fill all the fields.");
         return;
     }
-console.log("Entered Old:", "[" + oldPass + "]");
-console.log("Session Pass:", "[" + sessionStorage.getItem("passCode") + "]");
-console.log("Equal:", oldPass === sessionStorage.getItem("passCode"));
     
     if (oldPass !== sessionStorage.getItem("passCode")) {
         alert("Old Pass Code is incorrect.");
@@ -2989,8 +2982,6 @@ console.log("Equal:", oldPass === sessionStorage.getItem("passCode"));
         "changeSensitivePassCode"
     );
 const user = JSON.parse(sessionStorage.getItem("user"));
-console.log("USER =", user);
-console.log("loginUserName =", user.loginUserName);
 
     formData.append(
         "loginId",
@@ -3011,7 +3002,6 @@ console.log("loginUserName =", user.loginUserName);
         });
 
         const result = await response.json();
-alert(JSON.stringify(result));
         if (result.status == "success") {
 
             sessionStorage.setItem(
