@@ -5,6 +5,7 @@ Part 1A.3
 
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 
@@ -1409,6 +1410,7 @@ const formData = new FormData();
                 "user",
                 JSON.stringify(result)
             );
+            updateMenuButtons();
             sessionStorage.setItem(
         "passCode",
         passCode
@@ -2834,6 +2836,8 @@ logoutMenuBtn.onclick = ()=>{
 
     sessionStorage.removeItem("user");
     sessionStorage.removeItem("passCode"); 
+    updateMenuButtons();
+    
     sideMenu.classList.remove("open");
     menuOverlay.classList.remove("show");
 
