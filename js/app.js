@@ -3,6 +3,7 @@
 oneFaMiLe V1
 Part 1A.3
 
+
 ===================================== */
 
 /* WELCOME SCREEN */
@@ -2981,9 +2982,7 @@ console.log("Equal:", oldPass === sessionStorage.getItem("passCode"));
     }
 
     // Logged-in User
-    const user =
-        JSON.parse(sessionStorage.getItem("user"));
-
+    
     // FormData
     const formData = new FormData();
 
@@ -2992,7 +2991,8 @@ console.log("Equal:", oldPass === sessionStorage.getItem("passCode"));
         "changeSensitivePassCode"
     );
 const user = JSON.parse(sessionStorage.getItem("user"));
-
+console.log("USER =", user);
+console.log("loginUserName =", user.loginUserName);
 console.log(user);
 
 alert(JSON.stringify(user));
