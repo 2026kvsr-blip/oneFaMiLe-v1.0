@@ -3,7 +3,6 @@
 oneFaMiLe V1
 Part 1A.3
 
-
 ===================================== */
 
 /* WELCOME SCREEN */
@@ -1403,7 +1402,7 @@ const formData = new FormData();
         });
 
         const result = await response.json();
-alert(JSON.stringify(result));
+
         if(result.status=="success"){
 
             sessionStorage.setItem(
@@ -2992,11 +2991,7 @@ console.log("Equal:", oldPass === sessionStorage.getItem("passCode"));
 const user = JSON.parse(sessionStorage.getItem("user"));
 console.log("USER =", user);
 console.log("loginUserName =", user.loginUserName);
-console.log(user);
 
-alert(JSON.stringify(user));
-
-alert(user.loginUserName);
     formData.append(
         "loginId",
         user.loginUserName
