@@ -3,7 +3,6 @@
 oneFaMiLe V1
 Part 1A.3
 
-
 ===================================== */
 
 /* WELCOME SCREEN */
@@ -2959,12 +2958,18 @@ document.getElementById("savePassCodeBtn").onclick = async () => {
         document.getElementById("confirmPassCode").value.trim();
 console.log("Old Entered =", oldPass);
 console.log("Session Pass =", sessionStorage.getItem("passCode"));
+
+
+    
     // Validation
     if (oldPass === "" || newPass === "" || confirmPass === "") {
         alert("Please fill all the fields.");
         return;
     }
-
+console.log("Entered Old:", "[" + oldPass + "]");
+console.log("Session Pass:", "[" + sessionStorage.getItem("passCode") + "]");
+console.log("Equal:", oldPass === sessionStorage.getItem("passCode"));
+    
     if (oldPass !== sessionStorage.getItem("passCode")) {
         alert("Old Pass Code is incorrect.");
         return;
