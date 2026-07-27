@@ -3,7 +3,6 @@
 oneFaMiLe V1
 Part 1A.3
 
-
 ===================================== */
 
 /* WELCOME SCREEN */
@@ -1220,7 +1219,7 @@ loginPage.classList.remove("hidden");
 
 };
 
-
+console.log(result);
 
 /* ======================
 
