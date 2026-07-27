@@ -3014,6 +3014,7 @@ console.log("Equal:", oldPass === sessionStorage.getItem("passCode"));
         if (result.status == "success") {
 
             sessionStorage.setItem(
+                
                 "passCode",
                 newPass
             );
