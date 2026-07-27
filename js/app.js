@@ -1390,7 +1390,7 @@ loginSubmitBtn.onclick = async ()=>{
         alert("Enter Pass Code");
         return;
     }
-
+const formData = new FormData();
 
     formData.append("action","login");
     formData.append("loginId",loginId);
