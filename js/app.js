@@ -3,6 +3,7 @@
 oneFaMiLe V1
 Part 1A.3
 
+
 ===================================== */
 
 /* WELCOME SCREEN */
@@ -3015,7 +3016,6 @@ alert(user.loginUserName);
         });
 
         const result = await response.json();
-console.log(result);
 alert(JSON.stringify(result));
         if (result.status == "success") {
 
