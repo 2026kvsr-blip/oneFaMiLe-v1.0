@@ -3,6 +3,7 @@
 oneFaMiLe V1
 Part 1A.3
 
+
 ===================================== */
 
 /* WELCOME SCREEN */
@@ -2991,7 +2992,13 @@ console.log("Equal:", oldPass === sessionStorage.getItem("passCode"));
         "action",
         "changeSensitivePassCode"
     );
+const user = JSON.parse(sessionStorage.getItem("user"));
 
+console.log(user);
+
+alert(JSON.stringify(user));
+
+alert(user.loginUserName);
     formData.append(
         "loginId",
         user.loginUserName
