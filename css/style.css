@@ -5,7 +5,6 @@ box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
 }
 
-
 body{
     
     background:#EAF8FF;
@@ -1231,4 +1230,7 @@ SIDE MENU Hi UserName
 
     cursor:not-allowed;
 
+}
+.menu-btn.hidden{
+    display:none;
 }
