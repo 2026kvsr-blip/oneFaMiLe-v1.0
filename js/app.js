@@ -1430,6 +1430,7 @@ const formData = new FormData();
             updateMenuButtons();
             updateSideMenuUser();
             updateMenuIcon();
+            
             sessionStorage.setItem(
         "passCode",
         passCode
