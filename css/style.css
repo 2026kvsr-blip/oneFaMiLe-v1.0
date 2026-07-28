@@ -1223,4 +1223,12 @@ SIDE MENU Hi UserName
     font-size:18px;
     color:#666;
 }
+.menu-btn.disabled{
 
+    opacity:0.4;
+
+    pointer-events:none;
+
+    cursor:not-allowed;
+
+}
