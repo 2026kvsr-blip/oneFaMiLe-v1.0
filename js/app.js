@@ -3,6 +3,7 @@
 oneFaMiLe V1
 Part 1A.3
 
+
 ===================================== */
 
 /* WELCOME SCREEN */
@@ -1337,6 +1338,15 @@ registerBtn.onclick = async ()=>{
         email: document.getElementById("emailId").value,
 
         mobile: document.getElementById("mobileNo").value,
+        gender: document.getElementById("gender").value,
+
+dateOfBirth: document.getElementById("dateOfBirth").value,
+
+place: document.getElementById("place").value,
+
+state: document.getElementById("state").value,
+
+country: document.getElementById("country").value,
 
         passCode: document.getElementById("reportPassCode").value.trim()    };
 
@@ -1346,6 +1356,15 @@ formData.append("loginUserName",data.loginUserName);
 formData.append("surName",data.surName);
 formData.append("middleName",data.middleName);
 formData.append("lastName",data.lastName);
+formData.append("gender",data.gender);
+
+formData.append("dateOfBirth",data.dateOfBirth);
+
+formData.append("place",data.place);
+
+formData.append("state",data.state);
+
+formData.append("country",data.country);
 formData.append("email",data.email);
 formData.append("mobile",data.mobile);
 formData.append("passCode",data.passCode);
