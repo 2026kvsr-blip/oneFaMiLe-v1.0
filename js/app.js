@@ -88,6 +88,14 @@ document.getElementById("verifyOTPBtn");
 
 const backLoginBtn =
 document.getElementById("backLoginBtn");
+const forgotPassCodeBtn =
+document.getElementById("forgotPassCodeBtn");
+
+const forgotPassCodePage =
+document.getElementById("forgotPassCodePage");
+
+const backForgotBtn =
+document.getElementById("backForgotBtn");
 
 const backOTPBtn =
 document.getElementById("backOTPBtn");
@@ -1249,8 +1257,20 @@ welcomePage.classList.remove("hidden");
 
 };
 
+forgotPassCodeBtn.onclick = ()=>{
 
+    loginPage.classList.add("hidden");
 
+    forgotPassCodePage.classList.remove("hidden");
+
+};
+backForgotBtn.onclick = ()=>{
+
+    forgotPassCodePage.classList.add("hidden");
+
+    loginPage.classList.remove("hidden");
+
+};
 /* ======================
 
 SEND OTP
