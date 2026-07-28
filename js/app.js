@@ -3,7 +3,6 @@
 oneFaMiLe V1
 Part 1A.3
 
-
 ===================================== */
 
 /* WELCOME SCREEN */
@@ -1348,9 +1347,9 @@ state: document.getElementById("state").value,
 
 country: document.getElementById("country").value,
 
-        passCode: document.getElementById("reportPassCode").value.trim()    };
+        passCode: document.getElementById("sensitivePassCode").value.trim()    };
 
-   
+ const formData = new FormData();  
 formData.append("action","register");
 formData.append("loginUserName",data.loginUserName);
 formData.append("surName",data.surName);
