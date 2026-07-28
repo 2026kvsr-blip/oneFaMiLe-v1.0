@@ -176,12 +176,14 @@ id="loginId"
 type="text"
 placeholder="Mobile / Email / Login User Name">
 
-<input
-id="loginPassCode"
-type="password"
-maxlength="6"
-placeholder="Pass Code">
+<div class="password-box">
+    <input
+        type="password"
+        id="loginPassCode"
+        placeholder="Enter Pass Code">
 
+    <span id="toggleLoginPass" class="eye-icon">👁</span>
+</div>
 <button id="loginSubmitBtn">
 Login
 </button>
