@@ -3133,4 +3133,17 @@ function updateSideMenuUser(){
         .trim();
 
 }
+const toggleLoginPass = document.getElementById("toggleLoginPass");
+
+toggleLoginPass.onclick = function(){
+
+    const txt = document.getElementById("loginPassCode");
+
+    if(txt.type === "password"){
+        txt.type = "text";
+    }else{
+        txt.type = "password";
+    }
+
+};
 updateMenuButtons();
