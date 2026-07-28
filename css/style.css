@@ -18,7 +18,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -1159,20 +1158,23 @@ min-width:300px;
     pointer-events:none;
 
 }
+/* ==========================
+SIDE MENU Hi UserName
+========================== */
 .menu-user{
-    padding:12px 15px;
+    padding:10px 15px;
     text-align:center;
-    font-size:16px;
-    font-weight:600;
-    color:#2A6EB0;
     border-bottom:1px solid #d9e7f5;
+    font-size:14px;      /* ముందు 16px ఉంటే 14px చేయండి */
+    font-weight:600;
 }
 
 #menuGreeting{
-    margin-right:6px;
+    color:#2A6EB0;
+    margin-right:4px;
 }
 
 #menuUserName{
-    color:#333;
-    font-weight:700;
+    color:#2A6EB0;        /* Hi కి ఉన్న అదే color */
+    font-weight:600;      /* Bold తగ్గుతుంది */
 }
