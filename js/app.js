@@ -1428,6 +1428,7 @@ const formData = new FormData();
                 JSON.stringify(result)
             );
             updateMenuButtons();
+            updateSideMenuUser();
             sessionStorage.setItem(
         "passCode",
         passCode
@@ -2853,7 +2854,7 @@ logoutMenuBtn.onclick = ()=>{
     sessionStorage.removeItem("user");
     sessionStorage.removeItem("passCode"); 
     updateMenuButtons();
-    
+    updateSideMenuUser();
     sideMenu.classList.remove("open");
     menuOverlay.classList.remove("show");
 
@@ -3078,6 +3079,8 @@ if(loggedUser){
     dashboard.classList.remove("hidden");
 
     homeBtn.click();
+    updateSideMenuUser();
+
 
 }
 function updateMenuButtons() {
