@@ -18,6 +18,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -1157,4 +1158,21 @@ min-width:300px;
 
     pointer-events:none;
 
+}
+.menu-user{
+    padding:12px 15px;
+    text-align:center;
+    font-size:16px;
+    font-weight:600;
+    color:#2A6EB0;
+    border-bottom:1px solid #d9e7f5;
+}
+
+#menuGreeting{
+    margin-right:6px;
+}
+
+#menuUserName{
+    color:#333;
+    font-weight:700;
 }
