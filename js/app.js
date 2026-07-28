@@ -1427,7 +1427,7 @@ const formData = new FormData();
                 "user",
                 JSON.stringify(result)
             );
-            updateMenuButtons();
+            
             updateSideMenuUser();
             updateMenuIcon();
             
@@ -2855,7 +2855,7 @@ logoutMenuBtn.onclick = ()=>{
 
     sessionStorage.removeItem("user");
     sessionStorage.removeItem("passCode"); 
-    updateMenuButtons();
+
     updateSideMenuUser();
     updateMenuIcon();
     sideMenu.classList.remove("open");
@@ -3086,14 +3086,7 @@ if(loggedUser){
 updateMenuIcon();
 
 }
-function updateMenuButtons() {
 
-    const isLoggedIn = sessionStorage.getItem("user") !== null;
-
-    passcodeMenuBtn.disabled = !isLoggedIn;
-    logoutMenuBtn.disabled = !isLoggedIn;
-
-}
 
 function updateMenuIcon(){
 
@@ -3200,5 +3193,5 @@ document.querySelectorAll(".toggle-password").forEach(function(icon){
     });
 
 });
-updateMenuButtons();
+
 updateMenuIcon();
