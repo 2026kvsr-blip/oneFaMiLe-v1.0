@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 
@@ -3071,5 +3070,24 @@ function updateMenuButtons() {
     passcodeMenuBtn.disabled = !isLoggedIn;
     logoutMenuBtn.disabled = !isLoggedIn;
 
+}
+
+
+
+
+const gender = document.getElementById("gender");
+
+if(gender){
+    gender.addEventListener("change", function(){
+        this.style.color = "#333";
+    });
+}
+
+const dob = document.getElementById("dateOfBirth");
+
+if(dob){
+    dob.addEventListener("change", function(){
+        this.style.color = "#333";
+    });
 }
 updateMenuButtons();
