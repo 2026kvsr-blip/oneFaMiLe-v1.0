@@ -3,6 +3,7 @@
 oneFaMiLe V1
 Part 1A.3
 
+
 ===================================== */
 
 /* WELCOME SCREEN */
@@ -1263,7 +1264,23 @@ forgotPassCodeBtn.onclick = ()=>{
 
     forgotPassCodePage.classList.remove("hidden");
 
+    document.getElementById("otpPageHeading").textContent="Verify OTP";
+
 };
+
+
+sendForgotOTPBtn.onclick=()=>{
+
+    forgotPassCodePage.classList.add("hidden");
+
+    signupOTPPage.classList.remove("hidden");
+
+    document.getElementById("otpPageHeading").textContent="Reset Pass Code";
+
+    registerBtn.textContent="Reset Pass Code";
+
+};
+
 backForgotBtn.onclick = ()=>{
 
     forgotPassCodePage.classList.add("hidden");
