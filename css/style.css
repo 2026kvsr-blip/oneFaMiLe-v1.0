@@ -1178,3 +1178,27 @@ SIDE MENU Hi UserName
     color:#2A6EB0;        /* Hi కి ఉన్న అదే color */
     font-weight:600;      /* Bold తగ్గుతుంది */
 }
+
+
+.password-box{
+    position:relative;
+    width:100%;
+}
+
+.password-box input{
+    width:100%;
+    padding-right:45px;
+    box-sizing:border-box;
+}
+
+.eye-icon{
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+    user-select:none;
+    font-size:18px;
+    color:#666;
+}
+
