@@ -335,18 +335,29 @@ type="text"
 placeholder="Enter OTP">
 
 
-<input
-id="sensitivePassCode"
-maxlength="6"
-type="password"
-placeholder="Enter Pass Code">
+<div class="password-box">
 
-<input
-id="registerConfirmPassCode"
-maxlength="6"
-type="password"
-placeholder="Confirm Pass Code">
+    <input
+        id="sensitivePassCode"
+        maxlength="6"
+        type="password"
+        placeholder="Enter Pass Code">
 
+    <span id="toggleSensitivePassCode" class="eye-icon">👁</span>
+
+</div>
+
+<div class="password-box">
+
+    <input
+        id="registerConfirmPassCode"
+        maxlength="6"
+        type="password"
+        placeholder="Confirm Pass Code">
+
+    <span id="toggleRegisterConfirmPassCode" class="eye-icon">👁</span>
+
+</div>
 <button
 id="registerBtn">
 
