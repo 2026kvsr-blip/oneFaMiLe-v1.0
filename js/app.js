@@ -2814,7 +2814,6 @@ document.getElementById("loanChartBack").onclick=()=>{
 
 };
 
-
 }
 menuBtn.onclick = ()=>{
 
@@ -3107,5 +3106,28 @@ if(dob){
     dob.addEventListener("change", function(){
         this.style.color = "#333";
     });
+}
+function updateSideMenuUser(){
+
+    const greeting = document.getElementById("menuGreeting");
+    const userName = document.getElementById("menuUserName");
+
+    if(!greeting || !userName) return;
+
+    const user = JSON.parse(sessionStorage.getItem("user"));
+
+    if(!user){
+        greeting.textContent = "";
+        userName.textContent = "";
+        return;
+    }
+
+    greeting.textContent = "Hi";
+
+    userName.textContent =
+        `${user.surName} ${user.middleName} ${user.lastName}`
+        .replace(/\s+/g," ")
+        .trim();
+
 }
 updateMenuButtons();
