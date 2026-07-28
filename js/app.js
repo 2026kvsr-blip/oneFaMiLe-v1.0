@@ -5,7 +5,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 
@@ -3100,18 +3099,27 @@ function updateMenuIcon(){
     const menuBtn=document.getElementById("menuBtn");
 
     if(sessionStorage.getItem("user")){
-
         menuBtn.classList.remove("disabled");
+    }else{
+        menuBtn.classList.add("disabled");
+    }
+}
+
+function updateMenuIcon(){
+
+    const menuBtn = document.getElementById("menuBtn");
+
+    if(sessionStorage.getItem("user")){
+
+        menuBtn.classList.remove("hidden");
 
     }else{
 
-        menuBtn.classList.add("disabled");
+        menuBtn.classList.add("hidden");
 
     }
 
 }
-
-
 const gender = document.getElementById("gender");
 
 if(gender){
