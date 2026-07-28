@@ -5,6 +5,7 @@ Part 1A.3
 
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 
@@ -1429,6 +1430,7 @@ const formData = new FormData();
             );
             updateMenuButtons();
             updateSideMenuUser();
+            updateMenuIcon();
             sessionStorage.setItem(
         "passCode",
         passCode
@@ -2855,6 +2857,7 @@ logoutMenuBtn.onclick = ()=>{
     sessionStorage.removeItem("passCode"); 
     updateMenuButtons();
     updateSideMenuUser();
+    updateMenuIcon();
     sideMenu.classList.remove("open");
     menuOverlay.classList.remove("show");
 
@@ -3080,7 +3083,7 @@ if(loggedUser){
 
     homeBtn.click();
     updateSideMenuUser();
-
+updateMenuIcon();
 
 }
 function updateMenuButtons() {
@@ -3092,7 +3095,21 @@ function updateMenuButtons() {
 
 }
 
+function updateMenuIcon(){
 
+    const menuBtn=document.getElementById("menuBtn");
+
+    if(sessionStorage.getItem("user")){
+
+        menuBtn.classList.remove("disabled");
+
+    }else{
+
+        menuBtn.classList.add("disabled");
+
+    }
+
+}
 
 
 const gender = document.getElementById("gender");
@@ -3175,3 +3192,4 @@ document.querySelectorAll(".toggle-password").forEach(function(icon){
 
 });
 updateMenuButtons();
+updateMenuIcon();
