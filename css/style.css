@@ -5,6 +5,7 @@ box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
 }
 
+
 body{
     
     background:#EAF8FF;
@@ -1190,7 +1191,28 @@ SIDE MENU Hi UserName
     padding-right:45px;
     box-sizing:border-box;
 }
+.toggle-password{
 
+    position:absolute;
+
+    right:15px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    cursor:pointer;
+
+    color:#2A6EB0;
+
+    font-size:18px;
+
+}
+.toggle-password:hover{
+
+    color:#1E5A94;
+
+}
 .eye-icon{
     position:absolute;
     right:15px;
