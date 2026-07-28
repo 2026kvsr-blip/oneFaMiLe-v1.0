@@ -1226,3 +1226,37 @@ SIDE MENU Hi UserName
 .menu-btn.hidden{
     display:none;
 }
+
+/* ==========================
+Forget Pass word
+========================== */
+
+.forgot-password{
+
+    text-align:center;
+
+    margin-top:12px;
+
+    margin-bottom:12px;
+
+}
+
+#forgotPassCodeBtn{
+
+    color:#2A6EB0;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    text-decoration:underline;
+
+}
+
+#forgotPassCodeBtn:hover{
+
+    color:#1E5A94;
+
+}
