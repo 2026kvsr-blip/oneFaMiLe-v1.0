@@ -3,12 +3,11 @@
 oneFaMiLe V1
 Part 1A.3
 
-
 ===================================== */
 
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
-
+let otpMode = "signup";
 const loginSubmitBtn =
 document.getElementById("loginSubmitBtn");
 
@@ -1271,6 +1270,7 @@ forgotPassCodeBtn.onclick = ()=>{
 
 sendForgotOTPBtn.onclick=()=>{
 
+    otpMode = "forgot";
     forgotPassCodePage.classList.add("hidden");
 
     signupOTPPage.classList.remove("hidden");
@@ -1303,7 +1303,7 @@ welcomePage.classList.remove("hidden");
 
 };
 signupOTPBtn.onclick = ()=>{
-
+otpMode = "signup";
 signupPage.classList.add("hidden");
 
 signupOTPPage.classList.remove("hidden");
@@ -1360,9 +1360,7 @@ END
 registerBtn.onclick = async ()=>{
 
     const data = {
-
         action: "register",
-
         loginUserName: document.getElementById("loginUserName").value,
 
         surName: document.getElementById("surName").value,
@@ -3124,17 +3122,6 @@ updateMenuIcon();
 
 }
 
-
-function updateMenuIcon(){
-
-    const menuBtn=document.getElementById("menuBtn");
-
-    if(sessionStorage.getItem("user")){
-        menuBtn.classList.remove("disabled");
-    }else{
-        menuBtn.classList.add("disabled");
-    }
-}
 
 function updateMenuIcon(){
 
