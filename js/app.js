@@ -4,7 +4,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1493,10 +1492,84 @@ RESET PASS CODE
 
 async function resetPassCode(){
 
-    alert("Reset Pass Code module will be added in the next step.");
+    const otp = document.querySelector("#signupOTPPage input[type='text']").value.trim();
+
+    const newPassCode = sensitivePassCode.value.trim();
+
+    const confirmPassCode = registerConfirmPassCode.value.trim();
+
+    if(otp===""){
+        alert("Enter OTP");
+        return;
+    }
+
+    if(newPassCode===""){
+        alert("Enter New Pass Code");
+        return;
+    }
+
+    if(confirmPassCode===""){
+        alert("Confirm Pass Code");
+        return;
+    }
+
+    if(newPassCode!==confirmPassCode){
+        alert("Pass Codes do not match");
+        return;
+    }
+
+    const mobile = forgotMobileNo.value.trim();
+
+    /* -------- OTP Verify -------- */
+
+    const verifyData = new FormData();
+
+    verifyData.append("action","verifyForgotOTP");
+    verifyData.append("mobile",mobile);
+    verifyData.append("otp",otp);
+
+    const verifyResponse = await fetch(API_URL,{
+        method:"POST",
+        body:verifyData
+    });
+
+    const verifyResult = await verifyResponse.json();
+
+    if(verifyResult.status!=="success"){
+        alert(verifyResult.message);
+        return;
+    }
+
+    /* -------- Reset Pass Code -------- */
+
+    const resetData = new FormData();
+
+    resetData.append("action","resetPassCode");
+    resetData.append("mobile",mobile);
+    resetData.append("newPassCode",newPassCode);
+
+    const resetResponse = await fetch(API_URL,{
+        method:"POST",
+        body:resetData
+    });
+
+    const resetResult = await resetResponse.json();
+
+    alert(resetResult.message);
+
+    if(resetResult.status==="success"){
+
+        signupOTPPage.classList.add("hidden");
+
+        loginPage.classList.remove("hidden");
+
+        forgotMobileNo.value="";
+        sensitivePassCode.value="";
+        registerConfirmPassCode.value="";
+
+    }
 
 }
-
 
 
 loginSubmitBtn.onclick = async ()=>{
