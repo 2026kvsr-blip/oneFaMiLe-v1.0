@@ -10,6 +10,23 @@ let otpMode = "signup";
 const loginSubmitBtn =
 document.getElementById("loginSubmitBtn");
 
+const resetPassCodePage = document.getElementById("resetPassCodePage");
+
+const newPassCode = document.getElementById("newPassCode");
+
+const confirmNewPassCode = document.getElementById("confirmNewPassCode");
+
+const saveNewPassCodeBtn = document.getElementById("saveNewPassCodeBtn");
+
+const backResetPassCodeBtn = document.getElementById("backResetPassCodeBtn");
+
+const toggleNewPassCode =
+document.getElementById("toggleNewPassCode");
+
+const toggleConfirmNewPassCode =
+document.getElementById("toggleConfirmNewPassCode");
+
+
 const menuBtn =
 document.getElementById("menuBtn");
 
@@ -1369,17 +1386,16 @@ REGISTER / RESET PASS CODE
 
 registerBtn.onclick = async ()=>{
 
-    if(otpMode === "signup"){
+if(otpMode==="signup"){
 
-        await registerUser();
+    await registerUser();
 
-    }
-    else if(otpMode === "forgot"){
+}
+else if(otpMode==="forgot"){
 
-        await resetPassCode();
+    await verifyForgotOTP();
 
-    }
-
+}
 };
 /* ======================
 
@@ -1483,6 +1499,17 @@ async function registerUser(){
     }
 
 }
+/* ======================
+
+Verify PASS CODE
+
+====================== */
+async function verifyForgotOTP(){
+
+    alert("Verify Forgot OTP");
+
+}
+
 
 /* ======================
 
