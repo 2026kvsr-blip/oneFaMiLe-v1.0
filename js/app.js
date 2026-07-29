@@ -4,7 +4,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -3480,8 +3479,12 @@ backResetPassCodeBtn.onclick = ()=>{
 
     signupOTPPage.classList.remove("hidden");
 
+    // Clear Reset Pass Code fields
     newPassCode.value = "";
     confirmNewPassCode.value = "";
+
+    // Clear OTP field
+    document.querySelector("#signupOTPPage input[type='text']").value = "";
 
 };
 updateMenuIcon();
