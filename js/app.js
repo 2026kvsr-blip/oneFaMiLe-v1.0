@@ -4,7 +4,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -21,6 +20,11 @@ const saveNewPassCodeBtn = document.getElementById("saveNewPassCodeBtn");
 
 const backResetPassCodeBtn = document.getElementById("backResetPassCodeBtn");
 
+const signupPassCodeBox =
+document.getElementById("signupPassCodeBox");
+
+const signupConfirmPassCodeBox =
+document.getElementById("signupConfirmPassCodeBox");
 const toggleNewPassCode =
 document.getElementById("toggleNewPassCode");
 
@@ -1300,6 +1304,8 @@ sendForgotOTPBtn.onclick=()=>{
     document.getElementById("otpPageHeading").textContent="Reset Pass Code";
 
     registerBtn.textContent="Reset Pass Code";
+    signupPassCodeBox.classList.add("hidden");
+    signupConfirmPassCodeBox.classList.add("hidden");
 
 };
 
@@ -1329,6 +1335,8 @@ otpMode = "signup";
 signupPage.classList.add("hidden");
 
 signupOTPPage.classList.remove("hidden");
+    signupPassCodeBox.classList.remove("hidden");
+signupConfirmPassCodeBox.classList.remove("hidden");
 
 };
 /* ======================
