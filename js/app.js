@@ -3432,5 +3432,48 @@ document.querySelectorAll(".toggle-password").forEach(function(icon){
     });
 
 });
+saveNewPassCodeBtn.onclick = async ()=>{
 
+    const pass1 = newPassCode.value.trim();
+    const pass2 = confirmNewPassCode.value.trim();
+
+    if(pass1===""){
+        alert("Enter New Pass Code");
+        return;
+    }
+
+    if(pass2===""){
+        alert("Confirm New Pass Code");
+        return;
+    }
+
+    if(pass1!==pass2){
+        alert("Pass Codes do not match");
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("action","resetPassCode");
+    formData.append("mobile",forgotMobileNo.value.trim());
+    formData.append("newPassCode",pass1);
+
+    const response = await fetch(API_URL,{
+        method:"POST",
+        body:formData
+    });
+
+    const result = await response.json();
+
+    alert(result.message);
+
+    if(result.status==="success"){
+
+        resetPassCodePage.classList.add("hidden");
+
+        loginPage.classList.remove("hidden");
+
+    }
+
+};
 updateMenuIcon();
