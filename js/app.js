@@ -3,6 +3,7 @@
 oneFaMiLe V1
 Part 1A.3
 
+
 ===================================== */
 
 /* WELCOME SCREEN */
@@ -1357,73 +1358,143 @@ END
 ====================== */
 
 
+/* ======================
+
+REGISTER / RESET PASS CODE
+
+====================== */
+
 registerBtn.onclick = async ()=>{
 
-    const data = {
-        action: "register",
-        loginUserName: document.getElementById("loginUserName").value,
+    if(otpMode === "signup"){
 
-        surName: document.getElementById("surName").value,
+        await registerUser();
 
-        middleName: document.getElementById("middleName").value,
+    }
+    else if(otpMode === "forgot"){
 
-        lastName: document.getElementById("lastName").value,
-
-        email: document.getElementById("emailId").value,
-
-        mobile: document.getElementById("mobileNo").value,
-        gender: document.getElementById("gender").value,
-
-dateOfBirth: document.getElementById("dateOfBirth").value,
-
-place: document.getElementById("place").value,
-
-state: document.getElementById("state").value,
-
-country: document.getElementById("country").value,
-
-        passCode: document.getElementById("sensitivePassCode").value.trim()    };
-
- const formData = new FormData();  
-formData.append("action","register");
-formData.append("loginUserName",data.loginUserName);
-formData.append("surName",data.surName);
-formData.append("middleName",data.middleName);
-formData.append("lastName",data.lastName);
-formData.append("gender",data.gender);
-
-formData.append("dateOfBirth",data.dateOfBirth);
-
-formData.append("place",data.place);
-
-formData.append("state",data.state);
-
-formData.append("country",data.country);
-formData.append("email",data.email);
-formData.append("mobile",data.mobile);
-formData.append("passCode",data.passCode);
-
-const response = await fetch(API_URL,{
-
-    method:"POST",
-    body:formData
-
-});
-
-const result = await response.json();
-
-    
-    alert(result.message);
-
-    if(result.status=="success"){
-
-        signupOTPPage.classList.add("hidden");
-        signupPage.classList.add("hidden");
-        welcomePage.classList.remove("hidden");
+        await resetPassCode();
 
     }
 
 };
+/* ======================
+
+REGISTER USER
+
+====================== */
+
+async function registerUser(){
+
+    const data = {
+
+        action: "register",
+
+        loginUserName: document.getElementById("loginUserName").value.trim(),
+
+        surName: document.getElementById("surName").value.trim(),
+
+        middleName: document.getElementById("middleName").value.trim(),
+
+        lastName: document.getElementById("lastName").value.trim(),
+
+        email: document.getElementById("emailId").value.trim(),
+
+        mobile: document.getElementById("mobileNo").value.trim(),
+
+        gender: document.getElementById("gender").value,
+
+        dateOfBirth: document.getElementById("dateOfBirth").value,
+
+        place: document.getElementById("place").value.trim(),
+
+        state: document.getElementById("state").value.trim(),
+
+        country: document.getElementById("country").value.trim(),
+
+        passCode: document.getElementById("sensitivePassCode").value.trim()
+
+    };
+
+
+    const formData = new FormData();
+
+    formData.append("action","register");
+
+    formData.append("loginUserName",data.loginUserName);
+
+    formData.append("surName",data.surName);
+
+    formData.append("middleName",data.middleName);
+
+    formData.append("lastName",data.lastName);
+
+    formData.append("gender",data.gender);
+
+    formData.append("dateOfBirth",data.dateOfBirth);
+
+    formData.append("place",data.place);
+
+    formData.append("state",data.state);
+
+    formData.append("country",data.country);
+
+    formData.append("email",data.email);
+
+    formData.append("mobile",data.mobile);
+
+    formData.append("passCode",data.passCode);
+
+
+    try{
+
+        const response = await fetch(API_URL,{
+
+            method:"POST",
+
+            body:formData
+
+        });
+
+        const result = await response.json();
+
+        alert(result.message);
+
+        if(result.status=="success"){
+
+            signupOTPPage.classList.add("hidden");
+
+            signupPage.classList.add("hidden");
+
+            welcomePage.classList.remove("hidden");
+
+        }
+
+    }
+    catch(err){
+
+        alert("Unable to connect to server.");
+
+        console.log(err);
+
+    }
+
+}
+
+/* ======================
+
+RESET PASS CODE
+
+====================== */
+
+async function resetPassCode(){
+
+    alert("Reset Pass Code module will be added in the next step.");
+
+}
+
+
+
 loginSubmitBtn.onclick = async ()=>{
 
     const loginId =
