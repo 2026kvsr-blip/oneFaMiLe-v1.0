@@ -4,6 +4,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1447,6 +1448,7 @@ backSignupBtn.onclick = ()=>{
 
 signupOTPBtn.onclick = ()=>{
 
+     if(!validateSignup()) return;
     otpMode = "signup";
 
     clearOTP();
@@ -1528,6 +1530,8 @@ registerBtn.onclick = async ()=>{
 
 if(otpMode==="signup"){
 
+    if(!validateSignup()) return;
+
     await registerUser();
 
 }
@@ -1537,6 +1541,64 @@ else if(otpMode==="forgot"){
 
 }
 };
+
+
+function validateSignup(){
+
+    if(loginUserName.value.trim()==""){
+        alert("Enter Login User Name");
+        loginUserName.focus();
+        return false;
+    }
+
+    if(surName.value.trim()==""){
+        alert("Enter Surname");
+        surName.focus();
+        return false;
+    }
+
+    if(mobileNo.value.trim()==""){
+        alert("Enter Mobile Number");
+        mobileNo.focus();
+        return false;
+    }
+
+    if(gender.value==""){
+        alert("Select Gender");
+        gender.focus();
+        return false;
+    }
+
+    if(dateOfBirth.value==""){
+        alert("Select Date of Birth");
+        dateOfBirth.focus();
+        return false;
+    }
+
+    if(sensitivePassCode.value.trim()==""){
+        alert("Enter Sensitive Pass Code");
+        sensitivePassCode.focus();
+        return false;
+    }
+
+    if(registerConfirmPassCode.value.trim()==""){
+        alert("Confirm Sensitive Pass Code");
+        registerConfirmPassCode.focus();
+        return false;
+    }
+
+    if(sensitivePassCode.value !== registerConfirmPassCode.value){
+        alert("Pass Codes do not match");
+        registerConfirmPassCode.focus();
+        return false;
+    }
+
+    return true;
+}
+
+
+
+
 /* ======================
 
 REGISTER USER
