@@ -191,7 +191,7 @@ signupPage,
 signupOTPPage,
 forgotPassCodePage,
 resetPassCodePage,
-homePage
+dashboard
 
 ];
 
@@ -217,14 +217,13 @@ function hideAllPages(){
 SHOW PAGE
 ===================================== */
 
-function showPage(page){
+function showScreen(page){
 
     hideAllPages();
 
     page.classList.remove("hidden");
 
 }
-
 /* =====================================
 CLEAR OTP
 ===================================== */
