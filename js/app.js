@@ -1355,12 +1355,13 @@ LOGIN
 
 loginBtn.onclick = ()=>{
 
-welcomePage.classList.add("hidden");
+    clearLogin();
 
-loginPage.classList.remove("hidden");
+    showScreen(loginPage);
+
+    setFocus(loginId);
 
 };
-
 
 /* ======================
 
@@ -1370,12 +1371,9 @@ SIGNUP
 
 signupBtn.onclick = ()=>{
 
-welcomePage.classList.add("hidden");
-
-signupPage.classList.remove("hidden");
+    showScreen(signupPage);
 
 };
-
 
 /* ======================
 
@@ -1385,11 +1383,17 @@ BACK LOGIN
 
 backLoginBtn.onclick = ()=>{
 
-loginPage.classList.add("hidden");
+    clearLogin();
 
-welcomePage.classList.remove("hidden");
+    showScreen(welcomePage);
 
 };
+
+/* ======================
+
+Forget PassCode Btn
+
+====================== */
 
 forgotPassCodeBtn.onclick = ()=>{
 
