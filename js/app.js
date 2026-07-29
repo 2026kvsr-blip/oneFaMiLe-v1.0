@@ -4,6 +4,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1544,14 +1545,7 @@ async function verifyForgotOTP(){
             signupOTPPage.classList.add("hidden");
 
             resetPassCodePage.classList.remove("hidden");
-            forgotMobileNo.value = "";
-newPassCode.value = "";
-confirmNewPassCode.value = "";
-
-document.querySelector("#signupOTPPage input[type='text']").value = "";
-            loginId.value = "";
-    loginPassCode.value = "";
-
+            
         }else{
 
             alert(result.message);
@@ -1574,53 +1568,26 @@ RESET PASS CODE
 ====================== */
 
 async function resetPassCode(){
-
     const otp = document.querySelector("#signupOTPPage input[type='text']").value.trim();
-
     const newPassCode = sensitivePassCode.value.trim();
-
     const confirmPassCode = registerConfirmPassCode.value.trim();
-
     if(otp===""){
-        alert("Enter OTP");
-        return;
+        alert("Enter OTP");        return;    }
+    if(newPassCode===""){        alert("Enter New Pass Code");        return;
     }
-
-    if(newPassCode===""){
-        alert("Enter New Pass Code");
-        return;
+    if(confirmPassCode===""){        alert("Confirm Pass Code");        return;
     }
-
-    if(confirmPassCode===""){
-        alert("Confirm Pass Code");
-        return;
+    if(newPassCode!==confirmPassCode){        alert("Pass Codes do not match");        return;
     }
-
-    if(newPassCode!==confirmPassCode){
-        alert("Pass Codes do not match");
-        return;
-    }
-
     const mobile = forgotMobileNo.value.trim();
-
     /* -------- OTP Verify -------- */
-
     const verifyData = new FormData();
-
     verifyData.append("action","verifyForgotOTP");
     verifyData.append("mobile",mobile);
     verifyData.append("otp",otp);
-
-    const verifyResponse = await fetch(API_URL,{
-        method:"POST",
-        body:verifyData
-    });
-
+    const verifyResponse = await fetch(API_URL,{        method:"POST",        body:verifyData    });
     const verifyResult = await verifyResponse.json();
-
-    if(verifyResult.status!=="success"){
-        alert(verifyResult.message);
-        return;
+    if(verifyResult.status!=="success"){        alert(verifyResult.message);        return;
     }
 
     /* -------- Reset Pass Code -------- */
@@ -3488,6 +3455,14 @@ saveNewPassCodeBtn.onclick = async ()=>{
         resetPassCodePage.classList.add("hidden");
 
         loginPage.classList.remove("hidden");
+        forgotMobileNo.value = "";
+newPassCode.value = "";
+confirmNewPassCode.value = "";
+
+document.querySelector("#signupOTPPage input[type='text']").value = "";
+            loginId.value = "";
+    loginPassCode.value = "";
+
 
     }
 
