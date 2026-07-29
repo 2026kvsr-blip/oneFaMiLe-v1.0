@@ -4,7 +4,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -179,6 +178,115 @@ const reportsBtn =
 document.getElementById("reportsBtn");
 const languageSelect =
 document.getElementById("languageSelect");
+
+/* =====================================
+COMMON PAGE ARRAY
+===================================== */
+
+const allPages = [
+
+welcomePage,
+loginPage,
+signupPage,
+signupOTPPage,
+forgotPassCodePage,
+resetPassCodePage,
+homePage
+
+];
+
+/* =====================================
+HIDE ALL PAGES
+===================================== */
+
+function hideAllPages(){
+
+    allPages.forEach(page=>{
+
+        if(page){
+
+            page.classList.add("hidden");
+
+        }
+
+    });
+
+}
+
+/* =====================================
+SHOW PAGE
+===================================== */
+
+function showPage(page){
+
+    hideAllPages();
+
+    page.classList.remove("hidden");
+
+}
+
+/* =====================================
+CLEAR OTP
+===================================== */
+
+function clearOTP(){
+
+const otpInput =
+document.querySelector("#signupOTPPage input[type='text']");
+
+if(otpInput){
+
+otpInput.value="";
+
+}
+
+}
+
+/* =====================================
+CLEAR RESET PASS CODE
+===================================== */
+
+function clearResetPassCode(){
+
+newPassCode.value="";
+confirmNewPassCode.value="";
+
+}
+/* =====================================
+CLEAR FORGOT PASS CODE
+===================================== */
+
+function clearForgotPassCode(){
+
+forgotMobileNo.value="";
+
+}
+
+/* =====================================
+CLEAR LOGIN
+===================================== */
+
+function clearLogin(){
+
+loginId.value="";
+loginPassCode.value="";
+
+}
+
+/* =====================================
+FOCUS
+===================================== */
+
+function setFocus(control){
+
+if(control){
+
+control.focus();
+
+}
+
+}
+
 languageSelect.onchange = function(){
 
     updateWelcomePage();
