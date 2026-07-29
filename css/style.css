@@ -18,6 +18,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -523,7 +524,8 @@ display:none !important;
 
 }
 #signupPage,
-#signupOTPPage{
+#signupOTPPage,
+#resetPassCodePage{
 
 width:90%;
 
@@ -541,7 +543,8 @@ gap:15px;
 
 
 #signupPage h3,
-#signupOTPPage h3{
+#signupOTPPage h3,
+#resetPassCodePage h3
 
 text-align:center;
 
@@ -559,7 +562,8 @@ color:#2A6EB0;
 #signupPage input,
 #signupPage select,
 #signupOTPPage input,
-#signupOTPPage select{
+#signupOTPPage select,
+#resetPassCodePage input{
 
 height:46px;
 
@@ -580,7 +584,8 @@ width:100%;
 }
 
 #signupPage button,
-#signupOTPPage button{
+#signupOTPPage button,
+#resetPassCodePage button{
 
 height:46px;
 
