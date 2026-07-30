@@ -6,7 +6,6 @@ Part 1A.3
 ===================================== */
 
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1589,11 +1588,11 @@ REGISTER / RESET PASS CODE
 
 registerBtn.onclick = async ()=>{
 
-if(otpMode==="signup"){
+if(otpMode=="signup"){
 
     if(!validateSignup()) return;
 
-    await registerUser();
+    await verifySignupOTP();
 
 }
 else if(otpMode==="forgot"){
