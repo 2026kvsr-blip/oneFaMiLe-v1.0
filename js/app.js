@@ -5,6 +5,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1878,8 +1879,7 @@ const otp = forgotOTP.value.trim();
 
         if(result.status==="success"){
 
-            signupOTPPage.classList.add("hidden");
-
+            otpPage.classList.add("hidden");
             resetPassCodePage.classList.remove("hidden");
             
         }else{
