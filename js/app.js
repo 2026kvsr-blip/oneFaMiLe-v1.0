@@ -12,6 +12,7 @@ let otpMode = "signup";
 const loginSubmitBtn =
 document.getElementById("loginSubmitBtn");
 
+const forgotOTP = document.getElementById("forgotOTP");
 const registerOTP = document.getElementById("registerOTP");
 const resetPassCodePage = document.getElementById("resetPassCodePage");
 
