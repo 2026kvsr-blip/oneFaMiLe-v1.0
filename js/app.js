@@ -1,3 +1,4 @@
+
 /* =====================================
 
 oneFaMiLe V1
@@ -1486,8 +1487,7 @@ if(!validateSignupBasic()) return;
     // Send Signup OTP
     const formData = new FormData();
     formData.append("action","sendSignupOTP");
-    formData.append("mobile",signupMobileNo.value.trim());
-
+    formData.append("mobile", mobileNo.value.trim());
     try{
 
         const response = await fetch(API_URL,{
