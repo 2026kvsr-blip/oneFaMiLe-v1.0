@@ -6,6 +6,7 @@ Part 1A.3
 ===================================== */
 
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1805,14 +1806,28 @@ async function registerUser(){
 
         if(result.status=="success"){
 
-            signupOTPPage.classList.add("hidden");
+    alert(result.message);
 
-            signupPage.classList.add("hidden");
+    // Clear Signup Form
+    document.getElementById("loginUserName").value = "";
+    document.getElementById("surName").value = "";
+    document.getElementById("middleName").value = "";
+    document.getElementById("lastName").value = "";
+    document.getElementById("emailId").value = "";
+    document.getElementById("mobileNo").value = "";
+    document.getElementById("gender").value = "";
+    document.getElementById("dateOfBirth").value = "";
+    document.getElementById("place").value = "";
+    document.getElementById("state").value = "";
+    document.getElementById("country").value = "";
+    document.getElementById("sensitivePassCode").value = "";
+    document.getElementById("registerConfirmPassCode").value = "";
 
-            welcomePage.classList.remove("hidden");
+    clearOTP();
 
-        }
+    showScreen(welcomePage);
 
+}
     }
     catch(err){
 
