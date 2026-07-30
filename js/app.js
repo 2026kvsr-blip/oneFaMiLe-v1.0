@@ -4,6 +4,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1484,16 +1485,42 @@ signupOTPBtn.onclick = async ()=>{
 
     if(!(await checkSignup())) return;
 
-    otpMode = "signup";
+    // Send Signup OTP
+    const formData = new FormData();
+    formData.append("action","sendSignupOTP");
+    formData.append("mobile",signupMobileNo.value.trim());
 
-    clearOTP();
+    try{
 
-    showScreen(signupOTPPage);
+        const response = await fetch(API_URL,{
+            method:"POST",
+            body:formData
+        });
 
-    signupPassCodeBox.classList.remove("hidden");
-    signupConfirmPassCodeBox.classList.remove("hidden");
+        const result = await response.json();
+
+        if(result.status !== "success"){
+            alert(result.message);
+            return;
+        }
+
+        otpMode = "signup";
+
+        clearOTP();
+
+        showScreen(signupOTPPage);
+
+        signupPassCodeBox.classList.remove("hidden");
+        signupConfirmPassCodeBox.classList.remove("hidden");
+
+    }catch(err){
+
+        alert("Unable to connect to server.");
+        console.log(err);
+
+    }
+
 };
-
 /* ======================
 
 BACK OTP
