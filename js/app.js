@@ -5,7 +5,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1897,6 +1896,53 @@ async function verifyForgotOTP(){
     }
 
 }
+/* ======================
+VERIFY SIGNUP OTP
+====================== */
+
+async function verifySignupOTP(){
+
+    const formData = new FormData();
+
+    formData.append("action","verifySignupOTP");
+    formData.append("mobile", mobileNo.value.trim());
+    formData.append("otp", registerOTP.value.trim());
+
+    if(registerOTP.value.trim()==""){
+
+    alert("Enter OTP");
+    registerOTP.focus();
+    return;
+
+}
+
+    try{
+
+        const response = await fetch(API_URL,{
+            method:"POST",
+            body:formData
+        });
+
+        const result = await response.json();
+
+        if(result.status=="success"){
+
+            await registerUser();
+
+        }else{
+
+            alert(result.message);
+
+        }
+
+    }catch(error){
+
+        alert("Unable to verify OTP.");
+
+    }
+
+}
+
 /* ======================
 
 RESET PASS CODE
