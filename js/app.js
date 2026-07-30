@@ -4,7 +4,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1481,8 +1480,7 @@ backSignupBtn.onclick = ()=>{
 
 signupOTPBtn.onclick = async ()=>{
 
-    if(!validateSignup()) return;
-
+if(!validateSignupBasic()) return;
     if(!(await checkSignup())) return;
 
     // Send Signup OTP
@@ -1602,6 +1600,42 @@ else if(otpMode==="forgot"){
 
 }
 };
+
+function validateSignupBasic(){
+
+    if(loginUserName.value.trim()==""){
+        alert("Enter Login User Name");
+        loginUserName.focus();
+        return false;
+    }
+
+    if(surName.value.trim()==""){
+        alert("Enter Surname");
+        surName.focus();
+        return false;
+    }
+
+    if(mobileNo.value.trim()==""){
+        alert("Enter Mobile Number");
+        mobileNo.focus();
+        return false;
+    }
+
+    if(gender.value==""){
+        alert("Select Gender");
+        gender.focus();
+        return false;
+    }
+
+    if(dateOfBirth.value==""){
+        alert("Select Date of Birth");
+        dateOfBirth.focus();
+        return false;
+    }
+
+    return true;
+
+}
 
 
 function validateSignup(){
