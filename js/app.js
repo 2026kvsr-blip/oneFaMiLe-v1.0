@@ -4,7 +4,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1408,21 +1407,54 @@ forgotPassCodeBtn.onclick = ()=>{
 
 };
 
-sendForgotOTPBtn.onclick=()=>{
+sendForgotOTPBtn.onclick = async ()=>{
 
-    otpMode = "forgot";
-    forgotPassCodePage.classList.add("hidden");
+    const mobile = forgotMobileNo.value.trim();
 
-    signupOTPPage.classList.remove("hidden");
+    if(mobile === ""){
+        alert("Enter Mobile Number");
+        forgotMobileNo.focus();
+        return;
+    }
 
-    document.getElementById("otpPageHeading").textContent="Reset Pass Code";
+    const formData = new FormData();
+    formData.append("action","sendForgotOTP");
+    formData.append("mobile",mobile);
 
-    registerBtn.textContent="Reset Pass Code";
-    signupPassCodeBox.classList.add("hidden");
-    signupConfirmPassCodeBox.classList.add("hidden");
+    try{
+
+        const response = await fetch(API_URL,{
+            method:"POST",
+            body:formData
+        });
+
+        const result = await response.json();
+
+        if(result.status !== "success"){
+            alert(result.message);
+            return;
+        }
+
+        otpMode = "forgot";
+
+        forgotPassCodePage.classList.add("hidden");
+        signupOTPPage.classList.remove("hidden");
+
+        document.getElementById("otpPageHeading").textContent = "Reset Pass Code";
+
+        registerBtn.textContent = "Reset Pass Code";
+
+        signupPassCodeBox.classList.add("hidden");
+        signupConfirmPassCodeBox.classList.add("hidden");
+
+    }catch(err){
+
+        alert("Unable to connect to server.");
+        console.log(err);
+
+    }
 
 };
-
 backForgotBtn.onclick = ()=>{
 
     clearForgotPassCode();
