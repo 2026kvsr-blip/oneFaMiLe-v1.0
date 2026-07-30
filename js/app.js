@@ -4,7 +4,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1449,6 +1448,7 @@ backSignupBtn.onclick = ()=>{
 signupOTPBtn.onclick = ()=>{
 
      if(!validateSignup()) return;
+     if(!(await checkSignup())) return;
     otpMode = "signup";
 
     clearOTP();
@@ -1596,7 +1596,33 @@ function validateSignup(){
     return true;
 }
 
+/* ======================
 
+CHECK SIGHUP
+
+====================== */
+
+async function checkSignup() {
+
+  const response = await fetch(API_URL, {
+    method: "POST",
+    body: new URLSearchParams({
+      action: "checkSignup",
+      loginUserName: loginUserName.value.trim(),
+      mobile: mobileNo.value.trim()
+    })
+  });
+
+  const result = await response.json();
+
+  if (result.status !== "success") {
+    alert(result.message);
+    return false;
+  }
+
+  return true;
+
+}
 
 
 /* ======================
@@ -1701,6 +1727,9 @@ async function registerUser(){
     }
 
 }
+
+
+
 /* ======================
 
 Verify PASS CODE
