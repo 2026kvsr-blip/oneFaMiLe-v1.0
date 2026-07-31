@@ -6,6 +6,7 @@ font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
+
     
     background:#EAF8FF;
 
@@ -1299,12 +1300,11 @@ Forget Pass word
     text-align:center;
 }
 .change-password-container h2{
-    margin:0 0 25px;
     color:#2A6EB0;
-    font-size:28px;
+    font-size:30px;
     font-weight:700;
+    margin-bottom:25px;
 }
-
 .password-box{
     position:relative;
     margin-bottom:18px;
@@ -1313,13 +1313,13 @@ Forget Pass word
 .password-box input{
     width:100%;
     height:52px;
-    border:2px solid #2A6EB0;
+    border:1px solid #C9D8E8;
     border-radius:14px;
     padding:0 48px 0 15px;
     font-size:16px;
     outline:none;
     box-sizing:border-box;
-    background:#fff;
+    background:#FCFEFF;
 }
 
 .password-box input:focus{
@@ -1365,7 +1365,7 @@ Forget Pass word
 }
 
 #backChangePasswordBtn{
-    background:#d9534f;
+    background:#D94C4C;
     color:#fff;
 }
 
