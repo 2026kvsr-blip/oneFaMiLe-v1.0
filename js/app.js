@@ -5,7 +5,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -3543,20 +3542,19 @@ menuOverlay.onclick = ()=>{
 
 };
 
-passcodeMenuBtn.onclick = function () {
+passcodeMenuBtn.onclick = () => {
 
     sideMenu.classList.remove("show");
     menuOverlay.classList.remove("show");
 
-    dashboard.classList.add("hidden");
-    changePasswordPage.classList.remove("hidden");
+    showScreen(changePasswordPage);
 
     oldPassCode.value = "";
     changeNewPassCode.value = "";
     changeConfirmPassCode.value = "";
 
+    setFocus(oldPassCode);
 };
-
 
 logoutMenuBtn.onclick = ()=>{
 
@@ -3651,7 +3649,7 @@ changePasswordBtn.onclick = async () => {
     const formData = new FormData();
 
     formData.append("action", "changePassword");
-    formData.append("loginId", user.loginId);
+formData.append("loginId", user.loginUserName);
     formData.append("oldPassCode", oldPass);
     formData.append("newPassCode", newPass);
 
