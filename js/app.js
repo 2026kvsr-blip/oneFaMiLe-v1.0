@@ -5,6 +5,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1816,7 +1817,6 @@ async function registerUser(){
 
         const result = await response.json();
 
-        alert(result.message);
 
         if(result.status=="success"){
 
@@ -1840,6 +1840,10 @@ async function registerUser(){
     clearOTP();
 
     showScreen(welcomePage);
+
+}else{
+
+    alert(result.message);
 
 }
     }
