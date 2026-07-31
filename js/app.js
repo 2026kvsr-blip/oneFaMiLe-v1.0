@@ -4,7 +4,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -3057,19 +3056,22 @@ ${reportType}
 
 </h3>
 
+<div class="password-box" style="width:90%;margin:20px auto;">
+
 <input
 id="reportPassCode"
 type="password"
-placeholder="Enter Pass Code"
-style="
-width:90%;
-height:50px;
-margin:20px auto;
-display:block;
-border-radius:10px;
-padding-left:15px;
-font-size:16px;
-">
+placeholder="Enter Pass Code">
+
+<span
+id="toggleReportPassCode"
+class="eye-icon">
+
+<i class="fa-solid fa-eye"></i>
+
+</span>
+
+</div>
 <div align="center">
 
 <button
