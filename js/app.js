@@ -1,4 +1,3 @@
-
 /* =====================================
 
 oneFaMiLe V1
@@ -3542,19 +3541,6 @@ menuOverlay.onclick = ()=>{
 
 };
 
-passcodeMenuBtn.onclick = () => {
-
-    sideMenu.classList.remove("show");
-    menuOverlay.classList.remove("show");
-
-    showScreen(changePasswordPage);
-
-    oldPassCode.value = "";
-    changeNewPassCode.value = "";
-    changeConfirmPassCode.value = "";
-
-    setFocus(oldPassCode);
-};
 
 logoutMenuBtn.onclick = ()=>{
 
@@ -3584,7 +3570,7 @@ CHANGE PASS CODE MENU
 
 passcodeMenuBtn.onclick = () => {
 
-    sideMenu.classList.remove("show");
+    sideMenu.classList.remove("open");
     menuOverlay.classList.remove("show");
 
     showScreen(changePasswordPage);
@@ -3594,7 +3580,6 @@ passcodeMenuBtn.onclick = () => {
     changeConfirmPassCode.value = "";
 
     setFocus(oldPassCode);
-
 };
 
 /* ======================
