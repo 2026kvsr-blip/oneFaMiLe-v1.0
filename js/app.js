@@ -5,7 +5,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -3579,6 +3578,122 @@ logoutMenuBtn.onclick = ()=>{
         msg.style.display = "none";
     },1500);
 };
+
+/* ======================
+CHANGE PASS CODE MENU
+====================== */
+
+passcodeMenuBtn.onclick = () => {
+
+    sideMenu.classList.remove("show");
+    menuOverlay.classList.remove("show");
+
+    showScreen(changePasswordPage);
+
+    oldPassCode.value = "";
+    changeNewPassCode.value = "";
+    changeConfirmPassCode.value = "";
+
+    setFocus(oldPassCode);
+
+};
+
+/* ======================
+BACK CHANGE PASS CODE
+====================== */
+
+backChangePasswordBtn.onclick = () => {
+
+    showScreen(dashboard);
+
+    homeBtn.click();
+
+};
+
+/* ======================
+CHANGE PASS CODE
+====================== */
+
+changePasswordBtn.onclick = async () => {
+
+    const oldPass = oldPassCode.value.trim();
+    const newPass = changeNewPassCode.value.trim();
+    const confirmPass = changeConfirmPassCode.value.trim();
+
+    if (oldPass === "") {
+        alert("Enter Old Pass Code");
+        oldPassCode.focus();
+        return;
+    }
+
+    if (newPass === "") {
+        alert("Enter New Pass Code");
+        changeNewPassCode.focus();
+        return;
+    }
+
+    if (confirmPass === "") {
+        alert("Confirm New Pass Code");
+        changeConfirmPassCode.focus();
+        return;
+    }
+
+    if (newPass !== confirmPass) {
+        alert("New Pass Codes do not match");
+        changeConfirmPassCode.focus();
+        return;
+    }
+
+    const user =
+        JSON.parse(sessionStorage.getItem("user"));
+
+    const formData = new FormData();
+
+    formData.append("action", "changePassword");
+    formData.append("loginId", user.loginId);
+    formData.append("oldPassCode", oldPass);
+    formData.append("newPassCode", newPass);
+
+    try {
+
+        const response = await fetch(API_URL, {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+
+        alert(result.message);
+
+        if (result.status === "success") {
+
+            sessionStorage.setItem(
+                "passCode",
+                newPass
+            );
+
+            oldPassCode.value = "";
+            changeNewPassCode.value = "";
+            changeConfirmPassCode.value = "";
+
+            showScreen(dashboard);
+
+            homeBtn.click();
+        }
+
+    } catch (err) {
+
+        console.log(err);
+        alert("Unable to connect to server.");
+
+    }
+
+};
+
+/* ======================
+HIDE NAVIGATION - SHOW NAVIGATION
+====================== */
+
 function hideNavigation(){
 
     document.querySelector(".top-container").style.display = "none";
@@ -3592,6 +3707,8 @@ function showNavigation(){
     document.querySelector(".bottom-container").style.display = "flex";
 
 }
+
+
 function openChangeSensitivePassCode(){
 
     showPage(
