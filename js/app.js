@@ -184,6 +184,9 @@ document.getElementById("reportsBtn");
 const languageSelect =
 document.getElementById("languageSelect");
 
+const toggleSensitivePassCode =
+document.getElementById("toggleSensitivePassCode");
+
 /* =====================================
 COMMON PAGE ARRAY
 ===================================== */
@@ -3799,9 +3802,6 @@ toggleLoginPass.onclick = function(){
 };
 
 
-const toggleSensitivePassCode =
-document.getElementById("toggleSensitivePassCode");
-
 toggleSensitivePassCode.onclick = function(){
 
     const txt = document.getElementById("sensitivePassCode");
@@ -3822,6 +3822,79 @@ toggleSensitivePassCode.onclick = function(){
     }
 
 };
+
+toggleRegisterConfirmPassCode.onclick = function(){
+
+    const txt = document.getElementById("registerConfirmPassCode");
+    const icon = this.querySelector("i");
+
+    if(txt.type === "password"){
+
+        txt.type = "text";
+
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+
+    }else{
+
+        txt.type = "password";
+
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+
+    }
+
+};
+
+
+toggleNewPassCode.onclick = function(){
+
+    const txt = document.getElementById("newPassCode");
+    const icon = this.querySelector("i");
+
+    if(txt.type === "password"){
+
+        txt.type = "text";
+
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+
+    }else{
+
+        txt.type = "password";
+
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+
+    }
+
+};
+
+toggleConfirmNewPassCode.onclick = function(){
+
+    const txt = document.getElementById("confirmNewPassCode");
+    const icon = this.querySelector("i");
+
+    if(txt.type === "password"){
+
+        txt.type = "text";
+
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+
+    }else{
+
+        txt.type = "password";
+
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+
+    }
+
+};
+
+
+
 document.querySelectorAll(".toggle-password").forEach(function(icon){
 
     icon.addEventListener("click", function(){
