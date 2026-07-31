@@ -4,6 +4,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -3081,14 +3082,6 @@ Verify
 
 <br><br>
 
-<button
-id="changePassBtn"
-class="grid-btn">
-
-Change Pass Code
-
-</button>
-
 <br><br>
 
 <button
@@ -3125,11 +3118,6 @@ document.getElementById("verifyPass").onclick = () => {
         moduleName + " " + reportType,
         backFunction
     );
-
-};
-document.getElementById("changePassBtn").onclick = () => {
-
-    openChangeSensitivePassCode();
 
 };
 
