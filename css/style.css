@@ -5,6 +5,7 @@ box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
 }
 
+
 body{
     
     background:#EAF8FF;
@@ -1267,4 +1268,102 @@ Forget Pass word
 
     color:#1E5A94;
 
+}
+/* =====================================
+   CHANGE PASSWORD PAGE
+===================================== */
+
+#changePasswordPage{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#EAF8FF;
+    padding:20px;
+    box-sizing:border-box;
+}
+
+.change-password-container{
+    width:100%;
+    max-width:420px;
+    background:#ffffff;
+    border-radius:30px;
+    padding:30px 25px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+    text-align:center;
+}
+
+.change-password-container h2{
+    margin:0 0 25px;
+    color:#2A6EB0;
+    font-size:28px;
+    font-weight:700;
+}
+
+.password-group{
+    position:relative;
+    margin-bottom:18px;
+}
+
+.password-group input{
+    width:100%;
+    height:52px;
+    border:2px solid #2A6EB0;
+    border-radius:14px;
+    padding:0 48px 0 15px;
+    font-size:16px;
+    outline:none;
+    box-sizing:border-box;
+    background:#fff;
+}
+
+.password-group input:focus{
+    border-color:#1E5C94;
+}
+
+.password-group button{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    border:none;
+    background:none;
+    cursor:pointer;
+    color:#2A6EB0;
+    font-size:18px;
+}
+
+.change-password-buttons{
+    display:flex;
+    gap:12px;
+    margin-top:25px;
+}
+
+.change-password-buttons button{
+    flex:1;
+    height:50px;
+    border:none;
+    border-radius:14px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
+}
+
+#changePasswordBtn{
+    background:#2A6EB0;
+    color:#fff;
+}
+
+#changePasswordBtn:hover{
+    background:#225b93;
+}
+
+#backChangePasswordBtn{
+    background:#d9534f;
+    color:#fff;
+}
+
+#backChangePasswordBtn:hover{
+    background:#c63d39;
 }
