@@ -1,5 +1,6 @@
 /* =====================================
 
+
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
@@ -1957,7 +1958,11 @@ const otp = registerOTP.value.trim();
         alert("Enter OTP");
         return;
     }
-
+if (otp.length !== 6) {
+    alert("Enter 6-digit OTP");
+    registerOTP.focus();
+    return;
+}
 
     const formData = new FormData();
 
@@ -2006,12 +2011,18 @@ async function verifySignupOTP(){
     formData.append("mobile", mobileNo.value.trim());
     formData.append("otp", registerOTP.value.trim());
 
-    if(registerOTP.value.trim()==""){
+    const otp = registerOTP.value.trim();
 
+if (otp === "") {
     alert("Enter OTP");
     registerOTP.focus();
     return;
+}
 
+if (otp.length !== 6) {
+    alert("Enter 6-digit OTP");
+    registerOTP.focus();
+    return;
 }
 
     try{
