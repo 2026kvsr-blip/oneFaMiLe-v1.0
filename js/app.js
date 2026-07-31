@@ -5,6 +5,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -185,7 +186,36 @@ document.getElementById("languageSelect");
 
 const toggleSensitivePassCode =
 document.getElementById("toggleSensitivePassCode");
+/* =====================================
+CHANGE PASSWORD
+===================================== */
 
+const changePasswordPage =
+document.getElementById("changePasswordPage");
+
+const oldPassCode =
+document.getElementById("oldPassCode");
+
+const changeNewPassCode =
+document.getElementById("changeNewPassCode");
+
+const changeConfirmPassCode =
+document.getElementById("changeConfirmPassCode");
+
+const changePasswordBtn =
+document.getElementById("changePasswordBtn");
+
+const backChangePasswordBtn =
+document.getElementById("backChangePasswordBtn");
+
+const toggleOldPassCode =
+document.getElementById("toggleOldPassCode");
+
+const toggleChangeNewPassCode =
+document.getElementById("toggleChangeNewPassCode");
+
+const toggleChangeConfirmPassCode =
+document.getElementById("toggleChangeConfirmPassCode");
 /* =====================================
 COMMON PAGE ARRAY
 ===================================== */
@@ -201,6 +231,44 @@ resetPassCodePage,
 dashboard
 
 ];
+
+
+toggleOldPassCode.onclick = function () {
+    if (oldPassCode.type === "password") {
+        oldPassCode.type = "text";
+        toggleOldPassCode.innerHTML =
+            '<i class="fa-solid fa-eye-slash"></i>';
+    } else {
+        oldPassCode.type = "password";
+        toggleOldPassCode.innerHTML =
+            '<i class="fa-solid fa-eye"></i>';
+    }
+};
+
+toggleChangeNewPassCode.onclick = function () {
+    if (changeNewPassCode.type === "password") {
+        changeNewPassCode.type = "text";
+        toggleChangeNewPassCode.innerHTML =
+            '<i class="fa-solid fa-eye-slash"></i>';
+    } else {
+        changeNewPassCode.type = "password";
+        toggleChangeNewPassCode.innerHTML =
+            '<i class="fa-solid fa-eye"></i>';
+    }
+};
+
+toggleChangeConfirmPassCode.onclick = function () {
+    if (changeConfirmPassCode.type === "password") {
+        changeConfirmPassCode.type = "text";
+        toggleChangeConfirmPassCode.innerHTML =
+            '<i class="fa-solid fa-eye-slash"></i>';
+    } else {
+        changeConfirmPassCode.type = "password";
+        toggleChangeConfirmPassCode.innerHTML =
+            '<i class="fa-solid fa-eye"></i>';
+    }
+};
+
 
 /* =====================================
 HIDE ALL PAGES
@@ -3477,16 +3545,21 @@ menuOverlay.onclick = ()=>{
 
 };
 
-passcodeMenuBtn.onclick = (e) => {
+passcodeMenuBtn.onclick = function () {
 
-    e.stopPropagation();
-
-    sideMenu.classList.remove("open");
+    sideMenu.classList.remove("show");
     menuOverlay.classList.remove("show");
 
-    openChangeSensitivePassCode();
+    dashboard.classList.add("hidden");
+    changePasswordPage.classList.remove("hidden");
+
+    oldPassCode.value = "";
+    changeNewPassCode.value = "";
+    changeConfirmPassCode.value = "";
 
 };
+
+
 logoutMenuBtn.onclick = ()=>{
 
     sessionStorage.removeItem("user");
