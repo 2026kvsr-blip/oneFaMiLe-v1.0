@@ -4,6 +4,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -213,10 +214,23 @@ document.getElementById("toggleChangeNewPassCode");
 
 const toggleChangeConfirmPassCode =
 document.getElementById("toggleChangeConfirmPassCode");
+
 /* =====================================
 COMMON PAGE ARRAY
 ===================================== */
+// Signup OTP - Numbers Only
+registerOTP.addEventListener("input", function () {
 
+    this.value = this.value.replace(/\D/g, "");
+
+});
+
+// Forgot OTP - Numbers Only
+forgotOTP.addEventListener("input", function () {
+
+    this.value = this.value.replace(/\D/g, "");
+
+});
 const allPages = [
     welcomePage,
     loginPage,
