@@ -5,7 +5,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1867,7 +1866,7 @@ Verify PASS CODE
 async function verifyForgotOTP(){
 
    const mobile = forgotMobileNo.value.trim();
-const otp = forgotOTP.value.trim();
+const otp = registerOTP.value.trim();
     if(mobile===""){
         alert("Enter Mobile Number");
         forgotMobileNo.focus();
@@ -1896,8 +1895,8 @@ const otp = forgotOTP.value.trim();
 
         if(result.status==="success"){
 
-            otpPage.classList.add("hidden");
-            resetPassCodePage.classList.remove("hidden");
+          signupOTPPage.classList.add("hidden");
+resetPassCodePage.classList.remove("hidden");
             
         }else{
 
