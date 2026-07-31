@@ -5,6 +5,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -3779,15 +3780,25 @@ const toggleLoginPass = document.getElementById("toggleLoginPass");
 toggleLoginPass.onclick = function(){
 
     const txt = document.getElementById("loginPassCode");
+    const icon = this.querySelector("i");
 
     if(txt.type === "password"){
+
         txt.type = "text";
+
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+
     }else{
+
         txt.type = "password";
+
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+
     }
 
 };
-
 document.querySelectorAll(".toggle-password").forEach(function(icon){
 
     icon.addEventListener("click", function(){
