@@ -5,7 +5,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1477,10 +1476,24 @@ SEND OTP
 
 backSignupBtn.onclick = ()=>{
 
+    document.getElementById("loginUserName").value="";
+    document.getElementById("surName").value="";
+    document.getElementById("middleName").value="";
+    document.getElementById("lastName").value="";
+    document.getElementById("emailId").value="";
+    document.getElementById("mobileNo").value="";
+    document.getElementById("gender").value="";
+    document.getElementById("dateOfBirth").value="";
+    document.getElementById("place").value="";
+    document.getElementById("state").value="";
+    document.getElementById("country").value="";
+    document.getElementById("sensitivePassCode").value="";
+    document.getElementById("registerConfirmPassCode").value="";
+    registerOTP.value="";
+
     showScreen(welcomePage);
 
 };
-
 
 signupOTPBtn.onclick = async ()=>{
 
