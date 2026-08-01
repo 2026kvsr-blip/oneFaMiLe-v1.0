@@ -1414,22 +1414,22 @@ Forget Pass word
 .otp-link{
 
     text-align:center;
-    color:#777;
-    font-size:15px;
-    line-height:24px;
+    color:#666;
+    font-size:13px;
+    line-height:20px;
     cursor:pointer;
-    user-select:none;
 
 }
 
 .otp-link span{
 
     color:#2A6EB0;
-    font-size:17px;
-    font-weight:700;
+    font-size:15px;
+    font-weight:400;
     text-decoration:underline;
 
 }
+
 .otp-limit{
     color:#d9534f;
     font-size:15px;
