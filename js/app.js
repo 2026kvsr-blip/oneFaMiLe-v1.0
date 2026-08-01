@@ -4,7 +4,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -319,7 +318,15 @@ function startOtpTimer(timerId){
 
     clearInterval(otpInterval);
 
-    otpSeconds = 90;
+    // Timer start అయినప్పుడు Verify buttons enable చేయండి
+    document.getElementById("verifyOTPBtn")?.removeAttribute("disabled");
+    document.getElementById("registerBtn")?.removeAttribute("disabled");
+
+    // Resend buttons hide చేయండి
+    document.getElementById("resendSignupOTPBtn")?.classList.add("hidden");
+    document.getElementById("resendForgotOTPBtn")?.classList.add("hidden");
+
+    otpSeconds = 90;   // Test కోసం 90 sec
 
     updateOtpTimer(timerId);
 
@@ -333,14 +340,19 @@ function startOtpTimer(timerId){
 
             clearInterval(otpInterval);
 
-            alert("OTP Expired. Please request a new OTP.");
+            document.getElementById("verifyOTPBtn")?.setAttribute("disabled","true");
+            document.getElementById("registerBtn")?.setAttribute("disabled","true");
+
+            document.getElementById("resendSignupOTPBtn")?.classList.remove("hidden");
+            document.getElementById("resendForgotOTPBtn")?.classList.remove("hidden");
+
+            alert("OTP Expired. Please click Resend OTP.");
 
         }
 
     },1000);
 
 }
-
 
 function updateOtpTimer(timerId){
 
