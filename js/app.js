@@ -195,6 +195,10 @@ document.getElementById("signupOtpTimer");
 
 const otpLimitMsg =
 document.getElementById("otpLimitMsg");
+
+const otpSendingMsg =
+document.getElementById("otpSendingMsg");
+
 /* =====================================
 CHANGE PASSWORD
 ===================================== */
@@ -1592,7 +1596,7 @@ async function sendForgotOTP(){
         showScreen(signupOTPPage);
 
         startOtpTimer("signupOtpTimer");
-
+        otpSendingMsg.classList.add("hidden");
         document.getElementById("registerBtn").textContent = "Reset Pass Code";
 
         signupPassCodeBox.classList.add("hidden");
@@ -1687,7 +1691,7 @@ async function sendSignupOTP(){
         showScreen(signupOTPPage);
 
         startOtpTimer("signupOtpTimer");
-
+        otpSendingMsg.classList.add("hidden");
         signupPassCodeBox.classList.remove("hidden");
         signupConfirmPassCodeBox.classList.remove("hidden");
 
@@ -1733,7 +1737,9 @@ resendSignupOTPBtn.onclick = async ()=>{
     }
 
     otpResendCount++;
-resendSignupOTPBtn.classList.add("rotate");
+    resendSignupOTPBtn.classList.add("hidden");
+
+   otpSendingMsg.classList.remove("hidden");
 
 setTimeout(()=>{
     resendSignupOTPBtn.classList.remove("rotate");
