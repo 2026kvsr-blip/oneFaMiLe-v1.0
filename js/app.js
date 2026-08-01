@@ -5,6 +5,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -184,6 +185,8 @@ document.getElementById("languageSelect");
 
 const toggleSensitivePassCode =
 document.getElementById("toggleSensitivePassCode");
+let otpInterval = null;
+let otpSeconds = 300; // 5 Minutes
 /* =====================================
 CHANGE PASSWORD
 ===================================== */
@@ -307,6 +310,49 @@ function showScreen(page){
     hideAllPages();
 
     page.classList.remove("hidden");
+
+}
+
+/* =====================================
+OTP TIMER
+===================================== */
+function startOtpTimer(timerId){
+
+    clearInterval(otpInterval);
+
+    otpSeconds = 300;
+
+    updateOtpTimer(timerId);
+
+    otpInterval = setInterval(() => {
+
+        otpSeconds--;
+
+        updateOtpTimer(timerId);
+
+        if(otpSeconds <= 0){
+
+            clearInterval(otpInterval);
+
+            alert("OTP Expired. Please request a new OTP.");
+
+        }
+
+    },1000);
+
+}
+
+
+function updateOtpTimer(timerId){
+
+    const timer = document.getElementById(timerId);
+
+    if(!timer) return;
+
+    const min = String(Math.floor(otpSeconds / 60)).padStart(2,"0");
+    const sec = String(otpSeconds % 60).padStart(2,"0");
+
+    timer.textContent = `${min}:${sec}`;
 
 }
 /* =====================================
