@@ -7,7 +7,6 @@ const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlS
 let otpMode = "signup";
 const loginSubmitBtn =
 document.getElementById("loginSubmitBtn");
-
 const forgotOTP = document.getElementById("forgotOTP");
 const registerOTP = document.getElementById("registerOTP");
 const resetPassCodePage = document.getElementById("resetPassCodePage");
@@ -184,7 +183,9 @@ let otpInterval = null;
 let otpSeconds = 30; // 0.5 Minutes
 let otpResendCount = 0;
 const MAX_OTP_RESEND = 3;
-
+let cooldownInterval = null;
+let cooldownSeconds = 60;
+let otpCooldownRunning = false;
 const resendSignupOTPBtn =
 document.getElementById("resendSignupOTPBtn");
 
