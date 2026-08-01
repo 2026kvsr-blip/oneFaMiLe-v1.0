@@ -4,7 +4,6 @@ padding:0;
 box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
 }
-
 body{
        
        background:#EAF8FF;
@@ -1460,5 +1459,14 @@ transform:rotate(0deg);
 to{
 transform:rotate(360deg);
 }
+
+}
+.otp-sending{
+
+    text-align:center;
+    color:#2A6EB0;
+    font-size:16px;
+    font-weight:600;
+    margin-top:10px;
 
 }
