@@ -331,9 +331,15 @@ function startOtpTimer(timerId){
     document.getElementById("registerBtn")?.removeAttribute("disabled");
 
     // Resend buttons hide చేయండి
-    document.getElementById("resendSignupOTPBtn")?.classList.add("hidden");
-    document.getElementById("resendForgotOTPBtn")?.classList.add("hidden");
+   if(otpMode === "signup"){
 
+    resendSignupOTPBtn.classList.add("hidden");
+
+}else{
+
+    resendForgotOTPBtn.classList.add("hidden");
+
+}
     otpSeconds = 90;   // Test కోసం 90 sec
 
     updateOtpTimer(timerId);
@@ -351,9 +357,15 @@ function startOtpTimer(timerId){
             document.getElementById("verifyOTPBtn")?.setAttribute("disabled","true");
             document.getElementById("registerBtn")?.setAttribute("disabled","true");
 
-            document.getElementById("resendSignupOTPBtn")?.classList.remove("hidden");
-            document.getElementById("resendForgotOTPBtn")?.classList.remove("hidden");
+            if(otpMode === "signup"){
 
+    resendSignupOTPBtn.classList.remove("hidden");
+
+}else{
+
+    resendForgotOTPBtn.classList.remove("hidden");
+
+}
             alert("OTP Expired. Please click Resend OTP.");
 
         }
