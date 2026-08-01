@@ -16,7 +16,6 @@ const resetPassCodePage = document.getElementById("resetPassCodePage");
 const newPassCode = document.getElementById("newPassCode");
 
 const confirmNewPassCode = document.getElementById("confirmNewPassCode");
-
 const saveNewPassCodeBtn = document.getElementById("saveNewPassCodeBtn");
 
 const backResetPassCodeBtn = document.getElementById("backResetPassCodeBtn");
@@ -1853,13 +1852,44 @@ function validateSignupBasic(){
         loginUserName.focus();
         return false;
     }
+if(loginUserName.value.trim().length < 6){
 
+    alert("Login User Name should contain at least 6 characters.");
+
+    loginUserName.focus();
+
+    return false;
+
+}
     if(surName.value.trim()==""){
         alert("Enter Surname");
         surName.focus();
         return false;
     }
+if(surName.value.trim().length < 2){
 
+    alert("Enter valid Surname.");
+
+    surName.focus();
+
+    return false;
+
+}
+    if(lastName.value.trim()==""){
+    alert("Enter Last Name");
+    lastName.focus();
+    return false;
+}
+
+if(lastName.value.trim().length < 2){
+
+    alert("Enter valid Last Name.");
+
+    lastName.focus();
+
+    return false;
+
+}
     if(mobileNo.value.trim()==""){
         alert("Enter Mobile Number");
         mobileNo.focus();
@@ -1872,12 +1902,98 @@ function validateSignupBasic(){
         return false;
     }
 
+const dob = new Date(dateOfBirth.value);
+
+if(dateOfBirth.value === ""){
+
+    alert("Select Date of Birth");
+    dateOfBirth.focus();
+    return false;
+
+}
+
+const today = new Date();
+
+if(dob > today){
+
+    alert("Future Date of Birth is not allowed.");
+    dateOfBirth.focus();
+    return false;
+
+}
+
+let age = today.getFullYear() - dob.getFullYear();
+
+const month = today.getMonth() - dob.getMonth();
+
+if(month < 0 || (month === 0 && today.getDate() < dob.getDate())){
+
+    age--;
+
+}
+
+if(age < 18){
+
+    alert("Minimum age should be 18 years.");
+    dateOfBirth.focus();
+    return false;
+
+}
+    
     if(dateOfBirth.value==""){
         alert("Select Date of Birth");
         dateOfBirth.focus();
         return false;
     }
+if(place.value.trim()==""){
+    alert("Enter Place");
+    place.focus();
+    return false;
+}
 
+if(place.value.trim().length < 2){
+
+    alert("Enter valid Place.");
+
+    place.focus();
+
+    return false;
+
+}
+
+if(state.value.trim()==""){
+    alert("Enter State");
+    state.focus();
+    return false;
+}
+
+if(state.value.trim().length < 2){
+
+    alert("Enter valid State.");
+
+    state.focus();
+
+    return false;
+
+}
+
+if(country.value.trim()==""){
+    alert("Enter Country");
+    country.focus();
+    return false;
+}
+
+if(country.value.trim().length < 2){
+
+    alert("Enter valid Country.");
+
+    country.focus();
+
+    return false;
+
+}
+
+    
     return true;
 
 }
