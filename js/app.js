@@ -4,7 +4,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -185,7 +184,7 @@ document.getElementById("languageSelect");
 const toggleSensitivePassCode =
 document.getElementById("toggleSensitivePassCode");
 let otpInterval = null;
-let otpSeconds = 90; // 1.5 Minutes
+let otpSeconds = 30; // 0.5 Minutes
 let otpResendCount = 0;
 const MAX_OTP_RESEND = 3;
 
@@ -332,7 +331,7 @@ function startOtpTimer(timerId){
     // Hide Resend button
     resendSignupOTPBtn.classList.add("hidden");
 
-    otpSeconds = 90;   // Test
+    otpSeconds = 30;   // Test
 
     updateOtpTimer(timerId);
 
@@ -1737,7 +1736,7 @@ BACK OTP
 backOTPBtn.onclick = ()=>{
 
     clearInterval(otpInterval);
-    otpSeconds = 90;
+    otpSeconds = 30;
 
     otpPage.classList.add("hidden");
 
@@ -1750,7 +1749,7 @@ backOTPBtn.onclick = ()=>{
 backSignupOTPBtn.onclick = ()=>{
 
     clearInterval(otpInterval);
-    otpSeconds = 90;
+    otpSeconds = 30;
 
     clearOTP();
 
