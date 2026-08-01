@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1962,7 +1961,6 @@ if(lastName.value.trim().length < 2){
         mobileNo.focus();
         return false;
     }
-
 if(!isValidMobile(mobileNo.value.trim())){
 
     alert("Enter valid Mobile Number.");
@@ -1972,7 +1970,20 @@ if(!isValidMobile(mobileNo.value.trim())){
     return false;
 
 }
-    
+   if(emailId.value.trim()!=""){
+
+    if(!isValidEmail(emailId.value.trim())){
+
+        alert("Enter valid Email ID.");
+
+        emailId.focus();
+
+        return false;
+
+    }
+
+}
+ 
     if(gender.value==""){
         alert("Select Gender");
         gender.focus();
