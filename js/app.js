@@ -1,6 +1,5 @@
 /* =====================================
 
-
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
@@ -1567,16 +1566,18 @@ sendForgotOTPBtn.onclick = async ()=>{
 
         otpMode = "forgot";
 
-        forgotPassCodePage.classList.add("hidden");
-        signupOTPPage.classList.remove("hidden");
+       otpMode = "forgot";
 
-        document.getElementById("otpPageHeading").textContent = "Reset Pass Code";
+clearOTP();
 
-        registerBtn.textContent = "Reset Pass Code";
+showScreen(signupOTPPage);
 
-        signupPassCodeBox.classList.add("hidden");
-        signupConfirmPassCodeBox.classList.add("hidden");
+startOtpTimer("signupOtpTimer");
 
+document.getElementById("registerBtn").textContent = "Reset Pass Code";
+
+signupPassCodeBox.classList.add("hidden");
+signupConfirmPassCodeBox.classList.add("hidden");
     }catch(err){
 
         alert("Unable to connect to server.");
@@ -1650,7 +1651,7 @@ if(!validateSignupBasic()) return;
         clearOTP();
 
         showScreen(signupOTPPage);
-startOtpTimer("signupOtpTimer");
+        startOtpTimer("signupOtpTimer");
         signupPassCodeBox.classList.remove("hidden");
         signupConfirmPassCodeBox.classList.remove("hidden");
 
