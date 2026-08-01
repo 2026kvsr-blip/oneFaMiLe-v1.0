@@ -4,6 +4,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -185,6 +186,13 @@ const toggleSensitivePassCode =
 document.getElementById("toggleSensitivePassCode");
 let otpInterval = null;
 let otpSeconds = 90; // 5 Minutes
+
+
+const resendSignupOTPBtn =
+document.getElementById("resendSignupOTPBtn");
+
+const resendForgotOTPBtn =
+document.getElementById("resendForgotOTPBtn");
 /* =====================================
 CHANGE PASSWORD
 ===================================== */
@@ -1675,6 +1683,7 @@ async function sendSignupOTP(){
         }
 
         otpMode = "signup";
+        registerBtn.textContent = "Register";
 
         clearOTP();
 
