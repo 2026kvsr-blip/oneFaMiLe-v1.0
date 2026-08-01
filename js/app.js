@@ -185,7 +185,7 @@ document.getElementById("languageSelect");
 const toggleSensitivePassCode =
 document.getElementById("toggleSensitivePassCode");
 let otpInterval = null;
-let otpSeconds = 300; // 5 Minutes
+let otpSeconds = 90; // 5 Minutes
 /* =====================================
 CHANGE PASSWORD
 ===================================== */
@@ -319,7 +319,7 @@ function startOtpTimer(timerId){
 
     clearInterval(otpInterval);
 
-    otpSeconds = 300;
+    otpSeconds = 90;
 
     updateOtpTimer(timerId);
 
@@ -1673,7 +1673,7 @@ BACK OTP
 backOTPBtn.onclick = ()=>{
 
     clearInterval(otpInterval);
-    otpSeconds = 300;
+    otpSeconds = 90;
 
     otpPage.classList.add("hidden");
 
@@ -1684,7 +1684,7 @@ backOTPBtn.onclick = ()=>{
 backSignupOTPBtn.onclick = ()=>{
 
     clearInterval(otpInterval);
-    otpSeconds = 300;
+    otpSeconds = 90;
 
     clearOTP();
 
