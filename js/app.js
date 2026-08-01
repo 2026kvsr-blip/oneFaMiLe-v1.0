@@ -1549,7 +1549,7 @@ forgotPassCodeBtn.onclick = ()=>{
 
 };
 
-sendForgotOTPBtn.onclick = async ()=>{
+async function sendForgotOTP(){
 
     const mobile = forgotMobileNo.value.trim();
 
@@ -1579,18 +1579,17 @@ sendForgotOTPBtn.onclick = async ()=>{
 
         otpMode = "forgot";
 
-       otpMode = "forgot";
+        clearOTP();
 
-clearOTP();
+        showScreen(signupOTPPage);
 
-showScreen(signupOTPPage);
+        startOtpTimer("signupOtpTimer");
 
-startOtpTimer("signupOtpTimer");
+        document.getElementById("registerBtn").textContent = "Reset Pass Code";
 
-document.getElementById("registerBtn").textContent = "Reset Pass Code";
+        signupPassCodeBox.classList.add("hidden");
+        signupConfirmPassCodeBox.classList.add("hidden");
 
-signupPassCodeBox.classList.add("hidden");
-signupConfirmPassCodeBox.classList.add("hidden");
     }catch(err){
 
         alert("Unable to connect to server.");
@@ -1598,7 +1597,20 @@ signupConfirmPassCodeBox.classList.add("hidden");
 
     }
 
+}
+
+sendForgotOTPBtn.onclick = async ()=>{
+
+    await sendForgotOTP();
+
 };
+
+resendForgotOTPBtn.onclick = async ()=>{
+
+    await sendForgotOTP();
+
+};
+
 backForgotBtn.onclick = ()=>{
 
     clearForgotPassCode();
@@ -1688,7 +1700,11 @@ signupOTPBtn.onclick = async ()=>{
     await sendSignupOTP();
 
 };
+resendSignupOTPBtn.onclick = async () => {
 
+    await sendSignupOTP();
+
+};
 /* ======================
 
 BACK OTP
