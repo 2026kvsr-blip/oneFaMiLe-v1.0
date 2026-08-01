@@ -1380,8 +1380,37 @@ Forget Pass word
 }
 .otp-timer{
     text-align:center;
-    color:#d9534f;
+    color:#2A6EB0;
     font-size:18px;
-    font-weight:600;
+    font-weight:700;
     margin:12px 0;
 }
+
+/* OTP AREA */
+
+#signupOtpArea{
+    text-align:center;
+    margin:15px 0;
+    min-height:55px;
+}
+
+
+.otp-link{
+    border:none;
+    background:none;
+    color:#2A6EB0;
+    font-size:17px;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:underline;
+    display:block;
+    margin:0 auto;
+}
+
+.otp-limit{
+    color:#d9534f;
+    font-size:15px;
+    font-weight:600;
+    line-height:22px;
+}
+
