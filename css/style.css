@@ -1416,11 +1416,11 @@ Forget Pass word
 .otp-link{
 
     text-align:center;
-    color:#666;
+    color:#777;
     font-size:15px;
-    margin-top:10px;
-    cursor:pointer;
     line-height:24px;
+    cursor:pointer;
+    user-select:none;
 
 }
 
@@ -1437,5 +1437,14 @@ Forget Pass word
     font-size:15px;
     font-weight:600;
     line-height:22px;
+}
+
+
+.otp-link i{
+
+    color:#2A6EB0;
+    margin-right:6px;
+    font-size:15px;
+
 }
 
