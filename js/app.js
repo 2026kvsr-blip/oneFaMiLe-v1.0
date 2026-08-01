@@ -1,5 +1,4 @@
 /* =====================================
-
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
@@ -1939,12 +1938,7 @@ if(age < 18){
     return false;
 
 }
-    
-    if(dateOfBirth.value==""){
-        alert("Select Date of Birth");
-        dateOfBirth.focus();
-        return false;
-    }
+   
 if(place.value.trim()==""){
     alert("Enter Place");
     place.focus();
