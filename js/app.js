@@ -4,7 +4,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1714,26 +1713,40 @@ signupOTPBtn.onclick = async ()=>{
 
 resendSignupOTPBtn.onclick = async ()=>{
 
-if(otpResendCount >= MAX_OTP_RESEND){
+    if(otpResendCount >= MAX_OTP_RESEND){
 
-    resendSignupOTPBtn.classList.add("hidden");
+        resendSignupOTPBtn.classList.add("hidden");
 
-    otpLimitMsg.classList.remove("hidden");
+        otpLimitMsg.classList.remove("hidden");
 
-    setTimeout(()=>{
+        setTimeout(()=>{
 
-        otpResendCount = 0;
+            otpResendCount = 0;
 
-        otpLimitMsg.classList.add("hidden");
+            otpLimitMsg.classList.add("hidden");
 
-        resendSignupOTPBtn.classList.remove("hidden");
+            resendSignupOTPBtn.classList.remove("hidden");
 
-    },OTP_COOLDOWN);
+        }, OTP_COOLDOWN);
 
-    return;
+        return;
 
-}
+    }
+
+    otpResendCount++;
+
+    if(otpMode === "signup"){
+
+        await sendSignupOTP();
+
+    }else if(otpMode === "forgot"){
+
+        await sendForgotOTP();
+
+    }
+
 };
+
 /* ======================
 
 BACK OTP
