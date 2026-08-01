@@ -4,6 +4,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -191,6 +192,11 @@ const MAX_OTP_RESEND = 3;
 const resendSignupOTPBtn =
 document.getElementById("resendSignupOTPBtn");
 
+const signupOtpTimer =
+document.getElementById("signupOtpTimer");
+
+const otpLimitMsg =
+document.getElementById("otpLimitMsg");
 /* =====================================
 CHANGE PASSWORD
 ===================================== */
@@ -330,7 +336,9 @@ function startOtpTimer(timerId){
 
     // Hide Resend button
     resendSignupOTPBtn.classList.add("hidden");
-
+    signupOtpTimer.classList.remove("hidden");
+resendSignupOTPBtn.classList.add("hidden");
+otpLimitMsg.classList.add("hidden");
     otpSeconds = 30;   // Test
 
     updateOtpTimer(timerId);
@@ -349,10 +357,9 @@ function startOtpTimer(timerId){
             document.getElementById("registerBtn")?.setAttribute("disabled","true");
 
             // Show Resend button
+            signupOtpTimer.classList.add("hidden");
+
             resendSignupOTPBtn.classList.remove("hidden");
-
-            alert("OTP Expired. Please click Resend OTP.");
-
         }
 
     },1000);
@@ -1707,25 +1714,25 @@ signupOTPBtn.onclick = async ()=>{
 
 resendSignupOTPBtn.onclick = async ()=>{
 
-    if(otpResendCount >= MAX_OTP_RESEND){
+if(otpResendCount >= MAX_OTP_RESEND){
 
-        alert("Maximum OTP resend limit reached.");
-        return;
+    resendSignupOTPBtn.classList.add("hidden");
 
-    }
+    otpLimitMsg.classList.remove("hidden");
 
-    otpResendCount++;
+    setTimeout(()=>{
 
-    if(otpMode === "signup"){
+        otpResendCount = 0;
 
-        await sendSignupOTP();
+        otpLimitMsg.classList.add("hidden");
 
-    }else{
+        resendSignupOTPBtn.classList.remove("hidden");
 
-        await sendForgotOTP();
+    },OTP_COOLDOWN);
 
-    }
+    return;
 
+}
 };
 /* ======================
 
