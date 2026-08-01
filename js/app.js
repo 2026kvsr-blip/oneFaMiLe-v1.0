@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -229,6 +230,54 @@ document.getElementById("toggleChangeNewPassCode");
 const toggleChangeConfirmPassCode =
 document.getElementById("toggleChangeConfirmPassCode");
 
+/* ===========================
+   VALIDATION FUNCTIONS
+=========================== */
+
+function isValidName(value){
+
+    return /^[A-Za-z ]+$/.test(value);
+
+}
+
+function isValidMobile(value){
+
+    return /^[6-9][0-9]{9}$/.test(value);
+
+}
+
+function isValidEmail(value){
+
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+}
+
+function isAdult(dateValue){
+
+    const dob = new Date(dateValue);
+    const today = new Date();
+
+    if(dob > today){
+        return false;
+    }
+
+    let age = today.getFullYear() - dob.getFullYear();
+
+    const month = today.getMonth() - dob.getMonth();
+
+    if(month < 0 || (month === 0 && today.getDate() < dob.getDate())){
+        age--;
+    }
+
+    return age >= 18;
+
+}
+
+function isValidPassCode(value){
+
+    return /^[0-9]{6}$/.test(value);
+
+}
 /* =====================================
 COMMON PAGE ARRAY
 ===================================== */
@@ -1875,6 +1924,15 @@ if(surName.value.trim().length < 2){
     return false;
 
 }
+    if(!isValidName(surName.value.trim())){
+
+    alert("Surname should contain letters only.");
+
+    surName.focus();
+
+    return false;
+
+}
     if(lastName.value.trim()==""){
     alert("Enter Last Name");
     lastName.focus();
@@ -1890,12 +1948,31 @@ if(lastName.value.trim().length < 2){
     return false;
 
 }
+    if(!isValidName(lastName.value.trim())){
+
+    alert("Last Name should contain letters only.");
+
+    lastName.focus();
+
+    return false;
+
+}
     if(mobileNo.value.trim()==""){
         alert("Enter Mobile Number");
         mobileNo.focus();
         return false;
     }
 
+if(!isValidMobile(mobileNo.value.trim())){
+
+    alert("Enter valid Mobile Number.");
+
+    mobileNo.focus();
+
+    return false;
+
+}
+    
     if(gender.value==""){
         alert("Select Gender");
         gender.focus();
@@ -1955,7 +2032,15 @@ if(place.value.trim().length < 2){
     return false;
 
 }
+if(!isValidName(place.value.trim())){
 
+    alert("Place should contain letters only.");
+
+    place.focus();
+
+    return false;
+
+}
 if(state.value.trim()==""){
     alert("Enter State");
     state.focus();
@@ -1971,7 +2056,15 @@ if(state.value.trim().length < 2){
     return false;
 
 }
+if(!isValidName(state.value.trim())){
 
+    alert("State should contain letters only.");
+
+    state.focus();
+
+    return false;
+
+}
 if(country.value.trim()==""){
     alert("Enter Country");
     country.focus();
@@ -1987,7 +2080,15 @@ if(country.value.trim().length < 2){
     return false;
 
 }
+if(!isValidName(country.value.trim())){
 
+    alert("Country should contain letters only.");
+
+    country.focus();
+
+    return false;
+
+}
     
     return true;
 
