@@ -4,6 +4,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1671,13 +1672,19 @@ BACK OTP
 
 backOTPBtn.onclick = ()=>{
 
-otpPage.classList.add("hidden");
+    clearInterval(otpInterval);
+    otpSeconds = 300;
 
-loginPage.classList.remove("hidden");
+    otpPage.classList.add("hidden");
+
+    loginPage.classList.remove("hidden");
 
 };
 
 backSignupOTPBtn.onclick = ()=>{
+
+    clearInterval(otpInterval);
+    otpSeconds = 300;
 
     clearOTP();
 
@@ -1685,8 +1692,7 @@ backSignupOTPBtn.onclick = ()=>{
 
         showScreen(signupPage);
 
-    }
-    else if(otpMode === "forgot"){
+    }else if(otpMode === "forgot"){
 
         clearForgotPassCode();
 
@@ -1697,6 +1703,7 @@ backSignupOTPBtn.onclick = ()=>{
     }
 
 };
+
 /* ======================
 
 VERIFY OTP
