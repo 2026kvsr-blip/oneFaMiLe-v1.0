@@ -10,7 +10,6 @@ document.getElementById("loginSubmitBtn");
 const forgotOTP = document.getElementById("forgotOTP");
 const registerOTP = document.getElementById("registerOTP");
 const resetPassCodePage = document.getElementById("resetPassCodePage");
-
 const newPassCode = document.getElementById("newPassCode");
 
 const confirmNewPassCode = document.getElementById("confirmNewPassCode");
@@ -422,6 +421,23 @@ otpLimitMsg.classList.add("hidden");
     const sec = String(otpSeconds % 60).padStart(2,"0");
 
     timer.textContent = `${min}:${sec}`;
+if(otpSeconds > 20){
+
+    timer.style.color="#2A6EB0";
+
+}
+else if(otpSeconds > 10){
+
+    timer.style.color="#ff9800";
+
+}
+else{
+
+    timer.style.color="#d32f2f";
+
+}
+
+   
 
 }
 /* =====================================
