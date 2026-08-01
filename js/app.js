@@ -4,7 +4,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1637,15 +1636,16 @@ backSignupBtn.onclick = ()=>{
 
 };
 
-signupOTPBtn.onclick = async ()=>{
+async function sendSignupOTP(){
 
-if(!validateSignupBasic()) return;
+    if(!validateSignupBasic()) return;
     if(!(await checkSignup())) return;
 
-    // Send Signup OTP
     const formData = new FormData();
+
     formData.append("action","sendSignupOTP");
     formData.append("mobile", mobileNo.value.trim());
+
     try{
 
         const response = await fetch(API_URL,{
@@ -1656,8 +1656,10 @@ if(!validateSignupBasic()) return;
         const result = await response.json();
 
         if(result.status !== "success"){
+
             alert(result.message);
             return;
+
         }
 
         otpMode = "signup";
@@ -1665,7 +1667,9 @@ if(!validateSignupBasic()) return;
         clearOTP();
 
         showScreen(signupOTPPage);
+
         startOtpTimer("signupOtpTimer");
+
         signupPassCodeBox.classList.remove("hidden");
         signupConfirmPassCodeBox.classList.remove("hidden");
 
@@ -1676,7 +1680,15 @@ if(!validateSignupBasic()) return;
 
     }
 
+}
+
+
+signupOTPBtn.onclick = async ()=>{
+
+    await sendSignupOTP();
+
 };
+
 /* ======================
 
 BACK OTP
