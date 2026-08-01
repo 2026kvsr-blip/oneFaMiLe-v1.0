@@ -4,6 +4,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -191,8 +192,6 @@ const MAX_OTP_RESEND = 3;
 const resendSignupOTPBtn =
 document.getElementById("resendSignupOTPBtn");
 
-const resendForgotOTPBtn =
-document.getElementById("resendForgotOTPBtn");
 /* =====================================
 CHANGE PASSWORD
 ===================================== */
@@ -326,21 +325,14 @@ function startOtpTimer(timerId){
 
     clearInterval(otpInterval);
 
-    // Timer start అయినప్పుడు Verify buttons enable చేయండి
+    // Enable buttons
     document.getElementById("verifyOTPBtn")?.removeAttribute("disabled");
     document.getElementById("registerBtn")?.removeAttribute("disabled");
 
-    // Resend buttons hide చేయండి
-   if(otpMode === "signup"){
-
+    // Hide Resend button
     resendSignupOTPBtn.classList.add("hidden");
 
-}else{
-
-    resendForgotOTPBtn.classList.add("hidden");
-
-}
-    otpSeconds = 90;   // Test కోసం 90 sec
+    otpSeconds = 90;   // Test
 
     updateOtpTimer(timerId);
 
@@ -357,24 +349,16 @@ function startOtpTimer(timerId){
             document.getElementById("verifyOTPBtn")?.setAttribute("disabled","true");
             document.getElementById("registerBtn")?.setAttribute("disabled","true");
 
-            if(otpMode === "signup"){
+            // Show Resend button
+            resendSignupOTPBtn.classList.remove("hidden");
 
-    resendSignupOTPBtn.classList.remove("hidden");
-
-}else{
-
-    resendForgotOTPBtn.classList.remove("hidden");
-
-}
             alert("OTP Expired. Please click Resend OTP.");
 
         }
 
     },1000);
 
-}
-
-function updateOtpTimer(timerId){
+}function updateOtpTimer(timerId){
 
     const timer = document.getElementById(timerId);
 
@@ -1627,20 +1611,6 @@ sendForgotOTPBtn.onclick = async ()=>{
 
 };
 
-resendForgotOTPBtn.onclick = async ()=>{
-
-    if(otpResendCount >= MAX_OTP_RESEND){
-
-        alert("Maximum OTP resend limit reached.");
-        return;
-
-    }
-
-    otpResendCount++;
-
-    await sendForgotOTP();
-
-};
 
 backForgotBtn.onclick = ()=>{
 
@@ -1747,7 +1717,15 @@ resendSignupOTPBtn.onclick = async ()=>{
 
     otpResendCount++;
 
-    await sendSignupOTP();
+    if(otpMode === "signup"){
+
+        await sendSignupOTP();
+
+    }else{
+
+        await sendForgotOTP();
+
+    }
 
 };
 /* ======================
