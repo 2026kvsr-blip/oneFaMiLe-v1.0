@@ -6,6 +6,7 @@
 
       <meta charset="UTF-8">
 
+  
   <meta
 name="viewport"
 content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -380,11 +381,35 @@ id="registerOTP"
 inputmode="numeric"
 maxlength="6"
 placeholder="Enter OTP">
-<!-- ఇక్కడ add చేయాలి -->
-<div id="signupOtpTimer" class="otp-timer">
-00:30
-</div>
 
+
+<div id="signupOtpArea">
+
+    <div
+        id="signupOtpTimer"
+        class="otp-timer">
+        00:30
+    </div>
+
+    <button
+        id="resendSignupOTPBtn"
+        class="hidden otp-link">
+
+        Resend OTP
+
+    </button>
+
+    <div
+        id="otpLimitMsg"
+        class="hidden otp-limit">
+
+        Maximum resend limit reached.
+        <br>
+        Try again after 1 minute.
+
+    </div>
+
+</div>
 <div
 id="signupPassCodeBox"
 class="password-box">
@@ -399,7 +424,6 @@ class="password-box">
 </span>
 
 </div>
-
 <div
 id="signupConfirmPassCodeBox"
 class="password-box">
@@ -421,14 +445,8 @@ id="registerBtn">
 Register
 
 </button>
-<button
-id="resendSignupOTPBtn"
-class="hidden">
 
-Resend OTP
-
-</button>
-
+  
 <button
 id="backSignupOTPBtn">
 
