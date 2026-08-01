@@ -2,6 +2,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -182,8 +183,9 @@ let otpInterval = null;
 let otpSeconds = 30; // 0.5 Minutes
 let otpResendCount = 0;
 const MAX_OTP_RESEND = 3;
+const OTP_COOLDOWN = 60;
 let cooldownInterval = null;
-let cooldownSeconds = 60;
+let cooldownSeconds = OTP_COOLDOWN;
 let otpCooldownRunning = false;
 const resendSignupOTPBtn =
 document.getElementById("resendSignupOTPBtn");
@@ -411,7 +413,8 @@ otpLimitMsg.classList.add("hidden");
 
     },1000);
 
-}function updateOtpTimer(timerId){
+}
+function updateOtpTimer(timerId){
 
     const timer = document.getElementById(timerId);
 
@@ -421,25 +424,39 @@ otpLimitMsg.classList.add("hidden");
     const sec = String(otpSeconds % 60).padStart(2,"0");
 
     timer.textContent = `${min}:${sec}`;
-if(otpSeconds > 20){
 
-    timer.style.color="#2A6EB0";
+    // Blue → Orange → Red
+
+    if(otpSeconds > 20){
+
+        timer.style.color = "#2A6EB0";
+
+    }
+    else if(otpSeconds > 10){
+
+        timer.style.color = "#ff9800";
+
+    }
+    else{
+
+        timer.style.color = "#d32f2f";
+
+    }
+
+    // Last 5 Seconds Blink
+
+    if(otpSeconds <= 5){
+
+        timer.classList.add("otp-blink");
+
+    }else{
+
+        timer.classList.remove("otp-blink");
+
+    }
 
 }
-else if(otpSeconds > 10){
 
-    timer.style.color="#ff9800";
-
-}
-else{
-
-    timer.style.color="#d32f2f";
-
-}
-
-   
-
-}
 /* =====================================
 CLEAR OTP
 ===================================== */
