@@ -5,7 +5,6 @@ box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
 }
 
-
 body{
 
        background:#EAF8FF;
@@ -525,17 +524,16 @@ font-weight:700;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    color: #2A6EB0 !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 10px auto;
+    color: #2A6EB0;
     font-size: 18px;
     font-weight: 600;
     text-decoration: underline;
     cursor: pointer;
-    padding: 0;
-    margin: 10px auto;
-    width: auto !important;
-    height: auto !important;
 }
-
 
 
 /* =======================
