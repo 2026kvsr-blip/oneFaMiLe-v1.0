@@ -4,7 +4,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -185,8 +184,9 @@ document.getElementById("languageSelect");
 const toggleSensitivePassCode =
 document.getElementById("toggleSensitivePassCode");
 let otpInterval = null;
-let otpSeconds = 90; // 5 Minutes
-
+let otpSeconds = 90; // 1.5 Minutes
+let otpResendCount = 0;
+const MAX_OTP_RESEND = 3;
 
 const resendSignupOTPBtn =
 document.getElementById("resendSignupOTPBtn");
@@ -1609,11 +1609,22 @@ async function sendForgotOTP(){
 
 sendForgotOTPBtn.onclick = async ()=>{
 
+    otpResendCount = 0;
+
     await sendForgotOTP();
 
 };
 
 resendForgotOTPBtn.onclick = async ()=>{
+
+    if(otpResendCount >= MAX_OTP_RESEND){
+
+        alert("Maximum OTP resend limit reached.");
+        return;
+
+    }
+
+    otpResendCount++;
 
     await sendForgotOTP();
 
@@ -1706,10 +1717,23 @@ async function sendSignupOTP(){
 
 signupOTPBtn.onclick = async ()=>{
 
+    otpResendCount = 0;
+
     await sendSignupOTP();
 
 };
-resendSignupOTPBtn.onclick = async () => {
+
+
+resendSignupOTPBtn.onclick = async ()=>{
+
+    if(otpResendCount >= MAX_OTP_RESEND){
+
+        alert("Maximum OTP resend limit reached.");
+        return;
+
+    }
+
+    otpResendCount++;
 
     await sendSignupOTP();
 
