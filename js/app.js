@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -387,6 +386,15 @@ SHOW PAGE
 function showScreen(page){
 
     hideAllPages();
+
+    // Login page open అయినప్పుడు మాత్రమే clear చేయాలి
+    if(page === loginPage && !loginLocked){
+
+        loginLockMsg.classList.add("hidden");
+        loginLockMsg.innerHTML = "";
+        loginLockMsg.style.color = "";
+
+    }
 
     page.classList.remove("hidden");
 
@@ -2862,11 +2870,13 @@ const formData = new FormData();
     loginLockMsg.classList.remove("hidden");
 
    loginLockMsg.innerHTML = `
-Wrong Pass Code.
+<div id="wrongPassText">
+    Wrong Pass Code.
+</div>
 
-<br><br>
-
-Attempts Remaining : ${MAX_LOGIN_ATTEMPTS-loginAttempts}
+<div id="attemptText">
+    Attempts Remaining : ${MAX_LOGIN_ATTEMPTS-loginAttempts}
+</div>
 `;
 }
     }catch(err){
