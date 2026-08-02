@@ -512,9 +512,13 @@ function restoreCooldown(){
 
             sessionStorage.removeItem("otpCooldownEnd");
 
-            otpLimitMsg.classList.add("hidden");
+           otpLimitMsg.classList.add("hidden");
 
-            resendSignupOTPBtn.classList.remove("hidden");
+signupOtpTimer.classList.add("hidden");
+
+otpSendingMsg.classList.add("hidden");
+
+resendSignupOTPBtn.classList.remove("hidden");
 
         }
 
