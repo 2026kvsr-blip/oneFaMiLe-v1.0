@@ -2,7 +2,6 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1936,9 +1935,12 @@ async function sendForgotOTP(){
         const result = await response.json();
 
         if(result.status !== "success"){
+               hideLoader();
+
             alert(result.message);
             return;
         }
+        hideLoader();
 
         otpMode = "forgot";
 
@@ -2029,12 +2031,12 @@ async function sendSignupOTP(){
         const result = await response.json();
 
         if(result.status !== "success"){
-
+            hideLoader();
             alert(result.message);
             return;
 
         }
-
+hideLoader();
         otpMode = "signup";
         registerBtn.textContent = "Register";
 
@@ -2049,6 +2051,7 @@ async function sendSignupOTP(){
         signupConfirmPassCodeBox.classList.remove("hidden");
 
     }catch(err){
+        hideLoader();
 
         alert("Unable to connect to server.");
         console.log(err);
@@ -2574,7 +2577,7 @@ async function registerUser(){
 
 
         if(result.status=="success"){
-
+           hideLoader();
     alert(result.message);
 
     // Clear Signup Form
@@ -2654,7 +2657,7 @@ if (otp.length !== 6) {
         const result = await response.json();
 
         if(result.status==="success"){
-
+          hideLoader();
           signupOTPPage.classList.add("hidden");
 resetPassCodePage.classList.remove("hidden");
             
@@ -2709,7 +2712,7 @@ if (otp.length !== 6) {
         const result = await response.json();
 
         if(result.status=="success"){
-
+           hideLoader();
             await registerUser();
 
         }else{
@@ -2752,9 +2755,9 @@ const otp = registerOTP.value.trim();
     verifyData.append("otp",otp);
     const verifyResponse = await fetch(API_URL,{        method:"POST",        body:verifyData    });
     const verifyResult = await verifyResponse.json();
-    if(verifyResult.status!=="success"){        alert(verifyResult.message);        return;
+    if(verifyResult.status!=="success"){  hideLoader();      alert(verifyResult.message);        return;
     }
-
+hideLoader();
     /* -------- Reset Pass Code -------- */
 
     const resetData = new FormData();
@@ -2845,14 +2848,14 @@ const formData = new FormData();
     formData.append("passCode",passCode);
 
     try{
-
+        showLoader("Signing In...");
         const response = await fetch(API_URL,{
             method:"POST",
             body:formData
         });
 
         const result = await response.json();
-
+        hideLoader();
         if(result.status=="success"){
            loginAttempts = 0;
 
