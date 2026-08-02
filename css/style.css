@@ -6,7 +6,7 @@ font-family:Arial,Helvetica,sans-serif;
 }
 body{
 
-         
+        
             background:#EAF8FF;
 
 min-height:100vh;
@@ -1488,18 +1488,25 @@ Forget Pass word
 #wrongPassText{
 
     color:#ff9800;
+
     font-size:14px;
-    margin-bottom:6px;
+
+    font-weight:500;
+
+    margin-bottom:4px;
 
 }
 
 #attemptText{
 
-    color:#ff9800;
-    font-size:13px;
+    color:#666;
+
+    font-size:12px;
+
     font-weight:normal;
 
 }
+
 /* ==========================
    COMMON LOADER
 ========================== */
