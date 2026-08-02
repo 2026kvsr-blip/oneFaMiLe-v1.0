@@ -1,4 +1,3 @@
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -452,9 +451,13 @@ otpLimitMsg.classList.remove("hidden");
 
     sessionStorage.removeItem("otpCooldownEnd");
 
-    otpLimitMsg.classList.add("hidden");
+otpLimitMsg.classList.add("hidden");
 
-    resendSignupOTPBtn.classList.remove("hidden");
+signupOtpTimer.classList.add("hidden");
+
+otpSendingMsg.classList.add("hidden");
+
+resendSignupOTPBtn.classList.remove("hidden");
 
 }
     },1000);
