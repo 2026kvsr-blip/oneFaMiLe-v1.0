@@ -2,6 +2,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -431,6 +432,11 @@ resendSignupOTPBtn.classList.add("hidden");
 otpSendingMsg.classList.add("hidden");
 
 otpLimitMsg.classList.remove("hidden");
+   backSignupOTPBtn.disabled = true;
+
+backSignupOTPBtn.style.opacity = "0.5";
+
+backSignupOTPBtn.style.cursor = "not-allowed";
     updateCooldown();
 
     clearInterval(cooldownInterval);
@@ -458,6 +464,11 @@ signupOtpTimer.classList.add("hidden");
 otpSendingMsg.classList.add("hidden");
 
 resendSignupOTPBtn.classList.remove("hidden");
+           backSignupOTPBtn.disabled = false;
+
+backSignupOTPBtn.style.opacity = "1";
+
+backSignupOTPBtn.style.cursor = "pointer";
 
 }
     },1000);
@@ -492,6 +503,11 @@ function restoreCooldown(){
     cooldownSeconds = remaining;
     resendSignupOTPBtn.classList.add("hidden");
     otpLimitMsg.classList.remove("hidden");
+   backSignupOTPBtn.disabled = true;
+
+backSignupOTPBtn.style.opacity = "0.5";
+
+backSignupOTPBtn.style.cursor = "not-allowed";
     signupOtpTimer.classList.add("hidden");
 
     otpSendingMsg.classList.add("hidden");
