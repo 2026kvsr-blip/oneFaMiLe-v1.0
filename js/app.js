@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -510,7 +511,8 @@ function startLoginLock(){
 
     document.getElementById("loginPassCode").disabled = true;
     document.getElementById("loginSubmitBtn").disabled = true;
-loginLockMsg.classList.remove("hidden");
+     loginLockMsg.classList.remove("hidden");
+   alert("Login Lock Started");
     updateLoginLock();
 
     clearInterval(loginLockInterval);
