@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -520,14 +521,9 @@ Maximum login attempts reached.
 
 <br><br>
 
-Please wait for min
-
-<span id="loginLockTimer">
-01:00
-</span>
-
-sec before trying again.
-`;
+Please wait for
+${min}:${sec}
+before trying again.`;
 
 
     updateLoginLock();
@@ -2833,15 +2829,13 @@ const formData = new FormData();
 
     loginLockMsg.classList.remove("hidden");
 
-    loginLockMsg.innerHTML = `
-    Wrong Pass Code.
+   loginLockMsg.innerHTML = `
+Wrong Pass Code.
 
-    <br><br>
+<br><br>
 
-    Attempts Remaining :
-    <b>${MAX_LOGIN_ATTEMPTS-loginAttempts}</b>
-    `;
-
+Attempts Remaining : ${MAX_LOGIN_ATTEMPTS-loginAttempts}
+`;
 }
     }catch(err){
 
