@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2096,7 +2095,7 @@ backSignupOTPBtn.onclick = ()=>{
         const min = String(Math.floor(cooldownSeconds / 60)).padStart(2,"0");
         const sec = String(cooldownSeconds % 60).padStart(2,"0");
 
-        alert(`Please wait for min ${min}:${sec} sec before going back.`);
+        alert(`Please wait for ${min}:${sec} before going back.`);
 
         return;
 
@@ -2750,13 +2749,12 @@ Maximum login attempts reached.
 
 <br><br>
 
-Please wait min
+Please wait
 
 <span id="loginLockTimer">
 ${min}:${sec}
 </span>
-
-sec before trying again.
+ before trying again.
 `;
     return;
 
