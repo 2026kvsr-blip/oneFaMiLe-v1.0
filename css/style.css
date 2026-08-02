@@ -6,7 +6,7 @@ font-family:Arial,Helvetica,sans-serif;
 }
 body{
 
-            
+          
             background:#EAF8FF;
 
 min-height:100vh;
@@ -1434,14 +1434,10 @@ Forget Pass word
 .otp-limit{
 
     text-align:center;
-
     color:#d32f2f;
-
-    font-size:16px;
-
+    font-size:15px;
     font-weight:400;
-
-    margin-top:10px;
+    line-height:1.5;
 
 }
 
