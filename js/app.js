@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -512,7 +511,6 @@ function startLoginLock(){
     document.getElementById("loginPassCode").disabled = true;
     document.getElementById("loginSubmitBtn").disabled = true;
      loginLockMsg.classList.remove("hidden");
-   alert("Login Lock Started");
     updateLoginLock();
 
     clearInterval(loginLockInterval);
@@ -523,19 +521,21 @@ function startLoginLock(){
 
         updateLoginLock();
 
-        if(loginLockSeconds <= 0){
+       if(loginLockSeconds <= 0){
 
-            clearInterval(loginLockInterval);
+    clearInterval(loginLockInterval);
 
-            loginLocked = false;
+    loginLocked = false;
 
-            loginAttempts = 0;
+    loginAttempts = 0;
 
-            document.getElementById("loginPassCode").disabled = false;
-            document.getElementById("loginSubmitBtn").disabled = false;
+    loginLockMsg.classList.add("hidden");
 
-        }
+    document.getElementById("loginPassCode").disabled = false;
 
+    document.getElementById("loginSubmitBtn").disabled = false;
+
+}
     },1000);
 
 }
@@ -545,8 +545,7 @@ function updateLoginLock(){
 
     const sec = String(loginLockSeconds % 60).padStart(2,"0");
 
-    document.title =
-    `Please wait ${min}:${sec}`;
+    loginLockTimer.textContent = `${min}:${sec}`;
 
 }
 
