@@ -1922,6 +1922,7 @@ async function sendForgotOTP(){
         return;
     }
 
+   
     const formData = new FormData();
     formData.append("action","sendForgotOTP");
     formData.append("mobile",mobile);
