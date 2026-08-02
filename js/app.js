@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -511,6 +510,8 @@ function startLoginLock(){
 
     document.getElementById("loginPassCode").disabled = true;
     document.getElementById("loginSubmitBtn").disabled = true;
+   forgotPassCodeBtn.style.pointerEvents = "none";
+   forgotPassCodeBtn.style.opacity = "0.5";
     loginLockMsg.classList.remove("hidden");
 // Red Color
 loginLockMsg.style.color = "#d32f2f";
@@ -552,6 +553,8 @@ sec before trying again.
     document.getElementById("loginPassCode").disabled = false;
 
     document.getElementById("loginSubmitBtn").disabled = false;
+          forgotPassCodeBtn.style.pointerEvents = "auto";
+forgotPassCodeBtn.style.opacity = "1";
 
 }
     },1000);
@@ -1845,6 +1848,31 @@ Forget PassCode Btn
 ====================== */
 
 forgotPassCodeBtn.onclick = ()=>{
+
+    if(loginLocked){
+
+        const min = String(Math.floor(loginLockSeconds/60)).padStart(2,"0");
+        const sec = String(loginLockSeconds%60).padStart(2,"0");
+
+        loginLockMsg.style.color = "#d32f2f";
+
+        loginLockMsg.classList.remove("hidden");
+
+        loginLockMsg.innerHTML = `
+        Maximum login attempts reached.
+
+        <br><br>
+
+        Please wait for
+        <b>${min}:${sec}</b>
+
+        before trying again.
+        `;
+
+        return;
+    }
+
+    // Existing code...
 
     clearForgotPassCode();
 
