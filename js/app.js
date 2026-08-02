@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2392,12 +2393,31 @@ function validateSignup(){
     }
 
     if(sensitivePassCode.value.trim()==""){
+       if(sensitivePassCode.value.trim().length !== 6){
+
+    alert("Pass Code must contain exactly 6 digits.");
+
+    sensitivePassCode.focus();
+
+    return false;
+
+}
         alert("Enter Pass Code");
         sensitivePassCode.focus();
         return false;
     }
+   
 
     if(registerConfirmPassCode.value.trim()==""){
+       if(registerConfirmPassCode.value.trim().length !== 6){
+
+    alert("Confirm Pass Code must contain exactly 6 digits.");
+
+    registerConfirmPassCode.focus();
+
+    return false;
+
+}
         alert("Confirm Pass Code");
         registerConfirmPassCode.focus();
         return false;
@@ -2776,6 +2796,18 @@ ${min}:${sec}
         alert("Enter Pass Code");
         return;
     }
+   if(passCode.length !== 6){
+
+    loginLockMsg.style.color = "#ff9800";
+
+    loginLockMsg.classList.remove("hidden");
+
+    loginLockMsg.innerHTML =
+    "Pass Code must contain exactly 6 digits.";
+
+    return;
+
+}
 const formData = new FormData();
 
     formData.append("action","login");
