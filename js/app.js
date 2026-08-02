@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1959,6 +1960,7 @@ async function sendForgotOTP(){
         signupConfirmPassCodeBox.classList.add("hidden");
 
     }catch(err){
+        hideLoader();
 
         alert("Unable to connect to server.");
         console.log(err);
@@ -2608,6 +2610,7 @@ async function registerUser(){
 }
     }
     catch(err){
+        hideLoader();
 
         alert("Unable to connect to server.");
 
@@ -2670,6 +2673,7 @@ resetPassCodePage.classList.remove("hidden");
         }
 
     }catch(err){
+        hideLoader();
 
         console.log(err);
 
@@ -2718,12 +2722,14 @@ if (otp.length !== 6) {
             await registerUser();
 
         }else{
+          hideLoader();
 
             alert(result.message);
 
         }
 
     }catch(error){
+        hideLoader();
 
         alert("Unable to verify OTP.");
 
