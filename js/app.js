@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -206,7 +205,11 @@ document.getElementById("loginLockMsg");
 
 const loginLockTimer =
 document.getElementById("loginLockTimer");
+const appLoader =
+document.getElementById("appLoader");
 
+const loaderText =
+document.getElementById("loaderText");
 /* ==========================
    LOGIN SECURITY
 ========================== */
@@ -249,7 +252,24 @@ document.getElementById("toggleChangeNewPassCode");
 
 const toggleChangeConfirmPassCode =
 document.getElementById("toggleChangeConfirmPassCode");
+/* ===========================
+   SHOW LOADER / HIDE LOADER
+=========================== */
 
+
+function showLoader(text){
+
+    loaderText.textContent = text;
+
+    appLoader.classList.remove("hidden");
+
+}
+
+function hideLoader(){
+
+    appLoader.classList.add("hidden");
+
+}
 /* ===========================
    VALIDATION FUNCTIONS
 =========================== */
