@@ -1,3 +1,4 @@
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -424,10 +425,13 @@ function startCooldown(){
     Date.now() + OTP_COOLDOWN * 1000
 );
 
-    resendSignupOTPBtn.classList.add("hidden");
+    signupOtpTimer.classList.add("hidden");
 
-    otpLimitMsg.classList.remove("hidden");
+resendSignupOTPBtn.classList.add("hidden");
 
+otpSendingMsg.classList.add("hidden");
+
+otpLimitMsg.classList.remove("hidden");
     updateCooldown();
 
     clearInterval(cooldownInterval);
@@ -471,37 +475,27 @@ function restoreCooldown(){
     const endTime = Number(
         sessionStorage.getItem("otpCooldownEnd")
     );
-
     if(!endTime){
         return;
     }
-
     const remaining =
         Math.ceil((endTime - Date.now()) / 1000);
-
     if(remaining <= 0){
-
         sessionStorage.removeItem("otpCooldownEnd");
-
         return;
-
     }
-
+   
     otpCooldownRunning = true;
-
     cooldownSeconds = remaining;
-
     resendSignupOTPBtn.classList.add("hidden");
-
     otpLimitMsg.classList.remove("hidden");
+    signupOtpTimer.classList.add("hidden");
 
+    otpSendingMsg.classList.add("hidden");
     updateCooldown();
-
     clearInterval(cooldownInterval);
-
     cooldownInterval = setInterval(()=>{
-
-        cooldownSeconds--;
+    cooldownSeconds--;
 
         updateCooldown();
 
@@ -1783,6 +1777,7 @@ async function sendForgotOTP(){
         clearOTP();
 
         showScreen(signupOTPPage);
+        restoreCooldown();
 
         startOtpTimer("signupOtpTimer");
         otpSendingMsg.classList.add("hidden");
@@ -1878,6 +1873,7 @@ async function sendSignupOTP(){
         clearOTP();
 
         showScreen(signupOTPPage);
+        restoreCooldown();
 
         startOtpTimer("signupOtpTimer");
         otpSendingMsg.classList.add("hidden");
