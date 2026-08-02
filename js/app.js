@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -510,7 +511,24 @@ function startLoginLock(){
 
     document.getElementById("loginPassCode").disabled = true;
     document.getElementById("loginSubmitBtn").disabled = true;
-     loginLockMsg.classList.remove("hidden");
+    loginLockMsg.classList.remove("hidden");
+
+loginLockMsg.innerHTML = `
+Maximum login attempts reached.
+
+<br><br>
+
+Please wait
+
+<span id="loginLockTimer">
+01:00
+</span>
+
+before trying again.
+`;
+
+loginLockTimer =
+document.getElementById("loginLockTimer");
     updateLoginLock();
 
     clearInterval(loginLockInterval);
@@ -2763,11 +2781,16 @@ const formData = new FormData();
 
     }
 
-    alert(
-        `${result.message}\n\nAttempts Remaining : ${
-            MAX_LOGIN_ATTEMPTS - loginAttempts
-        }`
-    );
+    loginLockMsg.classList.remove("hidden");
+
+loginLockMsg.innerHTML = `
+Wrong Pass Code.
+
+<br><br>
+
+Attempts Remaining :
+<b>${MAX_LOGIN_ATTEMPTS-loginAttempts}</b>
+`;
 
 }
     }catch(err){
