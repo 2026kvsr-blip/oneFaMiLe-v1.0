@@ -208,6 +208,7 @@ document.getElementById("loginLockTimer");
 const appLoader =
 document.getElementById("appLoader");
 
+
 const loaderText =
 document.getElementById("loaderText");
 /* ==========================
