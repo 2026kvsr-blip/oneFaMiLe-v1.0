@@ -4,8 +4,7 @@
   <link rel="icon" href="images/favicon.ico">
 <head>
 
-  
-          <meta charset="UTF-8">
+            <meta charset="UTF-8">
   
   <meta
 name="viewport"
@@ -180,10 +179,11 @@ placeholder="Mobile / Email / Login User Name">
 
 <div class="password-box">
     <input
-        type="password"
-        id="loginPassCode"
-        placeholder="Enter Pass Code">
-
+    type="password"
+    id="loginPassCode"
+    inputmode="numeric"
+    maxlength="6"
+    placeholder="Enter 6-Digit Pass Code">
     <span id="toggleLoginPass" class="eye-icon">
     <i class="fa-solid fa-eye"></i>
 </span>
@@ -465,6 +465,8 @@ class="password-box">
         id="sensitivePassCode"
         maxlength="6"
         type="password"
+        inputmode="numeric"
+
         placeholder="Enter Pass Code">
 
     <span id="toggleSensitivePassCode" class="eye-icon">
@@ -480,6 +482,8 @@ class="password-box">
         id="registerConfirmPassCode"
         maxlength="6"
         type="password"
+        inputmode="numeric"
+
         placeholder="Confirm Pass Code">
 
     <span id="toggleRegisterConfirmPassCode" class="eye-icon">
