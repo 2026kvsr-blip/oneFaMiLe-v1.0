@@ -2798,16 +2798,19 @@ const formData = new FormData();
 
     }
 
+    // Orange Color
+    loginLockMsg.style.color = "#ff9800";
+
     loginLockMsg.classList.remove("hidden");
 
-loginLockMsg.innerHTML = `
-Wrong Pass Code.
+    loginLockMsg.innerHTML = `
+    Wrong Pass Code.
 
-<br><br>
+    <br><br>
 
-Attempts Remaining :
-<b>${MAX_LOGIN_ATTEMPTS-loginAttempts}</b>
-`;
+    Attempts Remaining :
+    <b>${MAX_LOGIN_ATTEMPTS-loginAttempts}</b>
+    `;
 
 }
     }catch(err){
