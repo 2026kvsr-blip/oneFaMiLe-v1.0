@@ -197,7 +197,8 @@ document.getElementById("otpLimitMsg");
 
 const otpSendingMsg =
 document.getElementById("otpSendingMsg");
-
+const cooldownTimer =
+document.getElementById("cooldownTimer");
 /* =====================================
 CHANGE PASSWORD
 ===================================== */
@@ -411,6 +412,53 @@ otpLimitMsg.classList.add("hidden");
         }
 
     },1000);
+
+}
+function startCooldown(){
+
+    otpCooldownRunning = true;
+
+    cooldownSeconds = OTP_COOLDOWN;
+
+    resendSignupOTPBtn.classList.add("hidden");
+
+    otpLimitMsg.classList.remove("hidden");
+
+    updateCooldown();
+
+    clearInterval(cooldownInterval);
+
+    cooldownInterval = setInterval(()=>{
+
+        cooldownSeconds--;
+
+        updateCooldown();
+
+        if(cooldownSeconds<=0){
+
+            clearInterval(cooldownInterval);
+
+            otpCooldownRunning = false;
+
+            otpResendCount = 0;
+
+            otpLimitMsg.classList.add("hidden");
+
+            resendSignupOTPBtn.classList.remove("hidden");
+
+        }
+
+    },1000);
+
+}
+
+function updateCooldown(){
+
+    const min = String(Math.floor(cooldownSeconds/60)).padStart(2,"0");
+
+    const sec = String(cooldownSeconds%60).padStart(2,"0");
+
+    cooldownTimer.textContent = `${min}:${sec}`;
 
 }
 function updateOtpTimer(timerId){
@@ -1798,20 +1846,9 @@ resendSignupOTPBtn.onclick = async ()=>{
 
         resendSignupOTPBtn.classList.add("hidden");
 
-        otpLimitMsg.classList.remove("hidden");
+       startCooldown();
 
-        setTimeout(()=>{
-
-            otpResendCount = 0;
-
-            otpLimitMsg.classList.add("hidden");
-
-            resendSignupOTPBtn.classList.remove("hidden");
-
-        }, OTP_COOLDOWN);
-
-        return;
-
+return;
     }
 
     otpResendCount++;
