@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -527,8 +526,7 @@ Please wait
 before trying again.
 `;
 
-loginLockTimer =
-document.getElementById("loginLockTimer");
+
     updateLoginLock();
 
     clearInterval(loginLockInterval);
@@ -559,14 +557,20 @@ document.getElementById("loginLockTimer");
 }
 function updateLoginLock(){
 
-    const min = String(Math.floor(loginLockSeconds / 60)).padStart(2,"0");
+    const timer =
+    document.getElementById("loginLockTimer");
 
-    const sec = String(loginLockSeconds % 60).padStart(2,"0");
+    if(!timer) return;
 
-    loginLockTimer.textContent = `${min}:${sec}`;
+    const min =
+    String(Math.floor(loginLockSeconds/60)).padStart(2,"0");
+
+    const sec =
+    String(loginLockSeconds%60).padStart(2,"0");
+
+    timer.textContent = `${min}:${sec}`;
 
 }
-
 function restoreCooldown(){
 
     const endTime = Number(
@@ -2713,8 +2717,21 @@ loginSubmitBtn.onclick = async ()=>{
     const min = String(Math.floor(loginLockSeconds / 60)).padStart(2,"0");
     const sec = String(loginLockSeconds % 60).padStart(2,"0");
 
-    alert(`Please wait for ${min}:${sec} before trying again.`);
+loginLockMsg.classList.remove("hidden");
 
+loginLockMsg.innerHTML = `
+Maximum login attempts reached.
+
+<br><br>
+
+Please wait min
+
+<span id="loginLockTimer">
+${min}:${sec}
+</span>
+
+sec before trying again.
+`;
     return;
 
 }
