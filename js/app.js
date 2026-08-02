@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -514,19 +515,21 @@ function startLoginLock(){
    forgotPassCodeBtn.style.opacity = "0.5";
     loginLockMsg.classList.remove("hidden");
 // Red Color
+loginLockMsg.classList.remove("hidden");
+
 loginLockMsg.style.color = "#d32f2f";
+
 loginLockMsg.innerHTML = `
 Maximum login attempts reached.
 
 <br><br>
 
 Please wait for
-${min}:${sec}
-before trying again.`;
+<span id="loginLockTimer">01:00</span>
+before trying again.
+`;
 
-
-    updateLoginLock();
-
+updateLoginLock();
     clearInterval(loginLockInterval);
 
     loginLockInterval = setInterval(()=>{
