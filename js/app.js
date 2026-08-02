@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -201,6 +200,19 @@ const otpSendingMsg =
 document.getElementById("otpSendingMsg");
 const cooldownTimer =
 document.getElementById("cooldownTimer");
+
+/* ==========================
+   LOGIN SECURITY
+========================== */
+
+const MAX_LOGIN_ATTEMPTS = 3;
+const LOGIN_LOCK_TIME = 60;   // Testing (1 minute)
+
+let loginAttempts = 0;
+let loginLockSeconds = LOGIN_LOCK_TIME;
+let loginLockInterval = null;
+let loginLocked = false;
+
 /* =====================================
 CHANGE PASSWORD
 ===================================== */
@@ -2626,6 +2638,16 @@ const otp = registerOTP.value.trim();
 
 loginSubmitBtn.onclick = async ()=>{
 
+   if(loginLocked){
+
+    const min = String(Math.floor(loginLockSeconds / 60)).padStart(2,"0");
+    const sec = String(loginLockSeconds % 60).padStart(2,"0");
+
+    alert(`Please wait for ${min}:${sec} before trying again.`);
+
+    return;
+
+}
     const loginId =
     document.getElementById("loginId").value.trim();
 
@@ -2657,6 +2679,7 @@ const formData = new FormData();
         const result = await response.json();
 
         if(result.status=="success"){
+           loginAttempts = 0;
 
             sessionStorage.setItem(
                 "user",
@@ -2678,10 +2701,23 @@ const formData = new FormData();
 
         }else{
 
-            alert(result.message);
+    loginAttempts++;
 
-        }
+    if(loginAttempts >= MAX_LOGIN_ATTEMPTS){
 
+        startLoginLock();
+
+        return;
+
+    }
+
+    alert(
+        `${result.message}\n\nAttempts Remaining : ${
+            MAX_LOGIN_ATTEMPTS - loginAttempts
+        }`
+    );
+
+}
     }catch(err){
 
         alert("Unable to connect to server.");
