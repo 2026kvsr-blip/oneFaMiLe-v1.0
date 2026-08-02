@@ -3,6 +3,7 @@
 
   <link rel="icon" href="images/favicon.ico">
 <head>
+
   
         <meta charset="UTF-8">
   
@@ -433,15 +434,21 @@ class="hidden otp-sending">
 
 </div>   
   
-  <div
-        id="otpLimitMsg"
-        class="hidden otp-limit">
+ <div
+id="otpLimitMsg"
+class="hidden otp-limit">
 
-        Maximum resend limit reached.
-        <br>
-        Try again after 1 minute.
+Maximum resend limit reached.
 
-    </div>
+<br><br>
+
+Try again in
+
+<span id="cooldownTimer">
+01:00
+</span>
+
+</div>
 
 </div>
 <div
