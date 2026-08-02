@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2863,7 +2862,6 @@ const formData = new FormData();
         });
 
         const result = await response.json();
-        hideLoader();
         if(result.status=="success"){
            loginAttempts = 0;
 
@@ -2925,13 +2923,15 @@ const formData = new FormData();
 },3000);          
 }
     }catch(err){
-        hideLoader();
-
         alert("Unable to connect to server.");
         console.log(err);
 
     }
+finally{
 
+    hideLoader();
+
+}
 };
 expensesBtn.onclick=()=>{
 setActiveButton(expensesBtn);
