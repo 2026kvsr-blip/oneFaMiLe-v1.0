@@ -419,6 +419,10 @@ function startCooldown(){
     otpCooldownRunning = true;
 
     cooldownSeconds = OTP_COOLDOWN;
+   sessionStorage.setItem(
+    "otpCooldownEnd",
+    Date.now() + OTP_COOLDOWN * 1000
+);
 
     resendSignupOTPBtn.classList.add("hidden");
 
@@ -434,20 +438,21 @@ function startCooldown(){
 
         updateCooldown();
 
-        if(cooldownSeconds<=0){
+        if(cooldownSeconds <= 0){
 
-            clearInterval(cooldownInterval);
+    clearInterval(cooldownInterval);
 
-            otpCooldownRunning = false;
+    otpCooldownRunning = false;
 
-            otpResendCount = 0;
+    otpResendCount = 0;
 
-            otpLimitMsg.classList.add("hidden");
+    sessionStorage.removeItem("otpCooldownEnd");
 
-            resendSignupOTPBtn.classList.remove("hidden");
+    otpLimitMsg.classList.add("hidden");
 
-        }
+    resendSignupOTPBtn.classList.remove("hidden");
 
+}
     },1000);
 
 }
@@ -459,6 +464,64 @@ function updateCooldown(){
     const sec = String(cooldownSeconds%60).padStart(2,"0");
 
     cooldownTimer.textContent = `${min}:${sec}`;
+
+}
+function restoreCooldown(){
+
+    const endTime = Number(
+        sessionStorage.getItem("otpCooldownEnd")
+    );
+
+    if(!endTime){
+        return;
+    }
+
+    const remaining =
+        Math.ceil((endTime - Date.now()) / 1000);
+
+    if(remaining <= 0){
+
+        sessionStorage.removeItem("otpCooldownEnd");
+
+        return;
+
+    }
+
+    otpCooldownRunning = true;
+
+    cooldownSeconds = remaining;
+
+    resendSignupOTPBtn.classList.add("hidden");
+
+    otpLimitMsg.classList.remove("hidden");
+
+    updateCooldown();
+
+    clearInterval(cooldownInterval);
+
+    cooldownInterval = setInterval(()=>{
+
+        cooldownSeconds--;
+
+        updateCooldown();
+
+        if(cooldownSeconds <= 0){
+
+            clearInterval(cooldownInterval);
+
+            otpCooldownRunning = false;
+
+            otpResendCount = 0;
+
+            sessionStorage.removeItem("otpCooldownEnd");
+
+            otpLimitMsg.classList.add("hidden");
+
+            resendSignupOTPBtn.classList.remove("hidden");
+
+        }
+
+    },1000);
 
 }
 function updateOtpTimer(timerId){
@@ -1842,15 +1905,19 @@ signupOTPBtn.onclick = async ()=>{
 
 resendSignupOTPBtn.onclick = async ()=>{
 
-    if(otpResendCount >= MAX_OTP_RESEND){
+   if(otpCooldownRunning){
 
-        resendSignupOTPBtn.classList.add("hidden");
+    return;
 
-       startCooldown();
+}
 
-return;
-    }
+if(otpResendCount >= MAX_OTP_RESEND){
 
+    startCooldown();
+
+    return;
+
+}
     otpResendCount++;
     resendSignupOTPBtn.classList.add("hidden");
 
