@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -336,10 +337,17 @@ function showMessage(text,type="info",duration=5000){
 
 function hideMessage(){
 
-    appMessage.classList.add("hidden");
+    appMessage.style.opacity = "0";
+
+    setTimeout(()=>{
+
+        appMessage.classList.add("hidden");
+
+        appMessage.style.opacity = "1";
+
+    },250);
 
 }
-
 
 /* ===========================
    VALIDATION FUNCTIONS
