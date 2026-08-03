@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -325,8 +324,27 @@ function showMessage(text,type="info",duration=5000){
 
     appMessage.classList.add("msg-"+type);
 
-    appMessageText.textContent = text;
+let icon = "";
 
+switch(type){
+
+    case "success":
+        icon = "✅ ";
+        break;
+
+    case "warning":
+        icon = "⚠ ";
+        break;
+
+    case "error":
+        icon = "❌ ";
+        break;
+
+    default:
+        icon = "ℹ ";
+}
+
+appMessageText.textContent = icon + text;
     messageTimer = setTimeout(()=>{
 
         hideMessage();
