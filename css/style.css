@@ -6,8 +6,7 @@ font-family:Arial,Helvetica,sans-serif;
 }
 body{
 
-       
-            background:#EAF8FF;
+                   background:#EAF8FF;
 
 min-height:100vh;
 
@@ -1625,6 +1624,8 @@ Forget Pass word
     z-index:99999;
 
     animation:slideDown .35s ease;
+    transition:opacity .25s ease;
+   
 
 }
 
