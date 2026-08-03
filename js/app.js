@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -213,10 +214,7 @@ const loaderText =
 document.getElementById("loaderText");
 
 // Reset Attempts after 1 minute inactivity
-const ATTEMPT_RESET_TIME = 60; // seconds
 
-let lastLoginAttemptTime = 0;
-let lastForgotAttemptTime = 0;
 let lastSensitiveAttemptTime = 0;
 
 /* ==========================
@@ -224,6 +222,28 @@ let lastSensitiveAttemptTime = 0;
 ========================== */
 
 const MAX_LOGIN_ATTEMPTS = 3;
+// =====================================
+// LOGIN ATTEMPT RESET
+// =====================================
+
+const ATTEMPT_RESET_TIME = 60; // 60 Seconds
+
+let lastLoginAttemptTime = 0;
+// =====================================
+// FORGOT PASSWORD SECURITY
+// =====================================
+
+const MAX_FORGOT_ATTEMPTS = 3;
+
+let forgotAttempts = 0;
+
+let forgotLocked = false;
+
+let forgotLockSeconds = 60;
+
+let forgotLockInterval = null;
+
+let lastForgotAttemptTime = 0;
 const LOGIN_LOCK_TIME = 60;   // Testing (1 minute)
 
 let loginAttempts = 0;
@@ -2830,17 +2850,23 @@ ${min}:${sec}
     return;
 
 }
-   const now = Date.now();
+   // =====================================
+// RESET LOGIN ATTEMPTS AFTER 1 MINUTE
+// =====================================
+
+const now = Date.now();
 
 if(
     loginAttempts > 0 &&
-    (now - lastLoginAttemptTime) > ATTEMPT_RESET_TIME * 1000
+    !loginLocked &&
+    (now - lastLoginAttemptTime) >= ATTEMPT_RESET_TIME * 1000
 ){
 
     loginAttempts = 0;
 
     loginLockMsg.classList.add("hidden");
     loginLockMsg.innerHTML = "";
+    loginLockMsg.style.color = "";
 
 }
     const loginId =
