@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -321,7 +322,34 @@ function hideLoader(){
 ===================================== */
 
 let messageTimer = null;
+/* =====================================
+   COMMON LOCK ENGINE
+===================================== */
 
+const lockState = {
+
+    login : {
+        attempts : 0,
+        locked : false,
+        endTime : 0,
+        interval : null
+    },
+
+    forgot : {
+        attempts : 0,
+        locked : false,
+        endTime : 0,
+        interval : null
+    },
+
+    sensitive : {
+        attempts : 0,
+        locked : false,
+        endTime : 0,
+        interval : null
+    }
+
+};
 function showMessage(text,type="info",duration=5000){
 
     clearTimeout(messageTimer);
