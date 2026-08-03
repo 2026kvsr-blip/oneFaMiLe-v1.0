@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -203,7 +202,8 @@ const cooldownTimer =
 document.getElementById("cooldownTimer");
 const loginLockMsg =
 document.getElementById("loginLockMsg");
-
+const forgotLockMsg =
+document.getElementById("forgotLockMsg");
 const loginLockTimer =
 document.getElementById("loginLockTimer");
 const appLoader =
@@ -616,6 +616,43 @@ forgotPassCodeBtn.style.opacity = "1";
     },1000);
 
 }
+function startForgotLock(){
+
+    forgotLocked = true;
+
+    forgotLockSeconds = 60;
+
+    forgotLockMsg.classList.remove("hidden");
+
+    updateForgotLock();
+
+    clearInterval(forgotLockInterval);
+
+    forgotLockInterval = setInterval(()=>{
+
+        forgotLockSeconds--;
+
+        updateForgotLock();
+
+        if(forgotLockSeconds <= 0){
+
+            clearInterval(forgotLockInterval);
+
+            forgotLocked = false;
+
+            forgotAttempts = 0;
+
+            forgotLockMsg.classList.add("hidden");
+
+            forgotLockMsg.innerHTML = "";
+
+        }
+
+    },1000);
+
+}
+
+
 function updateLoginLock(){
 
     const timer =
@@ -632,6 +669,35 @@ function updateLoginLock(){
     timer.textContent = `${min}:${sec}`;
 
 }
+function updateForgotLock(){
+
+    const min = String(
+        Math.floor(forgotLockSeconds / 60)
+    ).padStart(2,"0");
+
+    const sec = String(
+        forgotLockSeconds % 60
+    ).padStart(2,"0");
+
+    forgotLockMsg.style.color = "#d32f2f";
+
+    forgotLockMsg.innerHTML = `
+Maximum attempts reached.
+
+<br><br>
+
+Please wait for
+
+<span>
+${min}:${sec}
+</span>
+
+before trying again.
+`;
+
+}
+
+
 function restoreCooldown(){
 
     const endTime = Number(
@@ -1965,13 +2031,53 @@ async function sendForgotOTP(){
         const result = await response.json();
 
         if(result.status !== "success"){
-               hideLoader();
 
-            alert(result.message);
-            return;
+    forgotAttempts++;
+
+    lastForgotAttemptTime = Date.now();
+
+    if(forgotAttempts >= MAX_FORGOT_ATTEMPTS){
+
+        startForgotLock();
+
+        return;
+
+    }
+
+    forgotLockMsg.style.color = "#ff9800";
+
+    forgotLockMsg.classList.remove("hidden");
+
+    forgotLockMsg.innerHTML = `
+<div id="wrongForgotText">
+    Invalid Mobile Number.
+</div>
+
+<div id="forgotAttemptText">
+    Attempts Remaining : ${MAX_FORGOT_ATTEMPTS-forgotAttempts}
+</div>
+`;
+
+    setTimeout(()=>{
+
+        const msg =
+        document.getElementById("wrongForgotText");
+
+        if(msg){
+
+            msg.remove();
+
         }
-        hideLoader();
 
+    },3000);
+
+    hideLoader();
+
+    return;
+
+}
+        hideLoader();
+        forgotAttempts = 0;
         otpMode = "forgot";
 
         clearOTP();
@@ -1997,12 +2103,26 @@ async function sendForgotOTP(){
 }
 
 sendForgotOTPBtn.onclick = async ()=>{
+   // =====================================
+// FORGOT PASSWORD LOCK CHECK
+// =====================================
+
+if(forgotLocked){
+
+    updateForgotLock();
+
+    forgotLockMsg.classList.remove("hidden");
+
+    return;
+
+}
 
     otpResendCount = 0;
 
     await sendForgotOTP();
 
 };
+
 
 
 backForgotBtn.onclick = ()=>{
