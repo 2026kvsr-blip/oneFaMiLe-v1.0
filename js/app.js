@@ -2,7 +2,6 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -4131,6 +4130,15 @@ class="eye-icon">
 
 </span>
 
+</div>
+<div
+id="sensitiveLockMsg"
+class="hidden"
+style="
+text-align:center;
+font-size:13px;
+margin:10px;
+font-weight:500;">
 </div>
 <div align="center">
 
