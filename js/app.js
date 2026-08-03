@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -4223,10 +4224,29 @@ document.getElementById("verifyPass").onclick = () => {
     return;
 }
 
-    if (enteredPass !== savedPass) {
+   if (enteredPass !== savedPass) {
+
+    sensitiveAttempts++;
+
+    lastSensitiveAttemptTime = Date.now();
+
+    if(sensitiveAttempts >= MAX_SENSITIVE_ATTEMPTS){
+
+        sensitiveLocked = true;
+
+        showMessage(
+            "Maximum attempts reached.",
+            "error",
+            3000
+        );
+
+        return;
+
+    }
 
     showMessage(
-        "Wrong Pass Code.",
+        "Wrong Pass Code. Attempts Remaining : " +
+        (MAX_SENSITIVE_ATTEMPTS - sensitiveAttempts),
         "warning",
         3000
     );
@@ -4235,7 +4255,7 @@ document.getElementById("verifyPass").onclick = () => {
 
     return;
 }
-
+    sensitiveAttempts = 0;
     reportsLayout(
         moduleName + " " + reportType,
         backFunction
