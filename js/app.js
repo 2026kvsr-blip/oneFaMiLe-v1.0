@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -3071,13 +3070,23 @@ if(
     document.getElementById("loginPassCode").value.trim();
 
     if(loginId==""){
-        alert("Enter Login ID");
-        return;
+showMessage(
+    "Enter Login ID.",
+    "warning",
+    3000
+);
+
+document.getElementById("loginId").focus();        return;
     }
 
     if(passCode==""){
-        alert("Enter Pass Code");
-        return;
+showMessage(
+    "Enter Pass Code.",
+    "warning",
+    3000
+);
+
+document.getElementById("loginPassCode").focus();        return;
     }
    if(passCode.length !== 6){
 
@@ -3166,8 +3175,12 @@ const formData = new FormData();
 },3000);          
 }
     }catch(err){
-        alert("Unable to connect to server.");
-        console.log(err);
+showMessage(
+    "Unable to connect to server.",
+    "error",
+    3000
+);
+       console.log(err);
 
     }
 finally{
