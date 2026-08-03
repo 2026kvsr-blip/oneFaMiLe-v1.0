@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2015,7 +2016,20 @@ async function sendForgotOTP(){
         forgotMobileNo.focus();
         return;
     }
+if(mobile.length !== 10){
 
+    forgotLockMsg.style.color = "#ff9800";
+
+    forgotLockMsg.classList.remove("hidden");
+
+    forgotLockMsg.innerHTML =
+    "Mobile Number must contain exactly 10 digits.";
+
+    forgotMobileNo.focus();
+
+    return;
+
+}
    
     const formData = new FormData();
     formData.append("action","sendForgotOTP");
