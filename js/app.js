@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -397,19 +396,13 @@ function stopLock(type){
 
 }
 function isLocked(type){
-
     const state = lockState[type];
-
     if(!state){
-
         return false;
-
     }
 
     if(!state.locked){
-
         return false;
-
     }
 
     if(getRemainingSeconds(state.endTime) <= 0){
@@ -421,6 +414,48 @@ function isLocked(type){
     }
 
     return true;
+
+}
+function updateLockUI(type,messageElement){
+
+    const state = lockState[type];
+
+    if(!state){
+
+        return;
+
+    }
+
+    const remaining =
+        getRemainingSeconds(state.endTime);
+
+    if(remaining <= 0){
+
+        stopLock(type);
+
+        messageElement.classList.add("hidden");
+
+        messageElement.innerHTML = "";
+
+        return;
+
+    }
+
+    messageElement.classList.remove("hidden");
+
+    messageElement.style.color = "#d32f2f";
+
+    messageElement.innerHTML = `
+Maximum attempts reached.
+
+<br><br>
+
+Please wait
+
+<b>${formatLockTime(remaining)}</b>
+
+before trying again.
+`;
 
 }
 function showMessage(text,type="info",duration=5000){
