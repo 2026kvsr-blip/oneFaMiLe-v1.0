@@ -211,6 +211,14 @@ document.getElementById("appLoader");
 
 const loaderText =
 document.getElementById("loaderText");
+
+// Reset Attempts after 1 minute inactivity
+const ATTEMPT_RESET_TIME = 60; // seconds
+
+let lastLoginAttemptTime = 0;
+let lastForgotAttemptTime = 0;
+let lastSensitiveAttemptTime = 0;
+
 /* ==========================
    LOGIN SECURITY
 ========================== */
@@ -2804,6 +2812,7 @@ loginSubmitBtn.onclick = async ()=>{
     const min = String(Math.floor(loginLockSeconds / 60)).padStart(2,"0");
     const sec = String(loginLockSeconds % 60).padStart(2,"0");
 
+      
 loginLockMsg.classList.remove("hidden");
 
 loginLockMsg.innerHTML = `
@@ -2819,6 +2828,19 @@ ${min}:${sec}
  before trying again.
 `;
     return;
+
+}
+   const now = Date.now();
+
+if(
+    loginAttempts > 0 &&
+    (now - lastLoginAttemptTime) > ATTEMPT_RESET_TIME * 1000
+){
+
+    loginAttempts = 0;
+
+    loginLockMsg.classList.add("hidden");
+    loginLockMsg.innerHTML = "";
 
 }
     const loginId =
@@ -2886,7 +2908,7 @@ const formData = new FormData();
         }else{
 
     loginAttempts++;
-
+    lastLoginAttemptTime = Date.now();
     if(loginAttempts >= MAX_LOGIN_ATTEMPTS){
 
         startLoginLock();
