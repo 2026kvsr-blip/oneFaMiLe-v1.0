@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -4204,6 +4205,35 @@ if(toggle){
     
 document.getElementById("verifyPass").onclick = () => {
 
+    const sensitiveLockMsg =
+document.getElementById("sensitiveLockMsg");
+
+if(sensitiveLocked){
+
+    sensitiveLockMsg.classList.remove("hidden");
+
+    sensitiveLockMsg.style.color = "#d32f2f";
+
+    const min = String(Math.floor(sensitiveLockSeconds/60)).padStart(2,"0");
+
+    const sec = String(sensitiveLockSeconds%60).padStart(2,"0");
+
+    sensitiveLockMsg.innerHTML = `
+Maximum attempts reached.
+
+<br><br>
+
+Please wait
+
+<b>${min}:${sec}</b>
+
+before trying again.
+`;
+
+    return;
+
+}
+   
     const enteredPass =
         document.getElementById("reportPassCode").value.trim();
 
