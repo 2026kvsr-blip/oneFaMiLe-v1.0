@@ -2,6 +2,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2841,7 +2842,7 @@ if(state.value.trim().length < 2){
 }
 if(!isValidName(state.value.trim())){
 
-    alert("State should contain letters only.");
+    showMessage("State must contain only letters.","warning",3000);
 
     state.focus();
 
@@ -2849,7 +2850,7 @@ if(!isValidName(state.value.trim())){
 
 }
 if(country.value.trim()==""){
-    alert("Enter Country");
+    showMessage("Country is required.","warning",3000);
     country.focus();
     return false;
 }
@@ -2903,20 +2904,20 @@ function validateSignup(){
     if(registerConfirmPassCode.value.trim()==""){
        if(registerConfirmPassCode.value.trim().length !== 6){
 
-    alert("Confirm Pass Code must contain exactly 6 digits.");
+    showMessage("Confirm Pass Code must contain exactly 6 digits.","warning",3000);
 
     registerConfirmPassCode.focus();
 
     return false;
 
 }
-        alert("Confirm Pass Code");
+        showMessage("Confirm Pass Code is required.","warning",3000);
         registerConfirmPassCode.focus();
         return false;
     }
 
     if(sensitivePassCode.value !== registerConfirmPassCode.value){
-        alert("Pass Codes do not match");
+        showMessage("Pass Codes do not match.","warning",3000);
         registerConfirmPassCode.focus();
         return false;
     }
@@ -3087,7 +3088,7 @@ async function verifyForgotOTP(){
    const mobile = forgotMobileNo.value.trim();
 const otp = registerOTP.value.trim();
     if(mobile===""){
-        alert("Enter Mobile Number");
+        showMessage("Mobile Number is required.","warning",3000);
         forgotMobileNo.focus();
         return;
     }
@@ -3096,7 +3097,7 @@ const otp = registerOTP.value.trim();
         return;
     }
 if (otp.length !== 6) {
-    alert("Enter 6-digit OTP");
+    showMessage("OTP must contain exactly 6 digits.","warning",3000);
     registerOTP.focus();
     return;
 }
@@ -3158,7 +3159,7 @@ if (otp === "") {
 }
 
 if (otp.length !== 6) {
-    alert("Enter 6-digit OTP");
+    showMessage("OTP must contain exactly 6 digits.","warning",3000);
     registerOTP.focus();
     return;
 }
@@ -3204,11 +3205,11 @@ const otp = registerOTP.value.trim();
     const confirmPassCode = registerConfirmPassCode.value.trim();
     if(otp===""){
         alert("Enter OTP");        return;    }
-    if(newPassCode===""){        alert("Enter New Pass Code");        return;
+    if(newPassCode===""){        showMessage("New Pass Code is required.","warning",3000);        return;
     }
-    if(confirmPassCode===""){        alert("Confirm Pass Code");        return;
+    if(confirmPassCode===""){        showMessage("Confirm Pass Code is required.","warning",3000);        return;
     }
-    if(newPassCode!==confirmPassCode){        alert("Pass Codes do not match");        return;
+    if(newPassCode!==confirmPassCode){        showMessage("Pass Codes do not match.","warning",3000);        return;
     }
     const mobile = forgotMobileNo.value.trim();
     /* -------- OTP Verify -------- */
@@ -4965,13 +4966,13 @@ changePasswordBtn.onclick = async () => {
     }
 
     if (newPass === "") {
-        alert("Enter New Pass Code");
+        showMessage("New Pass Code is required.","warning",3000);
         changeNewPassCode.focus();
         return;
     }
 
     if (confirmPass === "") {
-        alert("Confirm New Pass Code");
+        showMessage("Confirm New Pass Code is required.","warning",3000);
         changeConfirmPassCode.focus();
         return;
     }
@@ -5453,17 +5454,17 @@ saveNewPassCodeBtn.onclick = async ()=>{
     const pass2 = confirmNewPassCode.value.trim();
 
     if(pass1===""){
-        alert("Enter New Pass Code");
+        showMessage("New Pass Code is required.","warning",3000);
         return;
     }
 
     if(pass2===""){
-        alert("Confirm New Pass Code");
+        showMessage("Confirm New Pass Code is required.","warning",3000);
         return;
     }
 
     if(pass1!==pass2){
-        alert("Pass Codes do not match");
+        showMessage("Pass Codes do not match.","warning",3000);
         return;
     }
 
