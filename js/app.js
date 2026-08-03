@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -447,6 +448,7 @@ function showScreen(page){
     }
 
     page.classList.remove("hidden");
+    window.scrollTo(0,0);
 
 }
 
@@ -2030,6 +2032,13 @@ forgotLockMsg.innerHTML = `
 Mobile Number must contain 10 digits.
 </div>
 `;
+   setTimeout(()=>{
+
+    forgotLockMsg.classList.add("hidden");
+
+    forgotLockMsg.innerHTML="";
+
+},5000);
     forgotMobileNo.focus();
 
     return;
@@ -2057,7 +2066,7 @@ Mobile Number must contain 10 digits.
     lastForgotAttemptTime = Date.now();
 
     if(forgotAttempts >= MAX_FORGOT_ATTEMPTS){
-
+        hideLoader();
         startForgotLock();
 
         return;
