@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2057,7 +2058,7 @@ async function sendForgotOTP(){
        showMessage(
     "Enter Mobile Number.",
     "warning",
-    5000
+    3000
 );
         forgotMobileNo.focus();
         return;
