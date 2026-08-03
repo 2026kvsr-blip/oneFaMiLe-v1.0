@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2368,7 +2367,7 @@ Mobile Number must contain 10 digits.
     }catch(err){
         hideLoader();
 
-        alert("Unable to connect to server.");
+        showMessage(     "Unable to connect to server.",     "error",     3000 );
         console.log(err);
 
     }
@@ -2456,7 +2455,7 @@ async function sendSignupOTP(){
 
         if(result.status !== "success"){
             hideLoader();
-            alert(result.message);
+            showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
             return;
 
         }
@@ -2477,7 +2476,7 @@ hideLoader();
     }catch(err){
         hideLoader();
 
-        alert("Unable to connect to server.");
+        showMessage(     "Unable to connect to server.",     "error",     3000 );
         console.log(err);
 
     }
@@ -2555,8 +2554,11 @@ backSignupOTPBtn.onclick = ()=>{
         const min = String(Math.floor(cooldownSeconds / 60)).padStart(2,"0");
         const sec = String(cooldownSeconds % 60).padStart(2,"0");
 
-        alert(`Please wait for ${min}:${sec} before going back.`);
-
+showMessage(
+    `Please wait for ${min}:${sec} before going back.`,
+    "info",
+    3000
+);
         return;
 
     }
@@ -2633,8 +2635,12 @@ else if(otpMode==="forgot"){
 function validateSignupBasic(){
 
     if(loginUserName.value.trim()==""){
-        alert("Enter Login User Name");
-        loginUserName.focus();
+showMessage(
+    "Enter Login User Name.",
+    "warning",
+    3000
+);
+       loginUserName.focus();
         return false;
     }
 if(loginUserName.value.trim().length < 6){
@@ -2647,8 +2653,12 @@ if(loginUserName.value.trim().length < 6){
 
 }
     if(surName.value.trim()==""){
-        alert("Enter Surname");
-        surName.focus();
+showMessage(
+    "Enter Surname.",
+    "warning",
+    3000
+);
+       surName.focus();
         return false;
     }
 if(surName.value.trim().length < 2){
@@ -2711,8 +2721,11 @@ if(!isValidMobile(mobileNo.value.trim())){
 
     if(!isValidEmail(emailId.value.trim())){
 
-        alert("Enter valid Email ID.");
-
+showMessage(
+    "Enter valid Email ID.",
+    "warning",
+    3000
+);
         emailId.focus();
 
         return false;
@@ -2910,7 +2923,7 @@ async function checkSignup() {
   const result = await response.json();
 
   if (result.status !== "success") {
-    alert(result.message);
+    showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
     return false;
   }
 
@@ -3002,7 +3015,7 @@ async function registerUser(){
 
         if(result.status=="success"){
            hideLoader();
-    alert(result.message);
+    showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
 
     // Clear Signup Form
     document.getElementById("loginUserName").value = "";
@@ -3025,14 +3038,14 @@ async function registerUser(){
 
 }else{
 
-    alert(result.message);
+    showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
 
 }
     }
     catch(err){
         hideLoader();
 
-        alert("Unable to connect to server.");
+        showMessage(     "Unable to connect to server.",     "error",     3000 );
 
         console.log(err);
 
@@ -3088,7 +3101,7 @@ resetPassCodePage.classList.remove("hidden");
             
         }else{
 
-            alert(result.message);
+            showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
 
         }
 
@@ -3144,7 +3157,7 @@ if (otp.length !== 6) {
         }else{
           hideLoader();
 
-            alert(result.message);
+            showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
 
         }
 
@@ -4966,7 +4979,7 @@ formData.append("loginId", user.loginUserName);
 
         const result = await response.json();
 
-        alert(result.message);
+        showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
 
         if (result.status === "success") {
 
@@ -4987,7 +5000,7 @@ formData.append("loginId", user.loginUserName);
     } catch (err) {
 
         console.log(err);
-        alert("Unable to connect to server.");
+        showMessage(     "Unable to connect to server.",     "error",     3000 );
 
     }
 
@@ -5160,19 +5173,19 @@ const user = JSON.parse(sessionStorage.getItem("user"));
                 newPass
             );
 
-            alert(result.message);
+            showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
 
             homeBtn.click();
 
         } else {
 
-            alert(result.message);
+            showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
 
         }
 
     } catch (err) {
 
-        alert("Unable to connect to server.");
+        showMessage(     "Unable to connect to server.",     "error",     3000 );
 
         console.log(err);
 
@@ -5446,7 +5459,7 @@ saveNewPassCodeBtn.onclick = async ()=>{
 
     const result = await response.json();
 
-    alert(result.message);
+    showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
 
     if(result.status==="success"){
 
