@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -380,6 +379,31 @@ function startLock(type,duration=60){
     state.locked = true;
 
     state.endTime = Date.now() + (duration * 1000);
+
+}
+function stopLock(type){
+
+    const state = lockState[type];
+
+    if(!state){
+
+        return;
+
+    }
+
+    state.locked = false;
+
+    state.attempts = 0;
+
+    state.endTime = 0;
+
+    if(state.interval){
+
+        clearInterval(state.interval);
+
+        state.interval = null;
+
+    }
 
 }
 function showMessage(text,type="info",duration=5000){
