@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2733,8 +2734,7 @@ showMessage(
     }
 if(!isValidMobile(mobileNo.value.trim())){
 
-    alert("Enter valid Mobile Number.");
-
+showMessage("Enter a valid Mobile Number.","warning",3000);
     mobileNo.focus();
 
     return false;
@@ -2758,8 +2758,8 @@ showMessage(
 }
  
     if(gender.value==""){
-        alert("Select Gender");
-        gender.focus();
+showMessage("Please select Gender.","warning",3000);
+       gender.focus();
         return false;
     }
 
@@ -2767,8 +2767,8 @@ const dob = new Date(dateOfBirth.value);
 
 if(dateOfBirth.value === ""){
 
-    alert("Select Date of Birth");
-    dateOfBirth.focus();
+showMessage("Please select Date of Birth.","warning",3000);
+   dateOfBirth.focus();
     return false;
 
 }
@@ -2777,8 +2777,7 @@ const today = new Date();
 
 if(dob > today){
 
-    alert("Future Date of Birth is not allowed.");
-    dateOfBirth.focus();
+showMessage("Future Date of Birth is not allowed.","warning",3000);    dateOfBirth.focus();
     return false;
 
 }
@@ -2795,22 +2794,20 @@ if(month < 0 || (month === 0 && today.getDate() < dob.getDate())){
 
 if(age < 18){
 
-    alert("Minimum age should be 18 years.");
-    dateOfBirth.focus();
+showMessage("Minimum age must be 18 years.","warning",3000);
+   dateOfBirth.focus();
     return false;
 
 }
    
 if(place.value.trim()==""){
-    alert("Enter Place");
-    place.focus();
+showMessage("Place is required.","warning",3000);    place.focus();
     return false;
 }
 
 if(place.value.trim().length < 2){
 
-    alert("Enter valid Place.");
-
+showMessage("Enter a valid Place.","warning",3000);
     place.focus();
 
     return false;
@@ -2818,23 +2815,21 @@ if(place.value.trim().length < 2){
 }
 if(!isValidName(place.value.trim())){
 
-    alert("Place should contain letters only.");
-
+showMessage("Place must contain only letters.","warning",3000);
     place.focus();
 
     return false;
 
 }
 if(state.value.trim()==""){
-    alert("Enter State");
-    state.focus();
+showMessage("State is required.","warning",3000);
+   state.focus();
     return false;
 }
 
 if(state.value.trim().length < 2){
 
-    alert("Enter valid State.");
-
+showMessage("Enter a valid State.","warning",3000);
     state.focus();
 
     return false;
@@ -2857,8 +2852,7 @@ if(country.value.trim()==""){
 
 if(country.value.trim().length < 2){
 
-    alert("Enter valid Country.");
-
+showMessage("Enter a valid Country.","warning",3000);
     country.focus();
 
     return false;
@@ -2866,8 +2860,7 @@ if(country.value.trim().length < 2){
 }
 if(!isValidName(country.value.trim())){
 
-    alert("Country should contain letters only.");
-
+showMessage("Country must contain only letters.","warning",3000);
     country.focus();
 
     return false;
@@ -2888,15 +2881,14 @@ function validateSignup(){
     if(sensitivePassCode.value.trim()==""){
        if(sensitivePassCode.value.trim().length !== 6){
 
-    alert("Pass Code must contain exactly 6 digits.");
-
+showMessage("Pass Code must contain exactly 6 digits.","warning",3000);
     sensitivePassCode.focus();
 
     return false;
 
 }
-        alert("Enter Pass Code");
-        sensitivePassCode.focus();
+showMessage("Pass Code is required.","warning",3000);
+       sensitivePassCode.focus();
         return false;
     }
    
@@ -3093,8 +3085,8 @@ const otp = registerOTP.value.trim();
         return;
     }
     if(otp===""){
-        alert("Enter OTP");
-        return;
+showMessage("OTP is required.","warning",3000);
+       return;
     }
 if (otp.length !== 6) {
     showMessage("OTP must contain exactly 6 digits.","warning",3000);
@@ -3133,8 +3125,7 @@ resetPassCodePage.classList.remove("hidden");
 
         console.log(err);
 
-        alert("Server Error");
-
+showMessage("Server Error.","error",3000);
     }
 
 }
@@ -3187,8 +3178,7 @@ if (otp.length !== 6) {
     }catch(error){
         hideLoader();
 
-        alert("Unable to verify OTP.");
-
+showMessage("Unable to verify OTP.","error",3000);
     }
 
 }
@@ -3219,7 +3209,10 @@ const otp = registerOTP.value.trim();
     verifyData.append("otp",otp);
     const verifyResponse = await fetch(API_URL,{        method:"POST",        body:verifyData    });
     const verifyResult = await verifyResponse.json();
-    if(verifyResult.status!=="success"){  hideLoader();      alert(verifyResult.message);        return;
+    if(verifyResult.status!=="success"){  hideLoader();  
+    showMessage(
+        verifyResult.message,
+    verifyResult.status === "success" ? "success" : "warning",  3000);        return;
     }
 hideLoader();
     /* -------- Reset Pass Code -------- */
@@ -3237,8 +3230,11 @@ hideLoader();
 
     const resetResult = await resetResponse.json();
 
-    alert(resetResult.message);
-
+showMessage(
+    resetResult.message,
+    resetResult.status === "success" ? "success" : "warning",
+    3000
+);
     if(resetResult.status==="success"){
 
         signupOTPPage.classList.add("hidden");
@@ -4960,8 +4956,8 @@ changePasswordBtn.onclick = async () => {
     const confirmPass = changeConfirmPassCode.value.trim();
 
     if (oldPass === "") {
-        alert("Enter Old Pass Code");
-        oldPassCode.focus();
+showMessage("Old Pass Code is required.","warning",3000);
+       oldPassCode.focus();
         return;
     }
 
@@ -4978,8 +4974,8 @@ changePasswordBtn.onclick = async () => {
     }
 
     if (newPass !== confirmPass) {
-        alert("New Pass Codes do not match");
-        changeConfirmPassCode.focus();
+showMessage("New Pass Codes do not match.","warning",3000);
+       changeConfirmPassCode.focus();
         return;
     }
 
@@ -5144,18 +5140,18 @@ document.getElementById("savePassCodeBtn").onclick = async () => {
     
     // Validation
     if (oldPass === "" || newPass === "" || confirmPass === "") {
-        alert("Please fill all the fields.");
-        return;
+showMessage("Please fill all the required fields.","warning",3000);
+       return;
     }
     
     if (oldPass !== sessionStorage.getItem("passCode")) {
-        alert("Old Pass Code is incorrect.");
-        return;
+showMessage("Old Pass Code is incorrect.","warning",3000);
+       return;
     }
 
     if (newPass !== confirmPass) {
-        alert("New Pass Code and Confirm Pass Code do not match.");
-        return;
+showMessage("New Pass Code and Confirm Pass Code do not match.","warning",3000);
+       return;
     }
 
     // Logged-in User
