@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2636,7 +2637,7 @@ function validateSignupBasic(){
 
     if(loginUserName.value.trim()==""){
 showMessage(
-    "Enter Login User Name.",
+    "Login User Name is required.",
     "warning",
     3000
 );
@@ -2645,8 +2646,11 @@ showMessage(
     }
 if(loginUserName.value.trim().length < 6){
 
-    alert("Login User Name should contain at least 6 characters.");
-
+showMessage(
+    "Login User Name must contain at least 6 characters.",
+    "warning",
+    3000
+);
     loginUserName.focus();
 
     return false;
@@ -2654,7 +2658,7 @@ if(loginUserName.value.trim().length < 6){
 }
     if(surName.value.trim()==""){
 showMessage(
-    "Enter Surname.",
+    "Surname is required.",
     "warning",
     3000
 );
@@ -2663,8 +2667,11 @@ showMessage(
     }
 if(surName.value.trim().length < 2){
 
-    alert("Enter valid Surname.");
-
+showMessage(
+    "Enter a valid surname.",
+    "warning",
+    3000
+);
     surName.focus();
 
     return false;
@@ -2672,23 +2679,33 @@ if(surName.value.trim().length < 2){
 }
     if(!isValidName(surName.value.trim())){
 
-    alert("Surname should contain letters only.");
-
+showMessage(
+    "Surname must contain only letters.",
+    "warning",
+    3000
+);
     surName.focus();
 
     return false;
 
 }
     if(lastName.value.trim()==""){
-    alert("Enter Last Name");
-    lastName.focus();
+showMessage(
+    "Last Name is required.",
+    "warning",
+    3000
+);
+       lastName.focus();
     return false;
 }
 
 if(lastName.value.trim().length < 2){
 
-    alert("Enter valid Last Name.");
-
+showMessage(
+    "Enter a valid last name.",
+    "warning",
+    3000
+);
     lastName.focus();
 
     return false;
@@ -2696,16 +2713,23 @@ if(lastName.value.trim().length < 2){
 }
     if(!isValidName(lastName.value.trim())){
 
-    alert("Last Name should contain letters only.");
-
+showMessage(
+    "Last Name must contain only letters.",
+    "warning",
+    3000
+);
     lastName.focus();
 
     return false;
 
 }
     if(mobileNo.value.trim()==""){
-        alert("Enter Mobile Number");
-        mobileNo.focus();
+showMessage(
+    "Mobile Number is required.",
+    "warning",
+    3000
+);
+       mobileNo.focus();
         return false;
     }
 if(!isValidMobile(mobileNo.value.trim())){
@@ -2722,7 +2746,7 @@ if(!isValidMobile(mobileNo.value.trim())){
     if(!isValidEmail(emailId.value.trim())){
 
 showMessage(
-    "Enter valid Email ID.",
+    "Enter a valid Email ID.",
     "warning",
     3000
 );
