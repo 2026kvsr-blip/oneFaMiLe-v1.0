@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -743,7 +744,20 @@ function showScreen(page){
 
 }
     page.classList.remove("hidden");
-   
+   const appTitle =
+document.getElementById("appTitle");
+
+if(page === welcomePage){
+
+    appTitle.textContent =
+    "Welcome to oneFaMiLe";
+
+}else{
+
+    appTitle.textContent =
+    "oneFaMiLe";
+
+}
     window.scrollTo(0,0);
 
 }
