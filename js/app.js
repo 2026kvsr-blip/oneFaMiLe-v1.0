@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -45,6 +44,15 @@ document.getElementById("closeMenuBtn");
 
 const logoutMenuBtn =
 document.getElementById("logoutMenuBtn");
+// =====================================
+// CLOSE SIDE MENU
+// =====================================
+
+function closeSideMenu(){
+
+    sideMenu.classList.remove("open");
+
+    menuOverlay.classList.remove("show");
 
 const passcodeMenuBtn =
 document.getElementById("passcodeMenuBtn");
