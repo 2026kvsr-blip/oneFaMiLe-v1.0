@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -487,7 +488,22 @@ if(type === "login"){
     document.getElementById("loginPassCode").focus();
 
 }
-      
+   if(type === "forgot"){
+
+    const btn =
+        document.getElementById("forgotOtpBtn");
+
+    if(btn){
+
+        btn.disabled = false;
+
+    }
+
+    forgotLockMsg.classList.add("hidden");
+
+    forgotLockMsg.innerHTML = "";
+
+} 
     messageElement.classList.add("hidden");
     messageElement.innerHTML = "";
     return;
@@ -872,40 +888,24 @@ function startLoginLock(){
 }
 function startForgotLock(){
 
-    forgotLocked = true;
+    const forgotLockMsg =
+        document.getElementById("forgotLockMsg");
+   const btn =
+    document.getElementById("forgotOtpBtn");
 
-    forgotLockSeconds = 60;
+if(btn){
 
-    forgotLockMsg.classList.remove("hidden");
-
-    updateForgotLock();
-
-    clearInterval(forgotLockInterval);
-
-    forgotLockInterval = setInterval(()=>{
-
-        forgotLockSeconds--;
-
-        updateForgotLock();
-
-        if(forgotLockSeconds <= 0){
-
-            clearInterval(forgotLockInterval);
-
-            forgotLocked = false;
-
-            forgotAttempts = 0;
-
-            forgotLockMsg.classList.add("hidden");
-
-            forgotLockMsg.innerHTML = "";
-
-        }
-
-    },1000);
+    btn.disabled = true;
 
 }
 
+    startLock(
+        "forgot",
+        60,
+        forgotLockMsg
+    );
+
+}
 
 function updateLoginLock(){
 
