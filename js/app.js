@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -3144,7 +3143,7 @@ async function verifySignupOTP(){
     const otp = registerOTP.value.trim();
 
 if (otp === "") {
-    alert("Enter OTP");
+    showMessage(     "OTP is required.",     "warning",     3000 );
     registerOTP.focus();
     return;
 }
@@ -3194,7 +3193,7 @@ const otp = registerOTP.value.trim();
     const newPassCode = sensitivePassCode.value.trim();
     const confirmPassCode = registerConfirmPassCode.value.trim();
     if(otp===""){
-        alert("Enter OTP");        return;    }
+        showMessage(     "OTP is required.",     "warning",     3000 );        return;    }
     if(newPassCode===""){        showMessage("New Pass Code is required.","warning",3000);        return;
     }
     if(confirmPassCode===""){        showMessage("Confirm Pass Code is required.","warning",3000);        return;
