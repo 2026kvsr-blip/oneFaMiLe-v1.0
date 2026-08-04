@@ -2190,27 +2190,27 @@ forgotPassCodeBtn.onclick = ()=>{
 
     if(isLocked("login")){
 
-       const remaining =
-    getRemainingSeconds(lockState.login.endTime);
-        <b>${formatLockTime(remaining)}</b>
+        const remaining =
+            getRemainingSeconds(lockState.login.endTime);
+
         loginLockMsg.style.color = "#d32f2f";
 
         loginLockMsg.classList.remove("hidden");
 
         loginLockMsg.innerHTML = `
-        Maximum login attempts reached.
+Maximum login attempts reached.
 
-        <br><br>
+<br><br>
 
-        Please wait for
-        <b>${min}:${sec}</b>
+Please wait for
 
-        before trying again.
-        `;
+<b>${formatLockTime(remaining)}</b>
+
+before trying again.
+`;
 
         return;
     }
-
     // Existing code...
 
     clearForgotPassCode();
