@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -441,6 +440,7 @@ function isLocked(type){
     if(getRemainingSeconds(state.endTime) <= 0){
 
         stopLock(type);
+       
 
         return false;
 
@@ -450,54 +450,47 @@ function isLocked(type){
 
 }
 function updateLockUI(type,messageElement){
-
     const state = lockState[type];
-
     if(!state){
-
         return;
-
     }
-
     const remaining =
         getRemainingSeconds(state.endTime);
-
    if(remaining <= 0){
-
     stopLock(type);
-
     if(type === "sensitive"){
-
         const txt =
         document.getElementById("reportPassCode");
-
         const btn =
         document.getElementById("verifyPass");
-
         if(txt){
-
             txt.disabled = false;
-
             txt.value = "";
-
             txt.focus();
-
         }
-
         if(btn){
-
             btn.disabled = false;
-
-        }
-
+       }
     }
+if(type === "login"){
 
+    document.getElementById("loginPassCode").disabled = false;
+
+    document.getElementById("loginSubmitBtn").disabled = false;
+
+    forgotPassCodeBtn.style.pointerEvents = "auto";
+
+    forgotPassCodeBtn.style.opacity = "1";
+
+    document.getElementById("loginPassCode").value = "";
+
+    document.getElementById("loginPassCode").focus();
+
+}
+      
     messageElement.classList.add("hidden");
-
     messageElement.innerHTML = "";
-
     return;
-
 }
     messageElement.classList.remove("hidden");
    if(type === "sensitive"){
