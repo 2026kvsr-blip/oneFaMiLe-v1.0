@@ -220,7 +220,7 @@ document.getElementById("appMessageText");
 
 // Reset Attempts after 1 minute inactivity
 
-let lastSensitiveAttemptTime = 0;
+//let lastSensitiveAttemptTime = 0;
 /* =====================================
    SENSITIVE PASS CODE SECURITY
 ===================================== */
@@ -4443,7 +4443,7 @@ if(isLocked("sensitive")){
    if (enteredPass !== savedPass) {
 
 lockState.sensitive.attempts++;
-    lastSensitiveAttemptTime = Date.now();
+    //lastSensitiveAttemptTime = Date.now();
 
    if(lockState.sensitive.attempts >= 3){
     startLock(
@@ -4461,13 +4461,12 @@ lockState.sensitive.attempts++;
     return;
 
 }
-    showMessage(
-        "Wrong Pass Code. Attempts Remaining : " +
-        (MAX_SENSITIVE_ATTEMPTS - sensitiveAttempts),
-        "warning",
-        3000
-    );
-
+   showMessage(
+    "Wrong Pass Code. Attempts Remaining : " +
+    (3 - lockState.sensitive.attempts),
+    "warning",
+    3000
+);
     document.getElementById("reportPassCode").focus();
 
     return;
