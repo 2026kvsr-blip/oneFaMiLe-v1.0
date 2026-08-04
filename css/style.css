@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -248,12 +249,11 @@ margin-bottom:8px;
 
     width:100%;
 
-    min-height:36px;
+    height:0;
 
-    margin-bottom:15px;
+    margin-bottom:0;
 
 }
-
 #welcomeHeading{
 
     font-size: 34px;
