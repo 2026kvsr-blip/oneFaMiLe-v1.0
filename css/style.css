@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -1680,8 +1681,6 @@ justify-content:center;
 }
 input:disabled{
 
-    opacity:0.6;
-
-    cursor:not-allowed;
+    background:#f3f3f3;
 
 }
