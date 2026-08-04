@@ -52,7 +52,7 @@ function closeSideMenu(){
 
     sideMenu.classList.remove("open");
 
-    menuOverlay.classList.remove("show");
+    menuOverlay.classList.remove("show");}
 
 const passcodeMenuBtn =
 document.getElementById("passcodeMenuBtn");
