@@ -3240,7 +3240,6 @@ loginSubmitBtn.onclick = async ()=>{
 
     const remaining =
     getRemainingSeconds(lockState.login.endTime);
-    ${formatLockTime(remaining)}
       
 loginLockMsg.classList.remove("hidden");
 
@@ -3251,12 +3250,10 @@ Maximum login attempts reached.
 
 Please wait
 
-<span id="loginLockTimer">
-${min}:${sec}
-</span>
- before trying again.
-`;
-    return;
+<b>${formatLockTime(remaining)}</b>
+
+before trying again.
+`;    return;
 
 }
    // =====================================
@@ -3402,6 +3399,7 @@ finally{
 
     hideLoader();
 
+   
 }
 };
 expensesBtn.onclick=()=>{
