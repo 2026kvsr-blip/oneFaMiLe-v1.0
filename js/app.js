@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -914,35 +915,6 @@ function updateLoginLock(){
     timer.textContent = `${min}:${sec}`;
 
 }
-function updateForgotLock(){
-
-    const min = String(
-        Math.floor(forgotLockSeconds / 60)
-    ).padStart(2,"0");
-
-    const sec = String(
-        forgotLockSeconds % 60
-    ).padStart(2,"0");
-
-    forgotLockMsg.style.color = "#d32f2f";
-
-    forgotLockMsg.innerHTML = `
-Maximum attempts reached.
-
-<br><br>
-
-Please wait for
-
-<span>
-${min}:${sec}
-</span>
-
-before trying again.
-`;
-
-}
-
-
 function restoreCooldown(){
 
     const endTime = Number(
