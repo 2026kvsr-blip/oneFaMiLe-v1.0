@@ -2,6 +2,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -460,19 +461,65 @@ function updateLockUI(type,messageElement){
     const remaining =
         getRemainingSeconds(state.endTime);
 
-    if(remaining <= 0){
+   if(remaining <= 0){
 
-        stopLock(type);
+    stopLock(type);
 
-        messageElement.classList.add("hidden");
+    if(type === "sensitive"){
 
-        messageElement.innerHTML = "";
+        const txt =
+        document.getElementById("reportPassCode");
 
-        return;
+        const btn =
+        document.getElementById("verifyPass");
+
+        if(txt){
+
+            txt.disabled = false;
+
+            txt.value = "";
+
+            txt.focus();
+
+        }
+
+        if(btn){
+
+            btn.disabled = false;
+
+        }
 
     }
 
+    messageElement.classList.add("hidden");
+
+    messageElement.innerHTML = "";
+
+    return;
+
+}
     messageElement.classList.remove("hidden");
+   if(type === "sensitive"){
+
+    const txt =
+    document.getElementById("reportPassCode");
+
+    const btn =
+    document.getElementById("verifyPass");
+
+    if(txt){
+
+        txt.disabled = true;
+
+    }
+
+    if(btn){
+
+        btn.disabled = true;
+
+    }
+
+}
 
     messageElement.style.color = "#d32f2f";
 
