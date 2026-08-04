@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -858,57 +859,22 @@ function updateCooldown(){
 }
 function startLoginLock(){
 
-    loginLocked = true;
-
-    loginLockSeconds = LOGIN_LOCK_TIME;
+    const loginLockMsg =
+        document.getElementById("loginLockMsg");
 
     document.getElementById("loginPassCode").disabled = true;
+
     document.getElementById("loginSubmitBtn").disabled = true;
-   forgotPassCodeBtn.style.pointerEvents = "none";
-   forgotPassCodeBtn.style.opacity = "0.5";
-    loginLockMsg.classList.remove("hidden");
-// Red Color
-loginLockMsg.classList.remove("hidden");
 
-loginLockMsg.style.color = "#d32f2f";
+    forgotPassCodeBtn.style.pointerEvents = "none";
 
-loginLockMsg.innerHTML = `
-Maximum login attempts reached.
+    forgotPassCodeBtn.style.opacity = "0.5";
 
-<br><br>
-
-Please wait for
-<span id="loginLockTimer">01:00</span>
-before trying again.
-`;
-
-updateLoginLock();
-    clearInterval(loginLockInterval);
-
-    loginLockInterval = setInterval(()=>{
-
-        loginLockSeconds--;
-
-        updateLoginLock();
-
-       if(loginLockSeconds <= 0){
-
-    clearInterval(loginLockInterval);
-
-    loginLocked = false;
-
-    loginAttempts = 0;
-
-    loginLockMsg.classList.add("hidden");
-
-    document.getElementById("loginPassCode").disabled = false;
-
-    document.getElementById("loginSubmitBtn").disabled = false;
-          forgotPassCodeBtn.style.pointerEvents = "auto";
-forgotPassCodeBtn.style.opacity = "1";
-
-}
-    },1000);
+    startLock(
+        "login",
+        LOGIN_LOCK_TIME,
+        loginLockMsg
+    );
 
 }
 function startForgotLock(){
