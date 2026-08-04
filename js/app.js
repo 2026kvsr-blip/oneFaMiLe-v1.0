@@ -15,7 +15,6 @@ const newPassCode = document.getElementById("newPassCode");
 const confirmNewPassCode = document.getElementById("confirmNewPassCode");
 const saveNewPassCodeBtn = document.getElementById("saveNewPassCodeBtn");
 
-
 const backResetPassCodeBtn = document.getElementById("backResetPassCodeBtn");
 
 const signupPassCodeBox =
@@ -4452,12 +4451,7 @@ lockState.sensitive.attempts++;
         sensitiveLockMsg
     );
 
-    showMessage(
-        "Maximum attempts reached.",
-        "error",
-        3000
-    );
-
+   
     return;
 
 }
