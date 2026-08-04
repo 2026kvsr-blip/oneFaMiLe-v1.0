@@ -2,7 +2,6 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -4399,32 +4398,16 @@ document.getElementById("verifyPass").onclick = () => {
     const sensitiveLockMsg =
 document.getElementById("sensitiveLockMsg");
 
-if(sensitiveLocked){
+if(isLocked("sensitive")){
 
-    sensitiveLockMsg.classList.remove("hidden");
-
-    sensitiveLockMsg.style.color = "#d32f2f";
-
-    const min = String(Math.floor(sensitiveLockSeconds/60)).padStart(2,"0");
-
-    const sec = String(sensitiveLockSeconds%60).padStart(2,"0");
-
-    sensitiveLockMsg.innerHTML = `
-Maximum attempts reached.
-
-<br><br>
-
-Please wait
-
-<b>${min}:${sec}</b>
-
-before trying again.
-`;
+    updateLockUI(
+        "sensitive",
+        sensitiveLockMsg
+    );
 
     return;
 
-}
-   
+}   
     const enteredPass =
         document.getElementById("reportPassCode").value.trim();
 
@@ -4450,20 +4433,25 @@ before trying again.
 
     lastSensitiveAttemptTime = Date.now();
 
-    if(sensitiveAttempts >= MAX_SENSITIVE_ATTEMPTS){
+   if(sensitiveAttempts >= MAX_SENSITIVE_ATTEMPTS){
 
-        sensitiveLocked = true;
+    sensitiveLocked = true;
 
-        showMessage(
-            "Maximum attempts reached.",
-            "error",
-            3000
-        );
+    startLock(
+        "sensitive",
+        60,
+        sensitiveLockMsg
+    );
 
-        return;
+    showMessage(
+        "Maximum attempts reached.",
+        "error",
+        3000
+    );
 
-    }
+    return;
 
+}
     showMessage(
         "Wrong Pass Code. Attempts Remaining : " +
         (MAX_SENSITIVE_ATTEMPTS - sensitiveAttempts),
