@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -734,14 +733,15 @@ function showScreen(page){
     hideAllPages();
 
     // Login page open అయినప్పుడు మాత్రమే clear చేయాలి
-    if(page === loginPage && !loginLocked){
+    if(page === loginPage && !isLocked("login")){
 
-        loginLockMsg.classList.add("hidden");
-        loginLockMsg.innerHTML = "";
-        loginLockMsg.style.color = "";
+    loginLockMsg.classList.add("hidden");
 
-    }
+    loginLockMsg.innerHTML = "";
 
+    loginLockMsg.style.color = "";
+
+}
     page.classList.remove("hidden");
     window.scrollTo(0,0);
 
@@ -2188,11 +2188,11 @@ Forget PassCode Btn
 
 forgotPassCodeBtn.onclick = ()=>{
 
-    if(loginLocked){
+    if(isLocked("login")){
 
-        const min = String(Math.floor(loginLockSeconds/60)).padStart(2,"0");
-        const sec = String(loginLockSeconds%60).padStart(2,"0");
-
+       const remaining =
+    getRemainingSeconds(lockState.login.endTime);
+        <b>${formatLockTime(remaining)}</b>
         loginLockMsg.style.color = "#d32f2f";
 
         loginLockMsg.classList.remove("hidden");
@@ -3236,11 +3236,11 @@ showMessage(
 
 loginSubmitBtn.onclick = async ()=>{
 
-   if(loginLocked){
+   if(isLocked("login")){
 
-    const min = String(Math.floor(loginLockSeconds / 60)).padStart(2,"0");
-    const sec = String(loginLockSeconds % 60).padStart(2,"0");
-
+    const remaining =
+    getRemainingSeconds(lockState.login.endTime);
+    ${formatLockTime(remaining)}
       
 loginLockMsg.classList.remove("hidden");
 
