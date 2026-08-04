@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -252,14 +251,6 @@ let lastLoginAttemptTime = 0;
 // =====================================
 
 const MAX_FORGOT_ATTEMPTS = 3;
-
-let forgotAttempts = 0;
-
-let forgotLocked = false;
-
-let forgotLockSeconds = 60;
-
-let forgotLockInterval = null;
 
 let lastForgotAttemptTime = 0;
 const LOGIN_LOCK_TIME = 60;   // Testing (1 minute)
@@ -887,8 +878,8 @@ function startLoginLock(){
 
 }
 function startForgotLock(){
-console.log("startForgotLock called");
-    const forgotLockMsg =
+console.log(document.getElementById("forgotOtpBtn"));
+   const forgotLockMsg =
         document.getElementById("forgotLockMsg");
    const btn =
     document.getElementById("forgotOtpBtn");
@@ -2263,6 +2254,16 @@ forgotPassCodeBtn.onclick = ()=>{
 async function sendForgotOTP(){
 
     const mobile = forgotMobileNo.value.trim();
+   if(isLocked("forgot")){
+
+    updateLockUI(
+        "forgot",
+        document.getElementById("forgotLockMsg")
+    );
+
+    return;
+
+}
 
     if(mobile === ""){
        showMessage(
@@ -2317,12 +2318,11 @@ Mobile Number must contain 10 digits.
 
         if(result.status !== "success"){
 
-    forgotAttempts++;
-
+lockState.forgot.attempts++;
     lastForgotAttemptTime = Date.now();
 
-    if(forgotAttempts >= MAX_FORGOT_ATTEMPTS){
-        hideLoader();
+if(lockState.forgot.attempts >= 3){
+   hideLoader();
         startForgotLock();
 
         return;
@@ -2339,7 +2339,7 @@ Mobile Number must contain 10 digits.
 </div>
 
 <div id="forgotAttemptText">
-    Attempts Remaining : ${MAX_FORGOT_ATTEMPTS-forgotAttempts}
+Attempts Remaining : ${3 - lockState.forgot.attempts}
 </div>
 `;
 
@@ -2362,8 +2362,8 @@ Mobile Number must contain 10 digits.
 
 }
         hideLoader();
-        forgotAttempts = 0;
-        otpMode = "forgot";
+lockState.forgot.attempts = 0;
+       otpMode = "forgot";
 
         clearOTP();
 
@@ -2392,16 +2392,16 @@ sendForgotOTPBtn.onclick = async ()=>{
 // FORGOT PASSWORD LOCK CHECK
 // =====================================
 
-if(forgotLocked){
+if(isLocked("forgot")){
 
-    updateForgotLock();
-
-    forgotLockMsg.classList.remove("hidden");
+    updateLockUI(
+        "forgot",
+        document.getElementById("forgotLockMsg")
+    );
 
     return;
 
 }
-
     otpResendCount = 0;
 
     await sendForgotOTP();
