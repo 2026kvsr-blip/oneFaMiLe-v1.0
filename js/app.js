@@ -15,6 +15,7 @@ const newPassCode = document.getElementById("newPassCode");
 const confirmNewPassCode = document.getElementById("confirmNewPassCode");
 const saveNewPassCodeBtn = document.getElementById("saveNewPassCodeBtn");
 
+
 const backResetPassCodeBtn = document.getElementById("backResetPassCodeBtn");
 
 const signupPassCodeBox =
@@ -224,7 +225,7 @@ let lastSensitiveAttemptTime = 0;
    SENSITIVE PASS CODE SECURITY
 ===================================== */
 
-const MAX_SENSITIVE_ATTEMPTS = 3;
+/*const MAX_SENSITIVE_ATTEMPTS = 3;
 
 let sensitiveAttempts = 0;
 
@@ -232,7 +233,7 @@ let sensitiveLocked = false;
 
 let sensitiveLockSeconds = 60;
 
-let sensitiveLockInterval = null;
+let sensitiveLockInterval = null;*/
 /* ==========================
    LOGIN SECURITY
 ========================== */
@@ -412,6 +413,14 @@ function stopLock(type){
     state.locked = false;
     state.attempts = 0;
     state.endTime = 0;
+   if(type === "sensitive"){
+
+    sensitiveLocked = false;
+
+lockState.sensitive.attempts = 0;
+    sensitiveLockSeconds = 60;
+
+}
     if(state.interval){
         clearInterval(state.interval);
         state.interval = null;
@@ -4407,6 +4416,10 @@ if(isLocked("sensitive")){
 
     return;
 
+}else{
+
+    sensitiveLocked = false;
+
 }   
     const enteredPass =
         document.getElementById("reportPassCode").value.trim();
@@ -4429,14 +4442,10 @@ if(isLocked("sensitive")){
 
    if (enteredPass !== savedPass) {
 
-    sensitiveAttempts++;
-
+lockState.sensitive.attempts++;
     lastSensitiveAttemptTime = Date.now();
 
-   if(sensitiveAttempts >= MAX_SENSITIVE_ATTEMPTS){
-
-    sensitiveLocked = true;
-
+   if(lockState.sensitive.attempts >= 3){
     startLock(
         "sensitive",
         60,
@@ -4463,8 +4472,8 @@ if(isLocked("sensitive")){
 
     return;
 }
-    sensitiveAttempts = 0;
-    reportsLayout(
+lockState.sensitive.attempts = 0;
+   reportsLayout(
         moduleName + " " + reportType,
         backFunction
     );
