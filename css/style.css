@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -75,13 +76,6 @@ font-weight:700;
 color:#000;
 
 white-space:nowrap;
-
-}
-.language{
-
-margin-left:auto;
-
-z-index:2;
 
 }
 
@@ -240,22 +234,24 @@ margin-bottom:8px;
     outline:none;
 
 }
+
 .welcome-title-bar{
 
-    position: relative;
+    position:relative;
 
     width:100%;
+
+    min-height:36px;
 
     margin-bottom:15px;
 
 }
 
 #welcomeHeading{
-
-    text-align:center;
-
     margin:0;
-
+    text-align:center;
+    font-size:26px;
+    line-height:36px;
 }
 
 .language{
@@ -267,20 +263,32 @@ margin-bottom:8px;
     top:50%;
 
     transform:translateY(-50%);
+ margin-left:auto;
+
+z-index:2;
+
 
 }
 
 #languageSelect{
 
-    width:110px;
+    width:105px;
 
     height:30px;
+
+    border:1px solid #2A6EB0;
 
     border-radius:15px;
 
     font-size:13px;
 
+    background:#fff;
+
+    color:#2A6EB0;
+
 }
+
+
 /* =======================
 LOGIN SIGNUP
 ======================= */
