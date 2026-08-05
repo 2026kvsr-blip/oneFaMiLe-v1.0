@@ -3391,7 +3391,24 @@ const formData = new FormData();
         return;
 
     }
+setTimeout(()=>{
 
+    if(
+        !isLocked("login") &&
+        loginAttempts > 0
+    ){
+
+        loginAttempts = 0;
+
+        loginLockMsg.classList.add("hidden");
+
+        loginLockMsg.innerHTML = "";
+
+        loginLockMsg.style.color = "";
+
+    }
+
+}, ATTEMPT_RESET_TIME * 1000);
     // Orange Color
     loginLockMsg.style.color = "#ff9800";
 
