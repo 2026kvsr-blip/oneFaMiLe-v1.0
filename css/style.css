@@ -17,7 +17,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -1289,12 +1288,28 @@ min-width:300px;
     font-size:16px;
 
 }
+.settings-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
 
 #currentLanguageText{
 
     color:#2A6EB0;
 
     font-weight:600;
+
+}
+.arrow{
+
+    color:#999;
+
+    font-size:18px;
 
 }
 /* ==========================
