@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -29,7 +28,6 @@ document.getElementById("toggleNewPassCode");
 const toggleConfirmNewPassCode =
 document.getElementById("toggleConfirmNewPassCode");
 
-
 const menuBtn =
 document.getElementById("menuBtn");
 
@@ -44,6 +42,17 @@ document.getElementById("closeMenuBtn");
 
 const logoutMenuBtn =
 document.getElementById("logoutMenuBtn");
+const restorePage =
+document.getElementById("restorePage");
+
+const restoreFile =
+document.getElementById("restoreFile");
+
+const restoreBackupBtn =
+document.getElementById("restoreBackupBtn");
+
+const backRestoreBtn =
+document.getElementById("backRestoreBtn");
 // =====================================
 // CLOSE SIDE MENU
 // =====================================
@@ -5247,14 +5256,18 @@ backupSettingsBtn.onclick = ()=>{
 };
 restoreSettingsBtn.onclick = ()=>{
 
-    showMessage(
-        "Restore Module",
-        "success",
-        2000
-    );
+    settingsPage.classList.add("hidden");
+
+    restorePage.classList.remove("hidden");
 
 };
+backRestoreBtn.onclick = ()=>{
 
+    restorePage.classList.add("hidden");
+
+    settingsPage.classList.remove("hidden");
+
+};
 aboutSettingsBtn.onclick = ()=>{
 
     showMessage(
