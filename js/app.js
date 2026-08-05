@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -250,6 +249,8 @@ document.getElementById("backupSettingsBtn");
 
 const restoreSettingsBtn =
 document.getElementById("restoreSettingsBtn");
+const aboutSettingsBtn =
+document.getElementById("aboutSettingsBtn");
 // Reset Attempts after 1 minute inactivity
 
 //let lastSensitiveAttemptTime = 0;
@@ -5036,6 +5037,21 @@ restoreSettingsBtn.onclick = ()=>{
     );
 
 };
+
+aboutSettingsBtn.onclick = ()=>{
+
+    showMessage(
+
+        "About Module",
+
+        "success",
+
+        2000
+
+    );
+
+};
+
 logoutMenuBtn.onclick = ()=>{
 
     sessionStorage.removeItem("user");
