@@ -17,7 +17,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -391,8 +390,15 @@ border-radius:12px;
 padding-left:15px;
 
 }
+#loginSubmitBtn{
 
+    font-size:18px;
 
+    font-weight:600;
+
+    letter-spacing:0.5px;
+
+}
 #loginPage button{
 
 height:46px;
