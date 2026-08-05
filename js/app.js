@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -5195,8 +5196,22 @@ exportBackupBtn.onclick = ()=>{
 
     a.href = url;
 
-    a.download =
-        "oneFaMiLe_Backup.json";
+    const now = new Date();
+
+const fileDate =
+    now.getFullYear() +
+
+    String(now.getMonth()+1).padStart(2,"0") +
+
+    String(now.getDate()).padStart(2,"0");
+
+const fileTime =
+    String(now.getHours()).padStart(2,"0") +
+
+    String(now.getMinutes()).padStart(2,"0");
+
+a.download =
+    `oneFaMiLe_${user.loginUserName}_${fileDate}_${fileTime}.json`;
 
     a.click();
 
