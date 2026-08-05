@@ -16,7 +16,6 @@ const confirmNewPassCode = document.getElementById("confirmNewPassCode");
 const saveNewPassCodeBtn = document.getElementById("saveNewPassCodeBtn");
 
 const backResetPassCodeBtn = document.getElementById("backResetPassCodeBtn");
-
 const signupPassCodeBox =
 document.getElementById("signupPassCodeBox");
 
@@ -792,19 +791,16 @@ function updateLanguageList(){
                 <span>${lang}</span>
                 <span>✓</span>
             `;
-
         }else{
-
             btn.innerHTML = `
                 <span>${lang}</span>
                 <span></span>
             `;
-
         }
-
-    });
+   });
 
 }
+
 /* =====================================
 SHOW PAGE
 ===================================== */
@@ -1187,6 +1183,22 @@ languageSelect.onchange = function(){
     }
 
 };
+
+document.querySelectorAll(".language-item").forEach(btn=>{
+
+    btn.onclick = ()=>{
+
+        languageSelect.value = btn.dataset.lang;
+
+        updateWelcomePage();
+
+        updateCurrentLanguage();
+
+        updateLanguageList();
+
+    };
+
+});
 function updateWelcomePage(){
 
     const txt = languageData[languageSelect.value];
