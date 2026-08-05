@@ -2,6 +2,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -281,7 +282,7 @@ const MAX_LOGIN_ATTEMPTS = 3;
 // =====================================
 
 const ATTEMPT_RESET_TIME = 60; // 60 Seconds
-
+let lastSensitiveAttemptTime = 0;
 let lastLoginAttemptTime = 0;
 // =====================================
 // FORGOT PASSWORD SECURITY
@@ -4546,7 +4547,17 @@ document.getElementById("verifyPass").onclick = () => {
 
     const sensitiveLockMsg =
 document.getElementById("sensitiveLockMsg");
+const now = Date.now();
 
+if(
+    lockState.sensitive.attempts > 0 &&
+    !isLocked("sensitive") &&
+    (now - lastSensitiveAttemptTime) >= ATTEMPT_RESET_TIME * 1000
+){
+
+    lockState.sensitive.attempts = 0;
+
+}
 if(isLocked("sensitive")){
 
     updateLockUI(
@@ -4583,6 +4594,7 @@ if(isLocked("sensitive")){
    if (enteredPass !== savedPass) {
 
 lockState.sensitive.attempts++;
+ lastSensitiveAttemptTime = Date.now();      
     //lastSensitiveAttemptTime = Date.now();
 
    if(lockState.sensitive.attempts >= 3){
