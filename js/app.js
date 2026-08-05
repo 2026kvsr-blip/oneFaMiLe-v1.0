@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -5115,6 +5114,96 @@ createBackupBtn.onclick = ()=>{
 
     showMessage(
         "Backup Created Successfully.",
+        "success",
+        3000
+    );
+};
+exportBackupBtn.onclick = ()=>{
+
+    const user =
+        JSON.parse(sessionStorage.getItem("user"));
+
+    if(!user){
+
+        showMessage(
+            "No user data available.",
+            "warning",
+            3000
+        );
+
+        return;
+
+    }
+
+    const backupData = {
+
+        app : "oneFaMiLe",
+
+        version : "1.0",
+
+        backupDate : new Date().toLocaleString(),
+
+        user : {
+
+            userId : user.userId,
+
+            loginUserName : user.loginUserName,
+
+            surName : user.surName,
+
+            middleName : user.middleName,
+
+            lastName : user.lastName,
+
+            mobile : user.mobile,
+
+            email : user.email,
+
+            gender : user.gender,
+
+            dateOfBirth : user.dateOfBirth,
+
+            place : user.place,
+
+            state : user.state,
+
+            country : user.country
+
+        },
+
+        settings : {
+
+            language : languageSelect.value
+
+        }
+
+    };
+
+    const json =
+        JSON.stringify(backupData,null,4);
+
+    const blob =
+        new Blob([json],{
+            type:"application/json"
+        });
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+        "oneFaMiLe_Backup.json";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+    showMessage(
+        "Backup Exported Successfully.",
         "success",
         3000
     );
