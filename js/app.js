@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -5091,6 +5090,13 @@ backLanguageBtn.onclick = ()=>{
     settingsPage.classList.remove("hidden");
 
 };
+backBackupBtn.onclick = ()=>{
+
+    backupPage.classList.add("hidden");
+
+    settingsPage.classList.remove("hidden");
+
+};
 changePassSettingsBtn.onclick = ()=>{
 
     settingsPage.classList.add("hidden");
@@ -5101,14 +5107,17 @@ changePassSettingsBtn.onclick = ()=>{
 
 backupSettingsBtn.onclick = ()=>{
 
-    showMessage(
-        "Backup Module",
-        "success",
-        2000
-    );
+    settingsPage.classList.add("hidden");
+
+    backupPage.classList.remove("hidden");
+
+    const lastBackup =
+        localStorage.getItem("lastBackup");
+
+    lastBackupText.textContent =
+        lastBackup ? lastBackup : "Never";
 
 };
-
 restoreSettingsBtn.onclick = ()=>{
 
     showMessage(
