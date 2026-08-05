@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -1273,7 +1274,29 @@ box-shadow:0 4px 12px rgba(0,0,0,0.20);
 min-width:300px;
 
 }
+.settings-btn{
 
+    width:100%;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:15px 18px;
+
+    font-size:16px;
+
+}
+
+#currentLanguageText{
+
+    color:#2A6EB0;
+
+    font-weight:600;
+
+}
 /* ==========================
 SIDE MENU Hi UserName
 ========================== */
