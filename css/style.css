@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -1388,6 +1389,43 @@ min-width:300px;
     border:2px solid #4A9FE8;
 
     background:#eef8ff;
+
+}
+.settings-card{
+
+    background:#fff;
+
+    border:1px solid #d9e8f5;
+
+    border-radius:15px;
+
+    padding:18px;
+
+    margin-bottom:18px;
+
+    text-align:center;
+
+}
+
+.backup-title{
+
+    color:#2A6EB0;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    margin-bottom:8px;
+
+}
+
+#lastBackupText{
+
+    font-size:17px;
+
+    font-weight:500;
+
+    color:#444;
 
 }
 /* ==========================
