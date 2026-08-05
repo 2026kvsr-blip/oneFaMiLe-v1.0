@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -755,6 +754,21 @@ function hideAllPages(){
 
 }
 
+
+function updateCurrentLanguage(){
+
+    const currentLanguageText =
+    document.getElementById("currentLanguageText");
+
+    if(currentLanguageText){
+
+        currentLanguageText.textContent =
+        languageSelect.value + " >";
+
+    }
+
+}
+
 /* =====================================
 SHOW PAGE
 ===================================== */
@@ -1125,6 +1139,7 @@ control.focus();
 languageSelect.onchange = function(){
 
     updateWelcomePage();
+    updateCurrentLanguage();
 
     if(!dashboard.classList.contains("hidden")){
 
@@ -5631,3 +5646,4 @@ updateWelcomePage();
 updateMenuIcon();
 updateSideMenuUser();
 closeSideMenu();   // <-- Add this
+updateCurrentLanguage();
