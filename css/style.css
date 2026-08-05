@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -1310,6 +1311,19 @@ min-width:300px;
     color:#999;
 
     font-size:18px;
+
+}
+.settings-back{
+
+    text-align:center;
+
+    margin-top:25px;
+
+}
+
+.settings-back .back-btn{
+
+    width:180px;
 
 }
 /* ==========================
