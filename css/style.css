@@ -17,7 +17,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -1426,6 +1425,19 @@ min-width:300px;
     font-weight:500;
 
     color:#444;
+
+}
+.back-settings-btn{
+
+    margin-top:20px;
+
+}
+
+.back-settings-btn span{
+
+    color:#d32f2f;
+
+    font-weight:600;
 
 }
 /* ==========================
