@@ -251,6 +251,13 @@ const restoreSettingsBtn =
 document.getElementById("restoreSettingsBtn");
 const aboutSettingsBtn =
 document.getElementById("aboutSettingsBtn");
+
+const languagePage =
+document.getElementById("languagePage");
+
+const backLanguageBtn =
+document.getElementById("backLanguageBtn");
+
 // Reset Attempts after 1 minute inactivity
 
 //let lastSensitiveAttemptTime = 0;
@@ -5002,14 +5009,18 @@ backSettingsBtn.onclick = ()=>{
 };
 languageSettingsBtn.onclick = ()=>{
 
-    showMessage(
-        "Language Module",
-        "success",
-        2000
-    );
+    settingsPage.classList.add("hidden");
+
+    languagePage.classList.remove("hidden");
 
 };
+backLanguageBtn.onclick = ()=>{
 
+    languagePage.classList.add("hidden");
+
+    settingsPage.classList.remove("hidden");
+
+};
 changePassSettingsBtn.onclick = ()=>{
 
     settingsPage.classList.add("hidden");
