@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -229,6 +228,27 @@ document.getElementById("appMessage");
 const appMessageText =
 document.getElementById("appMessageText");
 
+
+const settingsPage =
+document.getElementById("settingsPage");
+
+const settingsMenuBtn =
+document.getElementById("settingsMenuBtn");
+
+const backSettingsBtn =
+document.getElementById("backSettingsBtn");
+
+const languageSettingsBtn =
+document.getElementById("languageSettingsBtn");
+
+const changePassSettingsBtn =
+document.getElementById("changePassSettingsBtn");
+
+const backupSettingsBtn =
+document.getElementById("backupSettingsBtn");
+
+const restoreSettingsBtn =
+document.getElementById("restoreSettingsBtn");
 // Reset Attempts after 1 minute inactivity
 
 //let lastSensitiveAttemptTime = 0;
@@ -4928,7 +4948,59 @@ menuOverlay.onclick = ()=>{
 
 };
 
+settingsMenuBtn.onclick = ()=>{
 
+    closeSideMenu();
+
+    hideAllPages();
+
+    settingsPage.classList.remove("hidden");
+
+    window.scrollTo(0,0);
+
+};
+backSettingsBtn.onclick = ()=>{
+
+    showScreen(welcomePage);
+
+};
+languageSettingsBtn.onclick = ()=>{
+
+    showMessage(
+        "Language Module",
+        "success",
+        2000
+    );
+
+};
+
+changePassSettingsBtn.onclick = ()=>{
+
+    settingsPage.classList.add("hidden");
+
+    changePasswordPage.classList.remove("hidden");
+
+};
+
+backupSettingsBtn.onclick = ()=>{
+
+    showMessage(
+        "Backup Module",
+        "success",
+        2000
+    );
+
+};
+
+restoreSettingsBtn.onclick = ()=>{
+
+    showMessage(
+        "Restore Module",
+        "success",
+        2000
+    );
+
+};
 logoutMenuBtn.onclick = ()=>{
 
     sessionStorage.removeItem("user");
