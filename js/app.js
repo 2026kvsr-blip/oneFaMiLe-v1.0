@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -235,7 +234,6 @@ document.getElementById("appMessageText");
 /* =====================================
    SENSITIVE PASS CODE SECURITY
 ===================================== */
-
 /*const MAX_SENSITIVE_ATTEMPTS = 3;
 
 let sensitiveAttempts = 0;
@@ -265,7 +263,7 @@ const MAX_FORGOT_ATTEMPTS = 3;
 
 let lastForgotAttemptTime = 0;
 const LOGIN_LOCK_TIME = 60;   // Testing (1 minute)
-
+let loginAttemptTimer = null;
 let loginAttempts = 0;
 let loginLockSeconds = LOGIN_LOCK_TIME;
 let loginLockInterval = null;
@@ -3046,6 +3044,8 @@ async function registerUser(){
 
 
         if(result.status=="success"){
+           clearTimeout(loginAttemptTimer);
+           loginAttempts = 0;
            hideLoader();
     showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
 
@@ -3391,6 +3391,26 @@ const formData = new FormData();
         return;
 
     }
+    clearTimeout(loginAttemptTimer);
+
+loginAttemptTimer = setTimeout(()=>{
+
+    if(
+        !isLocked("login") &&
+        loginAttempts > 0
+    ){
+
+        loginAttempts = 0;
+
+        loginLockMsg.classList.add("hidden");
+
+        loginLockMsg.innerHTML = "";
+
+        loginLockMsg.style.color = "";
+
+    }
+
+}, ATTEMPT_RESET_TIME * 1000);        
 setTimeout(()=>{
 
     if(
