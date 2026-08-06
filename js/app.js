@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -5147,48 +5148,61 @@ exportBackupBtn.onclick = ()=>{
 
     const backupData = {
 
-        app : "oneFaMiLe",
+    app : "oneFaMiLe",
 
-        version : "1.0",
+    version : "1.0",
 
-        backupDate : new Date().toLocaleString(),
+    backupDate : new Date().toLocaleString(),
 
-        user : {
+    user : {
 
-            userId : user.userId,
+        userId : user.userId,
 
-            loginUserName : user.loginUserName,
+        loginUserName : user.loginUserName,
 
-            surName : user.surName,
+        surName : user.surName,
 
-            middleName : user.middleName,
+        middleName : user.middleName,
 
-            lastName : user.lastName,
+        lastName : user.lastName,
 
-            mobile : user.mobile,
+        mobile : user.mobile,
 
-            email : user.email,
+        email : user.email,
 
-            gender : user.gender,
+        gender : user.gender,
 
-            dateOfBirth : user.dateOfBirth,
+        dateOfBirth : user.dateOfBirth,
 
-            place : user.place,
+        place : user.place,
 
-            state : user.state,
+        state : user.state,
 
-            country : user.country
+        country : user.country
 
-        },
+    },
 
-        settings : {
+    settings : {
 
-            language : languageSelect.value
+        language : languageSelect.value
 
-        }
+    },
 
-    };
+    expenses : [],
 
+    activities : [],
+
+    income : [],
+
+    loans : [],
+
+    health : [],
+
+    family : [],
+
+    memories : []
+
+};
     const json =
         JSON.stringify(backupData,null,4);
 
