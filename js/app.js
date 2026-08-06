@@ -4,7 +4,6 @@ Part 1A.3
 
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2940,23 +2939,27 @@ showMessage("Enter a valid Mobile Number.","warning",3000);
     return false;
 
 }
-   if(emailId.value.trim()!=""){
+  if(emailId.value.trim()==""){
+
+    validationMessage(
+        "Email ID is required.",
+        emailId
+    );
+
+    return false;
+
+}
 
     if(!isValidEmail(emailId.value.trim())){
 
-showMessage(
-    "Enter a valid Email ID.",
-    "warning",
-    3000
-);
-        emailId.focus();
+    validationMessage(
+        "Enter a valid Email ID.",
+        emailId
+    );
 
-        return false;
-
-    }
+    return false;
 
 }
- 
     if(gender.value==""){
 showMessage("Please select Gender.","warning",3000);
        gender.focus();
