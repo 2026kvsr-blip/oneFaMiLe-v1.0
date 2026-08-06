@@ -1,8 +1,8 @@
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
-===================================== */
 
+===================================== */
 
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
@@ -641,7 +641,6 @@ appMessageText.textContent = icon + text;
     },duration);
 
 }
-
 function hideMessage(){
 
     appMessage.style.opacity = "0";
@@ -655,7 +654,59 @@ function hideMessage(){
     },250);
 
 }
+/* =====================================
+COMMON VALIDATION MESSAGE
+===================================== */
 
+/* =====================================
+COMMON VALIDATION MESSAGE
+===================================== */
+
+function highlightField(control){
+
+    if(!control) return;
+
+    control.classList.add("field-error");
+
+    setTimeout(()=>{
+
+        control.classList.remove("field-error");
+
+    },3000);
+
+}
+
+function validationMessage(message, control){
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+    showMessage(
+        message,
+        "warning",
+        3000
+    );
+
+    setTimeout(()=>{
+
+        if(control){
+
+            control.scrollIntoView({
+                behavior:"smooth",
+                block:"center"
+            });
+
+            control.focus();
+
+            highlightField(control);   // <-- ఇక్కడ call చేయాలి
+
+        }
+
+    },400);
+
+}
 /* ===========================
    VALIDATION FUNCTIONS
 =========================== */
@@ -2771,15 +2822,16 @@ else if(otpMode==="forgot"){
 function validateSignupBasic(){
 
     if(loginUserName.value.trim()==""){
-showMessage(
-    "Login User Name is required.",
-    "warning",
-    3000
-);
-       loginUserName.focus();
-        return false;
-    }
-if(loginUserName.value.trim().length < 6){
+
+    validationMessage(
+        "Login User Name is required.",
+        loginUserName
+    );
+
+    return false;
+
+}
+    if(loginUserName.value.trim().length < 6){
 
 showMessage(
     "Login User Name must contain at least 6 characters.",
@@ -2792,15 +2844,16 @@ showMessage(
 
 }
     if(surName.value.trim()==""){
-showMessage(
-    "Surname is required.",
-    "warning",
-    3000
-);
-       surName.focus();
-        return false;
-    }
-if(surName.value.trim().length < 2){
+
+    validationMessage(
+        "Surname is required.",
+        surName
+    );
+
+    return false;
+
+}
+    if(surName.value.trim().length < 2){
 
 showMessage(
     "Enter a valid surname.",
