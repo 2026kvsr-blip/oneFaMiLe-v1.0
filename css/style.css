@@ -5,7 +5,6 @@ box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
 }
 body{
-
  
   background:#EAF8FF;
 
@@ -1949,6 +1948,10 @@ input:disabled{
 
     border:2px solid #d32f2f !important;
 
-    box-shadow:0 0 8px rgba(211,47,47,0.35);
+    outline:none !important;
+
+    box-shadow:0 0 10px rgba(211,47,47,.5) !important;
+
+    transition:.3s;
 
 }
