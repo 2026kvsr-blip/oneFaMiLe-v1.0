@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2824,15 +2823,12 @@ function validateSignupBasic(){
 }
     if(loginUserName.value.trim().length < 6){
 
-showMessage(
+validationMessage(
     "Login User Name must contain at least 6 characters.",
-    "warning",
-    3000
+    loginUserName
 );
-    loginUserName.focus();
 
-    return false;
-
+return false;
 }
     if(surName.value.trim()==""){
 
@@ -2846,80 +2842,66 @@ showMessage(
 }
     if(surName.value.trim().length < 2){
 
-showMessage(
+validationMessage(
     "Enter a valid surname.",
-    "warning",
-    3000
+    surName
 );
-    surName.focus();
 
-    return false;
-
+return false;
 }
     if(!isValidName(surName.value.trim())){
 
-showMessage(
+validationMessage(
     "Surname must contain only letters.",
-    "warning",
-    3000
+    surName
 );
-    surName.focus();
 
-    return false;
-
+return false;
 }
     if(lastName.value.trim()==""){
-showMessage(
+validationMessage(
     "Last Name is required.",
-    "warning",
-    3000
+    lastName
 );
-       lastName.focus();
-    return false;
-}
+
+return false;}
 
 if(lastName.value.trim().length < 2){
 
-showMessage(
+validationMessage(
     "Enter a valid last name.",
-    "warning",
-    3000
+    lastName
 );
-    lastName.focus();
 
-    return false;
-
+return false;
 }
     if(!isValidName(lastName.value.trim())){
 
-showMessage(
+validationMessage(
     "Last Name must contain only letters.",
-    "warning",
-    3000
+    lastName
 );
-    lastName.focus();
 
-    return false;
-
+return false;
 }
     if(mobileNo.value.trim()==""){
-showMessage(
+validationMessage(
     "Mobile Number is required.",
-    "warning",
-    3000
+    mobileNo
 );
-       mobileNo.focus();
-        return false;
-    }
+
+return false;    }
 if(!isValidMobile(mobileNo.value.trim())){
 
-showMessage("Enter a valid Mobile Number.","warning",3000);
-    mobileNo.focus();
+    validationMessage(
+        "Enter a valid Mobile Number.",
+        mobileNo
+    );
 
     return false;
 
 }
-  if(emailId.value.trim()==""){
+    if(emailId.value.trim()==""){
 
     validationMessage(
         "Email ID is required.",
@@ -2941,28 +2923,35 @@ showMessage("Enter a valid Mobile Number.","warning",3000);
 
 }
     if(gender.value==""){
-showMessage("Please select Gender.","warning",3000);
-       gender.focus();
-        return false;
-    }
+validationMessage(
+    "Please select Gender.",
+    gender
+);
+
+return false;    }
 
 const dob = new Date(dateOfBirth.value);
 
 if(dateOfBirth.value === ""){
 
-showMessage("Please select Date of Birth.","warning",3000);
-   dateOfBirth.focus();
-    return false;
+validationMessage(
+    "Please select Date of Birth.",
+    dateOfBirth
+);
 
+return false;
 }
 
 const today = new Date();
 
 if(dob > today){
 
-showMessage("Future Date of Birth is not allowed.","warning",3000);    dateOfBirth.focus();
-    return false;
+validationMessage(
+    "Future Date of Birth is not allowed.",
+    dateOfBirth
+);
 
+return false;
 }
 
 let age = today.getFullYear() - dob.getFullYear();
@@ -2977,77 +2966,91 @@ if(month < 0 || (month === 0 && today.getDate() < dob.getDate())){
 
 if(age < 18){
 
-showMessage("Minimum age must be 18 years.","warning",3000);
-   dateOfBirth.focus();
-    return false;
+validationMessage(
+    "Minimum age must be 18 years.",
+    dateOfBirth
+);
 
+return false;
 }
    
 if(place.value.trim()==""){
-showMessage("Place is required.","warning",3000);    place.focus();
-    return false;
-}
+validationMessage(
+    "Place is required.",
+    place
+);
+
+return false;}
 
 if(place.value.trim().length < 2){
 
-showMessage("Enter a valid Place.","warning",3000);
-    place.focus();
+validationMessage(
+    "Enter a valid Place.",
+    place
+);
 
-    return false;
-
+return false;
 }
 if(!isValidName(place.value.trim())){
 
-showMessage("Place must contain only letters.","warning",3000);
-    place.focus();
+validationMessage(
+    "Place must contain only letters.",
+    place
+);
 
-    return false;
-
+return false;
 }
 if(state.value.trim()==""){
-showMessage("State is required.","warning",3000);
-   state.focus();
-    return false;
-}
+validationMessage(
+    "State is required.",
+    state
+);
+
+return false;}
 
 if(state.value.trim().length < 2){
 
-showMessage("Enter a valid State.","warning",3000);
-    state.focus();
+validationMessage(
+    "Enter a valid State.",
+    state
+);
 
-    return false;
-
+return false;
 }
 if(!isValidName(state.value.trim())){
 
-    showMessage("State must contain only letters.","warning",3000);
+   validationMessage(
+    "State must contain only letters.",
+    state
+);
 
-    state.focus();
-
-    return false;
-
+return false;
 }
 if(country.value.trim()==""){
-    showMessage("Country is required.","warning",3000);
-    country.focus();
-    return false;
-}
+    validationMessage(
+    "Country is required.",
+    country
+);
+
+return false;}
 
 if(country.value.trim().length < 2){
 
-showMessage("Enter a valid Country.","warning",3000);
-    country.focus();
+validationMessage(
+    "Enter a valid Country.",
+    country
+);
 
-    return false;
-
+return false;
 }
 if(!isValidName(country.value.trim())){
 
-showMessage("Country must contain only letters.","warning",3000);
-    country.focus();
+validationMessage(
+    "Country must contain only letters.",
+    country
+);
 
-    return false;
-
+return false;
 }
     
     return true;
