@@ -4,6 +4,7 @@ Part 1A.3
 
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -678,6 +679,17 @@ function highlightField(control){
 
 function validationMessage(message, control){
 
+    const page = document.querySelector("section:not(.hidden)");
+
+    if(page){
+
+        page.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+
+    }
+
     window.scrollTo({
         top:0,
         behavior:"smooth"
@@ -700,7 +712,7 @@ function validationMessage(message, control){
 
             control.focus();
 
-            highlightField(control);   // <-- ఇక్కడ call చేయాలి
+            highlightField(control);
 
         }
 
