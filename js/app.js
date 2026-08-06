@@ -1,7 +1,6 @@
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
-
 ===================================== */
 
 /* WELCOME SCREEN */
@@ -678,44 +677,27 @@ function highlightField(control){
 
 function validationMessage(message, control){
 
-    const page = document.querySelector("section:not(.hidden)");
+    showMessage(message,"warning",3000);
 
-    if(page){
+    if(control){
 
-        page.scrollTo({
-            top:0,
-            behavior:"smooth"
-        });
-
-    }
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
-
-    showMessage(
-        message,
-        "warning",
-        3000
-    );
-
-    setTimeout(()=>{
-
-        if(control){
+        setTimeout(()=>{
 
             control.scrollIntoView({
+
                 behavior:"smooth",
+
                 block:"center"
+
             });
 
             control.focus();
 
             highlightField(control);
 
-        }
+        },200);
 
-    },400);
+    }
 
 }
 /* ===========================
