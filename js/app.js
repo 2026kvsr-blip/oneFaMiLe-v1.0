@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -663,18 +664,15 @@ COMMON VALIDATION MESSAGE
 
 function highlightField(control){
 
+    console.log(control);
+
     if(!control) return;
 
-    control.classList.add("field-error");
+    control.style.border="2px solid red";
 
-    setTimeout(()=>{
-
-        control.classList.remove("field-error");
-
-    },3000);
+    control.style.boxShadow="0 0 10px red";
 
 }
-
 function validationMessage(message, control){
 
     showMessage(message,"warning",3000);
