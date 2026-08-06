@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -1941,5 +1942,12 @@ justify-content:center;
 input:disabled{
 
     background:#f3f3f3;
+
+}
+.field-error{
+
+    border:2px solid #d32f2f !important;
+
+    box-shadow:0 0 8px rgba(211,47,47,0.35);
 
 }
