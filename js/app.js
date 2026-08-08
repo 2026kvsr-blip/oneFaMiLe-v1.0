@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6155,81 +6156,9 @@ function showEditProfile(){
 
     profilePage.classList.remove("hidden");
 
-    const name =
-        `${user.surName || ""} ${user.middleName || ""} ${user.lastName || ""}`
-        .replace(/\s+/g," ")
-        .trim();
-
     profilePage.innerHTML = `
 
-        <h3>
-            ✏️ Edit Profile
-        </h3>
-
-        <div class="profile-box">
-
-            <div class="profile-row">
-                <span>Login User Name</span>
-                <strong>${user.loginUserName || "-"}</strong>
-            </div>
-
-            <div class="profile-row">
-                <span>Name</span>
-                <strong>${name || "-"}</strong>
-            </div>
-
-            <div class="profile-row">
-                <span>Mobile Number</span>
-                <strong>${user.mobile || "-"}</strong>
-            </div>
-
-            <div class="profile-row">
-                <span>Email</span>
-                <input
-                    id="editProfileEmail"
-                    type="email"
-                    value="${user.email || ""}"
-                >
-            </div>
-
-            <div class="profile-row">
-                <span>Gender</span>
-                <strong>${user.gender || "-"}</strong>
-            </div>
-
-            <div class="profile-row">
-                <span>Date of Birth</span>
-                <strong>${user.dateOfBirth || "-"}</strong>
-            </div>
-
-            <div class="profile-row">
-                <span>Place</span>
-                <input
-                    id="editProfilePlace"
-                    type="text"
-                    value="${user.place || ""}"
-                >
-            </div>
-
-            <div class="profile-row">
-                <span>State</span>
-                <input
-                    id="editProfileState"
-                    type="text"
-                    value="${user.state || ""}"
-                >
-            </div>
-
-            <div class="profile-row">
-                <span>Country</span>
-                <input
-                    id="editProfileCountry"
-                    type="text"
-                    value="${user.country || ""}"
-                >
-            </div>
-
-        </div>
+        ... profile HTML ...
 
         <div align="center">
 
@@ -6240,191 +6169,7 @@ function showEditProfile(){
                 💾 Save
 
             </button>
-document.getElementById("saveProfileBtn").onclick = async ()=>{
 
-    const email =
-        document.getElementById("editProfileEmail").value.trim();
-
-    const place =
-        document.getElementById("editProfilePlace").value.trim();
-
-    const state =
-        document.getElementById("editProfileState").value.trim();
-
-    const country =
-        document.getElementById("editProfileCountry").value.trim();
-
-
-    // ================================
-    // EMAIL VALIDATION
-    // ================================
-
-    if(email === ""){
-
-        showMessage(
-            "Email ID is required.",
-            "warning",
-            3000
-        );
-
-        document
-            .getElementById("editProfileEmail")
-            .focus();
-
-        return;
-    }
-
-    if(!isValidEmail(email)){
-
-        showMessage(
-            "Enter a valid Email ID.",
-            "warning",
-            3000
-        );
-
-        document
-            .getElementById("editProfileEmail")
-            .focus();
-
-        return;
-    }
-
-
-    // ================================
-    // PLACE
-    // ================================
-
-    if(place === ""){
-
-        showMessage(
-            "Place is required.",
-            "warning",
-            3000
-        );
-
-        document
-            .getElementById("editProfilePlace")
-            .focus();
-
-        return;
-    }
-
-
-    if(place.length < 2){
-
-        showMessage(
-            "Enter a valid Place.",
-            "warning",
-            3000
-        );
-
-        document
-            .getElementById("editProfilePlace")
-            .focus();
-
-        return;
-    }
-
-
-    if(!isValidName(place)){
-
-        showMessage(
-            "Place must contain only letters.",
-            "warning",
-            3000
-        );
-
-        document
-            .getElementById("editProfilePlace")
-            .focus();
-
-        return;
-    }
-
-
-    // ================================
-    // STATE
-    // ================================
-
-    if(state === ""){
-
-        showMessage(
-            "State is required.",
-            "warning",
-            3000
-        );
-
-        document
-            .getElementById("editProfileState")
-            .focus();
-
-        return;
-    }
-
-
-    if(!isValidName(state)){
-
-        showMessage(
-            "State must contain only letters.",
-            "warning",
-            3000
-        );
-
-        document
-            .getElementById("editProfileState")
-            .focus();
-
-        return;
-    }
-
-
-    // ================================
-    // COUNTRY
-    // ================================
-
-    if(country === ""){
-
-        showMessage(
-            "Country is required.",
-            "warning",
-            3000
-        );
-
-        document
-            .getElementById("editProfileCountry")
-            .focus();
-
-        return;
-    }
-
-
-    if(!isValidName(country)){
-
-        showMessage(
-            "Country must contain only letters.",
-            "warning",
-            3000
-        );
-
-        document
-            .getElementById("editProfileCountry")
-            .focus();
-
-        return;
-    }
-
-
-    // ================================
-    // NEXT STEP
-    // ================================
-
-    showMessage(
-        "Profile validation successful.",
-        "success",
-        2000
-    );
-
-};
             <br><br>
 
             <button
@@ -6437,10 +6182,192 @@ document.getElementById("saveProfileBtn").onclick = async ()=>{
 
         </div>
 
-    `;
+    `;   // ← IMPORTANT: template ఇక్కడ END అవుతుంది
+
+
+    // ================================
+    // SAVE BUTTON JAVASCRIPT
+    // ================================
+
+    document.getElementById("saveProfileBtn").onclick = async ()=>{
+
+        const email =
+            document.getElementById("editProfileEmail").value.trim();
+
+        const place =
+            document.getElementById("editProfilePlace").value.trim();
+
+        const state =
+            document.getElementById("editProfileState").value.trim();
+
+        const country =
+            document.getElementById("editProfileCountry").value.trim();
+
+
+        if(email === ""){
+
+            showMessage(
+                "Email ID is required.",
+                "warning",
+                3000
+            );
+
+            document
+                .getElementById("editProfileEmail")
+                .focus();
+
+            return;
+        }
+
+
+        if(!isValidEmail(email)){
+
+            showMessage(
+                "Enter a valid Email ID.",
+                "warning",
+                3000
+            );
+
+            document
+                .getElementById("editProfileEmail")
+                .focus();
+
+            return;
+        }
+
+
+        if(place === ""){
+
+            showMessage(
+                "Place is required.",
+                "warning",
+                3000
+            );
+
+            document
+                .getElementById("editProfilePlace")
+                .focus();
+
+            return;
+        }
+
+
+        if(place.length < 2){
+
+            showMessage(
+                "Enter a valid Place.",
+                "warning",
+                3000
+            );
+
+            document
+                .getElementById("editProfilePlace")
+                .focus();
+
+            return;
+        }
+
+
+        if(!isValidName(place)){
+
+            showMessage(
+                "Place must contain only letters.",
+                "warning",
+                3000
+            );
+
+            document
+                .getElementById("editProfilePlace")
+                .focus();
+
+            return;
+        }
+
+
+        if(state === ""){
+
+            showMessage(
+                "State is required.",
+                "warning",
+                3000
+            );
+
+            document
+                .getElementById("editProfileState")
+                .focus();
+
+            return;
+        }
+
+
+        if(!isValidName(state)){
+
+            showMessage(
+                "State must contain only letters.",
+                "warning",
+                3000
+            );
+
+            document
+                .getElementById("editProfileState")
+                .focus();
+
+            return;
+        }
+
+
+        if(country === ""){
+
+            showMessage(
+                "Country is required.",
+                "warning",
+                3000
+            );
+
+            document
+                .getElementById("editProfileCountry")
+                .focus();
+
+            return;
+        }
+
+
+        if(!isValidName(country)){
+
+            showMessage(
+                "Country must contain only letters.",
+                "warning",
+                3000
+            );
+
+            document
+                .getElementById("editProfileCountry")
+                .focus();
+
+            return;
+        }
+
+
+        showMessage(
+            "Profile validation successful.",
+            "success",
+            2000
+        );
+
+    };
+
+
+    // ================================
+    // CANCEL BUTTON
+    // ================================
+
+    document.getElementById("cancelEditProfileBtn").onclick = ()=>{
+
+        updateProfilePage();
+
+    };
 
 }
-
 const toggleLoginPass = document.getElementById("toggleLoginPass");
 
 toggleLoginPass.onclick = function(){
