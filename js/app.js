@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6156,9 +6155,91 @@ function showEditProfile(){
 
     profilePage.classList.remove("hidden");
 
+    const name =
+        `${user.surName || ""} ${user.middleName || ""} ${user.lastName || ""}`
+        .replace(/\s+/g," ")
+        .trim();
+
+
     profilePage.innerHTML = `
 
-        ... profile HTML ...
+        <h3>
+            ✏️ Edit Profile
+        </h3>
+
+        <div class="profile-box">
+
+            <div class="profile-row">
+                <span>Login User Name</span>
+                <strong>${user.loginUserName || "-"}</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Name</span>
+                <strong>${name || "-"}</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Mobile Number</span>
+                <strong>${user.mobile || "-"}</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Email</span>
+
+                <input
+                    id="editProfileEmail"
+                    type="email"
+                    value="${user.email || ""}"
+                >
+
+            </div>
+
+            <div class="profile-row">
+                <span>Gender</span>
+                <strong>${user.gender || "-"}</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Date of Birth</span>
+                <strong>${user.dateOfBirth || "-"}</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Place</span>
+
+                <input
+                    id="editProfilePlace"
+                    type="text"
+                    value="${user.place || ""}"
+                >
+
+            </div>
+
+            <div class="profile-row">
+                <span>State</span>
+
+                <input
+                    id="editProfileState"
+                    type="text"
+                    value="${user.state || ""}"
+                >
+
+            </div>
+
+            <div class="profile-row">
+                <span>Country</span>
+
+                <input
+                    id="editProfileCountry"
+                    type="text"
+                    value="${user.country || ""}"
+                >
+
+            </div>
+
+        </div>
+
 
         <div align="center">
 
@@ -6182,27 +6263,43 @@ function showEditProfile(){
 
         </div>
 
-    `;   // ← IMPORTANT: template ఇక్కడ END అవుతుంది
+    `;
 
 
-    // ================================
-    // SAVE BUTTON JAVASCRIPT
-    // ================================
+    // =====================================
+    // SAVE PROFILE
+    // =====================================
 
     document.getElementById("saveProfileBtn").onclick = async ()=>{
 
         const email =
-            document.getElementById("editProfileEmail").value.trim();
+            document
+                .getElementById("editProfileEmail")
+                .value
+                .trim();
 
         const place =
-            document.getElementById("editProfilePlace").value.trim();
+            document
+                .getElementById("editProfilePlace")
+                .value
+                .trim();
 
         const state =
-            document.getElementById("editProfileState").value.trim();
+            document
+                .getElementById("editProfileState")
+                .value
+                .trim();
 
         const country =
-            document.getElementById("editProfileCountry").value.trim();
+            document
+                .getElementById("editProfileCountry")
+                .value
+                .trim();
 
+
+        // =====================================
+        // EMAIL
+        // =====================================
 
         if(email === ""){
 
@@ -6235,6 +6332,10 @@ function showEditProfile(){
             return;
         }
 
+
+        // =====================================
+        // PLACE
+        // =====================================
 
         if(place === ""){
 
@@ -6284,6 +6385,10 @@ function showEditProfile(){
         }
 
 
+        // =====================================
+        // STATE
+        // =====================================
+
         if(state === ""){
 
             showMessage(
@@ -6315,6 +6420,10 @@ function showEditProfile(){
             return;
         }
 
+
+        // =====================================
+        // COUNTRY
+        // =====================================
 
         if(country === ""){
 
@@ -6348,6 +6457,10 @@ function showEditProfile(){
         }
 
 
+        // =====================================
+        // VALIDATION SUCCESS
+        // =====================================
+
         showMessage(
             "Profile validation successful.",
             "success",
@@ -6356,6 +6469,18 @@ function showEditProfile(){
 
     };
 
+
+    // =====================================
+    // CANCEL
+    // =====================================
+
+    document.getElementById("cancelEditProfileBtn").onclick = ()=>{
+
+        updateProfilePage();
+
+    };
+
+}
 
     // ================================
     // CANCEL BUTTON
