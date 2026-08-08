@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -261,11 +260,16 @@ document.getElementById("appMessageText");
 
 const settingsPage =
 document.getElementById("settingsPage");
+const profilePage =
+document.getElementById("profilePage");
 
-const settingsMenuBtn =
-document.getElementById("settingsMenuBtn");
 const profileMenuBtn =
 document.getElementById("profileMenuBtn");
+
+const profileBackBtn =
+document.getElementById("profileBackBtn");
+const settingsMenuBtn =
+document.getElementById("settingsMenuBtn");
 const backSettingsBtn =
 document.getElementById("backSettingsBtn");
 
@@ -5688,7 +5692,28 @@ aboutSettingsBtn.onclick = ()=>{
     );
 
 };
+profileMenuBtn.onclick = ()=>{
 
+    closeSideMenu();
+
+    hideAllPages();
+
+    profilePage.classList.remove("hidden");
+
+    updateProfilePage();
+
+    window.scrollTo(0,0);
+
+};
+profileBackBtn.onclick = ()=>{
+
+    profilePage.classList.add("hidden");
+
+    showScreen(dashboard);
+
+    homeBtn.click();
+
+};
 logoutMenuBtn.onclick = ()=>{
 
     sessionStorage.removeItem("user");
@@ -6056,28 +6081,62 @@ if(dob){
     });
 }
 function updateSideMenuUser(){
-
     const greeting = document.getElementById("menuGreeting");
     const userName = document.getElementById("menuUserName");
-
     if(!greeting || !userName) return;
-
     const user = JSON.parse(sessionStorage.getItem("user"));
-
     if(!user){
         greeting.textContent = "";
         userName.textContent = "";
         return;
     }
-
     greeting.textContent = "Hi";
-
     userName.textContent =
         `${user.surName} ${user.middleName} ${user.lastName}`
         .replace(/\s+/g," ")
         .trim();
+}
+function updateProfilePage(){
+
+    const user =
+        JSON.parse(sessionStorage.getItem("user"));
+
+    if(!user){
+        return;
+    }
+
+    document.getElementById("profileLoginUserName").textContent =
+        user.loginUserName || "-";
+
+    document.getElementById("profileName").textContent =
+        `${user.surName || ""} ${user.middleName || ""} ${user.lastName || ""}`
+        .replace(/\s+/g," ")
+        .trim() || "-";
+
+    document.getElementById("profileMobile").textContent =
+        user.mobile || "-";
+
+    document.getElementById("profileEmail").textContent =
+        user.email || "-";
+
+    document.getElementById("profileGender").textContent =
+        user.gender || "-";
+
+    document.getElementById("profileDOB").textContent =
+        user.dateOfBirth || "-";
+
+    document.getElementById("profilePlace").textContent =
+        user.place || "-";
+
+    document.getElementById("profileState").textContent =
+        user.state || "-";
+
+    document.getElementById("profileCountry").textContent =
+        user.country || "-";
 
 }
+
+
 const toggleLoginPass = document.getElementById("toggleLoginPass");
 
 toggleLoginPass.onclick = function(){
