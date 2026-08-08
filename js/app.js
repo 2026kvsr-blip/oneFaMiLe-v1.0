@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -218,8 +219,6 @@ document.getElementById("otpLimitMsg");
 
 const otpSendingMsg =
 document.getElementById("otpSendingMsg");
-const signupSendingMsg =
-document.getElementById("signupSendingMsg");
 const cooldownTimer =
 document.getElementById("cooldownTimer");
 const loginLockMsg =
@@ -2750,8 +2749,7 @@ signupOTPBtn.onclick = async ()=>{
 
     otpResendCount = 0;
 
-    signupSendingMsg.classList.remove("hidden");
-
+showLoader("Sending OTP...");
     await sendSignupOTP();
 
 };
