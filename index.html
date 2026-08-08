@@ -5,7 +5,6 @@
 <head>
      
             <meta charset="UTF-8">
-
   
    <meta
 name="viewport"
@@ -359,16 +358,20 @@ id="signupOTPBtn">
 Send OTP
 
 </button>
-<div
-id="signupSendingMsg"
-class="hidden otp-sending">
+<div class="signup-sending-area">
 
-    <i class="fa-solid fa-spinner fa-spin"></i>
+    <div
+    id="signupSendingMsg"
+    class="hidden signup-sending-box">
 
-    Sending OTP...
+        <i class="fa-solid fa-spinner fa-spin"></i>
+
+        <span>Sending OTP...</span>
+
+    </div>
 
 </div>
-<button
+  <button
 id="backSignupBtn">
 
 ← Back
