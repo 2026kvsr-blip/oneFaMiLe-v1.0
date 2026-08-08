@@ -674,27 +674,37 @@ function highlightField(control){
 }
 function validationMessage(message, control){
 
-    showMessage(message,"warning",3000);
+    showMessage(
+        message,
+        "warning",
+        3000
+    );
 
-    if(control){
-
-        setTimeout(()=>{
-
-            control.scrollIntoView({
-
-                behavior:"smooth",
-
-                block:"center"
-
-            });
-
-            control.focus();
-
-            highlightField(control);
-
-        },200);
-
+    if(!control){
+        return;
     }
+
+    // First highlight the wrong field
+    control.classList.add("field-error");
+
+    // Then bring that field into view
+    setTimeout(()=>{
+
+        control.scrollIntoView({
+            behavior:"smooth",
+            block:"center"
+        });
+
+        control.focus();
+
+    },100);
+
+    // Remove red border after 3 seconds
+    setTimeout(()=>{
+
+        control.classList.remove("field-error");
+
+    },3000);
 
 }
 /* ===========================
