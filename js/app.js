@@ -1201,14 +1201,11 @@ CLEAR OTP
 
 function clearOTP(){
 
-const otpInput =
-document.querySelector("#signupOTPPage input[type='text']");
+    if(registerOTP){
 
-if(otpInput){
+        registerOTP.value = "";
 
-otpInput.value="";
-
-}
+    }
 
 }
 
