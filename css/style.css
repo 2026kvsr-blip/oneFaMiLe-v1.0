@@ -1953,3 +1953,53 @@ input:disabled{
     transition:.3s;
 
 }
+
+.signup-sending-area{
+
+    height:45px;
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+.signup-sending-box{
+
+    width:90%;
+
+    height:38px;
+
+    border:1px solid #c4d4ff;
+
+    border-radius:10px;
+
+    background:#f0f7ff;
+
+    color:#2A6EB0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    box-sizing:border-box;
+
+}
+
+.signup-sending-box.hidden{
+
+    display:none;
+
+}
