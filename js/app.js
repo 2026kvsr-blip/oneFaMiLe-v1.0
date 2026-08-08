@@ -2633,9 +2633,19 @@ backSignupBtn.onclick = ()=>{
 
 async function sendSignupOTP(){
 
-    if(!validateSignupBasic()) return;
-    if(!(await checkSignup())) return;
+    if(!validateSignupBasic()){
 
+        otpSendingMsg.classList.add("hidden");
+
+        return;
+    }
+
+    if(!(await checkSignup())){
+
+        otpSendingMsg.classList.add("hidden");
+
+        return;
+    }
     const formData = new FormData();
 
     formData.append("action","sendSignupOTP");
