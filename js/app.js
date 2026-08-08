@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -218,6 +217,8 @@ document.getElementById("otpLimitMsg");
 
 const otpSendingMsg =
 document.getElementById("otpSendingMsg");
+const signupSendingMsg =
+document.getElementById("signupSendingMsg");
 const cooldownTimer =
 document.getElementById("cooldownTimer");
 const loginLockMsg =
@@ -2636,15 +2637,13 @@ async function sendSignupOTP(){
 
     if(!validateSignupBasic()){
 
-        otpSendingMsg.classList.add("hidden");
-
+signupSendingMsg.classList.add("hidden");
         return;
     }
 
     if(!(await checkSignup())){
 
-        otpSendingMsg.classList.add("hidden");
-
+signupSendingMsg.classList.add("hidden");
         return;
     }
 
@@ -2671,8 +2670,7 @@ async function sendSignupOTP(){
 
         if(result.status !== "success"){
 
-            otpSendingMsg.classList.add("hidden");
-
+signupSendingMsg.classList.add("hidden");
             hideLoader();
 
             showMessage(
@@ -2702,8 +2700,7 @@ async function sendSignupOTP(){
    HIDE SENDING MESSAGE
 ================================ */
 
-otpSendingMsg.classList.add("hidden");
-
+signupSendingMsg.classList.add("hidden");
 showScreen(signupOTPPage);
 
 restoreCooldown();
@@ -2717,8 +2714,7 @@ startOtpTimer("signupOtpTimer");
     }
     catch(err){
 
-        otpSendingMsg.classList.add("hidden");
-
+signupSendingMsg.classList.add("hidden");
         hideLoader();
 
         showMessage(
@@ -2737,7 +2733,7 @@ signupOTPBtn.onclick = async ()=>{
     otpResendCount = 0;
 
     // Show Sending OTP animation
-    otpSendingMsg.classList.remove("hidden");
+    signupSendingMsg.classList.remove("hidden");
 
     await sendSignupOTP();
 
