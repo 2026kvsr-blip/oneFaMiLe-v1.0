@@ -2819,20 +2819,45 @@ REGISTER / RESET PASS CODE
 
 registerBtn.onclick = async ()=>{
 
-if(otpMode=="signup"){
+    // =====================================
+    // OTP EXPIRED CHECK
+    // =====================================
 
-    if(!validateSignup()) return;
+    if(otpSeconds <= 0){
 
-    await verifySignupOTP();
+        showMessage(
+            "OTP expired. Please request a new OTP.",
+            "warning",
+            3000
+        );
 
-}
-else if(otpMode==="forgot"){
+        return;
 
-    await verifyForgotOTP();
+    }
 
-}
+    // =====================================
+    // SIGNUP
+    // =====================================
+
+    if(otpMode === "signup"){
+
+        if(!validateSignup()) return;
+
+        await verifySignupOTP();
+
+    }
+
+    // =====================================
+    // FORGOT PASSWORD
+    // =====================================
+
+    else if(otpMode === "forgot"){
+
+        await verifyForgotOTP();
+
+    }
+
 };
-
 function validateSignupBasic(){
 
     if(loginUserName.value.trim()==""){
