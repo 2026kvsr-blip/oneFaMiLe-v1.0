@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -938,7 +939,6 @@ function startOtpTimer(timerId){
 
     // Enable buttons
     document.getElementById("verifyOTPBtn")?.removeAttribute("disabled");
-    document.getElementById("registerBtn")?.removeAttribute("disabled");
 
     // Hide Resend button
     resendSignupOTPBtn.classList.add("hidden");
@@ -964,8 +964,8 @@ otpLimitMsg.classList.add("hidden");
     document.getElementById("verifyOTPBtn")
         ?.setAttribute("disabled","true");
 
-    document.getElementById("registerBtn")
-        ?.setAttribute("disabled","true");
+    // Register button must remain enabled
+    // so that clicking it can show OTP expired message
 
     signupOtpTimer.classList.add("hidden");
 
