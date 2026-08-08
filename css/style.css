@@ -1,4 +1,5 @@
 
+
 *{
 margin:0;
 padding:0;
@@ -2023,6 +2024,10 @@ input:disabled{
     color:#2A6EB0;
     font-weight:600;
     text-align:left;
+}
+
+.profile-row span::after{
+    content: " :";
 }
 
 .profile-row strong{
