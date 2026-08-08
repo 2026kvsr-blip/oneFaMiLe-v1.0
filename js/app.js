@@ -2695,27 +2695,44 @@ signupOTPBtn.onclick = async ()=>{
 
 resendSignupOTPBtn.onclick = async ()=>{
 
-   if(otpCooldownRunning){
+    if(otpCooldownRunning){
 
-    return;
+        return;
 
-}
+    }
 
-if(otpResendCount >= MAX_OTP_RESEND){
+    if(otpResendCount >= MAX_OTP_RESEND){
 
-    startCooldown();
+        startCooldown();
 
-    return;
+        return;
 
-}
+    }
+
+    // ================================
+    // CLEAR OLD OTP + PASS CODES
+    // ================================
+
+    clearOTP();
+
+    document.getElementById("sensitivePassCode").value = "";
+
+    document.getElementById("registerConfirmPassCode").value = "";
+
+    // ================================
+    // RESET OTP COUNT
+    // ================================
+
     otpResendCount++;
+
     resendSignupOTPBtn.classList.add("hidden");
 
-   otpSendingMsg.classList.remove("hidden");
+    otpSendingMsg.classList.remove("hidden");
 
-setTimeout(()=>{
-    resendSignupOTPBtn.classList.remove("rotate");
-},1000);
+    // ================================
+    // SEND NEW OTP
+    // ================================
+
     if(otpMode === "signup"){
 
         await sendSignupOTP();
