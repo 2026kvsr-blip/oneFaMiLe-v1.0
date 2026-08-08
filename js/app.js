@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2924,7 +2925,7 @@ REGISTER / RESET PASS CODE
 registerBtn.onclick = async ()=>{
 
     // ================================
-    // OTP EXPIRED CHECK
+    // OTP EXPIRY CHECK
     // ================================
 
     if(
@@ -2946,8 +2947,6 @@ registerBtn.onclick = async ()=>{
     // ================================
 
     if(otpMode === "signup"){
-
-        if(!validateSignup()) return;
 
         await verifySignupOTP();
 
@@ -3478,50 +3477,217 @@ VERIFY SIGNUP OTP
 
 async function verifySignupOTP(){
 
+    // ================================
+    // OTP
+    // ================================
+
+    const otp =
+        registerOTP.value.trim();
+
+
+    // OTP EMPTY
+    if(otp === ""){
+
+        showMessage(
+            "Please enter OTP.",
+            "warning",
+            3000
+        );
+
+        registerOTP.focus();
+
+        return;
+    }
+
+
+    // OTP LENGTH
+    if(otp.length !== 6){
+
+        showMessage(
+            "OTP must contain exactly 6 digits.",
+            "warning",
+            3000
+        );
+
+        registerOTP.focus();
+
+        return;
+    }
+
+
+    // ================================
+    // VERIFY OTP WITH SERVER
+    // ================================
+
     const formData = new FormData();
 
-    formData.append("action","verifySignupOTP");
-    formData.append("mobile", mobileNo.value.trim());
-    formData.append("otp", registerOTP.value.trim());
+    formData.append(
+        "action",
+        "verifySignupOTP"
+    );
 
-    const otp = registerOTP.value.trim();
+    formData.append(
+        "mobile",
+        mobileNo.value.trim()
+    );
 
-if (otp === "") {
-    showMessage(     "OTP is required.",     "warning",     3000 );
-    registerOTP.focus();
-    return;
-}
+    formData.append(
+        "otp",
+        otp
+    );
 
-if (otp.length !== 6) {
-    showMessage("OTP must contain exactly 6 digits.","warning",3000);
-    registerOTP.focus();
-    return;
-}
 
     try{
 
+        showLoader("Verifying OTP...");
+
+
         const response = await fetch(API_URL,{
+
             method:"POST",
+
             body:formData
+
         });
 
-        const result = await response.json();
 
-        if(result.status=="success"){
-           hideLoader();
-            await registerUser();
+        const result =
+            await response.json();
 
-        }else{
-          hideLoader();
 
-            showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
+        // ================================
+        // WRONG OTP
+        // ================================
 
+        if(result.status !== "success"){
+
+            hideLoader();
+
+            showMessage(
+                "Wrong OTP entered.",
+                "warning",
+                3000
+            );
+
+            registerOTP.focus();
+
+            return;
         }
 
-    }catch(error){
+
+        // ================================
+        // OTP CORRECT
+        // ================================
+
         hideLoader();
 
-showMessage("Unable to verify OTP.","error",3000);
+
+        // ================================
+        // PASS CODE VALIDATION
+        // ================================
+
+        const passCode =
+            sensitivePassCode.value.trim();
+
+        const confirmPassCode =
+            registerConfirmPassCode.value.trim();
+
+
+        // PASS CODE EMPTY
+        if(passCode === ""){
+
+            showMessage(
+                "Pass Code is required.",
+                "warning",
+                3000
+            );
+
+            sensitivePassCode.focus();
+
+            return;
+        }
+
+
+        // PASS CODE LENGTH
+        if(passCode.length !== 6){
+
+            showMessage(
+                "Pass Code must contain exactly 6 digits.",
+                "warning",
+                3000
+            );
+
+            sensitivePassCode.focus();
+
+            return;
+        }
+
+
+        // CONFIRM PASS CODE EMPTY
+        if(confirmPassCode === ""){
+
+            showMessage(
+                "Confirm Pass Code is required.",
+                "warning",
+                3000
+            );
+
+            registerConfirmPassCode.focus();
+
+            return;
+        }
+
+
+        // CONFIRM PASS CODE LENGTH
+        if(confirmPassCode.length !== 6){
+
+            showMessage(
+                "Confirm Pass Code must contain exactly 6 digits.",
+                "warning",
+                3000
+            );
+
+            registerConfirmPassCode.focus();
+
+            return;
+        }
+
+
+        // PASS CODE MATCH
+        if(passCode !== confirmPassCode){
+
+            showMessage(
+                "Pass Codes do not match.",
+                "warning",
+                3000
+            );
+
+            registerConfirmPassCode.focus();
+
+            return;
+        }
+
+
+        // ================================
+        // EVERYTHING CORRECT
+        // ================================
+
+        await registerUser();
+
+
+    }
+    catch(error){
+
+        hideLoader();
+
+        console.log(error);
+
+        showMessage(
+            "Unable to verify OTP.",
+            "error",
+            3000
+        );
+
     }
 
 }
