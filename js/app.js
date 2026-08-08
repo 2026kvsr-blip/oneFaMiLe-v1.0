@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -3496,11 +3497,10 @@ VERIFY SIGNUP OTP
 async function verifySignupOTP(){
 
     // ================================
-    // OTP
+    // 1. OTP
     // ================================
 
-    const otp =
-        registerOTP.value.trim();
+    const otp = registerOTP.value.trim();
 
 
     // OTP EMPTY
@@ -3534,7 +3534,93 @@ async function verifySignupOTP(){
 
 
     // ================================
-    // VERIFY OTP WITH SERVER
+    // 2. PASS CODE CONDITIONS
+    // ================================
+
+    const passCode =
+        sensitivePassCode.value.trim();
+
+    const confirmPassCode =
+        registerConfirmPassCode.value.trim();
+
+
+    // PASS CODE EMPTY
+    if(passCode === ""){
+
+        showMessage(
+            "Pass Code is required.",
+            "warning",
+            3000
+        );
+
+        sensitivePassCode.focus();
+
+        return;
+    }
+
+
+    // PASS CODE LENGTH
+    if(passCode.length !== 6){
+
+        showMessage(
+            "Pass Code must contain exactly 6 digits.",
+            "warning",
+            3000
+        );
+
+        sensitivePassCode.focus();
+
+        return;
+    }
+
+
+    // CONFIRM PASS CODE EMPTY
+    if(confirmPassCode === ""){
+
+        showMessage(
+            "Confirm Pass Code is required.",
+            "warning",
+            3000
+        );
+
+        registerConfirmPassCode.focus();
+
+        return;
+    }
+
+
+    // CONFIRM PASS CODE LENGTH
+    if(confirmPassCode.length !== 6){
+
+        showMessage(
+            "Confirm Pass Code must contain exactly 6 digits.",
+            "warning",
+            3000
+        );
+
+        registerConfirmPassCode.focus();
+
+        return;
+    }
+
+
+    // PASS CODES MATCH
+    if(passCode !== confirmPassCode){
+
+        showMessage(
+            "Pass Codes do not match.",
+            "warning",
+            3000
+        );
+
+        registerConfirmPassCode.focus();
+
+        return;
+    }
+
+
+    // ================================
+    // 3. NOW VERIFY OTP WITH SERVER
     // ================================
 
     const formData = new FormData();
@@ -3574,7 +3660,7 @@ async function verifySignupOTP(){
 
 
         // ================================
-        // WRONG OTP
+        // 4. WRONG OTP
         // ================================
 
         if(result.status !== "success"){
@@ -3594,104 +3680,12 @@ async function verifySignupOTP(){
 
 
         // ================================
-        // OTP CORRECT
+        // 5. OTP CORRECT
         // ================================
 
         hideLoader();
 
-
-        // ================================
-        // PASS CODE VALIDATION
-        // ================================
-
-        const passCode =
-            sensitivePassCode.value.trim();
-
-        const confirmPassCode =
-            registerConfirmPassCode.value.trim();
-
-
-        // PASS CODE EMPTY
-        if(passCode === ""){
-
-            showMessage(
-                "Pass Code is required.",
-                "warning",
-                3000
-            );
-
-            sensitivePassCode.focus();
-
-            return;
-        }
-
-
-        // PASS CODE LENGTH
-        if(passCode.length !== 6){
-
-            showMessage(
-                "Pass Code must contain exactly 6 digits.",
-                "warning",
-                3000
-            );
-
-            sensitivePassCode.focus();
-
-            return;
-        }
-
-
-        // CONFIRM PASS CODE EMPTY
-        if(confirmPassCode === ""){
-
-            showMessage(
-                "Confirm Pass Code is required.",
-                "warning",
-                3000
-            );
-
-            registerConfirmPassCode.focus();
-
-            return;
-        }
-
-
-        // CONFIRM PASS CODE LENGTH
-        if(confirmPassCode.length !== 6){
-
-            showMessage(
-                "Confirm Pass Code must contain exactly 6 digits.",
-                "warning",
-                3000
-            );
-
-            registerConfirmPassCode.focus();
-
-            return;
-        }
-
-
-        // PASS CODE MATCH
-        if(passCode !== confirmPassCode){
-
-            showMessage(
-                "Pass Codes do not match.",
-                "warning",
-                3000
-            );
-
-            registerConfirmPassCode.focus();
-
-            return;
-        }
-
-
-        // ================================
-        // EVERYTHING CORRECT
-        // ================================
-
         await registerUser();
-
 
     }
     catch(error){
