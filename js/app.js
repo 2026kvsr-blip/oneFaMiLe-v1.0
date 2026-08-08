@@ -674,32 +674,46 @@ function highlightField(control){
 }
 function validationMessage(message, control){
 
+    if(!control){
+        showMessage(
+            message,
+            "warning",
+            3000
+        );
+        return;
+    }
+
+    // Remove previous error first
+    control.classList.remove("field-error");
+
+    // Force browser to apply the change
+    void control.offsetWidth;
+
+    // Add red border immediately
+    control.classList.add("field-error");
+
+    // Show message
     showMessage(
         message,
         "warning",
         3000
     );
 
-    if(!control){
-        return;
-    }
-
-    // First highlight the wrong field
-    control.classList.add("field-error");
-
-    // Then bring that field into view
-    setTimeout(()=>{
+    // Scroll immediately to the wrong field
+    requestAnimationFrame(()=>{
 
         control.scrollIntoView({
             behavior:"smooth",
             block:"center"
         });
 
-        control.focus();
+        control.focus({
+            preventScroll:true
+        });
 
-    },100);
+    });
 
-    // Remove red border after 3 seconds
+    // Remove highlight after 3 seconds
     setTimeout(()=>{
 
         control.classList.remove("field-error");
