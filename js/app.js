@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2760,7 +2761,6 @@ resendSignupOTPBtn.onclick = async ()=>{
     if(otpCooldownRunning){
 
         return;
-
     }
 
     if(otpResendCount >= MAX_OTP_RESEND){
@@ -2768,7 +2768,6 @@ resendSignupOTPBtn.onclick = async ()=>{
         startCooldown();
 
         return;
-
     }
 
     // ================================
@@ -2782,7 +2781,7 @@ resendSignupOTPBtn.onclick = async ()=>{
     document.getElementById("registerConfirmPassCode").value = "";
 
     // ================================
-    // RESET OTP COUNT
+    // RESEND OTP
     // ================================
 
     otpResendCount++;
@@ -2791,22 +2790,29 @@ resendSignupOTPBtn.onclick = async ()=>{
 
     otpSendingMsg.classList.remove("hidden");
 
-    // ================================
-    // SEND NEW OTP
-    // ================================
+    try{
 
-    if(otpMode === "signup"){
+        if(otpMode === "signup"){
 
-        await sendSignupOTP();
+            await sendSignupOTP();
 
-    }else if(otpMode === "forgot"){
+        }else if(otpMode === "forgot"){
 
-        await sendForgotOTP();
+            await sendForgotOTP();
+
+        }
+
+    }finally{
+
+        // ================================
+        // HIDE SENDING OTP AFTER REQUEST
+        // ================================
+
+        otpSendingMsg.classList.add("hidden");
 
     }
 
 };
-
 /* ======================
 
 BACK OTP
