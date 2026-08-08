@@ -2685,10 +2685,12 @@ signupOTPBtn.onclick = async ()=>{
 
     otpResendCount = 0;
 
+    // Show Sending OTP animation
+    otpSendingMsg.classList.remove("hidden");
+
     await sendSignupOTP();
 
 };
-
 
 resendSignupOTPBtn.onclick = async ()=>{
 
