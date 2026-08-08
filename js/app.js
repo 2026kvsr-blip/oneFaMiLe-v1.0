@@ -1,3 +1,4 @@
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6481,17 +6482,7 @@ function showEditProfile(){
 
 }
 
-    // ================================
-    // CANCEL BUTTON
-    // ================================
-
-    document.getElementById("cancelEditProfileBtn").onclick = ()=>{
-
-        updateProfilePage();
-
-    };
-
-}
+   
 const toggleLoginPass = document.getElementById("toggleLoginPass");
 
 toggleLoginPass.onclick = function(){
