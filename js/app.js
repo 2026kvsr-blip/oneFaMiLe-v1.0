@@ -957,15 +957,21 @@ otpLimitMsg.classList.add("hidden");
 
         if(otpSeconds <= 0){
 
-            clearInterval(otpInterval);
-signupOtpActive = false;
-            document.getElementById("verifyOTPBtn")?.setAttribute("disabled","true");
+    clearInterval(otpInterval);
 
-            // Show Resend button
-            signupOtpTimer.classList.add("hidden");
+    signupOtpActive = false;
 
-            resendSignupOTPBtn.classList.remove("hidden");
-        }
+    document.getElementById("verifyOTPBtn")
+        ?.setAttribute("disabled","true");
+
+    document.getElementById("registerBtn")
+        ?.setAttribute("disabled","true");
+
+    signupOtpTimer.classList.add("hidden");
+
+    resendSignupOTPBtn.classList.remove("hidden");
+
+}
 
     },1000);
 
@@ -2634,21 +2640,38 @@ backSignupBtn.onclick = ()=>{
 
 async function sendSignupOTP(){
 
+    // ================================
+    // VALIDATE SIGNUP
+    // ================================
+
     if(!validateSignupBasic()){
 
-signupSendingMsg.classList.add("hidden");
+        hideLoader();
+
         return;
     }
+
+    // ================================
+    // CHECK USER
+    // ================================
 
     if(!(await checkSignup())){
 
-signupSendingMsg.classList.add("hidden");
+        hideLoader();
+
         return;
     }
 
+    // ================================
+    // SEND OTP
+    // ================================
+
     const formData = new FormData();
 
-    formData.append("action","sendSignupOTP");
+    formData.append(
+        "action",
+        "sendSignupOTP"
+    );
 
     formData.append(
         "mobile",
@@ -2667,54 +2690,60 @@ signupSendingMsg.classList.add("hidden");
 
         const result = await response.json();
 
+        console.log("Signup OTP Result:", result);
+
+        // ================================
+        // OTP FAILED
+        // ================================
+
         if(result.status !== "success"){
 
-signupSendingMsg.classList.add("hidden");
             hideLoader();
 
             showMessage(
-                result.message,
+                result.message || "Unable to send OTP.",
                 "warning",
                 3000
             );
 
             return;
-
         }
 
         // ================================
-        // OTP SENT SUCCESSFULLY
+        // OTP SUCCESS
         // ================================
 
-        hideLoader();
-
         otpMode = "signup";
+
+        signupOtpActive = true;
 
         registerBtn.textContent = "Register";
 
         clearOTP();
 
-        /* ================================
-   OTP REQUEST FINISHED
-   HIDE SENDING MESSAGE
-================================ */
-
-signupSendingMsg.classList.add("hidden");
-        signupOtpActive = true;
-showScreen(signupOTPPage);
-
-restoreCooldown();
-
-startOtpTimer("signupOtpTimer");
-
         signupPassCodeBox.classList.remove("hidden");
 
         signupConfirmPassCodeBox.classList.remove("hidden");
 
+        // STOP SENDING OTP LOADER
+        hideLoader();
+
+        // OPEN VERIFY OTP PAGE
+        showScreen(signupOTPPage);
+
+        // START OTP TIMER
+        startOtpTimer("signupOtpTimer");
+
+        console.log("Verify OTP page opened");
+
     }
     catch(err){
 
-signupSendingMsg.classList.add("hidden");
+        console.log(
+            "Signup OTP Error:",
+            err
+        );
+
         hideLoader();
 
         showMessage(
@@ -2722,8 +2751,6 @@ signupSendingMsg.classList.add("hidden");
             "error",
             3000
         );
-
-        console.log(err);
 
     }
 
@@ -2738,9 +2765,6 @@ signupOTPBtn.onclick = async ()=>{
             3000
         );
 
-        // Go directly to existing Verify OTP page
-        clearOTP();
-
         showScreen(signupOTPPage);
 
         return;
@@ -2748,7 +2772,8 @@ signupOTPBtn.onclick = async ()=>{
 
     otpResendCount = 0;
 
-showLoader("Sending OTP...");
+    showLoader("Sending OTP...");
+
     await sendSignupOTP();
 
 };
