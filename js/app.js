@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2646,50 +2647,84 @@ async function sendSignupOTP(){
 
         return;
     }
+
     const formData = new FormData();
 
     formData.append("action","sendSignupOTP");
-    formData.append("mobile", mobileNo.value.trim());
+
+    formData.append(
+        "mobile",
+        mobileNo.value.trim()
+    );
 
     try{
 
         const response = await fetch(API_URL,{
+
             method:"POST",
+
             body:formData
+
         });
 
         const result = await response.json();
 
         if(result.status !== "success"){
+
+            otpSendingMsg.classList.add("hidden");
+
             hideLoader();
-            showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
+
+            showMessage(
+                result.message,
+                "warning",
+                3000
+            );
+
             return;
 
         }
-hideLoader();
+
+        // ================================
+        // OTP SENT SUCCESSFULLY
+        // ================================
+
+        hideLoader();
+
         otpMode = "signup";
+
         registerBtn.textContent = "Register";
 
         clearOTP();
 
         showScreen(signupOTPPage);
+
         restoreCooldown();
 
         startOtpTimer("signupOtpTimer");
+
         signupPassCodeBox.classList.remove("hidden");
+
         signupConfirmPassCodeBox.classList.remove("hidden");
 
-    }catch(err){
+    }
+    catch(err){
+
+        otpSendingMsg.classList.add("hidden");
+
         hideLoader();
 
-        showMessage(     "Unable to connect to server.",     "error",     3000 );
+        showMessage(
+            "Unable to connect to server.",
+            "error",
+            3000
+        );
+
         console.log(err);
 
     }
 
 }
-
-
 signupOTPBtn.onclick = async ()=>{
 
     otpResendCount = 0;
