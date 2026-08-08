@@ -2,7 +2,6 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -2739,6 +2738,11 @@ signupOTPBtn.onclick = async ()=>{
             "info",
             3000
         );
+
+        // Go directly to existing Verify OTP page
+        clearOTP();
+
+        showScreen(signupOTPPage);
 
         return;
     }
