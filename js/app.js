@@ -2923,25 +2923,27 @@ REGISTER / RESET PASS CODE
 
 registerBtn.onclick = async ()=>{
 
-    // =====================================
+    // ================================
     // OTP EXPIRED CHECK
-    // =====================================
+    // ================================
 
-    if(otpSeconds <= 0){
+    if(
+        otpMode === "signup" &&
+        !signupOtpActive
+    ){
 
         showMessage(
-            "OTP expired. Please request a new OTP.",
+            "OTP has expired. Please request a new OTP.",
             "warning",
-            3000
+            4000
         );
 
         return;
-
     }
 
-    // =====================================
+    // ================================
     // SIGNUP
-    // =====================================
+    // ================================
 
     if(otpMode === "signup"){
 
@@ -2951,9 +2953,9 @@ registerBtn.onclick = async ()=>{
 
     }
 
-    // =====================================
+    // ================================
     // FORGOT PASSWORD
-    // =====================================
+    // ================================
 
     else if(otpMode === "forgot"){
 
