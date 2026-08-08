@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -23,6 +22,25 @@ document.getElementById("signupPassCodeBox");
 
 const signupConfirmPassCodeBox =
 document.getElementById("signupConfirmPassCodeBox");
+
+const sensitivePassCode =
+document.getElementById("sensitivePassCode");
+
+const registerConfirmPassCode =
+document.getElementById("registerConfirmPassCode");
+sensitivePassCode.addEventListener("input", function(){
+
+    this.value =
+        this.value.replace(/\D/g,"");
+
+});
+
+registerConfirmPassCode.addEventListener("input", function(){
+
+    this.value =
+        this.value.replace(/\D/g,"");
+
+});
 const toggleNewPassCode =
 document.getElementById("toggleNewPassCode");
 
