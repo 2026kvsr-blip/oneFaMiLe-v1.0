@@ -959,7 +959,6 @@ otpLimitMsg.classList.add("hidden");
             clearInterval(otpInterval);
 
             document.getElementById("verifyOTPBtn")?.setAttribute("disabled","true");
-            document.getElementById("registerBtn")?.setAttribute("disabled","true");
 
             // Show Resend button
             signupOtpTimer.classList.add("hidden");
