@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -200,6 +201,7 @@ const toggleSensitivePassCode =
 document.getElementById("toggleSensitivePassCode");
 let otpInterval = null;
 let otpSeconds = 30; // 0.5 Minutes
+let signupOtpActive = false;
 let otpResendCount = 0;
 const MAX_OTP_RESEND = 3;
 const OTP_COOLDOWN = 60;
@@ -959,7 +961,7 @@ otpLimitMsg.classList.add("hidden");
         if(otpSeconds <= 0){
 
             clearInterval(otpInterval);
-
+signupOtpActive = false;
             document.getElementById("verifyOTPBtn")?.setAttribute("disabled","true");
 
             // Show Resend button
@@ -2701,6 +2703,7 @@ signupSendingMsg.classList.add("hidden");
 ================================ */
 
 signupSendingMsg.classList.add("hidden");
+        signupOtpActive = true;
 showScreen(signupOTPPage);
 
 restoreCooldown();
@@ -2730,15 +2733,24 @@ signupSendingMsg.classList.add("hidden");
 }
 signupOTPBtn.onclick = async ()=>{
 
+    if(signupOtpActive){
+
+        showMessage(
+            "OTP already sent. Please wait until it expires.",
+            "info",
+            3000
+        );
+
+        return;
+    }
+
     otpResendCount = 0;
 
-    // Show Sending OTP animation
     signupSendingMsg.classList.remove("hidden");
 
     await sendSignupOTP();
 
 };
-
 resendSignupOTPBtn.onclick = async ()=>{
 
     if(otpCooldownRunning){
