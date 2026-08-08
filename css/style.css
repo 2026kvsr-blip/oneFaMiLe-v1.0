@@ -1,3 +1,4 @@
+
 *{
 margin:0;
 padding:0;
@@ -16,7 +17,6 @@ padding-bottom:80px;
 overflow-x:hidden;
 
 }
-
 
 /* =======================
 TOP BAR
@@ -2003,4 +2003,32 @@ input:disabled{
 
     display:none;
 
+}
+.profile-box{
+    width:90%;
+    margin:20px auto;
+}
+
+.profile-row{
+    display:flex;
+    align-items:center;
+    width:100%;
+    padding:12px 5px;
+    border-bottom:1px solid #c4d4ff;
+    box-sizing:border-box;
+}
+
+.profile-row span{
+    width:45%;
+    color:#2A6EB0;
+    font-weight:600;
+    text-align:left;
+}
+
+.profile-row strong{
+    width:55%;
+    color:#333;
+    font-weight:500;
+    text-align:left;
+    word-break:break-word;
 }
