@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -268,6 +269,8 @@ document.getElementById("profileMenuBtn");
 
 const profileBackBtn =
 document.getElementById("profileBackBtn");
+const editProfileBtn =
+document.getElementById("editProfileBtn");
 const settingsMenuBtn =
 document.getElementById("settingsMenuBtn");
 const backSettingsBtn =
@@ -5714,6 +5717,11 @@ profileBackBtn.onclick = ()=>{
     homeBtn.click();
 
 };
+editProfileBtn.onclick = ()=>{
+
+    showEditProfile();
+
+};
 logoutMenuBtn.onclick = ()=>{
 
     sessionStorage.removeItem("user");
@@ -6135,7 +6143,120 @@ function updateProfilePage(){
         user.country || "-";
 
 }
+function showEditProfile(){
 
+    const user =
+        JSON.parse(sessionStorage.getItem("user"));
+
+    if(!user){
+        return;
+    }
+
+    hideAllPages();
+
+    profilePage.classList.remove("hidden");
+
+    const name =
+        `${user.surName || ""} ${user.middleName || ""} ${user.lastName || ""}`
+        .replace(/\s+/g," ")
+        .trim();
+
+    profilePage.innerHTML = `
+
+        <h3>
+            ✏️ Edit Profile
+        </h3>
+
+        <div class="profile-box">
+
+            <div class="profile-row">
+                <span>Login User Name</span>
+                <strong>${user.loginUserName || "-"}</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Name</span>
+                <strong>${name || "-"}</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Mobile Number</span>
+                <strong>${user.mobile || "-"}</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Email</span>
+                <input
+                    id="editProfileEmail"
+                    type="email"
+                    value="${user.email || ""}"
+                >
+            </div>
+
+            <div class="profile-row">
+                <span>Gender</span>
+                <strong>${user.gender || "-"}</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Date of Birth</span>
+                <strong>${user.dateOfBirth || "-"}</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Place</span>
+                <input
+                    id="editProfilePlace"
+                    type="text"
+                    value="${user.place || ""}"
+                >
+            </div>
+
+            <div class="profile-row">
+                <span>State</span>
+                <input
+                    id="editProfileState"
+                    type="text"
+                    value="${user.state || ""}"
+                >
+            </div>
+
+            <div class="profile-row">
+                <span>Country</span>
+                <input
+                    id="editProfileCountry"
+                    type="text"
+                    value="${user.country || ""}"
+                >
+            </div>
+
+        </div>
+
+        <div align="center">
+
+            <button
+                id="saveProfileBtn"
+                class="grid-btn">
+
+                💾 Save
+
+            </button>
+
+            <br><br>
+
+            <button
+                id="cancelEditProfileBtn"
+                class="back-btn">
+
+                ← Cancel
+
+            </button>
+
+        </div>
+
+    `;
+
+}
 
 const toggleLoginPass = document.getElementById("toggleLoginPass");
 
