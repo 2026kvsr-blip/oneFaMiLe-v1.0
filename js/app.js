@@ -2,7 +2,6 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6351,7 +6350,220 @@ function showEditProfile(){
     </div>
 
 `;
+// =====================================
+// CHANGE MOBILE NUMBER
+// =====================================
 
+document.getElementById("changeMobileBtn").onclick = ()=>{
+
+    profilePage.innerHTML = `
+
+        <h3>
+            📱 Change Mobile Number
+        </h3>
+
+        <div class="profile-box">
+
+            <div class="profile-row">
+
+                <span>Current Mobile</span>
+
+                <strong>
+                    ${user.mobile || "-"}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <span>New Mobile Number</span>
+
+                <input
+                    id="newMobileNumber"
+                    type="tel"
+                    inputmode="numeric"
+                    maxlength="10"
+                    placeholder="Enter new mobile number"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div align="center">
+
+            <button
+                id="sendMobileOTPBtn"
+                class="grid-btn">
+
+                Send OTP
+
+            </button>
+
+            <div
+                id="mobileOtpSendingMsg"
+                class="hidden">
+
+                <span class="spinner"></span>
+                Sending OTP...
+
+            </div>
+
+
+            <br><br>
+
+            <button
+                id="mobileChangeBackBtn"
+                class="back-btn">
+
+                ← Back
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    // =====================================
+    // BACK
+    // =====================================
+
+    document.getElementById("mobileChangeBackBtn").onclick = ()=>{
+
+        showEditProfile();
+
+    };
+
+
+    // =====================================
+    // SEND OTP
+    // =====================================
+
+    document.getElementById("sendMobileOTPBtn").onclick = ()=>{
+
+    const newMobile =
+        document
+            .getElementById("newMobileNumber")
+            .value
+            .trim();
+
+
+    // ================================
+    // EMPTY
+    // ================================
+
+    if(newMobile === ""){
+
+        showMessage(
+            "Please enter new mobile number.",
+            "warning",
+            3000
+        );
+
+        document
+            .getElementById("newMobileNumber")
+            .focus();
+
+        return;
+    }
+
+
+    // ================================
+    // ONLY DIGITS
+    // ================================
+
+    if(!/^\d+$/.test(newMobile)){
+
+        showMessage(
+            "Mobile Number must contain only digits.",
+            "warning",
+            3000
+        );
+
+        document
+            .getElementById("newMobileNumber")
+            .focus();
+
+        return;
+    }
+
+
+    // ================================
+    // EXACTLY 10 DIGITS
+    // ================================
+
+    if(newMobile.length !== 10){
+
+        showMessage(
+            "Mobile Number must contain exactly 10 digits.",
+            "warning",
+            3000
+        );
+
+        document
+            .getElementById("newMobileNumber")
+            .focus();
+
+        return;
+    }
+
+
+    // ================================
+    // INDIAN MOBILE NUMBER
+    // ================================
+
+    if(!/^[6-9]\d{9}$/.test(newMobile)){
+
+        showMessage(
+            "Enter a valid mobile number.",
+            "warning",
+            3000
+        );
+
+        document
+            .getElementById("newMobileNumber")
+            .focus();
+
+        return;
+    }
+
+
+    // ================================
+    // SAME AS CURRENT NUMBER
+    // ================================
+
+    if(newMobile === String(user.mobile || "").trim()){
+
+        showMessage(
+            "New Mobile Number must be different from current number.",
+            "warning",
+            3000
+        );
+
+        document
+            .getElementById("newMobileNumber")
+            .focus();
+
+        return;
+    }
+
+
+    // ================================
+    // TEMPORARY TEST
+    // ================================
+
+    showMessage(
+        "Mobile Number is valid.",
+        "success",
+        2000
+    );
+
+};
+
+};
     // =====================================
     // SAVE PROFILE
     // =====================================
