@@ -2,6 +2,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6442,7 +6443,7 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
     // SEND OTP
     // =====================================
 
-    document.getElementById("sendMobileOTPBtn").onclick = ()=>{
+   document.getElementById("sendMobileOTPBtn").onclick = async ()=>{
 
     const newMobile =
         document
@@ -6535,7 +6536,10 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
     // SAME AS CURRENT NUMBER
     // ================================
 
-    if(newMobile === String(user.mobile || "").trim()){
+    if(
+        newMobile ===
+        String(user.mobile || "").trim()
+    ){
 
         showMessage(
             "New Mobile Number must be different from current number.",
@@ -6552,16 +6556,101 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
 
 
     // ================================
-    // TEMPORARY TEST
+    // CHECK MOBILE IN GOOGLE SHEET
     // ================================
 
-    showMessage(
-        "Mobile Number is valid.",
-        "success",
-        2000
+    const formData = new FormData();
+
+    formData.append(
+        "action",
+        "checkMobile"
     );
 
-};
+    formData.append(
+        "mobile",
+        newMobile
+    );
+
+
+    try{
+
+        showLoader("Checking Mobile Number...");
+
+
+        const response =
+            await fetch(API_URL,{
+
+                method:"POST",
+
+                body:formData
+
+            });
+
+
+        const result =
+            await response.json();
+
+
+        hideLoader();
+
+
+        // ================================
+        // MOBILE ALREADY EXISTS
+        // ================================
+
+        if(result.status === "exists"){
+
+            showMessage(
+                "Mobile Number already exists.",
+                "warning",
+                3000
+            );
+
+            return;
+        }
+
+
+        // ================================
+        // OTHER ERROR
+        // ================================
+
+        if(result.status !== "success"){
+
+            showMessage(
+                result.message ||
+                "Unable to check Mobile Number.",
+                "warning",
+                3000
+            );
+
+            return;
+        }
+
+
+        // ================================
+        // MOBILE AVAILABLE
+        // ================================
+
+        showMessage(
+            "Mobile Number is available.",
+            "success",
+            2000
+        );
+
+    }
+    catch(err){
+
+        hideLoader();
+
+        console.log(err);
+
+        showMessage(
+            "Unable to connect to server.",
+            "error",
+            3000
+        );
+
+    }
 
 };
     // =====================================
