@@ -6654,6 +6654,8 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
     }
 
 };
+};
+    
     // =====================================
     // SAVE PROFILE
     // =====================================
@@ -7675,6 +7677,7 @@ backResetPassCodeBtn.onclick = ()=>{
     document.querySelector("#signupOTPPage input[type='text']").value = "";
 
 };
+    
 /* ======================
 APP START
 ====================== */
