@@ -2,6 +2,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6364,6 +6365,11 @@ const gender =
         .getElementById("editProfileGender")
         .value
         .trim();
+        const dateOfBirth =
+    document
+        .getElementById("editProfileDateOfBirth")
+        .value
+        .trim();
 const surName =
     document
         .getElementById("editProfileSurName")
@@ -6420,6 +6426,24 @@ if(gender === ""){
 
     document
         .getElementById("editProfileGender")
+        .focus();
+
+    return;
+}
+        // ================================
+// DATE OF BIRTH VALIDATION
+// ================================
+
+if(dateOfBirth === ""){
+
+    showMessage(
+        "Date of Birth is required.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileDateOfBirth")
         .focus();
 
     return;
