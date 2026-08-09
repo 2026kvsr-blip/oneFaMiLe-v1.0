@@ -4,7 +4,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -270,6 +269,8 @@ document.getElementById("profileMenuBtn");
 
 const profileBackBtn =
 document.getElementById("profileBackBtn");
+const profileEditBackBtn =
+document.getElementById("profileEditBackBtn");
 const editProfileBtn =
 document.getElementById("editProfileBtn");
 const settingsMenuBtn =
@@ -6243,39 +6244,39 @@ function showEditProfile(){
         </div>
 
 
-        <div align="center">
-
-    <button
-        id="saveProfileBtn"
-        class="grid-btn">
-
-        💾 Save
-
-    </button>
-
-    <div class="profile-action-buttons">
+           <div align="center">
 
         <button
-            id="cancelEditProfileBtn"
+            id="saveProfileBtn"
             class="grid-btn">
 
-            ↩ Cancel
+            💾 Save
 
         </button>
 
-        <button
-            id="profileEditBackBtn"
-            class="back-btn">
+        <div class="profile-action-buttons">
 
-            ← Back
+            <button
+                id="cancelEditProfileBtn"
+                class="grid-btn">
 
-        </button>
+                ↩ Cancel
+
+            </button>
+
+            <button
+                id="profileEditBackBtn"
+                class="back-btn">
+
+                ← Back
+
+            </button>
+
+        </div>
 
     </div>
 
-</div>
-    `;
-
+`;
 
     // =====================================
     // SAVE PROFILE
