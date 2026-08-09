@@ -2,7 +2,6 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6255,10 +6254,16 @@ function showEditProfile(){
 
 </div>
 
-            <div class="profile-row">
-                <span>Date of Birth</span>
-                <strong>${user.dateOfBirth || "-"}</strong>
-            </div>
+           <div class="profile-row">
+    <span>Date of Birth</span>
+
+    <input
+        id="editProfileDateOfBirth"
+        type="date"
+        value="${user.dateOfBirth || ""}"
+    >
+
+</div>
 
             <div class="profile-row">
                 <span>Place</span>
