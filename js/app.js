@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6376,7 +6377,164 @@ const lastName =
             .value
             .trim();
 
+// ================================
+// LOGIN USER NAME VALIDATION
+// ================================
 
+if(loginUserName === ""){
+
+    showMessage(
+        "Login User Name is required.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileLoginUserName")
+        .focus();
+
+    return;
+}
+
+
+if(loginUserName.length < 6){
+
+    showMessage(
+        "Login User Name must contain at least 6 characters.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileLoginUserName")
+        .focus();
+
+    return;
+}
+
+
+// ================================
+// SUR NAME VALIDATION
+// ================================
+
+if(surName === ""){
+
+    showMessage(
+        "Surname is required.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileSurName")
+        .focus();
+
+    return;
+}
+
+
+if(surName.length < 2){
+
+    showMessage(
+        "Enter a valid surname.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileSurName")
+        .focus();
+
+    return;
+}
+
+
+if(!isValidName(surName)){
+
+    showMessage(
+        "Surname must contain only letters.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileSurName")
+        .focus();
+
+    return;
+}
+
+
+// ================================
+// MIDDLE NAME VALIDATION
+// ================================
+
+if(middleName !== "" && !isValidName(middleName)){
+
+    showMessage(
+        "Middle Name must contain only letters.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileMiddleName")
+        .focus();
+
+    return;
+}
+
+
+// ================================
+// LAST NAME VALIDATION
+// ================================
+
+if(lastName === ""){
+
+    showMessage(
+        "Last Name is required.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileLastName")
+        .focus();
+
+    return;
+}
+
+
+if(lastName.length < 2){
+
+    showMessage(
+        "Enter a valid last name.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileLastName")
+        .focus();
+
+    return;
+}
+
+
+if(!isValidName(lastName)){
+
+    showMessage(
+        "Last Name must contain only letters.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileLastName")
+        .focus();
+
+    return;
+}
     // ================================
     // VALIDATION
     // ================================
