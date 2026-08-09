@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6632,8 +6633,9 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
         // ================================
 
         // ================================
+// =====================================
 // SEND MOBILE CHANGE OTP
-// ================================
+// =====================================
 
 const otpFormData = new FormData();
 
@@ -6683,75 +6685,208 @@ try{
     }
 
 
-    // ================================
-    // OTP SENT
-    // ================================
+    // =====================================
+    // SHOW OTP VERIFICATION
+    // =====================================
 
-   // =====================================
-// SHOW OTP VERIFICATION
-// =====================================
+    profilePage.innerHTML = `
 
-profilePage.innerHTML = `
+        <h3>
+            🔐 Verify Mobile Number
+        </h3>
 
-    <h3>
-        🔐 Verify Mobile Number
-    </h3>
 
-    <div class="profile-box">
+        <div class="profile-box">
 
-        <div class="profile-row">
+            <div class="profile-row">
 
-            <span>New Mobile Number</span>
+                <span>New Mobile Number</span>
 
-            <strong>
-                ${newMobile}
-            </strong>
+                <strong>
+                    ${newMobile}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <span>Enter OTP</span>
+
+                <input
+                    id="mobileChangeOTP"
+                    type="tel"
+                    inputmode="numeric"
+                    maxlength="6"
+                    placeholder="Enter 6-digit OTP"
+                >
+
+            </div>
 
         </div>
 
 
-        <div class="profile-row">
+        <div align="center">
 
-            <span>Enter OTP</span>
+            <button
+                id="verifyMobileOTPBtn"
+                class="grid-btn">
 
-            <input
-                id="mobileChangeOTP"
-                type="tel"
-                inputmode="numeric"
-                maxlength="6"
-                placeholder="Enter 6-digit OTP"
-            >
+                Verify OTP
+
+            </button>
+
+
+            <br><br>
+
+
+            <button
+                id="mobileOTPBackBtn"
+                class="back-btn">
+
+                ← Back
+
+            </button>
 
         </div>
 
-    </div>
+    `;
 
 
-    <div align="center">
+    // =====================================
+    // OTP SCREEN BACK
+    // =====================================
 
-        <button
-            id="verifyMobileOTPBtn"
-            class="grid-btn">
+    document
+        .getElementById("mobileOTPBackBtn")
+        .onclick = ()=>{
 
-            Verify OTP
+        showEditProfile();
 
-        </button>
-
-
-        <br><br>
+    };
 
 
-        <button
-            id="mobileOTPBackBtn"
-            class="back-btn">
+    // =====================================
+    // VERIFY OTP
+    // =====================================
 
-            ← Back
+    document
+        .getElementById("verifyMobileOTPBtn")
+        .onclick = async ()=>{
 
-        </button>
+        const enteredOTP =
+            document
+                .getElementById("mobileChangeOTP")
+                .value
+                .trim();
 
-    </div>
 
-`;
+        if(enteredOTP === ""){
+
+            showMessage(
+                "Please enter OTP.",
+                "warning",
+                3000
+            );
+
+            return;
+        }
+
+
+        if(!/^\d{6}$/.test(enteredOTP)){
+
+            showMessage(
+                "OTP must contain exactly 6 digits.",
+                "warning",
+                3000
+            );
+
+            return;
+        }
+
+
+        const verifyData =
+            new FormData();
+
+        verifyData.append(
+            "action",
+            "verifyMobileChangeOTP"
+        );
+
+        verifyData.append(
+            "mobile",
+            newMobile
+        );
+
+        verifyData.append(
+            "otp",
+            enteredOTP
+        );
+
+
+        try{
+
+            showLoader("Verifying OTP...");
+
+
+            const verifyResponse =
+                await fetch(API_URL,{
+
+                    method:"POST",
+
+                    body:verifyData
+
+                });
+
+
+            const verifyResult =
+                await verifyResponse.json();
+
+
+            hideLoader();
+
+
+            if(verifyResult.status !== "success"){
+
+                showMessage(
+                    verifyResult.message ||
+                    "Invalid OTP.",
+                    "warning",
+                    3000
+                );
+
+                return;
+            }
+
+
+            showMessage(
+                "OTP verified successfully.",
+                "success",
+                2000
+            );
+
+
+            console.log(
+                "Mobile OTP verified:",
+                newMobile
+            );
+
+        }
+        catch(err){
+
+            hideLoader();
+
+            console.log(err);
+
+            showMessage(
+                "Unable to connect to server.",
+                "error",
+                3000
+            );
+
+        }
+
+    };
 
 }
 catch(err){
@@ -6766,26 +6901,7 @@ catch(err){
         3000
     );
 
-}
-
-    }
-    catch(err){
-
-        hideLoader();
-
-        console.log(err);
-
-        showMessage(
-            "Unable to connect to server.",
-            "error",
-            3000
-        );
-
-    }
-
-};
-};
-    
+}    
     // =====================================
     // SAVE PROFILE
     // =====================================
