@@ -1,4 +1,3 @@
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -269,6 +268,8 @@ document.getElementById("profileMenuBtn");
 
 const profileBackBtn =
 document.getElementById("profileBackBtn");
+const profileEditBackBtn =
+document.getElementById("profileEditBackBtn");
 const profileEditBackBtn =
 document.getElementById("profileEditBackBtn");
 const editProfileBtn =
@@ -6603,6 +6604,20 @@ function showEditProfile(){
         updateProfilePage();
 
     };
+
+// =====================================
+// BACK
+// =====================================
+
+    document.getElementById("profileEditBackBtn").onclick = ()=>{
+
+    profilePage.classList.add("hidden");
+
+    showScreen(dashboard);
+
+    homeBtn.click();
+
+};
 
 }
 
