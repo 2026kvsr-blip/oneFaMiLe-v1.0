@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6687,16 +6688,71 @@ try{
     // OTP SENT
     // ================================
 
-    showMessage(
-        "OTP sent successfully.",
-        "success",
-        2000
-    );
+   // =====================================
+// SHOW OTP VERIFICATION
+// =====================================
+
+profilePage.innerHTML = `
+
+    <h3>
+        🔐 Verify Mobile Number
+    </h3>
+
+    <div class="profile-box">
+
+        <div class="profile-row">
+
+            <span>New Mobile Number</span>
+
+            <strong>
+                ${newMobile}
+            </strong>
+
+        </div>
 
 
-    console.log(
-        "Mobile Change OTP generated."
-    );
+        <div class="profile-row">
+
+            <span>Enter OTP</span>
+
+            <input
+                id="mobileChangeOTP"
+                type="tel"
+                inputmode="numeric"
+                maxlength="6"
+                placeholder="Enter 6-digit OTP"
+            >
+
+        </div>
+
+    </div>
+
+
+    <div align="center">
+
+        <button
+            id="verifyMobileOTPBtn"
+            class="grid-btn">
+
+            Verify OTP
+
+        </button>
+
+
+        <br><br>
+
+
+        <button
+            id="mobileOTPBackBtn"
+            class="back-btn">
+
+            ← Back
+
+        </button>
+
+    </div>
+
+`;
 
 }
 catch(err){
