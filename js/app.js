@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6631,6 +6632,27 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
         // MOBILE AVAILABLE
         // ================================
 
+        showMessage(
+            "Mobile Number is available.",
+            "success",
+            2000
+        );
+
+    }
+    catch(err){
+
+        hideLoader();
+
+        console.log(err);
+
+        showMessage(
+            "Unable to connect to server.",
+            "error",
+            3000
+        );
+
+        return;
+    }
         // ================================
 // =====================================
 // SEND MOBILE CHANGE OTP
