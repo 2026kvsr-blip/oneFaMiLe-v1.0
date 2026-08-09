@@ -1,5 +1,4 @@
 
-
 *{
 margin:0;
 padding:0;
@@ -2036,4 +2035,20 @@ input:disabled{
     font-weight:500;
     text-align:left;
     word-break:break-word;
+}
+.profile-row input{
+    width:55%;
+    box-sizing:border-box;
+    padding:8px 10px;
+    border:1px solid #c4d4ff;
+    border-radius:8px;
+    background:#ffffff;
+    color:#333;
+    font-size:15px;
+    outline:none;
+}
+
+.profile-row input:focus{
+    border-color:#2A6EB0;
+    box-shadow:0 0 5px rgba(42,110,176,.25);
 }
