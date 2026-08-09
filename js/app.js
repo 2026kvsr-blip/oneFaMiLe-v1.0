@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6632,11 +6631,87 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
         // MOBILE AVAILABLE
         // ================================
 
+        // ================================
+// SEND MOBILE CHANGE OTP
+// ================================
+
+const otpFormData = new FormData();
+
+otpFormData.append(
+    "action",
+    "sendMobileChangeOTP"
+);
+
+otpFormData.append(
+    "mobile",
+    newMobile
+);
+
+
+try{
+
+    showLoader("Sending OTP...");
+
+
+    const otpResponse =
+        await fetch(API_URL,{
+
+            method:"POST",
+
+            body:otpFormData
+
+        });
+
+
+    const otpResult =
+        await otpResponse.json();
+
+
+    hideLoader();
+
+
+    if(otpResult.status !== "success"){
+
         showMessage(
-            "Mobile Number is available.",
-            "success",
-            2000
+            otpResult.message ||
+            "Unable to send OTP.",
+            "warning",
+            3000
         );
+
+        return;
+    }
+
+
+    // ================================
+    // OTP SENT
+    // ================================
+
+    showMessage(
+        "OTP sent successfully.",
+        "success",
+        2000
+    );
+
+
+    console.log(
+        "Mobile Change OTP generated."
+    );
+
+}
+catch(err){
+
+    hideLoader();
+
+    console.log(err);
+
+    showMessage(
+        "Unable to send OTP.",
+        "error",
+        3000
+    );
+
+}
 
     }
     catch(err){
