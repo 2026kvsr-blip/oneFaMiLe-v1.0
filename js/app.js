@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6354,7 +6355,11 @@ const loginUserName =
         .getElementById("editProfileLoginUserName")
         .value
         .trim();
-
+const gender =
+    document
+        .getElementById("editProfileGender")
+        .value
+        .trim();
 const surName =
     document
         .getElementById("editProfileSurName")
@@ -6397,6 +6402,24 @@ const lastName =
             .value
             .trim();
 
+        // ================================
+// GENDER VALIDATION
+// ================================
+
+if(gender === ""){
+
+    showMessage(
+        "Please select Gender.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileGender")
+        .focus();
+
+    return;
+}
 // ================================
 // LOGIN USER NAME VALIDATION
 // ================================
