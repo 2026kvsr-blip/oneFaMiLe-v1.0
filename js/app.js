@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6877,21 +6878,12 @@ try{
 
                 return;
             }
-
-
             showMessage(
                 "OTP verified successfully.",
                 "success",
                 2000
             );
-
-
-            console.log(
-                "Mobile OTP verified:",
-                newMobile
-            );
-
-        }
+                    }
         catch(err){
 
             hideLoader();
@@ -6907,7 +6899,7 @@ try{
         }
 
     };
-}
+};
 
 catch(err){
 
