@@ -2,6 +2,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6229,9 +6230,30 @@ function showEditProfile(){
             </div>
 
             <div class="profile-row">
-                <span>Gender</span>
-                <strong>${user.gender || "-"}</strong>
-            </div>
+    <span>Gender</span>
+
+    <select id="editProfileGender">
+
+        <option value="">Select Gender</option>
+
+        <option value="Male"
+            ${user.gender === "Male" ? "selected" : ""}>
+            Male
+        </option>
+
+        <option value="Female"
+            ${user.gender === "Female" ? "selected" : ""}>
+            Female
+        </option>
+
+        <option value="Other"
+            ${user.gender === "Other" ? "selected" : ""}>
+            Other
+        </option>
+
+    </select>
+
+</div>
 
             <div class="profile-row">
                 <span>Date of Birth</span>
