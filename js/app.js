@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6434,10 +6435,128 @@ if(gender === ""){
 // DATE OF BIRTH VALIDATION
 // ================================
 
+// ================================
+// DATE OF BIRTH VALIDATION
+// ================================
+
 if(dateOfBirth === ""){
 
     showMessage(
         "Date of Birth is required.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileDateOfBirth")
+        .focus();
+
+    return;
+}
+
+
+const dobDate =
+    new Date(dateOfBirth + "T00:00:00");
+
+const today =
+    new Date();
+
+today.setHours(0,0,0,0);
+
+
+// ================================
+// INVALID DATE
+// ================================
+
+if(isNaN(dobDate.getTime())){
+
+    showMessage(
+        "Enter a valid Date of Birth.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileDateOfBirth")
+        .focus();
+
+    return;
+}
+
+
+// ================================
+// FUTURE DATE
+// ================================
+
+if(dobDate > today){
+
+    showMessage(
+        "Date of Birth cannot be a future date.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileDateOfBirth")
+        .focus();
+
+    return;
+}
+
+
+// ================================
+// CALCULATE AGE
+// ================================
+
+let age =
+    today.getFullYear() -
+    dobDate.getFullYear();
+
+const monthDifference =
+    today.getMonth() -
+    dobDate.getMonth();
+
+if(
+    monthDifference < 0 ||
+    (
+        monthDifference === 0 &&
+        today.getDate() < dobDate.getDate()
+    )
+){
+
+    age--;
+
+}
+
+
+// ================================
+// MINIMUM AGE
+// ================================
+
+if(age < 18){
+
+    showMessage(
+        "Age must be at least 18 years.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileDateOfBirth")
+        .focus();
+
+    return;
+}
+
+
+// ================================
+// MAXIMUM AGE
+// ================================
+
+if(age > 120){
+
+    showMessage(
+        "Please enter a valid Date of Birth.",
         "warning",
         3000
     );
