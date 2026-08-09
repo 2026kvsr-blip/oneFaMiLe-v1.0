@@ -1,3 +1,4 @@
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6271,204 +6272,316 @@ function showEditProfile(){
 
     document.getElementById("saveProfileBtn").onclick = async ()=>{
 
-        const email =
-            document
-                .getElementById("editProfileEmail")
-                .value
-                .trim();
+    const user =
+        JSON.parse(sessionStorage.getItem("user"));
 
-        const place =
-            document
-                .getElementById("editProfilePlace")
-                .value
-                .trim();
-
-        const state =
-            document
-                .getElementById("editProfileState")
-                .value
-                .trim();
-
-        const country =
-            document
-                .getElementById("editProfileCountry")
-                .value
-                .trim();
-
-
-        // =====================================
-        // EMAIL
-        // =====================================
-
-        if(email === ""){
-
-            showMessage(
-                "Email ID is required.",
-                "warning",
-                3000
-            );
-
-            document
-                .getElementById("editProfileEmail")
-                .focus();
-
-            return;
-        }
-
-
-        if(!isValidEmail(email)){
-
-            showMessage(
-                "Enter a valid Email ID.",
-                "warning",
-                3000
-            );
-
-            document
-                .getElementById("editProfileEmail")
-                .focus();
-
-            return;
-        }
-
-
-        // =====================================
-        // PLACE
-        // =====================================
-
-        if(place === ""){
-
-            showMessage(
-                "Place is required.",
-                "warning",
-                3000
-            );
-
-            document
-                .getElementById("editProfilePlace")
-                .focus();
-
-            return;
-        }
-
-
-        if(place.length < 2){
-
-            showMessage(
-                "Enter a valid Place.",
-                "warning",
-                3000
-            );
-
-            document
-                .getElementById("editProfilePlace")
-                .focus();
-
-            return;
-        }
-
-
-        if(!isValidName(place)){
-
-            showMessage(
-                "Place must contain only letters.",
-                "warning",
-                3000
-            );
-
-            document
-                .getElementById("editProfilePlace")
-                .focus();
-
-            return;
-        }
-
-
-        // =====================================
-        // STATE
-        // =====================================
-
-        if(state === ""){
-
-            showMessage(
-                "State is required.",
-                "warning",
-                3000
-            );
-
-            document
-                .getElementById("editProfileState")
-                .focus();
-
-            return;
-        }
-
-
-        if(!isValidName(state)){
-
-            showMessage(
-                "State must contain only letters.",
-                "warning",
-                3000
-            );
-
-            document
-                .getElementById("editProfileState")
-                .focus();
-
-            return;
-        }
-
-
-        // =====================================
-        // COUNTRY
-        // =====================================
-
-        if(country === ""){
-
-            showMessage(
-                "Country is required.",
-                "warning",
-                3000
-            );
-
-            document
-                .getElementById("editProfileCountry")
-                .focus();
-
-            return;
-        }
-
-
-        if(!isValidName(country)){
-
-            showMessage(
-                "Country must contain only letters.",
-                "warning",
-                3000
-            );
-
-            document
-                .getElementById("editProfileCountry")
-                .focus();
-
-            return;
-        }
-
-
-        // =====================================
-        // VALIDATION SUCCESS
-        // =====================================
+    if(!user){
 
         showMessage(
-            "Profile validation successful.",
+            "User session not found.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    const email =
+        document
+            .getElementById("editProfileEmail")
+            .value
+            .trim();
+
+    const place =
+        document
+            .getElementById("editProfilePlace")
+            .value
+            .trim();
+
+    const state =
+        document
+            .getElementById("editProfileState")
+            .value
+            .trim();
+
+    const country =
+        document
+            .getElementById("editProfileCountry")
+            .value
+            .trim();
+
+
+    // ================================
+    // VALIDATION
+    // ================================
+
+    if(email === ""){
+
+        showMessage(
+            "Email ID is required.",
+            "warning",
+            3000
+        );
+
+        document
+            .getElementById("editProfileEmail")
+            .focus();
+
+        return;
+    }
+
+
+    if(!isValidEmail(email)){
+
+        showMessage(
+            "Enter a valid Email ID.",
+            "warning",
+            3000
+        );
+
+        document
+            .getElementById("editProfileEmail")
+            .focus();
+
+        return;
+    }
+
+
+    if(place === ""){
+
+        showMessage(
+            "Place is required.",
+            "warning",
+            3000
+        );
+
+        document
+            .getElementById("editProfilePlace")
+            .focus();
+
+        return;
+    }
+
+
+    if(place.length < 2){
+
+        showMessage(
+            "Enter a valid Place.",
+            "warning",
+            3000
+        );
+
+        document
+            .getElementById("editProfilePlace")
+            .focus();
+
+        return;
+    }
+
+
+    if(!isValidName(place)){
+
+        showMessage(
+            "Place must contain only letters.",
+            "warning",
+            3000
+        );
+
+        document
+            .getElementById("editProfilePlace")
+            .focus();
+
+        return;
+    }
+
+
+    if(state === ""){
+
+        showMessage(
+            "State is required.",
+            "warning",
+            3000
+        );
+
+        document
+            .getElementById("editProfileState")
+            .focus();
+
+        return;
+    }
+
+
+    if(!isValidName(state)){
+
+        showMessage(
+            "State must contain only letters.",
+            "warning",
+            3000
+        );
+
+        document
+            .getElementById("editProfileState")
+            .focus();
+
+        return;
+    }
+
+
+    if(country === ""){
+
+        showMessage(
+            "Country is required.",
+            "warning",
+            3000
+        );
+
+        document
+            .getElementById("editProfileCountry")
+            .focus();
+
+        return;
+    }
+
+
+    if(!isValidName(country)){
+
+        showMessage(
+            "Country must contain only letters.",
+            "warning",
+            3000
+        );
+
+        document
+            .getElementById("editProfileCountry")
+            .focus();
+
+        return;
+    }
+
+
+    // ================================
+    // SEND UPDATE TO GOOGLE SHEET
+    // ================================
+
+    const formData = new FormData();
+
+    formData.append(
+        "action",
+        "updateProfile"
+    );
+
+    formData.append(
+        "mobile",
+        user.mobile || ""
+    );
+
+    formData.append(
+        "email",
+        email
+    );
+
+    formData.append(
+        "place",
+        place
+    );
+
+    formData.append(
+        "state",
+        state
+    );
+
+    formData.append(
+        "country",
+        country
+    );
+
+
+    try{
+
+        showLoader("Updating Profile...");
+
+
+        const response =
+            await fetch(API_URL,{
+
+                method:"POST",
+
+                body:formData
+
+            });
+
+
+        const result =
+            await response.json();
+
+
+        hideLoader();
+
+
+        if(result.status !== "success"){
+
+            showMessage(
+                result.message ||
+                "Unable to update profile.",
+                "warning",
+                3000
+            );
+
+            return;
+        }
+
+
+        // ================================
+        // UPDATE SESSION DATA
+        // ================================
+
+        user.email = email;
+        user.place = place;
+        user.state = state;
+        user.country = country;
+
+
+        sessionStorage.setItem(
+            "user",
+            JSON.stringify(user)
+        );
+
+
+        // ================================
+        // SUCCESS
+        // ================================
+
+        showMessage(
+            "Profile Updated Successfully.",
             "success",
             2000
         );
 
-    };
+
+        setTimeout(()=>{
+
+            updateProfilePage();
+
+        },500);
 
 
+    }
+    catch(err){
+
+        hideLoader();
+
+        console.log(err);
+
+        showMessage(
+            "Unable to connect to server.",
+            "error",
+            3000
+        );
+
+    }
+
+};
     // =====================================
     // CANCEL
     // =====================================
