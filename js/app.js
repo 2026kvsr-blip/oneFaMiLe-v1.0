@@ -2,6 +2,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6870,17 +6871,65 @@ verifyData.append(
             hideLoader();
 
 
-            if(verifyResult.status !== "success"){
+           if(verifyResult.status === "locked"){
 
-                showMessage(
-                    verifyResult.message ||
-                    "Invalid OTP.",
-                    "warning",
-                    3000
-                );
+    showMessage(
+        verifyResult.message ||
+        "Maximum 3 OTP attempts reached. Please wait 1 minute.",
+        "warning",
+        3000
+    );
 
-                return;
-            }
+    const mobileInput =
+        document.getElementById(
+            "newMobileNumber"
+        );
+
+    if(mobileInput){
+
+        mobileInput.disabled = true;
+
+    }
+
+
+    // =====================================
+    // 1 MINUTE LOCK
+    // =====================================
+
+    setTimeout(()=>{
+
+        if(mobileInput){
+
+            mobileInput.disabled = false;
+
+            mobileInput.value = "";
+
+        }
+
+        showMessage(
+            "You can enter a new Mobile Number now.",
+            "success",
+            3000
+        );
+
+    }, 60 * 1000);
+
+
+    return;
+}
+
+
+if(verifyResult.status !== "success"){
+
+    showMessage(
+        verifyResult.message ||
+        "Invalid OTP.",
+        "warning",
+        3000
+    );
+
+    return;
+}
             showMessage(
                 "OTP verified successfully.",
                 "success",
