@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -7804,11 +7805,25 @@ user.country = country;
 };
 
 }
+
+let mobileOTPCountdownTimer = null;
 // =====================================
 // MOBILE OTP COUNTDOWN
 // =====================================
 
 function startMobileOTPCountdown(seconds){
+
+if(mobileOTPCountdownTimer){
+
+    clearInterval(
+        mobileOTPCountdownTimer
+    );
+
+    mobileOTPCountdownTimer = null;
+
+}
+
+    
     const status =        document.getElementById("mobileOTPStatus");
     const verifyBtn =        document.getElementById("verifyMobileOTPBtn");
     const resendBtn =        document.getElementById("resendMobileOTPBtn");
@@ -7816,7 +7831,8 @@ function startMobileOTPCountdown(seconds){
     let remaining =        seconds;
     if(verifyBtn){        verifyBtn.disabled = false;    }
     if(resendBtn){        resendBtn.disabled = false;        resendBtn.classList.add("hidden");    }
-    const timer =        setInterval(()=>{            const minutes =                Math.floor(remaining / 60);            const secs =                remaining % 60;
+    mobileOTPCountdownTimer =
+    setInterval(()=>{            const minutes =                Math.floor(remaining / 60);            const secs =                remaining % 60;
             status.textContent =      "⏱️ OTP expires in " +         String(minutes).padStart(2,"0") +   ":" +    String(secs).padStart(2,"0");
             if(remaining <= 0){ clearInterval(timer);  status.textContent =     "⚠️ OTP expired";
                 if(verifyBtn){                    verifyBtn.disabled = true;                }
@@ -7829,7 +7845,15 @@ function startMobileOTPCountdown(seconds){
 // =====================================
 
 function startMobileChangeLockTimer(seconds){
+if(mobileOTPCountdownTimer){
 
+    clearInterval(
+        mobileOTPCountdownTimer
+    );
+
+    mobileOTPCountdownTimer = null;
+
+}
     const status =
         document.getElementById(
             "mobileOTPStatus"
