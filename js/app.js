@@ -6824,7 +6824,9 @@ startMobileOTPCountdown(30);
                 .getElementById("mobileChangeOTP")
                 .value
                 .trim();
-
+ // =====================================
+ // OTP EMPTY
+ // =====================================
 
         if(enteredOTP === ""){
 
@@ -6836,6 +6838,9 @@ startMobileOTPCountdown(30);
 
             return;
         }
+// =====================================
+// OTP FORMAT
+// =====================================
 
 
         if(!/^\d{6}$/.test(enteredOTP)){
@@ -6848,6 +6853,9 @@ startMobileOTPCountdown(30);
 
             return;
         }
+// =====================================
+// VERIFY DATA
+// =====================================
 
 
         const verifyData =
@@ -6894,57 +6902,10 @@ verifyData.append(
 
 
             hideLoader();
-
-
-           if(verifyResult.status === "locked"){
-
-    showMessage(
-        verifyResult.message ||
-        "Maximum 3 OTP attempts reached. Please wait 1 minute.",
-        "warning",
-        3000
-    );
-
-    const mobileInput =
-        document.getElementById(
-            "newMobileNumber"
-        );
-
-    if(mobileInput){
-
-        mobileInput.disabled = true;
-
-    }
-
-
-    // =====================================
-    // 1 MINUTE LOCK
-    // =====================================
-
-    setTimeout(()=>{
-
-        if(mobileInput){
-
-            mobileInput.disabled = false;
-
-            mobileInput.value = "";
-
-        }
-
-        showMessage(
-            "You can enter a new Mobile Number now.",
-            "success",
-            3000
-        );
-
-    }, 60 * 1000);
-
-
-    return;
-}
-
-
-if(verifyResult.status === "locked"){
+// =====================================
+// 3 ATTEMPTS / 1 MINUTE LOCK
+// =====================================
+ if(verifyResult.status === "locked"){
 
     showMessage(
         verifyResult.message ||
@@ -6957,7 +6918,9 @@ if(verifyResult.status === "locked"){
 
     return;
 }
-
+// =====================================
+// INVALID OTP
+// =====================================
 
 if(verifyResult.status !== "success"){
 
@@ -6970,17 +6933,30 @@ if(verifyResult.status !== "success"){
 
     return;
 }
+ // =====================================
+ // OTP SUCCESS
+ // =====================================
+            
             showMessage(
                 "OTP verified successfully.",
                 "success",
                 2000
             );
+
+// =====================================
+// UPDATE SESSION MOBILE
+// =====================================
+            
             user.mobile = newMobile;
 
 sessionStorage.setItem(
     "user",
     JSON.stringify(user)
 );
+// =====================================
+// RETURN TO EDIT PROFILE
+// =====================================
+
 
 setTimeout(()=>{
 
