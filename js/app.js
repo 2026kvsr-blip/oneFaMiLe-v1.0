@@ -2,6 +2,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6386,6 +6387,8 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
                     maxlength="10"
                     placeholder="Enter new mobile number"
                 >
+                
+                
                 <div
     id="mobileAvailabilityMsg"
     style="
@@ -6444,7 +6447,152 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
 
     };
 
+// =====================================
+// LIVE MOBILE AVAILABILITY CHECK
+// =====================================
 
+document
+    .getElementById("newMobileNumber")
+    .addEventListener("input", async function(){
+
+    const mobile =
+        this.value.trim();
+
+    const msg =
+        document.getElementById(
+            "mobileAvailabilityMsg"
+        );
+
+
+    // Clear message initially
+    msg.textContent = "";
+    msg.style.color = "";
+
+
+    // Only digits
+    if(!/^\d*$/.test(mobile)){
+
+        this.value =
+            mobile.replace(/\D/g,"");
+
+        return;
+    }
+
+
+    // Wait until 10 digits
+    if(mobile.length !== 10){
+
+        return;
+    }
+
+
+    // Indian mobile validation
+    if(!/^[6-9]\d{9}$/.test(mobile)){
+
+        msg.textContent =
+            "❌ Invalid Mobile Number";
+
+        msg.style.color =
+            "red";
+
+        return;
+    }
+
+
+    // Same as current number
+    if(
+        mobile ===
+        String(user.mobile || "").trim()
+    ){
+
+        msg.textContent =
+            "❌ This is your current Mobile Number";
+
+        msg.style.color =
+            "red";
+
+        return;
+    }
+
+
+    try{
+
+        const formData =
+            new FormData();
+
+        formData.append(
+            "action",
+            "checkMobile"
+        );
+
+        formData.append(
+            "mobile",
+            mobile
+        );
+
+
+        const response =
+            await fetch(API_URL,{
+
+                method:"POST",
+
+                body:formData
+
+            });
+
+
+        const result =
+            await response.json();
+
+
+        if(result.status === "exists"){
+
+            msg.textContent =
+                "🔴 Mobile Number Not Available";
+
+            msg.style.color =
+                "red";
+
+            return;
+        }
+
+
+        if(result.status === "success"){
+
+            msg.textContent =
+                "🟢 Mobile Number Available";
+
+            msg.style.color =
+                "green";
+
+            return;
+        }
+
+
+        msg.textContent =
+            result.message ||
+            "Unable to check Mobile Number.";
+
+        msg.style.color =
+            "red";
+
+    }
+    catch(err){
+
+        console.log(err);
+
+        msg.textContent =
+            "Unable to check Mobile Number.";
+
+        msg.style.color =
+            "red";
+
+    }
+
+});
+
+
+    
     // =====================================
     // SEND OTP
     // =====================================
