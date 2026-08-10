@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6379,30 +6378,32 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
 
             <div class="profile-row">
 
-                <span>New Mobile Number</span>
+    <span>New Mobile Number</span>
 
-                <input
-                    id="newMobileNumber"
-                    type="tel"
-                    inputmode="numeric"
-                    maxlength="10"
-                    placeholder="Enter new mobile number"
-                    style="width:180px;"
-                >
-                
-                
-                <div
-    id="mobileAvailabilityMsg"
-    style="
-        text-align:center;
-        font-weight:normal;
-        font-size:12px;
-        margin-top:5px;
+    <div>
 
-    "
-></div>
-            </div>
+        <input
+            id="newMobileNumber"
+            type="tel"
+            inputmode="numeric"
+            maxlength="10"
+            placeholder="Enter new mobile number"
+            style="width:180px;"
+        >
 
+        <div
+            id="mobileAvailabilityMsg"
+            style="
+                text-align:left;
+                font-weight:normal;
+                font-size:12px;
+                margin-top:4px;
+            "
+        ></div>
+
+    </div>
+
+</div>
         </div>
 
 
