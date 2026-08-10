@@ -17,7 +17,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -2096,7 +2095,7 @@ input:disabled{
     display:grid !important;
 
     grid-template-columns:
-        210px
+        190px
         10px
         1fr;
 
