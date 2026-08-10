@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2174,13 +2175,13 @@ input:disabled{
 
 #newMobileNumber{
 
-    width:155px;
+    width:125px;
 
-    height:35px;
+    height:25px;
 
     box-sizing:border-box;
 
-    font-size:18px;
+    font-size:15px;
 
     padding:0 12px;
 
