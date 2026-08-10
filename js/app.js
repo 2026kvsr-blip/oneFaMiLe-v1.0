@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -7888,8 +7887,61 @@ if(mobileOTPCountdownTimer){
     // START COUNTDOWN
     // =================================
 
-    let remaining =
-        seconds;
+    // =================================
+// GET EXISTING LOCK TIME
+// =================================
+
+const savedLockUntil =
+    Number(
+        sessionStorage.getItem(
+            "mobileChangeLockUntil"
+        )
+    );
+
+let lockUntil;
+
+
+// =================================
+// EXISTING LOCK STILL ACTIVE
+// =================================
+
+if(
+    savedLockUntil &&
+    savedLockUntil > Date.now()
+){
+
+    lockUntil =
+        savedLockUntil;
+
+}
+
+
+// =================================
+// NEW LOCK
+// =================================
+
+else{
+
+    lockUntil =
+        Date.now() +
+        (seconds * 1000);
+
+    sessionStorage.setItem(
+        "mobileChangeLockUntil",
+        String(lockUntil)
+    );
+
+}
+
+
+// =================================
+// CALCULATE REMAINING TIME
+// =================================
+
+let remaining =
+    Math.ceil(
+        (lockUntil - Date.now()) / 1000
+    );
 
 
     // =================================
