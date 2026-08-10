@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6462,7 +6463,15 @@ document
         document.getElementById(
             "mobileAvailabilityMsg"
         );
+const sendBtn =
+    document.getElementById(
+        "sendMobileOTPBtn"
+    );
+        if(sendBtn){
 
+    sendBtn.disabled = true;
+
+}
 
     // Clear message initially
     msg.textContent = "";
@@ -6480,39 +6489,59 @@ document
 
 
     // Wait until 10 digits
-    if(mobile.length !== 10){
+   if(mobile.length !== 10){
 
-        return;
+    if(sendBtn){
+
+        sendBtn.disabled = true;
+
     }
 
+    return;
+}
 
     // Indian mobile validation
     if(!/^[6-9]\d{9}$/.test(mobile)){
 
-        msg.textContent =
-            "❌ Invalid Mobile Number";
+    msg.textContent =
+        "❌ Invalid Mobile Number";
 
-        msg.style.color =
-            "red";
+    msg.style.color =
+        "red";
 
-        return;
+
+    if(sendBtn){
+
+        sendBtn.disabled = true;
+
     }
 
+
+    return;
+}
 
     // Same as current number
-    if(
-        mobile ===
-        String(user.mobile || "").trim()
-    ){
+   if(
+    mobile ===
+    String(user.mobile || "").trim()
+){
 
-        msg.textContent =
-            "❌ This is your current Mobile Number";
+    msg.textContent =
+        "❌ This is your current Mobile Number";
 
-        msg.style.color =
-            "red";
+    msg.style.color =
+        "red";
 
-        return;
+
+    if(sendBtn){
+
+        sendBtn.disabled = true;
+
     }
+
+
+    return;
+}
 
 
     try{
@@ -6547,28 +6576,48 @@ document
 
         if(result.status === "exists"){
 
-            msg.textContent =
-                "🔴 Mobile Number Not Available";
+    msg.textContent =
+        "🔴 Mobile Number Not Available";
 
-            msg.style.color =
-                "red";
+    msg.style.color =
+        "red";
 
-            return;
-        }
+
+    if(sendBtn){
+
+        sendBtn.disabled = true;
+
+    }
+
+
+    return;
+}
 
 
         if(result.status === "success"){
 
-            msg.textContent =
-                "🟢 Mobile Number Available";
+    msg.textContent =
+        "🟢 Mobile Number Available";
 
-            msg.style.color =
-                "green";
-
-            return;
-        }
+    msg.style.color =
+        "green";
 
 
+    if(sendBtn){
+
+        sendBtn.disabled = false;
+
+    }
+
+
+    return;
+}
+
+if(sendBtn){
+
+    sendBtn.disabled = true;
+
+}
         msg.textContent =
             result.message ||
             "Unable to check Mobile Number.";
@@ -6577,17 +6626,25 @@ document
             "red";
 
     }
-    catch(err){
+   catch(err){
 
-        console.log(err);
+    console.log(err);
 
-        msg.textContent =
-            "Unable to check Mobile Number.";
 
-        msg.style.color =
-            "red";
+    if(sendBtn){
+
+        sendBtn.disabled = true;
 
     }
+
+
+    msg.textContent =
+        "Unable to check Mobile Number.";
+
+    msg.style.color =
+        "red";
+
+}
 
 });
 
