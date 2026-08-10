@@ -6,8 +6,7 @@ font-family:Arial,Helvetica,sans-serif;
 }
 body{
 
- 
-  background:#EAF8FF;
+   background:#EAF8FF;
 
 min-height:100vh;
 
@@ -2175,12 +2174,17 @@ input:disabled{
 
 #newMobileNumber{
 
-    width:170px;
+    width:155px;
+
+    height:52px;
 
     box-sizing:border-box;
 
-}
+    font-size:18px;
 
+    padding:0 12px;
+
+}
 
 /* =====================================
    AVAILABILITY MESSAGE
