@@ -18,6 +18,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2085,5 +2086,107 @@ input:disabled{
 .mobile-change-value{
 
     white-space:nowrap;
+
+}
+/* =====================================
+   CHANGE MOBILE NUMBER
+   ===================================== */
+
+.mobile-number-row {
+
+    display: flex !important;
+
+    align-items: flex-start !important;
+
+    width: 100%;
+
+    min-height: 82px;
+
+}
+
+
+/* =====================================
+   LABEL
+   ===================================== */
+
+.mobile-number-label {
+
+    flex: 0 0 225px !important;
+
+    width: 225px !important;
+
+    min-width: 225px !important;
+
+    max-width: 225px !important;
+
+    white-space: nowrap !important;
+
+    overflow: visible;
+
+}
+
+
+/* =====================================
+   CURRENT MOBILE VALUE
+   ===================================== */
+
+.mobile-number-value {
+
+    white-space: nowrap;
+
+}
+
+
+/* =====================================
+   NEW MOBILE AREA
+   ===================================== */
+
+.new-mobile-area {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    width: auto;
+
+}
+
+
+/* =====================================
+   NEW MOBILE INPUT
+   ===================================== */
+
+#newMobileNumber {
+
+    width: 180px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =====================================
+   AVAILABILITY MESSAGE
+   ===================================== */
+
+.mobile-availability-msg {
+
+    width: max-content;
+
+    min-width: 180px;
+
+    height: 22px;
+
+    margin-top: 4px;
+
+    font-size: 13px;
+
+    font-weight: normal;
+
+    line-height: 20px;
+
+    white-space: nowrap;
 
 }
