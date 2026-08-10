@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6797,7 +6796,7 @@ try{
         </div>
 
     `;
-
+startMobileOTPCountdown(30);
 
     // =====================================
     // OTP SCREEN BACK
@@ -7829,7 +7828,100 @@ user.country = country;
 };
 
 }
+// =====================================
+// MOBILE OTP COUNTDOWN
+// =====================================
 
+function startMobileOTPCountdown(seconds){
+
+    const status =
+        document.getElementById("mobileOTPStatus");
+
+    const verifyBtn =
+        document.getElementById("verifyMobileOTPBtn");
+
+    const resendBtn =
+        document.getElementById("resendMobileOTPBtn");
+
+
+    if(!status){
+        return;
+    }
+
+
+    let remaining =
+        seconds;
+
+
+    if(verifyBtn){
+
+        verifyBtn.disabled = false;
+
+    }
+
+
+    if(resendBtn){
+
+        resendBtn.disabled = false;
+
+        resendBtn.classList.add("hidden");
+
+    }
+
+
+    const timer =
+        setInterval(()=>{
+
+            const minutes =
+                Math.floor(remaining / 60);
+
+            const secs =
+                remaining % 60;
+
+
+            status.textContent =
+                "⏱️ OTP expires in " +
+                String(minutes).padStart(2,"0") +
+                ":" +
+                String(secs).padStart(2,"0");
+
+
+            if(remaining <= 0){
+
+                clearInterval(timer);
+
+
+                status.textContent =
+                    "⚠️ OTP expired";
+
+
+                if(verifyBtn){
+
+                    verifyBtn.disabled = true;
+
+                }
+
+
+                if(resendBtn){
+
+                    resendBtn.disabled = false;
+
+                    resendBtn.classList.remove(
+                        "hidden"
+                    );
+
+                }
+
+                return;
+
+            }
+
+
+            remaining--;
+
+        },1000);
+
+}
    
 const toggleLoginPass = document.getElementById("toggleLoginPass");
 
