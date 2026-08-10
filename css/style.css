@@ -17,7 +17,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -2336,5 +2335,54 @@ input:disabled{
 .profile-box .profile-row > .profile-mobile-value{
 
     grid-column:3;
+
+}
+/* =====================================
+   MOBILE NUMBER + CHANGE BUTTON
+   ===================================== */
+
+.profile-mobile-value{
+
+    grid-column:3;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    white-space:nowrap;
+
+}
+
+
+.profile-mobile-value strong{
+
+    white-space:nowrap;
+
+    font-weight:400;
+
+}
+
+
+/* Change button beside mobile number */
+
+.profile-mobile-value #changeMobileBtn{
+
+    width:auto;
+
+    min-width:auto;
+
+    max-width:none;
+
+    min-height:auto;
+
+    padding:5px 10px;
+
+    margin:0;
+
+    font-size:13px;
+
+    font-weight:600;
 
 }
