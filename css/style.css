@@ -2062,7 +2062,7 @@ input:disabled{
 
     display:grid;
 
-    grid-template-columns: 225px 1fr;
+    grid-template-columns: 180px 1fr;
 
     align-items:start;
 
@@ -2073,7 +2073,7 @@ input:disabled{
 
 .mobile-change-label{
 
-    width:225px;
+    width:180px;
 
     white-space:nowrap;
 
