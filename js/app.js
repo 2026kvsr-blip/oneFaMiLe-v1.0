@@ -6531,7 +6531,7 @@ const sendBtn =
 ){
 
     msg.textContent =
-        "❌ This is your current Mobile Number";
+        "❌ This is current Mobile Number";
 
     msg.style.color =
         "red";
