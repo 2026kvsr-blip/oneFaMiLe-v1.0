@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2498,4 +2499,23 @@ input:disabled{
     min-height:60px;
 
     box-sizing:border-box;
+}
+
+/* =====================================
+   EDIT PROFILE INPUTS
+   ===================================== */
+
+.edit-profile-box .profile-row > input,
+.edit-profile-box .profile-row > select{
+
+    grid-column:3;
+
+    width:100%;
+
+    height:44px;
+
+    box-sizing:border-box;
+
+    font-size:16px;
+
 }
