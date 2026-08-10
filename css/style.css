@@ -1,5 +1,4 @@
 
-
 *{
 margin:0;
 padding:0;
@@ -2058,4 +2057,33 @@ input:disabled{
 .profile-row input:focus{
     border-color:#2A6EB0;
     box-shadow:0 0 5px rgba(42,110,176,.25);
+}
+.mobile-change-row{
+
+    display:grid;
+
+    grid-template-columns: 225px 1fr;
+
+    align-items:start;
+
+    column-gap:10px;
+
+}
+
+
+.mobile-change-label{
+
+    width:225px;
+
+    white-space:nowrap;
+
+    box-sizing:border-box;
+
+}
+
+
+.mobile-change-value{
+
+    white-space:nowrap;
+
 }
