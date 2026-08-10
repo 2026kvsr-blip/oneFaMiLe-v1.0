@@ -17,7 +17,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -2277,67 +2276,6 @@ input:disabled{
    EDIT PROFILE - COLUMN ALIGNMENT
    ===================================== */
 
-.profile-box .profile-row{
-
-    display:grid !important;
-
-    grid-template-columns:
-        155px
-        20px
-        1fr;
-
-    align-items:center;
-
-    column-gap:0;
-
-}
-
-
-/* =====================================
-   LABEL
-   ===================================== */
-
-.profile-box .profile-row > span{
-
-    position:relative;
-
-    width:155px;
-
-    white-space:nowrap;
-
-}
-
-
-/* =====================================
-   COLON
-   ===================================== */
-
-.profile-box .profile-row > span::after{
-
-    content: ":";
-
-    position:absolute;
-
-    right:0;
-
-    width:20px;
-
-    text-align:center;
-
-}
-
-
-/* =====================================
-   REMOVE ORIGINAL SPACING
-   ===================================== */
-
-.profile-box .profile-row > input,
-.profile-box .profile-row > select,
-.profile-box .profile-row > .profile-mobile-value{
-
-    grid-column:3;
-
-}
 /* =====================================
    MOBILE NUMBER + CHANGE BUTTON
    ===================================== */
