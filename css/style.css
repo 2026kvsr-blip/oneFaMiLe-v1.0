@@ -2519,3 +2519,13 @@ input:disabled{
     font-size:16px;
 
 }
+.edit-profile-box #editProfileDateOfBirth{
+
+    height:44px;
+
+}
+.edit-profile-box #editProfileGender{
+
+    height:44px;
+
+}
