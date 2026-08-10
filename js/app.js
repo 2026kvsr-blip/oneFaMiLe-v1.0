@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6710,11 +6709,22 @@ try{
     // SHOW OTP VERIFICATION
     // =====================================
 
-    profilePage.innerHTML = `
+   profilePage.innerHTML = `
 
-        <h3>
-            🔐 Verify Mobile Number
-        </h3>
+    <div
+        id="mobileOTPStatus"
+        style="
+            text-align:center;
+            font-weight:bold;
+            margin-bottom:8px;
+        "
+    >
+        ⏱️ OTP expires in 00:30
+    </div>
+
+    <h3>
+        🔐 Verify Mobile Number
+    </h3>
 
 
         <div class="profile-box">
@@ -6756,8 +6766,15 @@ try{
                 Verify OTP
 
             </button>
+                  <button
+            id="resendMobileOTPBtn"
+            class="grid-btn hidden">
 
+            🔄 Resend OTP
 
+        </button>
+
+        
             <br><br>
 
 
