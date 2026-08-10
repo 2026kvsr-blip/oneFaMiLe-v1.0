@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2323,5 +2324,162 @@ input:disabled{
     font-size:13px;
 
     font-weight:600;
+
+}
+
+
+/* =====================================
+   EDIT PROFILE ONLY
+   ===================================== */
+
+.edit-profile-box .profile-row{
+
+    display:grid;
+
+    grid-template-columns:
+        210px
+        15px
+        1fr;
+
+    align-items:center;
+
+    column-gap:0;
+
+    min-height:60px;
+
+    box-sizing:border-box;
+
+}
+
+
+/* =====================================
+   LABEL
+   ===================================== */
+
+.edit-profile-box .profile-row > span{
+
+    position:relative;
+
+    width:210px;
+
+    white-space:nowrap;
+
+    box-sizing:border-box;
+
+}
+
+
+/* =====================================
+   COLON
+   ===================================== */
+
+.edit-profile-box .profile-row > span::after{
+
+    content:":";
+
+    position:absolute;
+
+    right:0;
+
+    width:15px;
+
+    text-align:center;
+
+}
+
+
+/* =====================================
+   INPUT / SELECT
+   ===================================== */
+
+.edit-profile-box .profile-row > input,
+.edit-profile-box .profile-row > select{
+
+    grid-column:3;
+
+    width:100%;
+
+    height:44px;
+
+    box-sizing:border-box;
+
+}
+
+
+/* =====================================
+   MOBILE NUMBER
+   ===================================== */
+
+.edit-profile-box .profile-mobile-value{
+
+    grid-column:3;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    white-space:nowrap;
+
+}
+
+
+/* =====================================
+   MOBILE NUMBER
+   ===================================== */
+
+.edit-profile-box .profile-mobile-value strong{
+
+    white-space:nowrap;
+
+    font-weight:400;
+
+}
+
+
+/* =====================================
+   CHANGE BUTTON
+   ===================================== */
+
+.edit-profile-box #changeMobileBtn{
+
+    width:auto;
+
+    min-width:auto;
+
+    height:40px;
+
+    padding:4px 10px;
+
+    margin:0;
+
+    font-size:13px;
+
+    white-space:nowrap;
+
+}
+
+
+/* =====================================
+   DATE OF BIRTH
+   ===================================== */
+
+.edit-profile-box
+#editProfileDateOfBirth{
+
+    height:44px;
+
+}
+
+
+/* =====================================
+   GENDER
+   ===================================== */
+
+.edit-profile-box
+#editProfileGender{
+
+    height:44px;
 
 }
