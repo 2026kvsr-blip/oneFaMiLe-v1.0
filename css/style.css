@@ -17,7 +17,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -2482,4 +2481,21 @@ input:disabled{
 
     height:44px;
 
+}
+.edit-profile-box .profile-row{
+
+    display:grid;
+
+    grid-template-columns:
+        210px
+        15px
+        1fr;
+
+    align-items:center;
+
+    column-gap:0;
+
+    min-height:60px;
+
+    box-sizing:border-box;
 }
