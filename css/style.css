@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2176,7 +2177,7 @@ input:disabled{
 
     width:155px;
 
-    height:52px;
+    height:35px;
 
     box-sizing:border-box;
 
