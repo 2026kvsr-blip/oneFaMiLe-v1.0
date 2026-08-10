@@ -2,7 +2,6 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6796,8 +6795,44 @@ try{
         </div>
 
     `;
-startMobileOTPCountdown(30);
+// =====================================
+// CHECK EXISTING MOBILE CHANGE LOCK
+// =====================================
 
+const savedLockUntil =
+    Number(
+        sessionStorage.getItem(
+            "mobileChangeLockUntil"
+        )
+    );
+
+
+if(
+    savedLockUntil &&
+    savedLockUntil > Date.now()
+){
+
+    const remainingSeconds =
+        Math.ceil(
+            (savedLockUntil - Date.now()) / 1000
+        );
+
+
+    startMobileChangeLockTimer(
+        remainingSeconds
+    );
+
+}
+else{
+
+    sessionStorage.removeItem(
+        "mobileChangeLockUntil"
+    );
+
+
+    startMobileOTPCountdown(30);
+
+}
     // =====================================
     // OTP SCREEN BACK
     // =====================================
@@ -8038,7 +8073,9 @@ let remaining =
 
                 // Stop timer
                 clearInterval(timer);
-
+                sessionStorage.removeItem(
+               "mobileChangeLockUntil"
+                );
 
                 // =========================
                 // SHOW SUCCESS MESSAGE
