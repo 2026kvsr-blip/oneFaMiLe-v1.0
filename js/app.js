@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6914,6 +6915,21 @@ verifyData.append(
 
     }, 60 * 1000);
 
+
+    return;
+}
+
+
+if(verifyResult.status === "locked"){
+
+    showMessage(
+        verifyResult.message ||
+        "Maximum 3 OTP attempts reached. Please wait 1 minute.",
+        "warning",
+        3000
+    );
+
+    startMobileChangeLockTimer(60);
 
     return;
 }
