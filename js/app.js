@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -7833,78 +7834,192 @@ user.country = country;
 // =====================================
 
 function startMobileOTPCountdown(seconds){
+    const status =        document.getElementById("mobileOTPStatus");
+    const verifyBtn =        document.getElementById("verifyMobileOTPBtn");
+    const resendBtn =        document.getElementById("resendMobileOTPBtn");
+    if(!status){        return;    }
+    let remaining =        seconds;
+    if(verifyBtn){        verifyBtn.disabled = false;    }
+    if(resendBtn){        resendBtn.disabled = false;        resendBtn.classList.add("hidden");    }
+    const timer =        setInterval(()=>{            const minutes =                Math.floor(remaining / 60);            const secs =                remaining % 60;
+            status.textContent =      "⏱️ OTP expires in " +         String(minutes).padStart(2,"0") +   ":" +    String(secs).padStart(2,"0");
+            if(remaining <= 0){ clearInterval(timer);  status.textContent =     "⚠️ OTP expired";
+                if(verifyBtn){                    verifyBtn.disabled = true;                }
+                if(resendBtn){                    resendBtn.disabled = false;                    resendBtn.classList.remove(  "hidden"        );       }  return;   }
+            remaining--;
+        },1000);
+}
+// =====================================
+// MOBILE CHANGE 1 MINUTE LOCK TIMER
+// =====================================
+
+function startMobileChangeLockTimer(seconds){
 
     const status =
-        document.getElementById("mobileOTPStatus");
+        document.getElementById(
+            "mobileOTPStatus"
+        );
 
     const verifyBtn =
-        document.getElementById("verifyMobileOTPBtn");
+        document.getElementById(
+            "verifyMobileOTPBtn"
+        );
 
     const resendBtn =
-        document.getElementById("resendMobileOTPBtn");
+        document.getElementById(
+            "resendMobileOTPBtn"
+        );
 
+    const mobileInput =
+        document.getElementById(
+            "newMobileNumber"
+        );
+
+
+    // =================================
+    // CHECK OTP PAGE
+    // =================================
 
     if(!status){
         return;
     }
 
 
+    // =================================
+    // START COUNTDOWN
+    // =================================
+
     let remaining =
         seconds;
 
 
+    // =================================
+    // DISABLE VERIFY OTP
+    // =================================
+
     if(verifyBtn){
 
-        verifyBtn.disabled = false;
+        verifyBtn.disabled =
+            true;
 
     }
 
+
+    // =================================
+    // DISABLE RESEND OTP
+    // =================================
 
     if(resendBtn){
 
-        resendBtn.disabled = false;
+        resendBtn.disabled =
+            true;
 
-        resendBtn.classList.add("hidden");
+        resendBtn.classList.remove(
+            "hidden"
+        );
 
     }
 
+
+    // =================================
+    // DISABLE NEW MOBILE NUMBER
+    // =================================
+
+    if(mobileInput){
+
+        mobileInput.disabled =
+            true;
+
+    }
+
+
+    // =================================
+    // INITIAL MESSAGE
+    // =================================
+
+    status.textContent =
+        "🔒 Maximum 3 OTP attempts reached";
+
+
+    // =================================
+    // START TIMER
+    // =================================
 
     const timer =
         setInterval(()=>{
 
+
+            // =============================
+            // CALCULATE MINUTES
+            // =============================
+
             const minutes =
-                Math.floor(remaining / 60);
+                Math.floor(
+                    remaining / 60
+                );
+
+
+            // =============================
+            // CALCULATE SECONDS
+            // =============================
 
             const secs =
                 remaining % 60;
 
 
+            // =============================
+            // SHOW TIMER
+            // =============================
+
             status.textContent =
-                "⏱️ OTP expires in " +
+                "🔒 Maximum 3 OTP attempts reached — " +
+                "Please wait: " +
                 String(minutes).padStart(2,"0") +
                 ":" +
                 String(secs).padStart(2,"0");
 
 
+            // =============================
+            // TIMER FINISHED
+            // =============================
+
             if(remaining <= 0){
 
+                // Stop timer
                 clearInterval(timer);
 
 
+                // =========================
+                // SHOW SUCCESS MESSAGE
+                // =========================
+
                 status.textContent =
-                    "⚠️ OTP expired";
+                    "✓ You can enter a new Mobile Number now.";
 
 
-                if(verifyBtn){
+                // =========================
+                // ENABLE MOBILE INPUT
+                // =========================
 
-                    verifyBtn.disabled = true;
+                if(mobileInput){
+
+                    mobileInput.disabled =
+                        false;
+
+                    mobileInput.value =
+                        "";
 
                 }
 
 
+                // =========================
+                // ENABLE RESEND OTP
+                // =========================
+
                 if(resendBtn){
 
-                    resendBtn.disabled = false;
+                    resendBtn.disabled =
+                        false;
 
                     resendBtn.classList.remove(
                         "hidden"
@@ -7912,17 +8027,34 @@ function startMobileOTPCountdown(seconds){
 
                 }
 
+
+                // =========================
+                // VERIFY OTP REMAINS DISABLED
+                // =========================
+
+                if(verifyBtn){
+
+                    verifyBtn.disabled =
+                        true;
+
+                }
+
+
                 return;
 
             }
 
 
+            // =============================
+            // DECREASE TIMER
+            // =============================
+
             remaining--;
+
 
         },1000);
 
-}
-   
+}   
 const toggleLoginPass = document.getElementById("toggleLoginPass");
 
 toggleLoginPass.onclick = function(){
