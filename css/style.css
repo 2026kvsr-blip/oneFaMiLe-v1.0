@@ -5,7 +5,6 @@ box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
 }
 body{
-
    
    background:#EAF8FF;
 
@@ -2550,5 +2549,32 @@ input:disabled{
     white-space:nowrap;
 
     font-weight:400;
+
+}
+
+/* =====================================
+   EDIT PROFILE MOBILE NUMBER LABEL
+   ===================================== */
+
+.edit-profile-box .edit-mobile-label::after{
+
+    content: ":" !important;
+
+    position:absolute;
+
+    right:0;
+
+    width:8px;
+
+    text-align:center;
+
+}
+
+
+/* Remove any duplicate colon */
+
+.edit-profile-box .edit-mobile-label{
+
+    position:relative;
 
 }
