@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2374,15 +2375,15 @@ input:disabled{
 
 .edit-profile-box .profile-row > span::after{
 
-    content:":";
+    content: ":";
 
-    position:absolute;
+    display:inline-block;
 
-    right:0;
+    margin-left:2px;
 
-    width:15px;
+    width:auto;
 
-    text-align:center;
+    position:static;
 
 }
 
