@@ -16,7 +16,6 @@ padding-bottom:80px;
 overflow-x:hidden;
 
 }
-
 /* =======================
 TOP BAR
 ======================= */
@@ -2412,7 +2411,7 @@ input:disabled{
 
     white-space:nowrap;
 
-    transform:translateX(-10px);
+    transform:translateX(-15px);
 
 }
 /* =====================================
