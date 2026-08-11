@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2333,22 +2334,22 @@ input:disabled{
 
 .edit-profile-box .profile-row{
 
-    display:grid;
+    display:grid !important;
 
     grid-template-columns:
-        170px
-        18px
+        175px
+        5px
         1fr;
 
     align-items:center;
 
-    column-gap:0;
-
     min-height:60px;
 
-    box-sizing:border-box;
-}
+    width:100%;
 
+    box-sizing:border-box;
+
+}
 
 /* =====================================
    LABEL
@@ -2356,16 +2357,30 @@ input:disabled{
 
 .edit-profile-box .profile-row > span{
 
-    position:relative;
+    grid-column:1;
 
-    width:210px;
+    width:175px;
+
+    position:relative;
 
     white-space:nowrap;
 
     box-sizing:border-box;
 
 }
+.edit-profile-box .profile-row > span::after{
 
+    content: ":";
+
+    position:absolute;
+
+    left:175px;
+
+    width:18px;
+
+    text-align:center;
+
+}
 
 
 
