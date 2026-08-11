@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2401,7 +2402,13 @@ input:disabled{
 
     gap:5px;
 
+    height:44px;
+
+    min-width:0;
+
     white-space:nowrap;
+
+    box-sizing:border-box;
 
 }
 
@@ -2425,11 +2432,11 @@ input:disabled{
 
 .edit-profile-box #changeMobileBtn{
 
+    height:40px;
+
     width:auto;
 
     min-width:auto;
-
-    height:40px;
 
     padding:4px 8px;
 
@@ -2438,6 +2445,8 @@ input:disabled{
     font-size:13px;
 
     white-space:nowrap;
+
+    box-sizing:border-box;
 
 }
 
@@ -2448,25 +2457,28 @@ input:disabled{
 
 .edit-profile-box #editProfileDateOfBirth{
 
-    grid-column:3;
+    grid-column:3 !important;
 
-    width:100%;
+    width:100% !important;
 
-    min-width:0;
+    min-width:0 !important;
 
-    max-width:100%;
+    max-width:100% !important;
 
-    height:44px;
+    height:44px !important;
 
-    box-sizing:border-box;
+    box-sizing:border-box !important;
 
-    font-size:16px;
+    padding:0 12px !important;
 
-    line-height:normal;
+    font-size:16px !important;
 
-    padding:0 12px;
+    line-height:normal !important;
 
-    text-align:left;
+    text-align:left !important;
+
+    direction:ltr;
+
 
 }
 
@@ -2488,15 +2500,15 @@ input:disabled{
 .edit-profile-box .profile-row > input,
 .edit-profile-box .profile-row > select{
 
-   grid-column:3;
+  grid-column:3 !important;
 
-    width:100%;
+    width:100% !important;
 
-    min-width:0;
+    min-width:0 !important;
 
-    max-width:100%;
+    max-width:100% !important;
 
-    height:44px;
+    height:44px !important;
 
     box-sizing:border-box;
 
@@ -2514,6 +2526,7 @@ input:disabled{
 
     color:#222;
 
+    text-align:left;
 }
 
 /* =====================================
@@ -2590,12 +2603,33 @@ input:disabled{
     text-align:center;
 
 }
+.edit-profile-box .profile-mobile-value strong::before,
+.edit-profile-box .profile-mobile-value strong::after{
 
+    content:none !important;
+
+}
 
 /* Remove any duplicate colon */
 
 .edit-profile-box .edit-mobile-label{
 
     position:relative;
+
+}
+
+/* =====================================
+   EDIT PROFILE MOBILE ROW - FIXED HEIGHT
+   ===================================== */
+
+.edit-profile-box .profile-row:has(.profile-mobile-value){
+
+    min-height:60px;
+
+    height:60px;
+
+    box-sizing:border-box;
+
+    align-items:center;
 
 }
