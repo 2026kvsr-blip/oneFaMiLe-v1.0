@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2480,6 +2481,18 @@ input:disabled{
     box-sizing:border-box;
 
     font-size:16px;
+
+    line-height:normal;
+
+    padding:0 12px;
+
+    border:1px solid #c4d4ff;
+
+    border-radius:10px;
+
+    background:#ffffff;
+
+    color:#222;
 
 }
 .edit-profile-box #editProfileDateOfBirth{
