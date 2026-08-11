@@ -17,7 +17,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -2338,10 +2337,12 @@ input:disabled{
 
     grid-template-columns:
         175px
-        18px
+        8px
         1fr;
 
     align-items:center;
+
+    column-gap:0;
 
     min-height:60px;
 
@@ -2384,19 +2385,6 @@ input:disabled{
 /* =====================================
    INPUT / SELECT
    ===================================== */
-
-.edit-profile-box .profile-row > input,
-.edit-profile-box .profile-row > select{
-
-    grid-column:3;
-
-    width:100%;
-
-    height:44px;
-
-    box-sizing:border-box;
-
-}
 
 
 /* =====================================
