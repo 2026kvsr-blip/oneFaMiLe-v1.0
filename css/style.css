@@ -17,7 +17,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -2375,7 +2374,7 @@ input:disabled{
 
     position:absolute;
 
-    right:5px;
+    right:10px;
 
     width:6px;
 
