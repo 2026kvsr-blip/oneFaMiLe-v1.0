@@ -5,6 +5,7 @@ box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
 }
 body{
+
    
    background:#EAF8FF;
 
@@ -2411,7 +2412,7 @@ input:disabled{
 
     white-space:nowrap;
 
-    transform:translateX(-15px);
+    transform:translateX(-5px);
 
 }
 /* =====================================
