@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2542,5 +2543,62 @@ input:disabled{
     line-height:normal;
 
     padding:0 12px;
+
+}
+
+/* =====================================
+   MY PROFILE - COLON ALIGNMENT
+   ===================================== */
+
+.profile-box:not(.edit-profile-box) .profile-row{
+
+    display:grid;
+
+    grid-template-columns:
+        205px
+        20px
+        1fr;
+
+    align-items:center;
+
+    column-gap:0;
+
+    min-height:68px;
+
+    box-sizing:border-box;
+
+}
+
+
+/* =====================================
+   PROFILE LABEL
+   ===================================== */
+
+.profile-box:not(.edit-profile-box)
+.profile-row > span{
+
+    grid-column:1;
+
+    white-space:nowrap;
+
+    width:205px;
+
+    box-sizing:border-box;
+
+}
+
+
+/* =====================================
+   PROFILE VALUE
+   ===================================== */
+
+.profile-box:not(.edit-profile-box)
+.profile-row > strong{
+
+    grid-column:3;
+
+    white-space:nowrap;
+
+    font-weight:400;
 
 }
