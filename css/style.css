@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2402,14 +2403,17 @@ input:disabled{
 
     height:44px;
 
-    min-width:0;
+    min-height:44px;
 
-    white-space:nowrap;
+    width:100%;
+
+    min-width:0;
 
     box-sizing:border-box;
 
-}
+    white-space:nowrap;
 
+}
 
 /* =====================================
    MOBILE NUMBER
@@ -2430,11 +2434,13 @@ input:disabled{
 
 .edit-profile-box #changeMobileBtn{
 
-    height:40px;
-
     width:auto;
 
     min-width:auto;
+
+    height:40px;
+
+    min-height:40px;
 
     padding:4px 8px;
 
@@ -2447,7 +2453,6 @@ input:disabled{
     box-sizing:border-box;
 
 }
-
 
 /* =====================================
    DATE OF BIRTH
