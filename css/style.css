@@ -2487,12 +2487,13 @@ input:disabled{
     display:grid;
 
     grid-template-columns:
-        160px
+        150px
         15px
         1fr;
 
     align-items:center;
 
+   
     column-gap:0;
 
     min-height:60px;
