@@ -17,7 +17,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -2338,7 +2337,7 @@ input:disabled{
 
     grid-template-columns:
         170px
-        15px
+        18px
         1fr;
 
     align-items:center;
@@ -2368,23 +2367,6 @@ input:disabled{
 }
 
 
-/* =====================================
-   COLON
-   ===================================== */
-
-.edit-profile-box .profile-row > span::after{
-
-    content: ":";
-
-    display:inline-block;
-
-    margin-right:2px;
-
-    width:auto;
-
-    position:static;
-
-}
 
 
 /* =====================================
