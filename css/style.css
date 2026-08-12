@@ -2857,31 +2857,91 @@ width:100%;
 }
 
 
+/* =====================================
+   PHONE NUMBER TEST - CHANGE BUTTON
+   ===================================== */
+
 .edit-profile-box .phone-test-value{
 
-    grid-column:3;
+    grid-column:3 !important;
 
-    display:flex;
+    display:flex !important;
 
-    align-items:center;
+    align-items:center !important;
 
-    justify-content:flex-start;
+    justify-content:flex-start !important;
 
-    width:max-content;
+    gap:5px !important;
 
-    height:44px;
+    width:max-content !important;
 
-    margin:0;
+    max-width:100% !important;
 
-    padding:0;
+    height:44px !important;
 
-    box-sizing:border-box;
+    min-height:44px !important;
 
-    white-space:nowrap;
+    margin:0 !important;
+
+    padding:0 !important;
+
+    box-sizing:border-box !important;
+
+    white-space:nowrap !important;
 
 }
 
 
+.edit-profile-box .phone-test-value strong{
+
+    display:inline-block !important;
+
+    flex:0 0 auto !important;
+
+    width:max-content !important;
+
+    max-width:none !important;
+
+    margin:0 !important;
+
+    padding:0 !important;
+
+    white-space:nowrap !important;
+
+    word-break:normal !important;
+
+    overflow-wrap:normal !important;
+
+    font-size:16px !important;
+
+    font-weight:400 !important;
+
+}
+
+
+.edit-profile-box #phoneTestChangeBtn{
+
+    flex:0 0 auto !important;
+
+    width:auto !important;
+
+    min-width:0 !important;
+
+    height:40px !important;
+
+    min-height:40px !important;
+
+    margin:0 !important;
+
+    padding:4px 8px !important;
+
+    font-size:13px !important;
+
+    white-space:nowrap !important;
+
+    box-sizing:border-box !important;
+
+}
 .edit-profile-box .phone-test-value strong{
 
     display:block;
