@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2061,68 +2062,35 @@ input:disabled{
 
     display:grid;
 
-    grid-template-columns: 180px 1fr;
-
-    align-items:start;
-
-    column-gap:10px;
-
-}
-
-
-.mobile-change-label{
-
-    width:180px;
-
-    white-space:nowrap;
-
-    box-sizing:border-box;
-
-}
-
-
-.mobile-change-value{
-
-    white-space:nowrap;
-
-}
-/* =====================================
-   CHANGE MOBILE NUMBER
-   ===================================== */
-
-.mobile-change-row{
-
-    display:grid !important;
-
     grid-template-columns:
-        190px
-        10px
+        165px
+        8px
         1fr;
 
-    align-items:start;
+    align-items:center;
+
+    column-gap:0;
 
     width:100%;
 
-    min-height:82px;
+    min-height:60px;
 
     box-sizing:border-box;
-
 }
 
-
-/* =====================================
-   LABEL
-   ===================================== */
 
 .mobile-change-label{
 
-    white-space:nowrap !important;
+    width:165px;
 
-    font-weight:600;
+    white-space:nowrap;
 
-    color:#2A6EB0;
+    box-sizing:border-box;
 
+    position:relative;
 }
+
+
 
 
 /* =====================================
@@ -2146,12 +2114,24 @@ input:disabled{
 
 .mobile-change-value{
 
+    grid-column:3;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-start;
+
     white-space:nowrap;
 
-    font-weight:400;
+    margin:0;
 
+    padding:0;
+
+    height:44px;
+
+    box-sizing:border-box;
 }
-
 
 /* =====================================
    NEW MOBILE AREA
