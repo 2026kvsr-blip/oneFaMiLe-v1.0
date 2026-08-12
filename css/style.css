@@ -6,7 +6,7 @@ font-family:Arial,Helvetica,sans-serif;
 }
 body{
 
-   
+  
    background:#EAF8FF;
 
 min-height:100vh;
@@ -2348,12 +2348,13 @@ input:disabled{
     width:100%;
 
     box-sizing:border-box;
-
 }
+
 
 /* =====================================
    LABEL
    ===================================== */
+
 .edit-profile-box .profile-row > span{
 
     grid-column:1;
@@ -2365,8 +2366,8 @@ input:disabled{
     white-space:nowrap;
 
     box-sizing:border-box;
-
 }
+
 
 .edit-profile-box .profile-row > span::after{
 
@@ -2374,16 +2375,12 @@ input:disabled{
 
     position:absolute;
 
-    right:5px; !important;
+    right:5px !important;
 
     width:8px;
 
     text-align:center;
-
 }
-/* =====================================
-   INPUT / SELECT
-   ===================================== */
 
 
 /* =====================================
@@ -2412,19 +2409,15 @@ input:disabled{
 
     white-space:nowrap;
 
-    transform:translateX(-5px);
-
+    transform:none;
 }
-/* =====================================
-   MOBILE NUMBER
-   ===================================== */
+
 
 .edit-profile-box .profile-mobile-value strong{
 
     white-space:nowrap;
 
     font-weight:400;
-
 }
 
 
@@ -2451,8 +2444,8 @@ input:disabled{
     white-space:nowrap;
 
     box-sizing:border-box;
-
 }
+
 
 /* =====================================
    DATE OF BIRTH
@@ -2481,8 +2474,6 @@ input:disabled{
     text-align:left !important;
 
     direction:ltr;
-
-
 }
 
 
@@ -2490,12 +2481,12 @@ input:disabled{
    GENDER
    ===================================== */
 
-.edit-profile-box
-#editProfileGender{
+.edit-profile-box #editProfileGender{
 
     height:44px;
-
 }
+
+
 /* =====================================
    EDIT PROFILE INPUTS
    ===================================== */
@@ -2503,7 +2494,7 @@ input:disabled{
 .edit-profile-box .profile-row > input,
 .edit-profile-box .profile-row > select{
 
-  grid-column:3 !important;
+    grid-column:3 !important;
 
     width:100% !important;
 
@@ -2532,6 +2523,54 @@ input:disabled{
     text-align:left;
 }
 
+
+/* =====================================
+   MOBILE NUMBER COLON
+   ===================================== */
+
+.edit-profile-box .edit-mobile-label{
+
+    position:relative;
+}
+
+
+.edit-profile-box .edit-mobile-label::after{
+
+    content:":" !important;
+
+    position:absolute;
+
+    right:0;
+
+    width:8px;
+
+    text-align:center;
+}
+
+
+/* prevent duplicate colon */
+
+.edit-profile-box .profile-mobile-value strong::before,
+.edit-profile-box .profile-mobile-value strong::after{
+
+    content:none !important;
+}
+
+
+/* =====================================
+   MOBILE ROW FIXED HEIGHT
+   ===================================== */
+
+.edit-profile-box .profile-row:has(.profile-mobile-value){
+
+    min-height:60px;
+
+    height:60px;
+
+    box-sizing:border-box;
+
+    align-items:center;
+}
 /* =====================================
    MY PROFILE - COLON ALIGNMENT
    ===================================== */
@@ -2589,50 +2628,4 @@ input:disabled{
 
 }
 
-/* =====================================
-   EDIT PROFILE MOBILE NUMBER LABEL
-   ===================================== */
 
-.edit-profile-box .edit-mobile-label::after{
-
-    content: ":" !important;
-
-    position:absolute;
-
-    right:0;
-
-    width:8px;
-
-    text-align:center;
-
-}
-.edit-profile-box .profile-mobile-value strong::before,
-.edit-profile-box .profile-mobile-value strong::after{
-
-    content:none !important;
-
-}
-
-/* Remove any duplicate colon */
-
-.edit-profile-box .edit-mobile-label{
-
-    position:relative;
-
-}
-
-/* =====================================
-   EDIT PROFILE MOBILE ROW - FIXED HEIGHT
-   ===================================== */
-
-.edit-profile-box .profile-row:has(.profile-mobile-value){
-
-    min-height:60px;
-
-    height:60px;
-
-    box-sizing:border-box;
-
-    align-items:center;
-
-}
