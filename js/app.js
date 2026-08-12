@@ -2,7 +2,6 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6105,6 +6104,21 @@ function updateSideMenuUser(){
         .replace(/\s+/g," ")
         .trim();
 }
+
+function formatDateForProfile(dateValue){
+
+    if(!dateValue) return "-";
+
+    const parts = String(dateValue).split("-");
+
+    if(parts.length === 3){
+
+        return `${parts[2]}-${parts[1]}-${parts[0]}`;
+
+    }
+
+    return dateValue;
+}
 function updateProfilePage(){
 
     const user =
@@ -6131,8 +6145,8 @@ function updateProfilePage(){
     document.getElementById("profileGender").textContent =
         user.gender || "-";
 
-    document.getElementById("profileDOB").textContent =
-        user.dateOfBirth || "-";
+   document.getElementById("profileDOB").textContent =
+    formatDateForProfile(user.dateOfBirth);
 
     document.getElementById("profilePlace").textContent =
         user.place || "-";
