@@ -1,3 +1,4 @@
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8146,48 +8147,150 @@ let mobileOTPCountdownTimer = null;
 // MOBILE OTP COUNTDOWN
 // =====================================
 
+// =====================================
+// MOBILE OTP COUNTDOWN
+// =====================================
+
 function startMobileOTPCountdown(seconds){
 
-if(mobileOTPCountdownTimer){
+    if(mobileOTPCountdownTimer){
 
-    clearInterval(
-        mobileOTPCountdownTimer
-    );
+        clearInterval(
+            mobileOTPCountdownTimer
+        );
 
-    mobileOTPCountdownTimer = null;
+        mobileOTPCountdownTimer = null;
 
-}
+    }
 
-    
-    const status =        document.getElementById("mobileOTPStatus");
-    const verifyBtn =        document.getElementById("verifyMobileOTPBtn");
-    const resendBtn =        document.getElementById("resendMobileOTPBtn");
-    if(!status){        return;    }
-    let remaining =        seconds;
-    if(verifyBtn){        verifyBtn.disabled = false;    }
-    if(resendBtn){        resendBtn.disabled = false;        resendBtn.classList.add("hidden");    }
+
+    const status =
+        document.getElementById(
+            "mobileOTPStatus"
+        );
+
+    const verifyBtn =
+        document.getElementById(
+            "verifyMobileOTPBtn"
+        );
+
+    const resendBtn =
+        document.getElementById(
+            "resendMobileOTPBtn"
+        );
+
+
+    if(!status){
+
+        return;
+
+    }
+
+
+    let remaining =
+        seconds;
+
+
+    if(verifyBtn){
+
+        verifyBtn.disabled =
+            false;
+
+    }
+
+
+    if(resendBtn){
+
+        resendBtn.disabled =
+            false;
+
+        resendBtn.classList.add(
+            "hidden"
+        );
+
+    }
+
+
     mobileOTPCountdownTimer =
-    setInterval(()=>{            const minutes =                Math.floor(remaining / 60);            const secs =                remaining % 60;
-            status.textContent =      "⏱️ OTP expires in " +         String(minutes).padStart(2,"0") +   ":" +    String(secs).padStart(2,"0");
-                     
+        setInterval(()=>{
+
+
+            // =============================
+            // CALCULATE MINUTES
+            // =============================
+
+            const minutes =
+                Math.floor(
+                    remaining / 60
+                );
+
+
+            // =============================
+            // CALCULATE SECONDS
+            // =============================
+
+            const secs =
+                remaining % 60;
+
+
+            // =============================
+            // SHOW TIMER
+            // =============================
+
+            status.textContent =
+                "⏱️ OTP expires in " +
+                String(minutes).padStart(2,"0") +
+                ":" +
+                String(secs).padStart(2,"0");
+
+
+            // =============================
+            // TIMER FINISHED
+            // =============================
+
             if(remaining <= 0){
-                clearInterval(timer); if(remaining <= 0){
 
-    clearInterval(
-        mobileOTPCountdownTimer
-    );
+                clearInterval(
+                    mobileOTPCountdownTimer
+                );
 
-    mobileOTPCountdownTimer = null;
+                mobileOTPCountdownTimer =
+                    null;
 
-    status.textContent =
-        "⚠️ OTP expired"; 
-                
-                status.textContent =     "⚠️ OTP expired";
-                if(verifyBtn){                    verifyBtn.disabled = true;                }
-                if(resendBtn){                    resendBtn.disabled = false;                    resendBtn.classList.remove(  "hidden"        );       }  return;   }
+
+                status.textContent =
+                    "⚠️ OTP expired";
+
+
+                if(verifyBtn){
+
+                    verifyBtn.disabled =
+                        true;
+
+                }
+
+
+                if(resendBtn){
+
+                    resendBtn.disabled =
+                        false;
+
+                    resendBtn.classList.remove(
+                        "hidden"
+                    );
+
+                }
+
+
+                return;
+
+            }
+
+
             remaining--;
-        },
-                1000);
+
+        },1000);
+
 }
 // =====================================
 // MOBILE CHANGE 1 MINUTE LOCK TIMER
