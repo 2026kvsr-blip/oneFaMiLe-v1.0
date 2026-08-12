@@ -16,7 +16,6 @@ padding-bottom:80px;
 overflow-x:hidden;
 
 }
-
 /* =======================
 TOP BAR
 ======================= */
@@ -3024,4 +3023,41 @@ width:100%;
     right:0 !important;
     width:8px !important;
     text-align:center !important;
+}
+/* =====================================
+   CHANGE MOBILE - NEW MOBILE INPUT
+   Same format as Edit Profile inputs
+   ===================================== */
+
+.new-mobile-area {
+    flex: 1;
+    min-width: 0;
+}
+
+#newMobileNumber {
+    width: 220px;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    padding: 10px 12px;
+
+    border: 1px solid #c4d4ff;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    font-size: 15px;
+    color: #333;
+
+    outline: none;
+}
+
+#newMobileNumber:focus {
+    border-color: #4A9FE8;
+}
+
+.mobile-availability-msg {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 5px;
 }
