@@ -6818,99 +6818,6 @@ if(sendBtn){
     // CHECK MOBILE IN GOOGLE SHEET
     // ================================
 
-    const formData = new FormData();
-
-    formData.append(
-        "action",
-        "checkMobile"
-    );
-
-    formData.append(
-        "mobile",
-        newMobile
-    );
-
-
-    try{
-
-        showLoader("Checking Mobile Number...");
-
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                body:formData
-
-            });
-
-
-        const result =
-            await response.json();
-
-
-        hideLoader();
-
-
-        // ================================
-        // MOBILE ALREADY EXISTS
-        // ================================
-
-        if(result.status === "exists"){
-
-            showMessage(
-                "Mobile Number already exists.",
-                "warning",
-                3000
-            );
-
-            return;
-        }
-
-
-        // ================================
-        // OTHER ERROR
-        // ================================
-
-        if(result.status !== "success"){
-
-            showMessage(
-                result.message ||
-                "Unable to check Mobile Number.",
-                "warning",
-                3000
-            );
-
-            return;
-        }
-
-
-        // ================================
-        // MOBILE AVAILABLE
-        // ================================
-
-        showMessage(
-            "Mobile Number is available.",
-            "success",
-            2000
-        );
-
-    }
-    catch(err){
-
-        hideLoader();
-
-        console.log(err);
-
-        showMessage(
-            "Unable to connect to server.",
-            "error",
-            3000
-        );
-
-        return;
-    }
         // ================================
 // =====================================
 // SEND MOBILE CHANGE OTP
@@ -8178,7 +8085,6 @@ function startMobileOTPCountdown(seconds){
         document.getElementById(
             "resendMobileOTPBtn"
         );
-
 
     if(!status){
 
