@@ -17,7 +17,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -2957,4 +2956,15 @@ width:100%;
 
     }
 
+}
+/* =====================================
+   EDIT PROFILE - MOBILE NUMBER COLON
+   ===================================== */
+
+.edit-profile-box .profile-row:has(.profile-mobile-value) > span::after{
+    content: ":" !important;
+    position:absolute !important;
+    right:0 !important;
+    width:8px !important;
+    text-align:center !important;
 }
