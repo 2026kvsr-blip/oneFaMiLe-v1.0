@@ -2,6 +2,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -8168,7 +8169,20 @@ if(mobileOTPCountdownTimer){
     mobileOTPCountdownTimer =
     setInterval(()=>{            const minutes =                Math.floor(remaining / 60);            const secs =                remaining % 60;
             status.textContent =      "⏱️ OTP expires in " +         String(minutes).padStart(2,"0") +   ":" +    String(secs).padStart(2,"0");
-            if(remaining <= 0){ clearInterval(timer);  status.textContent =     "⚠️ OTP expired";
+                     
+            if(remaining <= 0){
+                clearInterval(timer); if(remaining <= 0){
+
+    clearInterval(
+        mobileOTPCountdownTimer
+    );
+
+    mobileOTPCountdownTimer = null;
+
+    status.textContent =
+        "⚠️ OTP expired"; 
+                
+                status.textContent =     "⚠️ OTP expired";
                 if(verifyBtn){                    verifyBtn.disabled = true;                }
                 if(resendBtn){                    resendBtn.disabled = false;                    resendBtn.classList.remove(  "hidden"        );       }  return;   }
             remaining--;
