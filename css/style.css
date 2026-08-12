@@ -17,7 +17,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -2402,8 +2401,8 @@ input:disabled{
 
     min-height:44px;
 
-    width:100%;
-
+width:auto;
+padding:0;
     min-width:0;
 
     box-sizing:border-box;
@@ -2638,8 +2637,7 @@ input:disabled{
 
         gap:5px !important;
 
-        width:100% !important;
-
+width:auto !important;
         min-width:0 !important;
 
         max-width:100% !important;
