@@ -17,7 +17,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -2568,8 +2567,8 @@ width:100%;
     display:grid;
 
     grid-template-columns:
-        205px
-        20px
+        165px
+        8px
         1fr;
 
     align-items:center;
@@ -2579,10 +2578,7 @@ width:100%;
     min-height:68px;
 
     box-sizing:border-box;
-
 }
-
-
 /* =====================================
    PROFILE LABEL
    ===================================== */
@@ -2594,7 +2590,9 @@ width:100%;
 
     white-space:nowrap;
 
-    width:205px;
+    width:165px;
+
+    position:relative;
 
     box-sizing:border-box;
 
@@ -2615,7 +2613,19 @@ width:100%;
     font-weight:400;
 
 }
+.profile-box:not(.edit-profile-box)
+.profile-row > span::after{
 
+    content:":";
+
+    position:absolute;
+
+    right:0;
+
+    width:8px;
+
+    text-align:center;
+}
 /* =====================================
    EDIT PROFILE - iPHONE FINAL FIX
    ===================================== */
