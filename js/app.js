@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6181,6 +6180,8 @@ function showEditProfile(){
     >
 
 </div>
+
+
             <div class="profile-row">
     <span>Sur Name</span>
 
@@ -6213,6 +6214,19 @@ function showEditProfile(){
     >
 
 </div>
+
+<div class="profile-row phone-test-row">
+
+    <span>Phone Number</span>
+
+    <div class="phone-test-value">
+        <strong>${user.mobile || "-"}</strong>
+    </div>
+
+</div>
+
+
+
             <div class="profile-row">
 <span class="edit-mobile-label">Mobile Number</span>
     <div class="profile-mobile-value">
