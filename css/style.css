@@ -17,6 +17,7 @@ padding-bottom:80px;
 overflow-x:hidden;
 
 }
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2359,7 +2360,7 @@ input:disabled{
 
     grid-column:1;
 
-    width:175px;
+    width:165px;
 
     position:relative;
 
