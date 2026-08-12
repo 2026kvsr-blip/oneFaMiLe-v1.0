@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2627,48 +2628,54 @@ width:100%;
 
     .edit-profile-box .profile-mobile-value{
 
-        grid-column:3 !important;
+    grid-column:3 !important;
 
-        display:flex !important;
+    display:grid !important;
 
-        align-items:center !important;
+    grid-template-columns:max-content max-content !important;
 
-        justify-content:flex-start !important;
+    align-items:center !important;
 
-        gap:5px !important;
+    justify-content:start !important;
 
-width:100% !important;
-      min-width:0 !important;
+    column-gap:5px !important;
 
-        max-width:100% !important;
+    width:max-content !important;
 
-        height:44px !important;
+    max-width:100% !important;
 
-        min-height:44px !important;
+    height:44px !important;
 
-        margin:0 !important;
-
-        padding:0 !important;
-        box-sizing:border-box !important;
-
-        white-space:nowrap !important;
-
-        transform:none !important;
-
-    }
-
-
-   .edit-profile-box .profile-mobile-value strong{
-
-    display:inline-block !important;
+    min-height:44px !important;
 
     margin:0 !important;
 
+    padding-left:12px !important;
+
     padding-right:0 !important;
+
+    box-sizing:border-box !important;
+
+    white-space:nowrap !important;
+
+    transform:none !important;
+
+}
+
+   .edit-profile-box .profile-mobile-value strong{
+
+    display:block !important;
+
+    width:max-content !important;
+
+    margin:0 !important;
+
+    padding:0 !important;
 
     white-space:nowrap !important;
 
     font-weight:400 !important;
+
 }
 
 
@@ -2691,19 +2698,13 @@ width:100% !important;
        MOBILE NUMBER LABEL COLON
        ================================ */
 
-    .edit-profile-box .edit-mobile-label::after{
+   .edit-profile-box .edit-mobile-label::after{
 
-        content:":" !important;
+    content:none !important;
 
-        position:absolute !important;
+    display:none !important;
 
-        right:5px !important;
-
-        width:8px !important;
-
-        text-align:center !important;
-
-    }
+}
 
 
     /* ================================
