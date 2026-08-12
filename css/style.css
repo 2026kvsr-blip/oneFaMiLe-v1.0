@@ -16,6 +16,7 @@ padding-bottom:80px;
 overflow-x:hidden;
 
 }
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2157,15 +2158,26 @@ input:disabled{
    ===================================== */
 
 .new-mobile-area{
+    grid-column:3 !important;
 
-    display:flex;
+    display:flex !important;
 
-    flex-direction:column;
+    flex-direction:row !important;
 
-    align-items:flex-start;
+    align-items:center !important;
 
+    justify-content:flex-start !important;
+
+    gap:5px !important;
+
+    margin:0 !important;
+
+    padding:0 !important;
+
+    width:100% !important;
+
+    box-sizing:border-box !important;
 }
-
 
 /* =====================================
    NEW MOBILE INPUT
