@@ -8187,7 +8187,8 @@ if(mobileOTPCountdownTimer){
                 if(verifyBtn){                    verifyBtn.disabled = true;                }
                 if(resendBtn){                    resendBtn.disabled = false;                    resendBtn.classList.remove(  "hidden"        );       }  return;   }
             remaining--;
-        },1000);
+        },
+                1000);
 }
 // =====================================
 // MOBILE CHANGE 1 MINUTE LOCK TIMER
