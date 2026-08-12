@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -8345,8 +8346,8 @@ let remaining =
     // START TIMER
     // =================================
 
-    const timer =
-        setInterval(()=>{
+   mobileOTPCountdownTimer =
+    setInterval(()=>{
 
 
             // =============================
@@ -8386,7 +8387,11 @@ let remaining =
             if(remaining <= 0){
 
                 // Stop timer
-                clearInterval(timer);
+               clearInterval(
+    mobileOTPCountdownTimer
+);
+
+mobileOTPCountdownTimer = null;
                 sessionStorage.removeItem(
                "mobileChangeLockUntil"
                 );
