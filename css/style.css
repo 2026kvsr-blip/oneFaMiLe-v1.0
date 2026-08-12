@@ -16,6 +16,7 @@ padding-bottom:80px;
 overflow-x:hidden;
 
 }
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2171,20 +2172,40 @@ input:disabled{
    NEW MOBILE INPUT
    ===================================== */
 
+/* =====================================
+   CHANGE MOBILE - NEW MOBILE BOX
+   Same as Edit Profile
+   ===================================== */
+
 #newMobileNumber{
 
-    width:125px;
+    width:180px !important;
 
-    height:25px;
+    max-width:100% !important;
 
-    box-sizing:border-box;
+    height:44px !important;
 
-    font-size:15px;
+    min-height:44px !important;
 
-    padding:0 12px;
+    box-sizing:border-box !important;
+
+    padding:0 12px !important;
+
+    font-size:16px !important;
+
+    line-height:normal !important;
+
+    border:1px solid #c4d4ff !important;
+
+    border-radius:10px !important;
+
+    background:#ffffff !important;
+
+    color:#222 !important;
+
+    text-align:left !important;
 
 }
-
 /* =====================================
    AVAILABILITY MESSAGE
    ===================================== */
@@ -3070,4 +3091,40 @@ width:100%;
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+}
+
+
+/* =====================================
+   VERIFY MOBILE - OTP BOX
+   Same as Edit Profile
+   ===================================== */
+
+#mobileChangeOTP{
+
+    width:180px !important;
+
+    max-width:100% !important;
+
+    height:44px !important;
+
+    min-height:44px !important;
+
+    box-sizing:border-box !important;
+
+    padding:0 12px !important;
+
+    font-size:16px !important;
+
+    line-height:normal !important;
+
+    border:1px solid #c4d4ff !important;
+
+    border-radius:10px !important;
+
+    background:#ffffff !important;
+
+    color:#222 !important;
+
+    text-align:left !important;
+
 }
