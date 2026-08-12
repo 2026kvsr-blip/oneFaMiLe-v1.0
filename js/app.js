@@ -6993,9 +6993,7 @@ otpFormData.append(
 
 const otpResult =
     await otpResponse.json();
-
-    );
-
+  
 if(sendingMsg){
 
     sendingMsg.classList.add("hidden");
