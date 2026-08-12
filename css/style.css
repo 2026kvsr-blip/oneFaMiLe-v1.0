@@ -17,7 +17,6 @@ overflow-x:hidden;
 
 }
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -2134,91 +2133,77 @@ input:disabled{
 }
 
 /* =====================================
-   NEW MOBILE AREA
+   NEW MOBILE NUMBER
+   INPUT + MESSAGE
    ===================================== */
 
 .new-mobile-area{
+
     grid-column:3 !important;
 
-    display:flex !important;
+    display:grid !important;
 
-    flex-direction:row !important;
+    grid-template-columns:180px !important;
+
+    grid-template-rows:44px auto !important;
 
     align-items:center !important;
 
-    justify-content:flex-start !important;
+    justify-content:start !important;
 
-    gap:5px !important;
+    width:180px !important;
 
     margin:0 !important;
 
     padding:0 !important;
 
-    width:100% !important;
-
     box-sizing:border-box !important;
+
 }
 
-/* =====================================
-   NEW MOBILE INPUT
-   ===================================== */
 
-/* =====================================
-   CHANGE MOBILE - NEW MOBILE BOX
-   Same as Edit Profile
-   ===================================== */
+/* NEW MOBILE NUMBER BOX */
 
 #newMobileNumber{
 
-    width:180px !important;
+    grid-column:1 !important;
 
-    max-width:100% !important;
+    grid-row:1 !important;
+
+    width:180px !important;
 
     height:44px !important;
 
     min-height:44px !important;
 
+    margin:0 !important;
+
     box-sizing:border-box !important;
 
-    padding:0 12px !important;
-
-    font-size:16px !important;
-
-    line-height:normal !important;
-
-    border:1px solid #c4d4ff !important;
-
-    border-radius:10px !important;
-
-    background:#ffffff !important;
-
-    color:#222 !important;
-
-    text-align:left !important;
-
-}
-/* =====================================
-   AVAILABILITY MESSAGE
-   ===================================== */
-
-.mobile-availability-msg{
-
-    min-width:170px;
-
-    height:22px;
-
-    margin-top:4px;
-
-    font-size:13px;
-
-    font-weight:normal;
-
-    line-height:20px;
-
-    white-space:nowrap;
-
 }
 
+
+/* AVAILABILITY MESSAGE - BELOW BOX */
+
+#mobileAvailabilityMsg{
+
+    grid-column:1 !important;
+
+    grid-row:2 !important;
+
+    width:180px !important;
+
+    margin:4px 0 0 0 !important;
+
+    padding:0 !important;
+
+    text-align:center !important;
+
+    white-space:normal !important;
+
+    box-sizing:border-box !important;
+
+}
 /* =====================================
    CURRENT MOBILE VALUE
    ===================================== */
@@ -3120,4 +3105,76 @@ width:100%;
 
 }
 
+
+/* =====================================
+   VERIFY MOBILE NUMBER - OTP
+   SAME SIZE AS EDIT PROFILE
+   ===================================== */
+
 .verify-otp-row{
+
+    display:grid !important;
+
+    grid-template-columns:
+        165px
+        8px
+        1fr !important;
+
+    align-items:center !important;
+
+    column-gap:0 !important;
+
+    min-height:60px !important;
+
+    width:100% !important;
+
+    box-sizing:border-box !important;
+
+}
+
+
+.verify-otp-row > span{
+
+    grid-column:1 !important;
+
+    white-space:nowrap !important;
+
+}
+
+
+.verify-otp-row #mobileChangeOTP{
+
+    grid-column:3 !important;
+
+    width:180px !important;
+
+    min-width:180px !important;
+
+    max-width:180px !important;
+
+    height:44px !important;
+
+    min-height:44px !important;
+
+    box-sizing:border-box !important;
+
+    margin:0 !important;
+
+    padding:0 12px !important;
+
+    font-size:16px !important;
+
+    line-height:normal !important;
+
+    border:1px solid #c4d4ff !important;
+
+    border-radius:10px !important;
+
+    background:#ffffff !important;
+
+    color:#222 !important;
+
+    text-align:left !important;
+
+}
+
