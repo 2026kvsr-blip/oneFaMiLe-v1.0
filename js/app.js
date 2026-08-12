@@ -2,6 +2,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6533,7 +6534,9 @@ const sendBtn =
     return;
 }
 
+        
     // Indian mobile validation
+        
     if(!/^[6-9]\d{9}$/.test(mobile)){
 
     msg.textContent =
@@ -6575,7 +6578,18 @@ const sendBtn =
 
     return;
 }
+// =====================================
+// VERIFY MOBILE NUMBER
+// =====================================
 
+msg.innerHTML =
+    '<span class="spinner"></span> Verifying Mobile Number...';
+
+msg.style.color = "";
+
+if(sendBtn){
+    sendBtn.disabled = true;
+}
 
     try{
 
@@ -6914,29 +6928,85 @@ otpFormData.append(
 );
 
 
-try{
+   try{
 
-    showLoader("Sending OTP...");
+    const availabilityMsg =
+        document.getElementById(
+            "mobileAvailabilityMsg"
+        );
 
+    const sendBtn =
+        document.getElementById(
+            "sendMobileOTPBtn"
+        );
+
+    const sendingMsg =
+        document.getElementById(
+            "mobileOtpSendingMsg"
+        );
+
+
+    // =====================================
+    // HIDE MOBILE AVAILABLE MESSAGE
+    // =====================================
+
+    if(availabilityMsg){
+
+        availabilityMsg.textContent = "";
+
+        availabilityMsg.innerHTML = "";
+
+    }
+
+
+    // =====================================
+    // DISABLE SEND OTP BUTTON
+    // =====================================
+
+    if(sendBtn){
+
+        sendBtn.disabled = true;
+
+    }
+
+
+    // =====================================
+    // SHOW SENDING OTP ANIMATION
+    // =====================================
+
+    if(sendingMsg){
+
+        sendingMsg.classList.remove("hidden");
+
+    }
+
+
+    // =====================================
+    // SEND OTP TO BACKEND
+    // =====================================
 
     const otpResponse =
         await fetch(API_URL,{
-
             method:"POST",
-
             body:otpFormData
-
         });
+    
 
+const otpResult =
+    await otpResponse.json();
 
-    const otpResult =
-        await otpResponse.json();
+const sendingMsg =
+    document.getElementById(
+        "mobileOtpSendingMsg"
+    );
 
+if(sendingMsg){
 
-    hideLoader();
+    sendingMsg.classList.add("hidden");
 
+}
 
-    if(otpResult.status !== "success"){
+if(otpResult.status !== "success"){
 
         showMessage(
             otpResult.message ||
