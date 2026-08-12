@@ -6220,7 +6220,17 @@ function showEditProfile(){
     <span>Phone Number</span>
 
     <div class="phone-test-value">
+
         <strong>${user.mobile || "-"}</strong>
+
+        <button
+            id="phoneTestChangeBtn"
+            class="grid-btn">
+
+            ✏️ Change
+
+        </button>
+
     </div>
 
 </div>
