@@ -16,6 +16,7 @@ padding-bottom:80px;
 overflow-x:hidden;
 
 }
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2406,8 +2407,6 @@ input:disabled{
 
     box-sizing:border-box;
 
-    padding-left:12px;
-
     white-space:nowrap;
 
     transform:none;
@@ -2534,18 +2533,6 @@ input:disabled{
 }
 
 
-.edit-profile-box .edit-mobile-label::after{
-
-    content:":" !important;
-
-    position:absolute;
-
-    right:0;
-
-    width:8px;
-
-    text-align:center;
-}
 
 
 /* prevent duplicate colon */
@@ -2662,8 +2649,7 @@ input:disabled{
 
         margin:0 !important;
 
-        padding:0 0 0 12px !important;
-
+        padding:0 !important;
         box-sizing:border-box !important;
 
         white-space:nowrap !important;
@@ -2673,21 +2659,20 @@ input:disabled{
     }
 
 
-    .edit-profile-box .profile-mobile-value strong{
+   .edit-profile-box .profile-mobile-value strong{
 
-        display:inline-block !important;
+    display:inline-block !important;
 
-        width:auto !important;
+    margin:0 !important;
 
-        margin:0 !important;
+    padding-left:12px !important;
 
-        padding:0 !important;
+    padding-right:0 !important;
 
-        white-space:nowrap !important;
+    white-space:nowrap !important;
 
-        font-weight:400 !important;
-
-    }
+    font-weight:400 !important;
+}
 
 
     /* REMOVE ANY EXTRA COLON BEFORE NUMBER */
