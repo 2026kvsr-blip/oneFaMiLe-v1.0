@@ -14,7 +14,6 @@ const newPassCode = document.getElementById("newPassCode");
 
 const confirmNewPassCode = document.getElementById("confirmNewPassCode");
 const saveNewPassCodeBtn = document.getElementById("saveNewPassCodeBtn");
-
 const backResetPassCodeBtn = document.getElementById("backResetPassCodeBtn");
 const signupPassCodeBox =
 document.getElementById("signupPassCodeBox");
@@ -6985,21 +6984,19 @@ try{
             </div>
 
 
-            <div class="profile-row">
+            <div class="profile-row verify-otp-row">
 
-                <span>Enter OTP</span>
+    <span>Enter OTP</span>
 
-                <input
-                    id="mobileChangeOTP"
-                    type="tel"
-                    inputmode="numeric"
-                    maxlength="6"
-                    placeholder="Enter 6-digit OTP"
-                >
+    <input
+        id="mobileChangeOTP"
+        type="tel"
+        inputmode="numeric"
+        maxlength="6"
+        placeholder="Enter 6-digit OTP"
+    >
 
-            </div>
-
-        </div>
+</div>        </div>
 
 
         <div align="center">
