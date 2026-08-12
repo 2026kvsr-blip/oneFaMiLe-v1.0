@@ -16,6 +16,7 @@ padding-bottom:80px;
 overflow-x:hidden;
 
 }
+
 /* =======================
 TOP BAR
 ======================= */
@@ -2406,11 +2407,12 @@ input:disabled{
 
     box-sizing:border-box;
 
+    padding-left:12px;
+
     white-space:nowrap;
 
     transform:none;
 }
-
 
 .edit-profile-box .profile-mobile-value strong{
 
