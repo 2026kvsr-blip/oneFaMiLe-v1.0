@@ -6851,7 +6851,7 @@ const sendBtn =
 
 const sendingMsg =
     availabilityMsg;
-    );
+
 
 
     // =====================================
