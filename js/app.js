@@ -6839,19 +6839,18 @@ otpFormData.append(
 
    try{
 
-    const availabilityMsg =
-        document.getElementById(
-            "mobileAvailabilityMsg"
-        );
-
-    const sendBtn =
-        document.getElementById(
-            "sendMobileOTPBtn"
-        );
-
-  const sendingMsg =
+   const availabilityMsg =
     document.getElementById(
         "mobileAvailabilityMsg"
+    );
+
+const sendBtn =
+    document.getElementById(
+        "sendMobileOTPBtn"
+    );
+
+const sendingMsg =
+    availabilityMsg;
     );
 
 
