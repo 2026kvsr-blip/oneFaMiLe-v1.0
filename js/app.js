@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -7135,162 +7136,6 @@ else{
 // RESEND OTP
 // =====================================
 
-document
-    .getElementById("resendMobileOTPBtn")
-    .onclick = async ()=>{
-
-    const resendBtn =
-        document.getElementById(
-            "resendMobileOTPBtn"
-        );
-
-    const verifyBtn =
-        document.getElementById(
-            "verifyMobileOTPBtn"
-        );
-
-    const status =
-        document.getElementById(
-            "mobileOTPStatus"
-        );
-
-
-    // =====================================
-    // DISABLE RESEND BUTTON
-    // =====================================
-
-    if(resendBtn){
-
-        resendBtn.disabled = true;
-
-    }
-
-
-    // =====================================
-    // SHOW SENDING MESSAGE
-    // =====================================
-
-    if(status){
-
-        status.innerHTML =
-            '<span class="spinner"></span> Sending OTP...';
-
-    }
-
-
-    // =====================================
-    // SEND RESEND OTP REQUEST
-    // =====================================
-
-    const resendData =
-        new FormData();
-
-    resendData.append(
-        "action",
-        "sendMobileChangeOTP"
-    );
-
-    resendData.append(
-        "mobile",
-        newMobile
-    );
-
-
-    try{
-
-        const resendResponse =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                body:resendData
-
-            });
-
-
-        const resendResult =
-            await resendResponse.json();
-
-
-        // =====================================
-        // RESEND FAILED
-        // =====================================
-
-        if(resendResult.status !== "success"){
-
-            if(resendBtn){
-
-                resendBtn.disabled = false;
-
-            }
-
-            if(status){
-
-                status.textContent =
-                    resendResult.message ||
-                    "Unable to resend OTP.";
-
-            }
-
-            return;
-
-        }
-
-
-        // =====================================
-        // RESEND SUCCESS
-        // =====================================
-
-        if(verifyBtn){
-
-            verifyBtn.disabled = false;
-
-        }
-
-
-        if(resendBtn){
-
-            resendBtn.classList.add(
-                "hidden"
-            );
-
-        }
-         sessionStorage.setItem(
-    "mobileChangeOTPExpiresAt",
-    String(
-        Date.now() + (30 * 1000)
-    )
-);
-
-        // =====================================
-        // START NEW 30 SECOND COUNTDOWN
-        // =====================================
-
-        startMobileOTPCountdown(30);
-
-    }
-    catch(err){
-
-        console.log(err);
-
-
-        if(resendBtn){
-
-            resendBtn.disabled = false;
-
-        }
-
-
-        if(status){
-
-            status.textContent =
-                "Unable to resend OTP.";
-
-        }
-
-    }
-
-};   
     // =====================================
     // OTP SCREEN BACK
     // =====================================
@@ -8416,6 +8261,11 @@ function showMobileOTPPage(
 // RESEND MOBILE OTP
 // =====================================
 
+// =====================================
+// RESEND MOBILE OTP
+// MAXIMUM 2 RESENDS
+// =====================================
+
 document
     .getElementById("resendMobileOTPBtn")
     .onclick = async ()=>{
@@ -8442,6 +8292,40 @@ document
 
 
     // =====================================
+    // CHECK CURRENT RESEND COUNT
+    // =====================================
+
+    let resendCount =
+        getMobileResendCount();
+
+
+    // =====================================
+    // MAXIMUM 2 RESENDS
+    // =====================================
+
+    if(
+        resendCount >=
+        MOBILE_OTP_RESEND_LIMIT
+    ){
+
+        sessionStorage.setItem(
+            "mobileChangeResendLockUntil",
+            String(
+                Date.now() +
+                MOBILE_OTP_WINDOW
+            )
+        );
+
+        startMobileChangeLockTimer(
+            60
+        );
+
+        return;
+
+    }
+
+
+    // =====================================
     // CLEAR OLD OTP
     // =====================================
 
@@ -8453,7 +8337,7 @@ document
 
 
     // =====================================
-    // DISABLE RESEND
+    // DISABLE RESEND BUTTON
     // =====================================
 
     if(resendBtn){
@@ -8517,7 +8401,10 @@ document
         // RESEND FAILED
         // =====================================
 
-        if(result.status !== "success"){
+        if(
+            result.status !==
+            "success"
+        ){
 
             if(status){
 
@@ -8529,7 +8416,8 @@ document
 
             if(resendBtn){
 
-                resendBtn.disabled = false;
+                resendBtn.disabled =
+                    false;
 
                 resendBtn.classList.remove(
                     "hidden"
@@ -8543,7 +8431,20 @@ document
 
 
         // =====================================
-        // SAVE NEW EXPIRY TIME
+        // INCREASE RESEND COUNT
+        // =====================================
+
+        resendCount++;
+
+
+        sessionStorage.setItem(
+            "mobileChangeResendCount",
+            String(resendCount)
+        );
+
+
+        // =====================================
+        // SAVE MOBILE
         // =====================================
 
         sessionStorage.setItem(
@@ -8551,12 +8452,39 @@ document
             newMobile
         );
 
+
+        // =====================================
+        // SAVE NEW OTP EXPIRY
+        // =====================================
+
         sessionStorage.setItem(
             "mobileChangeOTPExpiresAt",
             String(
-                Date.now() + (30 * 1000)
+                Date.now() +
+                (30 * 1000)
             )
         );
+
+
+        // =====================================
+        // SECOND RESEND COMPLETED
+        // START 1 MINUTE LOCK
+        // =====================================
+
+        if(
+            resendCount >=
+            MOBILE_OTP_RESEND_LIMIT
+        ){
+
+            sessionStorage.setItem(
+                "mobileChangeResendLockUntil",
+                String(
+                    Date.now() +
+                    MOBILE_OTP_WINDOW
+                )
+            );
+
+        }
 
 
         // =====================================
@@ -8565,21 +8493,26 @@ document
 
         if(verifyBtn){
 
-            verifyBtn.disabled = false;
+            verifyBtn.disabled =
+                false;
 
         }
 
 
         // =====================================
-        // START NEW COUNTDOWN
+        // START NEW OTP COUNTDOWN
         // =====================================
 
-        startMobileOTPCountdown(30);
+        startMobileOTPCountdown(
+            30
+        );
+
 
     }
     catch(err){
 
         console.log(err);
+
 
         if(status){
 
@@ -8588,9 +8521,11 @@ document
 
         }
 
+
         if(resendBtn){
 
-            resendBtn.disabled = false;
+            resendBtn.disabled =
+                false;
 
             resendBtn.classList.remove(
                 "hidden"
@@ -8602,15 +8537,93 @@ document
 
 };
 
-}
-
-
 let mobileOTPCountdownTimer = null;
+// =====================================
+// MOBILE CHANGE OTP SECURITY
+// =====================================
 
+const MOBILE_OTP_RESEND_LIMIT = 2;
+
+const MOBILE_OTP_WINDOW =
+    60 * 1000;
 // =====================================
 // MOBILE OTP COUNTDOWN
 // =====================================
+// =====================================
+// CHECK / RESET RESEND WINDOW
+// =====================================
 
+function getMobileResendCount(){
+
+    const now = Date.now();
+
+    let count =
+        Number(
+            sessionStorage.getItem(
+                "mobileChangeResendCount"
+            )
+        ) || 0;
+
+    let windowStart =
+        Number(
+            sessionStorage.getItem(
+                "mobileChangeResendWindowStart"
+            )
+        ) || 0;
+
+
+    // =====================================
+    // NO WINDOW
+    // =====================================
+
+    if(!windowStart){
+
+        windowStart = now;
+
+        sessionStorage.setItem(
+            "mobileChangeResendWindowStart",
+            String(windowStart)
+        );
+
+        sessionStorage.setItem(
+            "mobileChangeResendCount",
+            "0"
+        );
+
+        return 0;
+    }
+
+
+    // =====================================
+    // 1 MINUTE COMPLETED
+    // RESET COUNT
+    // =====================================
+
+    if(
+        now - windowStart >=
+        MOBILE_OTP_WINDOW
+    ){
+
+        count = 0;
+
+        windowStart = now;
+
+
+        sessionStorage.setItem(
+            "mobileChangeResendWindowStart",
+            String(windowStart)
+        );
+
+        sessionStorage.setItem(
+            "mobileChangeResendCount",
+            "0"
+        );
+
+    }
+
+
+    return count;
+}
 function startMobileOTPCountdown(seconds){
 
     if(mobileOTPCountdownTimer){
