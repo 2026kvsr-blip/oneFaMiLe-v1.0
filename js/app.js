@@ -1,4 +1,3 @@
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6370,14 +6369,69 @@ function showEditProfile(){
 // =====================================
 
 document.getElementById("changeMobileBtn").onclick = ()=>{
-    
 
-        profilePage.innerHTML = `
+    // =====================================
+    // CHECK PENDING MOBILE OTP
+    // =====================================
+
+    const pendingMobile =
+        sessionStorage.getItem(
+            "mobileChangePendingMobile"
+        );
+
+    const otpExpiresAt =
+        Number(
+            sessionStorage.getItem(
+                "mobileChangeOTPExpiresAt"
+            )
+        );
+
+
+    // =====================================
+    // OTP STILL ACTIVE
+    // =====================================
+
+    if(
+        pendingMobile &&
+        otpExpiresAt &&
+        otpExpiresAt > Date.now()
+    ){
+
+        const remainingSeconds =
+            Math.ceil(
+                (otpExpiresAt - Date.now()) / 1000
+            );
+
+
+        showMobileOTPPage(
+            pendingMobile,
+            remainingSeconds
+        );
+
+        return;
+
+    }
+
+
+    // =====================================
+    // NO ACTIVE OTP
+    // =====================================
+
+    sessionStorage.removeItem(
+        "mobileChangePendingMobile"
+    );
+
+    sessionStorage.removeItem(
+        "mobileChangeOTPExpiresAt"
+    );
+
+
+    profilePage.innerHTML = `
 
         <h3>
             📱 Change Mobile Number
         </h3>
-
+        
         <div class="profile-box">
 
 <!-- =================================
@@ -6923,6 +6977,23 @@ if(otpResult.status !== "success"){
         return;
     }
 
+// =====================================
+// SAVE PENDING MOBILE OTP
+// =====================================
+
+sessionStorage.setItem(
+    "mobileChangePendingMobile",
+    newMobile
+);
+
+sessionStorage.setItem(
+    "mobileChangeOTPExpiresAt",
+    String(
+        Date.now() + (30 * 1000)
+    )
+);
+
+       
      // =====================================
 // SAVE PENDING MOBILE CHANGE
 // =====================================
@@ -8226,10 +8297,126 @@ user.country = country;
 
 }
 
+// =====================================
+// SHOW MOBILE OTP PAGE
+// =====================================
+
+function showMobileOTPPage(
+    newMobile,
+    remainingSeconds
+){
+
+    profilePage.innerHTML = `
+
+        <div
+            id="mobileOTPStatus"
+            style="
+                text-align:center;
+                font-weight:bold;
+                margin-bottom:8px;
+            "
+        >
+            ⏱️ OTP expires in 00:30
+        </div>
+
+
+        <h3>
+            🔐 Verify Mobile Number
+        </h3>
+
+
+        <div class="profile-box">
+
+            <div class="profile-row">
+
+                <span>New Mobile Number</span>
+
+                <strong>
+                    ${newMobile}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-row verify-otp-row">
+
+                <span>Enter OTP</span>
+
+                <input
+                    id="mobileChangeOTP"
+                    type="tel"
+                    inputmode="numeric"
+                    maxlength="6"
+                    placeholder="Enter 6-digit OTP"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div align="center">
+
+            <button
+                id="verifyMobileOTPBtn"
+                class="grid-btn">
+
+                Verify OTP
+
+            </button>
+
+
+            <button
+                id="resendMobileOTPBtn"
+                class="grid-btn hidden">
+
+                🔄 Resend OTP
+
+            </button>
+
+
+            <br><br>
+
+
+            <button
+                id="mobileOTPBackBtn"
+                class="back-btn">
+
+                ← Back
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    // =====================================
+    // START REMAINING COUNTDOWN
+    // =====================================
+
+    startMobileOTPCountdown(
+        remainingSeconds
+    );
+
+
+    // =====================================
+    // BACK
+    // =====================================
+
+    document
+        .getElementById("mobileOTPBackBtn")
+        .onclick = ()=>{
+
+        showEditProfile();
+
+    };
+
+
+}
+
+
 let mobileOTPCountdownTimer = null;
-// =====================================
-// MOBILE OTP COUNTDOWN
-// =====================================
 
 // =====================================
 // MOBILE OTP COUNTDOWN
