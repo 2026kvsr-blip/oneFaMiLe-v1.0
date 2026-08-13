@@ -3177,3 +3177,46 @@ width:100%;
     text-align:left !important;
 
 }
+/* =====================================
+   SENDING OTP SMALL SPINNER
+   ===================================== */
+
+#mobileAvailabilityMsg .spinner{
+
+    display:inline-block;
+
+    width:12px;
+
+    height:12px;
+
+    margin-right:5px;
+
+    vertical-align:-2px;
+
+    border:2px solid #c4d4ff;
+
+    border-top-color:#4A9FE8;
+
+    border-radius:50%;
+
+    animation:
+        mobileOtpSpin
+        0.7s linear infinite;
+}
+
+
+@keyframes mobileOtpSpin{
+
+    from{
+
+        transform:rotate(0deg);
+
+    }
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
