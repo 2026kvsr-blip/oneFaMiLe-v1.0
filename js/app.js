@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6881,11 +6880,16 @@ const sendingMsg =
     // SHOW SENDING OTP ANIMATION
     // =====================================
 
-    if(sendingMsg){
+   // =====================================
+// SHOW SENDING OTP ANIMATION
+// =====================================
 
-        sendingMsg.classList.remove("hidden");
+if(sendingMsg){
 
-    }
+    sendingMsg.innerHTML =
+        '<span class="spinner"></span> Sending OTP...';
+
+}
 
 
     // =====================================
