@@ -8536,7 +8536,7 @@ document
     }
 
 };
-
+}
 let mobileOTPCountdownTimer = null;
 // =====================================
 // MOBILE CHANGE OTP SECURITY
@@ -9260,6 +9260,7 @@ backResetPassCodeBtn.onclick = ()=>{
     document.querySelector("#signupOTPPage input[type='text']").value = "";
 
 };
+
     
 /* ======================
 APP START
