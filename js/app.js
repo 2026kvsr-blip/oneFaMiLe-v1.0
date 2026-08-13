@@ -1,3 +1,4 @@
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8411,7 +8412,195 @@ function showMobileOTPPage(
         showEditProfile();
 
     };
+// =====================================
+// RESEND MOBILE OTP
+// =====================================
 
+document
+    .getElementById("resendMobileOTPBtn")
+    .onclick = async ()=>{
+
+    const resendBtn =
+        document.getElementById(
+            "resendMobileOTPBtn"
+        );
+
+    const verifyBtn =
+        document.getElementById(
+            "verifyMobileOTPBtn"
+        );
+
+    const status =
+        document.getElementById(
+            "mobileOTPStatus"
+        );
+
+    const otpInput =
+        document.getElementById(
+            "mobileChangeOTP"
+        );
+
+
+    // =====================================
+    // CLEAR OLD OTP
+    // =====================================
+
+    if(otpInput){
+
+        otpInput.value = "";
+
+    }
+
+
+    // =====================================
+    // DISABLE RESEND
+    // =====================================
+
+    if(resendBtn){
+
+        resendBtn.disabled = true;
+
+        resendBtn.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    // =====================================
+    // SHOW SENDING OTP
+    // =====================================
+
+    if(status){
+
+        status.innerHTML =
+            '<span class="spinner"></span> Sending OTP...';
+
+    }
+
+
+    // =====================================
+    // SEND NEW OTP
+    // =====================================
+
+    const resendData =
+        new FormData();
+
+    resendData.append(
+        "action",
+        "sendMobileChangeOTP"
+    );
+
+    resendData.append(
+        "mobile",
+        newMobile
+    );
+
+
+    try{
+
+        const response =
+            await fetch(API_URL,{
+
+                method:"POST",
+
+                body:resendData
+
+            });
+
+
+        const result =
+            await response.json();
+
+
+        // =====================================
+        // RESEND FAILED
+        // =====================================
+
+        if(result.status !== "success"){
+
+            if(status){
+
+                status.textContent =
+                    result.message ||
+                    "Unable to resend OTP.";
+
+            }
+
+            if(resendBtn){
+
+                resendBtn.disabled = false;
+
+                resendBtn.classList.remove(
+                    "hidden"
+                );
+
+            }
+
+            return;
+
+        }
+
+
+        // =====================================
+        // SAVE NEW EXPIRY TIME
+        // =====================================
+
+        sessionStorage.setItem(
+            "mobileChangePendingMobile",
+            newMobile
+        );
+
+        sessionStorage.setItem(
+            "mobileChangeOTPExpiresAt",
+            String(
+                Date.now() + (30 * 1000)
+            )
+        );
+
+
+        // =====================================
+        // ENABLE VERIFY
+        // =====================================
+
+        if(verifyBtn){
+
+            verifyBtn.disabled = false;
+
+        }
+
+
+        // =====================================
+        // START NEW COUNTDOWN
+        // =====================================
+
+        startMobileOTPCountdown(30);
+
+    }
+    catch(err){
+
+        console.log(err);
+
+        if(status){
+
+            status.textContent =
+                "Unable to resend OTP.";
+
+        }
+
+        if(resendBtn){
+
+            resendBtn.disabled = false;
+
+            resendBtn.classList.remove(
+                "hidden"
+            );
+
+        }
+
+    }
+
+};
 
 }
 
