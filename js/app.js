@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6994,7 +6993,12 @@ sessionStorage.setItem(
         Date.now() + (30 * 1000)
     )
 );
+showMobileOTPPage(
+    newMobile,
+    30
+);
 
+return;
        
      // =====================================
 // SAVE PENDING MOBILE CHANGE
