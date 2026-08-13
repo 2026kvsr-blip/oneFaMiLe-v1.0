@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6418,19 +6419,27 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
 
     <div class="new-mobile-area">
 
-        <input
-            id="newMobileNumber"
-            type="tel"
-            inputmode="numeric"
-            maxlength="10"
-        >
+    <input
+        id="newMobileNumber"
+        type="tel"
+        inputmode="numeric"
+        maxlength="10"
+    >
 
-        <div
-            id="mobileAvailabilityMsg"
-            class="mobile-availability-msg"
-        ></div>
+    <div
+        id="mobileAvailabilityMsg"
+        class="mobile-availability-msg"
+    ></div>
 
+    <div
+        id="mobileOtpSendingMsg"
+        class="hidden"
+    >
+        <span class="spinner"></span>
+        Sending OTP...
     </div>
+
+</div>
 
 </div>
 
@@ -6447,15 +6456,6 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
                 Send OTP
 
             </button>
-
-            <div
-                id="mobileOtpSendingMsg"
-                class="hidden">
-
-                <span class="spinner"></span>
-                Sending OTP...
-
-            </div>
 
 
             <br><br>
