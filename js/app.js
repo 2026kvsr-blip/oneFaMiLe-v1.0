@@ -18,7 +18,6 @@ const saveNewPassCodeBtn = document.getElementById("saveNewPassCodeBtn");
 const backResetPassCodeBtn = document.getElementById("backResetPassCodeBtn");
 const signupPassCodeBox =
 document.getElementById("signupPassCodeBox");
-
 const signupConfirmPassCodeBox =
 document.getElementById("signupConfirmPassCodeBox");
 
@@ -6371,8 +6370,9 @@ function showEditProfile(){
 // =====================================
 
 document.getElementById("changeMobileBtn").onclick = ()=>{
+    
 
-    profilePage.innerHTML = `
+        profilePage.innerHTML = `
 
         <h3>
             📱 Change Mobile Number
@@ -6923,6 +6923,21 @@ if(otpResult.status !== "success"){
         return;
     }
 
+     // =====================================
+// SAVE PENDING MOBILE CHANGE
+// =====================================
+
+sessionStorage.setItem(
+    "mobileChangePendingMobile",
+    newMobile
+);
+
+sessionStorage.setItem(
+    "mobileChangeOTPExpiresAt",
+    String(
+        Date.now() + (30 * 1000)
+    )
+);  
 
     // =====================================
     // SHOW OTP VERIFICATION
@@ -7168,7 +7183,12 @@ document
             );
 
         }
-
+         sessionStorage.setItem(
+    "mobileChangeOTPExpiresAt",
+    String(
+        Date.now() + (30 * 1000)
+    )
+);
 
         // =====================================
         // START NEW 30 SECOND COUNTDOWN
@@ -8237,6 +8257,16 @@ function startMobileOTPCountdown(seconds){
         document.getElementById(
             "verifyMobileOTPBtn"
         );
+    const otpInput =
+    document.getElementById(
+        "mobileChangeOTP"
+    );
+
+if(otpInput){
+
+    otpInput.value = "";
+
+}
 
     const resendBtn =
         document.getElementById(
@@ -8484,6 +8514,8 @@ let remaining =
         resendBtn.classList.remove(
             "hidden"
         );
+
+        
 
     }
 
