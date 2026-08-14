@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6393,26 +6392,38 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
     // OTP STILL ACTIVE
     // =====================================
 
-    if(
-        pendingMobile &&
-        otpExpiresAt &&
-        otpExpiresAt > Date.now()
-    ){
+    // =====================================
+// ACTIVE OTP STILL EXISTS
+// =====================================
 
-        const remainingSeconds =
-            Math.ceil(
-                (otpExpiresAt - Date.now()) / 1000
-            );
+const now =
+    Date.now();
 
 
-        showMobileOTPPage(
-            pendingMobile,
-            remainingSeconds
+if(
+    pendingMobile &&
+    otpExpiresAt &&
+    otpExpiresAt > now
+){
+
+    const remainingSeconds =
+        Math.ceil(
+            (otpExpiresAt - now) / 1000
         );
 
-        return;
 
-    }
+    // =====================================
+    // RETURN DIRECTLY TO VERIFY OTP PAGE
+    // =====================================
+
+    showMobileOTPPage(
+        pendingMobile,
+        remainingSeconds
+    );
+
+    return;
+
+}
 
 
     // =====================================
