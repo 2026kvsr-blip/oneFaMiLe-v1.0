@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8273,6 +8274,213 @@ function showMobileOTPPage(
         showEditProfile();
 
     };
+    // =====================================
+// VERIFY MOBILE OTP
+// =====================================
+
+document
+    .getElementById("verifyMobileOTPBtn")
+    .onclick = async ()=>{
+
+    const otpInput =
+        document.getElementById(
+            "mobileChangeOTP"
+        );
+
+    const enteredOTP =
+        otpInput.value.trim();
+
+
+    // EMPTY OTP
+    if(enteredOTP === ""){
+
+        showMessage(
+            "Please enter OTP.",
+            "warning",
+            3000
+        );
+
+        otpInput.focus();
+
+        return;
+    }
+
+
+    // OTP FORMAT
+    if(!/^\d{6}$/.test(enteredOTP)){
+
+        showMessage(
+            "OTP must contain exactly 6 digits.",
+            "warning",
+            3000
+        );
+
+        otpInput.focus();
+
+        return;
+    }
+
+
+    const verifyBtn =
+        document.getElementById(
+            "verifyMobileOTPBtn"
+        );
+
+
+    // DISABLE VERIFY
+    verifyBtn.disabled = true;
+
+
+    const verifyData =
+        new FormData();
+
+
+    verifyData.append(
+        "action",
+        "verifyMobileChangeOTP"
+    );
+
+    verifyData.append(
+        "mobile",
+        newMobile
+    );
+
+    verifyData.append(
+        "oldMobile",
+        user.mobile || ""
+    );
+
+    verifyData.append(
+        "otp",
+        enteredOTP
+    );
+
+
+    try{
+
+        showLoader(
+            "Verifying OTP..."
+        );
+
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method:"POST",
+                    body:verifyData
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        hideLoader();
+
+
+        // LOCKED
+        if(result.status === "locked"){
+
+            showMessage(
+                result.message ||
+                "Maximum 3 OTP attempts reached. Please wait 1 minute.",
+                "warning",
+                3000
+            );
+
+            startMobileChangeLockTimer(60);
+
+            return;
+        }
+
+
+        // INVALID OTP
+        if(result.status !== "success"){
+
+            verifyBtn.disabled = false;
+
+            showMessage(
+                result.message ||
+                "Invalid OTP.",
+                "warning",
+                3000
+            );
+
+            otpInput.focus();
+
+            return;
+        }
+
+
+        // SUCCESS
+        showMessage(
+            "OTP verified successfully.",
+            "success",
+            2000
+        );
+
+
+        // UPDATE USER MOBILE
+        user.mobile = newMobile;
+
+
+        sessionStorage.setItem(
+            "user",
+            JSON.stringify(user)
+        );
+
+
+        // CLEAR PENDING OTP
+        sessionStorage.removeItem(
+            "mobileChangePendingMobile"
+        );
+
+        sessionStorage.removeItem(
+            "mobileChangeOTPExpiresAt"
+        );
+
+
+        // STOP TIMER
+        if(mobileOTPCountdownTimer){
+
+            clearInterval(
+                mobileOTPCountdownTimer
+            );
+
+            mobileOTPCountdownTimer = null;
+        }
+
+
+        // RETURN TO EDIT PROFILE
+        setTimeout(()=>{
+
+            showEditProfile();
+
+        },500);
+
+    }
+    catch(err){
+
+        hideLoader();
+
+        console.log(
+            "VERIFY MOBILE OTP ERROR:",
+            err
+        );
+
+        verifyBtn.disabled = false;
+
+        showMessage(
+            "Unable to connect to server.",
+            "error",
+            3000
+        );
+
+    }
+
+};
 // =====================================
 // RESEND MOBILE OTP
 // =====================================
