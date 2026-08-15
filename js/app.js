@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6439,6 +6440,75 @@ if(
     );
 
 
+// =====================================
+// CHECK MOBILE CHANGE 1 MINUTE LOCK
+// =====================================
+
+const savedMobileLockUntil =
+    Number(
+        sessionStorage.getItem(
+            "mobileChangeLockUntil"
+        )
+    ) || 0;
+
+
+if(
+    savedMobileLockUntil &&
+    savedMobileLockUntil > Date.now()
+){
+
+    const remainingLockSeconds =
+        Math.ceil(
+            (
+                savedMobileLockUntil -
+                Date.now()
+            ) / 1000
+        );
+
+
+    // =====================================
+    // SHOW WAIT MESSAGE
+    // =====================================
+
+    profilePage.innerHTML = `
+
+        <div
+            id="mobileOTPStatus"
+            style="
+                text-align:center;
+                font-weight:bold;
+                margin-bottom:15px;
+            "
+        ></div>
+
+        <h3>
+            🔐 Mobile Change Locked
+        </h3>
+
+        <div
+            style="
+                text-align:center;
+                margin-top:15px;
+                font-weight:600;
+            "
+        >
+            Please wait until the timer finishes.
+        </div>
+
+    `;
+
+
+    // =====================================
+    // START EXISTING LOCK TIMER
+    // =====================================
+
+    startMobileChangeLockTimer(
+        remainingLockSeconds
+    );
+
+    return;
+}
+    
     profilePage.innerHTML = `
 
         <h3>
@@ -8974,11 +9044,6 @@ if(mobileOTPCountdownTimer){
     // =================================
     // CHECK OTP PAGE
     // =================================
-
-    if(!status){
-        return;
-    }
-
 
     // =================================
     // START COUNTDOWN
