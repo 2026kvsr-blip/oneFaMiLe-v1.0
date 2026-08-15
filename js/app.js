@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -7364,7 +7365,47 @@ if(verifyResult.status === "locked"){
 // INVALID OTP
 // =====================================
 
+// =====================================
+// INVALID OTP
+// =====================================
+
 if(verifyResult.status !== "success"){
+
+    mobileOTPAttempts++;
+
+    // =====================================
+    // 3 ATTEMPTS REACHED
+    // =====================================
+
+    if(
+        mobileOTPAttempts >=
+        MAX_MOBILE_OTP_ATTEMPTS
+    ){
+
+        mobileChangeLocked = true;
+
+        // STOP OTP TIMER
+        if(mobileOTPCountdownTimer){
+
+            clearInterval(
+                mobileOTPCountdownTimer
+            );
+
+            mobileOTPCountdownTimer = null;
+        }
+
+        // =====================================
+        // START 1 MINUTE LOCK
+        // =====================================
+
+        startMobileChangeLockTimer(60);
+
+        return;
+    }
+
+    // =====================================
+    // INVALID OTP
+    // =====================================
 
     showMessage(
         verifyResult.message ||
@@ -7373,9 +7414,11 @@ if(verifyResult.status !== "success"){
         3000
     );
 
+    otpInput.focus();
+
     return;
 }
- // =====================================
+            // =====================================
  // OTP SUCCESS
  // =====================================
             
@@ -8912,6 +8955,15 @@ const MOBILE_OTP_RESEND_LIMIT = 2;
 const MOBILE_OTP_WINDOW =
     60 * 1000;
 // =====================================
+// MOBILE CHANGE OTP ATTEMPT SECURITY
+// =====================================
+
+const MAX_MOBILE_OTP_ATTEMPTS = 3;
+
+let mobileOTPAttempts = 0;
+
+let mobileChangeLocked = false;
+// =====================================
 // MOBILE OTP COUNTDOWN
 // =====================================
 // =====================================
@@ -9361,6 +9413,8 @@ mobileOTPCountdownTimer = null;
                 sessionStorage.removeItem(
                "mobileChangeLockUntil"
                 );
+ mobileOTPAttempts = 0;
+    mobileChangeLocked = false;
 
                 // =========================
                 // SHOW SUCCESS MESSAGE
