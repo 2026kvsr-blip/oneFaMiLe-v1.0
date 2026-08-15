@@ -1,4 +1,3 @@
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8389,19 +8388,56 @@ document
 
 
         // LOCKED
-        if(result.status === "locked"){
+       if(result.status === "locked"){
 
-            showMessage(
-                result.message ||
-                "Maximum 3 OTP attempts reached. Please wait 1 minute.",
-                "warning",
-                3000
-            );
+    // =====================================
+    // CLEAR OLD OTP STATE
+    // =====================================
 
-            startMobileChangeLockTimer(60);
+    sessionStorage.removeItem(
+        "mobileChangePendingMobile"
+    );
 
-            return;
-        }
+    sessionStorage.removeItem(
+        "mobileChangeOTPExpiresAt"
+    );
+
+
+    // =====================================
+    // STOP OLD OTP TIMER
+    // =====================================
+
+    if(mobileOTPCountdownTimer){
+
+        clearInterval(
+            mobileOTPCountdownTimer
+        );
+
+        mobileOTPCountdownTimer = null;
+    }
+
+
+    // =====================================
+    // SHOW LOCK MESSAGE
+    // =====================================
+
+    showMessage(
+        result.message ||
+        "Maximum 3 OTP attempts reached. Please wait 1 minute.",
+        "warning",
+        3000
+    );
+
+
+    // =====================================
+    // START 1 MINUTE LOCK
+    // =====================================
+
+    startMobileChangeLockTimer(60);
+
+
+    return;
+}
 
 
         // INVALID OTP
