@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6466,7 +6465,7 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
 
 
         return;
-    }
+    };
 
 
     // =====================================
@@ -9641,7 +9640,7 @@ backResetPassCodeBtn.onclick = ()=>{
 
 };
 
-    
+
 /* ======================
 APP START
 ====================== */
