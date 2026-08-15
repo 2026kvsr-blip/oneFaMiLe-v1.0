@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6427,34 +6428,7 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
                 ) / 1000
             );
 
-        profilePage.innerHTML = `
-
-            <div
-                id="mobileOTPStatus"
-                style="
-                    text-align:center;
-                    font-weight:bold;
-                    margin-bottom:15px;
-                "
-            ></div>
-
-            <h3>
-                🔐 Mobile Change Locked
-            </h3>
-
-            <div
-                style="
-                    text-align:center;
-                    margin-top:15px;
-                    font-weight:600;
-                "
-            >
-                Please wait until the timer finishes.
-            </div>
-
-        `;
-
-
+       
         // =====================================
         // START 1 MINUTE LOCK TIMER
         // =====================================
