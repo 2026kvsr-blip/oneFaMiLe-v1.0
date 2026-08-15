@@ -6473,8 +6473,44 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
     // NO 1 MINUTE LOCK
     // =====================================
 
+  // =====================================
+// CHANGE MOBILE NUMBER
+// =====================================
+
+document
+    .getElementById("changeMobileBtn")
+    .onclick = ()=>{
+
+
     // =====================================
-    // CHECK PENDING MOBILE OTP
+    // CHECK 1 MINUTE LOCK FIRST
+    // =====================================
+
+    const mobileLockUntil =
+        Number(
+            sessionStorage.getItem(
+                "mobileChangeLockUntil"
+            )
+        ) || 0;
+
+
+    if(
+        mobileLockUntil &&
+        mobileLockUntil > Date.now()
+    ){
+
+        showMessage(
+            "Please wait until the 1 minute timer expires.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    // =====================================
+    // CHECK ACTIVE 30 SECOND OTP
     // =====================================
 
     const pendingMobile =
@@ -6482,17 +6518,14 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
             "mobileChangePendingMobile"
         );
 
+
     const otpExpiresAt =
         Number(
             sessionStorage.getItem(
                 "mobileChangeOTPExpiresAt"
             )
-        );
+        ) || 0;
 
-
-    // =====================================
-    // ACTIVE 30 SECOND OTP
-    // =====================================
 
     if(
         pendingMobile &&
@@ -6502,7 +6535,10 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
 
         const remainingSeconds =
             Math.ceil(
-                (otpExpiresAt - Date.now()) / 1000
+                (
+                    otpExpiresAt -
+                    Date.now()
+                ) / 1000
             );
 
 
@@ -6510,7 +6546,6 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
             pendingMobile,
             remainingSeconds
         );
-
 
         return;
     }
@@ -6529,6 +6564,17 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
     );
 
 
+    // =====================================
+    // NORMAL CHANGE MOBILE PAGE
+    // =====================================
+
+    profilePage.innerHTML = `
+
+        <h3>
+            📱 Change Mobile Number
+        </h3>
+
+        <div class="profile-box">
     // =====================================
     // NORMAL CHANGE MOBILE NUMBER PAGE
     // =====================================
