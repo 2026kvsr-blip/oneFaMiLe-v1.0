@@ -6478,17 +6478,6 @@ profilePage.innerHTML = `
     </h3>
 
     <div class="profile-box">
-// =====================================
-// NORMAL CHANGE MOBILE NUMBER PAGE
-// =====================================
-
-profilePage.innerHTML = `
-
-    <h3>
-        📱 Change Mobile Number
-    </h3>
-
-    <div class="profile-box">
 <!-- =================================
      CURRENT MOBILE
      ================================= -->
