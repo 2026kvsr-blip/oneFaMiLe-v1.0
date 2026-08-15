@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6420,25 +6419,18 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
         // SHOW LOCK MESSAGE
         // =====================================
 
-        const remainingLockSeconds =
-            Math.ceil(
-                (
-                    savedMobileLockUntil -
-                    Date.now()
-                ) / 1000
-            );
+ // =====================================
+// MOBILE CHANGE LOCK ACTIVE
+// =====================================
 
-       
-        // =====================================
-        // START 1 MINUTE LOCK TIMER
-        // =====================================
+showMessage(
+    "Please wait until the 1 minute timer expires.",
+    "warning",
+    3000
+);
 
-        startMobileChangeLockTimer(
-            remainingLockSeconds
-        );
-
-
-        return;
+return; 
+    
     };
 
 
