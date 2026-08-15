@@ -6371,7 +6371,108 @@ function showEditProfile(){
 
 document.getElementById("changeMobileBtn").onclick = ()=>{
 
- 
+    // =====================================
+    // CHECK 1 MINUTE MOBILE CHANGE LOCK FIRST
+    // =====================================
+
+    const savedMobileLockUntil =
+        Number(
+            sessionStorage.getItem(
+                "mobileChangeLockUntil"
+            )
+        ) || 0;
+
+
+    if(
+        savedMobileLockUntil &&
+        savedMobileLockUntil > Date.now()
+    ){
+
+        // =====================================
+        // STOP OLD OTP TIMER
+        // =====================================
+
+        if(mobileOTPCountdownTimer){
+
+            clearInterval(
+                mobileOTPCountdownTimer
+            );
+
+            mobileOTPCountdownTimer = null;
+        }
+
+
+        // =====================================
+        // CLEAR OLD 30 SECOND OTP STATE
+        // =====================================
+
+        sessionStorage.removeItem(
+            "mobileChangePendingMobile"
+        );
+
+        sessionStorage.removeItem(
+            "mobileChangeOTPExpiresAt"
+        );
+
+
+        // =====================================
+        // SHOW LOCK MESSAGE
+        // =====================================
+
+        const remainingLockSeconds =
+            Math.ceil(
+                (
+                    savedMobileLockUntil -
+                    Date.now()
+                ) / 1000
+            );
+
+
+        profilePage.innerHTML = `
+
+            <div
+                id="mobileOTPStatus"
+                style="
+                    text-align:center;
+                    font-weight:bold;
+                    margin-bottom:15px;
+                "
+            ></div>
+
+            <h3>
+                🔐 Mobile Change Locked
+            </h3>
+
+            <div
+                style="
+                    text-align:center;
+                    margin-top:15px;
+                    font-weight:600;
+                "
+            >
+                Please wait until the timer finishes.
+            </div>
+
+        `;
+
+
+        // =====================================
+        // START 1 MINUTE LOCK TIMER
+        // =====================================
+
+        startMobileChangeLockTimer(
+            remainingLockSeconds
+        );
+
+
+        return;
+    }
+
+
+    // =====================================
+    // NO 1 MINUTE LOCK
+    // =====================================
+
     // =====================================
     // CHECK PENDING MOBILE OTP
     // =====================================
@@ -6390,41 +6491,29 @@ document.getElementById("changeMobileBtn").onclick = ()=>{
 
 
     // =====================================
-    // OTP STILL ACTIVE
+    // ACTIVE 30 SECOND OTP
     // =====================================
 
-    // =====================================
-// ACTIVE OTP STILL EXISTS
-// =====================================
+    if(
+        pendingMobile &&
+        otpExpiresAt &&
+        otpExpiresAt > Date.now()
+    ){
 
-const now =
-    Date.now();
+        const remainingSeconds =
+            Math.ceil(
+                (otpExpiresAt - Date.now()) / 1000
+            );
 
 
-if(
-    pendingMobile &&
-    otpExpiresAt &&
-    otpExpiresAt > now
-){
-
-    const remainingSeconds =
-        Math.ceil(
-            (otpExpiresAt - now) / 1000
+        showMobileOTPPage(
+            pendingMobile,
+            remainingSeconds
         );
 
 
-    // =====================================
-    // RETURN DIRECTLY TO VERIFY OTP PAGE
-    // =====================================
-
-    showMobileOTPPage(
-        pendingMobile,
-        remainingSeconds
-    );
-
-    return;
-
-}
+        return;
+    }
 
 
     // =====================================
@@ -6440,44 +6529,17 @@ if(
     );
 
 
-// =====================================
-// CHECK MOBILE CHANGE 1 MINUTE LOCK
-// =====================================
+    // =====================================
+    // NORMAL CHANGE MOBILE NUMBER PAGE
+    // =====================================
 
-const mobileLockUntil =
-    Number(
-        sessionStorage.getItem(
-            "mobileChangeLockUntil"
-        )
-    ) || 0;
+    profilePage.innerHTML = `
 
+        <h3>
+            📱 Change Mobile Number
+        </h3>
 
-if(
-    mobileLockUntil &&
-    mobileLockUntil > Date.now()
-){
-
-    showMessage(
-        "Please wait until the 1 minute lock expires.",
-        "warning",
-        3000
-    );
-
-    return;
-}
-
-
-// =====================================
-// NORMAL CHANGE MOBILE NUMBER PAGE
-// =====================================
-
-profilePage.innerHTML = `
-
-    <h3>
-        📱 Change Mobile Number
-    </h3>
-
-    <div class="profile-box">
+        <div class="profile-box">
 <!-- =================================
      CURRENT MOBILE
      ================================= -->
