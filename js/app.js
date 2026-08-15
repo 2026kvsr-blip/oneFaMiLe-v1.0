@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8767,8 +8766,7 @@ function getMobileResendCount(){
 
 
     return count;
-}
-function startMobileOTPCountdown(seconds){
+}function startMobileOTPCountdown(seconds){
 
     if(mobileOTPCountdownTimer){
 
@@ -8777,146 +8775,166 @@ function startMobileOTPCountdown(seconds){
         );
 
         mobileOTPCountdownTimer = null;
-
     }
 
 
-    const status =
-        document.getElementById(
-            "mobileOTPStatus"
+    // =====================================
+    // GET SAVED EXPIRY TIME
+    // =====================================
+
+    let expiryTime =
+        Number(
+            sessionStorage.getItem(
+                "mobileChangeOTPExpiresAt"
+            )
         );
 
-    const verifyBtn =
-        document.getElementById(
-            "verifyMobileOTPBtn"
+
+    // =====================================
+    // CREATE ONLY IF NOT EXISTS
+    // =====================================
+
+    if(!expiryTime){
+
+        expiryTime =
+            Date.now() +
+            (seconds * 1000);
+
+        sessionStorage.setItem(
+            "mobileChangeOTPExpiresAt",
+            String(expiryTime)
         );
-    const otpInput =
-    document.getElementById(
-        "mobileChangeOTP"
-    );
-
-if(otpInput){
-
-    otpInput.value = "";
-
-}
-
-    const resendBtn =
-        document.getElementById(
-            "resendMobileOTPBtn"
-        );
-
-    if(!status){
-
-        return;
-
     }
 
 
-    let remaining =
-        seconds;
+    // =====================================
+    // COUNTDOWN FUNCTION
+    // =====================================
+
+    function updateTimer(){
+
+        const remaining =
+            Math.max(
+                0,
+                Math.ceil(
+                    (expiryTime - Date.now()) / 1000
+                )
+            );
 
 
-    if(verifyBtn){
-
-        verifyBtn.disabled =
-            false;
-
-    }
+        const status =
+            document.getElementById(
+                "mobileOTPStatus"
+            );
 
 
-    if(resendBtn){
-
-        resendBtn.disabled =
-            false;
-
-        resendBtn.classList.add(
-            "hidden"
-        );
-
-    }
+        const verifyBtn =
+            document.getElementById(
+                "verifyMobileOTPBtn"
+            );
 
 
-    mobileOTPCountdownTimer =
-        setInterval(()=>{
+        const resendBtn =
+            document.getElementById(
+                "resendMobileOTPBtn"
+            );
 
 
-            // =============================
-            // CALCULATE MINUTES
-            // =============================
+        // =====================================
+        // SHOW TIMER ONLY WHEN OTP PAGE EXISTS
+        // =====================================
+
+        if(status){
 
             const minutes =
                 Math.floor(
                     remaining / 60
                 );
 
-
-            // =============================
-            // CALCULATE SECONDS
-            // =============================
-
             const secs =
                 remaining % 60;
 
-
-            // =============================
-            // SHOW TIMER
-            // =============================
 
             status.textContent =
                 "⏱️ OTP expires in " +
                 String(minutes).padStart(2,"0") +
                 ":" +
                 String(secs).padStart(2,"0");
+        }
 
 
-            // =============================
-            // TIMER FINISHED
-            // =============================
+        // =====================================
+        // OTP EXPIRED
+        // =====================================
 
-            if(remaining <= 0){
+        if(remaining <= 0){
 
-                clearInterval(
-                    mobileOTPCountdownTimer
-                );
+            clearInterval(
+                mobileOTPCountdownTimer
+            );
 
-                mobileOTPCountdownTimer =
-                    null;
+            mobileOTPCountdownTimer =
+                null;
 
+
+            sessionStorage.removeItem(
+                "mobileChangeOTPExpiresAt"
+            );
+
+
+            if(status){
 
                 status.textContent =
                     "⚠️ OTP expired";
-
-
-                if(verifyBtn){
-
-                    verifyBtn.disabled =
-                        true;
-
-                }
-
-
-                if(resendBtn){
-
-                    resendBtn.disabled =
-                        false;
-
-                    resendBtn.classList.remove(
-                        "hidden"
-                    );
-
-                }
-
-
-                return;
-
             }
 
 
-            remaining--;
+            if(verifyBtn){
 
-        },1000);
+                verifyBtn.disabled = true;
+            }
 
+
+            if(resendBtn){
+
+                resendBtn.disabled = false;
+
+                resendBtn.classList.remove(
+                    "hidden"
+                );
+            }
+
+            return;
+        }
+
+
+        // =====================================
+        // OTP ACTIVE
+        // =====================================
+
+        if(verifyBtn){
+
+            verifyBtn.disabled = false;
+        }
+    }
+
+
+    // =====================================
+    // RUN IMMEDIATELY
+    // =====================================
+
+    updateTimer();
+
+
+    // =====================================
+    // KEEP RUNNING EVEN WHEN PAGE IS HIDDEN
+    // =====================================
+
+    mobileOTPCountdownTimer =
+        setInterval(
+            updateTimer,
+            1000
+        );
 }
 // =====================================
 // MOBILE CHANGE 1 MINUTE LOCK TIMER
