@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6372,6 +6371,31 @@ function showEditProfile(){
 
 document.getElementById("changeMobileBtn").onclick = ()=>{
 
+    // =====================================
+// CHECK 1 MINUTE MOBILE CHANGE LOCK
+// =====================================
+
+const mobileLockUntil =
+    Number(
+        sessionStorage.getItem(
+            "mobileChangeLockUntil"
+        )
+    ) || 0;
+
+
+if(
+    mobileLockUntil &&
+    mobileLockUntil > Date.now()
+){
+
+    showMessage(
+        "Please wait until the 1 minute lock expires.",
+        "warning",
+        3000
+    );
+
+    return;
+}
     // =====================================
     // CHECK PENDING MOBILE OTP
     // =====================================
