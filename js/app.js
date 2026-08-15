@@ -1,3 +1,4 @@
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -7254,16 +7255,63 @@ verifyData.append(
 // =====================================
 // 3 ATTEMPTS / 1 MINUTE LOCK
 // =====================================
- if(verifyResult.status === "locked"){
+// =====================================
+// 3 ATTEMPTS / 1 MINUTE LOCK
+// =====================================
+
+if(result.status === "locked"){
+
+    const verifyBtn =
+        document.getElementById(
+            "verifyMobileOTPBtn"
+        );
+
+    const resendBtn =
+        document.getElementById(
+            "resendMobileOTPBtn"
+        );
+
+
+    // =====================================
+    // DISABLE VERIFY OTP
+    // =====================================
+
+    if(verifyBtn){
+
+        verifyBtn.disabled = true;
+
+    }
+
+
+    // =====================================
+    // DISABLE RESEND OTP
+    // =====================================
+
+    if(resendBtn){
+
+        resendBtn.disabled = true;
+
+    }
+
+
+    // =====================================
+    // SHOW LOCK MESSAGE
+    // =====================================
 
     showMessage(
-        verifyResult.message ||
+        result.message ||
         "Maximum 3 OTP attempts reached. Please wait 1 minute.",
         "warning",
         3000
     );
 
+
+    // =====================================
+    // START 1 MINUTE LOCK TIMER
+    // =====================================
+
     startMobileChangeLockTimer(60);
+
 
     return;
 }
