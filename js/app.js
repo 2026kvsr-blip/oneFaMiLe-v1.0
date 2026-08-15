@@ -6371,31 +6371,7 @@ function showEditProfile(){
 
 document.getElementById("changeMobileBtn").onclick = ()=>{
 
-    // =====================================
-// CHECK 1 MINUTE MOBILE CHANGE LOCK
-// =====================================
-
-const mobileLockUntil =
-    Number(
-        sessionStorage.getItem(
-            "mobileChangeLockUntil"
-        )
-    ) || 0;
-
-
-if(
-    mobileLockUntil &&
-    mobileLockUntil > Date.now()
-){
-
-    showMessage(
-        "Please wait until the 1 minute lock expires.",
-        "warning",
-        3000
-    );
-
-    return;
-}
+ 
     // =====================================
     // CHECK PENDING MOBILE OTP
     // =====================================
@@ -6522,25 +6498,44 @@ if(
     `;
 
 
-    // =====================================
-    // START EXISTING LOCK TIMER
-    // =====================================
+   // =====================================
+// CHECK 1 MINUTE MOBILE CHANGE LOCK
+// =====================================
 
-    startMobileChangeLockTimer(
-        remainingLockSeconds
+const mobileLockUntil =
+    Number(
+        sessionStorage.getItem(
+            "mobileChangeLockUntil"
+        )
+    ) || 0;
+
+
+if(
+    mobileLockUntil &&
+    mobileLockUntil > Date.now()
+){
+
+    showMessage(
+        "Please wait until the 1 minute lock expires.",
+        "warning",
+        3000
     );
 
     return;
 }
-    
-    profilePage.innerHTML = `
 
-        <h3>
-            📱 Change Mobile Number
-        </h3>
-        
-        <div class="profile-box">
 
+// =====================================
+// NORMAL CHANGE MOBILE NUMBER PAGE
+// =====================================
+
+profilePage.innerHTML = `
+
+    <h3>
+        📱 Change Mobile Number
+    </h3>
+
+    <div class="profile-box">
 <!-- =================================
      CURRENT MOBILE
      ================================= -->
