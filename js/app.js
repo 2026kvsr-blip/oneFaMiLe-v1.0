@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -7291,6 +7292,15 @@ if(result.status === "locked"){
 
         resendBtn.disabled = true;
 
+    }
+ // STOP 30 SECOND OTP TIMER
+    if(mobileOTPCountdownTimer){
+
+        clearInterval(
+            mobileOTPCountdownTimer
+        );
+
+        mobileOTPCountdownTimer = null;
     }
 
 
