@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8071,8 +8072,21 @@ function showMobileOTPPage(
     remainingSeconds
 ){
 
-    profilePage.innerHTML = `
+    const user =
+        JSON.parse(
+            sessionStorage.getItem("user")
+        );
 
+    if(!user){
+        showMessage(
+            "User session not found.",
+            "warning",
+            3000
+        );
+        return;
+    }
+
+    profilePage.innerHTML = `
         <div
             id="mobileOTPStatus"
             style="
