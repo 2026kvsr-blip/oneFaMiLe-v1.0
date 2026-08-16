@@ -2,7 +2,6 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6468,7 +6467,7 @@ document
         ) || 0;
 
 
-   if(
+  if(
     mobileLockUntil &&
     mobileLockUntil > Date.now()
 ){
@@ -6488,6 +6487,10 @@ document
         );
 
 
+    // =====================================
+    // OPEN VERIFY MOBILE NUMBER PAGE
+    // =====================================
+
     if(pendingMobile){
 
         showMobileOTPPage(
@@ -6497,21 +6500,30 @@ document
 
 
         // =====================================
-        // REPLACE 30 SEC OTP TIMER
-        // WITH EXISTING 1 MIN LOCK TIMER
+        // USE EXISTING 1 MINUTE LOCK TIMER
         // =====================================
 
         startMobileChangeLockTimer(
             remainingLockSeconds
         );
 
+
         return;
     }
 
 
+    // =====================================
+    // NO PENDING MOBILE
+    // =====================================
+
+    showMessage(
+        "Mobile Number verification session not found.",
+        "warning",
+        3000
+    );
+
     return;
 }
-
     // =====================================
     // CHECK ACTIVE 30 SECOND OTP
     // =====================================
