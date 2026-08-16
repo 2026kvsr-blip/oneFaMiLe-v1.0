@@ -2,7 +2,6 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6176,6 +6175,28 @@ function showProfilePage(){
     window.scrollTo(0,0);
 
 }
+// =====================================
+// SHOW MY PROFILE PAGE
+// =====================================
+
+function showProfilePage(){
+
+    const user =
+        JSON.parse(sessionStorage.getItem("user"));
+
+    if(!user){
+        return;
+    }
+
+    hideAllPages();
+
+    profilePage.classList.remove("hidden");
+
+    updateProfilePage();
+
+    window.scrollTo(0,0);
+
+}
 function showEditProfile(){
 
     const user =
@@ -7991,23 +8012,50 @@ user.country = country;
         );
 
 
-        // ================================
-        // SUCCESS
-        // ================================
+       // ================================
+// SUCCESS
+// ================================
 
-        showMessage(
-            "Profile Updated Successfully.",
-            "success",
-            2000
-        );
+showMessage(
+    "Profile Updated Successfully.",
+    "success",
+    2000
+);
 
 
-        setTimeout(()=>{
+// =====================================
+// UPDATE ORIGINAL VALUES AFTER SAVE
+// =====================================
 
-            updateProfilePage();
+editProfileFields.forEach(id => {
 
-        },500);
+    const field =
+        document.getElementById(id);
 
+    if(field){
+
+        originalProfileValues[id] =
+            field.value;
+
+    }
+
+});
+
+
+// =====================================
+// RESET SAVE / CANCEL BUTTONS
+// =====================================
+
+checkEditProfileChanges();
+
+
+// =====================================
+// REFRESH PROFILE DISPLAY
+// =====================================
+
+setTimeout(()=>{
+    updateProfilePage();
+},500);
 
     }
     catch(err){
