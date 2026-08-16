@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6412,13 +6411,37 @@ function showEditProfile(){
                 ← Back
 
             </button>
+<button
+    type="button"
+    id="testProfileBackBtn"
+    class="back-btn">
 
+    ← Test Back
+
+</button>
         </div>
 
     </div>
 
 `;
+// =====================================
+// TEST BACK BUTTON
+// =====================================
 
+const testProfileBackBtn =
+    document.getElementById(
+        "testProfileBackBtn"
+    );
+
+if(testProfileBackBtn){
+
+    testProfileBackBtn.onclick = function(){
+
+        alert("TEST BACK CLICKED");
+
+    };
+
+}
 // =====================================
 // EDIT PROFILE CHANGE DETECTION
 // =====================================
