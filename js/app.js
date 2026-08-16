@@ -1,3 +1,4 @@
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6513,14 +6514,7 @@ function showEditProfile(){
                 ← Back
 
             </button>
-<button
-    type="button"
-    id="testProfileBackBtn"
-    class="back-btn">
 
-    ← Test Back
-
-</button>
         </div>
 
     </div>
@@ -6530,28 +6524,8 @@ function showEditProfile(){
 // TEST BACK BUTTON
 // =====================================
 
+
 // =====================================
-// TEST BACK BUTTON → MY PROFILE
-// =====================================
-
-const testProfileBackBtn =
-    document.getElementById(
-        "testProfileBackBtn"
-    );
-
-if(testProfileBackBtn){
-
-    testProfileBackBtn.onclick = function(e){
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        showProfilePage();
-
-    };
-
-}
-    // =====================================
 // EDIT PROFILE CHANGE DETECTION
 // =====================================
 
