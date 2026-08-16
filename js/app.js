@@ -8213,16 +8213,7 @@ document
         // LOCKED
        if(result.status === "locked"){
 
-    // =====================================
-    // CLEAR OLD OTP STATE
-    // =====================================
-
-   
-    // =====================================
-    // STOP OLD OTP TIMER
-    // =====================================
-
-    if(mobileOTPCountdownTimer){
+     if(mobileOTPCountdownTimer){
 
         clearInterval(
             mobileOTPCountdownTimer
@@ -8230,42 +8221,6 @@ document
 
         mobileOTPCountdownTimer = null;
     }
-
-
-    // =====================================
-// SHOW LOCK STATUS ABOVE VERIFY TITLE
-// =====================================
-
-const lockStatus =
-    document.getElementById(
-        "mobileOTPStatus"
-    );
-
-if(lockStatus){
-
-    lockStatus.style.display =
-        "block";
-
-    lockStatus.style.color =
-        "red";
-
-    lockStatus.style.fontWeight =
-        "700";
-
-    lockStatus.style.textAlign =
-        "center";
-
-    lockStatus.style.marginBottom =
-        "8px";
-
-    lockStatus.textContent =
-        "Maximum 3 OTP attempts reached — Please wait: 01:00";
-}
-
-
-// =====================================
-// START 1 MINUTE LOCK
-// =====================================
 
 startMobileChangeLockTimer(60);
 
