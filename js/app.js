@@ -4,7 +4,6 @@ Part 1A.3
 ===================================== */
 
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -7982,7 +7981,8 @@ user.country = country;
 
 function showMobileOTPPage(
     newMobile,
-    remainingSeconds
+    remainingSeconds,
+    isLockMode = false
 ){
 
     const user =
