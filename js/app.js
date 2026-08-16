@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -9046,7 +9047,7 @@ let remaining =
         color:#d32f2f;
         font-weight:600;
         line-height:1.4;
-        margin-top:-10px;
+        margin-top:-20px;
     ">
         Maximum 3 OTP attempts reached
     </div>
