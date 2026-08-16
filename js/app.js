@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6375,12 +6376,146 @@ function showEditProfile(){
     </div>
 
 `;
+
 // =====================================
-// CHANGE MOBILE NUMBER
+// EDIT PROFILE CHANGE DETECTION
 // =====================================
 
+const cancelEditProfileBtn =
+    document.getElementById(
+        "cancelEditProfileBtn"
+    );
 
-  // =====================================
+
+const editProfileFields = [
+
+    "editProfileLoginUserName",
+    "editProfileSurName",
+    "editProfileMiddleName",
+    "editProfileLastName",
+    "editProfileEmail",
+    "editProfileGender",
+    "editProfileDateOfBirth",
+    "editProfilePlace",
+    "editProfileState",
+    "editProfileCountry"
+
+];
+
+
+// =====================================
+// SAVE ORIGINAL VALUES
+// =====================================
+
+const originalProfileValues = {};
+
+editProfileFields.forEach(id => {
+
+    const field =
+        document.getElementById(id);
+
+    if(field){
+
+        originalProfileValues[id] =
+            field.value;
+
+    }
+
+});
+
+
+// =====================================
+// CHECK WHETHER ANYTHING CHANGED
+// =====================================
+
+function checkEditProfileChanges(){
+
+    let changed = false;
+
+
+    editProfileFields.forEach(id => {
+
+        const field =
+            document.getElementById(id);
+
+        if(!field){
+
+            return;
+
+        }
+
+
+        if(
+            field.value !==
+            originalProfileValues[id]
+        ){
+
+            changed = true;
+
+        }
+
+    });
+
+
+    if(cancelEditProfileBtn){
+
+        cancelEditProfileBtn.disabled =
+            !changed;
+
+    }
+
+}
+
+
+// =====================================
+// WATCH ALL EDIT PROFILE FIELDS
+// =====================================
+
+editProfileFields.forEach(id => {
+
+    const field =
+        document.getElementById(id);
+
+    if(!field){
+
+        return;
+
+    }
+
+
+    field.addEventListener(
+        "input",
+        checkEditProfileChanges
+    );
+
+
+    field.addEventListener(
+        "change",
+        checkEditProfileChanges
+    );
+
+});
+
+
+// =====================================
+// CANCEL
+// =====================================
+
+cancelEditProfileBtn.onclick = ()=>{
+
+    if(cancelEditProfileBtn.disabled){
+
+        return;
+
+    }
+
+
+    // DISCARD UNSAVED CHANGES
+
+    showEditProfile();
+
+};
+// =====================================
 // CHANGE MOBILE NUMBER
 // =====================================
 
