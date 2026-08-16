@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -8000,114 +8001,60 @@ user.country = country;
     // CANCEL
     // =====================================
 
-    document.getElementById("cancelEditProfileBtn").onclick = ()=>{
+   // =====================================
+// CANCEL EDIT PROFILE
+// =====================================
 
-    profilePage.innerHTML = `
-        <h3>👤 My Profile</h3>
+document
+    .getElementById("cancelEditProfileBtn")
+    .onclick = ()=>{
 
-        <div class="profile-box">
+    const cancelBtn =
+        document.getElementById(
+            "cancelEditProfileBtn"
+        );
 
-            <div class="profile-row">
-                <span>Login User Name</span>
-                <strong id="profileLoginUserName">-</strong>
-            </div>
 
-            <div class="profile-row">
-                <span>Name</span>
-                <strong id="profileName">-</strong>
-            </div>
+    // =====================================
+    // DO NOTHING IF DISABLED
+    // =====================================
 
-            <div class="profile-row">
-                <span>Mobile Number</span>
-                <strong id="profileMobile">-</strong>
-            </div>
+    if(
+        cancelBtn &&
+        cancelBtn.disabled
+    ){
 
-            <div class="profile-row">
-                <span>Email</span>
-                <strong id="profileEmail">-</strong>
-            </div>
+        return;
 
-            <div class="profile-row">
-                <span>Gender</span>
-                <strong id="profileGender">-</strong>
-            </div>
+    }
 
-            <div class="profile-row">
-                <span>Date of Birth</span>
-                <strong id="profileDOB">-</strong>
-            </div>
 
-            <div class="profile-row">
-                <span>Place</span>
-                <strong id="profilePlace">-</strong>
-            </div>
+    // =====================================
+    // DISCARD UNSAVED CHANGES
+    // =====================================
 
-            <div class="profile-row">
-                <span>State</span>
-                <strong id="profileState">-</strong>
-            </div>
-
-            <div class="profile-row">
-                <span>Country</span>
-                <strong id="profileCountry">-</strong>
-            </div>
-
-        </div>
-
-        <div align="center">
-
-            <button
-                id="editProfileBtn"
-                class="grid-btn">
-
-                ✏️ Edit Profile
-
-            </button>
-
-            <br><br>
-
-            <button
-                id="profileBackBtn"
-                class="back-btn">
-
-                ← Back
-
-            </button>
-
-        </div>
-    `;
-
-    updateProfilePage();
-
-    document.getElementById("editProfileBtn").onclick = ()=>{
-
-        showEditProfile();
-
-    };
-
-    document.getElementById("profileBackBtn").onclick = ()=>{
-
-        profilePage.classList.add("hidden");
-
-        showScreen(dashboard);
-
-        homeBtn.click();
-
-    };
-
-    window.scrollTo(0,0);
+    showEditProfile();
 
 };
 // =====================================
 // BACK
 // =====================================
 
-   document.getElementById("profileEditBackBtn").onclick = ()=>{
+// =====================================
+// BACK FROM EDIT PROFILE
+// =====================================
 
-    document.getElementById("cancelEditProfileBtn").click();
+document
+    .getElementById("profileEditBackBtn")
+    .onclick = ()=>{
+
+    // =====================================
+    // GO TO MY PROFILE
+    // =====================================
+
+    updateProfilePage();
 
 };
-
 }
 // =====================================
 // SHOW MOBILE OTP PAGE
