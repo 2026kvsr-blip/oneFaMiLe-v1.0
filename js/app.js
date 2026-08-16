@@ -2,6 +2,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6130,7 +6131,9 @@ function updateProfilePage(){
         user.loginUserName || "-";
 
     document.getElementById("profileName").textContent =
-        `${user.surName || ""} ${user.middleName || ""} ${user.lastName || ""}`
+        `${user.surName || ""} ${
+            
+            user.middleName || ""} ${user.lastName || ""}`
         .replace(/\s+/g," ")
         .trim() || "-";
 
@@ -6154,6 +6157,23 @@ function updateProfilePage(){
 
     document.getElementById("profileCountry").textContent =
         user.country || "-";
+
+}
+// =====================================
+// SHOW MY PROFILE PAGE
+// =====================================
+
+function showProfilePage(){
+
+    closeSideMenu();
+
+    hideAllPages();
+
+    profilePage.classList.remove("hidden");
+
+    updateProfilePage();
+
+    window.scrollTo(0,0);
 
 }
 function showEditProfile(){
