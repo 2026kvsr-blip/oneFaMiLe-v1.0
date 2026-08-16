@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -8232,28 +8233,44 @@ document
 
 
     // =====================================
-    // SHOW LOCK MESSAGE
-    // =====================================
+// SHOW LOCK STATUS ABOVE VERIFY TITLE
+// =====================================
 
-    showMessage(
-        result.message ||
-        "Maximum 3 OTP attempts reached. Please wait 1 minute.",
-        "warning",
-        3000
+const lockStatus =
+    document.getElementById(
+        "mobileOTPStatus"
     );
 
+if(lockStatus){
 
-    // =====================================
-    // START 1 MINUTE LOCK
-    // =====================================
+    lockStatus.style.display =
+        "block";
 
-    startMobileChangeLockTimer(60);
+    lockStatus.style.color =
+        "red";
 
+    lockStatus.style.fontWeight =
+        "700";
 
-    return;
+    lockStatus.style.textAlign =
+        "center";
+
+    lockStatus.style.marginBottom =
+        "8px";
+
+    lockStatus.textContent =
+        "Maximum 3 OTP attempts reached — Please wait: 01:00";
 }
 
 
+// =====================================
+// START 1 MINUTE LOCK
+// =====================================
+
+startMobileChangeLockTimer(60);
+
+return;
+       }
         // INVALID OTP
         if(result.status !== "success"){
 
