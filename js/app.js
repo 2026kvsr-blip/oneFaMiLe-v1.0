@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6158,23 +6157,6 @@ function updateProfilePage(){
 
     document.getElementById("profileCountry").textContent =
         user.country || "-";
-
-}
-// =====================================
-// SHOW MY PROFILE PAGE
-// =====================================
-
-function showProfilePage(){
-
-    closeSideMenu();
-
-    hideAllPages();
-
-    profilePage.classList.remove("hidden");
-
-    updateProfilePage();
-
-    window.scrollTo(0,0);
 
 }
 // =====================================
