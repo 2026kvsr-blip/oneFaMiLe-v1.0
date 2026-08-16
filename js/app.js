@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6355,12 +6354,13 @@ function showEditProfile(){
         <div class="profile-action-buttons">
 
             <button
-                id="cancelEditProfileBtn"
-                class="grid-btn">
+    id="cancelEditProfileBtn"
+    class="grid-btn"
+    disabled>
 
-                ↩ Cancel
+    ↩ Cancel
 
-            </button>
+</button>
 
             <button
                 id="profileEditBackBtn"
