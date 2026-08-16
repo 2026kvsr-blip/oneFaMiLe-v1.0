@@ -6244,6 +6244,15 @@ function showEditProfile(){
 
         </button>
 
+
+<div
+    id="mobileChangeEditLockStatus"
+    style="
+        text-align:center;
+        font-weight:bold;
+        margin-top:6px;
+    "
+></div>
     </div>
 
 </div>
