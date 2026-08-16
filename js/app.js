@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -8941,7 +8942,10 @@ if(mobileOTPCountdownTimer){
         document.getElementById(
             "mobileOTPStatus"
         );
-
+const editLockStatus =
+    document.getElementById(
+        "mobileChangeEditLockStatus"
+    );
     const verifyBtn =
         document.getElementById(
             "verifyMobileOTPBtn"
@@ -9103,12 +9107,28 @@ let remaining =
             // SHOW TIMER
             // =============================
 
-            status.textContent =
-                "🔒 Maximum 3 OTP attempts reached — " +
-                "Please wait: " +
-                String(minutes).padStart(2,"0") +
-                ":" +
-                String(secs).padStart(2,"0");
+           const lockText =
+    "🔒 Maximum 3 OTP attempts reached — " +
+    "Please wait: " +
+    String(minutes).padStart(2,"0") +
+    ":" +
+    String(secs).padStart(2,"0");
+
+
+if(status){
+
+    status.textContent =
+        lockText;
+
+}
+
+
+if(editLockStatus){
+
+    editLockStatus.textContent =
+        lockText;
+
+}
 
 
             // =============================
@@ -9135,7 +9155,20 @@ mobileOTPCountdownTimer = null;
 
                 status.textContent =
                     "✓ You can enter a new Mobile Number now.";
+if(status){
 
+    status.textContent =
+        "✓ You can enter a new Mobile Number now.";
+
+}
+
+
+if(editLockStatus){
+
+    editLockStatus.textContent =
+        "";
+
+}
 
                 // =========================
                 // ENABLE MOBILE INPUT
