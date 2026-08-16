@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6428,6 +6429,10 @@ function showEditProfile(){
 // TEST BACK BUTTON
 // =====================================
 
+// =====================================
+// TEST BACK BUTTON → MY PROFILE
+// =====================================
+
 const testProfileBackBtn =
     document.getElementById(
         "testProfileBackBtn"
@@ -6435,14 +6440,17 @@ const testProfileBackBtn =
 
 if(testProfileBackBtn){
 
-    testProfileBackBtn.onclick = function(){
+    testProfileBackBtn.onclick = function(e){
 
-        alert("TEST BACK CLICKED");
+        e.preventDefault();
+        e.stopPropagation();
+
+        showProfilePage();
 
     };
 
 }
-// =====================================
+    // =====================================
 // EDIT PROFILE CHANGE DETECTION
 // =====================================
 
