@@ -2,6 +2,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6157,25 +6158,145 @@ function updateProfilePage(){
     document.getElementById("profileCountry").textContent =
         user.country || "-";
 
-}
-// =====================================
+}// =====================================
 // SHOW MY PROFILE PAGE
 // =====================================
 
 function showProfilePage(){
 
     const user =
-        JSON.parse(sessionStorage.getItem("user"));
+        JSON.parse(
+            sessionStorage.getItem("user")
+        );
 
     if(!user){
         return;
     }
 
+
+    // =====================================
+    // RESTORE MY PROFILE HTML
+    // =====================================
+
+    profilePage.innerHTML = `
+
+        <h3>
+            👤 My Profile
+        </h3>
+
+        <div class="profile-box">
+
+            <div class="profile-row">
+                <span>Login User Name</span>
+                <strong id="profileLoginUserName">-</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Name</span>
+                <strong id="profileName">-</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Mobile Number</span>
+                <strong id="profileMobile">-</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Email</span>
+                <strong id="profileEmail">-</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Gender</span>
+                <strong id="profileGender">-</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Date of Birth</span>
+                <strong id="profileDOB">-</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Place</span>
+                <strong id="profilePlace">-</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>State</span>
+                <strong id="profileState">-</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Country</span>
+                <strong id="profileCountry">-</strong>
+            </div>
+
+        </div>
+
+        <div align="center">
+
+            <button
+                id="editProfileBtn"
+                class="grid-btn">
+
+                ✏️ Edit Profile
+
+            </button>
+
+            <button
+                id="profileBackBtn"
+                class="back-btn">
+
+                ← Back
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    // =====================================
+    // SHOW PROFILE PAGE
+    // =====================================
+
     hideAllPages();
 
     profilePage.classList.remove("hidden");
 
+
+    // =====================================
+    // UPDATE PROFILE VALUES
+    // =====================================
+
     updateProfilePage();
+
+
+    // =====================================
+    // EDIT PROFILE BUTTON
+    // =====================================
+
+    document
+        .getElementById("editProfileBtn")
+        .onclick = ()=>{
+
+        showEditProfile();
+
+    };
+
+
+    // =====================================
+    // PROFILE BACK BUTTON
+    // =====================================
+
+    document
+        .getElementById("profileBackBtn")
+        .onclick = ()=>{
+
+        homeBtn.click();
+
+    };
+
 
     window.scrollTo(0,0);
 
