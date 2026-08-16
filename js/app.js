@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -8001,15 +8000,13 @@ function showMobileOTPPage(
 
     profilePage.innerHTML = `
         <div
-            id="mobileOTPStatus"
-            style="
-                text-align:center;
-                font-weight:bold;
-                margin-bottom:8px;
-            "
-        >
-            ⏱️ OTP expires in 00:30
-        </div>
+    id="mobileOTPStatus"
+    style="
+        text-align:center;
+        font-weight:bold;
+        margin-bottom:8px;
+    "
+></div>
 
 
         <h3>
