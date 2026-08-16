@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -6468,20 +6469,49 @@ document
         ) || 0;
 
 
-    if(
-        mobileLockUntil &&
-        mobileLockUntil > Date.now()
-    ){
+   if(
+    mobileLockUntil &&
+    mobileLockUntil > Date.now()
+){
 
-        showMessage(
-            "Please wait until the 1 minute timer expires.",
-            "warning",
-            3000
+    const remainingLockSeconds =
+        Math.ceil(
+            (
+                mobileLockUntil -
+                Date.now()
+            ) / 1000
+        );
+
+
+    const pendingMobile =
+        sessionStorage.getItem(
+            "mobileChangePendingMobile"
+        );
+
+
+    if(pendingMobile){
+
+        showMobileOTPPage(
+            pendingMobile,
+            remainingLockSeconds
+        );
+
+
+        // =====================================
+        // REPLACE 30 SEC OTP TIMER
+        // WITH EXISTING 1 MIN LOCK TIMER
+        // =====================================
+
+        startMobileChangeLockTimer(
+            remainingLockSeconds
         );
 
         return;
     }
 
+
+    return;
+}
 
     // =====================================
     // CHECK ACTIVE 30 SECOND OTP
