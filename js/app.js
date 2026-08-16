@@ -4,6 +4,7 @@ Part 1A.3
 ===================================== */
 
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -9037,7 +9038,7 @@ let remaining =
             // =============================
 
            const lockText =
-    "🔒 Maximum 3 OTP attempts reached — " +
+    "Maximum 3 OTP attempts reached — " +
     "Please wait: " +
     String(minutes).padStart(2,"0") +
     ":" +
