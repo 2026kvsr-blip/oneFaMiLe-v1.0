@@ -6,7 +6,6 @@ font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-
   
    background:#EAF8FF;
 
@@ -3269,22 +3268,11 @@ width:100%;
    SETTINGS PAGE TITLE
    ===================================== */
 
-#settingsPage h3{
-    display: block !important;
-    width: 100% !important;
-    text-align: center !important;
-    margin: 20px auto !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
-}
 /* =====================================
-   SETTINGS SUB PAGE TITLES - CENTER
+   SETTINGS PAGE TITLES - SAME STYLE
    ===================================== */
 
-/* =====================================
-   SETTINGS SUB PAGE TITLES - EXACT CENTER
-   ===================================== */
-
+#settingsPage h3,
 #languagePage h3,
 #backupPage h3,
 #restorePage h3{
@@ -3299,8 +3287,11 @@ width:100%;
 
     text-align:center !important;
 
-    margin:20px 0 !important;
+    margin:10px 0 20px !important;
+
+    padding:0 !important;
+
+    font-size:32px !important;
 
     box-sizing:border-box !important;
-
 }
