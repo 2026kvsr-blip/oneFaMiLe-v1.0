@@ -3232,3 +3232,10 @@ width:100%;
     padding-bottom: 110px !important;
     box-sizing: border-box;
 }
+/* =====================================
+   PREVENT HOME SCROLL POSITION JUMP
+   ===================================== */
+
+#dashboard {
+    overflow-anchor: none;
+}
