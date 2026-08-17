@@ -4,6 +4,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -81,7 +82,29 @@ function closeSideMenu(){
 
     menuOverlay.classList.remove("show");
 }
+// =====================================
+// SIDE MENU BUTTON VISIBILITY
+// =====================================
 
+function hideSideMenuButton(){
+
+    if(menuBtn){
+
+        menuBtn.style.display = "none";
+
+    }
+
+}
+
+function showSideMenuButton(){
+
+    if(menuBtn){
+
+        menuBtn.style.display = "flex";
+
+    }
+
+}
 const passcodeMenuBtn =
 document.getElementById("passcodeMenuBtn");
 
@@ -5487,7 +5510,7 @@ console.log(restoreSettingsBtn);
 settingsMenuBtn.onclick = ()=>{
 
     closeSideMenu();
-
+hideSideMenuButton();
     hideAllPages();
 
     settingsPage.classList.remove("hidden");
@@ -5506,6 +5529,8 @@ profileMenuBtn.onclick = ()=>{
 backSettingsBtn.onclick = ()=>{
 
    settingsPage.classList.add("hidden");
+        showSideMenuButton();
+
 
    showScreen(dashboard);
 
@@ -5725,6 +5750,7 @@ aboutSettingsBtn.onclick = ()=>{
 profileMenuBtn.onclick = ()=>{
 
     closeSideMenu();
+    hideSideMenuButton();
 
     hideAllPages();
 
@@ -5738,7 +5764,7 @@ profileMenuBtn.onclick = ()=>{
 profileBackBtn.onclick = ()=>{
 
     profilePage.classList.add("hidden");
-
+    showSideMenuButton();
     showScreen(dashboard);
 
     homeBtn.click();
