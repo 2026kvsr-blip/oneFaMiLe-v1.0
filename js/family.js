@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
@@ -326,26 +327,43 @@ document
             .onclick = () => {
 
 
-            const familyName =
-                document
-                    .getElementById("newFamilyName")
-                    .value
-                    .trim();
+           const familyName =
+    document
+        .getElementById("newFamilyName")
+        .value
+        .trim();
 
 
-            if(!familyName){
+if(familyName.length < 4){
 
-                validationMessage(
-                    "Please enter Family Name.",
-                    document.getElementById(
-                        "newFamilyName"
-                    )
-                );
+    validationMessage(
+        "Family Name must contain at least 4 letters.",
+        document.getElementById(
+            "newFamilyName"
+        )
+    );
 
-                return;
-            }
+    return;
+}
 
 
+const familyId =
+    document
+        .getElementById("newFamilyId")
+        .value
+        .trim();
+
+
+if(!familyId){
+
+    showMessage(
+        "Please enter at least 4 letters of Family Name.",
+        "warning",
+        3000
+    );
+
+    return;
+}
             /* ============================
                FAMILY OBJECT
                ============================ */
