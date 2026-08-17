@@ -206,3 +206,139 @@
 #createFamilyBackBtn{
     margin-top:12px;
 }
+/* =====================================
+   FAMILY CREATE TREE - FINAL FORM
+   ===================================== */
+
+.family-info-form{
+    width: calc(100% - 40px) !important;
+    max-width: 520px !important;
+    margin: 20px auto !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+
+/* EACH ROW */
+
+.family-field{
+    display: flex !important;
+    align-items: center !important;
+
+    width: 100% !important;
+
+    margin: 0 0 12px 0 !important;
+    padding: 0 !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* LABEL */
+
+.family-label{
+    flex: 0 0 115px !important;
+
+    width: 115px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 16px !important;
+    font-weight: 500 !important;
+
+    text-align: left !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* COLON */
+
+.family-colon{
+    flex: 0 0 20px !important;
+
+    width: 20px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    text-align: center !important;
+
+    font-size: 16px !important;
+    font-weight: 500 !important;
+
+    line-height: 42px !important;
+}
+
+
+/* INPUT */
+
+.family-field input{
+    flex: 1 1 auto !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+
+    height: 42px !important;
+
+    margin: 0 !important;
+    padding: 8px 10px !important;
+
+    box-sizing: border-box !important;
+
+    border: 1px solid #c4d4ff !important;
+
+    border-radius: 8px !important;
+
+    background: #ffffff !important;
+
+    font-size: 16px !important;
+
+    outline: none !important;
+}
+
+
+/* FAMILY ID */
+
+#newFamilyId{
+    background: #f0f7ff !important;
+
+    margin-left: 8px !important;
+}
+
+
+/* FAMILY NAME */
+
+#newFamilyName{
+    background: #ffffff !important;
+}
+
+
+/* READ ONLY */
+
+#newFamilyId[readonly]{
+    cursor: default !important;
+}
+
+
+/* FOCUS */
+
+#newFamilyName:focus{
+    border-color: #4A9FE8 !important;
+
+    box-shadow:
+        0 0 0 2px rgba(74,159,232,0.15) !important;
+}
+
+
+/* BUTTON AREA */
+
+#createFamilyTreeBtn{
+    margin-top: 15px !important;
+}
+
+
+#createFamilyBackBtn{
+    margin-top: 12px !important;
+}
