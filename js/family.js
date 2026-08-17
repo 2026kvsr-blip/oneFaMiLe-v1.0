@@ -1,276 +1,292 @@
-familyBtn.onclick = ()=>{
+/* =====================================
+   oneFaMiLe
+   FAMILY MODULE
+   ===================================== */
+
+
+/* =====================================
+   FAMILY MAIN PAGE
+   ===================================== */
+
+familyBtn.onclick = () => {
 
     setActiveButton(familyBtn);
 
     showPage(
 
-pageTitle(
-"Family",
-"images/colorbtns/Family1.png"
-)
-
-+`
-<div class="grid-3x2">
-
-<button
-id="addMemberBtn"
-class="grid-btn">
-
-<img
-src="images/colorbtns/AddMember1.png"
-class="btn-icon">
-
-<span>
-
-Add Member
-
-</span>
-
-</button>
-
-
-<button
-id="addFamilyBtn"
-class="grid-btn">
-
-<img
-src="images/colorbtns/AddFamily1.png"
-class="btn-icon">
-
-<span>
-
-Add Tree
-
-</span>
-
-</button>
-
-
-<button
-id="searchMemberBtn"
-class="grid-btn">
-
-<img
-src="images/colorbtns/CustomSearch1.png"
-class="btn-icon">
-
-<span>
-
-Search Member
-
-</span>
-
-</button>
-
-
-<button
-id="relationsBtn"
-class="grid-btn">
-
-<img
-src="images/colorbtns/Relations1.png"
-class="btn-icon">
-
-<span>
-
-Relations
-
-</span>
-
-</button>
-
-
-<button
-id="treeViewBtn"
-class="grid-btn">
-
-<img
-src="images/colorbtns/TreeView1.png"
-class="btn-icon">
-
-<span>
-
-Tree View
-
-</span>
-
-</button>
-
-
-<button
-id="familyAboutBtn"
-class="grid-btn">
-
-<img
-src="images/colorbtns/About1.png"
-class="btn-icon">
-
-<span>
-
-About
-
-</span>
-
-</button>
-
-</div>
-
-<div align="center">
-/* =====================================
-   FAMILY → ADD TREE
-   ===================================== */
-
-document.getElementById("addFamilyBtn").onclick = () => {
-
-    const user =
-        JSON.parse(
-            sessionStorage.getItem("user")
-        );
-
-    if(!user){
-
-        showMessage(
-            "User information not available.",
-            "warning",
-            3000
-        );
-
-        return;
-    }
-
-
-    /* ================================
-       AUTOMATIC FAMILY ID
-       ================================ */
-
-    const familyId =
-        "FAM-" +
-        Date.now().toString(36).toUpperCase();
-
-
-    /* ================================
-       CREATE FAMILY TREE PAGE
-       ================================ */
-
-    showPage(
-
         pageTitle(
-            "Create Family Tree",
-            "images/colorbtns/AddFamily1.png"
+            "Family",
+            "images/colorbtns/Family1.png"
         )
 
         +`
 
-        <div class="form-container">
+        <div class="grid-3x2">
 
-            <!-- FAMILY ID -->
+            <button
+                id="addMemberBtn"
+                class="grid-btn">
 
-            <label>
-                Family ID
-            </label>
+                <img
+                    src="images/colorbtns/AddMember1.png"
+                    class="btn-icon">
 
-            <input
-                type="text"
-                id="newFamilyId"
-                value="${familyId}"
-                readonly
-            >
+                <span>
+                    Add Member
+                </span>
 
-
-            <!-- FAMILY NAME -->
-
-            <label>
-                Family Name
-            </label>
-
-            <input
-                type="text"
-                id="newFamilyName"
-                placeholder="Enter Family Name"
-                autocomplete="off"
-            >
+            </button>
 
 
-            <!-- USER ID -->
+            <button
+                id="addFamilyBtn"
+                class="grid-btn">
 
-            <label>
-                UserID
-            </label>
+                <img
+                    src="images/colorbtns/AddFamily1.png"
+                    class="btn-icon">
 
-            <input
-                type="text"
-                id="familyUserId"
-                value="${user.userId || ""}"
-                readonly
-            >
+                <span>
+                    Add Tree
+                </span>
 
-
-            <!-- USER MAIL -->
-
-            <label>
-                UserMail
-            </label>
-
-            <input
-                type="text"
-                id="familyUserMail"
-                value="${user.email || ""}"
-                readonly
-            >
+            </button>
 
 
-            <!-- MOBILE -->
+            <button
+                id="searchMemberBtn"
+                class="grid-btn">
 
-            <label>
-                Mobile
-            </label>
+                <img
+                    src="images/colorbtns/CustomSearch1.png"
+                    class="btn-icon">
 
-            <input
-                type="text"
-                id="familyMobile"
-                value="${user.mobile || ""}"
-                readonly
-            >
+                <span>
+                    Search Member
+                </span>
 
-
-            <div align="center">
-
-                <button
-                    id="createFamilyTreeBtn"
-                    class="primary-btn">
-
-                    Create Family Tree
-
-                </button>
-
-            </div>
+            </button>
 
 
-            <div align="center">
+            <button
+                id="relationsBtn"
+                class="grid-btn">
 
-                <button
-                    id="createFamilyBackBtn"
-                    class="back-btn">
+                <img
+                    src="images/colorbtns/Relations1.png"
+                    class="btn-icon">
 
-                    ← Back
+                <span>
+                    Relations
+                </span>
 
-                </button>
+            </button>
 
-            </div>
+
+            <button
+                id="treeViewBtn"
+                class="grid-btn">
+
+                <img
+                    src="images/colorbtns/TreeView1.png"
+                    class="btn-icon">
+
+                <span>
+                    Tree View
+                </span>
+
+            </button>
+
+
+            <button
+                id="familyAboutBtn"
+                class="grid-btn">
+
+                <img
+                    src="images/colorbtns/About1.png"
+                    class="btn-icon">
+
+                <span>
+                    About
+                </span>
+
+            </button>
+
+        </div>
+
+
+        <div align="center">
+
+            <button
+                id="familyBack"
+                class="back-btn">
+
+                ← Back
+
+            </button>
 
         </div>
 
         `
+
     );
 
 
-    /* ================================
-       CREATE FAMILY TREE
-       ================================ */
+    /* =====================================
+       FAMILY → ADD TREE
+       ===================================== */
 
     document
-        .getElementById("createFamilyTreeBtn")
+        .getElementById("addFamilyBtn")
         .onclick = () => {
+
+
+        const user =
+            JSON.parse(
+                sessionStorage.getItem("user")
+            );
+
+
+        if(!user){
+
+            showMessage(
+                "User information not available.",
+                "warning",
+                3000
+            );
+
+            return;
+        }
+
+
+        /* ================================
+           AUTOMATIC FAMILY ID
+           ================================ */
+
+        const familyId =
+            "FAM-" +
+            Date.now()
+                .toString(36)
+                .toUpperCase();
+
+
+        /* ================================
+           CREATE FAMILY TREE PAGE
+           ================================ */
+
+        showPage(
+
+            pageTitle(
+                "Create Family Tree",
+                "images/colorbtns/AddFamily1.png"
+            )
+
+            +`
+
+            <div class="form-container">
+
+
+                <label>
+                    Family ID
+                </label>
+
+                <input
+                    type="text"
+                    id="newFamilyId"
+                    value="${familyId}"
+                    readonly
+                >
+
+
+                <label>
+                    Family Name
+                </label>
+
+                <input
+                    type="text"
+                    id="newFamilyName"
+                    placeholder="Enter Family Name"
+                    autocomplete="off"
+                >
+
+
+                <label>
+                    UserID
+                </label>
+
+                <input
+                    type="text"
+                    id="familyUserId"
+                    value="${user.userId || ""}"
+                    readonly
+                >
+
+
+                <label>
+                    UserMail
+                </label>
+
+                <input
+                    type="text"
+                    id="familyUserMail"
+                    value="${user.email || ""}"
+                    readonly
+                >
+
+
+                <label>
+                    Mobile
+                </label>
+
+                <input
+                    type="text"
+                    id="familyMobile"
+                    value="${user.mobile || ""}"
+                    readonly
+                >
+
+
+                <div align="center">
+
+                    <button
+                        id="createFamilyTreeBtn"
+                        class="primary-btn">
+
+                        Create Family Tree
+
+                    </button>
+
+                </div>
+
+
+                <div align="center">
+
+                    <button
+                        id="createFamilyBackBtn"
+                        class="back-btn">
+
+                        ← Back
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+            `
+
+        );
+
+
+        /* =====================================
+           CREATE FAMILY TREE
+           ===================================== */
+
+        document
+            .getElementById("createFamilyTreeBtn")
+            .onclick = () => {
+
 
             const familyName =
                 document
@@ -374,35 +390,27 @@ document.getElementById("addFamilyBtn").onclick = () => {
         };
 
 
-    /* ================================
-       BACK
-       ================================ */
+        /* =====================================
+           CREATE FAMILY TREE → BACK
+           ===================================== */
+
+        document
+            .getElementById("createFamilyBackBtn")
+            .onclick = () => {
+
+                familyBtn.click();
+
+            };
+
+    };
+
+
+    /* =====================================
+       FAMILY → BACK
+       ===================================== */
 
     document
-        .getElementById("createFamilyBackBtn")
-        .onclick = () => {
-
-            familyBtn.click();
-
-        };
+        .getElementById("familyBack")
+        .onclick = showHome;
 
 };
-
-<button
-id="familyBack"
-class="back-btn">
-
-← Back
-
-</button>
-
-</div>
-
-`);
-
-document.getElementById("familyBack").onclick = 
-    
-    showHome;
-
-};
-
