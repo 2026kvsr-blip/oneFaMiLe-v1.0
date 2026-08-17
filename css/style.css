@@ -3281,14 +3281,26 @@ width:100%;
    SETTINGS SUB PAGE TITLES - CENTER
    ===================================== */
 
+/* =====================================
+   SETTINGS SUB PAGE TITLES - EXACT CENTER
+   ===================================== */
+
 #languagePage h3,
 #backupPage h3,
-#restorePage h3,
-#changePasswordPage h2{
-    display:block !important;
-    width:100% !important;
+#restorePage h3{
+
+    position:relative !important;
+
+    left:50% !important;
+
+    transform:translateX(-50%) !important;
+
+    width:100vw !important;
+
     text-align:center !important;
-    margin-left:auto !important;
-    margin-right:auto !important;
+
+    margin:20px 0 !important;
+
     box-sizing:border-box !important;
+
 }
