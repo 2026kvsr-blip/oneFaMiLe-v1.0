@@ -88,4 +88,92 @@
     margin-top:12px;
 
 }
+/* =====================================
+   FAMILY - CREATE TREE INFORMATION
+   ===================================== */
 
+.family-info-form{
+    width:100%;
+    max-width:500px;
+    margin:10px auto 20px;
+    box-sizing:border-box;
+}
+
+
+.family-field{
+    display:grid;
+
+    grid-template-columns:
+        110px
+        18px
+        1fr;
+
+    align-items:center;
+
+    column-gap:4px;
+
+    margin-bottom:8px;
+}
+
+
+.family-label{
+    font-size:16px;
+    font-weight:500;
+    white-space:nowrap;
+    text-align:left;
+}
+
+
+.family-colon{
+    font-size:16px;
+    font-weight:500;
+    text-align:center;
+}
+
+
+.family-field input{
+    width:100%;
+    box-sizing:border-box;
+
+    height:42px;
+
+    padding:8px 10px;
+
+    border:1px solid #c4d4ff;
+
+    border-radius:8px;
+
+    background:#ffffff;
+
+    font-size:16px;
+
+    outline:none;
+}
+
+
+.family-field input[readonly]{
+    background:#f0f7ff;
+}
+
+
+#newFamilyName{
+    background:#ffffff !important;
+}
+
+
+#newFamilyName:focus{
+    border-color:#4A9FE8;
+
+    box-shadow:
+        0 0 0 2px rgba(74,159,232,0.15);
+}
+
+
+#createFamilyTreeBtn{
+    margin-top:10px;
+}
+
+
+#createFamilyBackBtn{
+    margin-top:12px;
+}
