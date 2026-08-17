@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
@@ -182,69 +183,88 @@ familyBtn.onclick = () => {
 
             +`
 
-            <div class="form-container">
+           <div class="family-info-form">
+
+    <div class="family-field">
+        <span class="family-label">
+            Family ID
+        </span>
+
+        <span class="family-colon">:</span>
+
+        <input
+            type="text"
+            id="newFamilyId"
+            value="${familyId}"
+            readonly
+        >
+    </div>
 
 
-                <label>
-                    Family ID
-                </label>
+    <div class="family-field">
+        <span class="family-label">
+            Family Name
+        </span>
 
-                <input
-                    type="text"
-                    id="newFamilyId"
-                    value="${familyId}"
-                    readonly
-                >
+        <span class="family-colon">:</span>
 
-
-                <label>
-                    Family Name
-                </label>
-
-                <input
-                    type="text"
-                    id="newFamilyName"
-                    placeholder="Enter Family Name"
-                    autocomplete="off"
-                >
+        <input
+            type="text"
+            id="newFamilyName"
+            placeholder="Enter Family Name"
+            autocomplete="off"
+        >
+    </div>
 
 
-                <label>
-                    UserID
-                </label>
+    <div class="family-field">
+        <span class="family-label">
+            Login ID
+        </span>
 
-                <input
-                    type="text"
-                    id="familyUserId"
-                    value="${user.userId || ""}"
-                    readonly
-                >
+        <span class="family-colon">:</span>
 
-
-                <label>
-                    UserMail
-                </label>
-
-                <input
-                    type="text"
-                    id="familyUserMail"
-                    value="${user.email || ""}"
-                    readonly
-                >
+        <input
+            type="text"
+            id="familyLoginId"
+            value="${user.loginUserName || ""}"
+            readonly
+        >
+    </div>
 
 
-                <label>
-                    Mobile
-                </label>
+    <div class="family-field">
+        <span class="family-label">
+            UserMail
+        </span>
 
-                <input
-                    type="text"
-                    id="familyMobile"
-                    value="${user.mobile || ""}"
-                    readonly
-                >
+        <span class="family-colon">:</span>
+
+        <input
+            type="text"
+            id="familyUserMail"
+            value="${user.email || ""}"
+            readonly
+        >
+    </div>
 
 
+    <div class="family-field">
+        <span class="family-label">
+            Mobile
+        </span>
+
+        <span class="family-colon">:</span>
+
+        <input
+            type="text"
+            id="familyMobile"
+            value="${user.mobile || ""}"
+            readonly
+        >
+    </div>
+
+</div>
                 <div align="center">
 
                     <button
