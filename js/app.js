@@ -6255,7 +6255,31 @@ function showProfilePage(){
 
     `;
 
+// =====================================
+// MY PROFILE BACK BUTTON
+// =====================================
 
+const newProfileBackBtn =
+    document.getElementById(
+        "profileBackBtn"
+    );
+
+if(newProfileBackBtn){
+
+    newProfileBackBtn.onclick = function(e){
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        profilePage.classList.add("hidden");
+
+        showScreen(dashboard);
+
+        homeBtn.click();
+
+    };
+
+}
     // =====================================
     // SHOW PROFILE PAGE
     // =====================================
