@@ -3253,3 +3253,15 @@ width:100%;
 #dashboard {
     overflow-anchor: none;
 }
+/* =====================================
+   REDUCE GAP BELOW TOP 5 BUTTONS
+   ===================================== */
+
+#homeContent{
+    margin-top:0 !important;
+    padding-top:0 !important;
+}
+
+#homeContent .welcome-box{
+    margin-top:0px !important;
+}
