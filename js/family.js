@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
@@ -130,7 +131,26 @@ familyBtn.onclick = () => {
 
     );
 
+function generateFamilyId(familyName){
 
+    const cleanName =
+        familyName
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, "");
+
+    const namePart =
+        cleanName
+            .substring(0,4)
+            .padEnd(4,"X");
+
+    const uniquePart =
+        Math.random()
+            .toString(36)
+            .substring(2,6)
+            .toUpperCase();
+
+    return `FAM-${namePart}-${uniquePart}`;
+}
     /* =====================================
        FAMILY → ADD TREE
        ===================================== */
@@ -253,6 +273,42 @@ familyBtn.onclick = () => {
 
     `
 );
+
+/* =====================================
+   FAMILY NAME → GENERATE FAMILY ID
+   ===================================== */
+           
+document
+    .getElementById("newFamilyName")
+    .addEventListener("input", function(){
+
+        const familyName =
+            this.value.trim();
+
+        const familyIdField =
+            document.getElementById(
+                "newFamilyId"
+            );
+
+
+        if(!familyName){
+
+            familyIdField.value = "";
+
+            familyIdField.placeholder =
+                "Enter Family Name first";
+
+            return;
+        }
+
+
+        familyIdField.value =
+            generateFamilyId(familyName);
+
+        familyIdField.placeholder = "";
+
+    });
+           
         /* =====================================
            CREATE FAMILY TREE
            ===================================== */
