@@ -3234,6 +3234,18 @@ width:100%;
     box-sizing: border-box;
 }
 /* =====================================
+   HOME WELCOME - MOVE CLOSER TO TOP NAV
+   ===================================== */
+
+#homeContent{
+    margin-top:0 !important;
+    padding-top:0 !important;
+}
+
+#homeContent .welcome-box{
+    margin-top:5px !important;
+}
+/* =====================================
    PREVENT HOME SCROLL POSITION JUMP
    ===================================== */
 
