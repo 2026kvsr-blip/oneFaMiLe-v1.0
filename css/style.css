@@ -4,6 +4,7 @@ padding:0;
 box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
 }
+
 body{
   
    background:#EAF8FF;
@@ -3273,4 +3274,19 @@ width:100%;
     margin: 20px auto !important;
     padding: 0 !important;
     box-sizing: border-box !important;
+}
+/* =====================================
+   SETTINGS SUB PAGE TITLES - CENTER
+   ===================================== */
+
+#languagePage h3,
+#backupPage h3,
+#restorePage h3,
+#changePasswordPage h2{
+    display:block !important;
+    width:100% !important;
+    text-align:center !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    box-sizing:border-box !important;
 }
