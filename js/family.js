@@ -116,6 +116,277 @@ About
 </div>
 
 <div align="center">
+/* =====================================
+   FAMILY → ADD TREE
+   ===================================== */
+
+document.getElementById("addFamilyBtn").onclick = () => {
+
+    const user =
+        JSON.parse(
+            sessionStorage.getItem("user")
+        );
+
+    if(!user){
+
+        showMessage(
+            "User information not available.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    /* ================================
+       AUTOMATIC FAMILY ID
+       ================================ */
+
+    const familyId =
+        "FAM-" +
+        Date.now().toString(36).toUpperCase();
+
+
+    /* ================================
+       CREATE FAMILY TREE PAGE
+       ================================ */
+
+    showPage(
+
+        pageTitle(
+            "Create Family Tree",
+            "images/colorbtns/AddFamily1.png"
+        )
+
+        +`
+
+        <div class="form-container">
+
+            <!-- FAMILY ID -->
+
+            <label>
+                Family ID
+            </label>
+
+            <input
+                type="text"
+                id="newFamilyId"
+                value="${familyId}"
+                readonly
+            >
+
+
+            <!-- FAMILY NAME -->
+
+            <label>
+                Family Name
+            </label>
+
+            <input
+                type="text"
+                id="newFamilyName"
+                placeholder="Enter Family Name"
+                autocomplete="off"
+            >
+
+
+            <!-- USER ID -->
+
+            <label>
+                UserID
+            </label>
+
+            <input
+                type="text"
+                id="familyUserId"
+                value="${user.userId || ""}"
+                readonly
+            >
+
+
+            <!-- USER MAIL -->
+
+            <label>
+                UserMail
+            </label>
+
+            <input
+                type="text"
+                id="familyUserMail"
+                value="${user.email || ""}"
+                readonly
+            >
+
+
+            <!-- MOBILE -->
+
+            <label>
+                Mobile
+            </label>
+
+            <input
+                type="text"
+                id="familyMobile"
+                value="${user.mobile || ""}"
+                readonly
+            >
+
+
+            <div align="center">
+
+                <button
+                    id="createFamilyTreeBtn"
+                    class="primary-btn">
+
+                    Create Family Tree
+
+                </button>
+
+            </div>
+
+
+            <div align="center">
+
+                <button
+                    id="createFamilyBackBtn"
+                    class="back-btn">
+
+                    ← Back
+
+                </button>
+
+            </div>
+
+        </div>
+
+        `
+    );
+
+
+    /* ================================
+       CREATE FAMILY TREE
+       ================================ */
+
+    document
+        .getElementById("createFamilyTreeBtn")
+        .onclick = () => {
+
+            const familyName =
+                document
+                    .getElementById("newFamilyName")
+                    .value
+                    .trim();
+
+
+            if(!familyName){
+
+                validationMessage(
+                    "Please enter Family Name.",
+                    document.getElementById(
+                        "newFamilyName"
+                    )
+                );
+
+                return;
+            }
+
+
+            /* ============================
+               FAMILY OBJECT
+               ============================ */
+
+            const familyData = {
+
+                familyId:
+                    document.getElementById(
+                        "newFamilyId"
+                    ).value,
+
+                familyName:
+                    familyName,
+
+                userId:
+                    user.userId || "",
+
+                userMail:
+                    user.email || "",
+
+                mobile:
+                    user.mobile || "",
+
+                createdAt:
+                    new Date().toISOString()
+
+            };
+
+
+            /* ============================
+               SAVE CURRENT FAMILY
+               ============================ */
+
+            localStorage.setItem(
+                "currentFamily",
+                JSON.stringify(
+                    familyData
+                )
+            );
+
+
+            /* ============================
+               SAVE FAMILY LIST
+               ============================ */
+
+            const existingFamilies =
+                JSON.parse(
+                    localStorage.getItem(
+                        "familyTrees"
+                    ) || "[]"
+                );
+
+
+            existingFamilies.push(
+                familyData
+            );
+
+
+            localStorage.setItem(
+                "familyTrees",
+                JSON.stringify(
+                    existingFamilies
+                )
+            );
+
+
+            showMessage(
+                "Family Tree Created Successfully.",
+                "success",
+                3000
+            );
+
+
+            /* ============================
+               RETURN TO FAMILY MENU
+               ============================ */
+
+            familyBtn.click();
+
+        };
+
+
+    /* ================================
+       BACK
+       ================================ */
+
+    document
+        .getElementById("createFamilyBackBtn")
+        .onclick = () => {
+
+            familyBtn.click();
+
+        };
+
+};
 
 <button
 id="familyBack"
