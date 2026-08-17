@@ -17,6 +17,7 @@ overflow-x:hidden;
 
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -3228,8 +3229,8 @@ width:100%;
    ===================================== */
 
 #homeContent {
-    padding-top: 115px !important;
-    padding-bottom: 110px !important;
+    padding-top: 95px !important;
+    padding-bottom: 90px !important;
     box-sizing: border-box;
 }
 /* =====================================
