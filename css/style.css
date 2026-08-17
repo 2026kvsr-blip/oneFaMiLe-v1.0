@@ -3224,3 +3224,13 @@ width:100%;
 #homeWelcomeHeading {
     display: none !important;
 }
+
+/* =====================================
+   HOME CONTENT - CLEAR FIXED TOP NAV
+   ===================================== */
+
+#homeContent {
+    padding-top: 110px !important;
+    padding-bottom: 90px !important;
+    box-sizing: border-box;
+}
