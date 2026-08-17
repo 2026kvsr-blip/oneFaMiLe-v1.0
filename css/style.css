@@ -3221,3 +3221,6 @@ width:100%;
     }
 
 }
+#homeWelcomeHeading {
+    display: none !important;
+}
