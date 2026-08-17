@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
@@ -176,128 +175,84 @@ familyBtn.onclick = () => {
 
         showPage(
 
-            pageTitle(
-                "Create Family Tree",
-                "images/colorbtns/AddFamily1.png"
-            )
+    pageTitle(
+        "Create Family Tree",
+        "images/colorbtns/AddFamily1.png"
+    )
 
-            +`
+    +`
 
-           <div class="family-info-form">
+    <div class="family-info-form">
 
-    <div class="family-field">
-        <span class="family-label">
-            Family ID
-        </span>
+        <div class="family-field">
 
-        <span class="family-colon">:</span>
+            <span class="family-label">
+                Family ID
+            </span>
 
-        <input
-            type="text"
-            id="newFamilyId"
-            value="${familyId}"
-            readonly
-        >
+            <span class="family-colon">
+                :
+            </span>
+
+            <input
+                type="text"
+                id="newFamilyId"
+                placeholder="Enter Family Name first"
+                readonly
+            >
+
+        </div>
+
+
+        <div class="family-field">
+
+            <span class="family-label">
+                Family Name
+            </span>
+
+            <span class="family-colon">
+                :
+            </span>
+
+            <input
+                type="text"
+                id="newFamilyName"
+                placeholder="Enter Family Name"
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <div align="center">
+
+            <button
+                id="createFamilyTreeBtn"
+                class="primary-btn">
+
+                Create Family Tree
+
+            </button>
+
+        </div>
+
+
+        <div align="center">
+
+            <button
+                id="createFamilyBackBtn"
+                class="back-btn">
+
+                ← Back
+
+            </button>
+
+        </div>
+
     </div>
 
-
-    <div class="family-field">
-        <span class="family-label">
-            Family Name
-        </span>
-
-        <span class="family-colon">:</span>
-
-        <input
-            type="text"
-            id="newFamilyName"
-            placeholder="Enter Family Name"
-            autocomplete="off"
-        >
-    </div>
-
-
-    <div class="family-field">
-        <span class="family-label">
-            Login ID
-        </span>
-
-        <span class="family-colon">:</span>
-
-        <input
-            type="text"
-            id="familyLoginId"
-            value="${user.loginUserName || ""}"
-            readonly
-        >
-    </div>
-
-
-    <div class="family-field">
-        <span class="family-label">
-            UserMail
-        </span>
-
-        <span class="family-colon">:</span>
-
-        <input
-            type="text"
-            id="familyUserMail"
-            value="${user.email || ""}"
-            readonly
-        >
-    </div>
-
-
-    <div class="family-field">
-        <span class="family-label">
-            Mobile
-        </span>
-
-        <span class="family-colon">:</span>
-
-        <input
-            type="text"
-            id="familyMobile"
-            value="${user.mobile || ""}"
-            readonly
-        >
-    </div>
-
-</div>
-                <div align="center">
-
-                    <button
-                        id="createFamilyTreeBtn"
-                        class="primary-btn">
-
-                        Create Family Tree
-
-                    </button>
-
-                </div>
-
-
-                <div align="center">
-
-                    <button
-                        id="createFamilyBackBtn"
-                        class="back-btn">
-
-                        ← Back
-
-                    </button>
-
-                </div>
-
-
-            </div>
-
-            `
-
-        );
-
-
+    `
+);
         /* =====================================
            CREATE FAMILY TREE
            ===================================== */
