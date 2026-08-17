@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
@@ -331,30 +330,32 @@ familyBtn.onclick = () => {
                FAMILY OBJECT
                ============================ */
 
-            const familyData = {
+           const familyData = {
 
-                familyId:
-                    document.getElementById(
-                        "newFamilyId"
-                    ).value,
+    familyId:
+        document.getElementById(
+            "newFamilyId"
+        ).value,
 
-                familyName:
-                    familyName,
+    familyName:
+        familyName,
 
-                userId:
-                    user.userId || "",
+    loginId:
+        user.loginUserName || "",
 
-                userMail:
-                    user.email || "",
+    userId:
+        user.userId || "",
 
-                mobile:
-                    user.mobile || "",
+    userMail:
+        user.email || "",
 
-                createdAt:
-                    new Date().toISOString()
+    mobile:
+        user.mobile || "",
 
-            };
+    createdAt:
+        new Date().toISOString()
 
+};
 
             /* ============================
                SAVE CURRENT FAMILY
