@@ -3,6 +3,7 @@
 oneFaMiLe V1
 Part 1A.3
 ===================================== */
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -260,7 +261,34 @@ const settingsPage =
 document.getElementById("settingsPage");
 const profilePage =
 document.getElementById("profilePage");
+// =====================================
+// MY PROFILE BACK BUTTON - PERMANENT
+// =====================================
 
+profilePage.addEventListener(
+    "click",
+    function(e){
+
+        const backBtn =
+            e.target.closest(
+                "#profileBackBtn"
+            );
+
+        if(!backBtn){
+            return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        profilePage.classList.add("hidden");
+
+        showScreen(dashboard);
+
+        homeBtn.click();
+
+    }
+);
 const profileMenuBtn =
 document.getElementById("profileMenuBtn");
 
