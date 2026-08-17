@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
@@ -291,24 +290,33 @@ document
             );
 
 
-        if(!familyName){
+        /* ================================
+           LESS THAN 4 LETTERS
+           ================================ */
+
+        if(familyName.length < 4){
 
             familyIdField.value = "";
 
             familyIdField.placeholder =
-                "Enter Family Name first";
+                "Enter 4 letters first";
 
             return;
         }
 
 
+        /* ================================
+           4 OR MORE LETTERS
+           ================================ */
+
         familyIdField.value =
-            generateFamilyId(familyName);
+            generateFamilyId(
+                familyName
+            );
 
         familyIdField.placeholder = "";
 
-    });
-           
+    });           
         /* =====================================
            CREATE FAMILY TREE
            ===================================== */
