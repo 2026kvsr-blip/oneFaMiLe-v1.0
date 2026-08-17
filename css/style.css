@@ -20,7 +20,6 @@ overflow-x:hidden;
 /* =======================
 TOP BAR
 ======================= */
-
 .topbar{
 
 position:fixed;
@@ -3229,7 +3228,7 @@ width:100%;
    ===================================== */
 
 #homeContent {
-    padding-top: 110px !important;
+    padding-top: 130px !important;
     padding-bottom: 90px !important;
     box-sizing: border-box;
 }
