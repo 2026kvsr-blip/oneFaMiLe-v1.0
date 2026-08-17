@@ -3264,3 +3264,11 @@ width:100%;
 #homeContent .welcome-box{
     margin-top:0px !important;
 }
+/* =====================================
+   SETTINGS PAGE TITLE
+   ===================================== */
+
+#settingsPage h3{
+    text-align: center !important;
+    width: 100%;
+}
