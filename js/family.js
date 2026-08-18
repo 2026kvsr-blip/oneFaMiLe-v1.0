@@ -6,6 +6,7 @@
    GENERATE FAMILY ID
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    ===================================== */
@@ -337,18 +338,16 @@ document
                     "createFamilyTreeBtn"
                 );
 
-           
 
             /* ================================
                RESET
                ================================ */
 
-            createBtn.disabled = true;
-
             statusField.textContent = "";
-
             statusField.className =
                 "family-id-status";
+
+            createBtn.disabled = true;
 
 
             /* ================================
@@ -360,114 +359,111 @@ document
                 familyIdField.textContent =
                     "auto generation";
 
+                familyIdField.classList.remove(
+                    "generated"
+                );
+
                 return;
             }
 
 
             /* ================================
-               GENERATE ID ONLY ONCE
+               GENERATE FAMILY ID ONLY ONCE
                ================================ */
 
             if(
-                familyIdField.classList.contains(
+                !familyIdField.classList.contains(
                     "generated"
                 )
             ){
 
-                return;
+                familyIdField.textContent =
+                    generateFamilyId(
+                        familyName
+                    );
+
+                familyIdField.classList.add(
+                    "generated"
+                );
             }
 
 
+            /* ================================
+               GET GENERATED ID
+               ================================ */
+
             const generatedFamilyId =
-                generateFamilyId(
-                    familyName
-                );
-
-
-            familyIdField.textContent =
-                generatedFamilyId;
-
-            familyIdField.classList.add(
-                "generated"
-            );
+                familyIdField.textContent.trim();
 
 
             /* ================================
                VERIFYING
                ================================ */
 
+            statusField.textContent =
+                "Verifying...";
+
             statusField.className =
                 "family-id-status verifying";
-
-            statusField.innerHTML =
-                'Verifying<span class="verifying-dots"></span>';
 
 
             /* ================================
                CHECK EXISTING FAMILY IDS
                ================================ */
 
-            setTimeout(
-                function(){
+            setTimeout(() => {
 
-                    const existingFamilies =
-                        JSON.parse(
-                            localStorage.getItem(
-                                "familyTrees"
-                            ) || "[]"
-                        );
-
-
-                    const alreadyExists =
-                        existingFamilies.some(
-                            function(family){
-
-                                return (
-                                    family.familyId ===
-                                    generatedFamilyId
-                                );
-
-                            }
-                        );
+                const existingFamilies =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "familyTrees"
+                        ) || "[]"
+                    );
 
 
-                    /* ============================
-                       NOT AVAILABLE
-                       ============================ */
-
-                    if(alreadyExists){
-
-                        statusField.className =
-                            "family-id-status not-available";
-
-                        statusField.textContent =
-                            "Family ID not available";
-
-                        createBtn.disabled = true;
-
-                        return;
-                    }
+                const alreadyExists =
+                    existingFamilies.some(
+                        family =>
+                            family.familyId ===
+                            generatedFamilyId
+                    );
 
 
-                    /* ============================
-                       AVAILABLE
-                       ============================ */
+                /* ============================
+                   NOT AVAILABLE
+                   ============================ */
 
-                    statusField.className =
-                        "family-id-status available";
+                if(alreadyExists){
 
                     statusField.textContent =
-                        "Family ID available";
+                        "Family ID not available";
 
-                    createBtn.disabled = false;
+                    statusField.className =
+                        "family-id-status not-available";
 
-                },
-                800
-            );
+                    createBtn.disabled = true;
+
+                    return;
+                }
+
+
+                /* ============================
+                   AVAILABLE
+                   ============================ */
+
+                statusField.textContent =
+                    "Family ID available";
+
+                statusField.className =
+                    "family-id-status available";
+
+                createBtn.disabled = false;
+
+            }, 800);
 
         }
     );
-        /* =====================================
+           /* =====================================
            CREATE FAMILY TREE
            ===================================== */
 
