@@ -9,9 +9,7 @@
 }
 
 
-/* =====================================
-   FAMILY ROW
-   ===================================== */
+/* FAMILY ROW */
 
 .family-row{
     display:flex;
@@ -27,9 +25,7 @@
 }
 
 
-/* =====================================
-   LABEL
-   ===================================== */
+/* LABEL */
 
 .family-row span{
     width:45%;
@@ -51,9 +47,7 @@
 }
 
 
-/* =====================================
-   FAMILY VALUE
-   ===================================== */
+/* VALUE */
 
 .family-row strong{
     width:55%;
@@ -64,16 +58,13 @@
 
     text-align:left;
 
-    word-break:break-word;
-
     box-sizing:border-box;
+
+    word-break:break-word;
 }
 
 
-/* =====================================
-   FAMILY NAME INPUT
-   SAME AS MY PROFILE
-   ===================================== */
+/* FAMILY NAME INPUT */
 
 .family-row input{
     width:55%;
@@ -96,6 +87,8 @@
 }
 
 
+/* INPUT FOCUS */
+
 .family-row input:focus{
     border-color:#2A6EB0;
 
@@ -104,9 +97,7 @@
 }
 
 
-/* =====================================
-   CREATE FAMILY TREE BUTTON
-   ===================================== */
+/* CREATE BUTTON */
 
 .family-create-action{
     text-align:center;
@@ -115,16 +106,14 @@
 }
 
 
+/* SAME AS MY PROFILE / SAVE BUTTON */
+
 .family-create-action .grid-btn{
     white-space:nowrap;
-
-    min-width:180px;
 }
 
 
-/* =====================================
-   BACK BUTTON
-   ===================================== */
+/* BACK */
 
 .family-back-action{
     text-align:center;
