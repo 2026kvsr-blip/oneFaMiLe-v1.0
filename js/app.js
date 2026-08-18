@@ -1,4 +1,3 @@
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -5995,11 +5994,50 @@ updateMenuIcon();
 }
 
 
+/* =====================================
+   SIDE MENU BUTTON
+   SHOW ONLY ON HOME
+   ===================================== */
+
 function updateMenuIcon(){
 
-    const menuBtn = document.getElementById("menuBtn");
+    const menuBtn =
+        document.getElementById("menuBtn");
 
-    if(sessionStorage.getItem("user")){
+    if(!menuBtn){
+        return;
+    }
+
+
+    const user =
+        sessionStorage.getItem("user");
+
+
+    /* =================================
+       NOT LOGGED IN
+       ================================= */
+
+    if(!user){
+
+        menuBtn.classList.add("hidden");
+
+        return;
+    }
+
+
+    /* =================================
+       LOGGED IN
+       CHECK CURRENT PAGE
+       ================================= */
+
+    const homePage =
+        document.getElementById("homePage");
+
+
+    if(
+        homePage &&
+        !homePage.classList.contains("hidden")
+    ){
 
         menuBtn.classList.remove("hidden");
 
