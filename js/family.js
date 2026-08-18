@@ -2,6 +2,7 @@
    oneFaMiLe
    FAMILY MODULE
    ===================================== */
+
 /* =====================================
    GENERATE FAMILY ID
    ===================================== */
@@ -285,15 +286,19 @@ familyBtn.onclick = () => {
 
     <!-- FAMILY NAME -->
 
-    <div class="family-row">
+   <!-- FAMILY NAME -->
 
-        <span class="family-label">
-            Family Name
-        </span>
+<div class="family-row">
 
-        <span class="family-colon">
-            :
-        </span>
+    <span class="family-label">
+        Family Name
+    </span>
+
+    <span class="family-colon">
+        :
+    </span>
+
+    <div class="family-name-field">
 
         <input
             type="text"
@@ -303,15 +308,14 @@ familyBtn.onclick = () => {
             autocomplete="off"
         >
 
+        <div
+            id="familyIdStatus"
+            class="family-id-status">
+        </div>
+
     </div>
 
 </div>
-    <!-- AVAILABILITY MESSAGE -->
-
-    <div
-        id="familyIdStatus"
-        class="family-id-status">
-    </div>
 
 
 
