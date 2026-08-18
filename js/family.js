@@ -129,7 +129,7 @@ familyBtn.onclick = () => {
 
     );
 
-function generateFamilyId(familyName){
+   function generateFamilyId(familyName){
 
     const cleanName =
         familyName
@@ -149,10 +149,7 @@ function generateFamilyId(familyName){
 
     return `FAM-${namePart}-${uniquePart}`;
 }
-    /* =====================================
-       FAMILY → ADD TREE
-       ===================================== */
-
+ 
    /* =====================================
    FAMILY → ADD TREE
    ===================================== */
