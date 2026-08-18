@@ -3,13 +3,12 @@
    FAMILY MODULE
    ===================================== */
 
-
-
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
 
 familyBtn.onclick = () => {
+    updateMenuIcon();
 
     setActiveButton(familyBtn);
 
