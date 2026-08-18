@@ -10,6 +10,12 @@
    ===================================== */
 
 
+/* =====================================
+   GENERATE UNIQUE FAMILY ID
+   FORMAT:
+   F-NAME-RANDOM4
+   ===================================== */
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -18,17 +24,59 @@ function generateFamilyId(familyName){
             .replace(/[^A-Z0-9]/g, "");
 
     const namePart =
-        cleanName.substring(0,4);
+        cleanName
+            .substring(0,4)
+            .padEnd(4,"X");
 
-    const uniquePart =
-        Math.random()
-            .toString(36)
-            .substring(2,8)
-            .toUpperCase();
 
-    return `FAM-${namePart}-${uniquePart}`;
+    /* =================================
+       GET EXISTING FAMILY IDs
+       ================================= */
+
+    const existingFamilies =
+        JSON.parse(
+            localStorage.getItem(
+                "familyTrees"
+            ) || "[]"
+        );
+
+
+    const existingIds =
+        existingFamilies.map(
+            family =>
+                family.familyId
+        );
+
+
+    let familyId;
+    let uniquePart;
+
+
+    /* =================================
+       GENERATE UNIQUE RANDOM 4
+       ================================= */
+
+    do{
+
+        uniquePart =
+            Math.random()
+                .toString(36)
+                .substring(2,6)
+                .toUpperCase();
+
+        familyId =
+            `F-${namePart}-${uniquePart}`;
+
+    }
+    while(
+        existingIds.includes(
+            familyId
+        )
+    );
+
+
+    return familyId;
 }
-
 
 /* =====================================
    CHECK FAMILY ID AVAILABILITY
@@ -341,19 +389,36 @@ document
 
 
             /* =================================
-               RESET STATUS
+               RESET CREATE BUTTON
                ================================= */
-
-            statusField.textContent = "";
-
-            statusField.className =
-                "family-id-status";
 
             createBtn.disabled = true;
 
 
             /* =================================
-               EMPTY / LESS THAN 4 LETTERS
+               EMPTY
+               ================================= */
+
+            if(familyName.length === 0){
+
+                familyIdField.textContent =
+                    "auto generation";
+
+                familyIdField.classList.remove(
+                    "generated"
+                );
+
+                statusField.textContent = "";
+
+                statusField.className =
+                    "family-id-status";
+
+                return;
+            }
+
+
+            /* =================================
+               LESS THAN 4 LETTERS
                ================================= */
 
             if(familyName.length < 4){
@@ -365,12 +430,20 @@ document
                     "generated"
                 );
 
+
+                statusField.textContent =
+                    "Name must be min 4 letters";
+
+                statusField.className =
+                    "family-id-status checking";
+
                 return;
             }
 
 
             /* =================================
-               GENERATE ONLY ON FIRST 4 LETTERS
+               GENERATE ID ONLY ONCE
+               AFTER 4TH LETTER
                ================================= */
 
             if(
@@ -387,6 +460,7 @@ document
                 familyIdField.classList.add(
                     "generated"
                 );
+
             }
 
 
@@ -399,14 +473,14 @@ document
 
 
             /* =================================
-               VERIFYING
+               CHECKING AVAILABILITY
                ================================= */
 
-           statusField.innerHTML =
-    '<span class="checking-spinner"></span> Checking availability...';
+            statusField.innerHTML =
+                '<span class="checking-spinner"></span> Checking availability...';
 
-statusField.className =
-    "family-id-status checking";
+            statusField.className =
+                "family-id-status checking";
 
 
             /* =================================
@@ -449,7 +523,8 @@ statusField.className =
                         statusField.className =
                             "family-id-status not-available";
 
-                        createBtn.disabled = true;
+                        createBtn.disabled =
+                            true;
 
                         return;
                     }
@@ -465,15 +540,15 @@ statusField.className =
                     statusField.className =
                         "family-id-status available";
 
-                    createBtn.disabled = false;
+                    createBtn.disabled =
+                        false;
 
                 },
                 800
             );
 
         }
-    );
-           /* =====================================
+    );           /* =====================================
            CREATE FAMILY TREE
            ===================================== */
 
