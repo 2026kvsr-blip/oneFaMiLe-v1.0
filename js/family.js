@@ -7,6 +7,10 @@
    ===================================== */
 
 
+/* =====================================
+   GENERATE UNIQUE FAMILY ID
+   ===================================== */
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -15,20 +19,34 @@ function generateFamilyId(familyName){
             .replace(/[^A-Z0-9]/g, "");
 
     const namePart =
-        cleanName
-            .substring(0,4)
-            .padEnd(4,"X");
+        cleanName.substring(0,4);
 
     const uniquePart =
         Math.random()
             .toString(36)
-            .substring(2,6)
+            .substring(2,8)
             .toUpperCase();
 
     return `FAM-${namePart}-${uniquePart}`;
 }
 
 
+/* =====================================
+   CHECK FAMILY ID AVAILABILITY
+   ===================================== */
+
+function isFamilyIdAvailable(familyId){
+
+    const existingFamilies =
+        JSON.parse(
+            localStorage.getItem("familyTrees") || "[]"
+        );
+
+    return !existingFamilies.some(
+        family =>
+            family.familyId === familyId
+    );
+}
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
@@ -217,6 +235,11 @@ familyBtn.onclick = () => {
                     </strong>
 
                 </div>
+<div
+        id="familyIdStatus"
+        class="family-id-status">
+    </div>
+
 
 
                 <!-- FAMILY NAME -->
@@ -281,7 +304,11 @@ familyBtn.onclick = () => {
            FAMILY NAME → GENERATE FAMILY ID
            ===================================== */
 
-        document
+      /* =====================================
+   FAMILY NAME → FAMILY ID
+   ===================================== */
+
+document
     .getElementById("newFamilyName")
     .addEventListener(
         "input",
@@ -290,55 +317,142 @@ familyBtn.onclick = () => {
             const familyName =
                 this.value.trim();
 
+
             const familyIdField =
                 document.getElementById(
                     "newFamilyId"
                 );
 
 
-            /* ================================
-               ALREADY GENERATED → DO NOT CHANGE
-               ================================ */
+            const statusField =
+                document.getElementById(
+                    "familyIdStatus"
+                );
+
+
+            const createBtn =
+                document.getElementById(
+                    "createFamilyTreeBtn"
+                );
+
+
+            /* =================================
+               LESS THAN 4 CHARACTERS
+               ================================= */
+
+            if(familyName.length < 4){
+
+                familyIdField.textContent =
+                    "Auto generation";
+
+                familyIdField.classList.remove(
+                    "generated"
+                );
+
+
+                statusField.textContent =
+                    "";
+
+                statusField.className =
+                    "family-id-status";
+
+
+                createBtn.disabled =
+                    true;
+
+                return;
+            }
+
+
+            /* =================================
+               DO NOT CHANGE ID AFTER GENERATED
+               ================================= */
 
             if(
                 familyIdField.classList.contains(
                     "generated"
                 )
             ){
-                return;
-            }
-
-
-            /* ================================
-               LESS THAN 4 LETTERS
-               ================================ */
-
-            if(familyName.length < 4){
-
-                familyIdField.textContent =
-                    "auto generation";
-
-                familyIdField.classList.remove(
-                    "generated"
-                );
 
                 return;
             }
 
 
-            /* ================================
-               4 LETTERS COMPLETED
-               GENERATE ONLY ONCE
-               ================================ */
+            /* =================================
+               VERIFYING
+               ================================= */
 
-            familyIdField.textContent =
+            statusField.className =
+                "family-id-status verifying";
+
+            statusField.innerHTML =
+                `<span class="verify-spinner"></span>
+                 Verifying...`;
+
+
+            createBtn.disabled =
+                true;
+
+
+            /* =================================
+               GENERATE ID ONCE
+               ================================= */
+
+            const familyId =
                 generateFamilyId(
                     familyName
                 );
 
+
+            familyIdField.textContent =
+                familyId;
+
+
             familyIdField.classList.add(
                 "generated"
             );
+
+
+            /* =================================
+               CHECK ID
+               ================================= */
+
+            setTimeout(() => {
+
+                const available =
+                    isFamilyIdAvailable(
+                        familyId
+                    );
+
+
+                if(available){
+
+                    statusField.className =
+                        "family-id-status available";
+
+                    statusField.textContent =
+                        "✓ Family ID available";
+
+
+                    createBtn.disabled =
+                        false;
+
+                }
+                else{
+
+                    statusField.className =
+                        "family-id-status not-available";
+
+                    statusField.textContent =
+                        "✕ Family ID not available";
+
+
+                    createBtn.disabled =
+                        true;
+
+                }
+
+            }, 700);
 
         }
     );
@@ -351,7 +465,41 @@ familyBtn.onclick = () => {
             .getElementById("createFamilyTreeBtn")
             .onclick = () => {
 
+const familyId =
+    document
+        .getElementById(
+            "newFamilyId"
+        )
+        .textContent
+        .trim();
 
+
+const statusField =
+    document.getElementById(
+        "familyIdStatus"
+    );
+
+
+/* =================================
+   FAMILY ID MUST BE AVAILABLE
+   ================================= */
+
+if(
+    !familyId ||
+    familyId === "Auto generation" ||
+    !statusField.classList.contains(
+        "available"
+    )
+){
+
+    showMessage(
+        "Family ID is not available.",
+        "warning",
+        3000
+    );
+
+    return;
+}
             const familyName =
                 document
                     .getElementById(
