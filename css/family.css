@@ -358,3 +358,138 @@
     box-shadow: none !important;
 
 }
+/* =====================================
+   FAMILY ID AUTO GENERATION
+   ===================================== */
+
+#newFamilyId.auto-generation{
+
+    color:#a8a8a8;
+
+    font-weight:400;
+
+}
+
+
+/* =====================================
+   GENERATED FAMILY ID
+   ===================================== */
+
+#newFamilyId.generated{
+
+    color:#333333;
+
+    font-weight:500;
+
+}
+
+
+/* =====================================
+   FAMILY ID STATUS
+   ===================================== */
+
+.family-id-status{
+
+    min-height:22px;
+
+    margin-top:-8px;
+
+    margin-bottom:10px;
+
+    margin-left:144px;
+
+    font-size:14px;
+
+    font-weight:500;
+
+}
+
+
+/* =====================================
+   VERIFYING
+   ===================================== */
+
+.family-id-status.verifying{
+
+    color:#777777;
+
+}
+
+
+/* =====================================
+   AVAILABLE
+   ===================================== */
+
+.family-id-status.available{
+
+    color:#159447;
+
+}
+
+
+/* =====================================
+   NOT AVAILABLE
+   ===================================== */
+
+.family-id-status.not-available{
+
+    color:#d93025;
+
+}
+
+
+/* =====================================
+   VERIFY SPINNER
+   ===================================== */
+
+.verify-spinner{
+
+    display:inline-block;
+
+    width:12px;
+
+    height:12px;
+
+    margin-right:6px;
+
+    border:2px solid #cfd8dc;
+
+    border-top:2px solid #4A9FE8;
+
+    border-radius:50%;
+
+    vertical-align:-2px;
+
+    animation:
+        familyVerifySpin
+        0.7s linear infinite;
+
+}
+
+
+@keyframes familyVerifySpin{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+
+/* =====================================
+   CREATE BUTTON DISABLED
+   ===================================== */
+
+#createFamilyTreeBtn:disabled{
+
+    opacity:0.45;
+
+    cursor:not-allowed;
+
+    pointer-events:none;
+
+}
