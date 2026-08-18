@@ -3,11 +3,39 @@
    FAMILY MODULE
    ===================================== */
 
+
+/* =====================================
+   GENERATE FAMILY ID
+   ===================================== */
+
+function generateFamilyId(familyName){
+
+    const cleanName =
+        familyName
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, "");
+
+    const namePart =
+        cleanName
+            .substring(0,4)
+            .padEnd(4,"X");
+
+    const uniquePart =
+        Math.random()
+            .toString(36)
+            .substring(2,6)
+            .toUpperCase();
+
+    return `FAM-${namePart}-${uniquePart}`;
+}
+
+
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
 
 familyBtn.onclick = () => {
+
     setActiveButton(familyBtn);
 
     showPage(
@@ -129,234 +157,26 @@ familyBtn.onclick = () => {
 
     );
 
-   function generateFamilyId(familyName){
-
-    const cleanName =
-        familyName
-            .toUpperCase()
-            .replace(/[^A-Z0-9]/g, "");
-
-    const namePart =
-        cleanName
-            .substring(0,4)
-            .padEnd(4,"X");
-
-    const uniquePart =
-        Math.random()
-            .toString(36)
-            .substring(2,6)
-            .toUpperCase();
-
-    return `FAM-${namePart}-${uniquePart}`;
-}
- 
-   /* =====================================
-   FAMILY → ADD TREE
-   ===================================== */
-
-document
-    .getElementById("addFamilyBtn")
-    .onclick = () => {
-
-
-    const user =
-        JSON.parse(
-            sessionStorage.getItem("user")
-        );
-
-
-    if(!user){
-
-        showMessage(
-            "User information not available.",
-            "warning",
-            3000
-        );
-
-        return;
-    }
-
 
     /* =====================================
-       CREATE FAMILY TREE PAGE
-       ===================================== */
-
-    showPage(
-
-        pageTitle(
-            "Create Family Tree",
-            "images/colorbtns/AddFamily1.png"
-        )
-
-        +`
-
-        <div class="family-box">
-
-
-            <!-- FAMILY ID -->
-
-            <div class="family-row">
-
-                <span>
-                    Family ID
-                </span>
-
-                <strong
-                    id="newFamilyId">
-                    -
-                </strong>
-
-            </div>
-
-
-            <!-- FAMILY NAME -->
-
-            <div class="family-row">
-
-                <span>
-                    Family Name
-                </span>
-
-                <input
-                    type="text"
-                    id="newFamilyName"
-                    placeholder="Enter Family Name"
-                    autocomplete="off"
-                >
-
-            </div>
-
-
-        </div>
-
-
-        <!-- CREATE BUTTON -->
-
-        <div class="family-create-action">
-
-            <button
-                id="createFamilyTreeBtn"
-                class="grid-btn">
-
-                Create Family Tree
-
-            </button>
-
-        </div>
-
-
-        <!-- BACK BUTTON -->
-
-        <div class="family-back-action">
-
-            <button
-                id="createFamilyBackBtn"
-                class="back-btn">
-
-                ← Back
-
-            </button>
-
-        </div>
-
-        `
-    );
-
-
-    /* =====================================
-       FAMILY NAME → GENERATE FAMILY ID
+       FAMILY → ADD TREE
        ===================================== */
 
     document
-        .getElementById("newFamilyName")
-        .addEventListener(
-            "input",
-            function(){
-
-                const familyName =
-                    this.value.trim();
-
-
-                const familyIdField =
-                    document.getElementById(
-                        "newFamilyId"
-                    );
-
-
-                /* LESS THAN 4 LETTERS */
-
-                if(familyName.length < 4){
-
-                    familyIdField.textContent =
-                        "-";
-
-                    return;
-                }
-
-
-                /* 4 OR MORE LETTERS */
-
-                familyIdField.textContent =
-                    generateFamilyId(
-                        familyName
-                    );
-
-            }
-        );
-
-
-    /* =====================================
-       CREATE FAMILY TREE
-       ===================================== */
-
-    document
-        .getElementById("createFamilyTreeBtn")
+        .getElementById("addFamilyBtn")
         .onclick = () => {
 
 
-        const familyName =
-            document
-                .getElementById(
-                    "newFamilyName"
-                )
-                .value
-                .trim();
-
-
-        /* =================================
-           MINIMUM 4 LETTERS
-           ================================= */
-
-        if(familyName.length < 4){
-
-            validationMessage(
-                "Family Name must contain at least 4 letters.",
-                document.getElementById(
-                    "newFamilyName"
-                )
+        const user =
+            JSON.parse(
+                sessionStorage.getItem("user")
             );
 
-            return;
-        }
 
-
-        /* =================================
-           GET GENERATED FAMILY ID
-           ================================= */
-
-        const familyId =
-            document
-                .getElementById(
-                    "newFamilyId"
-                )
-                .textContent
-                .trim();
-
-
-        if(!familyId || familyId === "-"){
+        if(!user){
 
             showMessage(
-                "Family ID could not be generated.",
+                "User information not available.",
                 "warning",
                 3000
             );
@@ -365,105 +185,267 @@ document
         }
 
 
-        /* =================================
-           FAMILY OBJECT
-           ================================= */
+        /* =====================================
+           CREATE FAMILY TREE PAGE
+           ===================================== */
 
-        const familyData = {
+        showPage(
 
-            familyId:
-                familyId,
+            pageTitle(
+                "Create Family Tree",
+                "images/colorbtns/AddFamily1.png"
+            )
 
-            familyName:
-                familyName,
+            +`
 
-            loginId:
-                user.loginUserName || "",
+            <div class="family-box">
 
-            userId:
-                user.userId || "",
 
-            userMail:
-                user.email || "",
+                <div class="family-row">
 
-            mobile:
-                user.mobile || "",
+                    <span>
+                        Family ID
+                    </span>
 
-            createdAt:
-                new Date().toISOString()
+                    <strong
+                        id="newFamilyId">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="family-row">
+
+                    <span>
+                        Family Name
+                    </span>
+
+                    <input
+                        type="text"
+                        id="newFamilyName"
+                        placeholder="Enter Family Name"
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <div class="family-create-action">
+
+                <button
+                    id="createFamilyTreeBtn"
+                    class="grid-btn">
+
+                    Create Family Tree
+
+                </button>
+
+            </div>
+
+
+            <div class="family-back-action">
+
+                <button
+                    id="createFamilyBackBtn"
+                    class="back-btn">
+
+                    ← Back
+
+                </button>
+
+            </div>
+
+            `
+        );
+
+
+        /* =====================================
+           FAMILY NAME → GENERATE FAMILY ID
+           ===================================== */
+
+        document
+            .getElementById("newFamilyName")
+            .addEventListener(
+                "input",
+                function(){
+
+                    const familyName =
+                        this.value.trim();
+
+
+                    const familyIdField =
+                        document.getElementById(
+                            "newFamilyId"
+                        );
+
+
+                    if(familyName.length < 4){
+
+                        familyIdField.textContent =
+                            "-";
+
+                        return;
+                    }
+
+
+                    familyIdField.textContent =
+                        generateFamilyId(
+                            familyName
+                        );
+
+                }
+            );
+
+
+        /* =====================================
+           CREATE FAMILY TREE
+           ===================================== */
+
+        document
+            .getElementById("createFamilyTreeBtn")
+            .onclick = () => {
+
+
+            const familyName =
+                document
+                    .getElementById(
+                        "newFamilyName"
+                    )
+                    .value
+                    .trim();
+
+
+            if(familyName.length < 4){
+
+                validationMessage(
+                    "Family Name must contain at least 4 letters.",
+                    document.getElementById(
+                        "newFamilyName"
+                    )
+                );
+
+                return;
+            }
+
+
+            const familyId =
+                document
+                    .getElementById(
+                        "newFamilyId"
+                    )
+                    .textContent
+                    .trim();
+
+
+            if(!familyId || familyId === "-"){
+
+                showMessage(
+                    "Family ID could not be generated.",
+                    "warning",
+                    3000
+                );
+
+                return;
+            }
+
+
+            /* =================================
+               FAMILY OBJECT
+               ================================= */
+
+            const familyData = {
+
+                familyId:
+                    familyId,
+
+                familyName:
+                    familyName,
+
+                loginId:
+                    user.loginUserName || "",
+
+                userId:
+                    user.userId || "",
+
+                userMail:
+                    user.email || "",
+
+                mobile:
+                    user.mobile || "",
+
+                createdAt:
+                    new Date().toISOString()
+
+            };
+
+
+            localStorage.setItem(
+                "currentFamily",
+                JSON.stringify(
+                    familyData
+                )
+            );
+
+
+            const existingFamilies =
+                JSON.parse(
+                    localStorage.getItem(
+                        "familyTrees"
+                    ) || "[]"
+                );
+
+
+            existingFamilies.push(
+                familyData
+            );
+
+
+            localStorage.setItem(
+                "familyTrees",
+                JSON.stringify(
+                    existingFamilies
+                );
+
+
+            showMessage(
+                "Family Tree Created Successfully.",
+                "success",
+                3000
+            );
+
+
+            familyBtn.click();
 
         };
 
 
-        /* =================================
-           SAVE CURRENT FAMILY
-           ================================= */
+        /* =====================================
+           CREATE FAMILY TREE → BACK
+           ===================================== */
 
-        localStorage.setItem(
-            "currentFamily",
-            JSON.stringify(
-                familyData
+        document
+            .getElementById(
+                "createFamilyBackBtn"
             )
-        );
+            .onclick = () => {
 
+                familyBtn.click();
 
-        /* =================================
-           SAVE FAMILY LIST
-           ================================= */
-
-        const existingFamilies =
-            JSON.parse(
-                localStorage.getItem(
-                    "familyTrees"
-                ) || "[]"
-            );
-
-
-        existingFamilies.push(
-            familyData
-        );
-
-
-        localStorage.setItem(
-            "familyTrees",
-            JSON.stringify(
-                existingFamilies
-            )
-        );
-
-
-        /* =================================
-           SUCCESS
-           ================================= */
-
-        showMessage(
-            "Family Tree Created Successfully.",
-            "success",
-            3000
-        );
-
-
-        /* =================================
-           RETURN TO FAMILY MENU
-           ================================= */
-
-        familyBtn.click();
+            };
 
     };
 
 
     /* =====================================
-       CREATE FAMILY TREE → BACK
+       FAMILY → BACK
        ===================================== */
 
     document
-        .getElementById(
-            "createFamilyBackBtn"
-        )
-        .onclick = () => {
-
-            familyBtn.click();
-
-        };
+        .getElementById("familyBack")
+        .onclick = showHome;
 
 };
