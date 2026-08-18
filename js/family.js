@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE FAMILY ID
    ===================================== */
@@ -125,6 +126,7 @@ familyBtn.onclick = () => {
 
             <button
                 id="familyAboutBtn"
+                
                 class="grid-btn">
 
                 <img
@@ -212,7 +214,7 @@ familyBtn.onclick = () => {
                     </span>
 
                     <strong id="newFamilyId">
-                        -
+                        auto generation
                     </strong>
 
                 </div>
