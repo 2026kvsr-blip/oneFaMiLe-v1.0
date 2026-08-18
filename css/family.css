@@ -1,36 +1,49 @@
 /* =====================================
    FAMILY → CREATE TREE
-   FINAL FORM
+   FINAL CLEAN FORM
+   ===================================== */
+
+
+/* =====================================
+   FAMILY FORM CONTAINER
    ===================================== */
 
 .family-box{
+
     width: calc(100% - 40px);
+
     max-width: 520px;
 
     margin: 25px auto 0;
+
+    padding: 0;
 
     box-sizing: border-box;
 }
 
 
-
 /* =====================================
-   EACH ROW
+   EACH FAMILY ROW
    ===================================== */
 
 .family-row{
 
     display: grid;
 
-    grid-template-columns: 120px 18px 1fr;
+    grid-template-columns:
+        125px
+        20px
+        minmax(0, 1fr);
 
     align-items: center;
 
-    column-gap: 6px;
+    column-gap: 5px;
 
     width: 100%;
 
-    margin-bottom: 14px;
+    margin: 0 0 14px 0;
+
+    padding: 0;
 
     box-sizing: border-box;
 }
@@ -40,7 +53,15 @@
    LABEL
    ===================================== */
 
-.family-row > span:first-child{
+.family-label{
+
+    display: block;
+
+    width: 125px;
+
+    margin: 0;
+
+    padding: 0;
 
     font-size: 16px;
 
@@ -51,6 +72,8 @@
     white-space: nowrap;
 
     line-height: 42px;
+
+    box-sizing: border-box;
 }
 
 
@@ -58,11 +81,15 @@
    COLON
    ===================================== */
 
-.family-row > span:nth-child(2){
+.family-colon{
 
     display: block;
 
-    width: 18px;
+    width: 20px;
+
+    margin: 0;
+
+    padding: 0;
 
     text-align: center;
 
@@ -71,34 +98,42 @@
     font-weight: 500;
 
     line-height: 42px;
+
+    box-sizing: border-box;
 }
 
 
 /* =====================================
-   FAMILY ID TEXT
+   FAMILY ID
    ===================================== */
 
 #newFamilyId{
 
     display: block;
 
-    min-height: 42px;
+    width: 100%;
 
-    line-height: 42px;
+    min-width: 0;
+
+    height: 42px;
+
+    margin: 0;
+
+    padding: 0 10px;
+
+    box-sizing: border-box;
 
     font-size: 16px;
 
     font-weight: 500;
 
-    padding: 0 10px;
-
-    margin: 0;
-
-    box-sizing: border-box;
+    line-height: 42px;
 
     text-align: left;
 
     white-space: nowrap;
+
+    overflow: hidden;
 }
 
 
@@ -107,42 +142,50 @@
    ===================================== */
 
 #newFamilyName{
-    width:100% !important;
 
-    height:42px !important;
+    display: block;
 
-    margin:0 !important;
+    width: 100% !important;
 
-    padding:8px 12px !important;
+    min-width: 0;
 
-    box-sizing:border-box !important;
+    height: 42px !important;
 
-    border:1px solid #c4d4ff !important;
+    margin: 0 !important;
 
-    border-radius:10px !important;
+    padding: 8px 12px !important;
 
-    background:#ffffff !important;
+    box-sizing: border-box;
 
-    font-size:16px !important;
+    border: 1px solid #c4d4ff !important;
 
-    outline:none !important;
+    border-radius: 10px !important;
+
+    background: #ffffff !important;
+
+    font-size: 16px !important;
+
+    outline: none;
+
 }
 
+
 /* =====================================
-   FAMILY NAME FOCUS
+   INPUT FOCUS
    ===================================== */
 
 #newFamilyName:focus{
 
-    border-color: #4A9FE8;
+    border-color: #4A9FE8 !important;
 
     box-shadow:
         0 0 0 2px rgba(74,159,232,0.15);
+
 }
 
 
 /* =====================================
-   CREATE BUTTON
+   CREATE BUTTON AREA
    ===================================== */
 
 .family-create-action{
@@ -155,38 +198,52 @@
 
     align-items: center;
 
-    margin-top: 35px;
+    margin: 35px 0 0 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
 
     text-align: center;
 }
 
 
+/* =====================================
+   CREATE FAMILY TREE BUTTON
+   ===================================== */
+
 #createFamilyTreeBtn{
 
-    display: inline-flex;
+    display: flex !important;
 
-    align-items: center;
+    align-items: center !important;
 
-    justify-content: center;
+    justify-content: center !important;
 
-    width: auto;
+    width: 220px !important;
 
-    min-width: 210px;
+    min-width: 220px !important;
 
-    height: 44px;
+    max-width: 220px !important;
 
-    padding: 0 20px;
+    height: 44px !important;
 
-    margin: 0;
+    margin: 0 !important;
 
-    box-sizing: border-box;
+    padding: 0 15px !important;
 
-    white-space: nowrap;
+    box-sizing: border-box !important;
+
+    white-space: nowrap !important;
+
+    overflow: visible !important;
+
+    flex: 0 0 220px !important;
 }
 
 
 /* =====================================
-   BACK BUTTON
+   BACK BUTTON AREA
    ===================================== */
 
 .family-back-action{
@@ -199,54 +256,21 @@
 
     align-items: center;
 
-    margin-top: 14px;
+    margin: 14px 0 0 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
 
     text-align: center;
 }
 
 
-#createFamilyBackBtn{
-
-    margin: 0;
-}
 /* =====================================
-   CREATE FAMILY TREE BUTTON
-   FORCE CENTER
+   BACK BUTTON
    ===================================== */
 
-.family-create-action{
-    width:100% !important;
+#createFamilyBackBtn{
 
-    display:flex !important;
-
-    justify-content:center !important;
-
-    align-items:center !important;
-
-    margin-top:35px !important;
-
-    text-align:center !important;
-}
-
-
-#createFamilyTreeBtn{
-    display:flex !important;
-
-    align-items:center !important;
-
-    justify-content:center !important;
-
-    width:auto !important;
-
-    min-width:210px !important;
-
-    height:44px !important;
-
-    margin:0 !important;
-
-    padding:0 20px !important;
-
-    box-sizing:border-box !important;
-
-    white-space:nowrap !important;
+    margin: 0 !important;
 }
