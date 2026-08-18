@@ -274,3 +274,88 @@
 
     margin: 0 !important;
 }
+/* =====================================
+   FAMILY ID - AUTO GENERATION
+   ===================================== */
+
+#newFamilyId{
+
+    color: #aeb4bc !important;
+
+    font-weight: 400 !important;
+
+    font-size: 16px !important;
+
+    padding-left: 10px !important;
+
+}
+
+
+/* =====================================
+   GENERATED FAMILY ID
+   ===================================== */
+
+#newFamilyId.generated{
+
+    color: #333333 !important;
+
+    font-weight: 500 !important;
+
+}
+
+
+/* =====================================
+   CREATE FAMILY TREE - TEXT BUTTON
+   ===================================== */
+
+#createFamilyTreeBtn{
+
+    background: transparent !important;
+
+    border: none !important;
+
+    box-shadow: none !important;
+
+    border-radius: 0 !important;
+
+    color: #2A6EB0 !important;
+
+    font-size: 18px !important;
+
+    font-weight: 600 !important;
+
+    width: auto !important;
+
+    min-width: auto !important;
+
+    max-width: none !important;
+
+    height: auto !important;
+
+    padding: 6px 10px !important;
+
+    margin: 0 !important;
+
+    white-space: nowrap !important;
+
+}
+
+
+/* HOVER / ACTIVE */
+
+#createFamilyTreeBtn:hover{
+
+    background: transparent !important;
+
+    box-shadow: none !important;
+
+}
+
+
+#createFamilyTreeBtn:active{
+
+    background: transparent !important;
+
+    box-shadow: none !important;
+
+}
