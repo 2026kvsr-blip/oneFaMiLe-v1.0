@@ -200,38 +200,45 @@ familyBtn.onclick = () => {
             <div class="family-box">
 
 
-                <div class="family-row">
+                <div class="family-box">
 
-                    <span>
-                        Family ID
-                    </span>
+    <div class="family-row">
 
-                    <strong
-                        id="newFamilyId">
-                        -
-                    </strong>
+        <span>
+            Family ID
+        </span>
 
-                </div>
+        <span>
+            :
+        </span>
 
+        <strong id="newFamilyId">
+            -
+        </strong>
 
-                <div class="family-row">
-
-                    <span>
-                        Family Name
-                    </span>
-
-                    <input
-                        type="text"
-                        id="newFamilyName"
-                        placeholder="Enter Family Name"
-                        autocomplete="off"
-                    >
-
-                </div>
+    </div>
 
 
-            </div>
+    <div class="family-row">
 
+        <span>
+            Family Name
+        </span>
+
+        <span>
+            :
+        </span>
+
+        <input
+            type="text"
+            id="newFamilyName"
+            placeholder="Enter Family Name"
+            autocomplete="off"
+        >
+
+    </div>
+
+</div>
 
             <div class="family-create-action">
 
