@@ -6,7 +6,6 @@
    GENERATE FAMILY ID
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    ===================================== */
@@ -233,11 +232,11 @@ familyBtn.onclick = () => {
                     <strong id="newFamilyId">
                         auto generation
                     </strong>
-
-                </div>
-<div
+<span
         id="familyIdStatus"
         class="family-id-status">
+    </span>
+            
     </div>
 
 
