@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE FAMILY ID
    ===================================== */
@@ -405,10 +404,11 @@ familyBtn.onclick = () => {
 
 
             localStorage.setItem(
-                "familyTrees",
-                JSON.stringify(
-                    existingFamilies
-                );
+    "familyTrees",
+    JSON.stringify(
+        existingFamilies
+    )
+);
 
 
             showMessage(
