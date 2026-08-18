@@ -3,6 +3,7 @@
    FINAL CLEAN FORM
    ===================================== */
 
+
 /* =====================================
    FAMILY FORM CONTAINER
    ===================================== */
@@ -599,11 +600,7 @@
 
 .family-id-status.checking{
 
-    color: #777;
-
-    display: flex;
-
-    align-items: center;
+    color: #f39c12;
 
     gap: 6px;
 }
@@ -611,11 +608,11 @@
 
 .family-id-status.available{
 
-    color: green;
+    color: #198754;
 }
 
 
 .family-id-status.not-available{
 
-    color: red;
+    color: #dc3545;
 }
