@@ -3,7 +3,6 @@
    FINAL CLEAN FORM
    ===================================== */
 
-
 /* =====================================
    FAMILY FORM CONTAINER
    ===================================== */
@@ -541,15 +540,19 @@
    FAMILY ID AVAILABILITY STATUS
    ===================================== */
 
+/* =====================================
+   FAMILY ID AVAILABILITY STATUS
+   ===================================== */
+
 .family-id-status{
 
     width: 100%;
 
-    min-height: 22px;
+    min-height: 20px;
 
-    margin-top: 6px;
+    margin-top: 2px;
 
-    padding-left: 144px;
+    padding: 0;
 
     box-sizing: border-box;
 
@@ -557,9 +560,9 @@
 
     font-weight: 500;
 
-    line-height: 22px;
+    line-height: 20px;
 
-    text-align: left;
+    text-align: center;
 
 }
 
@@ -568,51 +571,30 @@
    AVAILABLE
    ===================================== */
 
+.family-id-status.available{
+
+    color: #198754;
+
+}
 
 
 /* =====================================
    NOT AVAILABLE
    ===================================== */
 
+.family-id-status.not-available{
+
+    color: #dc3545;
+
+}
 
 
 /* =====================================
    CHECKING
    ===================================== */
-
-
-/* =====================================
-   AVAILABLE
-   ===================================== */
-
-
-
-/* =====================================
-   NOT AVAILABLE
-   ===================================== */
-
-
-
-/* =====================================
-   CHECKING
-   ===================================== */
-
 
 .family-id-status.checking{
 
     color: #f39c12;
 
-    gap: 6px;
-}
-
-
-.family-id-status.available{
-
-    color: #198754;
-}
-
-
-.family-id-status.not-available{
-
-    color: #dc3545;
 }
