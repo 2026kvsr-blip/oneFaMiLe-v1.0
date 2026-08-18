@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -5996,7 +5997,7 @@ updateMenuIcon();
 
 /* =====================================
    SIDE MENU BUTTON
-   SHOW ONLY ON HOME
+   ONLY HOME
    ===================================== */
 
 function updateMenuIcon(){
@@ -6013,9 +6014,7 @@ function updateMenuIcon(){
         sessionStorage.getItem("user");
 
 
-    /* =================================
-       NOT LOGGED IN
-       ================================= */
+    /* NOT LOGGED IN */
 
     if(!user){
 
@@ -6025,18 +6024,11 @@ function updateMenuIcon(){
     }
 
 
-    /* =================================
-       LOGGED IN
-       CHECK CURRENT PAGE
-       ================================= */
-
-    const homePage =
-        document.getElementById("homePage");
-
+    /* HOME BUTTON ACTIVE */
 
     if(
-        homePage &&
-        !homePage.classList.contains("hidden")
+        homeBtn &&
+        homeBtn.classList.contains("active")
     ){
 
         menuBtn.classList.remove("hidden");
