@@ -6,6 +6,7 @@
    GENERATE FAMILY ID
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    ===================================== */
@@ -400,11 +401,11 @@ document
                VERIFYING
                ================================= */
 
-            statusField.textContent =
-                "Verifying...";
+           statusField.innerHTML =
+    '<span class="checking-spinner"></span> Checking availability...';
 
-            statusField.className =
-                "family-id-status verifying";
+statusField.className =
+    "family-id-status checking";
 
 
             /* =================================
