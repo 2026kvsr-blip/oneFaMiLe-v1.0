@@ -2,7 +2,6 @@
    oneFaMiLe
    FAMILY MODULE
    ===================================== */
-
 /* =====================================
    GENERATE FAMILY ID
    ===================================== */
@@ -298,7 +297,7 @@ familyBtn.onclick = () => {
                     if(familyName.length < 4){
 
                         familyIdField.textContent =
-                            "-";
+        "auto generation";
 
                         return;
                     }
@@ -334,7 +333,7 @@ familyBtn.onclick = () => {
             if(familyName.length < 4){
 
                 validationMessage(
-                    "Family Name must contain at least 4 letters.",
+                    "Family Name at least 4 letters.",
                     document.getElementById(
                         "newFamilyName"
                     )
