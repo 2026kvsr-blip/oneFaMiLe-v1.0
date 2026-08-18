@@ -3,6 +3,7 @@
    FINAL CLEAN FORM
    ===================================== */
 
+
 /* =====================================
    FAMILY FORM CONTAINER
    ===================================== */
@@ -385,23 +386,6 @@
    FAMILY ID STATUS
    ===================================== */
 
-.family-id-status{
-
-    min-height:22px;
-
-    margin-top:-8px;
-
-    margin-bottom:10px;
-
-    margin-left:144px;
-
-    font-size:14px;
-
-    font-weight:500;
-
-}
-
-
 /* =====================================
    VERIFYING
    ===================================== */
@@ -490,15 +474,6 @@
     pointer-events:none;
 
 }
-.family-id-status{
-    margin-left: 144px;
-    margin-top: -8px;
-    margin-bottom: 12px;
-
-    font-size: 14px;
-    font-weight: 500;
-    min-height: 20px;
-}
 
 
 .family-id-status.verifying{
@@ -584,23 +559,64 @@
    FAMILY ID STATUS
    ===================================== */
 
+/* =====================================
+   FAMILY ID AVAILABILITY STATUS
+   ===================================== */
+
 .family-id-status{
+
+    width: 100%;
+
+    min-height: 22px;
 
     margin-top: 6px;
 
-    margin-left: 12px;
+    padding-left: 144px;
 
-    min-height: 20px;
+    box-sizing: border-box;
 
     font-size: 14px;
 
     font-weight: 500;
 
-    line-height: 20px;
+    line-height: 22px;
 
-    white-space: nowrap;
+    text-align: left;
+
 }
 
+
+/* =====================================
+   AVAILABLE
+   ===================================== */
+
+.family-id-status.available{
+
+    color: #198754;
+
+}
+
+
+/* =====================================
+   NOT AVAILABLE
+   ===================================== */
+
+.family-id-status.not-available{
+
+    color: #dc3545;
+
+}
+
+
+/* =====================================
+   CHECKING
+   ===================================== */
+
+.family-id-status.checking{
+
+    color: #777;
+
+}
 
 .family-id-status.checking{
 
