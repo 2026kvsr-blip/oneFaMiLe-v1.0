@@ -3,6 +3,7 @@
    FINAL CLEAN FORM
    ===================================== */
 
+
 /* =====================================
    FAMILY FORM CONTAINER
    ===================================== */
@@ -412,11 +413,6 @@
    NOT AVAILABLE
    ===================================== */
 
-.family-id-status.not-available{
-
-    color:#d93025;
-
-}
 
 
 /* =====================================
@@ -486,9 +482,6 @@
 }
 
 
-.family-id-status.not-available{
-    color: red;
-}
 
 
 #createFamilyTreeBtn:disabled{
@@ -499,12 +492,6 @@
    FAMILY ID CHECKING ANIMATION
    ===================================== */
 
-.family-id-status.checking{
-    color: #777;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
 
 
 /* Small rotating circle */
@@ -563,6 +550,10 @@
    FAMILY ID AVAILABILITY STATUS
    ===================================== */
 
+/* =====================================
+   FAMILY ID AVAILABILITY STATUS
+   ===================================== */
+
 .family-id-status{
 
     width: 100%;
@@ -601,22 +592,34 @@
    NOT AVAILABLE
    ===================================== */
 
-.family-id-status.not-available{
-
-    color: #dc3545;
-
-}
 
 
 /* =====================================
    CHECKING
    ===================================== */
 
-.family-id-status.checking{
 
-    color: #777;
+/* =====================================
+   AVAILABLE
+   ===================================== */
+
+.family-id-status.available{
+
+    color: #198754;
 
 }
+
+
+/* =====================================
+   NOT AVAILABLE
+   ===================================== */
+
+
+
+/* =====================================
+   CHECKING
+   ===================================== */
+
 
 .family-id-status.checking{
 
