@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE FAMILY ID
    ===================================== */
@@ -189,7 +188,7 @@ familyBtn.onclick = () => {
            CREATE FAMILY TREE PAGE
            ===================================== */
 
-        showPage(
+                showPage(
 
             pageTitle(
                 "Create Family Tree",
@@ -198,45 +197,52 @@ familyBtn.onclick = () => {
 
             +`
 
-                <div class="family-box">
+            <div class="family-box">
 
-    <div class="family-row">
+                <!-- FAMILY ID -->
 
-        <span>
-            Family ID
-        </span>
+                <div class="family-row">
 
-        <span>
-            :
-        </span>
+                    <span class="family-label">
+                        Family ID
+                    </span>
 
-        <strong id="newFamilyId">
-            -
-        </strong>
+                    <span class="family-colon">
+                        :
+                    </span>
 
-    </div>
+                    <strong id="newFamilyId">
+                        -
+                    </strong>
+
+                </div>
 
 
-    <div class="family-row">
+                <!-- FAMILY NAME -->
 
-        <span>
-            Family Name
-        </span>
+                <div class="family-row">
 
-        <span>
-            :
-        </span>
+                    <span class="family-label">
+                        Family Name
+                    </span>
 
-        <input
-            type="text"
-            id="newFamilyName"
-            placeholder="Enter Family Name"
-            autocomplete="off"
-        >
+                    <span class="family-colon">
+                        :
+                    </span>
 
-    </div>
+                    <input
+                        type="text"
+                        id="newFamilyName"
+                        placeholder="Enter Family Name"
+                        autocomplete="off"
+                    >
 
-</div>
+                </div>
+
+            </div>
+
+
+            <!-- CREATE BUTTON -->
 
             <div class="family-create-action">
 
@@ -250,6 +256,8 @@ familyBtn.onclick = () => {
 
             </div>
 
+
+            <!-- BACK BUTTON -->
 
             <div class="family-back-action">
 
@@ -265,7 +273,6 @@ familyBtn.onclick = () => {
 
             `
         );
-
 
         /* =====================================
            FAMILY NAME → GENERATE FAMILY ID
