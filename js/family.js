@@ -10,6 +10,7 @@
    GENERATE UNIQUE FAMILY ID
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
