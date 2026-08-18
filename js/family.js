@@ -6,6 +6,7 @@
    GENERATE FAMILY ID
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    ===================================== */
@@ -257,16 +258,18 @@ familyBtn.onclick = () => {
                         type="text"
                         id="newFamilyName"
                         placeholder="Enter Family Name"
-                            maxlength="20"
-
+                        maxlength="20"
                         autocomplete="off"
                     >
 
-                </div>
-
+              
+<div
+            id="familyIdStatus"
+            class="family-id-status">
             </div>
+        </div>
 
-
+  </div>
             <!-- CREATE BUTTON -->
 
             <div class="family-create-action">
