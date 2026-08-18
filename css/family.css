@@ -565,3 +565,63 @@
     }
 
 }
+/* =====================================
+   FAMILY NAME FIELD
+   ===================================== */
+
+.family-name-field{
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+}
+
+
+/* =====================================
+   FAMILY ID STATUS
+   ===================================== */
+
+.family-id-status{
+
+    margin-top: 6px;
+
+    margin-left: 12px;
+
+    min-height: 20px;
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+    line-height: 20px;
+
+    white-space: nowrap;
+}
+
+
+.family-id-status.checking{
+
+    color: #777;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+}
+
+
+.family-id-status.available{
+
+    color: green;
+}
+
+
+.family-id-status.not-available{
+
+    color: red;
+}
