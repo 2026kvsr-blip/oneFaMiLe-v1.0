@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
@@ -207,23 +208,20 @@ function generateFamilyId(familyName){
 
     <div class="family-field">
 
-        <span class="family-label">
-            Family ID
-        </span>
+    <span class="family-label">
+        Family ID
+    </span>
 
-        <span class="family-colon">
-            :
-        </span>
+    <span class="family-colon">
+        :
+    </span>
 
-        <input
-            type="text"
-            id="newFamilyId"
-            placeholder="oneFaMiLe"
-            readonly
-        >
+    <span
+        id="newFamilyId"
+        class="family-id-text">
+    </span>
 
-    </div>
-
+</div>
 
     <div class="family-field">
 
