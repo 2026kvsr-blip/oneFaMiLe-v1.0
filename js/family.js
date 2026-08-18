@@ -7,6 +7,7 @@
    ===================================== */
 
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    ===================================== */
@@ -461,7 +462,7 @@ statusField.className =
                        ========================= */
 
                     statusField.textContent =
-                        "Family ID available";
+                        "Family Name available";
 
                     statusField.className =
                         "family-id-status available";
