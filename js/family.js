@@ -246,13 +246,13 @@ familyBtn.onclick = () => {
 
             <div class="family-create-action">
 
-                <button
-                    id="createFamilyTreeBtn"
-                    class="grid-btn">
+               <button
+    id="createFamilyTreeBtn"
+    class="family-create-btn">
 
-                    Create Family Tree
+    Create Family Tree
 
-                </button>
+</button>
 
             </div>
 
