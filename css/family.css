@@ -7,120 +7,26 @@
    MAIN FORM
    ------------------------------------- */
 
-.family-info-form{
-    width: calc(100% - 40px);
-    max-width: 520px;
-
-    margin: 20px auto;
-    padding: 0;
-
-    box-sizing: border-box;
-}
 
 
 /* -------------------------------------
    EACH FIELD ROW
    ------------------------------------- */
 
-.family-field{
-    display: flex;
-    align-items: center;
 
-    width: 100%;
-
-    margin: 0 0 12px 0;
-    padding: 0;
-
-    box-sizing: border-box;
-}
 
 
 /* -------------------------------------
    FIELD LABEL
    ------------------------------------- */
 
-.family-label{
-    flex: 0 0 115px;
-
-    width: 115px;
-
-    margin: 0;
-    padding: 0;
-
-    font-size: 16px;
-    font-weight: 500;
-
-    text-align: left;
-
-    white-space: nowrap;
-}
 
 
 /* -------------------------------------
    COLON
    ------------------------------------- */
 
-.family-colon{
-    flex: 0 0 20px;
 
-    width: 20px;
-
-    margin: 0;
-    padding: 0;
-
-    font-size: 16px;
-    font-weight: 500;
-
-    text-align: center;
-
-    line-height: 42px;
-}
-
-
-/* -------------------------------------
-   INPUT BOXES
-   ------------------------------------- */
-
-.family-field input{
-    flex: 1;
-
-    width: 0;
-    min-width: 0;
-
-    height: 42px;
-
-    margin: 0;
-    padding: 8px 10px;
-
-    box-sizing: border-box;
-
-    border: 1px solid #c4d4ff;
-    border-radius: 8px;
-
-    background: #ffffff;
-
-    font-size: 16px;
-
-    outline: none;
-}
-
-
-/* -------------------------------------
-   FAMILY ID
-   ------------------------------------- */
-
-.family-id-text{
-    flex: 1;
-
-    min-width: 0;
-
-    padding-left: 8px;
-
-    font-size: 16px;
-    font-weight: 500;
-
-    text-align: left;
-}
 
 
 /* -------------------------------------
@@ -160,6 +66,176 @@
 #createFamilyBackBtn{
     margin-top: 12px;
 }
+/* =====================================
+   FAMILY - CREATE FAMILY TREE
+   SAME STYLE AS MY PROFILE / SETTINGS
+   ===================================== */
+
+.family-info-form{
+    width: calc(100% - 40px);
+    max-width: 600px;
+
+    margin: 18px auto 20px;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+
+/* -------------------------------------
+   FIELD ROW
+   ------------------------------------- */
+
+.family-field{
+    display: grid;
+
+    grid-template-columns: 175px 18px 1fr;
+
+    align-items: center;
+
+    width: 100%;
+
+    margin: 0 0 10px 0;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+
+/* -------------------------------------
+   LABEL
+   ------------------------------------- */
+
+.family-label{
+    grid-column: 1;
+
+    position: relative;
+
+    margin: 0;
+    padding: 0;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    white-space: nowrap;
+    text-align: left;
+}
+
+
+/* -------------------------------------
+   COLON
+   ------------------------------------- */
+
+.family-colon{
+    grid-column: 2;
+
+    margin: 0;
+    padding: 0;
+
+    width: 18px;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    text-align: center;
+}
+
+
+/* -------------------------------------
+   FAMILY ID TEXT
+   ------------------------------------- */
+
+.family-id-text{
+    grid-column: 3;
+
+    width: 100%;
+
+    min-height: 44px;
+
+    display: flex;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    padding: 0 12px;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    color: #222;
+
+    text-align: left;
+}
+
+
+/* -------------------------------------
+   FAMILY NAME INPUT
+   ------------------------------------- */
+
+#newFamilyName{
+    grid-column: 3;
+
+    width: 100%;
+    height: 44px;
+
+    box-sizing: border-box;
+
+    margin: 0;
+    padding: 0 12px;
+
+    border: 1px solid #c4d4ff;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #222;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+
+#newFamilyName:focus{
+    border-color: #4A9FE8;
+
+    box-shadow:
+        0 0 0 2px rgba(74,159,232,0.15);
+}
+
+
+/* -------------------------------------
+   CREATE FAMILY TREE BUTTON
+   ------------------------------------- */
+
+#createFamilyTreeBtn{
+    margin-top: 10px;
+
+    height: 44px;
+
+    padding: 0 18px;
+
+    box-sizing: border-box;
+
+    font-size: 16px;
+}
+
+
+/* -------------------------------------
+   BACK BUTTON
+   ------------------------------------- */
+
+#createFamilyBackBtn{
+    margin-top: 12px;
+
+    height: 44px;
+
+    padding: 0 20px;
+
+    box-sizing: border-box;
+
+    font-size: 16px;
+}
 
 
 /* -------------------------------------
@@ -171,32 +247,30 @@
     .family-info-form{
         width: calc(100% - 30px);
 
-        margin: 18px auto;
+        margin: 18px auto 20px;
     }
 
+    .family-field{
+        grid-template-columns: 115px 18px 1fr;
+    }
 
     .family-label{
-        flex: 0 0 105px;
-
-        width: 105px;
-
-        font-size: 15px;
+        font-size: 16px;
     }
-
 
     .family-colon{
-        flex: 0 0 18px;
-
-        width: 18px;
-
-        font-size: 15px;
+        font-size: 16px;
     }
 
+    #newFamilyName{
+        height: 44px;
+        font-size: 16px;
+    }
 
-    .family-field input{
-        height: 40px;
-
-        font-size: 15px;
+    .family-id-text{
+        min-height: 44px;
+        font-size: 16px;
     }
 
 }
+
