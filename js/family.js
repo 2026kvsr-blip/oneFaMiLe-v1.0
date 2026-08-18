@@ -4,6 +4,7 @@
    ===================================== */
 
 
+
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
@@ -245,13 +246,13 @@ function generateFamilyId(familyName){
 
     <div align="center">
 
-        <button
-            id="createFamilyTreeBtn"
-            class="primary-btn">
+       <button
+    id="createFamilyTreeBtn"
+    class="grid-btn">
 
-            Create Family Tree
+    Create Family Tree
 
-        </button>
+</button>
 
     </div>
 
