@@ -8,6 +8,7 @@
    ===================================== */
 
 
+
 .family-box{
 
     width: calc(100% - 40px);
@@ -544,11 +545,16 @@
    FAMILY ID AVAILABILITY STATUS
    ===================================== */
 
+/* =====================================
+   FAMILY ID STATUS
+   UNDER FAMILY NAME BOX
+   ===================================== */
+
 .family-id-status{
 
-    width: 100%;
+    width: calc(100% - 150px);
 
-    min-height: 20px;
+    margin-left: 150px;
 
     margin-top: 2px;
 
@@ -556,13 +562,26 @@
 
     box-sizing: border-box;
 
+    min-height: 20px;
+
     font-size: 14px;
 
     font-weight: 500;
 
     line-height: 20px;
 
-    text-align: center;
+    text-align: left;
+
+}
+
+
+/* =====================================
+   CHECKING
+   ===================================== */
+
+.family-id-status.checking{
+
+    color: #f39c12;
 
 }
 
@@ -585,16 +604,5 @@
 .family-id-status.not-available{
 
     color: #dc3545;
-
-}
-
-
-/* =====================================
-   CHECKING
-   ===================================== */
-
-.family-id-status.checking{
-
-    color: #f39c12;
 
 }
