@@ -6,6 +6,7 @@
    GENERATE FAMILY ID
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -279,38 +280,66 @@ familyBtn.onclick = () => {
            ===================================== */
 
         document
-            .getElementById("newFamilyName")
-            .addEventListener(
-                "input",
-                function(){
+    .getElementById("newFamilyName")
+    .addEventListener(
+        "input",
+        function(){
 
-                    const familyName =
-                        this.value.trim();
+            const familyName =
+                this.value.trim();
 
-
-                    const familyIdField =
-                        document.getElementById(
-                            "newFamilyId"
-                        );
-
-
-                    if(familyName.length < 4){
-
-                        familyIdField.textContent =
-        "auto generation";
-
-                        return;
-                    }
+            const familyIdField =
+                document.getElementById(
+                    "newFamilyId"
+                );
 
 
-                    familyIdField.textContent =
-                        generateFamilyId(
-                            familyName
-                        );
+            /* ================================
+               ALREADY GENERATED → DO NOT CHANGE
+               ================================ */
 
-                }
+            if(
+                familyIdField.classList.contains(
+                    "generated"
+                )
+            ){
+                return;
+            }
+
+
+            /* ================================
+               LESS THAN 4 LETTERS
+               ================================ */
+
+            if(familyName.length < 4){
+
+                familyIdField.textContent =
+                    "auto generation";
+
+                familyIdField.classList.remove(
+                    "generated"
+                );
+
+                return;
+            }
+
+
+            /* ================================
+               4 LETTERS COMPLETED
+               GENERATE ONLY ONCE
+               ================================ */
+
+            familyIdField.textContent =
+                generateFamilyId(
+                    familyName
+                );
+
+            familyIdField.classList.add(
+                "generated"
             );
 
+        }
+    );
 
         /* =====================================
            CREATE FAMILY TREE
