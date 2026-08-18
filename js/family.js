@@ -6,7 +6,6 @@
    GENERATE FAMILY ID
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    ===================================== */
@@ -339,20 +338,21 @@ document
                 );
 
 
-            /* ================================
-               RESET
-               ================================ */
+            /* =================================
+               RESET STATUS
+               ================================= */
 
             statusField.textContent = "";
+
             statusField.className =
                 "family-id-status";
 
             createBtn.disabled = true;
 
 
-            /* ================================
-               LESS THAN 4 LETTERS
-               ================================ */
+            /* =================================
+               EMPTY / LESS THAN 4 LETTERS
+               ================================= */
 
             if(familyName.length < 4){
 
@@ -367,9 +367,9 @@ document
             }
 
 
-            /* ================================
-               GENERATE FAMILY ID ONLY ONCE
-               ================================ */
+            /* =================================
+               GENERATE ONLY ON FIRST 4 LETTERS
+               ================================= */
 
             if(
                 !familyIdField.classList.contains(
@@ -379,7 +379,7 @@ document
 
                 familyIdField.textContent =
                     generateFamilyId(
-                        familyName
+                        familyName.substring(0,4)
                     );
 
                 familyIdField.classList.add(
@@ -388,17 +388,17 @@ document
             }
 
 
-            /* ================================
-               GET GENERATED ID
-               ================================ */
+            /* =================================
+               GET FIXED FAMILY ID
+               ================================= */
 
             const generatedFamilyId =
                 familyIdField.textContent.trim();
 
 
-            /* ================================
+            /* =================================
                VERIFYING
-               ================================ */
+               ================================= */
 
             statusField.textContent =
                 "Verifying...";
@@ -407,59 +407,67 @@ document
                 "family-id-status verifying";
 
 
-            /* ================================
+            /* =================================
                CHECK EXISTING FAMILY IDS
-               ================================ */
+               ================================= */
 
-            setTimeout(() => {
+            setTimeout(
+                function(){
 
-                const existingFamilies =
-                    JSON.parse(
-                        localStorage.getItem(
-                            "familyTrees"
-                        ) || "[]"
-                    );
-
-
-                const alreadyExists =
-                    existingFamilies.some(
-                        family =>
-                            family.familyId ===
-                            generatedFamilyId
-                    );
+                    const existingFamilies =
+                        JSON.parse(
+                            localStorage.getItem(
+                                "familyTrees"
+                            ) || "[]"
+                        );
 
 
-                /* ============================
-                   NOT AVAILABLE
-                   ============================ */
+                    const alreadyExists =
+                        existingFamilies.some(
+                            function(family){
 
-                if(alreadyExists){
+                                return (
+                                    family.familyId ===
+                                    generatedFamilyId
+                                );
+
+                            }
+                        );
+
+
+                    /* =========================
+                       ID NOT AVAILABLE
+                       ========================= */
+
+                    if(alreadyExists){
+
+                        statusField.textContent =
+                            "Family ID not available";
+
+                        statusField.className =
+                            "family-id-status not-available";
+
+                        createBtn.disabled = true;
+
+                        return;
+                    }
+
+
+                    /* =========================
+                       ID AVAILABLE
+                       ========================= */
 
                     statusField.textContent =
-                        "Family ID not available";
+                        "Family ID available";
 
                     statusField.className =
-                        "family-id-status not-available";
+                        "family-id-status available";
 
-                    createBtn.disabled = true;
+                    createBtn.disabled = false;
 
-                    return;
-                }
-
-
-                /* ============================
-                   AVAILABLE
-                   ============================ */
-
-                statusField.textContent =
-                    "Family ID available";
-
-                statusField.className =
-                    "family-id-status available";
-
-                createBtn.disabled = false;
-
-            }, 800);
+                },
+                800
+            );
 
         }
     );
