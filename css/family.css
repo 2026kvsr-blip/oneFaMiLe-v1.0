@@ -3,6 +3,7 @@
    FINAL CLEAN FORM
    ===================================== */
 
+
 /* =====================================
    FAMILY FORM CONTAINER
    ===================================== */
@@ -29,24 +30,21 @@
     display: grid;
 
     grid-template-columns:
-        125px
-        20px
-        minmax(0, 1fr);
+        120px
+        18px
+        auto
+        1fr;
 
     align-items: center;
 
-    column-gap: 5px;
+    column-gap: 6px;
 
     width: 100%;
 
-    margin: 0 0 14px 0;
-
-    padding: 0;
+    margin-bottom: 14px;
 
     box-sizing: border-box;
 }
-
-
 /* =====================================
    LABEL
    ===================================== */
