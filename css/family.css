@@ -1,344 +1,198 @@
 /* =====================================
-   FAMILY - CREATE TREE
+   oneFaMiLe
+   FAMILY - CREATE FAMILY TREE
    ===================================== */
 
-#newFamilyId,
-#newFamilyName,
-#familyUserId,
-#familyUserMail,
-#familyMobile{
 
-    width:100%;
-    box-sizing:border-box;
-
-    padding:12px 14px;
-
-    margin:6px 0 14px;
-
-    border:1px solid #c4d4ff;
-
-    border-radius:10px;
-
-    background:#ffffff;
-
-    font-size:16px;
-
-}
-
-
-/* READ ONLY FIELDS */
-
-#newFamilyId,
-#familyUserId,
-#familyUserMail,
-#familyMobile{
-
-    background:#f0f7ff;
-
-}
-
-
-/* FAMILY NAME */
-
-#newFamilyName{
-
-    background:#ffffff;
-
-}
-
-
-/* LABELS */
-
-#newFamilyId,
-#newFamilyName,
-#familyUserId,
-#familyUserMail,
-#familyMobile{
-
-    outline:none;
-
-}
-
-
-/* INPUT FOCUS */
-
-#newFamilyName:focus{
-
-    border-color:#4A9FE8;
-
-    box-shadow:
-        0 0 0 2px rgba(74,159,232,0.15);
-
-}
-
-
-/* CREATE BUTTON */
-
-#createFamilyTreeBtn{
-
-    margin-top:10px;
-
-}
-
-
-/* BACK BUTTON */
-
-#createFamilyBackBtn{
-
-    margin-top:12px;
-
-}
-/* =====================================
-   FAMILY - CREATE TREE INFORMATION
-   ===================================== */
-
-/* =====================================
-   FAMILY - CREATE TREE FORM
-   ===================================== */
+/* -------------------------------------
+   MAIN FORM
+   ------------------------------------- */
 
 .family-info-form{
-    width:100%;
-    max-width:520px;
-    margin:20px auto;
-    padding:0 18px;
-    box-sizing:border-box;
+    width: calc(100% - 40px);
+    max-width: 520px;
+
+    margin: 20px auto;
+    padding: 0;
+
+    box-sizing: border-box;
 }
 
 
-/* EACH ROW */
+/* -------------------------------------
+   EACH FIELD ROW
+   ------------------------------------- */
 
 .family-field{
-    display:grid;
+    display: flex;
+    align-items: center;
 
-    grid-template-columns:110px 18px 1fr;
+    width: 100%;
 
-    align-items:center;
+    margin: 0 0 12px 0;
+    padding: 0;
 
-    column-gap:6px;
-
-    margin-bottom:12px;
-
-    width:100%;
+    box-sizing: border-box;
 }
 
 
-/* LABEL */
+/* -------------------------------------
+   FIELD LABEL
+   ------------------------------------- */
 
 .family-label{
-    font-size:16px;
-    font-weight:500;
+    flex: 0 0 115px;
 
-    text-align:left;
+    width: 115px;
 
-    white-space:nowrap;
+    margin: 0;
+    padding: 0;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    text-align: left;
+
+    white-space: nowrap;
 }
 
 
-/* COLON */
+/* -------------------------------------
+   COLON
+   ------------------------------------- */
 
 .family-colon{
-    width:18px;
+    flex: 0 0 20px;
 
-    text-align:center;
+    width: 20px;
 
-    font-size:16px;
-    font-weight:500;
+    margin: 0;
+    padding: 0;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    text-align: center;
+
+    line-height: 42px;
 }
 
 
-/* INPUT BOX */
+/* -------------------------------------
+   INPUT BOXES
+   ------------------------------------- */
 
 .family-field input{
-    width:100%;
-    height:42px;
+    flex: 1;
 
-    box-sizing:border-box;
+    width: 0;
+    min-width: 0;
 
-    padding:8px 10px;
+    height: 42px;
 
-    margin:0;
+    margin: 0;
+    padding: 8px 10px;
 
-    border:1px solid #c4d4ff;
+    box-sizing: border-box;
 
-    border-radius:8px;
+    border: 1px solid #c4d4ff;
+    border-radius: 8px;
 
-    background:#ffffff;
+    background: #ffffff;
 
-    font-size:16px;
+    font-size: 16px;
 
-    outline:none;
+    outline: none;
 }
 
 
-/* FAMILY ID - READ ONLY */
+/* -------------------------------------
+   FAMILY ID
+   ------------------------------------- */
 
 #newFamilyId{
-    background:#f0f7ff;
+    background: #f0f7ff;
+
+    margin-left: 8px;
+
+    cursor: default;
 }
 
 
-/* FAMILY NAME */
+/* -------------------------------------
+   FAMILY NAME
+   ------------------------------------- */
 
 #newFamilyName{
-    background:#ffffff;
+    background: #ffffff;
 }
 
 
-/* FOCUS */
+/* -------------------------------------
+   FAMILY NAME FOCUS
+   ------------------------------------- */
 
 #newFamilyName:focus{
-    border-color:#4A9FE8;
+    border-color: #4A9FE8;
 
     box-shadow:
         0 0 0 2px rgba(74,159,232,0.15);
 }
 
 
-/* CREATE BUTTON */
+/* -------------------------------------
+   CREATE BUTTON
+   ------------------------------------- */
 
 #createFamilyTreeBtn{
-    margin-top:12px;
+    margin-top: 15px;
 }
 
 
-/* BACK BUTTON */
+/* -------------------------------------
+   BACK BUTTON
+   ------------------------------------- */
 
 #createFamilyBackBtn{
-    margin-top:12px;
-}
-/* =====================================
-   FAMILY CREATE TREE - FINAL FORM
-   ===================================== */
-
-.family-info-form{
-    width: calc(100% - 40px) !important;
-    max-width: 520px !important;
-    margin: 20px auto !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
+    margin-top: 12px;
 }
 
 
-/* EACH ROW */
+/* -------------------------------------
+   MOBILE
+   ------------------------------------- */
 
-.family-field{
-    display: flex !important;
-    align-items: center !important;
+@media (max-width: 480px){
 
-    width: 100% !important;
+    .family-info-form{
+        width: calc(100% - 30px);
 
-    margin: 0 0 12px 0 !important;
-    padding: 0 !important;
-
-    box-sizing: border-box !important;
-}
+        margin: 18px auto;
+    }
 
 
-/* LABEL */
+    .family-label{
+        flex: 0 0 105px;
 
-.family-label{
-    flex: 0 0 115px !important;
+        width: 105px;
 
-    width: 115px !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    font-size: 16px !important;
-    font-weight: 500 !important;
-
-    text-align: left !important;
-
-    white-space: nowrap !important;
-}
+        font-size: 15px;
+    }
 
 
-/* COLON */
+    .family-colon{
+        flex: 0 0 18px;
 
-.family-colon{
-    flex: 0 0 20px !important;
+        width: 18px;
 
-    width: 20px !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    text-align: center !important;
-
-    font-size: 16px !important;
-    font-weight: 500 !important;
-
-    line-height: 42px !important;
-}
+        font-size: 15px;
+    }
 
 
-/* INPUT */
+    .family-field input{
+        height: 40px;
 
-.family-field input{
-    flex: 1 1 auto !important;
+        font-size: 15px;
+    }
 
-    width: auto !important;
-    min-width: 0 !important;
-
-    height: 42px !important;
-
-    margin: 0 !important;
-    padding: 8px 10px !important;
-
-    box-sizing: border-box !important;
-
-    border: 1px solid #c4d4ff !important;
-
-    border-radius: 8px !important;
-
-    background: #ffffff !important;
-
-    font-size: 16px !important;
-
-    outline: none !important;
-}
-
-
-/* FAMILY ID */
-
-#newFamilyId{
-    background: #f0f7ff !important;
-
-    margin-left: 8px !important;
-}
-
-
-/* FAMILY NAME */
-
-#newFamilyName{
-    background: #ffffff !important;
-}
-
-
-/* READ ONLY */
-
-#newFamilyId[readonly]{
-    cursor: default !important;
-}
-
-
-/* FOCUS */
-
-#newFamilyName:focus{
-    border-color: #4A9FE8 !important;
-
-    box-shadow:
-        0 0 0 2px rgba(74,159,232,0.15) !important;
-}
-
-
-/* BUTTON AREA */
-
-#createFamilyTreeBtn{
-    margin-top: 15px !important;
-}
-
-
-#createFamilyBackBtn{
-    margin-top: 12px !important;
 }
