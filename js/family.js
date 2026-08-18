@@ -235,6 +235,8 @@ familyBtn.onclick = () => {
                         type="text"
                         id="newFamilyName"
                         placeholder="Enter Family Name"
+                            maxlength="20"
+
                         autocomplete="off"
                     >
 
