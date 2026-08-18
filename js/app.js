@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1402,9 +1403,23 @@ if(homeHeading){
 }
 function showPage(html){
 
-   hideNavigation();
+    hideNavigation();
+
+
+    /* HIDE SIDE MENU */
+
+    const menuBtn =
+        document.getElementById("menuBtn");
+
+    if(menuBtn){
+
+        menuBtn.classList.add("hidden");
+
+    }
+
 
     homeContent.scrollTop = 0;
+
     window.scrollTo(0,0);
 
     homeContent.innerHTML = html;
