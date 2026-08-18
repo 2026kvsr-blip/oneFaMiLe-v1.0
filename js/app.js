@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1466,6 +1465,7 @@ activeImg.src = activeImg.dataset.active;
 }
 
 activitiesBtn.onclick = ()=>{
+    updateMenuIcon();
 
     setActiveButton(activitiesBtn);
 
@@ -1627,6 +1627,7 @@ document.getElementById("activitiesBackBtn").onclick = showHome;
 
 };
 incomeBtn.onclick = ()=>{
+    updateMenuIcon();
 
     setActiveButton(incomeBtn);
 
@@ -1797,6 +1798,7 @@ document.getElementById("incomeBack").onclick=showHome;
 
 healthBtn.onclick = ()=>{
     
+    updateMenuIcon();
 
     setActiveButton(healthBtn);
 
@@ -1969,6 +1971,8 @@ document.getElementById("healthBack").onclick = showHome;
 };
 
 loansBtn.onclick = ()=>{
+        updateMenuIcon();
+
 setActiveButton(loansBtn);
     
 showPage(
@@ -4034,20 +4038,17 @@ finally{
 }
 };
 expensesBtn.onclick=()=>{
-setActiveButton(expensesBtn);
-   
-showPage(
+        updateMenuIcon();
 
+setActiveButton(expensesBtn);
+showPage(
 pageTitle(
 "Expenses",
 "images/colorbtns/Expenses1.png"
 )
-
 +`
 <div class="grid-3x2">
-
 <button class="grid-btn">
-
 <img
 src="images/colorbtns/Add1.png"
 class="btn-icon">
@@ -4217,27 +4218,21 @@ showHome();
 
 };
 homeBtn.onclick = ()=>{
-
     showNavigation();
-
     setActiveButton(homeBtn);
-
     homeContent.innerHTML = homeTemplate;
-
     updateWelcomePage();
-
-
     // =====================================
     // RESET HOME PAGE POSITION
     // =====================================
-
     homeContent.scrollTop = 0;
-
     document.documentElement.scrollTop = 0;
 
     document.body.scrollTop = 0;
 
     window.scrollTo(0,0);
+        updateMenuIcon();
+
 
 };
 function showHome(){
@@ -4250,6 +4245,7 @@ function showHome(){
 
 
 memoriesBtn.onclick = ()=>{
+    updateMenuIcon();
 
     setActiveButton(memoriesBtn);
 
@@ -4424,6 +4420,7 @@ document.getElementById("memoryBack").onclick = showHome;
 
 
 chartsBtn.onclick = ()=>{
+    updateMenuIcon();
 
     setActiveButton(chartsBtn);
 
@@ -4562,6 +4559,8 @@ document.getElementById("chartsBack").onclick = showHome;
 
 };
 reportsBtn.onclick=()=>{
+        updateMenuIcon();
+
 setActiveButton(reportsBtn);
 
 showPage(
