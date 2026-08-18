@@ -3,7 +3,6 @@
    FAMILY - CREATE FAMILY TREE
    ===================================== */
 
-
 /* -------------------------------------
    MAIN FORM
    ------------------------------------- */
@@ -110,12 +109,17 @@
    FAMILY ID
    ------------------------------------- */
 
-#newFamilyId{
-    background: #f0f7ff;
+.family-id-text{
+    flex: 1;
 
-    margin-left: 8px;
+    min-width: 0;
 
-    cursor: default;
+    padding-left: 8px;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    text-align: left;
 }
 
 
