@@ -215,89 +215,89 @@ familyBtn.onclick = () => {
 
             +`
 
-            <div class="family-box">
+          <div class="family-box">
 
-                <!-- FAMILY ID -->
+    <!-- FAMILY ID -->
 
-                <div class="family-row">
+    <div class="family-row">
 
-                    <span class="family-label">
-                        Family ID
-                    </span>
+        <span class="family-label">
+            Family ID
+        </span>
 
-                    <span class="family-colon">
-                        :
-                    </span>
+        <span class="family-colon">
+            :
+        </span>
 
-                    <strong id="newFamilyId">
-                        auto generation
-                    </strong>
-<span
-        id="familyIdStatus"
-        class="family-id-status">
-    </span>
-            
+        <strong id="newFamilyId">
+            auto generation
+        </strong>
+
     </div>
 
 
+    <!-- FAMILY NAME -->
 
-                <!-- FAMILY NAME -->
+    <div class="family-row">
 
-                <div class="family-row">
+        <span class="family-label">
+            Family Name
+        </span>
 
-                    <span class="family-label">
-                        Family Name
-                    </span>
+        <span class="family-colon">
+            :
+        </span>
 
-                    <span class="family-colon">
-                        :
-                    </span>
+        <input
+            type="text"
+            id="newFamilyName"
+            placeholder="Enter Family Name"
+            maxlength="20"
+            autocomplete="off"
+        >
 
-                    <input
-                        type="text"
-                        id="newFamilyName"
-                        placeholder="Enter Family Name"
-                        maxlength="20"
-                        autocomplete="off"
-                    >
-
-              
-<div
-            id="familyIdStatus"
-            class="family-id-status">
-            </div>
-        </div>
-
-  </div>
-            <!-- CREATE BUTTON -->
-
-            <div class="family-create-action">
-
-               <button
-    id="createFamilyTreeBtn"
-    class="family-create-btn">
-
-    Create Family Tree
-
-</button>
-
-            </div>
+    </div>
 
 
-            <!-- BACK BUTTON -->
+    <!-- AVAILABILITY MESSAGE -->
 
-            <div class="family-back-action">
+    <div
+        id="familyIdStatus"
+        class="family-id-status">
+    </div>
 
-                <button
-                    id="createFamilyBackBtn"
-                    class="back-btn">
+</div>
 
-                    ← Back
 
-                </button>
+<!-- CREATE BUTTON -->
 
-            </div>
+<div class="family-create-action">
 
+    <button
+        id="createFamilyTreeBtn"
+        class="family-create-btn"
+        disabled>
+
+        Create Family Tree
+
+    </button>
+
+</div>
+
+
+<!-- BACK BUTTON -->
+
+<div class="family-back-action">
+
+    <button
+        id="createFamilyBackBtn"
+        class="back-btn">
+
+        ← Back
+
+    </button>
+
+</div>
             `
         );
 
