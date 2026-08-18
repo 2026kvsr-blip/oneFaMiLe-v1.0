@@ -210,3 +210,44 @@
 
     margin: 0;
 }
+/* =====================================
+   CREATE FAMILY TREE BUTTON
+   FORCE CENTER
+   ===================================== */
+
+.family-create-action{
+    width:100% !important;
+
+    display:flex !important;
+
+    justify-content:center !important;
+
+    align-items:center !important;
+
+    margin-top:35px !important;
+
+    text-align:center !important;
+}
+
+
+#createFamilyTreeBtn{
+    display:flex !important;
+
+    align-items:center !important;
+
+    justify-content:center !important;
+
+    width:auto !important;
+
+    min-width:210px !important;
+
+    height:44px !important;
+
+    margin:0 !important;
+
+    padding:0 20px !important;
+
+    box-sizing:border-box !important;
+
+    white-space:nowrap !important;
+}
