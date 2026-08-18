@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
@@ -219,7 +218,7 @@ function generateFamilyId(familyName){
         <input
             type="text"
             id="newFamilyId"
-            placeholder="Enter Family Name first"
+            placeholder="oneFaMiLe"
             readonly
         >
 
