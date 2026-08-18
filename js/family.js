@@ -9,7 +9,6 @@
    GENERATE UNIQUE FAMILY ID
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -363,6 +362,9 @@ familyBtn.onclick = () => {
    VERIFY AVAILABILITY
    ===================================== */
 
+let familyAvailabilityTimer = null;
+let familyInputVersion = 0;
+           
 document
     .getElementById("newFamilyName")
     .addEventListener(
@@ -371,6 +373,7 @@ document
 
             const familyName =
                 this.value.trim();
+
 
             const familyIdField =
                 document.getElementById(
@@ -389,7 +392,32 @@ document
 
 
             /* =================================
-               RESET CREATE BUTTON
+               CANCEL PREVIOUS CHECK
+               ================================= */
+
+            if(familyAvailabilityTimer){
+
+                clearTimeout(
+                    familyAvailabilityTimer
+                );
+
+                familyAvailabilityTimer =
+                    null;
+            }
+
+
+            /* =================================
+               NEW INPUT VERSION
+               ================================= */
+
+            familyInputVersion++;
+
+            const currentVersion =
+                familyInputVersion;
+
+
+            /* =================================
+               CREATE BUTTON DISABLED
                ================================= */
 
             createBtn.disabled = true;
@@ -408,7 +436,8 @@ document
                     "generated"
                 );
 
-                statusField.textContent = "";
+                statusField.textContent =
+                    "";
 
                 statusField.className =
                     "family-id-status";
@@ -430,7 +459,6 @@ document
                     "generated"
                 );
 
-
                 statusField.textContent =
                     "Name must be min 4 letters";
 
@@ -443,7 +471,6 @@ document
 
             /* =================================
                GENERATE ID ONLY ONCE
-               AFTER 4TH LETTER
                ================================= */
 
             if(
@@ -460,12 +487,11 @@ document
                 familyIdField.classList.add(
                     "generated"
                 );
-
             }
 
 
             /* =================================
-               GET FIXED FAMILY ID
+               FIXED FAMILY ID
                ================================= */
 
             const generatedFamilyId =
@@ -473,7 +499,7 @@ document
 
 
             /* =================================
-               CHECKING AVAILABILITY
+               CHECKING MESSAGE
                ================================= */
 
             statusField.innerHTML =
@@ -484,71 +510,129 @@ document
 
 
             /* =================================
-               CHECK EXISTING FAMILY IDS
+               DELAYED AVAILABILITY CHECK
                ================================= */
 
-            setTimeout(
-                function(){
+            familyAvailabilityTimer =
+                setTimeout(
+                    function(){
 
-                    const existingFamilies =
-                        JSON.parse(
-                            localStorage.getItem(
-                                "familyTrees"
-                            ) || "[]"
-                        );
+                        /* =========================
+                           IGNORE OLD REQUEST
+                           ========================= */
 
+                        if(
+                            currentVersion !==
+                            familyInputVersion
+                        ){
 
-                    const alreadyExists =
-                        existingFamilies.some(
-                            function(family){
-
-                                return (
-                                    family.familyId ===
-                                    generatedFamilyId
-                                );
-
-                            }
-                        );
+                            return;
+                        }
 
 
-                    /* =========================
-                       ID NOT AVAILABLE
-                       ========================= */
+                        /* =========================
+                           CHECK CURRENT TEXT AGAIN
+                           ========================= */
 
-                    if(alreadyExists){
+                        const currentName =
+                            document
+                                .getElementById(
+                                    "newFamilyName"
+                                )
+                                .value
+                                .trim();
+
+
+                        /* =========================
+                           LESS THAN 4 NOW
+                           ========================= */
+
+                        if(
+                            currentName.length < 4
+                        ){
+
+                            statusField.textContent =
+                                currentName.length === 0
+                                    ? ""
+                                    : "Name must be min 4 letters";
+
+                            statusField.className =
+                                currentName.length === 0
+                                    ? "family-id-status"
+                                    : "family-id-status checking";
+
+                            createBtn.disabled =
+                                true;
+
+                            return;
+                        }
+
+
+                        /* =========================
+                           EXISTING FAMILY IDS
+                           ========================= */
+
+                        const existingFamilies =
+                            JSON.parse(
+                                localStorage.getItem(
+                                    "familyTrees"
+                                ) || "[]"
+                            );
+
+
+                        const alreadyExists =
+                            existingFamilies.some(
+                                function(family){
+
+                                    return (
+                                        family.familyId ===
+                                        generatedFamilyId
+                                    );
+
+                                }
+                            );
+
+
+                        /* =========================
+                           NOT AVAILABLE
+                           ========================= */
+
+                        if(alreadyExists){
+
+                            statusField.textContent =
+                                "Family ID not available";
+
+                            statusField.className =
+                                "family-id-status not-available";
+
+                            createBtn.disabled =
+                                true;
+
+                            return;
+                        }
+
+
+                        /* =========================
+                           AVAILABLE
+                           ========================= */
 
                         statusField.textContent =
-                            "Family ID not available";
+                            "Family Name available";
 
                         statusField.className =
-                            "family-id-status not-available";
+                            "family-id-status available";
 
                         createBtn.disabled =
-                            true;
+                            false;
 
-                        return;
-                    }
-
-
-                    /* =========================
-                       ID AVAILABLE
-                       ========================= */
-
-                    statusField.textContent =
-                        "Family Name available";
-
-                    statusField.className =
-                        "family-id-status available";
-
-                    createBtn.disabled =
-                        false;
-
-                },
-                800
-            );
+                    },
+                    800
+                );
 
         }
-    );           /* =====================================
+    );
+           
+           /* =====================================
            CREATE FAMILY TREE
            ===================================== */
 
