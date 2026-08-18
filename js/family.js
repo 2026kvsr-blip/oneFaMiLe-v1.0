@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE FAMILY ID
    ===================================== */
@@ -196,9 +197,6 @@ familyBtn.onclick = () => {
             )
 
             +`
-
-            <div class="family-box">
-
 
                 <div class="family-box">
 
