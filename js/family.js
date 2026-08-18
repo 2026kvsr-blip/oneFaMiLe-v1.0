@@ -6,7 +6,6 @@
    GENERATE FAMILY ID
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    ===================================== */
@@ -259,7 +258,7 @@ familyBtn.onclick = () => {
 
     </div>
 
-
+</div>
     <!-- AVAILABILITY MESSAGE -->
 
     <div
@@ -267,7 +266,7 @@ familyBtn.onclick = () => {
         class="family-id-status">
     </div>
 
-</div>
+
 
 
 <!-- CREATE BUTTON -->
