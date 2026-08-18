@@ -8,7 +8,6 @@
    ===================================== */
 
 
-
 .family-box{
 
     width: calc(100% - 40px);
@@ -165,7 +164,44 @@
     outline: none;
 
 }
+/* =====================================
+   FAMILY NAME STATUS
+   ===================================== */
 
+.family-name-field{
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+
+#familyIdStatus{
+
+    width: 100%;
+
+    margin-top: 3px;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    text-align: left;
+
+    font-size: 15px;
+
+    line-height: 20px;
+
+}
 
 /* =====================================
    INPUT FOCUS
@@ -513,66 +549,7 @@
     }
 
 }
-/* =====================================
-   FAMILY NAME FIELD
-   ===================================== */
 
-.family-name-field{
-
-    width: 100%;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: flex-start;
-}
-
-
-/* =====================================
-   FAMILY ID STATUS
-   ===================================== */
-
-/* =====================================
-   FAMILY ID AVAILABILITY STATUS
-   ===================================== */
-
-/* =====================================
-   FAMILY ID AVAILABILITY STATUS
-   ===================================== */
-
-/* =====================================
-   FAMILY ID AVAILABILITY STATUS
-   ===================================== */
-
-/* =====================================
-   FAMILY ID STATUS
-   UNDER FAMILY NAME BOX
-   ===================================== */
-
-.family-id-status{
-
-    width: calc(100% - 150px);
-
-    margin-left: 150px;
-
-    margin-top: 2px;
-
-    padding: 0;
-
-    box-sizing: border-box;
-
-    min-height: 20px;
-
-    font-size: 14px;
-
-    font-weight: 500;
-
-    line-height: 20px;
-
-    text-align: left;
-
-}
 
 
 /* =====================================
@@ -581,7 +558,7 @@
 
 .family-id-status.checking{
 
-    color: #f39c12;
+    color: orange;
 
 }
 
@@ -592,7 +569,7 @@
 
 .family-id-status.available{
 
-    color: #198754;
+    color: #268a57;
 
 }
 
@@ -603,6 +580,17 @@
 
 .family-id-status.not-available{
 
-    color: #dc3545;
+    color: red;
+
+}
+
+
+/* =====================================
+   MINIMUM 4 CHARACTERS
+   ===================================== */
+
+.family-id-status.minimum{
+
+    color: orange;
 
 }
