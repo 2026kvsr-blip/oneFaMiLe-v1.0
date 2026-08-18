@@ -3,7 +3,6 @@
    FINAL CLEAN FORM
    ===================================== */
 
-
 /* =====================================
    FAMILY FORM CONTAINER
    ===================================== */
@@ -402,12 +401,6 @@
    AVAILABLE
    ===================================== */
 
-.family-id-status.available{
-
-    color:#159447;
-
-}
-
 
 /* =====================================
    NOT AVAILABLE
@@ -475,13 +468,6 @@
 .family-id-status.verifying{
     color: #777;
 }
-
-
-.family-id-status.available{
-    color: green;
-}
-
-
 
 
 #createFamilyTreeBtn:disabled{
@@ -581,11 +567,6 @@
    AVAILABLE
    ===================================== */
 
-.family-id-status.available{
-
-    color: #198754;
-
-}
 
 
 /* =====================================
@@ -603,11 +584,6 @@
    AVAILABLE
    ===================================== */
 
-.family-id-status.available{
-
-    color: #198754;
-
-}
 
 
 /* =====================================
