@@ -8,6 +8,7 @@
    F-NAME-RANDOM4
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -878,43 +879,15 @@ document
        CHECK LOCAL FAMILY IDS
        ================================ */
 
-    const existingFamilies =
+ /*   const existingFamilies =
         JSON.parse(
             localStorage.getItem(
                 "familyTrees"
             ) || "[]"
-        );
+        );    */
 
 
-    const duplicateFamily =
-        existingFamilies.some(
-            function(family){
-
-                return (
-                    family.familyId ===
-                    savedFamilyId
-                );
-
-            }
-        );
-
-
-    /* ================================
-       DUPLICATE ID
-       ================================ */
-
-    if(duplicateFamily){
-
-        showMessage(
-            "This Family ID already exists. Please try again.",
-            "warning",
-            3000
-        );
-
-        return;
-    }
-
-
+    
     /* ================================
        DISABLE CREATE BUTTON
        ================================ */
