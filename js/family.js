@@ -8,6 +8,7 @@
    F-NAME-RANDOM4
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -721,35 +722,94 @@ fetch(
 
     }
 )
-.catch(
-    function(error){
+catch(error){
 
-        console.error(
-            "Family availability error:",
-            error
+    console.error(
+        "Family availability check error:",
+        error
+    );
+
+
+    /* ================================
+       CANCEL OLD CHECK
+       ================================ */
+
+    if(familyAvailabilityTimer){
+
+        clearTimeout(
+            familyAvailabilityTimer
         );
 
-
-        if(
-            currentVersion !==
-            familyInputVersion
-        ){
-
-            return;
-        }
+        familyAvailabilityTimer =
+            null;
+    }
 
 
-        statusField.textContent =
-            "Unable to check availability.";
+    /* ================================
+       INVALIDATE OLD REQUEST
+       ================================ */
 
-        statusField.className =
-            "family-id-status not-available";
+    familyInputVersion++;
 
-        createBtn.disabled =
-            true;
+
+    /* ================================
+       CLEAR FAMILY NAME BOX
+       ================================ */
+
+    const familyNameInput =
+        document.getElementById(
+            "newFamilyName"
+        );
+
+    if(familyNameInput){
+
+        familyNameInput.value = "";
 
     }
-);
+
+
+    /* ================================
+       RESET FAMILY ID
+       ================================ */
+
+    familyIdField.textContent =
+        "auto generation";
+
+    familyIdField.classList.remove(
+        "generated"
+    );
+
+
+    /* ================================
+       CLEAR STATUS MESSAGE
+       ================================ */
+
+    statusField.textContent =
+        "";
+
+    statusField.className =
+        "family-id-status";
+
+
+    /* ================================
+       DISABLE CREATE BUTTON
+       ================================ */
+
+    createBtn.disabled = true;
+
+
+    /* ================================
+       FOCUS BACK TO FAMILY NAME
+       ================================ */
+
+    if(familyNameInput){
+
+        familyNameInput.focus();
+
+    }
+
+}
+                       );
                     },
                     800
                 );
