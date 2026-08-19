@@ -8,7 +8,6 @@
    F-NAME-RANDOM4
    ===================================== */
 
-
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -485,10 +484,10 @@ if(invalidCharacters.test(familyName)){
                 );
 
                 statusField.textContent =
-                    "Name must be min 4 letters";
+    "Name must be min 4 letters";
 
-                statusField.className =
-                    "family-id-status checking";
+statusField.className =
+    "family-id-status min-length";
 
                 return;
             }
@@ -581,10 +580,10 @@ if(invalidCharacters.test(familyName)){
                                     ? ""
                                     : "Name must be min 4 letters";
 
-                            statusField.className =
-                                currentName.length === 0
-                                    ? "family-id-status"
-                                    : "family-id-status checking";
+                           statusField.className =
+    currentName.length === 0
+        ? "family-id-status"
+        : "family-id-status min-length";
 
                             createBtn.disabled =
                                 true;
