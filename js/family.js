@@ -2,6 +2,7 @@
    oneFaMiLe
    FAMILY MODULE
    ===================================== */
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -93,166 +94,7 @@ function isFamilyIdAvailable(familyId){
 familyBtn.onclick = () => {
 
     setActiveButton(familyBtn);
-   /* =====================================
-   LOAD USER FAMILY TREE FROM BACKEND
-   ===================================== */
-
-const loggedUser =
-    JSON.parse(
-        sessionStorage.getItem("user")
-    ) || {};
-
-
-if(loggedUser){
-
-    const params =
-        new URLSearchParams();
-
-    params.append(
-        "action",
-        "getUserFamilyTree"
-    );
-
-    params.append(
-        "loginUserName",
-        loggedUser.loginUserName || ""
-    );
-
-    params.append(
-        "email",
-        loggedUser.email || ""
-    );
-
-    params.append(
-        "mobile",
-        loggedUser.mobile || ""
-    );
-
-
-    fetch(
-        API_URL,
-        {
-            method:"POST",
-
-            headers:{
-                "Content-Type":
-                    "application/x-www-form-urlencoded"
-            },
-
-            body:
-                params.toString()
-        }
-    )
-    .then(
-        function(response){
-
-            return response.json();
-
-        }
-    )
-    .then(
-        function(result){
-
-            /* =========================
-               FAMILY TREE FOUND
-               ========================= */
-
-            if(
-                result.status ===
-                "success"
-            ){
-
-                const familyData = {
-
-                    familyId:
-                        result.familyId,
-
-                    familyName:
-                        result.familyName,
-
-                    loginId:
-                        result.loginUserName,
-
-                    userId:
-                        loggedUser.userId || "",
-
-                    userMail:
-                        result.email,
-
-                    mobile:
-                        result.mobile
-
-                };
-
-
-                /* =====================
-                   SAVE CURRENT FAMILY
-                   ===================== */
-
-                localStorage.setItem(
-                    "currentFamily",
-                    JSON.stringify(
-                        familyData
-                    )
-                );
-
-
-                /* =====================
-                   SAVE FAMILY LIST
-                   ===================== */
-
-                const existingFamilies =
-                    JSON.parse(
-                        localStorage.getItem(
-                            "familyTrees"
-                        ) || "[]"
-                    );
-
-
-                const alreadySaved =
-                    existingFamilies.some(
-                        function(family){
-
-                            return (
-                                family.familyId ===
-                                familyData.familyId
-                            );
-
-                        }
-                    );
-
-
-                if(!alreadySaved){
-
-                    existingFamilies.push(
-                        familyData
-                    );
-
-                    localStorage.setItem(
-                        "familyTrees",
-                        JSON.stringify(
-                            existingFamilies
-                        )
-                    );
-
-                }
-
-            }
-
-        }
-    )
-    .catch(
-        function(error){
-
-            console.error(
-                "Family Tree Load Error:",
-                error
-            );
-
-        }
-    );
-
-}
+ 
 
     showPage(
 
@@ -503,7 +345,175 @@ if(loggedUser){
 </div>
             `
         );
+/* =====================================
+   LOAD EXISTING FAMILY TREE
+   ===================================== */
 
+const loggedUser =
+    JSON.parse(
+        sessionStorage.getItem("user")
+    ) || {};
+
+if(loggedUser){
+
+    const params =
+        new URLSearchParams();
+
+    params.append(
+        "action",
+        "getUserFamilyTree"
+    );
+
+    params.append(
+        "loginUserName",
+        loggedUser.loginUserName || ""
+    );
+
+    params.append(
+        "email",
+        loggedUser.email || ""
+    );
+
+    params.append(
+        "mobile",
+        loggedUser.mobile || ""
+    );
+
+
+    fetch(
+        API_URL,
+        {
+            method:"POST",
+
+            headers:{
+                "Content-Type":
+                    "application/x-www-form-urlencoded"
+            },
+
+            body:
+                params.toString()
+        }
+    )
+    .then(
+        function(response){
+
+            return response.json();
+
+        }
+    )
+    .then(
+        function(result){
+
+            /* =========================
+               FAMILY TREE FOUND
+               ========================= */
+
+            if(
+                result.status !==
+                "success"
+            ){
+
+                return;
+
+            }
+
+
+            /* =========================
+               GET FAMILY ELEMENTS
+               ========================= */
+
+            const createBtn =
+                document.getElementById(
+                    "createFamilyTreeBtn"
+                );
+
+            const familyNameInput =
+                document.getElementById(
+                    "newFamilyName"
+                );
+
+            const familyIdField =
+                document.getElementById(
+                    "newFamilyId"
+                );
+
+            const statusField =
+                document.getElementById(
+                    "familyIdStatus"
+                );
+
+
+            /* =========================
+               HIDE CREATE BUTTON
+               ========================= */
+
+            if(createBtn){
+
+                createBtn.style.display =
+                    "none";
+
+            }
+
+
+            /* =========================
+               SHOW FAMILY ID
+               ========================= */
+
+            if(familyIdField){
+
+                familyIdField.textContent =
+                    result.familyId;
+
+                familyIdField.classList.add(
+                    "generated"
+                );
+
+            }
+
+
+            /* =========================
+               SHOW FAMILY NAME
+               ========================= */
+
+            if(familyNameInput){
+
+                familyNameInput.value =
+                    result.familyName;
+
+                familyNameInput.disabled =
+                    true;
+
+            }
+
+
+            /* =========================
+               SHOW MESSAGE
+               ========================= */
+
+            if(statusField){
+
+                statusField.textContent =
+                    "User already have a Family Tree.";
+
+                statusField.className =
+                    "family-id-status available";
+
+            }
+
+        }
+    )
+    .catch(
+        function(error){
+
+            console.error(
+                "Family Tree Load Error:",
+                error
+            );
+
+        }
+    );
+
+}
            
         /* =====================================
            FAMILY NAME → GENERATE FAMILY ID
@@ -526,12 +536,9 @@ document
     .addEventListener(
         "input",
         function(){
-
-
-           
+        
             const familyName =
                 this.value.trim();
-
 
             const familyIdField =
                 document.getElementById(
@@ -547,7 +554,6 @@ document
                 document.getElementById(
                     "createFamilyTreeBtn"
                 );
-
 
             /* =================================
                CANCEL PREVIOUS CHECK
