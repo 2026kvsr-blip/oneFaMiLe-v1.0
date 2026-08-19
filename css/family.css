@@ -127,7 +127,9 @@
 
     overflow: hidden;
 }
-
+.family-id-status.saving{
+    color: #28a745;
+}
 
 /* =====================================
    FAMILY NAME INPUT
