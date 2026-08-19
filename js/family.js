@@ -8,6 +8,7 @@
    F-NAME-RANDOM4
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -685,7 +686,7 @@ document
 
 document
     .getElementById("createFamilyTreeBtn")
-    .onclick = () => {
+    .onclick = async () => {
 
 
     /* ================================
@@ -752,7 +753,29 @@ document
 
 
     /* ================================
-       CHECK AGAINST EXISTING FAMILIES
+       USER INFORMATION
+       ================================ */
+
+    const user =
+        JSON.parse(
+            sessionStorage.getItem("user")
+        );
+
+
+    if(!user){
+
+        showMessage(
+            "User information not available.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    /* ================================
+       CHECK LOCAL FAMILY IDS
        ================================ */
 
     const existingFamilies =
@@ -793,83 +816,256 @@ document
 
 
     /* ================================
-       FAMILY OBJECT
+       DISABLE CREATE BUTTON
        ================================ */
 
-    const familyData = {
+    const createBtn =
+        document.getElementById(
+            "createFamilyTreeBtn"
+        );
 
-        familyId:
-            savedFamilyId,
 
-        familyName:
-            familyName,
-
-        loginId:
-            user.loginUserName || "",
-
-        userId:
-            user.userId || "",
-
-        userMail:
-            user.email || "",
-
-        mobile:
-            user.mobile || "",
-
-        createdAt:
-            new Date().toISOString()
-
-    };
+    createBtn.disabled = true;
 
 
     /* ================================
-       SAVE CURRENT FAMILY
+       CHECKING / SAVING MESSAGE
        ================================ */
 
-    localStorage.setItem(
-        "currentFamily",
-        JSON.stringify(
+    const statusField =
+        document.getElementById(
+            "familyIdStatus"
+        );
+
+
+    if(statusField){
+
+        statusField.innerHTML =
+            '<span class="checking-spinner"></span> Saving Family Tree...';
+
+        statusField.className =
+            "family-id-status checking";
+
+    }
+
+
+    /* ================================
+       GOOGLE SHEET DATA
+       ================================ */
+
+    const params =
+        new URLSearchParams();
+
+
+    params.append(
+        "action",
+        "saveFamilyTree"
+    );
+
+
+    params.append(
+        "familyId",
+        savedFamilyId
+    );
+
+
+    params.append(
+        "familyName",
+        familyName
+    );
+
+
+    params.append(
+        "loginUserName",
+        user.loginUserName || ""
+    );
+
+
+    params.append(
+        "email",
+        user.email || ""
+    );
+
+
+    params.append(
+        "mobile",
+        user.mobile || ""
+    );
+
+
+    /* ================================
+       SAVE TO GOOGLE SHEET
+       ================================ */
+
+    try{
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+
+                    body:
+                        params.toString()
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        /* ================================
+           BACKEND ERROR
+           ================================ */
+
+        if(
+            result.status !==
+            "success"
+        ){
+
+            createBtn.disabled = false;
+
+
+            if(statusField){
+
+                statusField.textContent =
+                    result.message ||
+                    "Family Tree could not be saved.";
+
+                statusField.className =
+                    "family-id-status not-available";
+
+            }
+
+            return;
+        }
+
+
+        /* ================================
+           FAMILY OBJECT
+           ================================ */
+
+        const familyData = {
+
+            familyId:
+                savedFamilyId,
+
+            familyName:
+                familyName,
+
+            loginId:
+                user.loginUserName || "",
+
+            userId:
+                user.userId || "",
+
+            userMail:
+                user.email || "",
+
+            mobile:
+                user.mobile || "",
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+
+        /* ================================
+           SAVE CURRENT FAMILY
+           ================================ */
+
+        localStorage.setItem(
+            "currentFamily",
+            JSON.stringify(
+                familyData
+            )
+        );
+
+
+        /* ================================
+           SAVE FAMILY LIST
+           ================================ */
+
+        existingFamilies.push(
             familyData
-        )
-    );
+        );
 
 
-    /* ================================
-       SAVE FAMILY LIST
-       ================================ */
-
-    existingFamilies.push(
-        familyData
-    );
-
-
-    localStorage.setItem(
-        "familyTrees",
-        JSON.stringify(
-            existingFamilies
-        )
-    );
+        localStorage.setItem(
+            "familyTrees",
+            JSON.stringify(
+                existingFamilies
+            )
+        );
 
 
-    /* ================================
-       SUCCESS MESSAGE
-       ================================ */
+        /* ================================
+           SUCCESS
+           ================================ */
 
-    showMessage(
-        "Family Tree Created Successfully.",
-        "success",
-        3000
-    );
+        if(statusField){
+
+            statusField.textContent =
+                "Family Tree saved successfully.";
+
+            statusField.className =
+                "family-id-status available";
+
+        }
 
 
-    /* ================================
-       RETURN TO FAMILY PAGE
-       ================================ */
+        showMessage(
+            "Family Tree Created Successfully.",
+            "success",
+            3000
+        );
 
-    familyBtn.click();
+
+        /* ================================
+           RETURN TO FAMILY PAGE
+           ================================ */
+
+        familyBtn.click();
+
+
+    }catch(error){
+
+        console.error(
+            "Family Tree Save Error:",
+            error
+        );
+
+
+        createBtn.disabled = false;
+
+
+        if(statusField){
+
+            statusField.textContent =
+                "Unable to save Family Tree. Please try again.";
+
+            statusField.className =
+                "family-id-status not-available";
+
+        }
+
+
+        showMessage(
+            "Unable to save Family Tree.",
+            "error",
+            3000
+        );
+
+    }
 
 };
-
 
         /* =====================================
            CREATE FAMILY TREE → BACK
