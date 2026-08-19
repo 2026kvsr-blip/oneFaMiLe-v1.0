@@ -8,6 +8,7 @@
    ===================================== */
 
 
+
 .family-box{
 
     width: calc(100% - 40px);
@@ -622,7 +623,7 @@
 
 .family-id-status.checking{
 
-    color: arange;
+    color: #4A9FE8;
 
 }
 
