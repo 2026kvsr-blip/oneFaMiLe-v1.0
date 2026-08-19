@@ -8,7 +8,6 @@
    F-NAME-RANDOM4
    ===================================== */
 
-
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -875,19 +874,7 @@ document
     }
 
 
-    /* ================================
-       CHECK LOCAL FAMILY IDS
-       ================================ */
-
- /*   const existingFamilies =
-        JSON.parse(
-            localStorage.getItem(
-                "familyTrees"
-            ) || "[]"
-        );    */
-
-
-    
+        
     /* ================================
        DISABLE CREATE BUTTON
        ================================ */
@@ -1019,7 +1006,17 @@ document
             return;
         }
 
+        /* ================================
+   GET LOCAL FAMILY LIST
+   ONLY AFTER BACKEND SUCCESS
+   ================================ */
 
+const existingFamilies =
+    JSON.parse(
+        localStorage.getItem(
+            "familyTrees"
+        ) || "[]"
+    );
         /* ================================
            FAMILY OBJECT
            ================================ */
