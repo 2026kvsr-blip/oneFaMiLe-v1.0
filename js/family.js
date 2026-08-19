@@ -8,6 +8,7 @@
    F-NAME-RANDOM4
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -367,6 +368,8 @@ document
         "input",
         function(){
 
+
+           
             const familyName =
                 this.value.trim();
 
@@ -402,6 +405,32 @@ document
             }
 
 
+           /* =================================
+   FAMILY NAME VALIDATION
+   ================================= */
+
+const invalidCharacters =
+    /[^A-Za-z0-9_.@-]/;
+
+if(invalidCharacters.test(familyName)){
+
+    statusField.textContent =
+        "Only letters, numbers, - _ . @ are allowed";
+
+    statusField.className =
+        "family-id-status not-available";
+
+    createBtn.disabled = true;
+
+    familyIdField.textContent =
+        "auto generation";
+
+    familyIdField.classList.remove(
+        "generated"
+    );
+
+    return;
+}
             /* =================================
                NEW INPUT VERSION
                ================================= */
