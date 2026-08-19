@@ -838,15 +838,15 @@ document
         );
 
 
-    if(statusField){
+   if(statusField){
 
-        statusField.innerHTML =
-            '<span class="checking-spinner"></span> Saving Family Tree...';
+    statusField.innerHTML =
+        '<span class="checking-spinner saving-spinner"></span> Saving Family Tree...';
 
-        statusField.className =
-            "family-id-status checking";
+    statusField.className =
+        "family-id-status saving";
 
-    }
+}
 
 
     /* ================================
