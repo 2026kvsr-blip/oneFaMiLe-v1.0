@@ -8,7 +8,6 @@
    F-NAME-RANDOM4
    ===================================== */
 
-
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -593,63 +592,164 @@ statusField.className =
                         }
 
 
-                        /* =========================
-                           EXISTING FAMILY IDS
-                           ========================= */
+                       /* =========================
+   BACKEND AVAILABILITY CHECK
+   ========================= */
 
-                        const existingFamilies =
-                            JSON.parse(
-                                localStorage.getItem(
-                                    "familyTrees"
-                                ) || "[]"
-                            );
+const currentUser =
+    JSON.parse(
+        sessionStorage.getItem("user")
+    ) || {};
 
 
-                        const alreadyExists =
-                            existingFamilies.some(
-                                function(family){
-
-                                    return (
-                                        family.familyId ===
-                                        generatedFamilyId
-                                    );
-
-                                }
-                            );
+const params =
+    new URLSearchParams();
 
 
-                        /* =========================
-                           NOT AVAILABLE
-                           ========================= */
-
-                        if(alreadyExists){
-
-                            statusField.textContent =
-                                "Family ID not available";
-
-                            statusField.className =
-                                "family-id-status not-available";
-
-                            createBtn.disabled =
-                                true;
-
-                            return;
-                        }
+params.append(
+    "action",
+    "checkFamilyAvailability"
+);
 
 
-                        /* =========================
-                           AVAILABLE
-                           ========================= */
+params.append(
+    "familyId",
+    generatedFamilyId
+);
 
-                        statusField.textContent =
-                            "Family Name available";
 
-                        statusField.className =
-                            "family-id-status available";
+params.append(
+    "familyName",
+    currentName
+);
 
-                        createBtn.disabled =
-                            false;
 
+params.append(
+    "loginUserName",
+    currentUser.loginUserName || ""
+);
+
+
+params.append(
+    "email",
+    currentUser.email || ""
+);
+
+
+params.append(
+    "mobile",
+    currentUser.mobile || ""
+);
+
+
+/* =========================
+   SEND TO BACKEND
+   ========================= */
+
+fetch(
+    API_URL,
+    {
+        method:"POST",
+
+        headers:{
+            "Content-Type":
+                "application/x-www-form-urlencoded"
+        },
+
+        body:
+            params.toString()
+    }
+)
+.then(
+    function(response){
+
+        return response.json();
+
+    }
+)
+.then(
+    function(result){
+
+        /* =====================
+           IGNORE OLD RESPONSE
+           ===================== */
+
+        if(
+            currentVersion !==
+            familyInputVersion
+        ){
+
+            return;
+        }
+
+
+        /* =====================
+           AVAILABLE
+           ===================== */
+
+        if(
+            result.status ===
+            "available"
+        ){
+
+            statusField.textContent =
+                "Family Name available";
+
+            statusField.className =
+                "family-id-status available";
+
+            createBtn.disabled =
+                false;
+
+            return;
+        }
+
+
+        /* =====================
+           NOT AVAILABLE
+           ===================== */
+
+        statusField.textContent =
+            result.message ||
+            "Family Name not available";
+
+        statusField.className =
+            "family-id-status not-available";
+
+        createBtn.disabled =
+            true;
+
+    }
+)
+.catch(
+    function(error){
+
+        console.error(
+            "Family availability error:",
+            error
+        );
+
+
+        if(
+            currentVersion !==
+            familyInputVersion
+        ){
+
+            return;
+        }
+
+
+        statusField.textContent =
+            "Unable to check availability.";
+
+        statusField.className =
+            "family-id-status not-available";
+
+        createBtn.disabled =
+            true;
+
+    }
+);
                     },
                     800
                 );
