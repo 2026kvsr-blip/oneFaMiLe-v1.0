@@ -8,7 +8,6 @@
    ===================================== */
 
 
-
 .family-box{
 
     width: calc(100% - 40px);
@@ -618,16 +617,19 @@
 
 
 /* =====================================
-   CHECKING
+   CHECKING availability
    ===================================== */
 
 .family-id-status.checking{
 
-    color: #4A9FE8;
+    color: orange;
 
 }
 
-
+/* 1, 2, 3 letters */
+.family-id-status.min-length{
+    color: #4A9FE8;
+}
 /* =====================================
    AVAILABLE
    ===================================== */
