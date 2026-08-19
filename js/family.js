@@ -93,6 +93,166 @@ function isFamilyIdAvailable(familyId){
 familyBtn.onclick = () => {
 
     setActiveButton(familyBtn);
+   /* =====================================
+   LOAD USER FAMILY TREE FROM BACKEND
+   ===================================== */
+
+const loggedUser =
+    JSON.parse(
+        sessionStorage.getItem("user")
+    ) || {};
+
+
+if(loggedUser){
+
+    const params =
+        new URLSearchParams();
+
+    params.append(
+        "action",
+        "getUserFamilyTree"
+    );
+
+    params.append(
+        "loginUserName",
+        loggedUser.loginUserName || ""
+    );
+
+    params.append(
+        "email",
+        loggedUser.email || ""
+    );
+
+    params.append(
+        "mobile",
+        loggedUser.mobile || ""
+    );
+
+
+    fetch(
+        API_URL,
+        {
+            method:"POST",
+
+            headers:{
+                "Content-Type":
+                    "application/x-www-form-urlencoded"
+            },
+
+            body:
+                params.toString()
+        }
+    )
+    .then(
+        function(response){
+
+            return response.json();
+
+        }
+    )
+    .then(
+        function(result){
+
+            /* =========================
+               FAMILY TREE FOUND
+               ========================= */
+
+            if(
+                result.status ===
+                "success"
+            ){
+
+                const familyData = {
+
+                    familyId:
+                        result.familyId,
+
+                    familyName:
+                        result.familyName,
+
+                    loginId:
+                        result.loginUserName,
+
+                    userId:
+                        loggedUser.userId || "",
+
+                    userMail:
+                        result.email,
+
+                    mobile:
+                        result.mobile
+
+                };
+
+
+                /* =====================
+                   SAVE CURRENT FAMILY
+                   ===================== */
+
+                localStorage.setItem(
+                    "currentFamily",
+                    JSON.stringify(
+                        familyData
+                    )
+                );
+
+
+                /* =====================
+                   SAVE FAMILY LIST
+                   ===================== */
+
+                const existingFamilies =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "familyTrees"
+                        ) || "[]"
+                    );
+
+
+                const alreadySaved =
+                    existingFamilies.some(
+                        function(family){
+
+                            return (
+                                family.familyId ===
+                                familyData.familyId
+                            );
+
+                        }
+                    );
+
+
+                if(!alreadySaved){
+
+                    existingFamilies.push(
+                        familyData
+                    );
+
+                    localStorage.setItem(
+                        "familyTrees",
+                        JSON.stringify(
+                            existingFamilies
+                        )
+                    );
+
+                }
+
+            }
+
+        }
+    )
+    .catch(
+        function(error){
+
+            console.error(
+                "Family Tree Load Error:",
+                error
+            );
+
+        }
+    );
+
+}
 
     showPage(
 
