@@ -8,6 +8,7 @@
    F-NAME-RANDOM4
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -655,7 +656,26 @@ if(invalidCharacters.test(familyName)){
 
         }
     );
-           
+
+           /* =================================
+   BLOCK SPACE KEY
+   FAMILY NAME
+   ================================= */
+
+document
+    .getElementById("newFamilyName")
+    .addEventListener(
+        "keydown",
+        function(event){
+
+            if(event.key === " "){
+
+                event.preventDefault();
+
+            }
+
+        }
+    );
            /* =====================================
            CREATE FAMILY TREE
            ===================================== */
