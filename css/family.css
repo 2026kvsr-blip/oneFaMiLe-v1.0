@@ -6,6 +6,7 @@
    FAMILY FORM CONTAINER
    ===================================== */
 
+
 .family-box{
 
     width: calc(100% - 40px);
@@ -128,7 +129,7 @@
     overflow: hidden;
 }
 .family-id-status.saving{
-    color: #28a745;
+    color: #2E8B57;
 }
 
 /* =====================================
