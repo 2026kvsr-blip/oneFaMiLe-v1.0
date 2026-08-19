@@ -8,7 +8,6 @@
    F-NAME-RANDOM4
    ===================================== */
 
-
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -720,10 +719,8 @@ fetch(
         createBtn.disabled =
             true;
 
-    }
-)
-catch(error){
-
+    })
+    .catch(function(error){
     console.error(
         "Family availability check error:",
         error
