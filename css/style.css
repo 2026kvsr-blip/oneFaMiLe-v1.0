@@ -3431,3 +3431,215 @@ width:100%;
     }
 
 }
+/* =========================================
+   oneFaMiLe
+   COMMON PAGE FRAMEWORK
+   ========================================= */
+
+/* COMMON PAGE CONTAINER */
+.common-page {
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+
+/* COMMON PAGE TITLE */
+.common-page-title {
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 8px 0 16px;
+}
+
+
+/* COMMON FORM CONTAINER */
+.common-form {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* COMMON FORM SECTION */
+.common-section {
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 14px;
+    box-sizing: border-box;
+    border-radius: 16px;
+    background: #f0f7ff;
+    border: 1px solid #c4d4ff;
+}
+
+
+/* COMMON SECTION TITLE */
+.common-section-title {
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+/* COMMON FORM GROUP */
+.common-form-group {
+    width: 100%;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+
+/* COMMON LABEL */
+.common-form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
+/* COMMON INPUT */
+.common-form-input {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    border: 1px solid #c4d4ff;
+    border-radius: 10px;
+    background: #ffffff;
+    font-size: 16px;
+    outline: none;
+}
+
+
+/* COMMON SELECT */
+.common-form-select {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    border: 1px solid #c4d4ff;
+    border-radius: 10px;
+    background: #ffffff;
+    font-size: 16px;
+    outline: none;
+}
+
+
+/* COMMON TEXTAREA */
+.common-form-textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 80px;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    border: 1px solid #c4d4ff;
+    border-radius: 10px;
+    background: #ffffff;
+    font-size: 16px;
+    resize: vertical;
+    outline: none;
+}
+
+
+/* COMMON RADIO GROUP */
+.common-radio-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-height: 42px;
+}
+
+
+/* COMMON RADIO ITEM */
+.common-radio-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+}
+
+
+/* COMMON RADIO */
+.common-radio-item input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+}
+
+
+/* COMMON ACTION AREA */
+.common-form-actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+
+/* COMMON PRIMARY BUTTON */
+.common-primary-btn {
+    min-width: 150px;
+    min-height: 42px;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 12px;
+    background: #4A9FE8;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+/* COMMON SECONDARY BUTTON */
+.common-secondary-btn {
+    min-width: 110px;
+    min-height: 42px;
+    padding: 8px 18px;
+    border: 1px solid #c4d4ff;
+    border-radius: 12px;
+    background: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+/* COMMON BACK BUTTON */
+.common-back-btn {
+    min-width: 100px;
+    min-height: 40px;
+    margin-top: 12px;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 12px;
+    background: #ffffff;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+
+/* COMMON STATUS */
+.common-status {
+    width: 100%;
+    min-height: 20px;
+    margin-top: 5px;
+    font-size: 13px;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+
+/* COMMON HIDDEN */
+.common-hidden {
+    display: none !important;
+}
