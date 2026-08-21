@@ -605,3 +605,11 @@ function createCommonFormTest(){
         };
 
 }
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        createCommonFormTest();
+
+    }
+);
