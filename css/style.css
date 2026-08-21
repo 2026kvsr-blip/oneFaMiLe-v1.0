@@ -7,6 +7,7 @@ font-family:Arial,Helvetica,sans-serif;
 
 body{
 
+     
      background:#EAF8FF;
 
 min-height:100vh;
@@ -3670,4 +3671,56 @@ width:100%;
     align-items: center;
     gap: 20px;
     min-height: 42px;
+}
+/* =========================================
+   COMMON FORM ROW
+   ========================================= */
+
+.common-form-group {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+
+/* LABEL */
+
+.common-form-label {
+    width: 135px;
+    min-width: 135px;
+
+    margin: 0;
+    padding: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    text-align: left;
+    white-space: nowrap;
+}
+
+
+/* COLON */
+
+.common-form-colon {
+    width: 15px;
+    min-width: 15px;
+
+    margin: 0;
+    padding: 0;
+
+    font-size: 14px;
+    text-align: center;
+}
+
+
+/* INPUT */
+
+.common-form-input {
+    flex: 1;
+    min-width: 0;
+
+    box-sizing: border-box;
 }
