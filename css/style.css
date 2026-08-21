@@ -3646,3 +3646,57 @@ width:100%;
 .common-hidden {
     display: none !important;
 }
+/* =========================================
+   COMMON FORM HORIZONTAL ROW
+   ========================================= */
+
+.common-form-group {
+    width: 100%;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+
+    display: grid;
+    grid-template-columns: 120px 14px 1fr;
+    align-items: center;
+    column-gap: 6px;
+}
+
+
+/* LABEL */
+
+.common-form-label {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+}
+
+
+/* COLON */
+
+.common-form-label::after {
+    content: ":";
+}
+
+
+/* INPUT / SELECT */
+
+.common-form-input,
+.common-form-select {
+    grid-column: 3;
+
+    width: 100%;
+    min-width: 0;
+}
+
+
+/* RADIO */
+
+.common-radio-group {
+    grid-column: 3;
+
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-height: 42px;
+}
