@@ -3488,17 +3488,20 @@ width:100%;
     width: 100%;
     margin-bottom: 12px;
     box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 
 /* COMMON LABEL */
 .common-form-label {
-    display: block;
-    margin-bottom: 5px;
+    flex: 0 0 120px;
+    margin-bottom: 0;
     font-size: 14px;
     font-weight: 500;
 }
-
 
 /* COMMON INPUT */
 .common-form-input {
