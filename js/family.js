@@ -21,6 +21,7 @@ function generateFamilyId(familyName){
             .substring(0,4)
             .padEnd(4,"X");
 
+   
     /* =================================
        GET EXISTING FAMILY IDs
        ================================= */
@@ -389,6 +390,32 @@ document
     >
 
 </div>
+
+<!-- =================================
+     PHOTO
+     ================================= -->
+
+<div class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberPhoto">
+        Photo
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="file"
+        id="memberPhoto"
+        class="common-form-input"
+        accept="image/*"
+    >
+
+</div>
+
 
     </div>
 
