@@ -386,3 +386,222 @@ function showFormStatus(
     }
 
 }
+/* =========================================
+   COMMON FORM TEST
+   ========================================= */
+
+function createCommonFormTest(){
+
+    const container =
+        document.getElementById(
+            "commonFormTest"
+        );
+
+    if(!container){
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    /* ================================
+       PAGE
+       ================================ */
+
+    const page =
+        document.createElement("div");
+
+    page.className =
+        "common-page";
+
+
+    /* ================================
+       TITLE
+       ================================ */
+
+    const title =
+        document.createElement("div");
+
+    title.className =
+        "common-page-title";
+
+    title.textContent =
+        "Common Form Test";
+
+
+    /* ================================
+       FORM
+       ================================ */
+
+    const form =
+        document.createElement("div");
+
+    form.className =
+        "common-form";
+
+
+    /* ================================
+       INPUT
+       ================================ */
+
+    form.appendChild(
+        createInputField(
+            "Name",
+            "testName",
+            "text",
+            "Enter Name"
+        )
+    );
+
+
+    /* ================================
+       SELECT
+       ================================ */
+
+    form.appendChild(
+        createSelectField(
+            "Gender",
+            "testGender",
+            [
+                {
+                    value: "",
+                    label: "Select Gender"
+                },
+                {
+                    value: "Male",
+                    label: "Male"
+                },
+                {
+                    value: "Female",
+                    label: "Female"
+                }
+            ]
+        )
+    );
+
+
+    /* ================================
+       RADIO
+       ================================ */
+
+    form.appendChild(
+        createRadioField(
+            "Marital Status",
+            "testMaritalStatus",
+            [
+                {
+                    value: "Yes",
+                    label: "Yes"
+                },
+                {
+                    value: "No",
+                    label: "No"
+                }
+            ]
+        )
+    );
+
+
+    /* ================================
+       STATUS
+       ================================ */
+
+    const status =
+        document.createElement("div");
+
+    status.id =
+        "commonTestStatus";
+
+    status.className =
+        "common-status";
+
+
+    form.appendChild(
+        status
+    );
+
+
+    /* ================================
+       BUTTONS
+       ================================ */
+
+    const actions =
+        document.createElement("div");
+
+    actions.className =
+        "common-form-actions";
+
+
+    const saveButton =
+        createPrimaryButton(
+            "Save",
+            "commonTestSave"
+        );
+
+
+    const backButton =
+        createBackButton(
+            "commonTestBack"
+        );
+
+
+    actions.appendChild(
+        saveButton
+    );
+
+    actions.appendChild(
+        backButton
+    );
+
+
+    form.appendChild(
+        actions
+    );
+
+
+    /* ================================
+       BUILD PAGE
+       ================================ */
+
+    page.appendChild(
+        title
+    );
+
+    page.appendChild(
+        form
+    );
+
+    container.appendChild(
+        page
+    );
+
+
+    /* ================================
+       SAVE TEST
+       ================================ */
+
+    saveButton.onclick =
+        function(){
+
+            showFormStatus(
+                status,
+                "Common Form is working successfully.",
+                "success"
+            );
+
+        };
+
+
+    /* ================================
+       BACK TEST
+       ================================ */
+
+    backButton.onclick =
+        function(){
+
+            container.innerHTML = "";
+
+        };
+
+}
