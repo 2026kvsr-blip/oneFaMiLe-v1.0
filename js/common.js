@@ -3,7 +3,6 @@
    COMMON JAVASCRIPT
    ========================================= */
 
-
 function getCurrentUser(){
 
     try{
@@ -89,8 +88,8 @@ function createInputField(
     label.className =
         "common-form-label";
 
-    label.textContent =
-        labelText;
+   label.textContent =
+    labelText + " :";
 
     label.htmlFor =
         inputId;
