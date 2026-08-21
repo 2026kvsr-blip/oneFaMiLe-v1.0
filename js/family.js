@@ -4,6 +4,7 @@
    ===================================== */
 
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -303,7 +304,32 @@ document
             class="common-form-value">
             auto generation
         </strong>
+<!-- =================================
+     NAME
+     ================================= -->
 
+<div class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberName">
+        Name
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="text"
+        id="memberName"
+        class="common-form-input"
+        placeholder="Enter Name"
+        required
+        autocomplete="off"
+    >
+
+</div>
     </div>
 
 </div>
