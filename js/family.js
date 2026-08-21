@@ -236,12 +236,77 @@ document
 
         <div class="common-page">
 
-            <div class="common-form">
+           <div class="common-form">
 
-                <!-- Add Member form will come here -->
+    <!-- =================================
+         FAMILY ID
+         ================================= -->
 
-            </div>
+    <div class="common-form-group">
 
+        <label class="common-form-label">
+            Family ID
+        </label>
+
+        <span class="common-form-colon">
+            :
+        </span>
+
+        <strong
+            id="memberFamilyId"
+            class="common-form-value">
+            -
+        </strong>
+
+    </div>
+
+
+    <!-- =================================
+         FAMILY NAME
+         ================================= -->
+
+    <div class="common-form-group">
+
+        <label class="common-form-label">
+            Family Name
+        </label>
+
+        <span class="common-form-colon">
+            :
+        </span>
+
+        <strong
+            id="memberFamilyName"
+            class="common-form-value">
+            -
+        </strong>
+
+    </div>
+
+
+    <!-- =================================
+         MEMBER ID
+         ================================= -->
+
+    <div class="common-form-group">
+
+        <label class="common-form-label">
+            Member ID
+        </label>
+
+        <span class="common-form-colon">
+            :
+        </span>
+
+        <strong
+            id="memberId"
+            class="common-form-value">
+            auto generation
+        </strong>
+
+    </div>
+
+</div>
         </div>
 
         `
