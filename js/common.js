@@ -3,6 +3,7 @@
    COMMON JAVASCRIPT
    ========================================= */
 
+
 function getCurrentUser(){
 
     try{
@@ -400,15 +401,10 @@ function createCommonFormTest(){
     if(!container){
         return;
     }
-
-
     container.innerHTML = "";
-
-
     /* ================================
        PAGE
        ================================ */
-
     const page =
         document.createElement("div");
 
