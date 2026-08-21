@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -313,6 +312,53 @@ document
 
     );
 
+/* =================================
+   GET CURRENT FAMILY
+   ================================= */
+
+const currentFamily =
+    JSON.parse(
+        localStorage.getItem(
+            "currentFamily"
+        )
+    );
+
+
+/* =================================
+   SHOW FAMILY INFORMATION
+   ================================= */
+
+if(currentFamily){
+
+    const familyIdField =
+        document.getElementById(
+            "memberFamilyId"
+        );
+
+    const familyNameField =
+        document.getElementById(
+            "memberFamilyName"
+        );
+
+
+    if(familyIdField){
+
+        familyIdField.textContent =
+            currentFamily.familyId || "-";
+
+    }
+
+
+    if(familyNameField){
+
+        familyNameField.textContent =
+            currentFamily.familyName || "-";
+
+    }
+
+}
+
+       
 };
     /* =====================================
        FAMILY → ADD TREE
