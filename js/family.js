@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -303,6 +302,8 @@ document
             class="common-form-value">
             auto generation
         </strong>
+            </div>
+
 <!-- =================================
      NAME
      ================================= -->
