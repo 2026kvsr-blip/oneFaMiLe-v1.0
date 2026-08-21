@@ -4,7 +4,6 @@
    ===================================== */
 
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -308,8 +307,7 @@ document
      NAME
      ================================= -->
 
-<div class="common-form-group">
-
+<div class="common-form-group member-name-row">
     <label
         class="common-form-label"
         for="memberName">
