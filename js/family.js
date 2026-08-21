@@ -21,7 +21,6 @@ function generateFamilyId(familyName){
             .substring(0,4)
             .padEnd(4,"X");
 
-
     /* =================================
        GET EXISTING FAMILY IDs
        ================================= */
@@ -365,6 +364,32 @@ document
     </select>
 
 </div>
+
+<!-- =================================
+     DATE OF BIRTH
+     ================================= -->
+
+<div class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberDob">
+        DoB
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="date"
+        id="memberDob"
+        class="common-form-input"
+        required
+    >
+
+</div>
+
     </div>
 
 </div>
