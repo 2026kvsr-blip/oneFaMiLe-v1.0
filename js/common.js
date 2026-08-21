@@ -3,6 +3,7 @@
    COMMON JAVASCRIPT
    ========================================= */
 
+
 function getCurrentUser(){
 
     try{
@@ -141,9 +142,8 @@ function createSelectField(
 
     label.className =
         "common-form-label";
-
-    label.textContent =
-        labelText;
+label.textContent =
+    labelText + " :";
 
     label.htmlFor =
         selectId;
@@ -210,8 +210,8 @@ function createRadioField(
     label.className =
         "common-form-label";
 
-    label.textContent =
-        labelText;
+   label.textContent =
+    labelText + " :";
 
 
     const radioGroup =
