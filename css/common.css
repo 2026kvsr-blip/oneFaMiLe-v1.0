@@ -427,3 +427,7 @@
     }
 
 }
+.member-name-row {
+    clear: both;
+    width: 100%;
+}
