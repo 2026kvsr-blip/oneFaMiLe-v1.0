@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -216,7 +217,38 @@ familyBtn.onclick = () => {
 
     );
 
+/* =====================================
+   FAMILY → ADD MEMBER
+   ===================================== */
 
+document
+    .getElementById("addMemberBtn")
+    .onclick = () => {
+
+    showPage(
+
+        pageTitle(
+            "Add Member",
+            "images/colorbtns/AddMember1.png"
+        )
+
+        + `
+
+        <div class="common-page">
+
+            <div class="common-form">
+
+                <!-- Add Member form will come here -->
+
+            </div>
+
+        </div>
+
+        `
+
+    );
+
+};
     /* =====================================
        FAMILY → ADD TREE
        ===================================== */
