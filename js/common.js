@@ -5,6 +5,7 @@
 
 function getCurrentUser(){
 
+   
     try{
 
         const user =
@@ -82,17 +83,40 @@ function createInputField(
         "common-form-group";
 
 
+    /* ================================
+       LABEL
+       ================================ */
+
     const label =
         document.createElement("label");
 
     label.className =
         "common-form-label";
 
-   label.textContent =
-    labelText;
+    label.textContent =
+        labelText;
+
     label.htmlFor =
         inputId;
 
+
+    /* ================================
+       COLON
+       ================================ */
+
+    const colon =
+        document.createElement("span");
+
+    colon.className =
+        "common-form-colon";
+
+    colon.textContent =
+        ":";
+
+
+    /* ================================
+       INPUT
+       ================================ */
 
     const input =
         document.createElement("input");
@@ -110,13 +134,25 @@ function createInputField(
         placeholder;
 
 
-    group.appendChild(label);
-    group.appendChild(input);
+    /* ================================
+       BUILD ROW
+       ================================ */
+
+    group.appendChild(
+        label
+    );
+
+    group.appendChild(
+        colon
+    );
+
+    group.appendChild(
+        input
+    );
 
 
     return group;
 }
-
 
 /* =========================================
    CREATE SELECT FIELD
