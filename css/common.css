@@ -1,1 +1,430 @@
+/* =========================================
+   oneFaMiLe
+   COMMON CSS
+   ========================================= */
 
+
+/* =========================================
+   COMMON PAGE
+   ========================================= */
+
+.common-page {
+    width: 100%;
+    max-width: 520px;
+
+    margin: 30px auto;
+    padding: 20px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   COMMON PAGE TITLE
+   ========================================= */
+
+.common-page-title {
+    text-align: center;
+
+    font-size: 28px;
+    font-weight: 700;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================================
+   COMMON FORM
+   ========================================= */
+
+.common-form {
+    width: 100%;
+}
+
+
+/* =========================================
+   COMMON FORM ROW
+   ========================================= */
+
+.common-form-group {
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 18px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   LABEL
+   ========================================= */
+
+.common-form-label {
+
+    width: 120px;
+    min-width: 120px;
+
+    margin: 0;
+    padding: 0;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    text-align: left;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   COLON
+   ========================================= */
+
+.common-form-colon {
+
+    width: 8px;
+    min-width: 8px;
+
+    margin-left: 0;
+    margin-right: 6px;
+
+    font-size: 16px;
+
+    text-align: left;
+}
+
+
+/* =========================================
+   INPUT
+   ========================================= */
+
+.common-form-input {
+
+    flex: 1;
+
+    width: 100%;
+    min-width: 0;
+
+    height: 42px;
+
+    padding: 0 12px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #b8c9d9;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+
+/* =========================================
+   INPUT FOCUS
+   ========================================= */
+
+.common-form-input:focus {
+
+    border-color: #4A9FE8;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(74,159,232,0.15);
+}
+
+
+/* =========================================
+   SELECT
+   ========================================= */
+
+.common-form-select {
+
+    flex: 1;
+
+    width: 100%;
+    min-width: 0;
+
+    height: 42px;
+
+    padding: 0 10px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #b8c9d9;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+
+/* =========================================
+   SELECT FOCUS
+   ========================================= */
+
+.common-form-select:focus {
+
+    border-color: #4A9FE8;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(74,159,232,0.15);
+}
+
+
+/* =========================================
+   RADIO GROUP
+   ========================================= */
+
+.common-radio-group {
+
+    flex: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    min-width: 0;
+}
+
+
+/* =========================================
+   RADIO ITEM
+   ========================================= */
+
+.common-radio-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    font-size: 16px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   RADIO BUTTON
+   ========================================= */
+
+.common-radio-item input[type="radio"] {
+
+    width: 20px;
+    height: 20px;
+
+    margin: 0;
+}
+
+
+/* =========================================
+   FORM ACTIONS
+   ========================================= */
+
+.common-form-actions {
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    margin-top: 30px;
+}
+
+
+/* =========================================
+   PRIMARY BUTTON
+   ========================================= */
+
+.common-primary-btn {
+
+    min-width: 150px;
+
+    min-height: 48px;
+
+    padding: 10px 20px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #4A9FE8;
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   SECONDARY BUTTON
+   ========================================= */
+
+.common-secondary-btn {
+
+    min-width: 150px;
+
+    min-height: 48px;
+
+    padding: 10px 20px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    color: #4A9FE8;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   BACK BUTTON
+   ========================================= */
+
+.common-back-btn {
+
+    min-width: 150px;
+
+    min-height: 48px;
+
+    padding: 10px 20px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    color: #4A9FE8;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   STATUS
+   ========================================= */
+
+.common-status {
+
+    width: 100%;
+
+    margin-top: 10px;
+
+    text-align: center;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   STATUS TYPES
+   ========================================= */
+
+.common-status.success {
+
+    color: green;
+}
+
+
+.common-status.error {
+
+    color: red;
+}
+
+
+.common-status.warning {
+
+    color: #b8860b;
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    .common-page {
+
+        max-width: 100%;
+
+        padding: 15px;
+    }
+
+
+    .common-form-label {
+
+        width: 115px;
+        min-width: 115px;
+
+        font-size: 16px;
+    }
+
+
+    .common-form-colon {
+
+        width: 8px;
+        min-width: 8px;
+
+        margin-right: 5px;
+    }
+
+
+    .common-form-input,
+    .common-form-select {
+
+        height: 42px;
+
+        font-size: 16px;
+    }
+
+
+    .common-form-actions {
+
+        gap: 12px;
+    }
+
+
+    .common-primary-btn,
+    .common-secondary-btn,
+    .common-back-btn {
+
+        min-width: 120px;
+    }
+
+}
