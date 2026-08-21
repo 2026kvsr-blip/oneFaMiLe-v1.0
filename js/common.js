@@ -59,3 +59,330 @@ function getUserIdentity(){
     };
 
 }
+/* =========================================
+   COMMON FORM FUNCTIONS
+   ========================================= */
+
+
+/* =========================================
+   CREATE INPUT FIELD
+   ========================================= */
+
+function createInputField(
+    labelText,
+    inputId,
+    type = "text",
+    placeholder = ""
+){
+
+    const group =
+        document.createElement("div");
+
+    group.className =
+        "common-form-group";
+
+
+    const label =
+        document.createElement("label");
+
+    label.className =
+        "common-form-label";
+
+    label.textContent =
+        labelText;
+
+    label.htmlFor =
+        inputId;
+
+
+    const input =
+        document.createElement("input");
+
+    input.className =
+        "common-form-input";
+
+    input.id =
+        inputId;
+
+    input.type =
+        type;
+
+    input.placeholder =
+        placeholder;
+
+
+    group.appendChild(label);
+    group.appendChild(input);
+
+
+    return group;
+}
+
+
+/* =========================================
+   CREATE SELECT FIELD
+   ========================================= */
+
+function createSelectField(
+    labelText,
+    selectId,
+    options = []
+){
+
+    const group =
+        document.createElement("div");
+
+    group.className =
+        "common-form-group";
+
+
+    const label =
+        document.createElement("label");
+
+    label.className =
+        "common-form-label";
+
+    label.textContent =
+        labelText;
+
+    label.htmlFor =
+        selectId;
+
+
+    const select =
+        document.createElement("select");
+
+    select.className =
+        "common-form-select";
+
+    select.id =
+        selectId;
+
+
+    options.forEach(
+        function(option){
+
+            const optionElement =
+                document.createElement("option");
+
+            optionElement.value =
+                option.value;
+
+            optionElement.textContent =
+                option.label;
+
+            select.appendChild(
+                optionElement
+            );
+
+        }
+    );
+
+
+    group.appendChild(label);
+    group.appendChild(select);
+
+
+    return group;
+}
+
+
+/* =========================================
+   CREATE RADIO FIELD
+   ========================================= */
+
+function createRadioField(
+    labelText,
+    name,
+    options = []
+){
+
+    const group =
+        document.createElement("div");
+
+    group.className =
+        "common-form-group";
+
+
+    const label =
+        document.createElement("div");
+
+    label.className =
+        "common-form-label";
+
+    label.textContent =
+        labelText;
+
+
+    const radioGroup =
+        document.createElement("div");
+
+    radioGroup.className =
+        "common-radio-group";
+
+
+    options.forEach(
+        function(option){
+
+            const item =
+                document.createElement("label");
+
+            item.className =
+                "common-radio-item";
+
+
+            const radio =
+                document.createElement("input");
+
+            radio.type =
+                "radio";
+
+            radio.name =
+                name;
+
+            radio.value =
+                option.value;
+
+
+            const text =
+                document.createElement("span");
+
+            text.textContent =
+                option.label;
+
+
+            item.appendChild(radio);
+            item.appendChild(text);
+
+            radioGroup.appendChild(item);
+
+        }
+    );
+
+
+    group.appendChild(label);
+    group.appendChild(radioGroup);
+
+
+    return group;
+}
+
+
+/* =========================================
+   CREATE PRIMARY BUTTON
+   ========================================= */
+
+function createPrimaryButton(
+    text,
+    buttonId
+){
+
+    const button =
+        document.createElement("button");
+
+    button.type =
+        "button";
+
+    button.id =
+        buttonId;
+
+    button.className =
+        "common-primary-btn";
+
+    button.textContent =
+        text;
+
+
+    return button;
+}
+
+
+/* =========================================
+   CREATE SECONDARY BUTTON
+   ========================================= */
+
+function createSecondaryButton(
+    text,
+    buttonId
+){
+
+    const button =
+        document.createElement("button");
+
+    button.type =
+        "button";
+
+    button.id =
+        buttonId;
+
+    button.className =
+        "common-secondary-btn";
+
+    button.textContent =
+        text;
+
+
+    return button;
+}
+
+
+/* =========================================
+   CREATE BACK BUTTON
+   ========================================= */
+
+function createBackButton(
+    buttonId
+){
+
+    const button =
+        document.createElement("button");
+
+    button.type =
+        "button";
+
+    button.id =
+        buttonId;
+
+    button.className =
+        "common-back-btn";
+
+    button.textContent =
+        "← Back";
+
+
+    return button;
+}
+
+
+/* =========================================
+   SHOW FORM STATUS
+   ========================================= */
+
+function showFormStatus(
+    element,
+    message,
+    type = ""
+){
+
+    if(!element){
+        return;
+    }
+
+
+    element.textContent =
+        message;
+
+
+    element.className =
+        "common-status";
+
+
+    if(type){
+
+        element.classList.add(
+            type
+        );
+
+    }
+
+}
