@@ -5,8 +5,7 @@
 
 function getCurrentUser(){
 
-   
-    try{
+       try{
 
         const user =
             JSON.parse(
@@ -171,16 +170,40 @@ function createSelectField(
         "common-form-group";
 
 
+    /* ================================
+       LABEL
+       ================================ */
+
     const label =
         document.createElement("label");
 
     label.className =
         "common-form-label";
-label.textContent =
-    labelText;
+
+    label.textContent =
+        labelText;
+
     label.htmlFor =
         selectId;
 
+
+    /* ================================
+       COLON
+       ================================ */
+
+    const colon =
+        document.createElement("span");
+
+    colon.className =
+        "common-form-colon";
+
+    colon.textContent =
+        ":";
+
+
+    /* ================================
+       SELECT
+       ================================ */
 
     const select =
         document.createElement("select");
@@ -212,13 +235,25 @@ label.textContent =
     );
 
 
-    group.appendChild(label);
-    group.appendChild(select);
+    /* ================================
+       BUILD ROW
+       ================================ */
+
+    group.appendChild(
+        label
+    );
+
+    group.appendChild(
+        colon
+    );
+
+    group.appendChild(
+        select
+    );
 
 
     return group;
 }
-
 
 /* =========================================
    CREATE RADIO FIELD
@@ -237,14 +272,37 @@ function createRadioField(
         "common-form-group";
 
 
+    /* ================================
+       LABEL
+       ================================ */
+
     const label =
         document.createElement("div");
 
     label.className =
         "common-form-label";
 
-   label.textContent =
-    labelText;
+    label.textContent =
+        labelText;
+
+
+    /* ================================
+       COLON
+       ================================ */
+
+    const colon =
+        document.createElement("span");
+
+    colon.className =
+        "common-form-colon";
+
+    colon.textContent =
+        ":";
+
+
+    /* ================================
+       RADIO GROUP
+       ================================ */
 
     const radioGroup =
         document.createElement("div");
@@ -283,22 +341,41 @@ function createRadioField(
                 option.label;
 
 
-            item.appendChild(radio);
-            item.appendChild(text);
+            item.appendChild(
+                radio
+            );
 
-            radioGroup.appendChild(item);
+            item.appendChild(
+                text
+            );
+
+            radioGroup.appendChild(
+                item
+            );
 
         }
     );
 
 
-    group.appendChild(label);
-    group.appendChild(radioGroup);
+    /* ================================
+       BUILD ROW
+       ================================ */
+
+    group.appendChild(
+        label
+    );
+
+    group.appendChild(
+        colon
+    );
+
+    group.appendChild(
+        radioGroup
+    );
 
 
     return group;
 }
-
 
 /* =========================================
    CREATE PRIMARY BUTTON
