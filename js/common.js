@@ -3,7 +3,6 @@
    COMMON JAVASCRIPT
    ========================================= */
 
-
 function getCurrentUser(){
 
     try{
