@@ -3,7 +3,6 @@
    COMMON CSS
    ========================================= */
 
-
 /* =========================================
    COMMON PAGE
    ========================================= */
@@ -109,7 +108,7 @@
     width: 100%;
     min-width: 0;
 
-    height: 42px;
+    height: 36px;
 
     padding: 0 12px;
 
@@ -152,7 +151,7 @@
     width: 100%;
     min-width: 0;
 
-    height: 42px;
+    height: 36px;
 
     padding: 0 10px;
 
@@ -408,7 +407,7 @@
     .common-form-input,
     .common-form-select {
 
-        height: 42px;
+        height: 36px;
 
         font-size: 16px;
     }
