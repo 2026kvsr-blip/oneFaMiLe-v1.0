@@ -89,7 +89,7 @@ function createInputField(
         "common-form-label";
 
    label.textContent =
-    labelText + " :";
+    labelText;
     label.htmlFor =
         inputId;
 
@@ -141,7 +141,7 @@ function createSelectField(
     label.className =
         "common-form-label";
 label.textContent =
-    labelText + " :";
+    labelText;
     label.htmlFor =
         selectId;
 
@@ -208,7 +208,7 @@ function createRadioField(
         "common-form-label";
 
    label.textContent =
-    labelText + " :";
+    labelText;
 
     const radioGroup =
         document.createElement("div");
