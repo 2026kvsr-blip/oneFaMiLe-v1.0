@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -357,7 +358,33 @@ if(currentFamily){
     }
 
 }
+/* =================================
+   GENERATE MEMBER ID PREFIX
+   ================================= */
 
+const memberIdField =
+    document.getElementById(
+        "memberId"
+    );
+
+
+if(
+    memberIdField &&
+    currentFamily &&
+    currentFamily.familyName
+){
+
+    const familyCode =
+        currentFamily.familyName
+            .trim()
+            .substring(0, 4)
+            .toUpperCase();
+
+
+    memberIdField.textContent =
+        familyCode + "-M-00001";
+
+}
        
 };
     /* =====================================
