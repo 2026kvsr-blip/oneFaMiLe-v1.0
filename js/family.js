@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -416,6 +415,42 @@ document
     >
 
 </div>
+<!-- =================================
+     MARITAL STATUS
+     ================================= -->
+
+<div class="common-form-group">
+
+    <label class="common-form-label">
+        Marital Status
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <div class="common-radio-group">
+
+        <label>
+            <input
+                type="radio"
+                name="memberMaritalStatus"
+                value="Yes">
+            Yes
+        </label>
+
+        <label>
+            <input
+                type="radio"
+                name="memberMaritalStatus"
+                value="No">
+            No
+        </label>
+
+    </div>
+
+</div>
+
 
 
     </div>
