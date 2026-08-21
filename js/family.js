@@ -9,6 +9,7 @@
    F-NAME-RANDOM4
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -327,6 +328,42 @@ document
         required
         autocomplete="off"
     >
+
+</div>
+<!-- =================================
+     GENDER
+     ================================= -->
+
+<div class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberGender">
+        Gender
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <select
+        id="memberGender"
+        class="common-form-select"
+        required>
+
+        <option value="">
+            Select Gender
+        </option>
+
+        <option value="Male">
+            Male
+        </option>
+
+        <option value="Female">
+            Female
+        </option>
+
+    </select>
 
 </div>
     </div>
