@@ -6,7 +6,6 @@ font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-
           background:#EAF8FF;
 
 min-height:100vh;
@@ -3654,7 +3653,6 @@ width:100%;
 
 .common-form-input,
 .common-form-select {
-    grid-column: 3;
 
     width: 100%;
     min-width: 0;
@@ -3664,7 +3662,6 @@ width:100%;
 /* RADIO */
 
 .common-radio-group {
-    grid-column: 3;
 
     display: flex;
     align-items: center;
