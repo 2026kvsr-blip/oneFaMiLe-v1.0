@@ -8,7 +8,6 @@
    F-NAME-RANDOM4
    ===================================== */
 
-
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -1074,7 +1073,163 @@ if(confirmMarriageNo){
     );
 
 }  
+/* =================================
+   LOAD FAMILY MEMBERS
+   INTO PARTNER / FATHER / MOTHER
+   ================================= */
 
+const currentFamily =
+    JSON.parse(
+        localStorage.getItem(
+            "currentFamily"
+        )
+    );
+
+
+if(currentFamily){
+
+    const members =
+        JSON.parse(
+            localStorage.getItem(
+                "familyMembers"
+            )
+        ) || [];
+
+
+    const familyMembers =
+        members.filter(
+            function(member){
+
+                return (
+                    member.familyId ===
+                    currentFamily.familyId
+                );
+
+            }
+        );
+
+
+    /* =================================
+       PARTNER
+       ================================= */
+
+    const partnerField =
+        document.getElementById(
+            "memberPartner"
+        );
+
+
+    /* =================================
+       FATHER
+       ================================= */
+
+    const fatherField =
+        document.getElementById(
+            "memberFather"
+        );
+
+
+    /* =================================
+       MOTHER
+       ================================= */
+
+    const motherField =
+        document.getElementById(
+            "memberMother"
+        );
+
+
+    /* =================================
+       ADD MEMBERS TO DROPDOWNS
+       ================================= */
+
+    familyMembers.forEach(
+        function(member){
+
+            /* -------------------------
+               PARTNER
+               ------------------------- */
+
+            if(partnerField){
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    member.memberId;
+
+                option.textContent =
+                    member.name +
+                    " (" +
+                    member.memberId +
+                    ")";
+
+                partnerField.appendChild(
+                    option
+                );
+
+            }
+
+
+            /* -------------------------
+               FATHER
+               ------------------------- */
+
+            if(fatherField){
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    member.memberId;
+
+                option.textContent =
+                    member.name +
+                    " (" +
+                    member.memberId +
+                    ")";
+
+                fatherField.appendChild(
+                    option
+                );
+
+            }
+
+
+            /* -------------------------
+               MOTHER
+               ------------------------- */
+
+            if(motherField){
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    member.memberId;
+
+                option.textContent =
+                    member.name +
+                    " (" +
+                    member.memberId +
+                    ")";
+
+                motherField.appendChild(
+                    option
+                );
+
+            }
+
+        }
+    );
+
+}
 /* =================================
    MEMBER ACTION BUTTONS
    ================================= */
