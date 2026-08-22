@@ -454,41 +454,7 @@ document
         </label>
 
     </div>
-<!-- =================================
-     PARTNER
-     ================================= -->
-
-<div
-    id="memberPartnerGroup"
-    class="common-form-group"
-    style="display:none;">
-
-    <label
-        class="common-form-label"
-        for="memberPartner">
-        Partner
-    </label>
-
-    <span class="common-form-colon">
-        :
-    </span>
-
-    <select
-        id="memberPartner"
-        class="common-form-select">
-
-        <option value="">
-            Select Partner
-        </option>
-
-    </select>
-
-</div>
-
-
-
-
-</div>
+        </div>
 
 
 <!-- =================================
@@ -856,6 +822,43 @@ if(confirmMarriageNo){
     );
 
 }
+  <!-- =================================
+     PARTNER
+     ================================= -->
+
+<div
+    id="memberPartnerGroup"
+    class="common-form-group"
+    style="display:none;">
+
+    <label
+        class="common-form-label"
+        for="memberPartner">
+        Partner
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <select
+        id="memberPartner"
+        class="common-form-select">
+
+        <option value="">
+            Select Partner
+        </option>
+
+    </select>
+
+</div>
+
+
+
+
+</div>
+
+     
 /* =================================
    GET CURRENT FAMILY
    ================================= */
