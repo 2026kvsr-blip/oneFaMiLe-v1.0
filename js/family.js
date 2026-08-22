@@ -8,6 +8,7 @@
    F-NAME-RANDOM4
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -1776,7 +1777,450 @@ saveMemberBtn.onclick =
             "memberHomeBtn"
         );
 
+/* =================================
+   SAVE MEMBER → GOOGLE SHEET
+   ================================= */
 
+saveMemberBtn.onclick = async function(){
+
+    /* ================================
+       CURRENT FAMILY
+       ================================ */
+
+    const currentFamily =
+        JSON.parse(
+            localStorage.getItem(
+                "currentFamily"
+            ) || "null"
+        );
+
+
+    if(!currentFamily){
+
+        showMessage(
+            "Family information not available.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    /* ================================
+       GET USER
+       ================================ */
+
+    const user =
+        JSON.parse(
+            sessionStorage.getItem(
+                "user"
+            ) || "null"
+        );
+
+
+    if(!user){
+
+        showMessage(
+            "User information not available.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    /* ================================
+       GET FORM VALUES
+       ================================ */
+
+    const nameField =
+        document.getElementById(
+            "memberName"
+        );
+
+    const genderField =
+        document.getElementById(
+            "memberGender"
+        );
+
+    const dobField =
+        document.getElementById(
+            "memberDob"
+        );
+
+
+    const name =
+        nameField ?
+        nameField.value.trim() :
+        "";
+
+
+    const gender =
+        genderField ?
+        genderField.value :
+        "";
+
+
+    const dob =
+        dobField ?
+        dobField.value :
+        "";
+
+
+    /* ================================
+       VALIDATION
+       ================================ */
+
+    if(!name){
+
+        showMessage(
+            "Please enter Member Name.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    if(!gender){
+
+        showMessage(
+            "Please select Gender.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    if(!dob){
+
+        showMessage(
+            "Please select Date of Birth.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    /* ================================
+       MARITAL STATUS
+       ================================ */
+
+    const maritalField =
+        document.querySelector(
+            'input[name="memberMaritalStatus"]:checked'
+        );
+
+
+    const maritalStatus =
+        maritalField ?
+        maritalField.value :
+        "";
+
+
+    /* ================================
+       RELATIONS
+       ================================ */
+
+    const fatherField =
+        document.getElementById(
+            "memberFather"
+        );
+
+    const motherField =
+        document.getElementById(
+            "memberMother"
+        );
+
+    const partnerField =
+        document.getElementById(
+            "memberPartner"
+        );
+
+
+    const fatherId =
+        fatherField ?
+        fatherField.value :
+        "";
+
+
+    const motherId =
+        motherField ?
+        motherField.value :
+        "";
+
+
+    const partnerId =
+        partnerField ?
+        partnerField.value :
+        "";
+
+
+    /* ================================
+       MEMBER ID
+       ================================ */
+
+    const memberIdField =
+        document.getElementById(
+            "memberId"
+        );
+
+
+    const memberId =
+        memberIdField &&
+        memberIdField.dataset.memberId
+            ?
+        memberIdField.dataset.memberId
+            :
+        (
+            memberIdField
+            ?
+            memberIdField.textContent.trim()
+            :
+            ""
+        );
+
+
+    /* ================================
+       PHOTO
+       ================================ */
+
+    const photoField =
+        document.getElementById(
+            "memberPhoto"
+        );
+
+
+    let photo = "";
+
+
+    if(
+        photoField &&
+        photoField.files &&
+        photoField.files.length > 0
+    ){
+
+        const file =
+            photoField.files[0];
+
+
+        photo =
+            file.name;
+
+    }
+
+
+    /* ================================
+       DISABLE SAVE BUTTON
+       ================================ */
+
+    saveMemberBtn.disabled = true;
+
+    saveMemberBtn.textContent =
+        "Saving...";
+
+
+    /* ================================
+       API PARAMETERS
+       ================================ */
+
+    const params =
+        new URLSearchParams();
+
+
+    params.append(
+        "action",
+        "saveMember"
+    );
+
+
+    params.append(
+        "familyId",
+        currentFamily.familyId || ""
+    );
+
+
+    params.append(
+        "familyName",
+        currentFamily.familyName || ""
+    );
+
+
+    params.append(
+        "memberId",
+        memberId
+    );
+
+
+    params.append(
+        "name",
+        name
+    );
+
+
+    params.append(
+        "gender",
+        gender
+    );
+
+
+    params.append(
+        "dob",
+        dob
+    );
+
+
+    params.append(
+        "photo",
+        photo
+    );
+
+
+    params.append(
+        "maritalStatus",
+        maritalStatus
+    );
+
+
+    params.append(
+        "fatherId",
+        fatherId
+    );
+
+
+    params.append(
+        "motherId",
+        motherId
+    );
+
+
+    params.append(
+        "partnerId",
+        partnerId
+    );
+
+
+    params.append(
+        "createdBy",
+        user.loginUserName || ""
+    );
+
+
+    params.append(
+        "email",
+        user.email || ""
+    );
+
+
+    params.append(
+        "mobile",
+        user.mobile || ""
+    );
+
+
+    /* ================================
+       SEND TO GOOGLE APPS SCRIPT
+       ================================ */
+
+    try{
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+
+                    body:
+                        params.toString()
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        /* ================================
+           ERROR
+           ================================ */
+
+        if(
+            result.status !==
+            "success"
+        ){
+
+            saveMemberBtn.disabled =
+                false;
+
+            saveMemberBtn.textContent =
+                "Save Member";
+
+
+            showMessage(
+                result.message ||
+                "Member could not be saved.",
+                "error",
+                3000
+            );
+
+            return;
+        }
+
+
+        /* ================================
+           SUCCESS
+           ================================ */
+
+        showMessage(
+            "Member saved successfully.",
+            "success",
+            3000
+        );
+
+
+        saveMemberBtn.disabled =
+            false;
+
+        saveMemberBtn.textContent =
+            "Save Member";
+
+
+    }catch(error){
+
+        console.error(
+            "Save Member Error:",
+            error
+        );
+
+
+        saveMemberBtn.disabled =
+            false;
+
+        saveMemberBtn.textContent =
+            "Save Member";
+
+
+        showMessage(
+            "Unable to save Member.",
+            "error",
+            3000
+        );
+
+    }
+
+};
     /* =============================
        ADD ALL 3 BUTTONS
        ============================= */
