@@ -1809,7 +1809,19 @@ saveMemberBtn.onclick =
   
 
 /* =================================
-   SHOW FAMILY INFORMATION
+   GET CURRENT FAMILY
+   ================================= */
+
+const currentFamily =
+    JSON.parse(
+        localStorage.getItem(
+            "currentFamily"
+        ) || "null"
+    );
+
+
+/* =================================
+   DISPLAY FAMILY INFORMATION
    ================================= */
 
 if(currentFamily){
