@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -531,16 +532,19 @@ document
                     :
                 </span>
 
-                <select
-                    id="memberPartner"
-                    class="common-form-select">
+               <select
+    id="memberPartner"
+    class="common-form-select">
 
-                    <option value="">
-                        Select Partner
-                    </option>
+    <option value="__ADD_NEW__">
+        Add New Person
+    </option>
 
-                </select>
+    <option value="">
+        Select Partner
+    </option>
 
+</select>
             </div>
 
 
