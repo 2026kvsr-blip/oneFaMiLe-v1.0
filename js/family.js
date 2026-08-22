@@ -226,292 +226,331 @@ document
 
     showPage(
 
-        pageTitle(
-            "Add Member",
-            "images/colorbtns/AddMember1.png"
-        )
+    pageTitle(
+        "Add Member",
+        "images/colorbtns/AddMember1.png"
+    )
 
-        + `
+    + `
 
-        <div class="common-page">
+    <div class="common-page">
 
-           <div class="common-form">
+        <div class="common-form">
 
-    <!-- =================================
-         FAMILY ID
-         ================================= -->
+            <!-- =================================
+                 FAMILY ID
+                 ================================= -->
 
-    <div class="common-form-group">
+            <div class="common-form-group">
 
-        <label class="common-form-label">
-            Family ID
-        </label>
+                <label class="common-form-label">
+                    Family ID
+                </label>
 
-        <span class="common-form-colon">
-            :
-        </span>
+                <span class="common-form-colon">
+                    :
+                </span>
 
-        <strong
-            id="memberFamilyId"
-            class="common-form-value">
-            -
-        </strong>
+                <strong
+                    id="memberFamilyId"
+                    class="common-form-value">
+                    -
+                </strong>
 
-    </div>
-
-
-    <!-- =================================
-         FAMILY NAME
-         ================================= -->
-
-    <div class="common-form-group">
-
-        <label class="common-form-label">
-            Family Name
-        </label>
-
-        <span class="common-form-colon">
-            :
-        </span>
-
-        <strong
-            id="memberFamilyName"
-            class="common-form-value">
-            -
-        </strong>
-
-    </div>
-
-
-    <!-- =================================
-         MEMBER ID
-         ================================= -->
-
-    <div class="common-form-group">
-
-        <label class="common-form-label">
-            Member ID
-        </label>
-
-        <span class="common-form-colon">
-            :
-        </span>
-
-        <strong
-            id="memberId"
-            class="common-form-value">
-            auto generation
-        </strong>
             </div>
 
-<!-- =================================
-     NAME
-     ================================= -->
 
-<div class="common-form-group member-name-row">
-    <label
-        class="common-form-label"
-        for="memberName">
-        Name
-    </label>
+            <!-- =================================
+                 FAMILY NAME
+                 ================================= -->
 
-    <span class="common-form-colon">
-        :
-    </span>
+            <div class="common-form-group">
 
-    <input
-        type="text"
-        id="memberName"
-        class="common-form-input"
-        placeholder="Enter Name"
-        required
-        autocomplete="off"
-    >
+                <label class="common-form-label">
+                    Family Name
+                </label>
 
-</div>
-<!-- =================================
-     GENDER
-     ================================= -->
+                <span class="common-form-colon">
+                    :
+                </span>
 
-<div class="common-form-group">
+                <strong
+                    id="memberFamilyName"
+                    class="common-form-value">
+                    -
+                </strong>
 
-    <label
-        class="common-form-label"
-        for="memberGender">
-        Gender
-    </label>
+            </div>
 
-    <span class="common-form-colon">
-        :
-    </span>
 
-    <select
-        id="memberGender"
-        class="common-form-select"
-        required>
+            <!-- =================================
+                 MEMBER ID
+                 ================================= -->
 
-        <option value="">
-            Select Gender
-        </option>
+            <div class="common-form-group">
 
-        <option value="Male">
-            Male
-        </option>
+                <label class="common-form-label">
+                    Member ID
+                </label>
 
-        <option value="Female">
-            Female
-        </option>
+                <span class="common-form-colon">
+                    :
+                </span>
 
-    </select>
+                <strong
+                    id="memberId"
+                    class="common-form-value">
+                    auto generation
+                </strong>
 
-</div>
+            </div>
 
-<!-- =================================
-     DATE OF BIRTH
-     ================================= -->
 
-<div class="common-form-group">
+            <!-- =================================
+                 NAME
+                 ================================= -->
 
-    <label
-        class="common-form-label"
-        for="memberDob">
-        DoB
-    </label>
+            <div class="common-form-group member-name-row">
 
-    <span class="common-form-colon">
-        :
-    </span>
+                <label
+                    class="common-form-label"
+                    for="memberName">
+                    Name
+                </label>
 
-    <input
-        type="date"
-        id="memberDob"
-        class="common-form-input"
-        required
-    >
+                <span class="common-form-colon">
+                    :
+                </span>
 
-</div>
+                <input
+                    type="text"
+                    id="memberName"
+                    class="common-form-input"
+                    placeholder="Enter Name"
+                    required
+                    autocomplete="off">
 
-<!-- =================================
-     PHOTO
-     ================================= -->
+            </div>
 
-<div class="common-form-group">
 
-    <label class="common-form-label">
-        Photo
-    </label>
+            <!-- =================================
+                 GENDER
+                 ================================= -->
 
-    <span class="common-form-colon">
-        :
-    </span>
+            <div class="common-form-group">
 
-    <input
-        type="file"
-        id="memberPhoto"
-        accept="image/*"
-        hidden
-    >
+                <label
+                    class="common-form-label"
+                    for="memberGender">
+                    Gender
+                </label>
 
-    <button
-        type="button"
-        id="memberPhotoBtn"
-        class="common-photo-input">
-        Select Photo
-    </button>
+                <span class="common-form-colon">
+                    :
+                </span>
 
-</div><!-- =================================
-     MARITAL STATUS
-     ================================= -->
+                <select
+                    id="memberGender"
+                    class="common-form-select"
+                    required>
 
-<div class="common-form-group">
+                    <option value="">
+                        Select Gender
+                    </option>
 
-    <label class="common-form-label">
-        Marital Status
-    </label>
+                    <option value="Male">
+                        Male
+                    </option>
 
-    <span class="common-form-colon">
-        :
-    </span>
+                    <option value="Female">
+                        Female
+                    </option>
 
-    <div class="common-radio-group">
+                </select>
 
-        <label>
-            <input
-                type="radio"
-                name="memberMaritalStatus"
-                value="Yes"
-                id="marriedYes">
-            Yes
-        </label>
+            </div>
 
-        <label>
-            <input
-                type="radio"
-                name="memberMaritalStatus"
-                value="No"
-                id="marriedNo">
-            No
-        </label>
 
-    </div>
+            <!-- =================================
+                 DATE OF BIRTH
+                 ================================= -->
+
+            <div class="common-form-group">
+
+                <label
+                    class="common-form-label"
+                    for="memberDob">
+                    DoB
+                </label>
+
+                <span class="common-form-colon">
+                    :
+                </span>
+
+                <input
+                    type="date"
+                    id="memberDob"
+                    class="common-form-input"
+                    required>
+
+            </div>
+
+
+            <!-- =================================
+                 PHOTO
+                 ================================= -->
+
+            <div class="common-form-group">
+
+                <label
+                    class="common-form-label">
+                    Photo
+                </label>
+
+                <span class="common-form-colon">
+                    :
+                </span>
+
+                <input
+                    type="file"
+                    id="memberPhoto"
+                    accept="image/*"
+                    hidden>
+
+                <button
+                    type="button"
+                    id="memberPhotoBtn"
+                    class="common-photo-input">
+                    Select Photo
+                </button>
+
+            </div>
+
+
+            <!-- =================================
+                 MARITAL STATUS
+                 ================================= -->
+
+            <div class="common-form-group">
+
+                <label class="common-form-label">
+                    Marital Status
+                </label>
+
+                <span class="common-form-colon">
+                    :
+                </span>
+
+                <div class="common-radio-group">
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="memberMaritalStatus"
+                            value="Yes"
+                            id="marriedYes">
+                        Yes
+                    </label>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="memberMaritalStatus"
+                            value="No"
+                            id="marriedNo">
+                        No
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================
+                 MARRIAGE CONFIRMATION
+                 ================================= -->
+
+            <div
+                id="marriageConfirmation"
+                class="common-form-group"
+                style="display:none;">
+
+                <label class="common-form-label">
+                    Confirmation
+                </label>
+
+                <span class="common-form-colon">
+                    :
+                </span>
+
+                <div class="common-radio-group">
+
+                    <span>
+                        Are you really married?
+                    </span>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="marriageConfirm"
+                            value="Yes"
+                            id="confirmMarriageYes">
+                        Yes
+                    </label>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="marriageConfirm"
+                            value="No"
+                            id="confirmMarriageNo">
+                        No
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================
+                 PARTNER
+                 ================================= -->
+
+            <div
+                id="memberPartnerGroup"
+                class="common-form-group"
+                style="display:none;">
+
+                <label
+                    class="common-form-label"
+                    for="memberPartner">
+                    Partner
+                </label>
+
+                <span class="common-form-colon">
+                    :
+                </span>
+
+                <select
+                    id="memberPartner"
+                    class="common-form-select">
+
+                    <option value="">
+                        Select Partner
+                    </option>
+
+                </select>
+
+            </div>
+
+
         </div>
 
-
-<!-- =================================
-     MARRIAGE CONFIRMATION
-     ================================= -->
-
-<div
-    id="marriageConfirmation"
-    class="common-form-group"
-    style="display:none;">
-
-    <label class="common-form-label">
-        Confirmation
-    </label>
-
-    <span class="common-form-colon">
-        :
-    </span>
-
-    <div class="common-radio-group">
-
-        <span>
-            Are you really married?
-        </span>
-
-        <label>
-            <input
-                type="radio"
-                name="marriageConfirm"
-                value="Yes"
-                id="confirmMarriageYes">
-            Yes
-        </label>
-
-        <label>
-            <input
-                type="radio"
-                name="marriageConfirm"
-                value="No"
-                id="confirmMarriageNo">
-            No
-        </label>
-
     </div>
 
-</div>
+    `
 
-
-
-    </div>
-
-</div>
-        </div>
-
-        `
-
-    );
+);
 
 /* =================================
    PHOTO BUTTON
@@ -822,39 +861,7 @@ if(confirmMarriageNo){
     );
 
 }
-  /*-- =================================
-     PARTNER
-     ================================= */
-
-<div
-    id="memberPartnerGroup"
-    class="common-form-group"
-    style="display:none;">
-
-    <label
-        class="common-form-label"
-        for="memberPartner">
-        Partner
-    </label>
-
-    <span class="common-form-colon">
-        :
-    </span>
-
-    <select
-        id="memberPartner"
-        class="common-form-select">
-
-        <option value="">
-            Select Partner
-        </option>
-
-    </select>
-
-</div>
-
-
-
+  
 </div>
 
      
