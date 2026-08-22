@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -723,7 +724,97 @@ function hideMarriageConfirmation(){
     }
 
 }
+/* =================================
+   DOB CHANGE
+   ================================= */
 
+if(memberDob){
+
+    memberDob.addEventListener(
+        "change",
+        function(){
+
+            const age =
+                calculateMemberAge(
+                    this.value
+                );
+
+
+            /* DoB not selected */
+
+            if(age === null){
+
+                hideMarriageConfirmation();
+
+                hidePartner();
+
+                if(marriedYes){
+                    marriedYes.checked = false;
+                }
+
+                if(marriedNo){
+                    marriedNo.checked = false;
+                }
+
+                return;
+
+            }
+
+
+            /* Age 18 or above */
+
+            if(age >= 18){
+
+                hideMarriageConfirmation();
+
+                /*
+                   If Yes is already selected,
+                   show Partner immediately
+                */
+
+                if(
+                    marriedYes &&
+                    marriedYes.checked
+                ){
+
+                    showPartner();
+
+                }
+
+            }
+
+
+            /* Age below 18 */
+
+            else {
+
+                /*
+                   If Yes is already selected,
+                   ask confirmation again
+                */
+
+                if(
+                    marriedYes &&
+                    marriedYes.checked
+                ){
+
+                    hidePartner();
+
+                    if(marriageConfirmation){
+
+                        marriageConfirmation.style.display =
+                            "flex";
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+}
 
 /* =================================
    YES
