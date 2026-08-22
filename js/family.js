@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -548,7 +547,7 @@ document
 
     );
 
-       /* =================================
+ * =================================
    PHOTO BUTTON
    ================================= */
 
@@ -574,6 +573,287 @@ if(
             memberPhoto.click();
 
         };
+
+}
+   /* =================================
+   MARITAL STATUS LOGIC
+   ================================= */
+
+const memberDob =
+    document.getElementById(
+        "memberDob"
+    );
+
+const marriedYes =
+    document.getElementById(
+        "marriedYes"
+    );
+
+const marriedNo =
+    document.getElementById(
+        "marriedNo"
+    );
+
+const marriageConfirmation =
+    document.getElementById(
+        "marriageConfirmation"
+    );
+
+const confirmMarriageYes =
+    document.getElementById(
+        "confirmMarriageYes"
+    );
+
+const confirmMarriageNo =
+    document.getElementById(
+        "confirmMarriageNo"
+    );
+
+const memberPartnerGroup =
+    document.getElementById(
+        "memberPartnerGroup"
+    );
+
+
+/* =================================
+   CALCULATE AGE
+   ================================= */
+
+function calculateMemberAge(
+    dateOfBirth
+){
+
+    if(!dateOfBirth){
+        return null;
+    }
+
+    const dob =
+        new Date(dateOfBirth);
+
+    const today =
+        new Date();
+
+    let age =
+        today.getFullYear()
+        - dob.getFullYear();
+
+    const monthDifference =
+        today.getMonth()
+        - dob.getMonth();
+
+    if(
+        monthDifference < 0 ||
+        (
+            monthDifference === 0 &&
+            today.getDate() < dob.getDate()
+        )
+    ){
+
+        age--;
+
+    }
+
+    return age;
+
+}
+
+
+/* =================================
+   HIDE PARTNER
+   ================================= */
+
+function hidePartner(){
+
+    if(memberPartnerGroup){
+
+        memberPartnerGroup.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =================================
+   SHOW PARTNER
+   ================================= */
+
+function showPartner(){
+
+    if(memberPartnerGroup){
+
+        memberPartnerGroup.style.display =
+            "flex";
+
+    }
+
+}
+
+
+/* =================================
+   RESET CONFIRMATION
+   ================================= */
+
+function hideMarriageConfirmation(){
+
+    if(marriageConfirmation){
+
+        marriageConfirmation.style.display =
+            "none";
+
+    }
+
+    if(confirmMarriageYes){
+
+        confirmMarriageYes.checked =
+            false;
+
+    }
+
+    if(confirmMarriageNo){
+
+        confirmMarriageNo.checked =
+            false;
+
+    }
+
+}
+
+
+/* =================================
+   YES
+   ================================= */
+
+if(marriedYes){
+
+    marriedYes.addEventListener(
+        "change",
+        function(){
+
+            if(!this.checked){
+                return;
+            }
+
+
+            hidePartner();
+
+
+            const age =
+                calculateMemberAge(
+                    memberDob
+                        ? memberDob.value
+                        : ""
+                );
+
+
+            /* DoB not selected */
+
+            if(age === null){
+
+                alert(
+                    "Please select DoB first."
+                );
+
+                this.checked =
+                    false;
+
+                return;
+
+            }
+
+
+            /* Under 18 */
+
+            if(age < 18){
+
+                if(marriageConfirmation){
+
+                    marriageConfirmation.style.display =
+                        "flex";
+
+                }
+
+                return;
+
+            }
+
+
+            /* 18 or above */
+
+            hideMarriageConfirmation();
+
+            showPartner();
+
+        }
+    );
+
+}
+
+
+/* =================================
+   NO
+   ================================= */
+
+if(marriedNo){
+
+    marriedNo.addEventListener(
+        "change",
+        function(){
+
+            if(!this.checked){
+                return;
+            }
+
+            hideMarriageConfirmation();
+
+            hidePartner();
+
+        }
+    );
+
+}
+
+
+/* =================================
+   CONFIRMATION YES
+   ================================= */
+
+if(confirmMarriageYes){
+
+    confirmMarriageYes.addEventListener(
+        "change",
+        function(){
+
+            if(!this.checked){
+                return;
+            }
+
+            showPartner();
+
+        }
+    );
+
+}
+
+
+/* =================================
+   CONFIRMATION NO
+   ================================= */
+
+if(confirmMarriageNo){
+
+    confirmMarriageNo.addEventListener(
+        "change",
+        function(){
+
+            if(!this.checked){
+                return;
+            }
+
+            hidePartner();
+
+        }
+    );
 
 }
 /* =================================
