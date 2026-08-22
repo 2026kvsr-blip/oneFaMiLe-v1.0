@@ -913,6 +913,10 @@ if(marriedNo){
    CONFIRMATION YES
    ================================= */
 
+/* =================================
+   CONFIRMATION YES
+   ================================= */
+
 if(confirmMarriageYes){
 
     confirmMarriageYes.addEventListener(
@@ -922,6 +926,18 @@ if(confirmMarriageYes){
             if(!this.checked){
                 return;
             }
+
+
+            /* =============================
+               HIDE CONFIRMATION
+               ============================= */
+
+            hideMarriageConfirmation();
+
+
+            /* =============================
+               SHOW PARTNER
+               ============================= */
 
             showPartner();
 
