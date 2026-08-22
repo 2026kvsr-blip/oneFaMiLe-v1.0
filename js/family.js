@@ -4,7 +4,6 @@
    ===================================== */
 
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -555,7 +554,7 @@ document
 
 <div
     id="memberActions"
-    class="common-form-actions">
+    class="common-form-actions member-actions">
 </div>
 </div>
 
