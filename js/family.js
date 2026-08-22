@@ -8,6 +8,7 @@
    F-NAME-RANDOM4
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -1204,24 +1205,14 @@ console.log(
         if(!select){
             return;
         }
-
-
         select.innerHTML = "";
-
-
         const defaultOption =
             document.createElement(
                 "option"
             );
-
-
         defaultOption.value = "";
-
-
         defaultOption.textContent =
             defaultText;
-
-
         select.appendChild(
             defaultOption
         );
@@ -1250,30 +1241,20 @@ console.log(
     /* =================================
        ADD NEW PERSON
        ================================= */
-
     function addNewPersonOption(
         select
     ){
-
         if(!select){
             return;
         }
-
-
         const option =
             document.createElement(
                 "option"
             );
-
-
         option.value =
             "__ADD_NEW__";
-
-
         option.textContent =
             "Add New Person";
-
-
         select.insertBefore(
             option,
             select.firstChild
@@ -1309,30 +1290,22 @@ function addMemberOption(
     select,
     member
 ){
-
     if(!select){
         return;
     }
-
-
     const option =
         document.createElement(
             "option"
         );
-
-
     /* =============================
        GET DISPLAY MEMBER NUMBER
        ============================= */
-
     const memberNumber =
         String(
             member.memberId || ""
         )
         .split("-")
         .pop();
-
-
     /* =============================
        OPTION VALUE
        ============================= */
@@ -1457,7 +1430,19 @@ console.log(
 
     }
 );
+/* =================================
+   REFRESH RELATIONS WHEN GENDER CHANGES
+   ================================= */
 
+if(genderField){
+
+    genderField.onchange = function(){
+
+        loadMemberRelations();
+
+    };
+
+}
 }
        /* =================================
    MEMBER ACTION BUTTONS
