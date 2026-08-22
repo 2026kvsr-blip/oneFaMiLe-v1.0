@@ -488,3 +488,23 @@
 #memberDob {
     text-align: left;
 }
+
+/* =========================================
+   ADD MEMBER ACTIONS
+   ========================================= */
+
+.member-actions {
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-wrap: nowrap;
+
+}
