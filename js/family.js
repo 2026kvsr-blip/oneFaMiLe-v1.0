@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -936,6 +935,10 @@ if(confirmMarriageYes){
    CONFIRMATION NO
    ================================= */
 
+/* =================================
+   CONFIRMATION NO
+   ================================= */
+
 if(confirmMarriageNo){
 
     confirmMarriageNo.addEventListener(
@@ -946,13 +949,36 @@ if(confirmMarriageNo){
                 return;
             }
 
+
+            /* =============================
+               MARITAL STATUS → NO
+               ============================= */
+
+            if(marriedNo){
+
+                marriedNo.checked =
+                    true;
+
+            }
+
+
+            /* =============================
+               HIDE CONFIRMATION
+               ============================= */
+
+            hideMarriageConfirmation();
+
+
+            /* =============================
+               HIDE PARTNER
+               ============================= */
+
             hidePartner();
 
         }
     );
 
-}
-  
+}  
 
      
 /* =================================
