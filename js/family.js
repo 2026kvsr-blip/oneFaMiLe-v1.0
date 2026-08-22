@@ -4,6 +4,7 @@
    ===================================== */
 
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -392,7 +393,7 @@ document
 
 </div>
 
-   <!-- =================================
+<!-- =================================
      PHOTO
      ================================= -->
 
@@ -416,11 +417,9 @@ document
     <button
         type="button"
         id="memberPhotoBtn"
-        class="common-photo-btn">
-        Photo
+        class="common-photo-input">
+        Select Photo
     </button>
-
-</div>
 
 </div>
 <!-- =================================
