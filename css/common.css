@@ -18,6 +18,7 @@
 }
 
 
+
 /* =========================================
    COMMON PAGE TITLE
    ========================================= */
@@ -497,19 +498,46 @@
    ADD MEMBER ACTION BUTTONS
    ========================================= */
 
+/* =========================================
+   ADD MEMBER - BOTTOM 3 BUTTONS
+   ========================================= */
+
 .member-actions {
 
-    display: flex;
+    display: flex !important;
 
-    flex-direction: row;
+    flex-direction: row !important;
 
-    justify-content: center;
+    justify-content: center !important;
 
-    align-items: center;
+    align-items: center !important;
 
-    gap: 18px;
+    gap: 22px !important;
 
-    flex-wrap: nowrap;
+    flex-wrap: nowrap !important;
+
+}
+
+
+/* =========================================
+   BUTTON HEIGHT
+   ========================================= */
+
+.member-actions button {
+
+    height: 30px !important;
+
+    min-height: 30px !important;
+
+    max-height: 30px !important;
+
+    min-width: 85px !important;
+
+    padding: 0 8px !important;
+
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
 
 }
 
