@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -1008,7 +1007,7 @@ if(confirmMarriageNo){
 
 }  
 
- /* =================================
+/* =================================
    MEMBER ACTION BUTTONS
    ================================= */
 
@@ -1020,6 +1019,10 @@ const memberActions =
 
 if(memberActions){
 
+    /* =============================
+       SAVE
+       ============================= */
+
     const saveMemberBtn =
         createPrimaryButton(
             "Save Member",
@@ -1027,11 +1030,30 @@ if(memberActions){
         );
 
 
+    /* =============================
+       BACK
+       ============================= */
+
     const memberBackBtn =
         createBackButton(
             "memberBackBtn"
         );
 
+
+    /* =============================
+       HOME
+       ============================= */
+
+    const memberHomeBtn =
+        createPrimaryButton(
+            "⌂ Home",
+            "memberHomeBtn"
+        );
+
+
+    /* =============================
+       ADD ALL 3 BUTTONS
+       ============================= */
 
     memberActions.appendChild(
         saveMemberBtn
@@ -1041,8 +1063,24 @@ if(memberActions){
         memberBackBtn
     );
 
-}    
-/* =================================
+    memberActions.appendChild(
+        memberHomeBtn
+    );
+
+
+    /* =============================
+       HOME ACTION
+       ============================= */
+
+    memberHomeBtn.onclick =
+        function(){
+
+            showHomePage();
+
+        };
+
+}
+       /* =================================
    GET CURRENT FAMILY
    ================================= */
 
