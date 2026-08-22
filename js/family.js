@@ -8,6 +8,7 @@
    F-NAME-RANDOM4
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -1298,41 +1299,62 @@ function loadMemberRelations(){
        ADD MEMBER OPTION
        ================================= */
 
-    function addMemberOption(
-        select,
-        member
-    ){
+    /* =================================
+   ADD MEMBER OPTION
+   ================================= */
 
-        if(!select){
-            return;
-        }
+function addMemberOption(
+    select,
+    member
+){
 
-
-        const option =
-            document.createElement(
-                "option"
-            );
-
-
-        option.value =
-            member.memberId;
-
-
-        option.textContent =
-    member.name +
-    " (" +
-    String(member.memberId)
-        .split("-")
-        .pop() +
-    ")";
-
-        select.appendChild(
-            option
-        );
-
+    if(!select){
+        return;
     }
 
 
+    const option =
+        document.createElement(
+            "option"
+        );
+
+
+    /* =============================
+       GET DISPLAY MEMBER NUMBER
+       ============================= */
+
+    const memberNumber =
+        String(
+            member.memberId || ""
+        )
+        .split("-")
+        .pop();
+
+
+    /* =============================
+       OPTION VALUE
+       ============================= */
+
+    option.value =
+        member.memberId;
+
+
+    /* =============================
+       DISPLAY
+       ============================= */
+
+    option.textContent =
+        member.name +
+        " (" +
+        memberNumber +
+        ")";
+
+
+    select.appendChild(
+        option
+    );
+
+}
     /* =================================
    FILTER MEMBERS
    ================================= */
