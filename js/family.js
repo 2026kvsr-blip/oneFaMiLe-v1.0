@@ -548,6 +548,32 @@ document
             </div>
 
 
+<!-- =================================
+     MEMBER ACTIONS
+     ================================= -->
+
+<div class="common-form-actions">
+
+    <button
+        type="button"
+        id="saveMemberBtn"
+        class="primary-btn">
+
+        Save Member
+
+    </button>
+
+
+    <button
+        type="button"
+        id="memberBackBtn"
+        class="back-btn">
+
+        ← Back
+
+    </button>
+
+</div>
         </div>
 
     </div>
