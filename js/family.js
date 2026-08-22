@@ -4,7 +4,6 @@
    ===================================== */
 
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -421,8 +420,7 @@ document
         Select Photo
     </button>
 
-</div>
-<!-- =================================
+</div><!-- =================================
      MARITAL STATUS
      ================================= -->
 
@@ -442,7 +440,8 @@ document
             <input
                 type="radio"
                 name="memberMaritalStatus"
-                value="Yes">
+                value="Yes"
+                id="marriedYes">
             Yes
         </label>
 
@@ -450,7 +449,87 @@ document
             <input
                 type="radio"
                 name="memberMaritalStatus"
-                value="No">
+                value="No"
+                id="marriedNo">
+            No
+        </label>
+
+    </div>
+<!-- =================================
+     PARTNER
+     ================================= -->
+
+<div
+    id="memberPartnerGroup"
+    class="common-form-group"
+    style="display:none;">
+
+    <label
+        class="common-form-label"
+        for="memberPartner">
+        Partner
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <select
+        id="memberPartner"
+        class="common-form-select">
+
+        <option value="">
+            Select Partner
+        </option>
+
+    </select>
+
+</div>
+
+
+
+
+</div>
+
+
+<!-- =================================
+     MARRIAGE CONFIRMATION
+     ================================= -->
+
+<div
+    id="marriageConfirmation"
+    class="common-form-group"
+    style="display:none;">
+
+    <label class="common-form-label">
+        Confirmation
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <div class="common-radio-group">
+
+        <span>
+            Are you really married?
+        </span>
+
+        <label>
+            <input
+                type="radio"
+                name="marriageConfirm"
+                value="Yes"
+                id="confirmMarriageYes">
+            Yes
+        </label>
+
+        <label>
+            <input
+                type="radio"
+                name="marriageConfirm"
+                value="No"
+                id="confirmMarriageNo">
             No
         </label>
 
