@@ -1334,85 +1334,98 @@ function loadMemberRelations(){
 
 
     /* =================================
-       FILTER MEMBERS
-       ================================= */
+   FILTER MEMBERS
+   ================================= */
 
-    familyMembers.forEach(
-        function(member){
+familyMembers.forEach(
+    function(member){
 
-            const memberGender =
-                String(
-                    member.gender || ""
-                ).toLowerCase();
-
-
-            const memberMarital =
-                String(
-                    member.maritalStatus || ""
-                ).toLowerCase();
+        const memberGender =
+            String(
+                member.gender || ""
+            ).toLowerCase();
 
 
-            const isMarried =
-                memberMarital === "yes";
+        const memberMarital =
+            String(
+                member.maritalStatus || ""
+            ).toLowerCase();
 
 
-            /* =============================
-               FATHER
-               MALE + MARRIED
-               ============================= */
-
-            if(
-                memberGender === "male" &&
-                isMarried
-            ){
-
-                addMemberOption(
-                    fatherField,
-                    member
-                );
-
-            }
+        const isMarried =
+            memberMarital === "yes";
 
 
-            /* =============================
-               MOTHER
-               FEMALE + MARRIED
-               ============================= */
+        /* =============================
+           CHECK EXISTING PARTNER
+           ============================= */
 
-            if(
-                memberGender === "female" &&
-                isMarried
-            ){
-
-                addMemberOption(
-                    motherField,
-                    member
-                );
-
-            }
+        const hasPartner =
+            member.partnerId &&
+            String(
+                member.partnerId
+            ).trim() !== "";
 
 
-            /* =============================
-               PARTNER
-               OPPOSITE GENDER + MARRIED
-               ============================= */
+        /* =============================
+           FATHER
+           MALE + MARRIED
+           ============================= */
 
-            if(
-                isMarried &&
-                currentGender &&
-                memberGender !==
-                    currentGender
-            ){
+        if(
+            memberGender === "male" &&
+            isMarried
+        ){
 
-                addMemberOption(
-                    partnerField,
-                    member
-                );
-
-            }
+            addMemberOption(
+                fatherField,
+                member
+            );
 
         }
-    );
+
+
+        /* =============================
+           MOTHER
+           FEMALE + MARRIED
+           ============================= */
+
+        if(
+            memberGender === "female" &&
+            isMarried
+        ){
+
+            addMemberOption(
+                motherField,
+                member
+            );
+
+        }
+
+
+        /* =============================
+           PARTNER
+           OPPOSITE GENDER
+           MARRIED
+           NO EXISTING PARTNER
+           ============================= */
+
+        if(
+            isMarried &&
+            currentGender &&
+            memberGender !== currentGender &&
+            !hasPartner
+        ){
+
+            addMemberOption(
+                partnerField,
+                member
+            );
+
+        }
+
+    }
+);
 
 }
        /* =================================
