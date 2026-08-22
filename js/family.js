@@ -4,6 +4,7 @@
    ===================================== */
 
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -552,29 +553,11 @@ document
      MEMBER ACTIONS
      ================================= -->
 
-<div class="common-form-actions">
-
-    <button
-        type="button"
-        id="saveMemberBtn"
-        class="primary-btn">
-
-        Save Member
-
-    </button>
-
-
-    <button
-        type="button"
-        id="memberBackBtn"
-        class="back-btn">
-
-        ← Back
-
-    </button>
-
+<div
+    id="memberActions"
+    class="common-form-actions">
 </div>
-        </div>
+</div>
 
     </div>
 
@@ -1026,7 +1009,40 @@ if(confirmMarriageNo){
 
 }  
 
-     
+ /* =================================
+   MEMBER ACTION BUTTONS
+   ================================= */
+
+const memberActions =
+    document.getElementById(
+        "memberActions"
+    );
+
+
+if(memberActions){
+
+    const saveMemberBtn =
+        createPrimaryButton(
+            "Save Member",
+            "saveMemberBtn"
+        );
+
+
+    const memberBackBtn =
+        createBackButton(
+            "memberBackBtn"
+        );
+
+
+    memberActions.appendChild(
+        saveMemberBtn
+    );
+
+    memberActions.appendChild(
+        memberBackBtn
+    );
+
+}    
 /* =================================
    GET CURRENT FAMILY
    ================================= */
