@@ -3,6 +3,7 @@
    COMMON CSS
    ========================================= */
 
+
 /* =========================================
    COMMON PAGE
    ========================================= */
@@ -497,6 +498,7 @@
    ADD MEMBER ACTION BUTTONS
    ========================================= */
 
+
 /* =========================================
    ADD MEMBER - BOTTOM 3 BUTTONS
    ========================================= */
@@ -519,25 +521,24 @@
 
 
 /* =========================================
-   BUTTON HEIGHT
+   SAME HEIGHT AS INPUT BOX
    ========================================= */
 
 .member-actions button {
 
-    height: 30px !important;
+    height: 36px !important;
 
-    min-height: 30px !important;
+    min-height: 36px !important;
 
-    max-height: 30px !important;
+    max-height: 36px !important;
 
     min-width: 85px !important;
 
-    padding: 0 8px !important;
+    padding: 0 10px !important;
 
     margin: 0 !important;
 
     box-sizing: border-box !important;
 
 }
-
 
