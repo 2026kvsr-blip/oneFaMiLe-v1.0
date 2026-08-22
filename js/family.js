@@ -20,8 +20,7 @@ function generateFamilyId(familyName){
             .substring(0,4)
             .padEnd(4,"X");
 
-   
-    /* =================================
+       /* =================================
        GET EXISTING FAMILY IDs
        ================================= */
 
@@ -1073,9 +1072,10 @@ if(confirmMarriageNo){
     );
 
 }  
+       
 /* =================================
    LOAD FAMILY MEMBERS
-   INTO PARTNER / FATHER / MOTHER
+   FILTER BY GENDER + MARITAL STATUS
    ================================= */
 
 const currentFamily =
@@ -1096,6 +1096,10 @@ if(currentFamily){
         ) || [];
 
 
+    /* =================================
+       CURRENT FAMILY MEMBERS
+       ================================= */
+
     const familyMembers =
         members.filter(
             function(member){
@@ -1110,7 +1114,23 @@ if(currentFamily){
 
 
     /* =================================
-       PARTNER
+       CURRENT MEMBER GENDER
+       ================================= */
+
+    const genderField =
+        document.getElementById(
+            "memberGender"
+        );
+
+
+    const currentGender =
+        genderField ?
+        genderField.value :
+        "";
+
+
+    /* =================================
+       GET DROPDOWNS
        ================================= */
 
     const partnerField =
@@ -1118,20 +1138,10 @@ if(currentFamily){
             "memberPartner"
         );
 
-
-    /* =================================
-       FATHER
-       ================================= */
-
     const fatherField =
         document.getElementById(
             "memberFather"
         );
-
-
-    /* =================================
-       MOTHER
-       ================================= */
 
     const motherField =
         document.getElementById(
@@ -1140,88 +1150,118 @@ if(currentFamily){
 
 
     /* =================================
-       ADD MEMBERS TO DROPDOWNS
+       ADD MEMBER OPTION
+       ================================= */
+
+    function addMemberOption(
+        select,
+        member
+    ){
+
+        if(!select){
+            return;
+        }
+
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+
+        option.value =
+            member.memberId;
+
+
+        option.textContent =
+            member.name +
+            " (" +
+            member.memberId +
+            ")";
+
+
+        select.appendChild(
+            option
+        );
+
+    }
+
+
+    /* =================================
+       FILTER MEMBERS
        ================================= */
 
     familyMembers.forEach(
         function(member){
 
-            /* -------------------------
-               PARTNER
-               ------------------------- */
-
-            if(partnerField){
-
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-                option.value =
-                    member.memberId;
-
-                option.textContent =
-                    member.name +
-                    " (" +
-                    member.memberId +
-                    ")";
-
-                partnerField.appendChild(
-                    option
-                );
-
-            }
+            const memberGender =
+                String(
+                    member.gender || ""
+                ).toLowerCase();
 
 
-            /* -------------------------
+            const memberMarital =
+                String(
+                    member.maritalStatus || ""
+                ).toLowerCase();
+
+
+            const isMarried =
+                memberMarital ===
+                "yes";
+
+
+            /* =============================
                FATHER
-               ------------------------- */
+               Male + Married
+               ============================= */
 
-            if(fatherField){
+            if(
+                memberGender === "male" &&
+                isMarried
+            ){
 
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-                option.value =
-                    member.memberId;
-
-                option.textContent =
-                    member.name +
-                    " (" +
-                    member.memberId +
-                    ")";
-
-                fatherField.appendChild(
-                    option
+                addMemberOption(
+                    fatherField,
+                    member
                 );
 
             }
 
 
-            /* -------------------------
+            /* =============================
                MOTHER
-               ------------------------- */
+               Female + Married
+               ============================= */
 
-            if(motherField){
+            if(
+                memberGender === "female" &&
+                isMarried
+            ){
 
-                const option =
-                    document.createElement(
-                        "option"
-                    );
+                addMemberOption(
+                    motherField,
+                    member
+                );
 
-                option.value =
-                    member.memberId;
+            }
 
-                option.textContent =
-                    member.name +
-                    " (" +
-                    member.memberId +
-                    ")";
 
-                motherField.appendChild(
-                    option
+            /* =============================
+               PARTNER
+               Opposite Gender + Married
+               ============================= */
+
+            if(
+                isMarried &&
+                currentGender &&
+                memberGender !==
+                    currentGender.toLowerCase()
+            ){
+
+                addMemberOption(
+                    partnerField,
+                    member
                 );
 
             }
@@ -1230,7 +1270,7 @@ if(currentFamily){
     );
 
 }
-/* =================================
+       /* =================================
    MEMBER ACTION BUTTONS
    ================================= */
 
