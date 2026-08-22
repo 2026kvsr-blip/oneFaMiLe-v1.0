@@ -18,7 +18,6 @@
 }
 
 
-
 /* =========================================
    COMMON PAGE TITLE
    ========================================= */
@@ -540,24 +539,5 @@
     box-sizing: border-box !important;
 
 }
-
-
-/* =========================================
-   BUTTON SIZE
-   ========================================= */
-
-.member-actions button {
-
-    min-width: 90px;
-
-    height: 32px;
-
-    padding: 0 10px;
-
-    box-sizing: border-box;
-
-}
-
-
 
 
