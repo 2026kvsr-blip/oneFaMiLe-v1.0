@@ -8,6 +8,7 @@
    F-NAME-RANDOM4
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -630,6 +631,34 @@ document
 );
 
 /* =================================
+   LOAD RELATIONS
+   ================================= */
+
+loadMemberRelations();
+       /* =================================
+   REFRESH RELATIONS WHEN GENDER CHANGES
+   ================================= */
+
+const memberGender =
+    document.getElementById(
+        "memberGender"
+    );
+
+
+if(memberGender){
+
+    memberGender.addEventListener(
+        "change",
+        function(){
+
+            loadMemberRelations();
+
+        }
+    );
+
+}
+       
+/* =================================
    PHOTO BUTTON
    ================================= */
 
@@ -1074,19 +1103,27 @@ if(confirmMarriageNo){
 }  
        
 /* =================================
-   LOAD FAMILY MEMBERS
-   FILTER BY GENDER + MARITAL STATUS
+   LOAD MEMBER RELATIONS
    ================================= */
 
-const currentFamily =
-    JSON.parse(
-        localStorage.getItem(
-            "currentFamily"
-        )
-    );
+function loadMemberRelations(){
+
+    const currentFamily =
+        JSON.parse(
+            localStorage.getItem(
+                "currentFamily"
+            )
+        );
 
 
-if(currentFamily){
+    if(!currentFamily){
+        return;
+    }
+
+
+    /* =================================
+       GET ALL MEMBERS
+       ================================= */
 
     const members =
         JSON.parse(
@@ -1114,7 +1151,7 @@ if(currentFamily){
 
 
     /* =================================
-       CURRENT MEMBER GENDER
+       GET CURRENT GENDER
        ================================= */
 
     const genderField =
@@ -1125,7 +1162,9 @@ if(currentFamily){
 
     const currentGender =
         genderField ?
-        genderField.value :
+        String(
+            genderField.value
+        ).toLowerCase() :
         "";
 
 
@@ -1138,15 +1177,122 @@ if(currentFamily){
             "memberPartner"
         );
 
+
     const fatherField =
         document.getElementById(
             "memberFather"
         );
 
+
     const motherField =
         document.getElementById(
             "memberMother"
         );
+
+
+    /* =================================
+       CLEAR OLD OPTIONS
+       ================================= */
+
+    function resetSelect(
+        select,
+        defaultText
+    ){
+
+        if(!select){
+            return;
+        }
+
+
+        select.innerHTML = "";
+
+
+        const defaultOption =
+            document.createElement(
+                "option"
+            );
+
+
+        defaultOption.value = "";
+
+
+        defaultOption.textContent =
+            defaultText;
+
+
+        select.appendChild(
+            defaultOption
+        );
+
+    }
+
+
+    resetSelect(
+        partnerField,
+        "Select Partner"
+    );
+
+
+    resetSelect(
+        fatherField,
+        "Select Father"
+    );
+
+
+    resetSelect(
+        motherField,
+        "Select Mother"
+    );
+
+
+    /* =================================
+       ADD NEW PERSON
+       ================================= */
+
+    function addNewPersonOption(
+        select
+    ){
+
+        if(!select){
+            return;
+        }
+
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+
+        option.value =
+            "__ADD_NEW__";
+
+
+        option.textContent =
+            "Add New Person";
+
+
+        select.insertBefore(
+            option,
+            select.firstChild
+        );
+
+    }
+
+
+    addNewPersonOption(
+        partnerField
+    );
+
+
+    addNewPersonOption(
+        fatherField
+    );
+
+
+    addNewPersonOption(
+        motherField
+    );
 
 
     /* =================================
@@ -1207,13 +1353,12 @@ if(currentFamily){
 
 
             const isMarried =
-                memberMarital ===
-                "yes";
+                memberMarital === "yes";
 
 
             /* =============================
                FATHER
-               Male + Married
+               MALE + MARRIED
                ============================= */
 
             if(
@@ -1231,7 +1376,7 @@ if(currentFamily){
 
             /* =============================
                MOTHER
-               Female + Married
+               FEMALE + MARRIED
                ============================= */
 
             if(
@@ -1249,14 +1394,14 @@ if(currentFamily){
 
             /* =============================
                PARTNER
-               Opposite Gender + Married
+               OPPOSITE GENDER + MARRIED
                ============================= */
 
             if(
                 isMarried &&
                 currentGender &&
                 memberGender !==
-                    currentGender.toLowerCase()
+                    currentGender
             ){
 
                 addMemberOption(
