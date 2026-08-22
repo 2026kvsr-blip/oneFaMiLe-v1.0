@@ -8,7 +8,6 @@
    F-NAME-RANDOM4
    ===================================== */
 
-
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -1166,7 +1165,10 @@ function loadMemberRelations(){
             genderField.value
         ).toLowerCase() :
         "";
-
+console.log(
+    "CURRENT GENDER:",
+    currentGender
+);
 
     /* =================================
        GET DROPDOWNS
@@ -1367,7 +1369,14 @@ familyMembers.forEach(
                 member.gender || ""
             ).toLowerCase();
 
-
+console.log(
+    "MEMBER:",
+    member.name,
+    "GENDER:",
+    memberGender,
+    "MARITAL:",
+    member.maritalStatus
+);
         const memberMarital =
             String(
                 member.maritalStatus || ""
