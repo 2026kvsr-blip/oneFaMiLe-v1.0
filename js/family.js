@@ -2,7 +2,6 @@
    oneFaMiLe
    FAMILY MODULE
    ===================================== */
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -545,6 +544,74 @@ document
 
 </select>
             </div>
+
+
+<!-- =================================
+     FATHER
+     ================================= -->
+
+<div
+    id="memberFatherGroup"
+    class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberFather">
+        Father
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <select
+        id="memberFather"
+        class="common-form-select">
+
+        <option value="__ADD_NEW__">
+            Add New Person
+        </option>
+
+        <option value="">
+            Select Father
+        </option>
+
+    </select>
+
+</div>
+<!-- =================================
+     MOTHER
+     ================================= -->
+
+<div
+    id="memberMotherGroup"
+    class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberMother">
+        Mother
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <select
+        id="memberMother"
+        class="common-form-select">
+
+        <option value="__ADD_NEW__">
+            Add New Person
+        </option>
+
+        <option value="">
+            Select Mother
+        </option>
+
+    </select>
+
+</div>
 
 
 <!-- =================================
