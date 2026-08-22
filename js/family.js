@@ -8,6 +8,7 @@
    F-NAME-RANDOM4
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -1096,7 +1097,326 @@ if(memberActions){
             "saveMemberBtn"
         );
 
+/* =================================
+   SAVE MEMBER
+   ================================= */
 
+saveMemberBtn.onclick =
+    function(){
+
+        /* =============================
+           GET CURRENT FAMILY
+           ============================= */
+
+        const currentFamily =
+            JSON.parse(
+                localStorage.getItem(
+                    "currentFamily"
+                )
+            );
+
+
+        if(!currentFamily){
+
+            showMessage(
+                "Family information not available.",
+                "warning",
+                3000
+            );
+
+            return;
+
+        }
+
+
+        /* =============================
+           GET FORM VALUES
+           ============================= */
+
+        const memberName =
+            document.getElementById(
+                "memberName"
+            ).value.trim();
+
+
+        const memberGender =
+            document.getElementById(
+                "memberGender"
+            ).value;
+
+
+        const memberDob =
+            document.getElementById(
+                "memberDob"
+            ).value;
+
+
+        const memberMarital =
+            document.querySelector(
+                'input[name="memberMaritalStatus"]:checked'
+            );
+
+
+        /* =============================
+           BASIC VALIDATION
+           ============================= */
+
+        if(!memberName){
+
+            showMessage(
+                "Please enter Member Name.",
+                "warning",
+                3000
+            );
+
+            return;
+
+        }
+
+
+        if(!memberGender){
+
+            showMessage(
+                "Please select Gender.",
+                "warning",
+                3000
+            );
+
+            return;
+
+        }
+
+
+        if(!memberDob){
+
+            showMessage(
+                "Please select DoB.",
+                "warning",
+                3000
+            );
+
+            return;
+
+        }
+
+
+        if(!memberMarital){
+
+            showMessage(
+                "Please select Marital Status.",
+                "warning",
+                3000
+            );
+
+            return;
+
+        }
+
+
+        /* =============================
+           GET EXISTING MEMBERS
+           ============================= */
+
+        let members =
+            JSON.parse(
+                localStorage.getItem(
+                    "familyMembers"
+                )
+            ) || [];
+
+
+        /* =============================
+           CURRENT FAMILY MEMBERS
+           ============================= */
+
+        const familyMembers =
+            members.filter(
+                function(member){
+
+                    return (
+                        member.familyId ===
+                        currentFamily.familyId
+                    );
+
+                }
+            );
+
+
+        /* =============================
+           GENERATE MEMBER NUMBER
+           ============================= */
+
+        let nextNumber =
+            familyMembers.length + 1;
+
+
+        let memberNumber =
+            String(nextNumber)
+                .padStart(
+                    5,
+                    "0"
+                );
+
+
+        /* =============================
+           MEMBER ID
+           ============================= */
+
+        const familyCode =
+            String(
+                currentFamily.familyName || ""
+            )
+            .trim()
+            .toUpperCase()
+            .replace(
+                /\s+/g,
+                ""
+            );
+
+
+        const memberId =
+            familyCode +
+            "-M-" +
+            memberNumber;
+
+
+        /* =============================
+           GET PARTNER
+           ============================= */
+
+        const partnerField =
+            document.getElementById(
+                "memberPartner"
+            );
+
+
+        const partnerId =
+            partnerField ?
+            partnerField.value :
+            "";
+
+
+        /* =============================
+           GET FATHER
+           ============================= */
+
+        const fatherField =
+            document.getElementById(
+                "memberFather"
+            );
+
+
+        const fatherId =
+            fatherField ?
+            fatherField.value :
+            "";
+
+
+        /* =============================
+           GET MOTHER
+           ============================= */
+
+        const motherField =
+            document.getElementById(
+                "memberMother"
+            );
+
+
+        const motherId =
+            motherField ?
+            motherField.value :
+            "";
+
+
+        /* =============================
+           CREATE MEMBER OBJECT
+           ============================= */
+
+        const newMember = {
+
+            memberId:
+                memberId,
+
+            familyId:
+                currentFamily.familyId,
+
+            familyName:
+                currentFamily.familyName,
+
+            name:
+                memberName,
+
+            gender:
+                memberGender,
+
+            dob:
+                memberDob,
+
+            maritalStatus:
+                memberMarital.value,
+
+            partnerId:
+                partnerId,
+
+            fatherId:
+                fatherId,
+
+            motherId:
+                motherId,
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+
+        /* =============================
+           SAVE MEMBER
+           ============================= */
+
+        members.push(
+            newMember
+        );
+
+
+        localStorage.setItem(
+            "familyMembers",
+            JSON.stringify(
+                members
+            )
+        );
+
+
+        /* =============================
+           UPDATE MEMBER ID ON PAGE
+           ============================= */
+
+        const memberIdField =
+            document.getElementById(
+                "memberId"
+            );
+
+
+        if(memberIdField){
+
+            memberIdField.textContent =
+                memberId;
+
+        }
+
+
+        /* =============================
+           SUCCESS MESSAGE
+           ============================= */
+
+        showMessage(
+            "Member saved successfully: " +
+            memberId,
+            "success",
+            3000
+        );
+
+    };
     /* =============================
        BACK
        ============================= */
