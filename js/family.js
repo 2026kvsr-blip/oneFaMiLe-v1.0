@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -391,15 +392,13 @@ document
 
 </div>
 
-<!-- =================================
+   <!-- =================================
      PHOTO
      ================================= -->
 
 <div class="common-form-group">
 
-    <label
-        class="common-form-label"
-        for="memberPhoto">
+    <label class="common-form-label">
         Photo
     </label>
 
@@ -410,9 +409,18 @@ document
     <input
         type="file"
         id="memberPhoto"
-        class="common-form-input"
         accept="image/*"
+        hidden
     >
+
+    <button
+        type="button"
+        id="memberPhotoBtn"
+        class="common-photo-btn">
+        Photo
+    </button>
+
+</div>
 
 </div>
 <!-- =================================
@@ -462,6 +470,34 @@ document
 
     );
 
+       /* =================================
+   PHOTO BUTTON
+   ================================= */
+
+const memberPhoto =
+    document.getElementById(
+        "memberPhoto"
+    );
+
+const memberPhotoBtn =
+    document.getElementById(
+        "memberPhotoBtn"
+    );
+
+
+if(
+    memberPhoto &&
+    memberPhotoBtn
+){
+
+    memberPhotoBtn.onclick =
+        function(){
+
+            memberPhoto.click();
+
+        };
+
+}
 /* =================================
    GET CURRENT FAMILY
    ================================= */
