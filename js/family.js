@@ -1622,17 +1622,7 @@ saveMemberBtn.onclick =
         };
 
 }
-       /* =================================
-   GET CURRENT FAMILY
-   ================================= */
-
-const currentFamily =
-    JSON.parse(
-        localStorage.getItem(
-            "currentFamily"
-        )
-    );
-
+  
 
 /* =================================
    SHOW FAMILY INFORMATION
