@@ -8,7 +8,6 @@
    F-NAME-RANDOM4
    ===================================== */
 
-
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -1320,11 +1319,12 @@ function loadMemberRelations(){
 
 
         option.textContent =
-            member.name +
-            " (" +
-            member.memberId +
-            ")";
-
+    member.name +
+    " (" +
+    String(member.memberId)
+        .split("-")
+        .pop() +
+    ")";
 
         select.appendChild(
             option
