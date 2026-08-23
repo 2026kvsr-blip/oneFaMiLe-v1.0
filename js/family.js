@@ -8,6 +8,7 @@
    F-NAME-RANDOM4
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -2249,7 +2250,10 @@ const newMember = {
         memberDob,
 
     maritalStatus:
-        memberMarital.value,
+        document.querySelector(
+            'input[name="memberMaritalStatus"]:checked'
+        )?.value || "",
+
 
     fatherId:
         fatherId,
