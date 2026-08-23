@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -982,8 +981,12 @@ if(marriedYes){
 
             /* 18 or above */
 
-            hideMarriageConfirmation();
+if(marriageConfirmation){
 
+    marriageConfirmation.style.display =
+        "none";
+
+}
             showPartner();
 
         }
