@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -1641,7 +1642,36 @@ const gender =
 
         return;
     }
+/* ================================
+   FUTURE DOB VALIDATION
+   ================================ */
 
+const selectedDob =
+    new Date(dob);
+
+const todayDate =
+    new Date();
+
+todayDate.setHours(
+    0, 0, 0, 0
+);
+
+selectedDob.setHours(
+    0, 0, 0, 0
+);
+
+
+if(selectedDob > todayDate){
+
+    showMessage(
+        "Date of Birth cannot be a future date.",
+        "warning",
+        3000
+    );
+
+    return;
+
+}
 
     /* ================================
        MARITAL STATUS
