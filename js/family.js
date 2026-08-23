@@ -4,7 +4,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -3196,6 +3195,7 @@ document
        SAVE TO GOOGLE SHEET
        ================================ */
 
+       
     try{
 
         const response =
@@ -3217,7 +3217,15 @@ document
 
         const result =
             await response.json();
+console.log(
+    "SAVE MEMBER RESULT:",
+    result
+);
 
+console.log(
+    "GENERATED MEMBER ID:",
+    result.memberId
+);
 
         /* ================================
            BACKEND ERROR
