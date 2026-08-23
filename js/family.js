@@ -2,6 +2,7 @@
    oneFaMiLe
    FAMILY MODULE
    ===================================== */
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -1635,7 +1636,52 @@ saveMemberBtn.onclick = async function(){
         maritalField ?
         maritalField.value :
         "";
+/* ================================
+   UNDER 18 MARRIAGE CONFIRMATION
+   ================================ */
 
+const birthDate =
+    new Date(dob);
+
+const today =
+    new Date();
+
+let age =
+    today.getFullYear() -
+    birthDate.getFullYear();
+
+const monthDifference =
+    today.getMonth() -
+    birthDate.getMonth();
+
+if(
+    monthDifference < 0 ||
+    (
+        monthDifference === 0 &&
+        today.getDate() <
+        birthDate.getDate()
+    )
+){
+
+    age--;
+
+}
+
+
+if(
+    age < 18 &&
+    !maritalField
+){
+
+    showMessage(
+        "Please select Yes or No for \"Are you really married?\".",
+        "warning",
+        3000
+    );
+
+    return;
+
+}
 
     /* ================================
        RELATIONS
