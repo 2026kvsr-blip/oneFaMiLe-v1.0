@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1116,8 +1117,7 @@ if(marriageConfirmation){
    LOAD MEMBER RELATIONS
    ================================= */
 
-function loadMemberRelations(){
-
+async function loadMemberRelations(){
     const currentFamily =
         JSON.parse(
             localStorage.getItem(
@@ -1131,35 +1131,118 @@ function loadMemberRelations(){
     }
 
 
-    /* =================================
-       GET ALL MEMBERS
-       ================================= */
+   /* =================================
+   GET MEMBERS FROM GOOGLE SHEET
+   ================================= */
 
-    const members =
-        JSON.parse(
-            localStorage.getItem(
-                "familyMembers"
-            )
-        ) || [];
+let members = [];
+
+try{
+
+    const params =
+        new URLSearchParams();
+
+    params.append(
+        "action",
+        "getFamilyMembers"
+    );
+
+    params.append(
+        "familyId",
+        currentFamily.familyId || ""
+    );
 
 
-    /* =================================
-       CURRENT FAMILY MEMBERS
-       ================================= */
+    const response =
+        await fetch(
+            API_URL,
+            {
+                method: "POST",
 
-    const familyMembers =
-        members.filter(
-            function(member){
+                headers: {
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"
+                },
 
-                return (
-                    member.familyId ===
-                    currentFamily.familyId
-                );
-
+                body:
+                    params.toString()
             }
         );
 
 
+    const result =
+        await response.json();
+
+
+    console.log(
+        "GET FAMILY MEMBERS RESULT:",
+        result
+    );
+
+
+    if(
+        result.status !== "success"
+    ){
+
+        console.error(
+            "Members could not be loaded:",
+            result.message
+        );
+
+        return;
+
+    }
+
+
+    members =
+        Array.isArray(result.members)
+            ? result.members
+            : [];
+
+
+    /* =============================
+       UPDATE LOCAL STORAGE
+       ============================= */
+
+    localStorage.setItem(
+        "familyMembers",
+        JSON.stringify(
+            members
+        )
+    );
+
+
+}catch(error){
+
+    console.error(
+        "Load Members Error:",
+        error
+    );
+
+    return;
+
+}
+
+
+/* =================================
+   CURRENT FAMILY MEMBERS
+   ================================= */
+
+const familyMembers =
+    members.filter(
+        function(member){
+
+            return (
+                String(
+                    member.familyId || ""
+                ).trim() ===
+                String(
+                    currentFamily.familyId || ""
+                ).trim()
+            );
+
+        }
+    );
     /* =================================
        GET CURRENT GENDER
        ================================= */
