@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1117,6 +1118,13 @@ if(marriageConfirmation){
    ================================= */
 
 async function loadMemberRelations(){
+   console.log(
+    "LOAD MEMBER RELATIONS CALLED"
+);
+
+alert(
+    "LOAD MEMBER RELATIONS CALLED"
+);
 console.log(
         "LOAD MEMBER RELATIONS CALLED"
     );
@@ -1322,6 +1330,15 @@ console.log(
    console.log(
     "MEMBERS COUNT:",
     members.length
+);
+   alert(
+    "MEMBERS COUNT: " +
+    members.length
+);
+   alert(
+    "Partner: " + !!partnerField +
+    "\nFather: " + !!fatherField +
+    "\nMother: " + !!motherField
 );
     /* =================================
        CLEAR OLD OPTIONS
