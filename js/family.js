@@ -9,6 +9,7 @@
    F-NAME-RANDOM4
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -981,12 +982,8 @@ if(marriedYes){
 
             /* 18 or above */
 
-if(marriageConfirmation){
+            hideMarriageConfirmation();
 
-    marriageConfirmation.style.display =
-        "none";
-
-}
             showPartner();
 
         }
@@ -1042,8 +1039,12 @@ if(confirmMarriageYes){
                HIDE CONFIRMATION
                ============================= */
 
-            hideMarriageConfirmation();
+if(marriageConfirmation){
 
+    marriageConfirmation.style.display =
+        "none";
+
+}
 
             /* =============================
                SHOW PARTNER
@@ -1092,8 +1093,12 @@ if(confirmMarriageNo){
                HIDE CONFIRMATION
                ============================= */
 
-            hideMarriageConfirmation();
+if(marriageConfirmation){
 
+    marriageConfirmation.style.display =
+        "none";
+
+}
 
             /* =============================
                HIDE PARTNER
