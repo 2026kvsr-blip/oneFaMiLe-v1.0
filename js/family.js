@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -1664,7 +1663,7 @@ selectedDob.setHours(
 if(selectedDob > todayDate){
 
     showMessage(
-        "Date of Birth cannot be a future date.",
+        "Future date not allowed.",
         "warning",
         3000
     );
