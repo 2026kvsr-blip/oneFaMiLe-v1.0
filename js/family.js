@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1118,6 +1117,10 @@ if(marriageConfirmation){
    ================================= */
 
 async function loadMemberRelations(){
+console.log(
+        "LOAD MEMBER RELATIONS CALLED"
+    );
+   
     const currentFamily =
         JSON.parse(
             localStorage.getItem(
@@ -1307,7 +1310,19 @@ const familyMembers =
             "memberMother"
         );
 
+console.log(
+    "MOBILE/DESKTOP DROPDOWNS:",
+    {
+        partner: !!partnerField,
+        father: !!fatherField,
+        mother: !!motherField
+    }
+);
 
+   console.log(
+    "MEMBERS COUNT:",
+    members.length
+);
     /* =================================
        CLEAR OLD OPTIONS
        ================================= */
