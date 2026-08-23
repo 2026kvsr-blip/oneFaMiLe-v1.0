@@ -1,5 +1,6 @@
 
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1552,7 +1553,7 @@ function loadMemberRelations(){
         }
     );
 
-}
+
        /* =================================
    REFRESH RELATIONS WHEN GENDER CHANGES
    ================================= */
