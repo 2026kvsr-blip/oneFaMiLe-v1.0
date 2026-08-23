@@ -8,7 +8,6 @@
    F-NAME-RANDOM4
    ===================================== */
 
-
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -2217,7 +2216,67 @@ saveMemberBtn.onclick = async function(){
             "success",
             3000
         );
+/* ================================
+   UPDATE LOCAL MEMBER LIST
+   ================================ */
 
+let familyMembers =
+    JSON.parse(
+        localStorage.getItem(
+            "familyMembers"
+        ) || "[]"
+    );
+
+
+const newMember = {
+
+   memberId:
+    result.memberId || memberId,
+
+    familyId:
+        currentFamily.familyId,
+
+    familyName:
+        currentFamily.familyName,
+
+    name:
+        memberName,
+
+    gender:
+        memberGender,
+
+    dob:
+        memberDob,
+
+    maritalStatus:
+        memberMarital.value,
+
+    fatherId:
+        fatherId,
+
+    motherId:
+        motherId,
+
+    partnerId:
+        partnerId,
+
+    createdAt:
+        new Date().toISOString()
+
+};
+
+
+familyMembers.push(
+    newMember
+);
+
+
+localStorage.setItem(
+    "familyMembers",
+    JSON.stringify(
+        familyMembers
+    )
+);
 
         saveMemberBtn.disabled =
             false;
