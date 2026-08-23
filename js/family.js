@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1171,15 +1172,37 @@ function loadMemberRelations(){
 
 
     const currentGender =
-        genderField ?
-        String(
-            genderField.value
-        ).toLowerCase() :
-        "";
-console.log(
-    "CURRENT GENDER:",
-    currentGender
-);
+        genderField
+            ? String(
+                genderField.value || ""
+              ).toLowerCase().trim()
+            : "";
+
+
+    console.log(
+        "CURRENT GENDER:",
+        currentGender
+    );
+
+
+    /* =================================
+       GET CURRENT MEMBER ID
+       ================================= */
+
+    const memberIdField =
+        document.getElementById(
+            "memberId"
+        );
+
+
+    const currentMemberId =
+        memberIdField
+            ? String(
+                memberIdField.dataset.memberId ||
+                ""
+              ).trim()
+            : "";
+
 
     /* =================================
        GET DROPDOWNS
@@ -1215,14 +1238,24 @@ console.log(
         if(!select){
             return;
         }
+
+
         select.innerHTML = "";
+
+
         const defaultOption =
             document.createElement(
                 "option"
             );
+
+
         defaultOption.value = "";
+
+
         defaultOption.textContent =
             defaultText;
+
+
         select.appendChild(
             defaultOption
         );
@@ -1251,20 +1284,30 @@ console.log(
     /* =================================
        ADD NEW PERSON
        ================================= */
+
     function addNewPersonOption(
         select
     ){
+
         if(!select){
             return;
         }
+
+
         const option =
             document.createElement(
                 "option"
             );
+
+
         option.value =
             "__ADD_NEW__";
+
+
         option.textContent =
             "Add New Person";
+
+
         select.insertBefore(
             option,
             select.firstChild
@@ -1292,167 +1335,225 @@ console.log(
        ADD MEMBER OPTION
        ================================= */
 
-    /* =================================
-   ADD MEMBER OPTION
-   ================================= */
+    function addMemberOption(
+        select,
+        member
+    ){
 
-function addMemberOption(
-    select,
-    member
-){
-    if(!select){
-        return;
-    }
-    const option =
-        document.createElement(
-            "option"
+        if(!select){
+            return;
+        }
+
+
+        const fullMemberId =
+            String(
+                member.memberId || ""
+            ).trim();
+
+
+        if(!fullMemberId){
+            return;
+        }
+
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+
+        /* =============================
+           OPTION VALUE
+           ============================= */
+
+        option.value =
+            fullMemberId;
+
+
+        /* =============================
+           MEMBER NUMBER
+           ============================= */
+
+        const memberNumber =
+            fullMemberId
+                .split("-")
+                .pop();
+
+
+        /* =============================
+           MEMBER NAME
+           ============================= */
+
+        let displayName = "";
+
+
+        if(
+            typeof member.name ===
+            "string"
+        ){
+
+            displayName =
+                member.name.trim();
+
+        }
+        else if(
+            member.name &&
+            typeof member.name ===
+            "object"
+        ){
+
+            displayName =
+                String(
+                    member.name.name ||
+                    member.name.value ||
+                    ""
+                ).trim();
+
+        }
+
+
+        /* =============================
+           DISPLAY
+           ============================= */
+
+        option.textContent =
+            displayName +
+            " (" +
+            memberNumber +
+            ")";
+
+
+        select.appendChild(
+            option
         );
-    /* =============================
-       GET DISPLAY MEMBER NUMBER
-       ============================= */
-    const memberNumber =
-        String(
-            member.memberId || ""
-        )
-        .split("-")
-        .pop();
-    /* =============================
-       OPTION VALUE
-       ============================= */
 
-    option.value =
-        member.memberId;
+    }
 
 
-    /* =============================
-       DISPLAY
-       ============================= */
+    /* =================================
+       FILTER MEMBERS
+       ================================= */
 
-const displayName =
-    typeof member.name === "object"
-        ? (
-            member.name.name ||
-            member.name.value ||
-            ""
-          )
-        : String(
-            member.name || ""
-          );
+    familyMembers.forEach(
+        function(member){
+
+            const memberId =
+                String(
+                    member.memberId || ""
+                ).trim();
 
 
-option.textContent =
-    displayName +
-    " (" +
-    memberNumber +
-    ")";
+            const memberGender =
+                String(
+                    member.gender || ""
+                ).toLowerCase().trim();
 
 
-    select.appendChild(
-        option
+            const memberMarital =
+                String(
+                    member.maritalStatus || ""
+                ).toLowerCase().trim();
+
+
+            const isMarried =
+                memberMarital === "yes";
+
+
+            /* =============================
+               EXISTING PARTNER
+               ============================= */
+
+            const hasPartner =
+                String(
+                    member.partnerId || ""
+                ).trim() !== "";
+
+
+            console.log(
+                "MEMBER:",
+                member.name,
+                "GENDER:",
+                memberGender,
+                "MARITAL:",
+                memberMarital,
+                "HAS PARTNER:",
+                hasPartner
+            );
+
+
+            /* =============================
+               DO NOT SHOW CURRENT MEMBER
+               ============================= */
+
+            if(
+                memberId ===
+                currentMemberId
+            ){
+
+                return;
+
+            }
+
+
+            /* =============================
+               FATHER
+               MALE + MARRIED
+               ============================= */
+
+            if(
+                memberGender === "male" &&
+                isMarried
+            ){
+
+                addMemberOption(
+                    fatherField,
+                    member
+                );
+
+            }
+
+
+            /* =============================
+               MOTHER
+               FEMALE + MARRIED
+               ============================= */
+
+            if(
+                memberGender === "female" &&
+                isMarried
+            ){
+
+                addMemberOption(
+                    motherField,
+                    member
+                );
+
+            }
+
+
+            /* =============================
+               PARTNER
+               ============================= */
+
+            if(
+                isMarried &&
+                currentGender &&
+                memberGender !== currentGender &&
+                !hasPartner
+            ){
+
+                addMemberOption(
+                    partnerField,
+                    member
+                );
+
+            }
+
+        }
     );
 
 }
-    /* =================================
-   FILTER MEMBERS
-   ================================= */
-
-familyMembers.forEach(
-    function(member){
-
-        const memberGender =
-            String(
-                member.gender || ""
-            ).toLowerCase();
-
-console.log(
-    "MEMBER:",
-    member.name,
-    "GENDER:",
-    memberGender,
-    "MARITAL:",
-    member.maritalStatus
-);
-        const memberMarital =
-            String(
-                member.maritalStatus || ""
-            ).toLowerCase();
-
-
-        const isMarried =
-            memberMarital === "yes";
-
-
-        /* =============================
-           CHECK EXISTING PARTNER
-           ============================= */
-
-        const hasPartner =
-            member.partnerId &&
-            String(
-                member.partnerId
-            ).trim() !== "";
-
-
-        /* =============================
-           FATHER
-           MALE + MARRIED
-           ============================= */
-
-        if(
-            memberGender === "male" &&
-            isMarried
-        ){
-
-            addMemberOption(
-                fatherField,
-                member
-            );
-
-        }
-
-
-        /* =============================
-           MOTHER
-           FEMALE + MARRIED
-           ============================= */
-
-        if(
-            memberGender === "female" &&
-            isMarried
-        ){
-
-            addMemberOption(
-                motherField,
-                member
-            );
-
-        }
-
-
-        /* =============================
-           PARTNER
-           OPPOSITE GENDER
-           MARRIED
-           NO EXISTING PARTNER
-           ============================= */
-
-        if(
-            isMarried &&
-            currentGender &&
-            memberGender !== currentGender &&
-            !hasPartner
-        ){
-
-            addMemberOption(
-                partnerField,
-                member
-            );
-
-        }
-
-    }
-);
-/* =================================
+       /* =================================
    REFRESH RELATIONS WHEN GENDER CHANGES
    ================================= */
 
