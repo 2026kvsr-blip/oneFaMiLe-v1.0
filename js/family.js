@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -1644,10 +1645,10 @@ const gender =
         );
 
 
-    const maritalStatus =
-        maritalField ?
-        maritalField.value :
-        "";
+   const maritalStatus =
+    maritalField
+        ? String(maritalField.value || "").trim()
+        : "";
 /* ================================
    UNDER 18 MARRIAGE CONFIRMATION
    ================================ */
