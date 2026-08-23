@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -1577,16 +1576,16 @@ saveMemberBtn.onclick = async function(){
         );
 
 
-    const name =
-        nameField ?
-        nameField.value.trim() :
-        "";
+  const name =
+    nameField
+        ? String(nameField.value || "").trim()
+        : "";
 
 
-    const gender =
-        genderField ?
-        genderField.value :
-        "";
+const gender =
+    genderField
+        ? String(genderField.value || "").trim()
+        : "";
 
 
     const dob =
