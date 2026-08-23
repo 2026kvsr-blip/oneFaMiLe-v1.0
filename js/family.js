@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -1722,7 +1721,7 @@ if(
     if(!confirmationSelected){
 
         showMessage(
-            'Please select Yes or No for "Are you really married?".',
+            'Please select Yes/No in Confirmation?".',
             "warning",
             3000
         );
