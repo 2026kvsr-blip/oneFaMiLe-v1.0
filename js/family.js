@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1163,7 +1162,15 @@ try{
         currentFamily.familyId || ""
     );
 
+console.log(
+    "SENDING FAMILY ID:",
+    currentFamily.familyId
+);
 
+alert(
+    "FAMILY ID:\n" +
+    currentFamily.familyId
+);
     const response =
         await fetch(
             API_URL,
