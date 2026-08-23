@@ -4,7 +4,6 @@
    ===================================== */
 
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -2019,11 +2018,11 @@ const newMember = {
     familyName:
         currentFamily.familyName,
 
-    name:
-        memberName,
+   name:
+    name,
 
-    gender:
-        memberGender,
+gender:
+    gender,
 
     dob:
         memberDob,
