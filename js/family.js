@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -1680,13 +1681,14 @@ if(
 }
 
 
-if(
-    age < 18 &&
-    !maritalField
-){
+/* =================================
+   MARITAL STATUS REQUIRED
+   ================================= */
+
+if(!maritalField){
 
     showMessage(
-        "Please select Yes or No for \"Are you really married?\".",
+        "Please select Marital Status.",
         "warning",
         3000
     );
@@ -1695,7 +1697,42 @@ if(
 
 }
 
-    /* ================================
+
+/* =================================
+   UNDER 18 + MARRIED
+   CONFIRMATION REQUIRED
+   ================================= */
+
+if(
+    age < 18 &&
+    maritalStatus.toLowerCase() === "yes"
+){
+
+    const confirmationSelected =
+        (
+            confirmMarriageYes &&
+            confirmMarriageYes.checked
+        ) ||
+        (
+            confirmMarriageNo &&
+            confirmMarriageNo.checked
+        );
+
+
+    if(!confirmationSelected){
+
+        showMessage(
+            'Please select Yes or No for "Are you really married?".',
+            "warning",
+            3000
+        );
+
+        return;
+
+    }
+
+}
+   /* ================================
        RELATIONS
        ================================ */
 
