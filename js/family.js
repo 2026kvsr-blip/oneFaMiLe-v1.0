@@ -3,7 +3,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -1644,7 +1643,15 @@ const gender =
             'input[name="memberMaritalStatus"]:checked'
         );
 
+console.log(
+    "MARITAL FIELD:",
+    maritalField
+);
 
+console.log(
+    "MARITAL VALUE:",
+    maritalField ? maritalField.value : "NONE"
+);
    const maritalStatus =
     maritalField
         ? String(maritalField.value || "").trim()
