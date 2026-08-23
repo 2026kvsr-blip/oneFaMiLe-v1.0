@@ -3,6 +3,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -1318,11 +1319,23 @@ function addMemberOption(
        DISPLAY
        ============================= */
 
-    option.textContent =
-        member.name +
-        " (" +
-        memberNumber +
-        ")";
+const displayName =
+    typeof member.name === "object"
+        ? (
+            member.name.name ||
+            member.name.value ||
+            ""
+          )
+        : String(
+            member.name || ""
+          );
+
+
+option.textContent =
+    displayName +
+    " (" +
+    memberNumber +
+    ")";
 
 
     select.appendChild(
