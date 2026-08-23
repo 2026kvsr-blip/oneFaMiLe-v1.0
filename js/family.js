@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -2028,6 +2029,34 @@ const memberId = "";
             3000
         );
 
+
+       /* ================================
+   DISPLAY GENERATED MEMBER ID
+   ================================ */
+
+const generatedMemberId =
+    result.memberId ||
+    result.memberID ||
+    "";
+
+console.log(
+    "GENERATED MEMBER ID:",
+    generatedMemberId
+);
+
+
+if(
+    memberIdField &&
+    generatedMemberId
+){
+
+    memberIdField.textContent =
+        generatedMemberId;
+
+    memberIdField.dataset.memberId =
+        generatedMemberId;
+
+}
        /* ================================
    UPDATE MEMBER ID DISPLAY
    ================================ */
