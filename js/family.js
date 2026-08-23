@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -2087,11 +2086,38 @@ let familyMembers =
         ) || "[]"
     );
 
+/* ================================
+   GET CLEAN MEMBER VALUES
+   ================================ */
 
+const savedName =
+    String(
+        document.getElementById(
+            "memberName"
+        )?.value || ""
+    ).trim();
+
+
+const savedGender =
+    String(
+        document.getElementById(
+            "memberGender"
+        )?.value || ""
+    ).trim();
+
+
+const savedDob =
+    String(
+        document.getElementById(
+            "memberDob"
+        )?.value || ""
+    ).trim();
+
+       
 const newMember = {
 
-   memberId:
-    result.memberId || memberId,
+    memberId:
+        result.memberId || memberId,
 
     familyId:
         currentFamily.familyId,
@@ -2099,20 +2125,19 @@ const newMember = {
     familyName:
         currentFamily.familyName,
 
-   name:
-    name,
+    name:
+        savedName,
 
-gender:
-    gender,
+    gender:
+        savedGender,
 
     dob:
-        memberDob,
+        savedDob,
 
     maritalStatus:
         document.querySelector(
             'input[name="memberMaritalStatus"]:checked'
         )?.value || "",
-
 
     fatherId:
         fatherId,
@@ -2127,8 +2152,6 @@ gender:
         new Date().toISOString()
 
 };
-
-
 familyMembers.push(
     newMember
 );
