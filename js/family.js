@@ -4,7 +4,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -2129,140 +2128,7 @@ const memberId = "";
             3000
         );
 
-partnerField.addEventListener(
-    "change",
-    function(){
-
-        const selectedPartnerId =
-            this.value;
-
-
-        if(
-            !selectedPartnerId ||
-            selectedPartnerId ===
-            "__ADD_NEW__"
-        ){
-            return;
-        }
-
-
-        /* =============================
-           GET MEMBERS
-           ============================= */
-
-        let members =
-            JSON.parse(
-                localStorage.getItem(
-                    "familyMembers"
-                )
-            ) || [];
-
-
-        /* =============================
-           CURRENT MEMBER ID
-           ============================= */
-
-        const memberIdField =
-            document.getElementById(
-                "memberId"
-            );
-
-
-        const currentMemberId =
-            memberIdField
-                ? String(
-                    memberIdField.dataset.memberId ||
-                    memberIdField.textContent ||
-                    ""
-                  ).trim()
-                : "";
-
-
-        if(!currentMemberId){
-            return;
-        }
-
-
-        /* =============================
-           FIND CURRENT MEMBER
-           ============================= */
-
-        const currentMember =
-            members.find(
-                function(member){
-
-                    return (
-                        String(
-                            member.memberId
-                        ).trim() ===
-                        currentMemberId
-                    );
-
-                }
-            );
-
-
-        /* =============================
-           FIND PARTNER
-           ============================= */
-
-        const selectedPartner =
-            members.find(
-                function(member){
-
-                    return (
-                        String(
-                            member.memberId
-                        ).trim() ===
-                        selectedPartnerId
-                    );
-
-                }
-            );
-
-
-        if(
-            !currentMember ||
-            !selectedPartner
-        ){
-            return;
-        }
-
-
-        /* =============================
-           TWO-WAY PARTNER LINK
-           ============================= */
-
-        currentMember.partnerId =
-            selectedPartner.memberId;
-
-
-        selectedPartner.partnerId =
-            currentMember.memberId;
-
-
-        /* =============================
-           SAVE
-           ============================= */
-
-        localStorage.setItem(
-            "familyMembers",
-            JSON.stringify(
-                members
-            )
-        );
-
-
-        console.log(
-            "PARTNER LINKED:",
-            currentMember.name,
-            "⇄",
-            selectedPartner.name
-        );
-
-    }
-);
-       /* ================================
+/* ================================
    DISPLAY GENERATED MEMBER ID
    ================================ */
 
