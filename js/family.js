@@ -4,6 +4,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -1816,31 +1817,17 @@ if(
         "";
 
 
-    /* ================================
-       MEMBER ID
-       ================================ */
+   /* ================================
+   MEMBER ID
+   ================================ */
 
-    const memberIdField =
-        document.getElementById(
-            "memberId"
-        );
+const memberIdField =
+    document.getElementById(
+        "memberId"
+    );
 
-
-    const memberId =
-        memberIdField &&
-        memberIdField.dataset.memberId
-            ?
-        memberIdField.dataset.memberId
-            :
-        (
-            memberIdField
-            ?
-            memberIdField.textContent.trim()
-            :
-            ""
-        );
-
-
+const memberId = "";
+   
     /* ================================
        PHOTO
        ================================ */
@@ -2041,6 +2028,26 @@ if(
             "success",
             3000
         );
+
+       /* ================================
+   UPDATE MEMBER ID DISPLAY
+   ================================ */
+
+const savedMemberId =
+    result.memberId || "";
+
+if(
+    memberIdField &&
+    savedMemberId
+){
+
+    memberIdField.textContent =
+        savedMemberId;
+
+    memberIdField.dataset.memberId =
+        savedMemberId;
+
+}
 /* ================================
    UPDATE LOCAL MEMBER LIST
    ================================ */
