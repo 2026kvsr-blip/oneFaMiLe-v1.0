@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1265,7 +1266,85 @@ const familyMembers =
         currentGender
     );
 
+/* =================================
+   GET CURRENT MEMBER AGE
+   ================================= */
 
+function calculateAge(dob){
+
+    if(!dob){
+        return null;
+    }
+
+    const birthDate =
+        new Date(dob);
+
+    if(
+        isNaN(
+            birthDate.getTime()
+        )
+    ){
+        return null;
+    }
+
+    const today =
+        new Date();
+
+    let age =
+        today.getFullYear() -
+        birthDate.getFullYear();
+
+    const monthDifference =
+        today.getMonth() -
+        birthDate.getMonth();
+
+    if(
+        monthDifference < 0 ||
+        (
+            monthDifference === 0 &&
+            today.getDate() <
+            birthDate.getDate()
+        )
+    ){
+
+        age--;
+
+    }
+
+    return age;
+}
+
+
+/* =================================
+   CURRENT MEMBER DOB
+   ================================= */
+
+const currentDobField =
+    document.getElementById(
+        "memberDob"
+    );
+
+
+const currentDob =
+    currentDobField ?
+    currentDobField.value :
+    "";
+
+
+/* =================================
+   CURRENT MEMBER AGE
+   ================================= */
+
+const currentAge =
+    calculateAge(
+        currentDob
+    );
+
+
+console.log(
+    "CURRENT MEMBER AGE:",
+    currentAge
+);
     /* =================================
        GET CURRENT MEMBER ID
        ================================= */
@@ -1535,7 +1614,21 @@ const familyMembers =
                 String(
                     member.maritalStatus || ""
                 ).toLowerCase().trim();
+/* =============================
+   MEMBER AGE
+   ============================= */
 
+const memberAge =
+    calculateAge(
+        member.dob
+    );
+
+
+console.log(
+    "MEMBER AGE:",
+    member.name,
+    memberAge
+);
 
             const isMarried =
                 memberMarital === "yes";
@@ -1577,40 +1670,49 @@ const familyMembers =
             }
 
 
-            /* =============================
-               FATHER
-               MALE + MARRIED
-               ============================= */
+           /* =============================
+   FATHER
+   MALE + MARRIED
+   + 15 YEARS OLDER
+   ============================= */
 
-            if(
-                memberGender === "male" &&
-                isMarried
-            ){
+if(
+    memberGender === "male" &&
+    isMarried &&
+    currentAge !== null &&
+    memberAge !== null &&
+    memberAge >= currentAge + 15
+){
 
-                addMemberOption(
-                    fatherField,
-                    member
-                );
+    addMemberOption(
+        fatherField,
+        member
+    );
 
-            }
+}
 
 
-            /* =============================
-               MOTHER
-               FEMALE + MARRIED
-               ============================= */
 
-            if(
-                memberGender === "female" &&
-                isMarried
-            ){
+           /* =============================
+   MOTHER
+   FEMALE + MARRIED
+   + 15 YEARS OLDER
+   ============================= */
 
-                addMemberOption(
-                    motherField,
-                    member
-                );
+if(
+    memberGender === "female" &&
+    isMarried &&
+    currentAge !== null &&
+    memberAge !== null &&
+    memberAge >= currentAge + 15
+){
 
-            }
+    addMemberOption(
+        motherField,
+        member
+    );
+
+}
 
 
             /* =============================
