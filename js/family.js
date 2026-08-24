@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -216,30 +217,6 @@ familyBtn.onclick = () => {
         `
 
     );
-/* =====================================
-   FAMILY → RELATIONS
-   ===================================== */
-
-const relationsBtn =
-    document.getElementById(
-        "relationsBtn"
-    );
-
-
-if(relationsBtn){
-
-    relationsBtn.onclick =
-        function(){
-
-            console.log(
-                "RELATIONS BUTTON CLICKED"
-            );
-
-            openRelationsPage();
-
-        };
-
-}
    /* =====================================
    FAMILY → RELATIONS
    ===================================== */
@@ -286,6 +263,130 @@ if(familyBackBtn){
         showHome();
 
         };
+
+}
+   function openRelationsPage(){
+
+    console.log(
+        "OPENING RELATIONS PAGE"
+    );
+
+    showPage(
+
+        pageTitle(
+            "Relations",
+            "images/colorbtns/Relations1.png"
+        )
+
+        + `
+
+        <div class="relations-page">
+
+            <div class="relations-member-header">
+
+                <div id="relationMemberPhoto">
+                </div>
+
+                <div id="relationMemberName">
+                    -
+                </div>
+
+            </div>
+
+            <div class="relations-section">
+
+                <h3>1. Parents</h3>
+
+                <div>
+                    Father :
+                    <span id="relationFather">
+                        --------
+                    </span>
+                </div>
+
+                <div>
+                    Mother :
+                    <span id="relationMother">
+                        --------
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="relations-section">
+
+                <h3>2. Partner</h3>
+
+                <div>
+                    Partner :
+                    <span id="relationPartner">
+                        --------
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="relations-section">
+
+                <h3>3. Children</h3>
+
+                <div id="relationChildren">
+                    --------
+                </div>
+
+            </div>
+
+            <div class="relations-section">
+
+                <h3>4. Siblings</h3>
+
+                <strong>Brothers</strong>
+
+                <div id="relationBrothers">
+                    --------
+                </div>
+
+                <strong>Sisters</strong>
+
+                <div id="relationSisters">
+                    --------
+                </div>
+
+            </div>
+
+            <div align="center">
+
+                <button
+                    id="relationsBackBtn"
+                    class="back-btn">
+
+                    ← Back
+
+                </button>
+
+            </div>
+
+        </div>
+
+        `
+    );
+
+
+    const relationsBackBtn =
+        document.getElementById(
+            "relationsBackBtn"
+        );
+
+    if(relationsBackBtn){
+
+        relationsBackBtn.onclick =
+            function(){
+
+                familyBtn.click();
+
+            };
+
+    }
 
 }
 /* =====================================
