@@ -4,6 +4,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -235,7 +236,7 @@ if(familyBackBtn){
                 "FAMILY → BACK"
             );
 
-            showHomePage();
+        showHome();
 
         };
 
