@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1117,16 +1118,6 @@ if(marriageConfirmation){
    ================================= */
 
 async function loadMemberRelations(){
-   console.log(
-    "LOAD MEMBER RELATIONS CALLED"
-);
-
-alert(
-    "LOAD MEMBER RELATIONS CALLED"
-);
-console.log(
-        "LOAD MEMBER RELATIONS CALLED"
-    );
    
     const currentFamily =
         JSON.parse(
@@ -1162,15 +1153,6 @@ try{
         currentFamily.familyId || ""
     );
 
-console.log(
-    "SENDING FAMILY ID:",
-    currentFamily.familyId
-);
-
-alert(
-    "FAMILY ID:\n" +
-    currentFamily.familyId
-);
     const response =
         await fetch(
             API_URL,
@@ -1325,28 +1307,8 @@ const familyMembers =
             "memberMother"
         );
 
-console.log(
-    "MOBILE/DESKTOP DROPDOWNS:",
-    {
-        partner: !!partnerField,
-        father: !!fatherField,
-        mother: !!motherField
-    }
-);
 
-   console.log(
-    "MEMBERS COUNT:",
-    members.length
-);
-   alert(
-    "MEMBERS COUNT: " +
-    members.length
-);
-   alert(
-    "Partner: " + !!partnerField +
-    "\nFather: " + !!fatherField +
-    "\nMother: " + !!motherField
-);
+   
     /* =================================
        CLEAR OLD OPTIONS
        ================================= */
