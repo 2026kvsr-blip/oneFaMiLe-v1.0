@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -2513,12 +2514,106 @@ localStorage.setItem(
    GET CURRENT FAMILY
    ================================= */
 
-const currentFamily =
+/* =================================
+   GET CURRENT USER
+   ================================= */
+
+const loggedUser =
+    JSON.parse(
+        sessionStorage.getItem("user")
+    ) || {};
+
+
+/* =================================
+   GET STORED FAMILY
+   ================================= */
+
+const storedFamily =
     JSON.parse(
         localStorage.getItem(
             "currentFamily"
         ) || "null"
     );
+
+
+/* =================================
+   VERIFY FAMILY BELONGS TO USER
+   ================================= */
+
+let currentFamily = null;
+
+
+if(
+    storedFamily &&
+    loggedUser
+){
+
+    const loginMatch =
+        storedFamily.loginId &&
+        loggedUser.loginUserName &&
+        String(
+            storedFamily.loginId
+        ).trim().toLowerCase() ===
+        String(
+            loggedUser.loginUserName
+        ).trim().toLowerCase();
+
+
+    const emailMatch =
+        storedFamily.userMail &&
+        loggedUser.email &&
+        String(
+            storedFamily.userMail
+        ).trim().toLowerCase() ===
+        String(
+            loggedUser.email
+        ).trim().toLowerCase();
+
+
+    const mobileMatch =
+        storedFamily.mobile &&
+        loggedUser.mobile &&
+        String(
+            storedFamily.mobile
+        ).trim() ===
+        String(
+            loggedUser.mobile
+        ).trim();
+
+
+    if(
+        loginMatch ||
+        emailMatch ||
+        mobileMatch
+    ){
+
+        currentFamily =
+            storedFamily;
+
+    }
+
+}
+
+
+/* =================================
+   INVALID OLD FAMILY
+   ================================= */
+
+if(!currentFamily){
+
+    console.log(
+        "NO FAMILY FOR CURRENT USER"
+    );
+
+    localStorage.removeItem(
+        "currentFamily"
+    );
+
+    localStorage.removeItem(
+        "familyMembers"
+    );
+
+}
 
 
 /* =================================
