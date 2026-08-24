@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -2705,6 +2704,27 @@ const loggedUser =
         sessionStorage.getItem("user")
     ) || {};
 
+/* =================================
+   CLEAR OLD FAMILY DATA
+   ================================= */
+
+localStorage.removeItem(
+    "currentFamily"
+);
+
+localStorage.removeItem(
+    "familyMembers"
+);
+
+console.log(
+    "OLD FAMILY DATA CLEARED"
+);
+
+/* =================================
+   GET FAMILY TREE
+   ================================= */
+
+           
 if(loggedUser){
 
     const params =
@@ -2759,14 +2779,26 @@ if(loggedUser){
                FAMILY TREE FOUND
                ========================= */
 
-            if(
-                result.status !==
-                "success"
-            ){
+           if(
+    result.status !==
+    "success"
+){
 
-                return;
+    console.log(
+        "NO FAMILY TREE FOR CURRENT USER"
+    );
 
-            }
+    localStorage.removeItem(
+        "currentFamily"
+    );
+
+    localStorage.removeItem(
+        "familyMembers"
+    );
+
+    return;
+
+}
 
 /* ================================
    SET CURRENT FAMILY FROM SERVER
