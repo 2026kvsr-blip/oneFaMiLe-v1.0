@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -217,7 +216,30 @@ familyBtn.onclick = () => {
         `
 
     );
+/* =====================================
+   FAMILY → BACK
+   ===================================== */
 
+const familyBackBtn =
+    document.getElementById(
+        "familyBack"
+    );
+
+
+if(familyBackBtn){
+
+    familyBackBtn.onclick =
+        function(){
+
+            console.log(
+                "FAMILY → BACK"
+            );
+
+            showHomePage();
+
+        };
+
+}
 /* =====================================
    FAMILY → ADD MEMBER
    ===================================== */
@@ -1797,6 +1819,22 @@ if(memberActions){
             "memberHomeBtn"
         );
 
+/* =============================
+   BACK ACTION
+   ============================= */
+
+memberBackBtn.onclick =
+    function(){
+
+        console.log(
+            "ADD MEMBER → BACK"
+        );
+
+        familyBtn.click();
+
+    };
+
+   
 /* =================================
    SAVE MEMBER → GOOGLE SHEET
    ================================= */
@@ -2706,6 +2744,16 @@ localStorage.setItem(
             showHomePage();
 
         };
+   memberBackBtn.onclick =
+    function(){
+
+        console.log(
+            "MEMBER BACK CLICKED"
+        );
+
+        showFamilyTree();
+
+    };
 
 }
   
