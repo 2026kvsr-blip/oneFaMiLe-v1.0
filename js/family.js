@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -2738,7 +2739,7 @@ localStorage.setItem(
        HOME ACTION
        ============================= */
 
-   memberHomeBtn.onclick =
+  memberHomeBtn.onclick =
     function(e){
 
         e.preventDefault();
@@ -2747,7 +2748,7 @@ localStorage.setItem(
             "MEMBER HOME CLICKED"
         );
 
-        showHomePage();
+        homeBtn.click();
 
     };
  /* =============================
