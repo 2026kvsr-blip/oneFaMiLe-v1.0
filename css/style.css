@@ -17,7 +17,6 @@ overflow-x:hidden;
 }
 
 
-
 /* =======================
 TOP BAR
 ======================= */
@@ -3433,5 +3432,10 @@ width:100%;
     cursor: default;
     user-select: none;
 }
+/* ================================
+   DOB LEFT ALIGN
+   ================================ */
 
-
+#memberDob {
+    text-align: left !important;
+}
