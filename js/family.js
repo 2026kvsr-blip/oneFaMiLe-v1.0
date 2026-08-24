@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -279,7 +278,31 @@ if(familyBackBtn){
         )
 
         + `
+<!-- =================================
+     SELECT MEMBER
+     ================================= -->
 
+<div class="common-form-group">
+
+    <label class="common-form-label">
+        Member
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <select
+        id="relationsMemberSelect"
+        class="common-form-select">
+
+        <option value="">
+            Select Member
+        </option>
+
+    </select>
+
+</div>
         <div class="relations-page">
 
             <div class="relations-member-header">
@@ -371,7 +394,104 @@ if(familyBackBtn){
         `
     );
 
+ const relationsMemberSelect =
+        document.getElementById(
+            "relationsMemberSelect"
+        );
+      /* =====================================
+   LOAD MEMBERS INTO RELATIONS DROPDOWN
+   ===================================== */
 
+if(relationsMemberSelect){
+
+    let familyMembers =
+        JSON.parse(
+            localStorage.getItem(
+                "familyMembers"
+            ) || "[]"
+        );
+
+
+    console.log(
+        "RELATIONS FAMILY MEMBERS:",
+        familyMembers
+    );
+
+
+    familyMembers.forEach(
+        function(member){
+
+            if(
+                !member ||
+                !member.memberId
+            ){
+                return;
+            }
+            const option =
+                document.createElement(
+                    "option"
+                );
+            option.value =
+                member.memberId;
+            option.textContent =
+               member.name || "Unnamed";
+            relationsMemberSelect.appendChild(
+                option
+            );
+        }
+    );
+relationsMemberSelect.onchange =
+    function(){
+
+        const selectedMemberId =
+            this.value;
+
+
+        if(!selectedMemberId){
+
+            return;
+
+        }
+
+
+        const selectedMember =
+            familyMembers.find(
+                function(member){
+
+                    return String(
+                        member.memberId
+                    ) === String(
+                        selectedMemberId
+                    );
+
+                }
+            );
+
+
+        if(!selectedMember){
+
+            console.log(
+                "SELECTED MEMBER NOT FOUND"
+            );
+
+            return;
+
+        }
+
+
+        console.log(
+            "SELECTED RELATIONS MEMBER:",
+            selectedMember
+        );
+
+
+        loadSelectedMemberRelations(
+            selectedMember,
+            familyMembers
+        );
+
+    };
+}
     const relationsBackBtn =
         document.getElementById(
             "relationsBackBtn"
@@ -385,6 +505,358 @@ if(familyBackBtn){
                 familyBtn.click();
 
             };
+
+    }
+
+}
+   function loadSelectedMemberRelations(
+    member,
+    familyMembers
+){
+
+    console.log(
+        "LOADING RELATIONS FOR:",
+        member.name
+    );
+
+
+    /* ================================
+       MEMBER NAME
+       ================================ */
+
+    const nameField =
+        document.getElementById(
+            "relationMemberName"
+        );
+
+
+    if(nameField){
+
+        nameField.textContent =
+            member.name || "-";
+
+    }
+
+
+    /* ================================
+       MEMBER PHOTO
+       ================================ */
+
+    const photoField =
+        document.getElementById(
+            "relationMemberPhoto"
+        );
+
+
+    if(photoField){
+
+        photoField.innerHTML = "";
+
+
+        if(member.photo){
+
+            const img =
+                document.createElement(
+                    "img"
+                );
+
+            img.src =
+                member.photo;
+
+            img.alt =
+                member.name || "Member";
+
+            photoField.appendChild(
+                img
+            );
+
+        }
+
+    }
+
+
+    /* ================================
+       FIND FATHER
+       ================================ */
+
+    const father =
+        familyMembers.find(
+            function(item){
+
+                return String(
+                    item.memberId
+                ) === String(
+                    member.fatherId
+                );
+
+            }
+        );
+
+
+    /* ================================
+       FIND MOTHER
+       ================================ */
+
+    const mother =
+        familyMembers.find(
+            function(item){
+
+                return String(
+                    item.memberId
+                ) === String(
+                    member.motherId
+                );
+
+            }
+        );
+
+
+    /* ================================
+       SHOW FATHER
+       ================================ */
+
+    const fatherField =
+        document.getElementById(
+            "relationFather"
+        );
+
+
+    if(fatherField){
+
+        fatherField.textContent =
+            father
+                ? father.name
+                : "--------";
+
+    }
+
+
+    /* ================================
+       SHOW MOTHER
+       ================================ */
+
+    const motherField =
+        document.getElementById(
+            "relationMother"
+        );
+
+
+    if(motherField){
+
+        motherField.textContent =
+            mother
+                ? mother.name
+                : "--------";
+
+    }
+
+}
+
+   /* ================================
+   FIND PARTNER
+   ================================ */
+
+const partner =
+    familyMembers.find(
+        function(item){
+
+            return String(
+                item.memberId
+            ) === String(
+                member.partnerId
+            );
+
+        }
+    );
+
+
+/* ================================
+   SHOW PARTNER
+   ================================ */
+
+const partnerField =
+    document.getElementById(
+        "relationPartner"
+    );
+
+
+if(partnerField){
+
+    partnerField.textContent =
+        partner
+            ? partner.name
+            : "--------";
+
+}
+   /* ================================
+   SIBLINGS
+   ================================ */
+
+const siblings =
+    familyMembers.filter(
+        function(item){
+
+            /* Don't include selected member */
+
+            if(
+                String(item.memberId) ===
+                String(member.memberId)
+            ){
+
+                return false;
+
+            }
+
+
+            /* Same Father */
+
+            const sameFather =
+                member.fatherId &&
+                item.fatherId &&
+                String(item.fatherId) ===
+                String(member.fatherId);
+
+
+            /* Same Mother */
+
+            const sameMother =
+                member.motherId &&
+                item.motherId &&
+                String(item.motherId) ===
+                String(member.motherId);
+
+
+            return (
+                sameFather ||
+                sameMother
+            );
+
+        }
+    );
+
+
+/* ================================
+   BROTHERS
+   ================================ */
+
+const brothers =
+    siblings.filter(
+        function(item){
+
+            return String(
+                item.gender || ""
+            ).toLowerCase() ===
+            "male";
+
+        }
+    );
+
+
+const brothersField =
+    document.getElementById(
+        "relationBrothers"
+    );
+
+
+if(brothersField){
+
+    brothersField.innerHTML = "";
+
+
+    if(brothers.length === 0){
+
+        brothersField.textContent =
+            "--------";
+
+    }
+    else{
+
+        brothers.forEach(
+            function(brother, index){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        brother.name ||
+                        "--------"
+                    );
+
+                brothersField.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* ================================
+   SISTERS
+   ================================ */
+
+const sisters =
+    siblings.filter(
+        function(item){
+
+            return String(
+                item.gender || ""
+            ).toLowerCase() ===
+            "female";
+
+        }
+    );
+
+
+const sistersField =
+    document.getElementById(
+        "relationSisters"
+    );
+
+
+if(sistersField){
+
+    sistersField.innerHTML = "";
+
+
+    if(sisters.length === 0){
+
+        sistersField.textContent =
+            "--------";
+
+    }
+    else{
+
+        sisters.forEach(
+            function(sister, index){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        sister.name ||
+                        "--------"
+                    );
+
+                sistersField.appendChild(
+                    div
+                );
+
+            }
+        );
 
     }
 
