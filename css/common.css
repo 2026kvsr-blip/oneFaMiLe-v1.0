@@ -487,10 +487,29 @@
    DATE OF BIRTH - LEFT ALIGN
    ========================================= */
 
+/* =================================
+   DOB - LEFT ALIGN ON MOBILE
+   ================================= */
+
 #memberDob {
     text-align: left !important;
     text-align-last: left !important;
+    -webkit-appearance: none;
+    appearance: none;
 }
+
+#memberDob::-webkit-date-and-time-value {
+    text-align: left !important;
+}
+
+#memberDob::-webkit-datetime-edit {
+    text-align: left !important;
+}
+
+#memberDob::-webkit-datetime-edit-fields-wrapper {
+    text-align: left !important;
+}
+
 /* =========================================
    ADD MEMBER ACTIONS
    ========================================= */
