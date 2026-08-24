@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -2667,7 +2666,42 @@ if(loggedUser){
 
             }
 
+/* ================================
+   SET CURRENT FAMILY FROM SERVER
+   ================================ */
 
+const serverFamily = {
+
+    familyId:
+        result.familyId || "",
+
+    familyName:
+        result.familyName || "",
+
+    loginId:
+        loggedUser.loginUserName || "",
+
+    userId:
+        loggedUser.userId || "",
+
+    userMail:
+        loggedUser.email || "",
+
+    mobile:
+        loggedUser.mobile || "",
+
+    createdAt:
+        new Date().toISOString()
+
+};
+
+
+localStorage.setItem(
+    "currentFamily",
+    JSON.stringify(
+        serverFamily
+    )
+);
             /* =========================
                GET FAMILY ELEMENTS
                ========================= */
