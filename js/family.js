@@ -4,7 +4,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -217,6 +216,54 @@ familyBtn.onclick = () => {
         `
 
     );
+/* =====================================
+   FAMILY → RELATIONS
+   ===================================== */
+
+const relationsBtn =
+    document.getElementById(
+        "relationsBtn"
+    );
+
+
+if(relationsBtn){
+
+    relationsBtn.onclick =
+        function(){
+
+            console.log(
+                "RELATIONS BUTTON CLICKED"
+            );
+
+            openRelationsPage();
+
+        };
+
+}
+   /* =====================================
+   FAMILY → RELATIONS
+   ===================================== */
+
+const relationsBtn =
+    document.getElementById(
+        "relationsBtn"
+    );
+
+
+if(relationsBtn){
+
+    relationsBtn.onclick =
+        function(){
+
+            console.log(
+                "RELATIONS BUTTON CLICKED"
+            );
+
+            openRelationsPage();
+
+        };
+
+}
 /* =====================================
    FAMILY → BACK
    ===================================== */
@@ -945,6 +992,7 @@ if(memberDob){
         }
     );
 
+   
 }
 
 /* =================================
