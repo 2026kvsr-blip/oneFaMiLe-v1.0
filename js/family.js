@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1807,13 +1806,213 @@ saveMemberBtn.onclick = async function(){
        CURRENT FAMILY
        ================================ */
 
-    const currentFamily =
+ let currentFamily =
+    JSON.parse(
+        localStorage.getItem(
+            "currentFamily"
+        ) || "null"
+    );
+/* =================================
+   LOAD CURRENT USER FAMILY
+   IF NOT ALREADY AVAILABLE
+   ================================= */
+
+if(!currentFamily){
+
+    const loggedUser =
         JSON.parse(
-            localStorage.getItem(
-                "currentFamily"
-            ) || "null"
+            sessionStorage.getItem(
+                "user"
+            )
+        ) || null;
+
+
+    if(loggedUser){
+
+        const params =
+            new URLSearchParams();
+
+
+        params.append(
+            "action",
+            "getUserFamilyTree"
         );
 
+
+        params.append(
+            "loginUserName",
+            loggedUser.loginUserName || ""
+        );
+
+
+        params.append(
+            "email",
+            loggedUser.email || ""
+        );
+
+
+        params.append(
+            "mobile",
+            loggedUser.mobile || ""
+        );
+
+
+        fetch(
+            API_URL,
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"
+                },
+
+                body:
+                    params.toString()
+            }
+        )
+        .then(
+            function(response){
+
+                return response.json();
+
+            }
+        )
+        .then(
+            function(result){
+
+                console.log(
+                    "ADD MEMBER FAMILY RESULT:",
+                    result
+                );
+
+
+                if(
+                    result.status !==
+                    "success"
+                ){
+
+                    console.log(
+                        "No Family Tree found for current user."
+                    );
+
+                    return;
+
+                }
+
+
+                /* =============================
+                   CREATE CURRENT FAMILY
+                   ============================= */
+
+                currentFamily = {
+
+                    familyId:
+                        result.familyId || "",
+
+                    familyName:
+                        result.familyName || "",
+
+                    loginId:
+                        result.loginUserName ||
+                        loggedUser.loginUserName ||
+                        "",
+
+                    userId:
+                        loggedUser.userId || "",
+
+                    userMail:
+                        result.email ||
+                        loggedUser.email ||
+                        "",
+
+                    mobile:
+                        result.mobile ||
+                        loggedUser.mobile ||
+                        "",
+
+                    createdAt:
+                        new Date().toISOString()
+
+                };
+
+
+                /* =============================
+                   SAVE CURRENT FAMILY
+                   ============================= */
+
+                localStorage.setItem(
+                    "currentFamily",
+                    JSON.stringify(
+                        currentFamily
+                    )
+                );
+
+
+                /* =============================
+                   DISPLAY FAMILY ID
+                   ============================= */
+
+                const familyIdField =
+                    document.getElementById(
+                        "memberFamilyId"
+                    );
+
+
+                if(familyIdField){
+
+                    familyIdField.textContent =
+                        currentFamily.familyId || "-";
+
+                }
+
+
+                /* =============================
+                   DISPLAY FAMILY NAME
+                   ============================= */
+
+                const familyNameField =
+                    document.getElementById(
+                        "memberFamilyName"
+                    );
+
+
+                if(familyNameField){
+
+                    familyNameField.textContent =
+                        currentFamily.familyName || "-";
+
+                }
+
+
+                /* =============================
+                   LOAD RELATIONS
+                   ============================= */
+
+                loadMemberRelations();
+
+
+                console.log(
+                    "CURRENT FAMILY LOADED:",
+                    currentFamily
+                );
+
+            }
+        )
+        .catch(
+            function(error){
+
+                console.error(
+                    "Add Member Family Load Error:",
+                    error
+                );
+
+            }
+        );
+
+    }
+
+}
 
     if(!currentFamily){
 
