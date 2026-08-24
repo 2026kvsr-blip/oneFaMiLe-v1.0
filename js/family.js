@@ -2799,18 +2799,188 @@ if(
    INVALID OLD FAMILY
    ================================= */
 
+/* =================================
+   LOAD FAMILY FROM SERVER
+   ================================= */
+
 if(!currentFamily){
 
+    const params =
+        new URLSearchParams();
+
+    params.append(
+        "action",
+        "getUserFamilyTree"
+    );
+
+    params.append(
+        "loginUserName",
+        loggedUser.loginUserName || ""
+    );
+
+    params.append(
+        "email",
+        loggedUser.email || ""
+    );
+
+    params.append(
+        "mobile",
+        loggedUser.mobile || ""
+    );
+
+
     console.log(
-        "NO FAMILY FOR CURRENT USER"
+        "ADD MEMBER → GET FAMILY:",
+        loggedUser.loginUserName,
+        loggedUser.email,
+        loggedUser.mobile
     );
 
-    localStorage.removeItem(
-        "currentFamily"
-    );
 
-    localStorage.removeItem(
-        "familyMembers"
+    fetch(
+        API_URL,
+        {
+            method:"POST",
+
+            headers:{
+                "Content-Type":
+                    "application/x-www-form-urlencoded"
+            },
+
+            body:
+                params.toString()
+        }
+    )
+    .then(
+        function(response){
+
+            return response.json();
+
+        }
+    )
+    .then(
+        function(result){
+
+            console.log(
+                "ADD MEMBER → FAMILY RESULT:",
+                result
+            );
+
+
+            if(
+                result.status !==
+                "success"
+            ){
+
+                console.log(
+                    "NO FAMILY FOUND"
+                );
+
+                return;
+
+            }
+
+
+            /* =========================
+               CREATE CURRENT FAMILY
+               ========================= */
+
+            currentFamily = {
+
+                familyId:
+                    result.familyId || "",
+
+                familyName:
+                    result.familyName || "",
+
+                loginId:
+                    result.loginUserName ||
+                    loggedUser.loginUserName ||
+                    "",
+
+                userId:
+                    loggedUser.userId || "",
+
+                userMail:
+                    result.email ||
+                    loggedUser.email ||
+                    "",
+
+                mobile:
+                    result.mobile ||
+                    loggedUser.mobile ||
+                    "",
+
+                createdAt:
+                    new Date().toISOString()
+
+            };
+
+
+            /* =========================
+               SAVE
+               ========================= */
+
+            localStorage.setItem(
+                "currentFamily",
+                JSON.stringify(
+                    currentFamily
+                )
+            );
+
+
+            /* =========================
+               DISPLAY FAMILY ID
+               ========================= */
+
+            const familyIdField =
+                document.getElementById(
+                    "memberFamilyId"
+                );
+
+
+            const familyNameField =
+                document.getElementById(
+                    "memberFamilyName"
+                );
+
+
+            if(familyIdField){
+
+                familyIdField.textContent =
+                    currentFamily.familyId ||
+                    "-";
+
+            }
+
+
+            if(familyNameField){
+
+                familyNameField.textContent =
+                    currentFamily.familyName ||
+                    "-";
+
+            }
+
+
+            /* =========================
+               LOAD RELATIONS
+               ========================= */
+
+            loadMemberRelations();
+
+
+        }
+    )
+    .catch(
+        function(error){
+
+            console.error(
+                "ADD MEMBER FAMILY ERROR:",
+                error
+            );
+
+        }
     );
 
 }
