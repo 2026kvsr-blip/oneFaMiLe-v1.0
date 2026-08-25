@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -465,43 +464,76 @@ if(familyBackBtn){
     </div>
 
 </div>
-<div class="relations-section">
-
+<div
+    id="relationGrandParentsSection"
+    class="relations-section relations-grandparents">
     <h3>6. Grand Parents</h3>
 
     <strong>Paternal Grand Parents</strong>
 
-    <div>
-        Grand Father :
-        <span id="relationPaternalGrandFather">
-            --------
-        </span>
-    </div>
+    <div class="relation-row">
 
-    <div>
-        Grand Mother :
-        <span id="relationPaternalGrandMother">
-            --------
-        </span>
-    </div>
+    <span class="relation-label">
+        Grand Father
+    </span>
 
+    <span class="relation-colon">
+        :
+    </span>
+
+    <span id="relationPaternalGrandFather">
+        --------
+    </span>
+
+</div>
+    <div class="relation-row">
+
+    <span class="relation-label">
+        Grand Mother
+    </span>
+
+    <span class="relation-colon">
+        :
+    </span>
+
+    <span id="relationPaternalGrandMother">
+        --------
+    </span>
+
+</div>
 
     <strong>Maternal Grand Parents</strong>
 
-    <div>
-        Grand Father :
-        <span id="relationMaternalGrandFather">
-            --------
-        </span>
-    </div>
+    <div class="relation-row">
 
-    <div>
-        Grand Mother :
-        <span id="relationMaternalGrandMother">
-            --------
-        </span>
-    </div>
+    <span class="relation-label">
+        Grand Father
+    </span>
 
+    <span class="relation-colon">
+        :
+    </span>
+
+    <span id="relationMaternalGrandFather">
+        --------
+    </span>
+
+</div>
+    <div class="relation-row">
+
+    <span class="relation-label">
+        Grand Mother
+    </span>
+
+    <span class="relation-colon">
+        :
+    </span>
+
+    <span id="relationMaternalGrandMother">
+        --------
+    </span>
+
+</div>
 </div>
 
 
