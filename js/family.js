@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -722,7 +723,17 @@ if(memberSelector){
     member,
     familyMembers
 ){
+const memberHeader =
+    document.querySelector(
+        ".relations-member-header"
+    );
 
+if(memberHeader){
+
+    memberHeader.style.display =
+        "flex";
+
+}
     console.log(
         "LOADING RELATIONS FOR:",
         member.name
