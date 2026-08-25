@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -416,24 +417,41 @@ if(familyBackBtn){
                 </div>
 
             </div>
-            <div class="relations-section">
-
+<div
+    id="relationInLawsSection"
+    class="relations-section relations-inlaws">
     <h3>5. In-Laws</h3>
 
-    <div>
-        Father-in-Law :
-        <span id="relationFatherInLaw">
-            --------
-        </span>
-    </div>
+    <div class="relation-row">
 
-    <div>
-        Mother-in-Law :
-        <span id="relationMotherInLaw">
-            --------
-        </span>
-    </div>
+    <span class="relation-label">
+        Father-in-Law
+    </span>
 
+    <span class="relation-colon">
+        :
+    </span>
+
+    <span id="relationFatherInLaw">
+        --------
+    </span>
+
+</div>
+    <div class="relation-row">
+
+    <span class="relation-label">
+        Mother-in-Law
+    </span>
+
+    <span class="relation-colon">
+        :
+    </span>
+
+    <span id="relationMotherInLaw">
+        --------
+    </span>
+
+</div>
     <strong>Brothers-in-Law</strong>
 
     <div id="relationBrothersInLaw">
