@@ -6,7 +6,6 @@
    FAMILY FORM CONTAINER
    ===================================== */
 
-
 .family-box{
 
     width: calc(100% - 40px);
@@ -669,7 +668,15 @@
     gap:10px;
     width:100%;
 }
+.relations-member-row .common-form-select{
+    flex:1;
+    min-width:0;
+}
 
+#relationsMemberSearch{
+    width:30%;
+    box-sizing:border-box;
+}
 #relationsMemberSelect{
     flex:1;
     min-width:0;
