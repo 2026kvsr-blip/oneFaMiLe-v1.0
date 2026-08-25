@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -216,7 +215,7 @@ familyBtn.onclick = () => {
         `
 
     );
-
+bindAddMemberButton();
  
    /* =====================================
    FAMILY → RELATIONS
@@ -932,9 +931,14 @@ if(sistersField){
    FAMILY → ADD MEMBER
    ===================================== */
 
-document
-    .getElementById("addMemberBtn")
-    .onclick = () => {
+function bindAddMemberButton(){
+
+    const addMemberBtn =
+        document.getElementById("addMemberBtn");
+
+    if(!addMemberBtn) return;
+
+    addMemberBtn.onclick = () => {
 
     showPage(
 
@@ -3783,6 +3787,7 @@ const memberIdField =
 
        
 };
+}
     /* =====================================
        FAMILY → ADD TREE
        ===================================== */
