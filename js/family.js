@@ -1,6 +1,5 @@
 
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -645,18 +644,27 @@ if(relationsMemberSearch){
 }
 relationsMemberSelect.onchange =
     function(){
-
         const selectedMemberId =
             this.value;
-
-
         if(!selectedMemberId){
-
             return;
-
         }
 
+       /* =====================================
+   HIDE MEMBER SELECTOR AFTER SELECTION
+   ===================================== */
 
+const memberSelector =
+    document.querySelector(
+        ".relations-member-row"
+    );
+
+if(memberSelector){
+
+    memberSelector.style.display =
+        "none";
+
+}
         const selectedMember =
             familyMembers.find(
                 function(member){
@@ -666,7 +674,6 @@ relationsMemberSelect.onchange =
                     ) === String(
                         selectedMemberId
                     );
-
                 }
             );
 
