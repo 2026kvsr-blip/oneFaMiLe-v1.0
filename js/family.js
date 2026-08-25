@@ -1,5 +1,6 @@
 
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -422,6 +423,45 @@ if(familyBackBtn){
     </div>
 
 </div>
+<div class="relations-section">
+
+    <h3>6. Grand Parents</h3>
+
+    <strong>Paternal Grand Parents</strong>
+
+    <div>
+        Grand Father :
+        <span id="relationPaternalGrandFather">
+            --------
+        </span>
+    </div>
+
+    <div>
+        Grand Mother :
+        <span id="relationPaternalGrandMother">
+            --------
+        </span>
+    </div>
+
+
+    <strong>Maternal Grand Parents</strong>
+
+    <div>
+        Grand Father :
+        <span id="relationMaternalGrandFather">
+            --------
+        </span>
+    </div>
+
+    <div>
+        Grand Mother :
+        <span id="relationMaternalGrandMother">
+            --------
+        </span>
+    </div>
+
+</div>
+
 
             <div align="center">
 
@@ -1098,7 +1138,103 @@ if(sistersInLawField){
     }
 
 }
+/* ================================
+   GRAND PARENTS
+   ================================ */
 
+let paternalGrandFather = null;
+let paternalGrandMother = null;
+
+let maternalGrandFather = null;
+let maternalGrandMother = null;
+
+
+/* ================================
+   FATHER'S PARENTS
+   ================================ */
+
+if(father){
+
+    if(father.fatherId){
+
+        paternalGrandFather =
+            familyMembers.find(
+                function(item){
+
+                    return String(
+                        item.memberId
+                    ) === String(
+                        father.fatherId
+                    );
+
+                }
+            );
+
+    }
+
+
+    if(father.motherId){
+
+        paternalGrandMother =
+            familyMembers.find(
+                function(item){
+
+                    return String(
+                        item.memberId
+                    ) === String(
+                        father.motherId
+                    );
+
+                }
+            );
+
+    }
+
+}
+
+
+/* ================================
+   MOTHER'S PARENTS
+   ================================ */
+
+if(mother){
+
+    if(mother.fatherId){
+
+        maternalGrandFather =
+            familyMembers.find(
+                function(item){
+
+                    return String(
+                        item.memberId
+                    ) === String(
+                        mother.fatherId
+                    );
+
+                }
+            );
+
+    }
+
+
+    if(mother.motherId){
+
+        maternalGrandMother =
+            familyMembers.find(
+                function(item){
+
+                    return String(
+                        item.memberId
+                    ) === String(
+                        mother.motherId
+                    );
+
+                }
+            );
+
+    }
+
+}
       
    /* ================================
    SIBLINGS
