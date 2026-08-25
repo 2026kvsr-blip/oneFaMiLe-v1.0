@@ -1,5 +1,6 @@
 
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -216,6 +217,51 @@ familyBtn.onclick = () => {
         `
 
     );
+
+   /* =====================================
+   FAMILY → ADD MEMBER
+   ===================================== */
+
+const addMemberBtn =
+    document.getElementById("addMemberBtn");
+
+if(addMemberBtn){
+
+    addMemberBtn.onclick = function(){
+
+        console.log("ADD MEMBER BUTTON CLICKED");
+
+        showPage(
+            pageTitle(
+                "Add Member",
+                "images/colorbtns/AddMember1.png"
+            )
+            + `
+            <!-- EXISTING ADD MEMBER HTML -->
+            `
+        );
+
+    };
+}
+
+
+/* =====================================
+   FAMILY → ADD TREE
+   ===================================== */
+
+const addFamilyBtn =
+    document.getElementById("addFamilyBtn");
+
+if(addFamilyBtn){
+
+    addFamilyBtn.onclick = function(){
+
+        console.log("ADD TREE BUTTON CLICKED");
+
+        // existing Add Tree code
+    };
+
+}
    /* =====================================
    FAMILY → RELATIONS
    ===================================== */
