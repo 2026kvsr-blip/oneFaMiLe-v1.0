@@ -1,5 +1,6 @@
 
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -651,7 +652,17 @@ relationsMemberSelect.onchange =
         if(!selectedMemberId){
             return;
         }
+const memberGroup =
+    document.getElementById(
+        "relationsMemberGroup"
+    );
 
+if(memberGroup){
+
+    memberGroup.style.display =
+        "none";
+
+}
        /* =====================================
    HIDE MEMBER SELECTOR AFTER SELECTION
    ===================================== */
