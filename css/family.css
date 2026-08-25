@@ -824,3 +824,24 @@
 .relations-member-header{
     display:none;
 }
+/* =====================================
+   RELATION TITLES
+   ===================================== */
+
+.relations-section h3,
+.relation-subgroup-title,
+.relation-subgroup-title span:first-child{
+    color:#2A6EB0;
+    font-weight:600;
+}
+
+
+/* =====================================
+   MEMBER NAMES - NORMAL FONT
+   ===================================== */
+
+.relation-row span[id],
+.relation-subrow span[id]{
+    font-weight:400;
+    color:inherit;
+}
