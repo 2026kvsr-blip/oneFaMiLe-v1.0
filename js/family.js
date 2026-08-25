@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -283,8 +284,9 @@ if(familyBackBtn){
      SELECT MEMBER
      ================================= -->
 
-<div class="common-form-group">
-
+<div
+    id="relationsMemberGroup"
+    class="common-form-group">
     <label class="common-form-label">
         Member
     </label>
