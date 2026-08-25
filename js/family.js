@@ -3978,12 +3978,51 @@ if(loggedUser){
         }
     )
     .then(
-        function(response){
+    async function(response){
 
-            return response.json();
+        const text =
+            await response.text();
+
+        console.log(
+            "API STATUS:",
+            response.status
+        );
+
+        console.log(
+            "API RESPONSE:",
+            text
+        );
+
+        if(!response.ok){
+
+            throw new Error(
+                "API HTTP Error " +
+                response.status +
+                ": " +
+                text.substring(0,300)
+            );
 
         }
-    )
+
+        try{
+
+            return JSON.parse(text);
+
+        }catch(error){
+
+            console.error(
+                "API returned NON-JSON:",
+                text
+            );
+
+            throw new Error(
+                "Server did not return JSON."
+            );
+
+        }
+
+    }
+)
     .then(
         function(result){
 
@@ -4048,6 +4087,7 @@ localStorage.setItem(
         serverFamily
     )
 );
+           
             /* =========================
                GET FAMILY ELEMENTS
                ========================= */
