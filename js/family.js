@@ -1233,7 +1233,80 @@ if(mother){
     }
 
 }
-      
+   /* ================================
+   DISPLAY GRAND FATHER - FATHER SIDE
+   ================================ */
+
+const paternalGrandFatherField =
+    document.getElementById(
+        "relationPaternalGrandFather"
+    );
+
+if(paternalGrandFatherField){
+
+    paternalGrandFatherField.textContent =
+        paternalGrandFather
+            ? paternalGrandFather.name
+            : "--------";
+
+}
+
+
+/* ================================
+   DISPLAY GRAND MOTHER - FATHER SIDE
+   ================================ */
+
+const paternalGrandMotherField =
+    document.getElementById(
+        "relationPaternalGrandMother"
+    );
+
+if(paternalGrandMotherField){
+
+    paternalGrandMotherField.textContent =
+        paternalGrandMother
+            ? paternalGrandMother.name
+            : "--------";
+
+}
+
+
+/* ================================
+   DISPLAY GRAND FATHER - MOTHER SIDE
+   ================================ */
+
+const maternalGrandFatherField =
+    document.getElementById(
+        "relationMaternalGrandFather"
+    );
+
+if(maternalGrandFatherField){
+
+    maternalGrandFatherField.textContent =
+        maternalGrandFather
+            ? maternalGrandFather.name
+            : "--------";
+
+}
+
+
+/* ================================
+   DISPLAY GRAND MOTHER - MOTHER SIDE
+   ================================ */
+
+const maternalGrandMotherField =
+    document.getElementById(
+        "relationMaternalGrandMother"
+    );
+
+if(maternalGrandMotherField){
+
+    maternalGrandMotherField.textContent =
+        maternalGrandMother
+            ? maternalGrandMother.name
+            : "--------";
+
+}   
    /* ================================
    SIBLINGS
    ================================ */
