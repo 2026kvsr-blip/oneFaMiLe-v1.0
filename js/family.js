@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -390,6 +391,37 @@ if(familyBackBtn){
                 </div>
 
             </div>
+            <div class="relations-section">
+
+    <h3>5. In-Laws</h3>
+
+    <div>
+        Father-in-Law :
+        <span id="relationFatherInLaw">
+            --------
+        </span>
+    </div>
+
+    <div>
+        Mother-in-Law :
+        <span id="relationMotherInLaw">
+            --------
+        </span>
+    </div>
+
+    <strong>Brothers-in-Law</strong>
+
+    <div id="relationBrothersInLaw">
+        --------
+    </div>
+
+    <strong>Sisters-in-Law</strong>
+
+    <div id="relationSistersInLaw">
+        --------
+    </div>
+
+</div>
 
             <div align="center">
 
@@ -798,6 +830,276 @@ if(partnerField){
             : "--------";
 
 }
+      /* ================================
+   IN-LAWS
+   ================================ */
+
+let fatherInLaw = null;
+let motherInLaw = null;
+let brothersInLaw = [];
+let sistersInLaw = [];
+
+
+if(partner){
+
+    /* ================================
+       PARTNER'S FATHER
+       ================================ */
+
+    if(partner.fatherId){
+
+        fatherInLaw =
+            familyMembers.find(
+                function(item){
+
+                    return String(
+                        item.memberId
+                    ) === String(
+                        partner.fatherId
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* ================================
+       PARTNER'S MOTHER
+       ================================ */
+
+    if(partner.motherId){
+
+        motherInLaw =
+            familyMembers.find(
+                function(item){
+
+                    return String(
+                        item.memberId
+                    ) === String(
+                        partner.motherId
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* ================================
+       PARTNER'S SIBLINGS
+       ================================ */
+
+    const partnerSiblings =
+        familyMembers.filter(
+            function(item){
+
+                if(
+                    String(item.memberId) ===
+                    String(partner.memberId)
+                ){
+                    return false;
+                }
+
+
+                const sameFather =
+                    partner.fatherId &&
+                    item.fatherId &&
+                    String(
+                        item.fatherId
+                    ) === String(
+                        partner.fatherId
+                    );
+
+
+                const sameMother =
+                    partner.motherId &&
+                    item.motherId &&
+                    String(
+                        item.motherId
+                    ) === String(
+                        partner.motherId
+                    );
+
+
+                return (
+                    sameFather ||
+                    sameMother
+                );
+
+            }
+        );
+
+
+    brothersInLaw =
+        partnerSiblings.filter(
+            function(item){
+
+                return String(
+                    item.gender || ""
+                )
+                .toLowerCase()
+                === "male";
+
+            }
+        );
+
+
+    sistersInLaw =
+        partnerSiblings.filter(
+            function(item){
+
+                return String(
+                    item.gender || ""
+                )
+                .toLowerCase()
+                === "female";
+
+            }
+        );
+
+}
+
+/* ================================
+   DISPLAY FATHER-IN-LAW
+   ================================ */
+
+const fatherInLawField =
+    document.getElementById(
+        "relationFatherInLaw"
+    );
+
+if(fatherInLawField){
+
+    fatherInLawField.textContent =
+        fatherInLaw
+            ? fatherInLaw.name
+            : "--------";
+
+}
+
+
+/* ================================
+   DISPLAY MOTHER-IN-LAW
+   ================================ */
+
+const motherInLawField =
+    document.getElementById(
+        "relationMotherInLaw"
+    );
+
+if(motherInLawField){
+
+    motherInLawField.textContent =
+        motherInLaw
+            ? motherInLaw.name
+            : "--------";
+
+}
+
+
+/* ================================
+   DISPLAY BROTHERS-IN-LAW
+   ================================ */
+
+const brothersInLawField =
+    document.getElementById(
+        "relationBrothersInLaw"
+    );
+
+if(brothersInLawField){
+
+    brothersInLawField.innerHTML = "";
+
+    if(
+        brothersInLaw.length === 0
+    ){
+
+        brothersInLawField.textContent =
+            "--------";
+
+    }
+    else{
+
+        brothersInLaw.forEach(
+            function(brother, index){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        brother.name ||
+                        "--------"
+                    );
+
+                brothersInLawField.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* ================================
+   DISPLAY SISTERS-IN-LAW
+   ================================ */
+
+const sistersInLawField =
+    document.getElementById(
+        "relationSistersInLaw"
+    );
+
+if(sistersInLawField){
+
+    sistersInLawField.innerHTML = "";
+
+    if(
+        sistersInLaw.length === 0
+    ){
+
+        sistersInLawField.textContent =
+            "--------";
+
+    }
+    else{
+
+        sistersInLaw.forEach(
+            function(sister, index){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        sister.name ||
+                        "--------"
+                    );
+
+                sistersInLawField.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+      
    /* ================================
    SIBLINGS
    ================================ */
