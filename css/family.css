@@ -1,4 +1,5 @@
 
+
 /* =====================================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -844,4 +845,10 @@
 .relation-subrow span[id]{
     font-weight:400;
     color:inherit;
+}
+.relation-title{
+    display:block;
+    color:#2A6EB0;
+    font-weight:600;
+    margin:6px 0 3px 0;
 }
