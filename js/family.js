@@ -215,7 +215,27 @@ familyBtn.onclick = () => {
         `
 
     );
- 
+
+
+   const addMemberBtn =
+    document.getElementById(
+        "addMemberBtn"
+    );
+
+if(addMemberBtn){
+
+    addMemberBtn.onclick =
+        function(){
+
+            console.log(
+                "ADD MEMBER BUTTON CLICKED"
+            );
+
+            openAddMemberPage();
+
+        };
+
+}
    /* =====================================
    FAMILY → RELATIONS
    ===================================== */
@@ -885,29 +905,19 @@ const sistersField =
     document.getElementById(
         "relationSisters"
     );
-
-
 if(sistersField){
-
     sistersField.innerHTML = "";
-
-
     if(sisters.length === 0){
-
         sistersField.textContent =
             "--------";
-
     }
     else{
-
         sisters.forEach(
             function(sister, index){
-
                 const div =
                     document.createElement(
                         "div"
                     );
-
                 div.textContent =
                     (index + 1) +
                     ". " +
