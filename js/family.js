@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -694,30 +695,20 @@ if(partnerField){
 const siblings =
     familyMembers.filter(
         function(item){
-
             /* Don't include selected member */
-
             if(
                 String(item.memberId) ===
                 String(member.memberId)
             ){
-
                 return false;
-
             }
-
-
-            /* Same Father */
-
+           /* Same Father */
             const sameFather =
                 member.fatherId &&
                 item.fatherId &&
                 String(item.fatherId) ===
                 String(member.fatherId);
-
-
             /* Same Mother */
-
             const sameMother =
                 member.motherId &&
                 item.motherId &&
@@ -796,7 +787,82 @@ if(brothersField){
     }
 
 }
+/* ================================
+   CHILDREN
+   ================================ */
 
+const children =
+    familyMembers.filter(
+        function(item){
+
+            const isFather =
+                String(
+                    item.fatherId || ""
+                ) === String(
+                    member.memberId
+                );
+
+            const isMother =
+                String(
+                    item.motherId || ""
+                ) === String(
+                    member.memberId
+                );
+
+            return (
+                isFather ||
+                isMother
+            );
+
+        }
+    );
+
+
+const childrenField =
+    document.getElementById(
+        "relationChildren"
+    );
+
+
+if(childrenField){
+
+    childrenField.innerHTML = "";
+
+
+    if(children.length === 0){
+
+        childrenField.textContent =
+            "--------";
+
+    }
+    else{
+
+        children.forEach(
+            function(child,index){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        child.name ||
+                        "--------"
+                    );
+
+                childrenField.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
 
 /* ================================
    SISTERS
