@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -215,7 +216,6 @@ familyBtn.onclick = () => {
         `
 
     );
-bindAddMemberButton();
  
    /* =====================================
    FAMILY → RELATIONS
