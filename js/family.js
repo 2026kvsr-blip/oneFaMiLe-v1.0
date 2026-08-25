@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -662,6 +661,42 @@ if(memberGroup){
         "none";
 
 }
+        /* =====================================
+           SHOW MEMBER HEADER
+           ===================================== */
+
+        const memberHeader =
+            document.querySelector(
+                ".relations-member-header"
+            );
+
+        if(memberHeader){
+
+            memberHeader.style.display =
+                "flex";
+
+        }
+
+
+        /* =====================================
+           SHOW RELATION SECTIONS
+           ===================================== */
+
+        const relationSections =
+            document.querySelectorAll(
+                ".relations-section"
+            );
+
+        relationSections.forEach(
+            function(section){
+
+                section.style.display =
+                    "block";
+
+            }
+        );
+
+       
        /* =====================================
    HIDE MEMBER SELECTOR AFTER SELECTION
    ===================================== */
