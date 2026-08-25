@@ -4186,7 +4186,7 @@ localStorage.setItem(
     );
 
 }
-           
+  };         
         /* =====================================
            FAMILY NAME → GENERATE FAMILY ID
            ===================================== */
@@ -4651,7 +4651,7 @@ fetch(
 
         }
     );
-};
+
            /* =================================
    BLOCK SPACE KEY
    FAMILY NAME
