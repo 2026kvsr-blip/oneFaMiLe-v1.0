@@ -817,3 +817,10 @@
     background:#e8f7fa;
     border-color:#2999aa;
 }
+.relations-section{
+    display:none;
+}
+
+.relations-member-header{
+    display:none;
+}
