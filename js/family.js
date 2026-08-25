@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -217,25 +218,6 @@ familyBtn.onclick = () => {
     );
 
 
-   const addMemberBtn =
-    document.getElementById(
-        "addMemberBtn"
-    );
-
-if(addMemberBtn){
-
-    addMemberBtn.onclick =
-        function(){
-
-            console.log(
-                "ADD MEMBER BUTTON CLICKED"
-            );
-
-            openAddMemberPage();
-
-        };
-
-}
    /* =====================================
    FAMILY → RELATIONS
    ===================================== */
