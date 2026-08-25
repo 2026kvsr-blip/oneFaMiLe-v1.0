@@ -4,6 +4,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -403,14 +404,16 @@ if(familyBackBtn){
     class="relations-section relations-siblings">
                 <h3>4. Siblings</h3>
 
-                <strong>Brothers</strong>
-
+<strong class="relation-title">
+    Brothers
+</strong>
                 <div id="relationBrothers">
                     --------
                 </div>
 
-                <strong>Sisters</strong>
-
+<strong class="relation-title">
+    Sisters
+</strong>
                 <div id="relationSisters">
                     --------
                 </div>
@@ -451,14 +454,16 @@ if(familyBackBtn){
     </span>
 
 </div>
-    <strong>Brothers-in-Law</strong>
-
+<strong class="relation-title">
+    Brothers-in-Law
+</strong>
     <div id="relationBrothersInLaw">
         --------
     </div>
 
-    <strong>Sisters-in-Law</strong>
-
+<strong class="relation-title">
+    Sisters-in-Law
+</strong>
     <div id="relationSistersInLaw">
         --------
     </div>
@@ -502,8 +507,9 @@ if(familyBackBtn){
 
 </div>
 
-    <strong>Maternal Grand Parents</strong>
-
+<strong class="relation-title">
+    Maternal Grand Parents
+</strong>
     <div class="relation-row">
 
     <span class="relation-label">
