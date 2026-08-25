@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -293,6 +294,13 @@ if(familyBackBtn){
         :
     </span>
 
+
+<input
+    type="text"
+    id="relationsMemberSearch"
+    class="common-form-input"
+    placeholder="Search Member..."
+    autocomplete="off">
     <select
         id="relationsMemberSelect"
         class="common-form-select">
@@ -399,7 +407,13 @@ if(familyBackBtn){
         document.getElementById(
             "relationsMemberSelect"
         );
-      /* =====================================
+const relationsMemberSearch =
+    document.getElementById(
+        "relationsMemberSearch"
+    );
+
+      
+/* =====================================
    LOAD MEMBERS INTO RELATIONS DROPDOWN
    ===================================== */
 
@@ -441,6 +455,96 @@ if(relationsMemberSelect){
             );
         }
     );
+
+   /* =====================================
+   SEARCH MEMBERS
+   ===================================== */
+
+if(relationsMemberSearch){
+
+    relationsMemberSearch.oninput =
+        function(){
+
+            const searchText =
+                this.value
+                    .trim()
+                    .toLowerCase();
+
+
+            relationsMemberSelect.innerHTML = "";
+
+
+            const defaultOption =
+                document.createElement(
+                    "option"
+                );
+
+            defaultOption.value = "";
+
+            defaultOption.textContent =
+                searchText
+                    ? "Matching Members"
+                    : "Select Member";
+
+            relationsMemberSelect.appendChild(
+                defaultOption
+            );
+
+
+            familyMembers.forEach(
+                function(member){
+
+                    if(
+                        !member ||
+                        !member.memberId
+                    ){
+                        return;
+                    }
+
+
+                    const memberName =
+                        String(
+                            member.name || ""
+                        );
+
+
+                    /* =========================
+                       EMPTY → ALL MEMBERS
+                       TEXT → ANYWHERE IN NAME
+                       ========================= */
+
+                    if(
+                        searchText === "" ||
+                        memberName
+                            .toLowerCase()
+                            .includes(searchText)
+                    ){
+
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
+
+                        option.value =
+                            member.memberId;
+
+                        option.textContent =
+                            memberName ||
+                            "Unnamed";
+
+                        relationsMemberSelect
+                            .appendChild(
+                                option
+                            );
+
+                    }
+
+                }
+            );
+
+        };
+
+}
 relationsMemberSelect.onchange =
     function(){
 
