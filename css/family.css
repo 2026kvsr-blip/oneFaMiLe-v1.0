@@ -6,6 +6,7 @@
    FAMILY FORM CONTAINER
    ===================================== */
 
+
 .family-box{
 
     width: calc(100% - 40px);
@@ -702,4 +703,36 @@
     width:20px;
     flex-shrink:0;
     text-align:center;
+}
+.relations-member-header{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    gap:15px;
+    width:100%;
+    box-sizing:border-box;
+    padding:10px 5px 15px;
+}
+
+#relationMemberPhoto{
+    width:85px;
+    height:85px;
+    min-width:85px;
+    border-radius:50%;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+#relationMemberPhoto img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:50%;
+}
+
+#relationMemberName{
+    font-size:22px;
+    font-weight:700;
 }
