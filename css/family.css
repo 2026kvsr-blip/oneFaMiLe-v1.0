@@ -6,6 +6,7 @@
    FAMILY FORM CONTAINER
    ===================================== */
 
+
 .family-box{
 
     width: calc(100% - 40px);
@@ -739,15 +740,6 @@
    RELATIONS SECTIONS
    ===================================== */
 
-.relations-section{
-    width:100%;
-    box-sizing:border-box;
-    padding:10px 12px;
-    margin:8px 0;
-    border:1px solid;
-    border-radius:10px;
-}
-
 
 /* SECTION HEADING */
 
@@ -819,6 +811,13 @@
 }
 .relations-section{
     display:none;
+    width:calc(100% - 20px);
+    margin-left:10px;
+    margin-right:10px;
+    box-sizing:border-box;
+    padding:10px 12px;
+    border:1px solid;
+    border-radius:10px;
 }
 
 .relations-member-header{
