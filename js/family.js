@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1280,6 +1281,498 @@ if(sistersInLawField){
         );
 
     }
+
+}
+      /* ================================
+   FATHER'S SIBLINGS
+   ================================ */
+
+let fatherSiblings = [];
+let fatherSiblingsBrothers = [];
+let fatherSiblingsSisters = [];
+
+
+if(father){
+
+    fatherSiblings =
+        familyMembers.filter(
+            function(item){
+
+                if(
+                    String(item.memberId) ===
+                    String(father.memberId)
+                ){
+                    return false;
+                }
+
+
+                const sameFather =
+                    father.fatherId &&
+                    item.fatherId &&
+                    String(
+                        item.fatherId
+                    ) === String(
+                        father.fatherId
+                    );
+
+
+                const sameMother =
+                    father.motherId &&
+                    item.motherId &&
+                    String(
+                        item.motherId
+                    ) === String(
+                        father.motherId
+                    );
+
+
+                return (
+                    sameFather ||
+                    sameMother
+                );
+
+            }
+        );
+
+
+    fatherSiblingsBrothers =
+        fatherSiblings.filter(
+            function(item){
+
+                return String(
+                    item.gender || ""
+                )
+                .toLowerCase()
+                === "male";
+
+            }
+        );
+
+
+    fatherSiblingsSisters =
+        fatherSiblings.filter(
+            function(item){
+
+                return String(
+                    item.gender || ""
+                )
+                .toLowerCase()
+                === "female";
+
+            }
+        );
+
+}
+      /* ================================
+   MOTHER'S SIBLINGS
+   ================================ */
+
+let motherSiblings = [];
+let motherSiblingsBrothers = [];
+let motherSiblingsSisters = [];
+
+
+if(mother){
+
+    motherSiblings =
+        familyMembers.filter(
+            function(item){
+
+                if(
+                    String(item.memberId) ===
+                    String(mother.memberId)
+                ){
+                    return false;
+                }
+
+
+                const sameFather =
+                    mother.fatherId &&
+                    item.fatherId &&
+                    String(
+                        item.fatherId
+                    ) === String(
+                        mother.fatherId
+                    );
+
+
+                const sameMother =
+                    mother.motherId &&
+                    item.motherId &&
+                    String(
+                        item.motherId
+                    ) === String(
+                        mother.motherId
+                    );
+
+
+                return (
+                    sameFather ||
+                    sameMother
+                );
+
+            }
+        );
+
+
+    motherSiblingsBrothers =
+        motherSiblings.filter(
+            function(item){
+
+                return String(
+                    item.gender || ""
+                )
+                .toLowerCase()
+                === "male";
+
+            }
+        );
+
+
+    motherSiblingsSisters =
+        motherSiblings.filter(
+            function(item){
+
+                return String(
+                    item.gender || ""
+                )
+                .toLowerCase()
+                === "female";
+
+            }
+        );
+
+}
+      /* ================================
+   FATHER-IN-LAW'S SIBLINGS
+   ================================ */
+
+let fatherInLawSiblings = [];
+let fatherInLawSiblingsBrothers = [];
+let fatherInLawSiblingsSisters = [];
+
+
+if(fatherInLaw){
+
+    fatherInLawSiblings =
+        familyMembers.filter(
+            function(item){
+
+                if(
+                    String(item.memberId) ===
+                    String(fatherInLaw.memberId)
+                ){
+                    return false;
+                }
+
+
+                const sameFather =
+                    fatherInLaw.fatherId &&
+                    item.fatherId &&
+                    String(
+                        item.fatherId
+                    ) === String(
+                        fatherInLaw.fatherId
+                    );
+
+
+                const sameMother =
+                    fatherInLaw.motherId &&
+                    item.motherId &&
+                    String(
+                        item.motherId
+                    ) === String(
+                        fatherInLaw.motherId
+                    );
+
+
+                return (
+                    sameFather ||
+                    sameMother
+                );
+
+            }
+        );
+
+
+    fatherInLawSiblingsBrothers =
+        fatherInLawSiblings.filter(
+            function(item){
+
+                return String(
+                    item.gender || ""
+                )
+                .toLowerCase()
+                === "male";
+
+            }
+        );
+
+
+    fatherInLawSiblingsSisters =
+        fatherInLawSiblings.filter(
+            function(item){
+
+                return String(
+                    item.gender || ""
+                )
+                .toLowerCase()
+                === "female";
+
+            }
+        );
+
+}
+      /* ================================
+   MOTHER-IN-LAW'S SIBLINGS
+   ================================ */
+
+let motherInLawSiblings = [];
+let motherInLawSiblingsBrothers = [];
+let motherInLawSiblingsSisters = [];
+
+
+if(motherInLaw){
+
+    motherInLawSiblings =
+        familyMembers.filter(
+            function(item){
+
+                if(
+                    String(item.memberId) ===
+                    String(motherInLaw.memberId)
+                ){
+                    return false;
+                }
+
+
+                const sameFather =
+                    motherInLaw.fatherId &&
+                    item.fatherId &&
+                    String(
+                        item.fatherId
+                    ) === String(
+                        motherInLaw.fatherId
+                    );
+
+
+                const sameMother =
+                    motherInLaw.motherId &&
+                    item.motherId &&
+                    String(
+                        item.motherId
+                    ) === String(
+                        motherInLaw.motherId
+                    );
+
+
+                return (
+                    sameFather ||
+                    sameMother
+                );
+
+            }
+        );
+
+
+    motherInLawSiblingsBrothers =
+        motherInLawSiblings.filter(
+            function(item){
+
+                return String(
+                    item.gender || ""
+                )
+                .toLowerCase()
+                === "male";
+
+            }
+        );
+
+
+    motherInLawSiblingsSisters =
+        motherInLawSiblings.filter(
+            function(item){
+
+                return String(
+                    item.gender || ""
+                )
+                .toLowerCase()
+                === "female";
+
+            }
+        );
+
+}
+      /* ================================
+   DISPLAY FATHER'S SIBLINGS COUNTS
+   ================================ */
+
+const fatherSiblingsTotalField =
+    document.getElementById(
+        "relationFatherSiblingsTotal"
+    );
+
+if(fatherSiblingsTotalField){
+
+    fatherSiblingsTotalField.textContent =
+        fatherSiblings.length;
+
+}
+
+
+const fatherSiblingsBrothersField =
+    document.getElementById(
+        "relationFatherSiblingsBrothers"
+    );
+
+if(fatherSiblingsBrothersField){
+
+    fatherSiblingsBrothersField.textContent =
+        fatherSiblingsBrothers.length;
+
+}
+
+
+const fatherSiblingsSistersField =
+    document.getElementById(
+        "relationFatherSiblingsSisters"
+    );
+
+if(fatherSiblingsSistersField){
+
+    fatherSiblingsSistersField.textContent =
+        fatherSiblingsSisters.length;
+
+}
+
+
+/* ================================
+   DISPLAY MOTHER'S SIBLINGS COUNTS
+   ================================ */
+
+const motherSiblingsTotalField =
+    document.getElementById(
+        "relationMotherSiblingsTotal"
+    );
+
+if(motherSiblingsTotalField){
+
+    motherSiblingsTotalField.textContent =
+        motherSiblings.length;
+
+}
+
+
+const motherSiblingsBrothersField =
+    document.getElementById(
+        "relationMotherSiblingsBrothers"
+    );
+
+if(motherSiblingsBrothersField){
+
+    motherSiblingsBrothersField.textContent =
+        motherSiblingsBrothers.length;
+
+}
+
+
+const motherSiblingsSistersField =
+    document.getElementById(
+        "relationMotherSiblingsSisters"
+    );
+
+if(motherSiblingsSistersField){
+
+    motherSiblingsSistersField.textContent =
+        motherSiblingsSisters.length;
+
+}
+
+
+/* ================================
+   DISPLAY FATHER-IN-LAW'S
+   SIBLINGS COUNTS
+   ================================ */
+
+const fatherInLawSiblingsTotalField =
+    document.getElementById(
+        "relationFatherInLawSiblingsTotal"
+    );
+
+if(fatherInLawSiblingsTotalField){
+
+    fatherInLawSiblingsTotalField.textContent =
+        fatherInLawSiblings.length;
+
+}
+
+
+const fatherInLawSiblingsBrothersField =
+    document.getElementById(
+        "relationFatherInLawSiblingsBrothers"
+    );
+
+if(fatherInLawSiblingsBrothersField){
+
+    fatherInLawSiblingsBrothersField.textContent =
+        fatherInLawSiblingsBrothers.length;
+
+}
+
+
+const fatherInLawSiblingsSistersField =
+    document.getElementById(
+        "relationFatherInLawSiblingsSisters"
+    );
+
+if(fatherInLawSiblingsSistersField){
+
+    fatherInLawSiblingsSistersField.textContent =
+        fatherInLawSiblingsSisters.length;
+
+}
+
+
+/* ================================
+   DISPLAY MOTHER-IN-LAW'S
+   SIBLINGS COUNTS
+   ================================ */
+
+const motherInLawSiblingsTotalField =
+    document.getElementById(
+        "relationMotherInLawSiblingsTotal"
+    );
+
+if(motherInLawSiblingsTotalField){
+
+    motherInLawSiblingsTotalField.textContent =
+        motherInLawSiblings.length;
+
+}
+
+
+const motherInLawSiblingsBrothersField =
+    document.getElementById(
+        "relationMotherInLawSiblingsBrothers"
+    );
+
+if(motherInLawSiblingsBrothersField){
+
+    motherInLawSiblingsBrothersField.textContent =
+        motherInLawSiblingsBrothers.length;
+
+}
+
+
+const motherInLawSiblingsSistersField =
+    document.getElementById(
+        "relationMotherInLawSiblingsSisters"
+    );
+
+if(motherInLawSiblingsSistersField){
+
+    motherInLawSiblingsSistersField.textContent =
+        motherInLawSiblingsSisters.length;
 
 }
 /* ================================
