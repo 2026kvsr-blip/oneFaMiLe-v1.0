@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -295,12 +294,8 @@ if(familyBackBtn){
     </span>
 
 
-<input
-    type="text"
-    id="relationsMemberSearch"
-    class="common-form-input"
-    placeholder="Search Member..."
-    autocomplete="off">
+<div class="relations-member-row">
+
     <select
         id="relationsMemberSelect"
         class="common-form-select">
@@ -310,6 +305,16 @@ if(familyBackBtn){
         </option>
 
     </select>
+
+
+    <input
+        type="text"
+        id="relationsMemberSearch"
+        class="common-form-input"
+        placeholder="Search Member..."
+        autocomplete="off">
+
+</div>
 
 </div>
         <div class="relations-page">
