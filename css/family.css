@@ -663,3 +663,19 @@
     color: orange;
 
 }
+.relations-member-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+}
+
+#relationsMemberSelect{
+    flex:1;
+    min-width:0;
+}
+
+#relationsMemberSearch{
+    width:50%;
+    box-sizing:border-box;
+}
