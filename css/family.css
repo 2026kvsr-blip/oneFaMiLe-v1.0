@@ -974,3 +974,98 @@
     font-size:16px;
 
 }
+
+/* =====================================
+   RELATIONS MEMBER SEARCH
+   ===================================== */
+
+.relations-member-search-wrap{
+
+    position:relative;
+
+    width:100%;
+
+}
+
+
+#relationsMemberSearch{
+
+    width:100%;
+
+    box-sizing:border-box;
+
+}
+
+
+.relations-member-dropdown{
+
+    display:none;
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    top:100%;
+
+    z-index:9999;
+
+    background:#ffffff;
+
+    border:1px solid #c4d4ff;
+
+    border-radius:10px;
+
+    max-height:220px;
+
+    overflow-y:auto;
+
+    box-shadow:
+        0 4px 12px rgba(
+            0,
+            0,
+            0,
+            0.15
+        );
+
+}
+
+
+.relations-member-option{
+
+    padding:12px 14px;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+    background:#ffffff;
+
+    border-bottom:
+        1px solid #eeeeee;
+
+}
+
+
+.relations-member-option:last-child{
+
+    border-bottom:none;
+
+}
+
+
+.relations-member-option:active{
+
+    background:#eaf8ff;
+
+}
+
+
+.relations-no-match{
+
+    padding:12px 14px;
+
+    font-size:16px;
+
+}
