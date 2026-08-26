@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -93,6 +94,7 @@ function isFamilyIdAvailable(familyId){
    ===================================== */
 
 familyBtn.onclick = () => {
+    console.log("FAMILY BUTTON CLICKED");
 
     setActiveButton(familyBtn);
  
