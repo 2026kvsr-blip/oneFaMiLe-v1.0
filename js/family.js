@@ -2640,15 +2640,6 @@ memberBackBtn.onclick =
    GET CURRENT FAMILY
    ================================= */
 
-/* =================================
-   GET CURRENT USER
-   ================================= */
-
-const loggedUser =
-    JSON.parse(
-        sessionStorage.getItem("user")
-    ) || {};
-
 
 /* =================================
    GET STORED FAMILY
