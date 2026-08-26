@@ -9498,11 +9498,9 @@ const existingFamilies =
     }
 
 };
-
         /* =====================================
            CREATE FAMILY TREE → BACK
            ===================================== */
-
         document
             .getElementById(
                 "createFamilyBackBtn"
@@ -9510,21 +9508,14 @@ const existingFamilies =
             .onclick = () => {
 
                 familyBtn.click();
-
             };
-
-    
-
-
 
     /* =====================================
        FAMILY → BACK
        ===================================== */
-
     document
         .getElementById("familyBack")
         .onclick = showHome;
-
 };
 
 
