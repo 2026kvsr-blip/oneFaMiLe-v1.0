@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -817,15 +818,7 @@ const relationsMemberSearch =
 
 if(relationsMemberSelect){
 
-    let familyMembers =
-        JSON.parse(
-            localStorage.getItem(
-                "familyMembers"
-            ) || "[]"
-        );
-
-
-    console.log(
+       console.log(
         "RELATIONS FAMILY MEMBERS:",
         familyMembers
     );
@@ -3410,7 +3403,6 @@ async function loadMemberRelations(){
    GET MEMBERS FROM GOOGLE SHEET
    ================================= */
 
-let members = [];
 
 try{
 
@@ -3468,10 +3460,10 @@ try{
     }
 
 
-    members =
-        Array.isArray(result.members)
-            ? result.members
-            : [];
+   familyMembers =
+    Array.isArray(result.members)
+        ? result.members
+        : [];
 
 
     /* =============================
@@ -5053,7 +5045,7 @@ const storedFamily =
 /* =================================
    VERIFY FAMILY BELONGS TO USER
    ================================= */
-
+let familyMembers = [];
 let currentFamily = null;
 
 
