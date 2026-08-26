@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -438,39 +439,50 @@ if(familyBackBtn){
     </div>
 
 
-    <div class="relation-subrow">
+  <div
+    id="fatherSiblingsBrothersRow"
+    class="relation-subrow">
 
-        <span>
-            Brothers
-        </span>
+    <span>
+        Brothers
+    </span>
 
-        <span>
-            :
-        </span>
+    <span>
+        :
+    </span>
 
-        <span id="relationFatherSiblingsBrothers">
-            0
-        </span>
+    <span id="relationFatherSiblingsBrothers">
+        0
+    </span>
 
-    </div>
+</div>
 
+<div
+    id="relationFatherSiblingsBrothersNames"
+    class="relation-names">
+</div>
+   <div
+    id="fatherSiblingsSistersRow"
+    class="relation-subrow">
 
-    <div class="relation-subrow">
+    <span>
+        Sisters
+    </span>
 
-        <span>
-            Sisters
-        </span>
+    <span>
+        :
+    </span>
 
-        <span>
-            :
-        </span>
+    <span id="relationFatherSiblingsSisters">
+        0
+    </span>
 
-        <span id="relationFatherSiblingsSisters">
-            0
-        </span>
+</div>
 
-    </div>
-
+<div
+    id="relationFatherSiblingsSistersNames"
+    class="relation-names">
+</div>
 </div>
 
 
@@ -493,39 +505,51 @@ if(familyBackBtn){
     </div>
 
 
-    <div class="relation-subrow">
+    <div
+    id="motherSiblingsBrothersRow"
+    class="relation-subrow">
 
-        <span>
-            Brothers
-        </span>
+    <span>
+        Brothers
+    </span>
 
-        <span>
-            :
-        </span>
+    <span>
+        :
+    </span>
 
-        <span id="relationMotherSiblingsBrothers">
-            0
-        </span>
+    <span id="relationMotherSiblingsBrothers">
+        0
+    </span>
 
-    </div>
+</div>
 
+<div
+    id="relationMotherSiblingsBrothersNames"
+    class="relation-names">
+</div>
 
-    <div class="relation-subrow">
+   <div
+    id="motherSiblingsSistersRow"
+    class="relation-subrow">
 
-        <span>
-            Sisters
-        </span>
+    <span>
+        Sisters
+    </span>
 
-        <span>
-            :
-        </span>
+    <span>
+        :
+    </span>
 
-        <span id="relationMotherSiblingsSisters">
-            0
-        </span>
+    <span id="relationMotherSiblingsSisters">
+        0
+    </span>
 
-    </div>
+</div>
 
+<div
+    id="relationMotherSiblingsSistersNames"
+    class="relation-names">
+</div>
 </div>
             </div>
 <div
@@ -1990,6 +2014,77 @@ if(motherInLawSiblingsSistersField){
 
     motherInLawSiblingsSistersField.textContent =
         motherInLawSiblingsSisters.length;
+
+}
+      /* ================================
+   HIDE ZERO COUNT SIBLING ROWS
+   ================================ */
+
+
+/* Father's Brothers */
+
+const fatherBrothersRow =
+    document.getElementById(
+        "fatherSiblingsBrothersRow"
+    );
+
+if(fatherBrothersRow){
+
+    fatherBrothersRow.style.display =
+        fatherSiblingsBrothers.length > 0
+            ? "flex"
+            : "none";
+
+}
+
+
+/* Father's Sisters */
+
+const fatherSistersRow =
+    document.getElementById(
+        "fatherSiblingsSistersRow"
+    );
+
+if(fatherSistersRow){
+
+    fatherSistersRow.style.display =
+        fatherSiblingsSisters.length > 0
+            ? "flex"
+            : "none";
+
+}
+
+
+/* Mother's Brothers */
+
+const motherBrothersRow =
+    document.getElementById(
+        "motherSiblingsBrothersRow"
+    );
+
+if(motherBrothersRow){
+
+    motherBrothersRow.style.display =
+        motherSiblingsBrothers.length > 0
+            ? "flex"
+            : "none";
+
+}
+
+
+/* Mother's Sisters */
+
+const motherSistersRow =
+    document.getElementById(
+        "motherSiblingsSistersRow"
+    );
+
+if(motherSistersRow){
+
+    motherSistersRow.style.display =
+        motherSiblingsSisters.length > 0
+            ? "flex"
+            : "none";
 
 }
 /* ================================
