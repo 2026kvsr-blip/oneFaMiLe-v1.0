@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -624,105 +623,6 @@ if(relationsMemberSearch){
 }
 
 
-      
- const relationsMemberSelect =
-        document.getElementById(
-            "relationsMemberSelect"
-        );
-      /* =====================================
-   LOAD MEMBERS INTO RELATIONS DROPDOWN
-   ===================================== */
-
-if(relationsMemberSelect){
-
-    let familyMembers =
-        JSON.parse(
-            localStorage.getItem(
-                "familyMembers"
-            ) || "[]"
-        );
-
-
-    console.log(
-        "RELATIONS FAMILY MEMBERS:",
-        familyMembers
-    );
-
-
-    familyMembers.forEach(
-        function(member){
-
-            if(
-                !member ||
-                !member.memberId
-            ){
-                return;
-            }
-            const option =
-                document.createElement(
-                    "option"
-                );
-            option.value =
-                member.memberId;
-            option.textContent =
-               member.name || "Unnamed";
-            relationsMemberSelect.appendChild(
-                option
-            );
-        }
-    );
-relationsMemberSelect.onchange =
-    function(){
-
-        const selectedMemberId =
-            this.value;
-
-
-        if(!selectedMemberId){
-
-            return;
-
-        }
-
-
-        const selectedMember =
-            familyMembers.find(
-                function(member){
-
-                    return String(
-                        member.memberId
-                    ) === String(
-                        selectedMemberId
-                    );
-
-                }
-            );
-
-
-        if(!selectedMember){
-
-            console.log(
-                "SELECTED MEMBER NOT FOUND"
-            );
-
-            return;
-
-        }
-
-
-        console.log(
-            "SELECTED RELATIONS MEMBER:",
-            selectedMember
-        );
-
-
-        loadSelectedMemberRelations(
-            selectedMember,
-            familyMembers
-        );
-
-    };
-}
     const relationsBackBtn =
         document.getElementById(
             "relationsBackBtn"
