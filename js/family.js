@@ -1,10 +1,7 @@
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
    ===================================== */
-
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -33,25 +30,19 @@ function generateFamilyId(familyName){
                 "familyTrees"
             ) || "[]"
         );
-
-
     const existingIds =
         existingFamilies.map(
             family =>
                 family.familyId
         );
 
-
     let familyId;
     let uniquePart;
-
-
     /* =================================
        GENERATE UNIQUE RANDOM 4
        ================================= */
 
     do{
-
         uniquePart =
             Math.random()
                 .toString(36)
@@ -67,8 +58,6 @@ function generateFamilyId(familyName){
             familyId
         )
     );
-
-
     return familyId;
 }
 
@@ -120,70 +109,47 @@ familyBtn.onclick = () => {
                 <span>
                     Add Member
                 </span>
-
             </button>
-
-
             <button
                 id="addFamilyBtn"
                 class="grid-btn">
-
                 <img
                     src="images/colorbtns/AddFamily1.png"
                     class="btn-icon">
-
                 <span>
                     Add Tree
                 </span>
-
             </button>
-
-
             <button
                 id="searchMemberBtn"
                 class="grid-btn">
-
                 <img
                     src="images/colorbtns/CustomSearch1.png"
                     class="btn-icon">
-
                 <span>
                     Search Member
                 </span>
-
             </button>
-
-
             <button
                 id="relationsBtn"
                 class="grid-btn">
-
                 <img
                     src="images/colorbtns/Relations1.png"
                     class="btn-icon">
-
                 <span>
                     Relations
                 </span>
-
             </button>
-
-
             <button
                 id="treeViewBtn"
                 class="grid-btn">
-
                 <img
                     src="images/colorbtns/TreeView1.png"
                     class="btn-icon">
-
                 <span>
                     Tree View
                 </span>
-
             </button>
-
-
             <button
                 id="familyAboutBtn"
                 
@@ -198,12 +164,8 @@ familyBtn.onclick = () => {
                 </span>
 
             </button>
-
         </div>
-
-
         <div align="center">
-
             <button
                 id="familyBack"
                 class="back-btn">
@@ -9492,9 +9454,7 @@ const existingFamilies =
             "error",
             3000
         );
-
     }
-
 };
         /* =====================================
            CREATE FAMILY TREE → BACK
@@ -9507,7 +9467,6 @@ const existingFamilies =
 
                 familyBtn.click();
             };
-
         
     /* =====================================
        FAMILY → BACK
