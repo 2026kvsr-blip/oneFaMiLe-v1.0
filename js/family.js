@@ -4,7 +4,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -8258,15 +8257,9 @@ const memberIdField =
     /* =====================================
        FAMILY → ADD TREE
        ===================================== */
-
-    const addFamilyBtn =
-    document.getElementById(
-        "addFamilyBtn"
-    );
-
-if(addFamilyBtn){
-
-    addFamilyBtn.onclick = () => {
+document
+    .getElementById("addFamilyBtn")
+    .onclick = () => {
 
 
         const user =
@@ -8648,8 +8641,6 @@ localStorage.setItem(
         }
     );
 
-}
-    };
 }
         /* =====================================
            FAMILY NAME → GENERATE FAMILY ID
