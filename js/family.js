@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -2062,7 +2063,15 @@ console.log(
         )
     );
 
+console.log(
+    "AFTER SAVE FAMILY MEMBERS:",
+    members
+);
 
+console.log(
+    "AFTER SAVE FAMILY MEMBERS COUNT:",
+    members.length
+);
 }catch(error){
 
     console.error(
