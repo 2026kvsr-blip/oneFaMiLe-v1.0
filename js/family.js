@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -2041,8 +2040,12 @@ try{
 
     }
 
-
+console.log(
+    "RELATIONS SERVER MEMBERS:",
+    result.members
+);
     members =
+       
         Array.isArray(result.members)
             ? result.members
             : [];
