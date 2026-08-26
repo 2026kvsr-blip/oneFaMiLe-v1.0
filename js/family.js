@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -418,7 +417,116 @@ if(familyBackBtn){
                 <div id="relationSisters">
                     --------
                 </div>
+<hr class="relation-separator">
 
+<div class="relation-subgroup">
+
+    <div class="relation-subgroup-title">
+
+        <span>
+            Father's Siblings
+        </span>
+
+        <span>
+            :
+        </span>
+
+        <span id="relationFatherSiblingsTotal">
+            0
+        </span>
+
+    </div>
+
+
+    <div class="relation-subrow">
+
+        <span>
+            Brothers
+        </span>
+
+        <span>
+            :
+        </span>
+
+        <span id="relationFatherSiblingsBrothers">
+            0
+        </span>
+
+    </div>
+
+
+    <div class="relation-subrow">
+
+        <span>
+            Sisters
+        </span>
+
+        <span>
+            :
+        </span>
+
+        <span id="relationFatherSiblingsSisters">
+            0
+        </span>
+
+    </div>
+
+</div>
+
+
+<div class="relation-subgroup">
+
+    <div class="relation-subgroup-title">
+
+        <span>
+            Mother's Siblings
+        </span>
+
+        <span>
+            :
+        </span>
+
+        <span id="relationMotherSiblingsTotal">
+            0
+        </span>
+
+    </div>
+
+
+    <div class="relation-subrow">
+
+        <span>
+            Brothers
+        </span>
+
+        <span>
+            :
+        </span>
+
+        <span id="relationMotherSiblingsBrothers">
+            0
+        </span>
+
+    </div>
+
+
+    <div class="relation-subrow">
+
+        <span>
+            Sisters
+        </span>
+
+        <span>
+            :
+        </span>
+
+        <span id="relationMotherSiblingsSisters">
+            0
+        </span>
+
+    </div>
+
+</div>
             </div>
 <div
     id="relationInLawsSection"
@@ -468,7 +576,116 @@ if(familyBackBtn){
     <div id="relationSistersInLaw">
         --------
     </div>
+<hr class="relation-separator">
 
+<div class="relation-subgroup">
+
+    <div class="relation-subgroup-title">
+
+        <span>
+            Father-in-Law Siblings
+        </span>
+
+        <span>
+            :
+        </span>
+
+        <span id="relationFatherInLawSiblingsTotal">
+            0
+        </span>
+
+    </div>
+
+
+    <div class="relation-subrow">
+
+        <span>
+            Brothers
+        </span>
+
+        <span>
+            :
+        </span>
+
+        <span id="relationFatherInLawSiblingsBrothers">
+            0
+        </span>
+
+    </div>
+
+
+    <div class="relation-subrow">
+
+        <span>
+            Sisters
+        </span>
+
+        <span>
+            :
+        </span>
+
+        <span id="relationFatherInLawSiblingsSisters">
+            0
+        </span>
+
+    </div>
+
+</div>
+
+
+<div class="relation-subgroup">
+
+    <div class="relation-subgroup-title">
+
+        <span>
+            Mother-in-Law Siblings
+        </span>
+
+        <span>
+            :
+        </span>
+
+        <span id="relationMotherInLawSiblingsTotal">
+            0
+        </span>
+
+    </div>
+
+
+    <div class="relation-subrow">
+
+        <span>
+            Brothers
+        </span>
+
+        <span>
+            :
+        </span>
+
+        <span id="relationMotherInLawSiblingsBrothers">
+            0
+        </span>
+
+    </div>
+
+
+    <div class="relation-subrow">
+
+        <span>
+            Sisters
+        </span>
+
+        <span>
+            :
+        </span>
+
+        <span id="relationMotherInLawSiblingsSisters">
+            0
+        </span>
+
+    </div>
+
+</div>
 </div>
 <div
     id="relationGrandParentsSection"
