@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -513,21 +512,7 @@ if(relationsMemberSearch){
             relationsMemberDropdown.innerHTML =
                 "";
 
-
-            /* =========================
-               NO TEXT
-               ========================= */
-
-            if(searchText === ""){
-
-                relationsMemberDropdown.style.display =
-                    "none";
-
-                return;
-
-            }
-
-
+          
             /* =========================
                FIND MATCHING MEMBERS
                ========================= */
