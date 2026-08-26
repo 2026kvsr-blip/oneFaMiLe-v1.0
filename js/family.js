@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -2485,17 +2486,67 @@ if(memberSelector){
             "relationsBackBtn"
         );
 
-    if(relationsBackBtn){
 
-        relationsBackBtn.onclick =
-            function(){
+   if(relationsBackBtn){
 
-                familyBtn.click();
+    relationsBackBtn.onclick =
+        function(){
 
-            };
+            /* ================================
+               CLEAR SELECTED MEMBER
+               ================================ */
 
-    }
+            const select =
+                document.getElementById(
+                    "relationsMemberSelect"
+                );
 
+            const search =
+                document.getElementById(
+                    "relationsMemberSearch"
+                );
+
+
+            if(select){
+
+                select.value = "";
+
+            }
+
+
+            if(search){
+
+                search.value = "";
+
+            }
+
+
+            /* ================================
+               HIDE RELATIONS MEMBER HEADER
+               ================================ */
+
+            const memberHeader =
+                document.querySelector(
+                    ".relations-member-header"
+                );
+
+            if(memberHeader){
+
+                memberHeader.style.display =
+                    "none";
+
+            }
+
+
+            /* ================================
+               GO BACK TO FAMILY PAGE
+               ================================ */
+
+            familyBtn.click();
+
+        };
+
+}
 }
    function loadSelectedMemberRelations(
     member,
