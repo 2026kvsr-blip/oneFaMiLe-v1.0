@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -209,25 +210,7 @@ if(familyBackBtn){
         };
 
 }
-                  
-
-            <div align="center">
-
-                <button
-                    id="relationsBackBtn"
-                    class="back-btn">
-
-                    ← Back
-
-                </button>
-
-            </div>
-
-        </div>
-
-        `
-    );
-
+    
 /* =====================================
    FAMILY → ADD MEMBER
    ===================================== */
