@@ -8259,9 +8259,14 @@ const memberIdField =
        FAMILY → ADD TREE
        ===================================== */
 
-    document
-        .getElementById("addFamilyBtn")
-        .onclick = () => {
+    const addFamilyBtn =
+    document.getElementById(
+        "addFamilyBtn"
+    );
+
+if(addFamilyBtn){
+
+    addFamilyBtn.onclick = () => {
 
 
         const user =
@@ -8644,7 +8649,8 @@ localStorage.setItem(
     );
 
 }
-          
+    };
+}
         /* =====================================
            FAMILY NAME → GENERATE FAMILY ID
            ===================================== */
