@@ -478,7 +478,13 @@ console.log(
     "RELATIONS FAMILY MEMBERS:",
     relationsFamilyMembers
 );
+console.log(
+    "RELATIONS MEMBER COUNT:",
+    relationsFamilyMembers.length
+);
 
+
+      
       //2C Code
       /* =====================================
    RELATIONS → SEARCH MEMBERS
