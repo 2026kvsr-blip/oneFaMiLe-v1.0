@@ -217,7 +217,7 @@ familyBtn.onclick = () => {
         `
 
     );
-bindAddMemberButton();
+//bindAddMemberButton();
 
    /* =====================================
    FAMILY → RELATIONS
