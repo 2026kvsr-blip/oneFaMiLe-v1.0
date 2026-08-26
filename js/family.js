@@ -4,20 +4,14 @@
    FAMILY MODULE
    ===================================== */
 
-
-
-
-
-
-
-
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
    F-NAME-RANDOM4
    ===================================== */
+
 function generateFamilyId(familyName){
+
     const cleanName =
         familyName
             .toUpperCase()
@@ -38,20 +32,25 @@ function generateFamilyId(familyName){
                 "familyTrees"
             ) || "[]"
         );
+
+
     const existingIds =
         existingFamilies.map(
             family =>
                 family.familyId
         );
 
+
     let familyId;
     let uniquePart;
+
+
     /* =================================
        GENERATE UNIQUE RANDOM 4
        ================================= */
 
-   
     do{
+
         uniquePart =
             Math.random()
                 .toString(36)
@@ -67,6 +66,8 @@ function generateFamilyId(familyName){
             familyId
         )
     );
+
+
     return familyId;
 }
 
@@ -91,7 +92,6 @@ function isFamilyIdAvailable(familyId){
    ===================================== */
 
 familyBtn.onclick = () => {
-    console.log("FAMILY BUTTON CLICKED");
 
     setActiveButton(familyBtn);
  
@@ -118,47 +118,70 @@ familyBtn.onclick = () => {
                 <span>
                     Add Member
                 </span>
+
             </button>
+
+
             <button
                 id="addFamilyBtn"
                 class="grid-btn">
+
                 <img
                     src="images/colorbtns/AddFamily1.png"
                     class="btn-icon">
+
                 <span>
                     Add Tree
                 </span>
+
             </button>
+
+
             <button
                 id="searchMemberBtn"
                 class="grid-btn">
+
                 <img
                     src="images/colorbtns/CustomSearch1.png"
                     class="btn-icon">
+
                 <span>
                     Search Member
                 </span>
+
             </button>
+
+
             <button
                 id="relationsBtn"
                 class="grid-btn">
+
                 <img
                     src="images/colorbtns/Relations1.png"
                     class="btn-icon">
+
                 <span>
                     Relations
                 </span>
+
             </button>
+
+
             <button
                 id="treeViewBtn"
                 class="grid-btn">
+
                 <img
                     src="images/colorbtns/TreeView1.png"
                     class="btn-icon">
+
                 <span>
                     Tree View
                 </span>
+
             </button>
+
+
             <button
                 id="familyAboutBtn"
                 
@@ -173,8 +196,12 @@ familyBtn.onclick = () => {
                 </span>
 
             </button>
+
         </div>
+
+
         <div align="center">
+
             <button
                 id="familyBack"
                 class="back-btn">
@@ -186,16 +213,43 @@ familyBtn.onclick = () => {
         </div>
 
         `
+
     );
 bindAddMemberButton();
 
+   /* =====================================
+   FAMILY → RELATIONS
+   ===================================== */
+
+const relationsBtn =
+    document.getElementById(
+        "relationsBtn"
+    );
+
+
+if(relationsBtn){
+
+    relationsBtn.onclick =
+        function(){
+
+            console.log(
+                "RELATIONS BUTTON CLICKED"
+            );
+
+            openRelationsPage();
+
+        };
+
+}
 /* =====================================
    FAMILY → BACK
    ===================================== */
+
 const familyBackBtn =
     document.getElementById(
         "familyBack"
     );
+
 
 if(familyBackBtn){
 
@@ -211,7 +265,659 @@ if(familyBackBtn){
         };
 
 }
+   function openRelationsPage(){
+
+    console.log(
+        "OPENING RELATIONS PAGE"
+    );
+
+    showPage(
+
+        pageTitle(
+            "Relations",
+            "images/colorbtns/Relations1.png"
+        )
+
+        + `
+<!-- =================================
+     SELECT MEMBER
+     ================================= -->
+
+<div class="common-form-group">
+
+    <label class="common-form-label">
+        Member
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <select
+        id="relationsMemberSelect"
+        class="common-form-select">
+
+        <option value="">
+            Select Member
+        </option>
+
+    </select>
+
+</div>
+        <div class="relations-page">
+
+            <div class="relations-member-header">
+
+                <div id="relationMemberPhoto">
+                </div>
+
+                <div id="relationMemberName">
+                    -
+                </div>
+
+            </div>
+
+            <div class="relations-section">
+
+                <h3>1. Parents</h3>
+
+                <div>
+                    Father :
+                    <span id="relationFather">
+                        --------
+                    </span>
+                </div>
+
+                <div>
+                    Mother :
+                    <span id="relationMother">
+                        --------
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="relations-section">
+
+                <h3>2. Partner</h3>
+
+                <div>
+                    Partner :
+                    <span id="relationPartner">
+                        --------
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="relations-section">
+
+                <h3>3. Children</h3>
+
+                <div id="relationChildren">
+                    --------
+                </div>
+
+            </div>
+
+            <div class="relations-section">
+
+                <h3>4. Siblings</h3>
+
+                <strong>Brothers</strong>
+
+                <div id="relationBrothers">
+                    --------
+                </div>
+
+                <strong>Sisters</strong>
+
+                <div id="relationSisters">
+                    --------
+                </div>
+
+            </div>
+
+            <div align="center">
+
+                <button
+                    id="relationsBackBtn"
+                    class="back-btn">
+
+                    ← Back
+
+                </button>
+
+            </div>
+
+        </div>
+
+        `
+    );
+
+ const relationsMemberSelect =
+        document.getElementById(
+            "relationsMemberSelect"
+        );
+      /* =====================================
+   LOAD MEMBERS INTO RELATIONS DROPDOWN
+   ===================================== */
+
+if(relationsMemberSelect){
+
+    let familyMembers =
+        JSON.parse(
+            localStorage.getItem(
+                "familyMembers"
+            ) || "[]"
+        );
+
+
+    console.log(
+        "RELATIONS FAMILY MEMBERS:",
+        familyMembers
+    );
+
+
+    familyMembers.forEach(
+        function(member){
+
+            if(
+                !member ||
+                !member.memberId
+            ){
+                return;
+            }
+            const option =
+                document.createElement(
+                    "option"
+                );
+            option.value =
+                member.memberId;
+            option.textContent =
+               member.name || "Unnamed";
+            relationsMemberSelect.appendChild(
+                option
+            );
+        }
+    );
+relationsMemberSelect.onchange =
+    function(){
+
+        const selectedMemberId =
+            this.value;
+
+
+        if(!selectedMemberId){
+
+            return;
+
+        }
+
+
+        const selectedMember =
+            familyMembers.find(
+                function(member){
+
+                    return String(
+                        member.memberId
+                    ) === String(
+                        selectedMemberId
+                    );
+
+                }
+            );
+
+
+        if(!selectedMember){
+
+            console.log(
+                "SELECTED MEMBER NOT FOUND"
+            );
+
+            return;
+
+        }
+
+
+        console.log(
+            "SELECTED RELATIONS MEMBER:",
+            selectedMember
+        );
+
+
+        loadSelectedMemberRelations(
+            selectedMember,
+            familyMembers
+        );
+
+    };
+}
+    const relationsBackBtn =
+        document.getElementById(
+            "relationsBackBtn"
+        );
+
+    if(relationsBackBtn){
+
+        relationsBackBtn.onclick =
+            function(){
+
+                familyBtn.click();
+
+            };
+
+    }
+
+}
+   function loadSelectedMemberRelations(
+    member,
+    familyMembers
+){
+
+    console.log(
+        "LOADING RELATIONS FOR:",
+        member.name
+    );
+
+
+    /* ================================
+       MEMBER NAME
+       ================================ */
+
+    const nameField =
+        document.getElementById(
+            "relationMemberName"
+        );
+
+
+    if(nameField){
+
+        nameField.textContent =
+            member.name || "-";
+
+    }
+
+
+    /* ================================
+       MEMBER PHOTO
+       ================================ */
+
+    const photoField =
+        document.getElementById(
+            "relationMemberPhoto"
+        );
+
+
+    if(photoField){
+
+        photoField.innerHTML = "";
+
+
+        if(member.photo){
+
+            const img =
+                document.createElement(
+                    "img"
+                );
+
+            img.src =
+                member.photo;
+
+            img.alt =
+                member.name || "Member";
+
+            photoField.appendChild(
+                img
+            );
+
+        }
+
+    }
+
+
+    /* ================================
+       FIND FATHER
+       ================================ */
+
+    const father =
+        familyMembers.find(
+            function(item){
+
+                return String(
+                    item.memberId
+                ) === String(
+                    member.fatherId
+                );
+
+            }
+        );
+
+
+    /* ================================
+       FIND MOTHER
+       ================================ */
+
+    const mother =
+        familyMembers.find(
+            function(item){
+
+                return String(
+                    item.memberId
+                ) === String(
+                    member.motherId
+                );
+
+            }
+        );
+
+
+    /* ================================
+       SHOW FATHER
+       ================================ */
+
+    const fatherField =
+        document.getElementById(
+            "relationFather"
+        );
+
+
+    if(fatherField){
+
+        fatherField.textContent =
+            father
+                ? father.name
+                : "--------";
+
+    }
+
+
+    /* ================================
+       SHOW MOTHER
+       ================================ */
+
+    const motherField =
+        document.getElementById(
+            "relationMother"
+        );
+
+
+    if(motherField){
+
+        motherField.textContent =
+            mother
+                ? mother.name
+                : "--------";
+
     
+
+}
+
+   /* ================================
+   FIND PARTNER
+   ================================ */
+
+const partner =
+    familyMembers.find(
+        function(item){
+
+            return String(
+                item.memberId
+            ) === String(
+                member.partnerId
+            );
+
+        }
+    );
+
+
+/* ================================
+   SHOW PARTNER
+   ================================ */
+
+const partnerField =
+    document.getElementById(
+        "relationPartner"
+    );
+
+
+if(partnerField){
+
+    partnerField.textContent =
+        partner
+            ? partner.name
+            : "--------";
+
+}
+   /* ================================
+   SIBLINGS
+   ================================ */
+
+const siblings =
+    familyMembers.filter(
+        function(item){
+            /* Don't include selected member */
+            if(
+                String(item.memberId) ===
+                String(member.memberId)
+            ){
+                return false;
+            }
+           /* Same Father */
+            const sameFather =
+                member.fatherId &&
+                item.fatherId &&
+                String(item.fatherId) ===
+                String(member.fatherId);
+            /* Same Mother */
+            const sameMother =
+                member.motherId &&
+                item.motherId &&
+                String(item.motherId) ===
+                String(member.motherId);
+
+
+            return (
+                sameFather ||
+                sameMother
+            );
+
+        }
+    );
+
+
+/* ================================
+   BROTHERS
+   ================================ */
+
+const brothers =
+    siblings.filter(
+        function(item){
+
+            return String(
+                item.gender || ""
+            ).toLowerCase() ===
+            "male";
+
+        }
+    );
+
+
+const brothersField =
+    document.getElementById(
+        "relationBrothers"
+    );
+
+
+if(brothersField){
+
+    brothersField.innerHTML = "";
+
+
+    if(brothers.length === 0){
+
+        brothersField.textContent =
+            "--------";
+
+    }
+    else{
+
+        brothers.forEach(
+            function(brother, index){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        brother.name ||
+                        "--------"
+                    );
+
+                brothersField.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+/* ================================
+   CHILDREN
+   ================================ */
+
+const children =
+    familyMembers.filter(
+        function(item){
+
+            const isFather =
+                String(
+                    item.fatherId || ""
+                ) === String(
+                    member.memberId
+                );
+
+            const isMother =
+                String(
+                    item.motherId || ""
+                ) === String(
+                    member.memberId
+                );
+
+            return (
+                isFather ||
+                isMother
+            );
+
+        }
+    );
+
+
+const childrenField =
+    document.getElementById(
+        "relationChildren"
+    );
+
+
+if(childrenField){
+
+    childrenField.innerHTML = "";
+
+
+    if(children.length === 0){
+
+        childrenField.textContent =
+            "--------";
+
+    }
+    else{
+
+        children.forEach(
+            function(child,index){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        child.name ||
+                        "--------"
+                    );
+
+                childrenField.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+/* ================================
+   SISTERS
+   ================================ */
+
+const sisters =
+    siblings.filter(
+        function(item){
+
+            return String(
+                item.gender || ""
+            ).toLowerCase() ===
+            "female";
+
+        }
+    );
+
+
+const sistersField =
+    document.getElementById(
+        "relationSisters"
+    );
+if(sistersField){
+    sistersField.innerHTML = "";
+    if(sisters.length === 0){
+        sistersField.textContent =
+            "--------";
+    }
+    else{
+        sisters.forEach(
+            function(sister, index){
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        sister.name ||
+                        "--------"
+                    );
+
+                sistersField.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+   }
 /* =====================================
    FAMILY → ADD MEMBER
    ===================================== */
@@ -257,17 +963,24 @@ function bindAddMemberButton(){
                     class="common-form-value">
                     -
                 </strong>
+
             </div>
+
+
             <!-- =================================
                  FAMILY NAME
                  ================================= -->
+
             <div class="common-form-group">
+
                 <label class="common-form-label">
                     Family Name
                 </label>
+
                 <span class="common-form-colon">
                     :
                 </span>
+
                 <strong
                     id="memberFamilyName"
                     class="common-form-value">
@@ -628,7 +1341,9 @@ function bindAddMemberButton(){
 /* =================================
    LOAD RELATIONS
    ================================= */
-/* =================================
+
+loadMemberRelations();
+       /* =================================
    REFRESH RELATIONS WHEN GENDER CHANGES
    ================================= */
 
@@ -644,6 +1359,7 @@ if(memberGender){
         "change",
         function(){
 
+            loadMemberRelations();
 
         }
     );
@@ -759,9 +1475,7 @@ function calculateMemberAge(
     return age;
 
 }
-};
-}
-      
+
 
 /* =================================
    HIDE PARTNER
@@ -1108,6 +1822,112 @@ if(marriageConfirmation){
 /* =================================
    LOAD MEMBER RELATIONS
    ================================= */
+
+async function loadMemberRelations(){
+   
+    const currentFamily =
+        JSON.parse(
+            localStorage.getItem(
+                "currentFamily"
+            )
+        );
+
+
+    if(!currentFamily){
+        return;
+    }
+
+
+   /* =================================
+   GET MEMBERS FROM GOOGLE SHEET
+   ================================= */
+
+let members = [];
+
+try{
+
+    const params =
+        new URLSearchParams();
+
+    params.append(
+        "action",
+        "getFamilyMembers"
+    );
+
+    params.append(
+        "familyId",
+        currentFamily.familyId || ""
+    );
+
+    const response =
+        await fetch(
+            API_URL,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"
+                },
+
+                body:
+                    params.toString()
+            }
+        );
+
+
+    const result =
+        await response.json();
+
+
+    console.log(
+        "GET FAMILY MEMBERS RESULT:",
+        result
+    );
+
+
+    if(
+        result.status !== "success"
+    ){
+
+        console.error(
+            "Members could not be loaded:",
+            result.message
+        );
+
+        return;
+
+    }
+
+
+    members =
+        Array.isArray(result.members)
+            ? result.members
+            : [];
+
+
+    /* =============================
+       UPDATE LOCAL STORAGE
+       ============================= */
+
+    localStorage.setItem(
+        "familyMembers",
+        JSON.stringify(
+            members
+        )
+    );
+
+
+}catch(error){
+
+    console.error(
+        "Load Members Error:",
+        error
+    );
+
+    return;
+
+}
 
 
 /* =================================
@@ -2640,6 +3460,15 @@ memberBackBtn.onclick =
    GET CURRENT FAMILY
    ================================= */
 
+/* =================================
+   GET CURRENT USER
+   ================================= */
+
+const loggedUser =
+    JSON.parse(
+        sessionStorage.getItem("user")
+    ) || {};
+
 
 /* =================================
    GET STORED FAMILY
@@ -2656,8 +3485,9 @@ const storedFamily =
 /* =================================
    VERIFY FAMILY BELONGS TO USER
    ================================= */
-let addMemberFamilyMembers = [];
+
 let currentFamily = null;
+
 
 if(
     storedFamily &&
@@ -2944,20 +3774,19 @@ const memberIdField =
         "memberId"
     );
 
-      
+
+
+       
+};
+}
     /* =====================================
        FAMILY → ADD TREE
        ===================================== */
-function bindAddFamilyButton(){
 
-    const addFamilyBtn =
-        document.getElementById(
-            "addFamilyBtn"
-        );
+    document
+        .getElementById("addFamilyBtn")
+        .onclick = () => {
 
-    if(!addFamilyBtn) return;
-
-    addFamilyBtn.onclick = () => {
 
         const user =
             JSON.parse(
@@ -3086,6 +3915,22 @@ const loggedUser =
     JSON.parse(
         sessionStorage.getItem("user")
     ) || {};
+
+/* =================================
+   CLEAR OLD FAMILY DATA
+   ================================= */
+
+localStorage.removeItem(
+    "currentFamily"
+);
+
+localStorage.removeItem(
+    "familyMembers"
+);
+
+console.log(
+    "OLD FAMILY DATA CLEARED"
+);
 
 /* =================================
    GET FAMILY TREE
@@ -3234,7 +4079,6 @@ const serverFamily = {
         new Date().toISOString()
 
 };
-                      
 
 
 localStorage.setItem(
@@ -3340,6 +4184,7 @@ localStorage.setItem(
     );
 
 }
+          
         /* =====================================
            FAMILY NAME → GENERATE FAMILY ID
            ===================================== */
@@ -4189,11 +5034,15 @@ const existingFamilies =
             "error",
             3000
         );
+
     }
+
 };
+
         /* =====================================
            CREATE FAMILY TREE → BACK
            ===================================== */
+
         document
             .getElementById(
                 "createFamilyBackBtn"
@@ -4201,15 +5050,18 @@ const existingFamilies =
             .onclick = () => {
 
                 familyBtn.click();
+
             };
-        
+
+    };
+
+
     /* =====================================
        FAMILY → BACK
        ===================================== */
+
     document
         .getElementById("familyBack")
         .onclick = showHome;
-    };
-       
-}
-   
+
+};
