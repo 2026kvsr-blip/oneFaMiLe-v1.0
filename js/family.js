@@ -217,7 +217,7 @@ familyBtn.onclick = () => {
         `
 
     );
-//bindAddMemberButton();
+bindAddMemberButton();
 
    /* =====================================
    FAMILY → RELATIONS
@@ -5953,7 +5953,7 @@ function calculateMemberAge(
 }
        
 }
-
+}
 /* =================================
    HIDE PARTNER
    ================================= */
