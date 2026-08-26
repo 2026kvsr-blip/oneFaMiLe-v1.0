@@ -8,10 +8,7 @@
    FORMAT:
    F-NAME-RANDOM4
    ===================================== */
-
-
 function generateFamilyId(familyName){
-
     const cleanName =
         familyName
             .toUpperCase()
@@ -180,20 +177,16 @@ familyBtn.onclick = () => {
         </div>
 
         `
-
     );
 bindAddMemberButton();
 
- 
 /* =====================================
    FAMILY → BACK
    ===================================== */
-
 const familyBackBtn =
     document.getElementById(
         "familyBack"
     );
-
 
 if(familyBackBtn){
 
@@ -255,24 +248,17 @@ function bindAddMemberButton(){
                     class="common-form-value">
                     -
                 </strong>
-
             </div>
-
-
             <!-- =================================
                  FAMILY NAME
                  ================================= -->
-
             <div class="common-form-group">
-
                 <label class="common-form-label">
                     Family Name
                 </label>
-
                 <span class="common-form-colon">
                     :
                 </span>
-
                 <strong
                     id="memberFamilyName"
                     class="common-form-value">
@@ -633,8 +619,7 @@ function bindAddMemberButton(){
 /* =================================
    LOAD RELATIONS
    ================================= */
-
-       /* =================================
+/* =================================
    REFRESH RELATIONS WHEN GENDER CHANGES
    ================================= */
 
