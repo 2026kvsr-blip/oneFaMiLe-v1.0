@@ -5951,9 +5951,10 @@ function calculateMemberAge(
     return age;
 
 }
-       
 }
 }
+      
+
 /* =================================
    HIDE PARTNER
    ================================= */
@@ -7961,9 +7962,8 @@ const storedFamily =
 /* =================================
    VERIFY FAMILY BELONGS TO USER
    ================================= */
-let familyMembers = [];
+let addMemberFamilyMembers = [];
 let currentFamily = null;
-
 
 if(
     storedFamily &&
