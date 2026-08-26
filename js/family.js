@@ -9510,12 +9510,13 @@ const existingFamilies =
                 familyBtn.click();
             };
 
+        }
     /* =====================================
        FAMILY → BACK
        ===================================== */
     document
         .getElementById("familyBack")
         .onclick = showHome;
-};
+
 
 
