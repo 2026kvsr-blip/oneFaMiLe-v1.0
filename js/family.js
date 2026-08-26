@@ -9510,7 +9510,7 @@ const existingFamilies =
                 familyBtn.click();
             };
 
-        }
+        
     /* =====================================
        FAMILY → BACK
        ===================================== */
@@ -9518,5 +9518,5 @@ const existingFamilies =
         .getElementById("familyBack")
         .onclick = showHome;
 
-
+};
 
