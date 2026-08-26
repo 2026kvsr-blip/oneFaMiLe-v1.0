@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -452,15 +453,21 @@ const relationsMemberDropdown =
 
 let relationsFamilyMembers = [];
 
-
 try{
 
-    relationsFamilyMembers =
-        JSON.parse(
-            localStorage.getItem(
-                "familyMembers"
-            ) || "[]"
+    const storedMembers =
+        localStorage.getItem(
+            "familyMembers"
         );
+
+    if(storedMembers){
+
+        relationsFamilyMembers =
+            JSON.parse(
+                storedMembers
+            );
+
+    }
 
 }catch(error){
 
@@ -472,7 +479,6 @@ try{
     relationsFamilyMembers = [];
 
 }
-
 
 console.log(
     "RELATIONS FAMILY MEMBERS:",
