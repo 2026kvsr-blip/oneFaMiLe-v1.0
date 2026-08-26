@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -2613,40 +2614,67 @@ if(memberHeader){
        SHOW FATHER
        ================================ */
 
-    const fatherField =
-        document.getElementById(
-            "relationFather"
-        );
+   const fatherField =
+    document.getElementById(
+        "relationFather"
+    );
+
+const fatherRow =
+    document.getElementById(
+        "relationFatherRow"
+    );
 
 
-    if(fatherField){
+if(fatherField){
 
-        fatherField.textContent =
-            father
-                ? father.name
-                : "--------";
+    fatherField.textContent =
+        father
+            ? father.name
+            : "";
 
-    }
+}
 
+
+if(fatherRow){
+
+    fatherRow.style.display =
+        father
+            ? "flex"
+            : "none";
+
+}
 
     /* ================================
        SHOW MOTHER
        ================================ */
 
-    const motherField =
-        document.getElementById(
-            "relationMother"
-        );
+   const motherField =
+    document.getElementById(
+        "relationMother"
+    );
+
+const motherRow =
+    document.getElementById(
+        "relationMotherRow"
+    );
 
 
-    if(motherField){
+if(motherField){
 
-        motherField.textContent =
-            mother
-                ? mother.name
-                : "--------";
+    motherField.textContent =
+        mother
+            ? mother.name
+            : "";
 
-    
+}
+
+
+if(motherRow){
+
+    motherRow.style.display =
+        mother
+            ? "flex"
+            : "none";
 
 }
 
@@ -2677,16 +2705,32 @@ const partnerField =
         "relationPartner"
     );
 
+const partnerRow =
+    document.getElementById(
+        "relationPartnerRow"
+    );
+
 
 if(partnerField){
 
     partnerField.textContent =
         partner
             ? partner.name
-            : "--------";
+            : "";
 
 }
-      /* ================================
+
+
+if(partnerRow){
+
+    partnerRow.style.display =
+        partner
+            ? "flex"
+            : "none";
+
+}
+
+/* ================================
    IN-LAWS
    ================================ */
 
