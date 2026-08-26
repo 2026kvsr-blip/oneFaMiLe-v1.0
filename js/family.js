@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -899,8 +898,7 @@ if(familyBackBtn){
 
 
 </div>
-
-`        <div class="relations-page">
+        <div class="relations-page">
 
            <!-- ================================
      SELECTED MEMBER
