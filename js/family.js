@@ -4928,6 +4928,101 @@ if(grandGrandParentsSection){
 
 }
 /* ================================
+   HIDE EMPTY FATHER-IN-LAW ROW
+   ================================ */
+
+const fatherInLawRow =
+    document.getElementById(
+        "relationFatherInLawRow"
+    );
+
+if(fatherInLawRow){
+
+    fatherInLawRow.style.display =
+        fatherInLaw
+            ? "flex"
+            : "none";
+
+}
+
+
+/* ================================
+   HIDE EMPTY MOTHER-IN-LAW ROW
+   ================================ */
+
+const motherInLawRow =
+    document.getElementById(
+        "relationMotherInLawRow"
+    );
+
+if(motherInLawRow){
+
+    motherInLawRow.style.display =
+        motherInLaw
+            ? "flex"
+            : "none";
+
+}
+
+
+/* ================================
+   HIDE FATHER-IN-LAW SIBLINGS
+   ================================ */
+
+if(fatherInLawSiblingsSection){
+
+    fatherInLawSiblingsSection.style.display =
+        (
+            fatherInLaw &&
+            fatherInLawSiblings.length > 0
+        )
+            ? "block"
+            : "none";
+
+}
+
+
+/* ================================
+   HIDE MOTHER-IN-LAW SIBLINGS
+   ================================ */
+
+if(motherInLawSiblingsSection){
+
+    motherInLawSiblingsSection.style.display =
+        (
+            motherInLaw &&
+            motherInLawSiblings.length > 0
+        )
+            ? "block"
+            : "none";
+
+}
+
+
+/* ================================
+   HIDE EMPTY IN-LAWS SECTION
+   ================================ */
+
+const inLawsSection =
+    document.getElementById(
+        "relationInLawsSection"
+    );
+
+if(inLawsSection){
+
+    const hasInLawData =
+        !!fatherInLaw ||
+        !!motherInLaw ||
+        fatherInLawSiblings.length > 0 ||
+        motherInLawSiblings.length > 0;
+
+    inLawsSection.style.display =
+        hasInLawData
+            ? ""
+            : "none";
+
+}
+/* ================================
         old existing code
    ================================ */
 
