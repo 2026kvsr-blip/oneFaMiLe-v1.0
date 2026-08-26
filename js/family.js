@@ -8,7 +8,6 @@
    F-NAME-RANDOM4
    ===================================== */
 
-
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -8508,6 +8507,7 @@ const serverFamily = {
         new Date().toISOString()
 
 };
+        }           
 
 
 localStorage.setItem(
