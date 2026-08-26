@@ -4209,6 +4209,7 @@ const existingFamilies =
     document
         .getElementById("familyBack")
         .onclick = showHome;
-
+    };
+       
 }
    
