@@ -43,6 +43,7 @@ function generateFamilyId(familyName){
        GENERATE UNIQUE RANDOM 4
        ================================= */
 
+   
     do{
         uniquePart =
             Math.random()
@@ -8221,10 +8222,16 @@ const memberIdField =
     /* =====================================
        FAMILY → ADD TREE
        ===================================== */
-document
-    .getElementById("addFamilyBtn")
-    .onclick = () => {
+function bindAddFamilyButton(){
 
+    const addFamilyBtn =
+        document.getElementById(
+            "addFamilyBtn"
+        );
+
+    if(!addFamilyBtn) return;
+
+    addFamilyBtn.onclick = () => {
 
         const user =
             JSON.parse(
