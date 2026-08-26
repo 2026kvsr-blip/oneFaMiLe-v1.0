@@ -5485,22 +5485,6 @@ const loggedUser =
     ) || {};
 
 /* =================================
-   CLEAR OLD FAMILY DATA
-   ================================= */
-
-localStorage.removeItem(
-    "currentFamily"
-);
-
-localStorage.removeItem(
-    "familyMembers"
-);
-
-console.log(
-    "OLD FAMILY DATA CLEARED"
-);
-
-/* =================================
    GET FAMILY TREE
    ================================= */
 
