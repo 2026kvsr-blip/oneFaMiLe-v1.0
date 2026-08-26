@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -280,94 +279,700 @@ if(familyBackBtn){
             "images/colorbtns/Relations1.png"
         )
 
-        + `
-<!-- =================================
-     SELECT MEMBER
-     ================================= -->
++ `
 
 <div
     id="relationsMemberGroup"
-    class="common-form-group">
-    <label class="common-form-label">
-        Member
-    </label>
+    class="relations-member-group">
 
-    <span class="common-form-colon">
+    <span class="relations-member-label">
+        Member
+    </span>
+
+    <span class="relations-member-colon">
         :
     </span>
 
+    <div class="relations-member-controls">
 
-<div class="relations-member-row">
+        <input
+            type="text"
+            id="relationsMemberSearch"
+            class="relations-member-search"
+            placeholder="Search / Select Member..."
+            autocomplete="off">
 
-    <select
-        id="relationsMemberSelect"
-        class="common-form-select">
+        <select
+            id="relationsMemberSelect"
+            class="relations-member-select">
 
-        <option value="">
-            Select Member
-        </option>
+            <option value="">
+                Select Member
+            </option>
 
-    </select>
+        </select>
 
-
-    <input
-        type="text"
-        id="relationsMemberSearch"
-        class="common-form-input"
-        placeholder="Search Member..."
-        autocomplete="off">
-
-</div>
+    </div>
 
 </div>
-        <div class="relations-page">
 
-            <div class="relations-member-header">
 
-                <div id="relationMemberPhoto">
-                </div>
+<div class="relations-page">
 
-                <div id="relationMemberName">
-                    -
-                </div>
+
+    <!-- ================================
+         SELECTED MEMBER HEADER
+         ================================ -->
+
+    <div
+        class="relations-member-header"
+        style="display:none;">
+
+        <div id="relationMemberPhoto">
+        </div>
+
+        <div class="relation-member-info">
+
+            <div id="relationMemberName">
+                -
+            </div>
+
+            <div id="relationMemberGender">
+                -
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================
+         PARENTS
+         ================================ -->
+
+    <div
+        id="relationParentsSection"
+        class="relations-section relations-parents">
+
+        <h3>Parents</h3>
+
+        <div
+            id="relationFatherRow"
+            class="relation-row">
+
+            <span class="relation-label">
+                Father
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationFather">
+            </span>
+
+        </div>
+
+
+        <div
+            id="relationMotherRow"
+            class="relation-row">
+
+            <span class="relation-label">
+                Mother
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationMother">
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================
+         PARTNER
+         ================================ -->
+
+    <div
+        id="relationPartnerSection"
+        class="relations-section relations-partner">
+
+        <div class="relation-single-row">
+
+            <span>
+                Partner
+            </span>
+
+            <span>
+                :
+            </span>
+
+            <span id="relationPartner">
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================
+         CHILDREN
+         ================================ -->
+
+    <div
+        id="relationChildrenSection"
+        class="relations-section relations-children">
+
+        <h3 id="relationChildrenTitle">
+            Children
+        </h3>
+
+        <div
+            id="relationChildrenNo"
+            class="relation-row">
+
+            Children
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span>
+                No
+            </span>
+
+        </div>
+
+
+        <div
+            id="relationChildrenTotalRow"
+            class="relation-row">
+
+            <span class="relation-label">
+                Children
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationChildrenTotal">
+                0
+            </span>
+
+        </div>
+
+
+        <div
+            id="relationSonsRow">
+
+            <div class="relation-row">
+
+                <span class="relation-label">
+                    Sons
+                </span>
+
+                <span class="relation-colon">
+                    :
+                </span>
+
+                <span id="relationSonsTotal">
+                    0
+                </span>
 
             </div>
+
+            <div
+                id="relationSons"
+                class="relation-names">
+            </div>
+
+        </div>
+
+
+        <div
+            id="relationDaughtersRow">
+
+            <div class="relation-row">
+
+                <span class="relation-label">
+                    Daughters
+                </span>
+
+                <span class="relation-colon">
+                    :
+                </span>
+
+                <span id="relationDaughtersTotal">
+                    0
+                </span>
+
+            </div>
+
+            <div
+                id="relationDaughters"
+                class="relation-names">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================
+         SIBLINGS
+         ================================ -->
+
+    <div
+        id="relationSiblingsSection"
+        class="relations-section relations-siblings">
+
+        <h3>
+            Siblings
+            <span id="relationSiblingsTotal">
+                0
+            </span>
+        </h3>
+
+
+        <div id="relationBrothersRow">
+
+            <div class="relation-row">
+
+                <span class="relation-label">
+                    Brothers
+                </span>
+
+                <span class="relation-colon">
+                    :
+                </span>
+
+                <span id="relationBrothersTotal">
+                    0
+                </span>
+
+            </div>
+
+            <div
+                id="relationBrothers"
+                class="relation-names">
+            </div>
+
+        </div>
+
+
+        <div id="relationSistersRow">
+
+            <div class="relation-row">
+
+                <span class="relation-label">
+                    Sisters
+                </span>
+
+                <span class="relation-colon">
+                    :
+                </span>
+
+                <span id="relationSistersTotal">
+                    0
+                </span>
+
+            </div>
+
+            <div
+                id="relationSisters"
+                class="relation-names">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================
+         IN-LAWS
+         ================================ -->
+
+    <div
+        id="relationInLawsSection"
+        class="relations-section relations-inlaws">
+
+        <h3>In-Laws</h3>
+
+
+        <div
+            id="relationFatherInLawRow"
+            class="relation-row">
+
+            <span class="relation-label">
+                Father-in-Law
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationFatherInLaw">
+            </span>
+
+        </div>
+
+
+        <div
+            id="relationMotherInLawRow"
+            class="relation-row">
+
+            <span class="relation-label">
+                Mother-in-Law
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationMotherInLaw">
+            </span>
+
+        </div>
+
+
+        <div id="relationBrothersInLawRow">
+
+            <div class="relation-row">
+
+                <span class="relation-label">
+                    Brothers-in-Law
+                </span>
+
+                <span class="relation-colon">
+                    :
+                </span>
+
+                <span id="relationBrothersInLawTotal">
+                    0
+                </span>
+
+            </div>
+
+            <div
+                id="relationBrothersInLaw"
+                class="relation-names">
+            </div>
+
+        </div>
+
+
+        <div id="relationSistersInLawRow">
+
+            <div class="relation-row">
+
+                <span class="relation-label">
+                    Sisters-in-Law
+                </span>
+
+                <span class="relation-colon">
+                    :
+                </span>
+
+                <span id="relationSistersInLawTotal">
+                    0
+                </span>
+
+            </div>
+
+            <div
+                id="relationSistersInLaw"
+                class="relation-names">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================
+         GRAND PARENTS
+         ================================ -->
+
+    <div
+        id="relationGrandParentsSection"
+        class="relations-section relations-grandparents">
+
+        <h3>Grand Parents</h3>
+
+
+        <strong class="relation-title">
+            Paternal Grand Parents
+        </strong>
+
+
+        <div
+            id="relationPaternalGrandFatherRow"
+            class="relation-row">
+
+            <span class="relation-label">
+                Grand Father
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationPaternalGrandFather">
+            </span>
+
+        </div>
+
+
+        <div
+            id="relationPaternalGrandMotherRow"
+            class="relation-row">
+
+            <span class="relation-label">
+                Grand Mother
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationPaternalGrandMother">
+            </span>
+
+        </div>
+
+
+        <strong class="relation-title">
+            Maternal Grand Parents
+        </strong>
+
+
+        <div
+            id="relationMaternalGrandFatherRow"
+            class="relation-row">
+
+            <span class="relation-label">
+                Grand Father
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationMaternalGrandFather">
+            </span>
+
+        </div>
+
+
+        <div
+            id="relationMaternalGrandMotherRow"
+            class="relation-row">
+
+            <span class="relation-label">
+                Grand Mother
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationMaternalGrandMother">
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================
+         GRAND GRAND PARENTS
+         ================================ -->
+
+    <div
+        id="relationGrandGrandParentsSection"
+        class="relations-section relations-grandgrandparents">
+
+        <h3>Grand Grand Parents</h3>
+
+
+        <strong class="relation-title">
+            Paternal Grand Grand Parents
+        </strong>
+
+
+        <div
+            id="relationPaternalGrandGrandFatherRow"
+            class="relation-row">
+
+            <span class="relation-label">
+                Grand Father
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationPaternalGrandGrandFather">
+            </span>
+
+        </div>
+
+
+        <div
+            id="relationPaternalGrandGrandMotherRow"
+            class="relation-row">
+
+            <span class="relation-label">
+                Grand Mother
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationPaternalGrandGrandMother">
+            </span>
+
+        </div>
+
+
+        <strong class="relation-title">
+            Maternal Grand Grand Parents
+        </strong>
+
+
+        <div
+            id="relationMaternalGrandGrandFatherRow"
+            class="relation-row">
+
+            <span class="relation-label">
+                Grand Father
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationMaternalGrandGrandFather">
+            </span>
+
+        </div>
+
+
+        <div
+            id="relationMaternalGrandGrandMotherRow"
+            class="relation-row">
+
+            <span class="relation-label">
+                Grand Mother
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationMaternalGrandGrandMother">
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div align="center">
+
+        <button
+            id="relationsBackBtn"
+            class="back-btn">
+
+            ← Back
+
+        </button>
+
+    </div>
+
+
+</div>
+
+`        <div class="relations-page">
+
+           <!-- ================================
+     SELECTED MEMBER
+     ================================ -->
+
+<div
+    class="relations-member-header"
+    style="display:none;">
+
+    <div id="relationMemberPhoto">
+    </div>
+
+    <div class="relation-member-info">
+
+        <div id="relationMemberName">
+            -
+        </div>
+
+        <div id="relationMemberGender">
+            -
+        </div>
+
+    </div>
+
+</div>
+<!-- ================================
+     PARENTS
+     ================================ -->
 
 <div
     id="relationParentsSection"
     class="relations-section relations-parents">
-                <h3>1. Parents</h3>
 
-                <div class="relation-row">
-    <span class="relation-label">
-        Father
-    </span>
+    <h3>Parents</h3>
 
-    <span class="relation-colon">
-        :
-    </span>
 
-    <span id="relationFather">
-        --------
-    </span>
+    <div
+        id="relationFatherRow"
+        class="relation-row">
+
+        <span class="relation-label">
+            Father
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span id="relationFather">
+        </span>
+
+    </div>
+
+
+    <div
+        id="relationMotherRow"
+        class="relation-row">
+
+        <span class="relation-label">
+            Mother
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span id="relationMother">
+        </span>
+
+    </div>
+
 </div>
-
-
-<div class="relation-row">
-    <span class="relation-label">
-        Mother
-    </span>
-
-    <span class="relation-colon">
-        :
-    </span>
-
-    <span id="relationMother">
-        --------
-    </span>
-</div>
-            </div>
-<div
+           <div
     id="relationPartnerSection"
     class="relations-section relations-partner">
 
