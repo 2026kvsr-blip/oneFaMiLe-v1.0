@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -972,39 +973,538 @@ if(familyBackBtn){
     </div>
 
 </div>
-           <div
+           
+<!-- ================================
+     PARTNER
+     ================================ -->
+
+<div
     id="relationPartnerSection"
     class="relations-section relations-partner">
 
-    <h3>2. Partner</h3>
+    <div
+        id="relationPartnerRow"
+        class="relation-row">
 
-               <div class="relation-row">
-    <span class="relation-label">
-        Partner
-    </span>
+        <span class="relation-label">
+            Partner
+        </span>
 
-    <span class="relation-colon">
-        :
-    </span>
+        <span class="relation-colon">
+            :
+        </span>
 
-    <span id="relationPartner">
-        --------
-    </span>
+        <span id="relationPartner">
+        </span>
+
+    </div>
+
 </div>
-
-            </div>
+<!-- ================================
+     CHILDREN
+     ================================ -->
 
 <div
     id="relationChildrenSection"
     class="relations-section relations-children">
-                <h3>3. Children</h3>
 
-                <div id="relationChildren">
-                    --------
-                </div>
+    <div
+        id="relationChildrenTotalRow"
+        class="relation-row">
+
+        <span class="relation-label">
+            Children
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span id="relationChildrenTotal">
+            0
+        </span>
+
+    </div>
+
+
+    <div
+        id="relationChildrenNoRow"
+        class="relation-row">
+
+        <span class="relation-label">
+            Children
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span>
+            No
+        </span>
+
+    </div>
+
+
+    <!-- SONS -->
+
+    <div id="relationSonsRow">
+
+        <div class="relation-row">
+
+            <span class="relation-label">
+                Sons
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationSonsTotal">
+                0
+            </span>
+
+        </div>
+
+        <div
+            id="relationSons"
+            class="relation-names">
+        </div>
+
+    </div>
+
+
+    <!-- DAUGHTERS -->
+
+    <div id="relationDaughtersRow">
+
+        <div class="relation-row">
+
+            <span class="relation-label">
+                Daughters
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationDaughtersTotal">
+                0
+            </span>
+
+        </div>
+
+        <div
+            id="relationDaughters"
+            class="relation-names">
+        </div>
+
+    </div>
+
+</div>
+<!-- ================================
+     SIBLINGS
+     ================================ -->
+
+<div
+    id="relationSiblingsSection"
+    class="relations-section relations-siblings">
+
+    <h3>
+        Siblings :
+        <span id="relationSiblingsTotal">
+            0
+        </span>
+    </h3>
+
+
+    <!-- BROTHERS -->
+
+    <div id="relationBrothersRow">
+
+        <div class="relation-row">
+
+            <span class="relation-label">
+                Brothers
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationBrothersTotal">
+                0
+            </span>
+
+        </div>
+
+        <div
+            id="relationBrothers"
+            class="relation-names">
+        </div>
+
+    </div>
+
+
+    <!-- SISTERS -->
+
+    <div id="relationSistersRow">
+
+        <div class="relation-row">
+
+            <span class="relation-label">
+                Sisters
+            </span>
+
+            <span class="relation-colon">
+                :
+            </span>
+
+            <span id="relationSistersTotal">
+                0
+            </span>
+
+        </div>
+
+        <div
+            id="relationSisters"
+            class="relation-names">
+        </div>
+
+    </div>
+
+</div>
+<!-- ================================
+     PARENTS' SIBLINGS
+     ================================ -->
+
+<div
+    id="relationParentsSiblingsSection"
+    class="relations-section relations-parents-siblings">
+
+    <h3>
+        Parents' Siblings
+    </h3>
+
+
+    <!-- ================================
+         FATHER'S SIBLINGS
+         ================================ -->
+
+    <div id="relationFatherSiblingsSection">
+
+        <div class="relation-subheading">
+
+            Father's Siblings :
+            <span id="relationFatherSiblingsTotal">
+                0
+            </span>
+
+        </div>
+
+
+        <!-- BROTHERS -->
+
+        <div id="relationFatherSiblingsBrothersRow">
+
+            <div class="relation-row">
+
+                <span class="relation-label">
+                    Brothers
+                </span>
+
+                <span class="relation-colon">
+                    :
+                </span>
+
+                <span
+                    id="relationFatherSiblingsBrothers">
+                    0
+                </span>
 
             </div>
 
+            <div
+                id="relationFatherSiblingsBrothersNames"
+                class="relation-names">
+            </div>
+
+        </div>
+
+
+        <!-- SISTERS -->
+
+        <div id="relationFatherSiblingsSistersRow">
+
+            <div class="relation-row">
+
+                <span class="relation-label">
+                    Sisters
+                </span>
+
+                <span class="relation-colon">
+                    :
+                </span>
+
+                <span
+                    id="relationFatherSiblingsSisters">
+                    0
+                </span>
+
+            </div>
+
+            <div
+                id="relationFatherSiblingsSistersNames"
+                class="relation-names">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================
+         MOTHER'S SIBLINGS
+         ================================ -->
+
+    <div id="relationMotherSiblingsSection">
+
+        <div class="relation-subheading">
+
+            Mother's Siblings :
+            <span id="relationMotherSiblingsTotal">
+                0
+            </span>
+
+        </div>
+
+
+        <!-- BROTHERS -->
+
+        <div id="relationMotherSiblingsBrothersRow">
+
+            <div class="relation-row">
+
+                <span class="relation-label">
+                    Brothers
+                </span>
+
+                <span class="relation-colon">
+                    :
+                </span>
+
+                <span
+                    id="relationMotherSiblingsBrothers">
+                    0
+                </span>
+
+            </div>
+
+            <div
+                id="relationMotherSiblingsBrothersNames"
+                class="relation-names">
+            </div>
+
+        </div>
+
+
+        <!-- SISTERS -->
+
+        <div id="relationMotherSiblingsSistersRow">
+
+            <div class="relation-row">
+
+                <span class="relation-label">
+                    Sisters
+                </span>
+
+                <span class="relation-colon">
+                    :
+                </span>
+
+                <span
+                    id="relationMotherSiblingsSisters">
+                    0
+                </span>
+
+            </div>
+
+            <div
+                id="relationMotherSiblingsSistersNames"
+                class="relation-names">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================================
+     IN-LAWS' SIBLINGS
+     ================================ -->
+
+<div
+    id="relationInLawsSiblingsSection"
+    class="relations-section relations-inlaws-siblings">
+
+    <h3>
+        In-Laws' Siblings
+    </h3>
+
+
+    <!-- ================================
+         FATHER-IN-LAW'S SIBLINGS
+         ================================ -->
+
+    <div id="relationFatherInLawSiblingsSection">
+
+        <div class="relation-subheading">
+
+            Father-in-Law's Siblings :
+            <span id="relationFatherInLawSiblingsTotal">
+                0
+            </span>
+
+        </div>
+
+
+        <!-- BROTHERS -->
+
+        <div id="relationFatherInLawSiblingsBrothersRow">
+
+            <div class="relation-row">
+
+                <span class="relation-label">
+                    Brothers
+                </span>
+
+                <span class="relation-colon">
+                    :
+                </span>
+
+                <span
+                    id="relationFatherInLawSiblingsBrothers">
+                    0
+                </span>
+
+            </div>
+
+            <div
+                id="relationFatherInLawSiblingsBrothersNames"
+                class="relation-names">
+            </div>
+
+        </div>
+
+
+        <!-- SISTERS -->
+
+        <div id="relationFatherInLawSiblingsSistersRow">
+
+            <div class="relation-row">
+
+                <span class="relation-label">
+                    Sisters
+                </span>
+
+                <span class="relation-colon">
+                    :
+                </span>
+
+                <span
+                    id="relationFatherInLawSiblingsSisters">
+                    0
+                </span>
+
+            </div>
+
+            <div
+                id="relationFatherInLawSiblingsSistersNames"
+                class="relation-names">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================
+         MOTHER-IN-LAW'S SIBLINGS
+         ================================ -->
+
+    <div id="relationMotherInLawSiblingsSection">
+
+        <div class="relation-subheading">
+
+            Mother-in-Law's Siblings :
+            <span id="relationMotherInLawSiblingsTotal">
+                0
+            </span>
+
+        </div>
+
+
+        <!-- BROTHERS -->
+
+        <div id="relationMotherInLawSiblingsBrothersRow">
+
+            <div class="relation-row">
+
+                <span class="relation-label">
+                    Brothers
+                </span>
+
+                <span class="relation-colon">
+                    :
+                </span>
+
+                <span
+                    id="relationMotherInLawSiblingsBrothers">
+                    0
+                </span>
+
+            </div>
+
+            <div
+                id="relationMotherInLawSiblingsBrothersNames"
+                class="relation-names">
+            </div>
+
+        </div>
+
+
+        <!-- SISTERS -->
+
+        <div id="relationMotherInLawSiblingsSistersRow">
+
+            <div class="relation-row">
+
+                <span class="relation-label">
+                    Sisters
+                </span>
+
+                <span class="relation-colon">
+                    :
+                </span>
+
+                <span
+                    id="relationMotherInLawSiblingsSisters">
+                    0
+                </span>
+
+            </div>
+
+            <div
+                id="relationMotherInLawSiblingsSistersNames"
+                class="relation-names">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>               
+               
 <div
     id="relationSiblingsSection"
     class="relations-section relations-siblings">
