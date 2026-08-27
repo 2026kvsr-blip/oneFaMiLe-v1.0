@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -266,7 +265,7 @@ if(familyBackBtn){
         };
 
 }
-async function openRelationsPage(){
+function openRelationsPage(){
    
    console.time("RELATIONS PAGE LOAD");
    console.time("RELATIONS OPEN");
