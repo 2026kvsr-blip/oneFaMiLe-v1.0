@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -895,14 +894,12 @@ console.log(
        ===================================== */
 
   relationsMemberSearch.addEventListener(
-    "pointerdown",
+    "click",
     function(){
 
-        console.log(
-            "PHONE MEMBER BOX POINTERDOWN"
-        );
-
         showRelationsMemberDropdown();
+
+        this.focus();
 
     }
 );
