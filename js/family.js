@@ -814,42 +814,61 @@ if(genderField){
 
 }
 
-    /* ================================
-       MEMBER PHOTO
-       ================================ */
+/* ================================
+   MEMBER PHOTO
+   ================================ */
 
-    const photoField =
-        document.getElementById(
-            "relationMemberPhoto"
-        );
+const photoField =
+    document.getElementById(
+        "relationMemberPhoto"
+    );
 
+if(photoField){
 
-    if(photoField){
+    photoField.innerHTML = "";
 
-        photoField.innerHTML = "";
+    const photoUrl =
+        member.photo ||
+        member.photoUrl ||
+        member.photoURL ||
+        member.profilePhoto ||
+        member.image ||
+        "";
 
+    console.log(
+        "RELATIONS MEMBER PHOTO:",
+        photoUrl
+    );
 
-        if(member.photo){
+    if(photoUrl){
 
-            const img =
-                document.createElement(
-                    "img"
-                );
-
-            img.src =
-                member.photo;
-
-            img.alt =
-                member.name || "Member";
-
-            photoField.appendChild(
-                img
+        const img =
+            document.createElement(
+                "img"
             );
 
-        }
+        img.src = photoUrl;
+
+        img.alt =
+            member.name || "Member";
+
+        img.onerror =
+            function(){
+
+                console.log(
+                    "RELATIONS PHOTO LOAD FAILED:",
+                    photoUrl
+                );
+
+                photoField.innerHTML = "";
+
+            };
+
+        photoField.appendChild(img);
 
     }
 
+}
 
     /* ================================
        FIND FATHER
