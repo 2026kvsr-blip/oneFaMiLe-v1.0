@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -527,7 +528,19 @@ if(currentFamily){
                 "RELATIONS MEMBER COUNT:",
                 relationsFamilyMembers.length
             );
+/* =====================================
+   REFRESH DROPDOWN AFTER MEMBERS LOAD
+   ===================================== */
 
+if(
+    relationsMemberSearch &&
+    document.activeElement ===
+        relationsMemberSearch
+){
+
+    showRelationsMemberDropdown();
+
+}
         }
     )
     .catch(
