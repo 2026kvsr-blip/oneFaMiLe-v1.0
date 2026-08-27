@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -348,17 +347,7 @@ if(familyBackBtn){
 </div>
 <div class="relations-page">
 
-            <div class="relations-member-header">
-
-                <div id="relationMemberPhoto">
-                </div>
-
-                <div id="relationMemberName">
-                    -
-                </div>
-
-            </div>
-
+           
             <div class="relations-section">
 
                 <h3>1. Parents</h3>
