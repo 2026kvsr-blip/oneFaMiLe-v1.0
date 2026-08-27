@@ -1099,3 +1099,44 @@
     align-items: center;
     gap: 10px;
 }
+.relations-member-search-wrap{
+    position:relative;
+    flex:1;
+}
+
+#relationsMemberSearch{
+    width:100%;
+    box-sizing:border-box;
+}
+
+.relations-member-dropdown{
+    position:absolute;
+    left:0;
+    right:0;
+    top:100%;
+    z-index:9999;
+
+    display:none;
+
+    max-height:220px;
+    overflow-y:auto;
+
+    background:#ffffff;
+    border:1px solid #c4d4ff;
+    border-radius:8px;
+}
+
+.relations-member-option{
+    padding:10px 12px;
+    cursor:pointer;
+    background:#ffffff;
+}
+
+.relations-member-option:hover{
+    background:#eef6ff;
+}
+
+.relations-no-match{
+    padding:10px 12px;
+    color:#777;
+}
