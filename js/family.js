@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -266,7 +267,8 @@ if(familyBackBtn){
 
 }
 function openRelationsPage(){
-   
+       console.time("RELATIONS REAL LOAD");
+
    console.time("RELATIONS PAGE LOAD");
    console.time("RELATIONS OPEN");
     console.log(
@@ -426,6 +428,7 @@ function openRelationsPage(){
 
         `
     );
+       console.timeEnd("RELATIONS REAL LOAD");
 console.timeEnd("RELATIONS OPEN");
 /* =====================================
    LOAD LATEST FAMILY MEMBERS
