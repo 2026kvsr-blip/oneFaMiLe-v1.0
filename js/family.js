@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -502,7 +501,34 @@ console.log(
        ===================================== */
 
     function showRelationsMemberDropdown(){
+ console.log(
+        "RELATIONS DROPDOWN OPEN"
+    );
 
+    console.log(
+        "RELATIONS FAMILY MEMBERS:",
+        relationsFamilyMembers
+    );
+
+    console.log(
+        "RELATIONS MEMBER COUNT:",
+        relationsFamilyMembers.length
+    );
+
+    console.log(
+        "RELATIONS SEARCH VALUE:",
+        relationsMemberSearch.value
+    );
+
+    const searchText =
+        String(
+            relationsMemberSearch.value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+       
         const searchText =
             String(
                 relationsMemberSearch.value || ""
