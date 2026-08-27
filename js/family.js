@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -577,37 +576,28 @@ if(
     }
 
 
-    /* =================================
-       BOX CLICK
-       → SHOW ALL MEMBERS
-       ================================= */
+  /* =================================
+   MEMBER SEARCH
+   ================================= */
 
-    relationsMemberSearch.addEventListener(
-        "click",
-        function(){
+relationsMemberSearch.addEventListener(
+    "focus",
+    function(){
 
-            showRelationsMemberDropdown();
+        showRelationsMemberDropdown();
 
-            this.focus();
-
-        }
-    );
+    }
+);
 
 
-    /* =================================
-       TEXT SEARCH
-       ================================= */
+relationsMemberSearch.addEventListener(
+    "input",
+    function(){
 
-    relationsMemberSearch.addEventListener(
-        "input",
-        function(){
+        showRelationsMemberDropdown();
 
-            showRelationsMemberDropdown();
-
-        }
-    );
-
-
+    }
+);
     /* =================================
        MEMBER SELECT
        ================================= */
