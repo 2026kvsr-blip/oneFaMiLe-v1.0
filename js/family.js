@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -893,7 +892,6 @@ console.log(
 
         relationsMemberDropdown.style.display =
             "block";
-console.timeEnd("RELATIONS PAGE LOAD");
     }
 
 
