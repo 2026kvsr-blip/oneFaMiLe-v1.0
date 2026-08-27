@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -323,11 +322,11 @@ if(familyBackBtn){
     </div>
 
     <div id="relationMemberName">
-        -
+        
     </div>
 
     <div id="relationMemberGender">
-        -
+      
     </div>
 
 </div>
