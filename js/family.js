@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -266,7 +267,9 @@ if(familyBackBtn){
 
 }
 async function openRelationsPage(){
+   
    console.time("RELATIONS PAGE LOAD");
+   console.time("RELATIONS OPEN");
     console.log(
         "OPENING RELATIONS PAGE"
     );
@@ -424,7 +427,7 @@ async function openRelationsPage(){
 
         `
     );
-
+console.timeEnd("RELATIONS OPEN");
 /* =====================================
    LOAD LATEST FAMILY MEMBERS
    ===================================== */
@@ -972,7 +975,7 @@ relationsMemberSearch.addEventListener(
             "RELATIONS BACK CLICKED"
         );
 
-        showHome();
+    familyBtn.click();
 
     }
 
