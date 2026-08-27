@@ -1,3 +1,952 @@
+
+/* =====================================
+   oneFaMiLe
+   FAMILY MODULE
+   ===================================== */
+
+
+/* =====================================
+   GENERATE UNIQUE FAMILY ID
+   FORMAT:
+   F-NAME-RANDOM4
+   ===================================== */
+
+function generateFamilyId(familyName){
+
+    const cleanName =
+        familyName
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, "");
+
+    const namePart =
+        cleanName
+            .substring(0,4)
+            .padEnd(4,"X");
+
+       /* =================================
+       GET EXISTING FAMILY IDs
+       ================================= */
+
+    const existingFamilies =
+        JSON.parse(
+            localStorage.getItem(
+                "familyTrees"
+            ) || "[]"
+        );
+
+
+    const existingIds =
+        existingFamilies.map(
+            family =>
+                family.familyId
+        );
+
+
+    let familyId;
+    let uniquePart;
+
+
+    /* =================================
+       GENERATE UNIQUE RANDOM 4
+       ================================= */
+
+    do{
+
+        uniquePart =
+            Math.random()
+                .toString(36)
+                .substring(2,6)
+                .toUpperCase();
+
+        familyId =
+            `F-${namePart}-${uniquePart}`;
+
+    }
+    while(
+        existingIds.includes(
+            familyId
+        )
+    );
+
+
+    return familyId;
+}
+
+/* =====================================
+   CHECK FAMILY ID AVAILABILITY
+   ===================================== */
+
+function isFamilyIdAvailable(familyId){
+
+    const existingFamilies =
+        JSON.parse(
+            localStorage.getItem("familyTrees") || "[]"
+        );
+
+    return !existingFamilies.some(
+        family =>
+            family.familyId === familyId
+    );
+}
+/* =====================================
+   FAMILY MAIN PAGE
+   ===================================== */
+
+familyBtn.onclick = () => {
+
+    setActiveButton(familyBtn);
+ 
+
+    showPage(
+
+        pageTitle(
+            "Family",
+            "images/colorbtns/Family1.png"
+        )
+
+        +`
+
+        <div class="grid-3x2">
+
+            <button
+                id="addMemberBtn"
+                class="grid-btn">
+
+                <img
+                    src="images/colorbtns/AddMember1.png"
+                    class="btn-icon">
+
+                <span>
+                    Add Member
+                </span>
+
+            </button>
+
+
+            <button
+                id="addFamilyBtn"
+                class="grid-btn">
+
+                <img
+                    src="images/colorbtns/AddFamily1.png"
+                    class="btn-icon">
+
+                <span>
+                    Add Tree
+                </span>
+
+            </button>
+
+
+            <button
+                id="searchMemberBtn"
+                class="grid-btn">
+
+                <img
+                    src="images/colorbtns/CustomSearch1.png"
+                    class="btn-icon">
+
+                <span>
+                    Search Member
+                </span>
+
+            </button>
+
+
+            <button
+                id="relationsBtn"
+                class="grid-btn">
+
+                <img
+                    src="images/colorbtns/Relations1.png"
+                    class="btn-icon">
+
+                <span>
+                    Relations
+                </span>
+
+            </button>
+
+
+            <button
+                id="treeViewBtn"
+                class="grid-btn">
+
+                <img
+                    src="images/colorbtns/TreeView1.png"
+                    class="btn-icon">
+
+                <span>
+                    Tree View
+                </span>
+
+            </button>
+
+
+            <button
+                id="familyAboutBtn"
+                
+                class="grid-btn">
+
+                <img
+                    src="images/colorbtns/About1.png"
+                    class="btn-icon">
+
+                <span>
+                    About
+                </span>
+
+            </button>
+
+        </div>
+
+
+        <div align="center">
+
+            <button
+                id="familyBack"
+                class="back-btn">
+
+                ← Back
+
+            </button>
+
+        </div>
+
+        `
+
+    );
+bindAddMemberButton();
+
+   /* =====================================
+   FAMILY → RELATIONS
+   ===================================== */
+
+const relationsBtn =
+    document.getElementById(
+        "relationsBtn"
+    );
+
+
+if(relationsBtn){
+
+    relationsBtn.onclick =
+        function(){
+
+            console.log(
+                "RELATIONS BUTTON CLICKED"
+            );
+
+            openRelationsPage();
+
+        };
+
+}
+/* =====================================
+   FAMILY → BACK
+   ===================================== */
+
+const familyBackBtn =
+    document.getElementById(
+        "familyBack"
+    );
+
+
+if(familyBackBtn){
+
+    familyBackBtn.onclick =
+        function(){
+
+            console.log(
+                "FAMILY → BACK"
+            );
+
+        showHome();
+
+        };
+
+}
+   function openRelationsPage(){
+
+    console.log(
+        "OPENING RELATIONS PAGE"
+    );
+
+    showPage(
+
+        pageTitle(
+            "Relations",
+            "images/colorbtns/Relations1.png"
+        )
+
+        + `
+<!-- =================================
+     SELECT / SEARCH MEMBER
+     ================================= -->
+
+<div
+    id="relationsMemberGroup"
+    class="common-form-group">
+
+    <label class="common-form-label">
+        Member
+    </label>
+    
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <div
+        class="relations-member-search-wrap">
+
+        <input
+            type="text"
+            id="relationsMemberSearch"
+            class="common-form-select"
+            placeholder="Select / Search Member"
+            autocomplete="off">
+
+        <div
+            id="relationsMemberDropdown"
+            class="relations-member-dropdown">
+        </div>
+
+    </div>
+
+</div>
+<div class="relations-page">
+
+           <div class="relations-member-header">
+
+    <div id="relationMemberPhoto">
+    </div>
+
+    <div id="relationMemberName">
+        
+    </div>
+
+    <div id="relationMemberGender">
+      
+    </div>
+
+</div>
+
+
+   
+<!-- =================================
+     RELATIONS DETAILS
+     ================================= -->
+
+<!-- 1. PARTNER -->
+<div
+    id="relationPartnerSection"
+    class="relations-section relation-direct-row">
+
+    <div class="relation-row">
+
+        <span class="relation-label">
+            Partner
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span
+            id="relationPartner"
+            class="relation-value">
+            --------
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- 2. CHILDREN -->
+<div
+    id="relationChildrenSection"
+    class="relations-section">
+
+    <h3>Children</h3>
+
+    <div
+        id="relationChildren">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 3. PARENTS -->
+<div
+    id="relationParentsSection"
+    class="relations-section">
+
+    <h3>Parents</h3>
+
+    <div class="relation-row">
+
+        <span class="relation-label">
+            Father
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span
+            id="relationFather"
+            class="relation-value">
+            --------
+        </span>
+
+    </div>
+
+
+    <div class="relation-row">
+
+        <span class="relation-label">
+            Mother
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span
+            id="relationMother"
+            class="relation-value">
+            --------
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- 4. SIBLINGS -->
+<div
+    id="relationSiblingsSection"
+    class="relations-section">
+
+    <h3>Siblings</h3>
+
+    <strong>Brothers</strong>
+
+    <div
+        id="relationBrothers">
+        --------
+    </div>
+
+
+    <strong>Sisters</strong>
+
+    <div
+        id="relationSisters">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 5. FATHER SIBLINGS -->
+<div
+    id="relationFatherSiblingsSection"
+    class="relations-section">
+
+    <h3>Father Siblings</h3>
+
+    <div
+        id="relationFatherSiblings">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 6. MOTHER SIBLINGS -->
+<div
+    id="relationMotherSiblingsSection"
+    class="relations-section">
+
+    <h3>Mother Siblings</h3>
+
+    <div
+        id="relationMotherSiblings">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 7. IN-LAWS -->
+<div
+    id="relationInLawsSection"
+    class="relations-section">
+
+    <h3>In-Laws</h3>
+
+    <div class="relation-row">
+
+        <span class="relation-label">
+            Father-in-Law
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span
+            id="relationFatherInLaw"
+            class="relation-value">
+            --------
+        </span>
+
+    </div>
+
+
+    <div class="relation-row">
+
+        <span class="relation-label">
+            Mother-in-Law
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span
+            id="relationMotherInLaw"
+            class="relation-value">
+            --------
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- 8. FATHER-IN-LAW SIBLINGS -->
+<div
+    id="relationFatherInLawSiblingsSection"
+    class="relations-section">
+
+    <h3>Father-in-Law Siblings</h3>
+
+    <div
+        id="relationFatherInLawSiblings">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 9. MOTHER-IN-LAW SIBLINGS -->
+<div
+    id="relationMotherInLawSiblingsSection"
+    class="relations-section">
+
+    <h3>Mother-in-Law Siblings</h3>
+
+    <div
+        id="relationMotherInLawSiblings">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 10. GRAND PARENTS -->
+<div
+    id="relationGrandParentsSection"
+    class="relations-section">
+
+    <h3>Grand Parents</h3>
+
+    <div
+        id="relationGrandParents">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 11. GRAND GRAND PARENTS -->
+<div
+    id="relationGrandGrandParentsSection"
+    class="relations-section">
+
+    <h3>Grand Grand Parents</h3>
+
+    <div
+        id="relationGrandGrandParents">
+        --------
+    </div>
+
+</div>
+
+
+<!-- BACK BUTTON -->
+<div align="center">
+
+    <button
+        id="relationsBackBtn"
+        class="back-btn">
+
+        ← Back
+
+    </button>
+
+</div>
+            <div align="center">
+
+                <button
+                    id="relationsBackBtn"
+                    class="back-btn">
+
+                    ← Back
+
+                </button>
+
+            </div>
+
+        </div>
+
+        `
+    );
+
+const relationsMemberSearch =
+    document.getElementById(
+        "relationsMemberSearch"
+    );
+
+const relationsMemberDropdown =
+    document.getElementById(
+        "relationsMemberDropdown"
+    );
+
+
+/* =====================================
+   LOAD MEMBERS INTO RELATIONS SEARCH
+   ===================================== */
+
+if(
+    relationsMemberSearch &&
+    relationsMemberDropdown
+){
+
+    const familyMembers =
+        JSON.parse(
+            localStorage.getItem(
+                "familyMembers"
+            ) || "[]"
+        );
+
+
+    console.log(
+        "RELATIONS FAMILY MEMBERS:",
+        familyMembers
+    );
+
+
+    /* =================================
+       SHOW MEMBER LIST
+       ================================= */
+
+    function showRelationsMemberDropdown(){
+
+        const searchText =
+            String(
+                relationsMemberSearch.value || ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        relationsMemberDropdown.innerHTML =
+            "";
+
+
+        /* =============================
+           FILTER MEMBERS
+           ============================= */
+
+        const matchingMembers =
+            familyMembers.filter(
+                function(member){
+
+                    if(
+                        !member ||
+                        !member.memberId
+                    ){
+
+                        return false;
+
+                    }
+
+
+                    const memberName =
+                        String(
+                            member.name || ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+
+                    /* EMPTY SEARCH
+                       → SHOW ALL */
+
+                    if(
+                        searchText === ""
+                    ){
+
+                        return (
+                            memberName !== ""
+                        );
+
+                    }
+
+
+                    /* TEXT SEARCH */
+
+                    return (
+                        memberName !== "" &&
+                        memberName.includes(
+                            searchText
+                        )
+                    );
+
+                }
+            );
+
+
+        console.log(
+            "RELATIONS SEARCH:",
+            searchText,
+            matchingMembers
+        );
+
+
+        /* =============================
+           NO MATCH
+           ============================= */
+
+        if(
+            matchingMembers.length === 0
+        ){
+
+            relationsMemberDropdown.innerHTML =
+                `<div class="relations-no-match">
+                    No matching member
+                </div>`;
+
+            relationsMemberDropdown.style.display =
+                "block";
+
+            return;
+
+        }
+
+
+        /* =============================
+           CREATE MEMBER ITEMS
+           ============================= */
+
+        matchingMembers.forEach(
+            function(member){
+
+                const option =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                option.className =
+                    "relations-member-option";
+
+
+                option.textContent =
+                    member.name ||
+                    "Unnamed";
+
+
+                option.dataset.memberId =
+                    member.memberId;
+
+
+                relationsMemberDropdown.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        relationsMemberDropdown.style.display =
+            "block";
+
+    }
+
+
+  /* =================================
+   MEMBER SEARCH
+   ================================= */
+
+relationsMemberSearch.addEventListener(
+    "focus",
+    function(){
+
+        showRelationsMemberDropdown();
+
+    }
+);
+
+
+relationsMemberSearch.addEventListener(
+    "input",
+    function(){
+
+        showRelationsMemberDropdown();
+
+    }
+);
+    /* =================================
+       MEMBER SELECT
+       ================================= */
+
+    relationsMemberDropdown.addEventListener(
+        "click",
+        function(event){
+
+            const option =
+                event.target.closest(
+                    ".relations-member-option"
+                );
+
+
+            if(!option){
+
+                return;
+
+            }
+
+
+            const selectedMemberId =
+                option.dataset.memberId;
+
+
+            const selectedMember =
+                familyMembers.find(
+                    function(member){
+
+                        return String(
+                            member.memberId
+                        ) === String(
+                            selectedMemberId
+                        );
+
+                    }
+                );
+
+
+            if(!selectedMember){
+
+                console.log(
+                    "SELECTED MEMBER NOT FOUND"
+                );
+
+                return;
+
+            }
+
+
+            console.log(
+                "SELECTED RELATIONS MEMBER:",
+                selectedMember
+            );
+
+
+            /* =========================
+               PUT SELECTED NAME
+               IN SEARCH BOX
+               ========================= */
+
+            relationsMemberSearch.value =
+                selectedMember.name ||
+                "";
+
+
+            /* =========================
+               HIDE LIST ONLY
+               ========================= */
+
+            relationsMemberDropdown.innerHTML =
+                "";
+
+            relationsMemberDropdown.style.display =
+                "none";
+
+
+            /* =========================
+               LOAD RELATIONS
+               ========================= */
+
+            loadSelectedMemberRelations(
+                selectedMember,
+                familyMembers
+            );
+
+        }
+    );
+
+
+    /* =================================
+       OUTSIDE CLICK
+       → HIDE LIST
+       → KEEP EMPTY BOX
+       ================================= */
+
+    document.addEventListener(
+        "click",
+        function(event){
+
+            if(
+                !event.target.closest(
+                    ".relations-member-search-wrap"
+                )
+            ){
+
+                relationsMemberDropdown.innerHTML =
+                    "";
+
+                relationsMemberDropdown.style.display =
+                    "none";
+
+            }
+
+        }
+    );
+
+}
+      const relationsBackBtn =
+        document.getElementById(
+            "relationsBackBtn"
+        );
+
+    if(relationsBackBtn){
+
+        relationsBackBtn.onclick =
+            function(){
+
+                familyBtn.click();
+
+            };
+
+    }
+
+}
+
 function loadSelectedMemberRelations(
     member,
     familyMembers
