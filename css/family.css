@@ -1059,7 +1059,23 @@
     background:#eaf8ff;
 
 }
+.relations-member-search-wrap{
+    position:relative;
+    margin-right:10px;
+}
 
+#relationsMemberGroup{
+    margin-left:8px;
+}
+
+#relationsMemberGroup .common-form-label{
+    margin-left:4px;
+}
+
+#relationsMemberGroup .common-form-colon{
+    margin-left:3px;
+    margin-right:5px;
+}
 
 .relations-no-match{
 
