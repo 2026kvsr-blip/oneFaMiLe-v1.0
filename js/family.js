@@ -4,7 +4,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -823,11 +822,14 @@ console.log(
     "pointerdown",
     function(){
 
+        console.log(
+            "PHONE MEMBER BOX POINTERDOWN"
+        );
+
         showRelationsMemberDropdown();
 
     }
 );
-
 
 relationsMemberSearch.addEventListener(
     "input",
