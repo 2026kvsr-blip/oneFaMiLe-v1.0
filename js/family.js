@@ -4,6 +4,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -298,7 +299,7 @@ if(familyBackBtn){
         class="common-form-select">
 
         <option value="">
-            Select Member
+            Select / Search Member
         </option>
 
     </select>
