@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -267,6 +266,7 @@ if(familyBackBtn){
 
 }
 async function openRelationsPage(){
+   console.time("RELATIONS PAGE LOAD");
     console.log(
         "OPENING RELATIONS PAGE"
     );
@@ -535,6 +535,7 @@ if(currentFamily){
 
     }
 
+   
 }   
    
 /* =====================================
@@ -885,7 +886,7 @@ console.log(
 
         relationsMemberDropdown.style.display =
             "block";
-
+console.timeEnd("RELATIONS PAGE LOAD");
     }
 
 
