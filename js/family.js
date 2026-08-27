@@ -529,14 +529,6 @@ console.log(
 
 
        
-        const searchText =
-            String(
-                relationsMemberSearch.value || ""
-            )
-            .trim()
-            .toLowerCase();
-
-
         relationsMemberDropdown.innerHTML =
             "";
 
