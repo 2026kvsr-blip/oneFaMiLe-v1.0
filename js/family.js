@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -330,67 +331,275 @@ if(familyBackBtn){
     </div>
 
 </div>
-            <div class="relations-section">
 
-                <h3>1. Parents</h3>
 
-                <div>
-                    Father :
-                    <span id="relationFather">
-                        --------
-                    </span>
-                </div>
+   
+<!-- =================================
+     RELATIONS DETAILS
+     ================================= -->
 
-                <div>
-                    Mother :
-                    <span id="relationMother">
-                        --------
-                    </span>
-                </div>
+<!-- 1. PARTNER -->
+<div
+    id="relationPartnerSection"
+    class="relations-section relation-direct-row">
 
-            </div>
+    <div class="relation-row">
 
-            <div class="relations-section">
+        <span class="relation-label">
+            Partner
+        </span>
 
-                <h3>2. Partner</h3>
+        <span class="relation-colon">
+            :
+        </span>
 
-                <div>
-                    Partner :
-                    <span id="relationPartner">
-                        --------
-                    </span>
-                </div>
+        <span
+            id="relationPartner"
+            class="relation-value">
+            --------
+        </span>
 
-            </div>
+    </div>
 
-            <div class="relations-section">
+</div>
 
-                <h3>3. Children</h3>
 
-                <div id="relationChildren">
-                    --------
-                </div>
+<!-- 2. CHILDREN -->
+<div
+    id="relationChildrenSection"
+    class="relations-section">
 
-            </div>
+    <h3>Children</h3>
 
-            <div class="relations-section">
+    <div
+        id="relationChildren">
+        --------
+    </div>
 
-                <h3>4. Siblings</h3>
+</div>
 
-                <strong>Brothers</strong>
 
-                <div id="relationBrothers">
-                    --------
-                </div>
+<!-- 3. PARENTS -->
+<div
+    id="relationParentsSection"
+    class="relations-section">
 
-                <strong>Sisters</strong>
+    <h3>Parents</h3>
 
-                <div id="relationSisters">
-                    --------
-                </div>
+    <div class="relation-row">
 
-            </div>
+        <span class="relation-label">
+            Father
+        </span>
 
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span
+            id="relationFather"
+            class="relation-value">
+            --------
+        </span>
+
+    </div>
+
+
+    <div class="relation-row">
+
+        <span class="relation-label">
+            Mother
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span
+            id="relationMother"
+            class="relation-value">
+            --------
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- 4. SIBLINGS -->
+<div
+    id="relationSiblingsSection"
+    class="relations-section">
+
+    <h3>Siblings</h3>
+
+    <strong>Brothers</strong>
+
+    <div
+        id="relationBrothers">
+        --------
+    </div>
+
+
+    <strong>Sisters</strong>
+
+    <div
+        id="relationSisters">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 5. FATHER SIBLINGS -->
+<div
+    id="relationFatherSiblingsSection"
+    class="relations-section">
+
+    <h3>Father Siblings</h3>
+
+    <div
+        id="relationFatherSiblings">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 6. MOTHER SIBLINGS -->
+<div
+    id="relationMotherSiblingsSection"
+    class="relations-section">
+
+    <h3>Mother Siblings</h3>
+
+    <div
+        id="relationMotherSiblings">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 7. IN-LAWS -->
+<div
+    id="relationInLawsSection"
+    class="relations-section">
+
+    <h3>In-Laws</h3>
+
+    <div class="relation-row">
+
+        <span class="relation-label">
+            Father-in-Law
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span
+            id="relationFatherInLaw"
+            class="relation-value">
+            --------
+        </span>
+
+    </div>
+
+
+    <div class="relation-row">
+
+        <span class="relation-label">
+            Mother-in-Law
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span
+            id="relationMotherInLaw"
+            class="relation-value">
+            --------
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- 8. FATHER-IN-LAW SIBLINGS -->
+<div
+    id="relationFatherInLawSiblingsSection"
+    class="relations-section">
+
+    <h3>Father-in-Law Siblings</h3>
+
+    <div
+        id="relationFatherInLawSiblings">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 9. MOTHER-IN-LAW SIBLINGS -->
+<div
+    id="relationMotherInLawSiblingsSection"
+    class="relations-section">
+
+    <h3>Mother-in-Law Siblings</h3>
+
+    <div
+        id="relationMotherInLawSiblings">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 10. GRAND PARENTS -->
+<div
+    id="relationGrandParentsSection"
+    class="relations-section">
+
+    <h3>Grand Parents</h3>
+
+    <div
+        id="relationGrandParents">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 11. GRAND GRAND PARENTS -->
+<div
+    id="relationGrandGrandParentsSection"
+    class="relations-section">
+
+    <h3>Grand Grand Parents</h3>
+
+    <div
+        id="relationGrandGrandParents">
+        --------
+    </div>
+
+</div>
+
+
+<!-- BACK BUTTON -->
+<div align="center">
+
+    <button
+        id="relationsBackBtn"
+        class="back-btn">
+
+        ← Back
+
+    </button>
+
+</div>
             <div align="center">
 
                 <button
