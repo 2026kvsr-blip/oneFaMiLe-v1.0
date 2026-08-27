@@ -1,5 +1,4 @@
 
-
 /* =====================================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -1068,4 +1067,19 @@
 
     font-size:16px;
 
+}
+.relation-member-name{
+    display: inline-block;
+    font-weight: 600;
+}
+
+.relation-member-gender{
+    display: inline-block;
+    font-weight: 500;
+}
+.relation-member-details{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
 }
