@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -281,7 +282,7 @@ if(familyBackBtn){
 
         + `
 <!-- =================================
-     SELECT MEMBER
+     SELECT / SEARCH MEMBER
      ================================= -->
 
 <div class="common-form-group">
@@ -294,18 +295,25 @@ if(familyBackBtn){
         :
     </span>
 
-    <select
-        id="relationsMemberSelect"
-        class="common-form-select">
+    <div
+        class="relations-member-search-wrap">
 
-        <option value="">
-            Select / Search Member
-        </option>
+        <input
+            type="text"
+            id="relationsMemberSearch"
+            class="common-form-select"
+            placeholder="Select / Search Member"
+            autocomplete="off">
 
-    </select>
+        <div
+            id="relationsMemberDropdown"
+            class="relations-member-dropdown">
+        </div>
+
+    </div>
 
 </div>
-        <div class="relations-page">
+<div class="relations-page">
 
             <div class="relations-member-header">
 
@@ -396,17 +404,27 @@ if(familyBackBtn){
         `
     );
 
- const relationsMemberSelect =
-        document.getElementById(
-            "relationsMemberSelect"
-        );
-      /* =====================================
-   LOAD MEMBERS INTO RELATIONS DROPDOWN
+const relationsMemberSearch =
+    document.getElementById(
+        "relationsMemberSearch"
+    );
+
+const relationsMemberDropdown =
+    document.getElementById(
+        "relationsMemberDropdown"
+    );
+
+
+/* =====================================
+   LOAD MEMBERS INTO RELATIONS SEARCH
    ===================================== */
 
-if(relationsMemberSelect){
+if(
+    relationsMemberSearch &&
+    relationsMemberDropdown
+){
 
-    let familyMembers =
+    const familyMembers =
         JSON.parse(
             localStorage.getItem(
                 "familyMembers"
@@ -420,81 +438,295 @@ if(relationsMemberSelect){
     );
 
 
-    familyMembers.forEach(
-        function(member){
+    /* =================================
+       SHOW MEMBER LIST
+       ================================= */
 
-            if(
-                !member ||
-                !member.memberId
-            ){
-                return;
-            }
-            const option =
-                document.createElement(
-                    "option"
-                );
-            option.value =
-                member.memberId;
-            option.textContent =
-               member.name || "Unnamed";
-            relationsMemberSelect.appendChild(
-                option
-            );
-        }
-    );
-relationsMemberSelect.onchange =
-    function(){
+    function showRelationsMemberDropdown(){
 
-        const selectedMemberId =
-            this.value;
+        const searchText =
+            String(
+                relationsMemberSearch.value || ""
+            )
+            .trim()
+            .toLowerCase();
 
 
-        if(!selectedMemberId){
-
-            return;
-
-        }
+        relationsMemberDropdown.innerHTML =
+            "";
 
 
-        const selectedMember =
-            familyMembers.find(
+        /* =============================
+           FILTER MEMBERS
+           ============================= */
+
+        const matchingMembers =
+            familyMembers.filter(
                 function(member){
 
-                    return String(
-                        member.memberId
-                    ) === String(
-                        selectedMemberId
+                    if(
+                        !member ||
+                        !member.memberId
+                    ){
+
+                        return false;
+
+                    }
+
+
+                    const memberName =
+                        String(
+                            member.name || ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+
+                    /* EMPTY SEARCH
+                       → SHOW ALL */
+
+                    if(
+                        searchText === ""
+                    ){
+
+                        return (
+                            memberName !== ""
+                        );
+
+                    }
+
+
+                    /* TEXT SEARCH */
+
+                    return (
+                        memberName !== "" &&
+                        memberName.includes(
+                            searchText
+                        )
                     );
 
                 }
             );
 
 
-        if(!selectedMember){
+        console.log(
+            "RELATIONS SEARCH:",
+            searchText,
+            matchingMembers
+        );
 
-            console.log(
-                "SELECTED MEMBER NOT FOUND"
-            );
+
+        /* =============================
+           NO MATCH
+           ============================= */
+
+        if(
+            matchingMembers.length === 0
+        ){
+
+            relationsMemberDropdown.innerHTML =
+                `<div class="relations-no-match">
+                    No matching member
+                </div>`;
+
+            relationsMemberDropdown.style.display =
+                "block";
 
             return;
 
         }
 
 
-        console.log(
-            "SELECTED RELATIONS MEMBER:",
-            selectedMember
+        /* =============================
+           CREATE MEMBER ITEMS
+           ============================= */
+
+        matchingMembers.forEach(
+            function(member){
+
+                const option =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                option.className =
+                    "relations-member-option";
+
+
+                option.textContent =
+                    member.name ||
+                    "Unnamed";
+
+
+                option.dataset.memberId =
+                    member.memberId;
+
+
+                relationsMemberDropdown.appendChild(
+                    option
+                );
+
+            }
         );
 
 
-        loadSelectedMemberRelations(
-            selectedMember,
-            familyMembers
-        );
+        relationsMemberDropdown.style.display =
+            "block";
 
-    };
+    }
+
+
+    /* =================================
+       BOX CLICK
+       → SHOW ALL MEMBERS
+       ================================= */
+
+    relationsMemberSearch.addEventListener(
+        "click",
+        function(){
+
+            showRelationsMemberDropdown();
+
+            this.focus();
+
+        }
+    );
+
+
+    /* =================================
+       TEXT SEARCH
+       ================================= */
+
+    relationsMemberSearch.addEventListener(
+        "input",
+        function(){
+
+            showRelationsMemberDropdown();
+
+        }
+    );
+
+
+    /* =================================
+       MEMBER SELECT
+       ================================= */
+
+    relationsMemberDropdown.addEventListener(
+        "click",
+        function(event){
+
+            const option =
+                event.target.closest(
+                    ".relations-member-option"
+                );
+
+
+            if(!option){
+
+                return;
+
+            }
+
+
+            const selectedMemberId =
+                option.dataset.memberId;
+
+
+            const selectedMember =
+                familyMembers.find(
+                    function(member){
+
+                        return String(
+                            member.memberId
+                        ) === String(
+                            selectedMemberId
+                        );
+
+                    }
+                );
+
+
+            if(!selectedMember){
+
+                console.log(
+                    "SELECTED MEMBER NOT FOUND"
+                );
+
+                return;
+
+            }
+
+
+            console.log(
+                "SELECTED RELATIONS MEMBER:",
+                selectedMember
+            );
+
+
+            /* =========================
+               PUT SELECTED NAME
+               IN SEARCH BOX
+               ========================= */
+
+            relationsMemberSearch.value =
+                selectedMember.name ||
+                "";
+
+
+            /* =========================
+               HIDE LIST ONLY
+               ========================= */
+
+            relationsMemberDropdown.innerHTML =
+                "";
+
+            relationsMemberDropdown.style.display =
+                "none";
+
+
+            /* =========================
+               LOAD RELATIONS
+               ========================= */
+
+            loadSelectedMemberRelations(
+                selectedMember,
+                familyMembers
+            );
+
+        }
+    );
+
+
+    /* =================================
+       OUTSIDE CLICK
+       → HIDE LIST
+       → KEEP EMPTY BOX
+       ================================= */
+
+    document.addEventListener(
+        "click",
+        function(event){
+
+            if(
+                !event.target.closest(
+                    ".relations-member-search-wrap"
+                )
+            ){
+
+                relationsMemberDropdown.innerHTML =
+                    "";
+
+                relationsMemberDropdown.style.display =
+                    "none";
+
+            }
+
+        }
+    );
+
 }
-    const relationsBackBtn =
+      const relationsBackBtn =
         document.getElementById(
             "relationsBackBtn"
         );
