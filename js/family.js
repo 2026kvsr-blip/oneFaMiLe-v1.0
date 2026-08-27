@@ -4,6 +4,7 @@
    FAMILY MODULE
    ===================================== */
 
+
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -535,7 +536,20 @@ console.log(
         /* ================================
            FIND MEMBERS
            ================================ */
+console.log(
+    "DROPDOWN MEMBERS:",
+    relationsFamilyMembers
+);
 
+console.log(
+    "DROPDOWN MEMBER COUNT:",
+    relationsFamilyMembers.length
+);
+
+console.log(
+    "DROPDOWN SEARCH:",
+    searchText
+);
         const matchingMembers =
             relationsFamilyMembers.filter(
                 function(member){
