@@ -1175,3 +1175,34 @@
     display:flex;
     align-items:flex-end;
 }
+.relations-member-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+#relationMemberPhoto{
+    width:60px;
+    height:60px;
+    flex:0 0 60px;
+    border-radius:50%;
+    overflow:hidden;
+}
+
+#relationMemberPhoto img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+#relationMemberName{
+    font-weight:600;
+    line-height:22px;
+}
+
+#relationMemberGender{
+    margin-top:0;
+    font-size:14px;
+    line-height:22px;
+}
