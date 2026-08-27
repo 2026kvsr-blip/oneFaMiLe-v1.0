@@ -4,7 +4,6 @@
    FAMILY MODULE
    ===================================== */
 
-
 /* =====================================
    GENERATE UNIQUE FAMILY ID
    FORMAT:
@@ -266,8 +265,7 @@ if(familyBackBtn){
         };
 
 }
-   function openRelationsPage(){
-
+async function openRelationsPage(){
     console.log(
         "OPENING RELATIONS PAGE"
     );
@@ -425,7 +423,13 @@ if(familyBackBtn){
 
         `
     );
-      
+
+/* =====================================
+   LOAD LATEST FAMILY MEMBERS
+   ===================================== */
+
+await loadMemberRelations();
+   
 /* =====================================
  2b  -   RELATIONS → LOAD FAMILY MEMBERS
    ===================================== */
@@ -648,8 +652,8 @@ console.log(
                    ========================= */
 
                 option.addEventListener(
-                    "mousedown",
-                    function(event){
+                    "click",
+                   function(event){
 
                         event.preventDefault();
 
