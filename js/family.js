@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -897,15 +898,36 @@ relationsMemberSearch.addEventListener(
 
     if(relationsBackBtn){
 
-        relationsBackBtn.onclick =
-            function(){
+    function goBackFromRelations(){
 
-                familyBtn.click();
+        console.log(
+            "RELATIONS BACK CLICKED"
+        );
 
-            };
+        showHome();
 
     }
 
+
+    relationsBackBtn.onclick =
+        goBackFromRelations;
+
+
+    relationsBackBtn.addEventListener(
+        "touchend",
+        function(event){
+
+            event.preventDefault();
+
+            goBackFromRelations();
+
+        },
+        {
+            passive:false
+        }
+    );
+
+}
 }
    function loadSelectedMemberRelations(
     member,
