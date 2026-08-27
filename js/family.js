@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -800,21 +801,21 @@ console.log(
        → SHOW ALL MEMBERS
        ===================================== */
 
-   relationsMemberSearch.addEventListener(
-    "focus",
+  relationsMemberSearch.addEventListener(
+    "pointerdown",
     function(){
 
-        showRelationsMemberList();
+        showRelationsMemberDropdown();
 
     }
 );
 
 
 relationsMemberSearch.addEventListener(
-    "click",
+    "input",
     function(){
 
-        showRelationsMemberList();
+        showRelationsMemberDropdown();
 
     }
 );
