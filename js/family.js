@@ -444,100 +444,102 @@ const currentFamily =
 
 if(currentFamily){
 
-    try{
+    const params =
+        new URLSearchParams();
 
-        const params =
-            new URLSearchParams();
+    params.append(
+        "action",
+        "getFamilyMembers"
+    );
 
-        params.append(
-            "action",
-            "getFamilyMembers"
-        );
-
-        params.append(
-            "familyId",
-            currentFamily.familyId || ""
-        );
+    params.append(
+        "familyId",
+        currentFamily.familyId || ""
+    );
 
 
-        const response =
-            await fetch(
-                API_URL,
-                {
-                    method:"POST",
+    fetch(
+        API_URL,
+        {
+            method:"POST",
 
-                    headers:{
-                        "Content-Type":
-                            "application/x-www-form-urlencoded"
-                    },
+            headers:{
+                "Content-Type":
+                    "application/x-www-form-urlencoded"
+            },
 
-                    body:
-                        params.toString()
-                }
+            body:
+                params.toString()
+        }
+    )
+    .then(
+        function(response){
+
+            return response.json();
+
+        }
+    )
+    .then(
+        function(result){
+
+            console.log(
+                "RELATIONS DIRECT MEMBERS RESULT:",
+                result
             );
 
 
-        const result =
-            await response.json();
+            if(
+                result.status === "success" &&
+                Array.isArray(result.members)
+            ){
+
+                relationsFamilyMembers =
+                    result.members.filter(
+                        function(member){
+
+                            return (
+                                member &&
+                                String(
+                                    member.familyId || ""
+                                ).trim() ===
+                                String(
+                                    currentFamily.familyId || ""
+                                ).trim()
+                            );
+
+                        }
+                    );
+
+            }
 
 
-        console.log(
-            "RELATIONS DIRECT MEMBERS RESULT:",
-            result
-        );
+            console.log(
+                "RELATIONS FAMILY MEMBERS:",
+                relationsFamilyMembers
+            );
 
 
-        if(
-            result.status === "success" &&
-            Array.isArray(result.members)
-        ){
-
-            relationsFamilyMembers =
-                result.members.filter(
-                    function(member){
-
-                        return (
-                            member &&
-                            String(
-                                member.familyId || ""
-                            ).trim() ===
-                            String(
-                                currentFamily.familyId || ""
-                            ).trim()
-                        );
-
-                    }
-                );
+            console.log(
+                "RELATIONS MEMBER COUNT:",
+                relationsFamilyMembers.length
+            );
 
         }
+    )
+    .catch(
+        function(error){
 
+            console.error(
+                "RELATIONS MEMBERS LOAD ERROR:",
+                error
+            );
 
-        console.log(
-            "RELATIONS FAMILY MEMBERS:",
-            relationsFamilyMembers
-        );
+            relationsFamilyMembers = [];
 
+        }
+    );
 
-        console.log(
-            "RELATIONS MEMBER COUNT:",
-            relationsFamilyMembers.length
-        );
-
-
-    }catch(error){
-
-        console.error(
-            "RELATIONS MEMBERS LOAD ERROR:",
-            error
-        );
-
-        relationsFamilyMembers = [];
-
-    }
-
-   
 }   
-   
 /* =====================================
  2b  -   RELATIONS → LOAD FAMILY MEMBERS
    ===================================== */
