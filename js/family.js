@@ -284,12 +284,14 @@ if(familyBackBtn){
      SELECT / SEARCH MEMBER
      ================================= -->
 
-<div class="common-form-group">
+<div
+    id="relationsMemberGroup"
+    class="common-form-group">
 
     <label class="common-form-label">
         Member
     </label>
-
+    
     <span class="common-form-colon">
         :
     </span>
@@ -314,17 +316,20 @@ if(familyBackBtn){
 </div>
 <div class="relations-page">
 
-            <div class="relations-member-header">
+           <div class="relations-member-header">
 
-                <div id="relationMemberPhoto">
-                </div>
+    <div id="relationMemberPhoto">
+    </div>
 
-                <div id="relationMemberName">
-                    -
-                </div>
+    <div id="relationMemberName">
+        -
+    </div>
 
-            </div>
+    <div id="relationMemberGender">
+        -
+    </div>
 
+</div>
             <div class="relations-section">
 
                 <h3>1. Parents</h3>
@@ -745,6 +750,39 @@ relationsMemberSearch.addEventListener(
 
 
     /* ================================
+       HIDE MEMBER SEARCH BOX
+       ================================ */
+
+    const memberGroup =
+        document.getElementById(
+            "relationsMemberGroup"
+        );
+
+    if(memberGroup){
+
+        memberGroup.style.display =
+            "none";
+
+    }
+
+
+    /* ================================
+       SHOW SELECTED MEMBER HEADER
+       ================================ */
+
+    const memberHeader =
+        document.querySelector(
+            ".relations-member-header"
+        );
+
+    if(memberHeader){
+
+        memberHeader.style.display =
+            "flex";
+
+    }
+
+    /* ================================
        MEMBER NAME
        ================================ */
 
@@ -760,7 +798,21 @@ relationsMemberSearch.addEventListener(
             member.name || "-";
 
     }
+/* ================================
+   MEMBER GENDER
+   ================================ */
 
+const genderField =
+    document.getElementById(
+        "relationMemberGender"
+    );
+
+if(genderField){
+
+    genderField.textContent =
+        member.gender || "-";
+
+}
 
     /* ================================
        MEMBER PHOTO
