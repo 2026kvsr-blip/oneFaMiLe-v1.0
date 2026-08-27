@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -859,16 +860,7 @@ relationsMemberSearch.addEventListener(
        → FILTER MEMBERS
        ===================================== */
 
-    relationsMemberSearch.addEventListener(
-        "input",
-        function(){
-
-            showRelationsMemberDropdown();
-
-        }
-    );
-
-
+    
     /* =====================================
        OUTSIDE CLICK
        → HIDE LIST
