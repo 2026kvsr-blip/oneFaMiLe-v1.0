@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -429,7 +428,113 @@ async function openRelationsPage(){
    LOAD LATEST FAMILY MEMBERS
    ===================================== */
 
-await loadMemberRelations();
+/* =====================================
+   LOAD RELATIONS MEMBERS DIRECTLY
+   ===================================== */
+
+let relationsFamilyMembers = [];
+
+const currentFamily =
+    JSON.parse(
+        localStorage.getItem(
+            "currentFamily"
+        ) || "null"
+    );
+
+if(currentFamily){
+
+    try{
+
+        const params =
+            new URLSearchParams();
+
+        params.append(
+            "action",
+            "getFamilyMembers"
+        );
+
+        params.append(
+            "familyId",
+            currentFamily.familyId || ""
+        );
+
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+
+                    body:
+                        params.toString()
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "RELATIONS DIRECT MEMBERS RESULT:",
+            result
+        );
+
+
+        if(
+            result.status === "success" &&
+            Array.isArray(result.members)
+        ){
+
+            relationsFamilyMembers =
+                result.members.filter(
+                    function(member){
+
+                        return (
+                            member &&
+                            String(
+                                member.familyId || ""
+                            ).trim() ===
+                            String(
+                                currentFamily.familyId || ""
+                            ).trim()
+                        );
+
+                    }
+                );
+
+        }
+
+
+        console.log(
+            "RELATIONS FAMILY MEMBERS:",
+            relationsFamilyMembers
+        );
+
+
+        console.log(
+            "RELATIONS MEMBER COUNT:",
+            relationsFamilyMembers.length
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "RELATIONS MEMBERS LOAD ERROR:",
+            error
+        );
+
+        relationsFamilyMembers = [];
+
+    }
+
+}   
    
 /* =====================================
  2b  -   RELATIONS → LOAD FAMILY MEMBERS
@@ -444,45 +549,6 @@ const relationsMemberDropdown =
     document.getElementById(
         "relationsMemberDropdown"
     );
-
-
-let relationsFamilyMembers = [];
-
-try{
-
-    const storedMembers =
-        localStorage.getItem(
-            "familyMembers"
-        );
-
-    if(storedMembers){
-
-        relationsFamilyMembers =
-            JSON.parse(
-                storedMembers
-            );
-
-    }
-
-}catch(error){
-
-    console.error(
-        "RELATIONS MEMBERS LOAD ERROR:",
-        error
-    );
-
-    relationsFamilyMembers = [];
-
-}
-
-console.log(
-    "RELATIONS FAMILY MEMBERS:",
-    relationsFamilyMembers
-);
-console.log(
-    "RELATIONS MEMBER COUNT:",
-    relationsFamilyMembers.length
-);
 
 
       
