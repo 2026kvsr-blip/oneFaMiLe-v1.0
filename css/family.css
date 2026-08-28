@@ -1248,6 +1248,11 @@
 .partner-label{
     font-weight: bold;
     color: #2A6EB0;
+       font-size:inherit;
+
+}
+.relation-direct-row{
+    font-size:inherit;
 }
 .relation-father-siblings{
     background:#fff8e1;
