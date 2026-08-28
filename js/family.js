@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -267,7 +266,8 @@ if(familyBackBtn){
         };
 
 }
-async function openRelationsPage(){
+   function openRelationsPage(){
+
     console.log(
         "OPENING RELATIONS PAGE"
     );
@@ -599,17 +599,22 @@ async function openRelationsPage(){
     </button>
 
 </div>
-            
+            <div align="center">
+
+                <button
+                    id="relationsBackBtn"
+                    class="back-btn">
+
+                    ← Back
+
+                </button>
+
+            </div>
+
         </div>
 
         `
     );
-
-
-
-/* =====================================
-   LOAD MEMBERS INTO RELATIONS SEARCH
-   ===================================== */
 
 const relationsMemberSearch =
     document.getElementById(
@@ -622,137 +627,31 @@ const relationsMemberDropdown =
     );
 
 
+/* =====================================
+   LOAD MEMBERS INTO RELATIONS SEARCH
+   ===================================== */
+
 if(
     relationsMemberSearch &&
     relationsMemberDropdown
 ){
 
-    let familyMembers = [];
-
-    try{
-
-        const currentFamily =
-            JSON.parse(
-                localStorage.getItem(
-                    "currentFamily"
-                ) || "null"
-            );
-
-
-        if(
-            !currentFamily ||
-            !currentFamily.familyId
-        ){
-
-            console.log(
-                "RELATIONS: CURRENT FAMILY NOT FOUND"
-            );
-
-        }
-        else{
-
-            const params =
-                new URLSearchParams();
-
-            params.append(
-                "action",
-                "getFamilyMembers"
-            );
-
-            params.append(
-                "familyId",
-                currentFamily.familyId
-            );
-
-
-            const response =
-                await fetch(
-                    API_URL,
-                    {
-                        method:"POST",
-
-                        headers:{
-                            "Content-Type":
-                                "application/x-www-form-urlencoded"
-                        },
-
-                        body:
-                            params.toString()
-                    }
-                );
-
-
-            const result =
-                await response.json();
-
-
-            console.log(
-                "RELATIONS MEMBERS RESULT:",
-                result
-            );
-
-
-            if(
-                result.status === "success" &&
-                Array.isArray(result.members)
-            ){
-
-                familyMembers =
-                    result.members.filter(
-                        function(member){
-
-                            return (
-                                member &&
-                                String(
-                                    member.familyId || ""
-                                ).trim() ===
-                                String(
-                                    currentFamily.familyId || ""
-                                ).trim()
-                            );
-
-                        }
-                    );
-
-
-                localStorage.setItem(
-                    "familyMembers",
-                    JSON.stringify(
-                        familyMembers
-                    )
-                );
-
-            }
-
-        }
-
-    }
-    catch(error){
-
-        console.error(
-            "RELATIONS MEMBERS LOAD ERROR:",
-            error
+    const familyMembers =
+        JSON.parse(
+            localStorage.getItem(
+                "familyMembers"
+            ) || "[]"
         );
 
 
-        familyMembers =
-            JSON.parse(
-                localStorage.getItem(
-                    "familyMembers"
-                ) || "[]"
-            );
-
-    }
-
-
     console.log(
-        "RELATIONS FINAL MEMBERS:",
+        "RELATIONS FAMILY MEMBERS:",
         familyMembers
     );
 
 
     /* =================================
-       SHOW MEMBER DROPDOWN
+       SHOW MEMBER LIST
        ================================= */
 
     function showRelationsMemberDropdown(){
@@ -768,6 +667,10 @@ if(
         relationsMemberDropdown.innerHTML =
             "";
 
+
+        /* =============================
+           FILTER MEMBERS
+           ============================= */
 
         const matchingMembers =
             familyMembers.filter(
@@ -791,36 +694,27 @@ if(
                         .toLowerCase();
 
 
-                    if(
-                        memberName === ""
-                    ){
-
-                        return false;
-
-                    }
-
-
-                    /*
-                       EMPTY SEARCH
-                       → SHOW ALL MEMBERS
-                    */
+                    /* EMPTY SEARCH
+                       → SHOW ALL */
 
                     if(
                         searchText === ""
                     ){
 
-                        return true;
+                        return (
+                            memberName !== ""
+                        );
 
                     }
 
 
-                    /*
-                       STRING SEARCH
-                       → NAME CONTAINS SEARCH TEXT
-                    */
+                    /* TEXT SEARCH */
 
-                    return memberName.includes(
-                        searchText
+                    return (
+                        memberName !== "" &&
+                        memberName.includes(
+                            searchText
+                        )
                     );
 
                 }
@@ -833,6 +727,10 @@ if(
             matchingMembers
         );
 
+
+        /* =============================
+           NO MATCH
+           ============================= */
 
         if(
             matchingMembers.length === 0
@@ -850,6 +748,10 @@ if(
 
         }
 
+
+        /* =============================
+           CREATE MEMBER ITEMS
+           ============================= */
 
         matchingMembers.forEach(
             function(member){
@@ -887,34 +789,28 @@ if(
     }
 
 
-    /* =================================
-       FOCUS
-       ================================= */
+  /* =================================
+   MEMBER SEARCH
+   ================================= */
 
-    relationsMemberSearch.addEventListener(
-        "focus",
-        function(){
+relationsMemberSearch.addEventListener(
+    "focus",
+    function(){
 
-            showRelationsMemberDropdown();
+        showRelationsMemberDropdown();
 
-        }
-    );
-
-
-    /* =================================
-       SEARCH
-       ================================= */
-
-    relationsMemberSearch.addEventListener(
-        "input",
-        function(){
-
-            showRelationsMemberDropdown();
-
-        }
-    );
+    }
+);
 
 
+relationsMemberSearch.addEventListener(
+    "input",
+    function(){
+
+        showRelationsMemberDropdown();
+
+    }
+);
     /* =================================
        MEMBER SELECT
        ================================= */
@@ -946,8 +842,7 @@ if(
 
                         return String(
                             member.memberId
-                        ) ===
-                        String(
+                        ) === String(
                             selectedMemberId
                         );
 
@@ -972,9 +867,19 @@ if(
             );
 
 
-            relationsMemberSearch.value =
-                selectedMember.name || "";
+            /* =========================
+               PUT SELECTED NAME
+               IN SEARCH BOX
+               ========================= */
 
+            relationsMemberSearch.value =
+                selectedMember.name ||
+                "";
+
+
+            /* =========================
+               HIDE LIST ONLY
+               ========================= */
 
             relationsMemberDropdown.innerHTML =
                 "";
@@ -983,9 +888,9 @@ if(
                 "none";
 
 
-            /*
-               LOAD RELATIONS IMMEDIATELY
-            */
+            /* =========================
+               LOAD RELATIONS
+               ========================= */
 
             loadSelectedMemberRelations(
                 selectedMember,
@@ -995,33 +900,6 @@ if(
         }
     );
 
-
-    /* =================================
-       OUTSIDE CLICK
-       ================================= */
-
-    document.addEventListener(
-        "click",
-        function(event){
-
-            if(
-                !event.target.closest(
-                    ".relations-member-search-wrap"
-                )
-            ){
-
-                relationsMemberDropdown.innerHTML =
-                    "";
-
-                relationsMemberDropdown.style.display =
-                    "none";
-
-            }
-
-        }
-    );
-
-}
 
     /* =================================
        OUTSIDE CLICK
@@ -3080,7 +2958,7 @@ if(genderField){
     };
 
 }
-
+}
        /* =================================
    MEMBER ACTION BUTTONS
    ================================= */
@@ -3153,7 +3031,7 @@ saveMemberBtn.onclick = async function(){
        CURRENT FAMILY
        ================================ */
 
- currentFamily =
+ let currentFamily =
     JSON.parse(
         localStorage.getItem(
             "currentFamily"
@@ -4110,6 +3988,7 @@ const storedFamily =
    VERIFY FAMILY BELONGS TO USER
    ================================= */
 
+let currentFamily = null;
 
 
 if(
@@ -4388,6 +4267,14 @@ if(currentFamily){
     }
 
 }
+/* =================================
+   GENERATE MEMBER ID PREFIX
+   ================================= */
+
+const memberIdField =
+    document.getElementById(
+        "memberId"
+    );
 
 
 
