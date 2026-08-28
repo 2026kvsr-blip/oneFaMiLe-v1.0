@@ -3153,7 +3153,7 @@ saveMemberBtn.onclick = async function(){
        CURRENT FAMILY
        ================================ */
 
- let currentFamily =
+ currentFamily =
     JSON.parse(
         localStorage.getItem(
             "currentFamily"
@@ -4110,7 +4110,6 @@ const storedFamily =
    VERIFY FAMILY BELONGS TO USER
    ================================= */
 
-let currentFamily = null;
 
 
 if(
