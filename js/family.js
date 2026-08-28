@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1846,23 +1847,30 @@ else{
     }
 
 
-    if(
-        motherSiblings.length
-    ){
+   if(
+    motherSiblings.length
+){
 
-        showSection(
+    const motherSiblingsSection =
+        document.getElementById(
             "relationMotherSiblingsSection"
         );
 
-    }
-    else{
+    if(motherSiblingsSection){
 
-        hideSection(
-            "relationMotherSiblingsSection"
-        );
+        motherSiblingsSection.style.display =
+            "block";
 
     }
 
+}
+else{
+
+    hideSection(
+        "relationMotherSiblingsSection"
+    );
+
+}
 
     /* =================================
        7. IN-LAWS
@@ -1946,28 +1954,34 @@ else{
     }
 
 
-    if(
-        isMarried &&
-        (
-            getName(fatherInLaw) ||
-            getName(motherInLaw)
-        )
-    ){
+   if(
+    isMarried &&
+    (
+        getName(fatherInLaw) ||
+        getName(motherInLaw)
+    )
+){
 
-        showSection(
+    const inLawsSection =
+        document.getElementById(
             "relationInLawsSection"
         );
 
-    }
-    else{
+    if(inLawsSection){
 
-        hideSection(
-            "relationInLawsSection"
-        );
+        inLawsSection.style.display =
+            "block";
 
     }
 
+}
+else{
 
+    hideSection(
+        "relationInLawsSection"
+    );
+
+}
     /* =================================
        8. FATHER-IN-LAW SIBLINGS
        ================================= */
@@ -2061,24 +2075,31 @@ else{
     }
 
 
-    if(
-        isMarried &&
-        fatherInLawSiblings.length
-    ){
+   if(
+    isMarried &&
+    fatherInLawSiblings.length
+){
 
-        showSection(
+    const fatherInLawSiblingsSection =
+        document.getElementById(
             "relationFatherInLawSiblingsSection"
         );
 
-    }
-    else{
+    if(fatherInLawSiblingsSection){
 
-        hideSection(
-            "relationFatherInLawSiblingsSection"
-        );
+        fatherInLawSiblingsSection.style.display =
+            "block";
 
     }
 
+}
+else{
+
+    hideSection(
+        "relationFatherInLawSiblingsSection"
+    );
+
+}
 
     /* =================================
        9. MOTHER-IN-LAW SIBLINGS
@@ -2173,24 +2194,31 @@ else{
     }
 
 
-    if(
-        isMarried &&
-        motherInLawSiblings.length
-    ){
+   if(
+    isMarried &&
+    motherInLawSiblings.length
+){
 
-        showSection(
+    const motherInLawSiblingsSection =
+        document.getElementById(
             "relationMotherInLawSiblingsSection"
         );
 
-    }
-    else{
+    if(motherInLawSiblingsSection){
 
-        hideSection(
-            "relationMotherInLawSiblingsSection"
-        );
+        motherInLawSiblingsSection.style.display =
+            "block";
 
     }
 
+}
+else{
+
+    hideSection(
+        "relationMotherInLawSiblingsSection"
+    );
+
+}
 
     /* =================================
        10. GRAND PARENTS
@@ -2330,19 +2358,26 @@ else{
 
     if(grandParents.length){
 
-        showSection(
+    const grandParentsSection =
+        document.getElementById(
             "relationGrandParentsSection"
         );
 
-    }
-    else{
+    if(grandParentsSection){
 
-        hideSection(
-            "relationGrandParentsSection"
-        );
+        grandParentsSection.style.display =
+            "block";
 
     }
 
+}
+else{
+
+    hideSection(
+        "relationGrandParentsSection"
+    );
+
+}
 
     /* =================================
        11. GRAND GRAND PARENTS
@@ -2450,22 +2485,31 @@ else{
     }
 
 
-    if(
-        grandGrandParents.length
-    ){
+   if(
+    grandGrandParents.length
+){
 
-        showSection(
+    const grandGrandParentsSection =
+        document.getElementById(
             "relationGrandGrandParentsSection"
         );
 
-    }
-    else{
+    if(grandGrandParentsSection){
 
-        hideSection(
-            "relationGrandGrandParentsSection"
-        );
+        grandGrandParentsSection.style.display =
+            "block";
 
     }
+
+}
+else{
+
+    hideSection(
+        "relationGrandGrandParentsSection"
+    );
+
+}
+      
 console.log(
     "RELATIONS SECTIONS IN DOM:",
     document.querySelectorAll(
