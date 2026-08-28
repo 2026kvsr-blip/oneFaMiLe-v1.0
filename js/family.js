@@ -1,6 +1,7 @@
 
 
-/* =====================================
+/* =============
+========================
    oneFaMiLe
    FAMILY MODULE
    ===================================== */
@@ -1136,8 +1137,7 @@ function loadSelectedMemberRelations(
             member.motherId
         );
 
-
-  /* =================================
+/* =================================
    FATHER
    ================================= */
 
@@ -1155,12 +1155,15 @@ const fatherField =
 if(
     father &&
     father.name &&
-    String(father.name).trim() !== ""
+    String(
+        father.name
+    ).trim() !== ""
 ){
 
     if(fatherRow){
 
-        fatherRow.style.display = "";
+        fatherRow.style.display =
+            "";
 
     }
 
@@ -1176,19 +1179,22 @@ else{
 
     if(fatherRow){
 
-        fatherRow.style.display = "none";
+        fatherRow.style.display =
+            "none";
 
     }
 
     if(fatherField){
 
-        fatherField.textContent = "";
+        fatherField.textContent =
+            "";
 
     }
 
 }
 
-   /* =================================
+
+/* =================================
    MOTHER
    ================================= */
 
@@ -1206,12 +1212,15 @@ const motherField =
 if(
     mother &&
     mother.name &&
-    String(mother.name).trim() !== ""
+    String(
+        mother.name
+    ).trim() !== ""
 ){
 
     if(motherRow){
 
-        motherRow.style.display = "";
+        motherRow.style.display =
+            "";
 
     }
 
@@ -1227,17 +1236,20 @@ else{
 
     if(motherRow){
 
-        motherRow.style.display = "none";
+        motherRow.style.display =
+            "none";
 
     }
 
     if(motherField){
 
-        motherField.textContent = "";
+        motherField.textContent =
+            "";
 
     }
 
 }
+
 
 /* =================================
    SHOW / HIDE PARENTS SECTION
@@ -1251,22 +1263,31 @@ const parentsSection =
 
 if(parentsSection){
 
+    const hasFather =
+        father &&
+        father.name &&
+        String(
+            father.name
+        ).trim() !== "";
+
+
+    const hasMother =
+        mother &&
+        mother.name &&
+        String(
+            mother.name
+        ).trim() !== "";
+
+
     parentsSection.style.display =
         (
-            father &&
-            father.name &&
-            String(father.name).trim() !== ""
-        ) ||
-        (
-            mother &&
-            mother.name &&
-            String(mother.name).trim() !== ""
+            hasFather ||
+            hasMother
         )
             ? ""
             : "none";
 
 }
-
    
     /* =================================
        FIND PARTNER
