@@ -1254,3 +1254,12 @@
     font-weight: bold;
     color: #2A6EB0;
 }
+.relation-father-siblings{
+    background:#fff8e1;
+    border-color:#d6a72c;
+}
+
+.relation-mother-siblings{
+    background:#f7f0df;
+    border-color:#b89b5e;
+}
