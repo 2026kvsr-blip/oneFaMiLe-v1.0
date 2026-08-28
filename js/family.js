@@ -1428,16 +1428,23 @@ if(childrenSection){
 
 
     if(
-        getName(father) ||
-        getName(mother)
-    ){
+    getName(father) ||
+    getName(mother)
+){
 
-        showSection(
+    const parentsSection =
+        document.getElementById(
             "relationParentsSection"
         );
 
+    if(parentsSection){
+
+        parentsSection.style.display =
+            "block";
+
     }
-    else{
+
+}    else{
 
         hideSection(
             "relationParentsSection"
