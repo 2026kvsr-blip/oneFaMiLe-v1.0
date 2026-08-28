@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -481,7 +480,7 @@ if(familyBackBtn){
 <!-- 7. IN-LAWS -->
 <div
     id="relationInLawsSection"
-    class="relations-section">
+    class="relations-section relations-inlaws">
 
     <h3>In-Laws</h3>
 
