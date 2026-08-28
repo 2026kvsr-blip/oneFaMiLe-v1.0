@@ -980,7 +980,20 @@ relationsMemberSearch.addEventListener(
             "flex";
 
     }
+/* ================================
+   SHOW ALL RELATION SECTIONS
+   ================================ */
 
+document.querySelectorAll(
+    ".relations-section"
+).forEach(
+    function(section){
+
+        section.style.display =
+            "block";
+
+    }
+);
 
     /* =================================
        MEMBER NAME
