@@ -1,6 +1,4 @@
 
-
-
 /* =========
 ============================
    FAMILY → CREATE TREE
@@ -1265,8 +1263,8 @@
     border-color:#d9954d;
 }
 .relation-father-inlaw-siblings{
-    background:#fff0f5;
-    border-color:#c9829a;
+     background:#ffe8e8;
+    border-color:#d66b6b;
 }
 .relation-mother-inlaw-siblings{
     background:#f5eafb;
