@@ -1388,9 +1388,12 @@ if(!isMarried){
 }
 else{
 
-    showSection(
-        "relationChildrenSection"
-    );
+    if(childrenSection){
+
+    childrenSection.style.display =
+        "block";
+
+}
 
 
     /* ===============================
