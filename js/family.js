@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -339,8 +340,7 @@ if(familyBackBtn){
 <!-- 1. PARTNER -->
 <div
     id="relationPartnerSection"
-    class="relations-section relation-direct-row">
-
+    class="relations-section relation-direct-row relations-partner">
     <div class="relation-row">
 
         <span class="relation-label partner-label">
