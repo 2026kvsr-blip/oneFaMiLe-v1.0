@@ -1611,23 +1611,30 @@ if(childrenSection){
 
 
     if(
-        brothers.length ||
-        sisters.length
-    ){
+    brothers.length ||
+    sisters.length
+){
 
-        showSection(
+    const siblingsSection =
+        document.getElementById(
             "relationSiblingsSection"
         );
 
-    }
-    else{
+    if(siblingsSection){
 
-        hideSection(
-            "relationSiblingsSection"
-        );
+        siblingsSection.style.display =
+            "block";
 
     }
 
+}
+else{
+
+    hideSection(
+        "relationSiblingsSection"
+    );
+
+}
 
     /* =================================
        5. FATHER SIBLINGS
