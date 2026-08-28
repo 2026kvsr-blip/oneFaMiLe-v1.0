@@ -365,15 +365,43 @@ if(familyBackBtn){
 <div
     id="relationChildrenSection"
     class="relations-section relations-children">
-    <h3>Children</h3>
+
+    <h3 id="relationChildrenTitle">
+        Children
+    </h3>
 
     <div
-        id="relationChildren">
-        --------
+        id="relationSonsRow"
+        class="relation-child-group">
+
+        <div
+            id="relationSonsTitle"
+            class="relation-child-title">
+        </div>
+
+        <div
+            id="relationSons">
+        </div>
+
+    </div>
+
+
+    <div
+        id="relationDaughtersRow"
+        class="relation-child-group">
+
+        <div
+            id="relationDaughtersTitle"
+            class="relation-child-title">
+        </div>
+
+        <div
+            id="relationDaughters">
+        </div>
+
     </div>
 
 </div>
-
 
 <!-- 3. PARENTS -->
 <div
@@ -1249,117 +1277,311 @@ document.querySelectorAll(
     }
 
 
-    /* =================================
-       2. CHILDREN
-       ================================= */
+   /* =================================
+   2. CHILDREN
+   ================================= */
 
-    const children =
-        familyMembers.filter(
-            function(item){
+const children =
+    familyMembers.filter(
+        function(item){
 
-                if(
-                    String(
-                        item.memberId || ""
-                    ).trim() ===
-                    String(
-                        member.memberId || ""
-                    ).trim()
-                ){
+            if(
+                String(
+                    item.memberId || ""
+                ).trim() ===
+                String(
+                    member.memberId || ""
+                ).trim()
+            ){
 
-                    return false;
-
-                }
-
-
-                const isFather =
-                    String(
-                        item.fatherId || ""
-                    ).trim() ===
-                    String(
-                        member.memberId || ""
-                    ).trim();
-
-
-                const isMother =
-                    String(
-                        item.motherId || ""
-                    ).trim() ===
-                    String(
-                        member.memberId || ""
-                    ).trim();
-
-
-                return (
-                    isFather ||
-                    isMother
-                );
+                return false;
 
             }
-        );
 
+            const isFather =
+                String(
+                    item.fatherId || ""
+                ).trim() ===
+                String(
+                    member.memberId || ""
+                ).trim();
 
-    const childrenSection =
-        document.getElementById(
-            "relationChildrenSection"
-        );
+            const isMother =
+                String(
+                    item.motherId || ""
+                ).trim() ===
+                String(
+                    member.memberId || ""
+                ).trim();
 
-
-    const childrenField =
-        document.getElementById(
-            "relationChildren"
-        );
-
-
-    if(!isMarried){
-
-        hideSection(
-            "relationChildrenSection"
-        );
-
-    }
-    else{
-
-        showSection(
-            "relationChildrenSection"
-        );
-
-
-        if(childrenField){            childrenField.innerHTML =                "";
-            if(children.length === 0){                childrenField.textContent =                    "No";            }
-            else{                children.forEach(                    function(                        child,                        index                    ){
-                        const div =                            document.createElement(                                "div"                            );
-                        div.textContent =          (index + 1) +         ". " +       (         getName(child) ||               "--------"                        );
-                        childrenField.appendChild(                            div                        );                    }
-                );
-
-            }
+            return (
+                isFather ||
+                isMother
+            );
 
         }
+    );
+
+
+/* =================================
+   CHILDREN SECTION
+   ================================= */
+
 const childrenSection =
     document.getElementById(
         "relationChildrenSection"
     );
 
-if(childrenSection){
 
-    if(isMarried){
+const childrenTitle =
+    document.getElementById(
+        "relationChildrenTitle"
+    );
 
-        childrenSection.style.display =
-            "block";
+
+const sonsRow =
+    document.getElementById(
+        "relationSonsRow"
+    );
+
+
+const daughtersRow =
+    document.getElementById(
+        "relationDaughtersRow"
+    );
+
+
+const sonsTitle =
+    document.getElementById(
+        "relationSonsTitle"
+    );
+
+
+const daughtersTitle =
+    document.getElementById(
+        "relationDaughtersTitle"
+    );
+
+
+const sonsField =
+    document.getElementById(
+        "relationSons"
+    );
+
+
+const daughtersField =
+    document.getElementById(
+        "relationDaughters"
+    );
+
+
+/* =================================
+   HIDE CHILDREN IF NOT MARRIED
+   ================================= */
+
+if(!isMarried){
+
+    hideSection(
+        "relationChildrenSection"
+    );
+
+}
+else{
+
+    showSection(
+        "relationChildrenSection"
+    );
+
+
+    /* ===============================
+       CHILDREN TOTAL COUNT
+       =============================== */
+
+    if(childrenTitle){
+
+        childrenTitle.textContent =
+            "Children : " +
+            children.length;
+
+    }
+
+
+    /* ===============================
+       SPLIT SONS
+       =============================== */
+
+    const sons =
+        children.filter(
+            function(child){
+
+                return String(
+                    child.gender || ""
+                )
+                .trim()
+                .toLowerCase() ===
+                "male";
+
+            }
+        );
+
+
+    /* ===============================
+       SPLIT DAUGHTERS
+       =============================== */
+
+    const daughters =
+        children.filter(
+            function(child){
+
+                return String(
+                    child.gender || ""
+                )
+                .trim()
+                .toLowerCase() ===
+                "female";
+
+            }
+        );
+
+
+    /* ===============================
+       SONS
+       =============================== */
+
+    if(sons.length === 0){
+
+        if(sonsRow){
+
+            sonsRow.style.display =
+                "none";
+
+        }
 
     }
     else{
 
-        childrenSection.style.display =
-            "none";
+        if(sonsRow){
+
+            sonsRow.style.display =
+                "";
+
+        }
+
+
+        if(sonsTitle){
+
+            sonsTitle.textContent =
+                "Sons : " +
+                sons.length;
+
+        }
+
+
+        if(sonsField){
+
+            sonsField.innerHTML =
+                "";
+
+            sons.forEach(
+                function(
+                    son,
+                    index
+                ){
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+                    div.textContent =
+                        (index + 1) +
+                        ". " +
+                        (
+                            getName(son) ||
+                            "--------"
+                        );
+
+                    sonsField.appendChild(
+                        div
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* ===============================
+       DAUGHTERS
+       =============================== */
+
+    if(daughters.length === 0){
+
+        if(daughtersRow){
+
+            daughtersRow.style.display =
+                "none";
+
+        }
+
+    }
+    else{
+
+        if(daughtersRow){
+
+            daughtersRow.style.display =
+                "";
+
+        }
+
+
+        if(daughtersTitle){
+
+            daughtersTitle.textContent =
+                "Daughters : " +
+                daughters.length;
+
+        }
+
+
+        if(daughtersField){
+
+            daughtersField.innerHTML =
+                "";
+
+            daughters.forEach(
+                function(
+                    daughter,
+                    index
+                ){
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+                    div.textContent =
+                        (index + 1) +
+                        ". " +
+                        (
+                            getName(daughter) ||
+                            "--------"
+                        );
+
+                    daughtersField.appendChild(
+                        div
+                    );
+
+                }
+            );
+
+        }
 
     }
 
 }
-       
-    }
-
-
     /* =================================
        3. PARENTS
        ================================= */
