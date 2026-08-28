@@ -4388,14 +4388,6 @@ if(currentFamily){
     }
 
 }
-/* =================================
-   GENERATE MEMBER ID PREFIX
-   ================================= */
-
-const memberIdField =
-    document.getElementById(
-        "memberId"
-    );
 
 
 
