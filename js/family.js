@@ -527,8 +527,7 @@ if(familyBackBtn){
 <!-- 8. FATHER-IN-LAW SIBLINGS -->
 <div
     id="relationFatherInLawSiblingsSection"
-    class="relations-section">
-
+    class="relations-section relation-father-inlaw-siblings">
     <h3>Father-in-Law Siblings</h3>
 
     <div
