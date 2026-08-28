@@ -599,18 +599,7 @@ if(familyBackBtn){
     </button>
 
 </div>
-            <div align="center">
-
-                <button
-                    id="relationsBackBtn"
-                    class="back-btn">
-
-                    ← Back
-
-                </button>
-
-            </div>
-
+            
         </div>
 
         `
