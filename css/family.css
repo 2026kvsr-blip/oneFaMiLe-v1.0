@@ -1252,3 +1252,7 @@
     object-fit:cover;
     display:block;
 }
+.partner-label{
+    font-weight: bold;
+    color: #2A6EB0;
+}
