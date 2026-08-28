@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -4407,20 +4408,47 @@ const loggedUser =
     ) || {};
 
 /* =================================
-   CLEAR OLD FAMILY DATA
+   SHOW CURRENT FAMILY IMMEDIATELY
    ================================= */
 
-localStorage.removeItem(
-    "currentFamily"
-);
+const savedFamily =
+    JSON.parse(
+        localStorage.getItem(
+            "currentFamily"
+        ) || "null"
+    );
 
-localStorage.removeItem(
-    "familyMembers"
-);
 
-console.log(
-    "OLD FAMILY DATA CLEARED"
-);
+const newFamilyIdField =
+    document.getElementById(
+        "newFamilyId"
+    );
+
+const newFamilyNameField =
+    document.getElementById(
+        "newFamilyName"
+    );
+
+
+if(savedFamily){
+
+    if(newFamilyIdField){
+
+        newFamilyIdField.textContent =
+            savedFamily.familyId || "-";
+
+    }
+
+
+    if(newFamilyNameField){
+
+        newFamilyNameField.value =
+            savedFamily.familyName || "";
+
+    }
+
+}
+
 
 /* =================================
    GET FAMILY TREE
