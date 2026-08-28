@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1224,8 +1223,8 @@ document.querySelectorAll(
 
         if(partnerSection){
 
-            partnerSection.style.display =
-                "";
+               partnerSection.style.display =
+        "block";
 
         }
 
