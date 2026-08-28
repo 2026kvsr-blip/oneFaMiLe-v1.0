@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -2334,7 +2335,21 @@ if(parentsSection){
                 grandGrandParents
         }
     );
+console.log(
+    "RELATIONS TEST:",
+    {
+        member: member.name,
+        father: father ? father.name : "NO FATHER",
+        mother: mother ? mother.name : "NO MOTHER",
+        partner: partner ? partner.name : "NO PARTNER",
+        children: children.length,
+        siblings: siblings.length
+    }
+);
 
+document.getElementById(
+    "relationParentsSection"
+).style.display = "";
 }
    
 /* =====================================
