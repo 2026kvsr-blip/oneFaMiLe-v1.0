@@ -1332,50 +1332,39 @@ document.querySelectorAll(
         );
 
 
-        if(childrenField){
-
-            childrenField.innerHTML =
-                "";
-
-
-            if(children.length === 0){
-
-                childrenField.textContent =
-                    "No";
-
-            }
-            else{
-
-                children.forEach(
-                    function(
-                        child,
-                        index
-                    ){
-
-                        const div =
-                            document.createElement(
-                                "div"
-                            );
-
-                        div.textContent =
-                            (index + 1) +
-                            ". " +
-                            (
-                                getName(child) ||
-                                "--------"
-                            );
-
-                        childrenField.appendChild(
-                            div
-                        );
-
-                    }
+        if(childrenField){            childrenField.innerHTML =                "";
+            if(children.length === 0){                childrenField.textContent =                    "No";            }
+            else{                children.forEach(                    function(                        child,                        index                    ){
+                        const div =                            document.createElement(                                "div"                            );
+                        div.textContent =          (index + 1) +         ". " +       (         getName(child) ||               "--------"                        );
+                        childrenField.appendChild(                            div                        );                    }
                 );
 
             }
 
         }
+const childrenSection =
+    document.getElementById(
+        "relationChildrenSection"
+    );
 
+if(childrenSection){
+
+    if(isMarried){
+
+        childrenSection.style.display =
+            "block";
+
+    }
+    else{
+
+        childrenSection.style.display =
+            "none";
+
+    }
+
+}
+       
     }
 
 
@@ -1407,12 +1396,12 @@ document.querySelectorAll(
 
         if(fatherRow){
 
-            fatherRow.style.display =
-                getName(father)
-                    ? ""
-                    : "none";
+    fatherRow.style.display =
+        getName(father)
+            ? "flex"
+            : "none";
 
-        }
+}
 
     }
 
@@ -1427,15 +1416,14 @@ document.querySelectorAll(
                 ".relation-row"
             );
 
-        if(motherRow){
+       if(motherRow){
 
-            motherRow.style.display =
-                getName(mother)
-                    ? ""
-                    : "none";
+    motherRow.style.display =
+        getName(mother)
+            ? "flex"
+            : "none";
 
-        }
-
+}
     }
 
 
