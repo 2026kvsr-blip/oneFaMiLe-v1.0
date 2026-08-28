@@ -569,8 +569,7 @@ if(familyBackBtn){
 <!-- 11. GRAND GRAND PARENTS -->
 <div
     id="relationGrandGrandParentsSection"
-    class="relations-section">
-
+    class="relations-section relation-grand-grandparents">
     <h3>Grand Grand Parents</h3>
 
     <div
