@@ -1399,11 +1399,21 @@ else{
 
     if(childrenTitle){
 
+    if(children.length === 0){
+
+        childrenTitle.textContent =
+            "Children : No";
+
+    }
+    else{
+
         childrenTitle.textContent =
             "Children : " +
             children.length;
 
     }
+
+}
 
 
     /* ===============================
