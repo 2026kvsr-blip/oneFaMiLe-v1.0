@@ -541,8 +541,7 @@ if(familyBackBtn){
 <!-- 9. MOTHER-IN-LAW SIBLINGS -->
 <div
     id="relationMotherInLawSiblingsSection"
-    class="relations-section">
-
+    class="relations-section relation-mother-inlaw-siblings">
     <h3>Mother-in-Law Siblings</h3>
 
     <div
@@ -556,8 +555,7 @@ if(familyBackBtn){
 <!-- 10. GRAND PARENTS -->
 <div
     id="relationGrandParentsSection"
-    class="relations-section">
-
+    class="relations-section relations-grandparents">
     <h3>Grand Parents</h3>
 
     <div
