@@ -385,7 +385,10 @@ if(familyBackBtn){
 
     <h3>Parents</h3>
 
-    <div class="relation-row">
+
+    <div
+        id="relationFatherRow"
+        class="relation-row">
 
         <span class="relation-label">
             Father
@@ -398,13 +401,14 @@ if(familyBackBtn){
         <span
             id="relationFather"
             class="relation-value">
-            --------
         </span>
 
     </div>
 
 
-    <div class="relation-row">
+    <div
+        id="relationMotherRow"
+        class="relation-row">
 
         <span class="relation-label">
             Mother
@@ -417,14 +421,11 @@ if(familyBackBtn){
         <span
             id="relationMother"
             class="relation-value">
-            --------
         </span>
 
     </div>
 
 </div>
-
-
 <!-- 4. SIBLINGS -->
 <div
     id="relationSiblingsSection"
@@ -1135,40 +1136,137 @@ function loadSelectedMemberRelations(
         );
 
 
-    /* =================================
-       FATHER
-       ================================= */
+  /* =================================
+   FATHER
+   ================================= */
 
-    setText(
-        "relationFather",
-        father
-            ? father.name
-            : ""
+const fatherRow =
+    document.getElementById(
+        "relationFatherRow"
     );
 
-    showSection(
-        "relationFatherSection",
-        !!father
-    );
-
-
-    /* =================================
-       MOTHER
-       ================================= */
-
-    setText(
-        "relationMother",
-        mother
-            ? mother.name
-            : ""
-    );
-
-    showSection(
-        "relationMotherSection",
-        !!mother
+const fatherField =
+    document.getElementById(
+        "relationFather"
     );
 
 
+if(
+    father &&
+    father.name &&
+    String(father.name).trim() !== ""
+){
+
+    if(fatherRow){
+
+        fatherRow.style.display = "";
+
+    }
+
+    if(fatherField){
+
+        fatherField.textContent =
+            father.name;
+
+    }
+
+}
+else{
+
+    if(fatherRow){
+
+        fatherRow.style.display = "none";
+
+    }
+
+    if(fatherField){
+
+        fatherField.textContent = "";
+
+    }
+
+}
+
+   /* =================================
+   MOTHER
+   ================================= */
+
+const motherRow =
+    document.getElementById(
+        "relationMotherRow"
+    );
+
+const motherField =
+    document.getElementById(
+        "relationMother"
+    );
+
+
+if(
+    mother &&
+    mother.name &&
+    String(mother.name).trim() !== ""
+){
+
+    if(motherRow){
+
+        motherRow.style.display = "";
+
+    }
+
+    if(motherField){
+
+        motherField.textContent =
+            mother.name;
+
+    }
+
+}
+else{
+
+    if(motherRow){
+
+        motherRow.style.display = "none";
+
+    }
+
+    if(motherField){
+
+        motherField.textContent = "";
+
+    }
+
+}
+
+/* =================================
+   SHOW / HIDE PARENTS SECTION
+   ================================= */
+
+const parentsSection =
+    document.getElementById(
+        "relationParentsSection"
+    );
+
+
+if(parentsSection){
+
+    parentsSection.style.display =
+        (
+            father &&
+            father.name &&
+            String(father.name).trim() !== ""
+        ) ||
+        (
+            mother &&
+            mother.name &&
+            String(mother.name).trim() !== ""
+        )
+            ? ""
+            : "none";
+
+}
+
+   
     /* =================================
        FIND PARTNER
        ================================= */
