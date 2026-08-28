@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1730,22 +1729,29 @@ else{
 
 
     if(
-        fatherSiblings.length
-    ){
+    fatherSiblings.length
+){
 
-        showSection(
+    const fatherSiblingsSection =
+        document.getElementById(
             "relationFatherSiblingsSection"
         );
 
-    }
-    else{
+    if(fatherSiblingsSection){
 
-        hideSection(
-            "relationFatherSiblingsSection"
-        );
+        fatherSiblingsSection.style.display =
+            "block";
 
     }
 
+}
+else{
+
+    hideSection(
+        "relationFatherSiblingsSection"
+    );
+
+}
 
     /* =================================
        6. MOTHER SIBLINGS
