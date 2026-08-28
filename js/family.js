@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1221,12 +1222,23 @@ document.querySelectorAll(
         getName(partner)
     ){
 
-        if(partnerSection){
+       if(partnerSection){
 
-               partnerSection.style.display =
+    console.log(
+        "PARTNER SECTION FOUND:",
+        partnerSection
+    );
+
+    partnerSection.style.display =
         "block";
 
-        }
+    partnerSection.style.visibility =
+        "visible";
+
+    partnerSection.style.height =
+        "auto";
+
+}
 
         if(partnerField){
 
