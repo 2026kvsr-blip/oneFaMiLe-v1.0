@@ -425,7 +425,7 @@ if(familyBackBtn){
 <!-- 4. SIBLINGS -->
 <div
     id="relationSiblingsSection"
-    class="relations-section">
+    class="relations-section relations-siblings">
 
     <h3>Siblings</h3>
 
