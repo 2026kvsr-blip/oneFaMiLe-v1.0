@@ -1,5 +1,6 @@
 
 
+
 /* =========
 ============================
    FAMILY → CREATE TREE
@@ -768,8 +769,8 @@
    ===================================== */
 
 .relations-partner{
-    background:#f4ecff;
-    border-color:#8a4bd8;
+    background:#fdeaf1;
+    border-color:#d65a86;
 }
 
 
@@ -795,11 +796,6 @@
 /* =====================================
    IN-LAWS
    ===================================== */
-
-.relations-inlaws{
-    background:#fdeaf1;
-    border-color:#d65a86;
-}
 
 
 /* =====================================
@@ -1265,8 +1261,8 @@
     border-color:#d88aa8;
 }
 .relations-inlaws{
-    background:#fdeaf1;
-    border-color:#d65a86;
+    background:#fff0df;
+    border-color:#d9954d;
 }
 .relation-father-inlaw-siblings{
     background:#fff0f5;
@@ -1275,4 +1271,8 @@
 .relation-mother-inlaw-siblings{
     background:#f5eafb;
     border-color:#a77bc5;
+}
+.relation-grand-grandparents{
+    background:#eee7fa;
+    border-color:#9470c2;
 }
