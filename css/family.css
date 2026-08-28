@@ -1279,3 +1279,7 @@
     background:#fff0df;
     border-color:#d9954d;
 }
+.relation-child-title {
+    font-weight: 700;
+    font-size: 16px;
+}
