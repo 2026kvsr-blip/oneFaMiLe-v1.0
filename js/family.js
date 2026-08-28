@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1547,10 +1548,47 @@ if(childrenSection){
         );
 
 
-    if(brothersField){
+/* =================================
+   SIBLINGS → BROTHERS / SISTERS
+   ================================= */
 
-        brothersField.innerHTML =
+if(brothersField){
+
+    brothersField.innerHTML = "";
+
+    const brothersLabel =
+        brothersField.previousElementSibling;
+
+    if(brothers.length === 0){
+
+        /* Hide Brothers row */
+        brothersField.style.display =
+            "none";
+
+        if(brothersLabel){
+
+            brothersLabel.style.display =
+                "none";
+
+        }
+
+    }
+    else{
+
+        /* Show Brothers row */
+        brothersField.style.display =
             "";
+
+        if(brothersLabel){
+
+            brothersLabel.style.display =
+                "";
+
+            brothersLabel.textContent =
+                "Brothers : " +
+                brothers.length;
+
+        }
 
         brothers.forEach(
             function(
@@ -1577,11 +1615,46 @@ if(childrenSection){
 
     }
 
+}
 
-    if(sistersField){
 
-        sistersField.innerHTML =
+if(sistersField){
+
+    sistersField.innerHTML = "";
+
+    const sistersLabel =
+        sistersField.previousElementSibling;
+
+    if(sisters.length === 0){
+
+        /* Hide Sisters row */
+        sistersField.style.display =
+            "none";
+
+        if(sistersLabel){
+
+            sistersLabel.style.display =
+                "none";
+
+        }
+
+    }
+    else{
+
+        /* Show Sisters row */
+        sistersField.style.display =
             "";
+
+        if(sistersLabel){
+
+            sistersLabel.style.display =
+                "";
+
+            sistersLabel.textContent =
+                "Sisters : " +
+                sisters.length;
+
+        }
 
         sisters.forEach(
             function(
@@ -1608,7 +1681,10 @@ if(childrenSection){
 
     }
 
+}
 
+
+      
     if(
     brothers.length ||
     sisters.length
