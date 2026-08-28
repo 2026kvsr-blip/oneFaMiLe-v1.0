@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -2446,7 +2447,19 @@ document.querySelectorAll(
         );
 
     }
+console.log(
+    "RELATIONS SECTIONS IN DOM:",
+    document.querySelectorAll(
+        ".relations-section"
+    ).length
+);
 
+console.log(
+    "RELATIONS PAGE IN DOM:",
+    document.querySelector(
+        ".relations-page"
+    )
+);
 
     console.log(
         "RELATIONS COMPLETE:",
