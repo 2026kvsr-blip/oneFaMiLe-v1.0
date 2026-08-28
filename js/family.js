@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -4445,10 +4444,29 @@ if(savedFamily){
         newFamilyNameField.value =
             savedFamily.familyName || "";
 
+        newFamilyNameField.disabled =
+            true;
+
+    }
+
+
+    const statusField =
+        document.getElementById(
+            "familyIdStatus"
+        );
+
+
+    if(statusField){
+
+        statusField.textContent =
+            "User already have a Family Tree.";
+
+        statusField.className =
+            "family-id-status available";
+
     }
 
 }
-
 
 /* =================================
    GET FAMILY TREE
