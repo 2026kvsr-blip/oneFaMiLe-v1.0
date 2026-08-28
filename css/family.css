@@ -1,5 +1,6 @@
 
-/* =====================================
+/* =========
+============================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
    ===================================== */
@@ -811,7 +812,7 @@
     border-color:#2999aa;
 }
 .relations-section{
-    display:block;
+    display:none;
     width:calc(100% - 20px);
     margin-left:10px;
     margin-right:10px;
