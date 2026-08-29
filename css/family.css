@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    FAMILY → CREATE TREE
@@ -1318,4 +1317,38 @@
     margin-left: 8px;
     margin-right: 8px;
     white-space: nowrap;
+}
+/* =================================
+   GRAND PARENTS
+   ================================= */
+
+.relation-grandparents .grandparent-row{
+    display: flex;
+    align-items: flex-start;
+}
+
+
+.relation-grandparents .grandparent-label{
+    width: 145px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+
+.relation-grandparents .grandparent-colon{
+    width: 20px;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+
+.relation-grandparents .grandparent-value{
+    flex: 1;
+}
+
+
+.relation-grandparents > strong{
+    display: block;
+    font-weight: 700;
+    margin-bottom: 3px;
 }
