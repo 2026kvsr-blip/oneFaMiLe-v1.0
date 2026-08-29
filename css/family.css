@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    FAMILY → CREATE TREE
@@ -1291,4 +1292,11 @@
 .relation-siblings-subtitle{
     font-weight: 700;
     font-size: 16px;
+}
+/* =================================
+   IN-LAWS LABELS
+   ================================= */
+
+.relations-inlaws .relation-label{
+    white-space: nowrap;
 }
