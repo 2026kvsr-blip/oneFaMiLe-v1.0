@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -3735,7 +3734,14 @@ else{
             )
             : [];
 
+      
 
+const motherInLawIsMySibling =
+    areSiblingsForSpecialRelation(
+        motherInLaw,
+        member
+    );
+      
   /* =================================
    MOTHER-IN-LAW SIBLINGS
    BROTHERS / SISTERS
@@ -3980,7 +3986,72 @@ else{
     }
 
 }
+/* =================================
+   MOTHER-IN-LAW IS MY SIBLING
+   ================================= */
 
+if(
+    motherInLawIsMySibling
+){
+
+    if(motherInLawSiblingsBrothersRow){
+
+        motherInLawSiblingsBrothersRow.style.display =
+            "none";
+
+    }
+
+
+    if(motherInLawSiblingsSistersRow){
+
+        motherInLawSiblingsSistersRow.style.display =
+            "none";
+
+    }
+
+
+    if(motherInLawSiblingsTitle){
+
+        motherInLawSiblingsTitle.textContent =
+            "Mother-in-Law Siblings";
+
+    }
+
+
+    const motherInLawSiblingsContainer =
+        document.getElementById(
+            "relationMotherInLawSiblings"
+        );
+
+
+    if(motherInLawSiblingsContainer){
+
+        motherInLawSiblingsContainer.innerHTML =
+            "";
+
+
+        const specialMessage =
+            document.createElement(
+                "div"
+            );
+
+
+        specialMessage.textContent =
+            "Same as " +
+            (
+                getName(member) ||
+                "my"
+            ) +
+            " siblings because Mother-in-Law is my sister";
+
+
+        motherInLawSiblingsContainer.appendChild(
+            specialMessage
+        );
+
+    }
+
+}
 
 /* =================================
    SHOW / HIDE SECTION
