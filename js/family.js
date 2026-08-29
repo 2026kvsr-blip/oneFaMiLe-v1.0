@@ -4132,11 +4132,6 @@ else{
    MOTHER'S FATHER
    ================================= */
 
-const mothersFatherRow =
-    document.getElementById(
-        "relationMothersFatherRow"
-    );
-
 const mothersFatherField =
     document.getElementById(
         "relationMothersFather"
