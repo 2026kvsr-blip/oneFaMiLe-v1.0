@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -3743,165 +3742,336 @@ else{
 
 }
 
-    /* =================================
-       10. GRAND PARENTS
-       ================================= */
-
-    const grandParents = [];
+   /* =================================
+   GRAND PARENTS
+   ================================= */
 
 
-    if(father){
+/* =================================
+   FATHER'S FATHER
+   ================================= */
 
-        const paternalGrandFather =
-            findMember(
-                father.fatherId
-            );
+const fathersFatherRow =
+    document.getElementById(
+        "relationFathersFatherRow"
+    );
 
-        const paternalGrandMother =
-            findMember(
-                father.motherId
-            );
+const fathersFatherField =
+    document.getElementById(
+        "relationFathersFather"
+    );
 
 
-        if(paternalGrandFather){
+if(
+    father &&
+    father.father
+){
 
-            grandParents.push(
-                paternalGrandFather
-            );
+    const fathersFatherName =
+        getName(
+            father.father
+        );
+
+
+    if(
+        fathersFatherName &&
+        fathersFatherName.trim() !== ""
+    ){
+
+        if(fathersFatherField){
+
+            fathersFatherField.textContent =
+                fathersFatherName;
 
         }
 
-        if(paternalGrandMother){
+        if(fathersFatherRow){
 
-            grandParents.push(
-                paternalGrandMother
-            );
+            fathersFatherRow.style.display =
+                "";
 
         }
 
     }
+    else{
 
+        if(fathersFatherRow){
 
-    if(mother){
-
-        const maternalGrandFather =
-            findMember(
-                mother.fatherId
-            );
-
-        const maternalGrandMother =
-            findMember(
-                mother.motherId
-            );
-
-
-        if(
-            maternalGrandFather &&
-            !grandParents.some(
-                function(item){
-
-                    return String(
-                        item.memberId
-                    ) === String(
-                        maternalGrandFather.memberId
-                    );
-
-                }
-            )
-        ){
-
-            grandParents.push(
-                maternalGrandFather
-            );
+            fathersFatherRow.style.display =
+                "none";
 
         }
-
-
-        if(
-            maternalGrandMother &&
-            !grandParents.some(
-                function(item){
-
-                    return String(
-                        item.memberId
-                    ) === String(
-                        maternalGrandMother.memberId
-                    );
-
-                }
-            )
-        ){
-
-            grandParents.push(
-                maternalGrandMother
-            );
-
-        }
-
-    }
-
-
-    const grandParentsField =
-        document.getElementById(
-            "relationGrandParents"
-        );
-
-
-    if(grandParentsField){
-
-        grandParentsField.innerHTML =
-            "";
-
-
-        grandParents.forEach(
-            function(
-                item,
-                index
-            ){
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-                div.textContent =
-                    (index + 1) +
-                    ". " +
-                    getName(item);
-
-                grandParentsField.appendChild(
-                    div
-                );
-
-            }
-        );
-
-    }
-
-
-    if(grandParents.length){
-
-    const grandParentsSection =
-        document.getElementById(
-            "relationGrandParentsSection"
-        );
-
-    if(grandParentsSection){
-
-        grandParentsSection.style.display =
-            "block";
 
     }
 
 }
 else{
 
-    hideSection(
-        "relationGrandParentsSection"
-    );
+    if(fathersFatherRow){
+
+        fathersFatherRow.style.display =
+            "none";
+
+    }
 
 }
 
+
+/* =================================
+   FATHER'S MOTHER
+   ================================= */
+
+const fathersMotherRow =
+    document.getElementById(
+        "relationFathersMotherRow"
+    );
+
+const fathersMotherField =
+    document.getElementById(
+        "relationFathersMother"
+    );
+
+
+if(
+    father &&
+    father.mother
+){
+
+    const fathersMotherName =
+        getName(
+            father.mother
+        );
+
+
+    if(
+        fathersMotherName &&
+        fathersMotherName.trim() !== ""
+    ){
+
+        if(fathersMotherField){
+
+            fathersMotherField.textContent =
+                fathersMotherName;
+
+        }
+
+        if(fathersMotherRow){
+
+            fathersMotherRow.style.display =
+                "";
+
+        }
+
+    }
+    else{
+
+        if(fathersMotherRow){
+
+            fathersMotherRow.style.display =
+                "none";
+
+        }
+
+    }
+
+}
+else{
+
+    if(fathersMotherRow){
+
+        fathersMotherRow.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =================================
+   MOTHER'S FATHER
+   ================================= */
+
+const mothersFatherRow =
+    document.getElementById(
+        "relationMothersFatherRow"
+    );
+
+const mothersFatherField =
+    document.getElementById(
+        "relationMothersFather"
+    );
+
+
+if(
+    mother &&
+    mother.father
+){
+
+    const mothersFatherName =
+        getName(
+            mother.father
+        );
+
+
+    if(
+        mothersFatherName &&
+        mothersFatherName.trim() !== ""
+    ){
+
+        if(mothersFatherField){
+
+            mothersFatherField.textContent =
+                mothersFatherName;
+
+        }
+
+        if(mothersFatherRow){
+
+            mothersFatherRow.style.display =
+                "";
+
+        }
+
+    }
+    else{
+
+        if(mothersFatherRow){
+
+            mothersFatherRow.style.display =
+                "none";
+
+        }
+
+    }
+
+}
+else{
+
+    if(mothersFatherRow){
+
+        mothersFatherRow.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =================================
+   MOTHER'S MOTHER
+   ================================= */
+
+const mothersMotherRow =
+    document.getElementById(
+        "relationMothersMotherRow"
+    );
+
+const mothersMotherField =
+    document.getElementById(
+        "relationMothersMother"
+    );
+
+
+if(
+    mother &&
+    mother.mother
+){
+
+    const mothersMotherName =
+        getName(
+            mother.mother
+        );
+
+
+    if(
+        mothersMotherName &&
+        mothersMotherName.trim() !== ""
+    ){
+
+        if(mothersMotherField){
+
+            mothersMotherField.textContent =
+                mothersMotherName;
+
+        }
+
+        if(mothersMotherRow){
+
+            mothersMotherRow.style.display =
+                "";
+
+        }
+
+    }
+    else{
+
+        if(mothersMotherRow){
+
+            mothersMotherRow.style.display =
+                "none";
+
+        }
+
+    }
+
+}
+else{
+
+    if(mothersMotherRow){
+
+        mothersMotherRow.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =================================
+   SHOW / HIDE GRAND PARENTS SECTION
+   ================================= */
+
+const grandParentsSection =
+    document.getElementById(
+        "relationGrandParentsSection"
+    );
+
+
+const hasGrandParents =
+    (
+        fathersFatherRow &&
+        fathersFatherRow.style.display !== "none"
+    ) ||
+    (
+        fathersMotherRow &&
+        fathersMotherRow.style.display !== "none"
+    ) ||
+    (
+        mothersFatherRow &&
+        mothersFatherRow.style.display !== "none"
+    ) ||
+    (
+        mothersMotherRow &&
+        mothersMotherRow.style.display !== "none"
+    );
+
+
+if(grandParentsSection){
+
+    if(hasGrandParents){
+
+        grandParentsSection.style.display =
+            "block";
+
+    }
+    else{
+
+        grandParentsSection.style.display =
+            "none";
+
+    }
+
+}
     /* =================================
        11. GRAND GRAND PARENTS
        ================================= */
