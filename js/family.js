@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -3741,7 +3742,11 @@ const motherInLawIsMySibling =
         motherInLaw,
         member
     );
-      
+      const motherInLawIsFathersSibling =
+    areSiblingsForSpecialRelation(
+        motherInLaw,
+        father
+    );
   /* =================================
    MOTHER-IN-LAW SIBLINGS
    BROTHERS / SISTERS
@@ -3993,6 +3998,45 @@ else{
 if(
     motherInLawIsMySibling
 ){
+    if(motherInLawSiblingsBrothersRow){
+        motherInLawSiblingsBrothersRow.style.display =
+            "none";
+    }
+    if(motherInLawSiblingsSistersRow){
+        motherInLawSiblingsSistersRow.style.display =
+            "none";
+    }
+    if(motherInLawSiblingsTitle){
+        motherInLawSiblingsTitle.textContent =
+            "Mother-in-Law Siblings";
+    }
+    const motherInLawSiblingsContainer =
+        document.getElementById(
+            "relationMotherInLawSiblings"
+        );
+    if(motherInLawSiblingsContainer){
+        motherInLawSiblingsContainer.innerHTML =
+            "";
+        const specialMessage =
+            document.createElement(
+                "div"
+            );
+        specialMessage.textContent =
+            "Same as mine " +
+            (
+                getName(member) ||
+                "my"
+            ) +
+            " siblings because Mother-in-Law is my sister";
+        motherInLawSiblingsContainer.appendChild(
+            specialMessage
+        );
+
+    }
+
+}else if(
+    motherInLawIsFathersSibling
+){
 
     if(motherInLawSiblingsBrothersRow){
 
@@ -4037,12 +4081,12 @@ if(
 
 
         specialMessage.textContent =
-            "Same as mine " +
+            "Same as " +
             (
-                getName(member) ||
-                "my"
+                getName(father) ||
+                "Father"
             ) +
-            " siblings because Mother-in-Law is my sister";
+            " siblings because Mother-in-Law is my father's sister";
 
 
         motherInLawSiblingsContainer.appendChild(
