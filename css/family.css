@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    FAMILY → CREATE TREE
@@ -1379,6 +1380,6 @@
 .relation-grand-grandparents
 .grand-grandparent-value{
     min-width: 0;
-    word-break: normal;
     overflow-wrap: break-word;
+    word-break: normal;
 }
