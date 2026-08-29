@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    FAMILY → CREATE TREE
@@ -1296,9 +1297,6 @@
    IN-LAWS LABELS
    ================================= */
 
-.relations-inlaws .relation-label{
-    white-space: nowrap;
-}
 /* =================================
    IN-LAWS
    ================================= */
@@ -1309,7 +1307,8 @@
 }
 
 .relations-inlaws .relation-label{
-    width: auto;
+    width: 95px;
+    flex-shrink: 0;
     white-space: nowrap;
 }
 
