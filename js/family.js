@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -825,9 +824,9 @@ if(familyBackBtn){
     </div>
 
 
-    <strong>
-        Maternal Grand Parents
-    </strong>
+  <strong id="maternalGrandParentsTitle">
+    Maternal Grand Parents
+</strong>
 
 
     <div
@@ -4002,7 +4001,61 @@ if(grandParentsSection){
 
 }
 
+/* =================================
+   HIDE EMPTY GRAND PARENT GROUP TITLES
+   ================================= */
 
+const paternalGrandParentsTitle =
+    document.querySelector(
+        "#paternalGrandParents"
+    )?.previousElementSibling;
+
+const maternalGrandParentsTitle =
+    document.getElementById(
+        "maternalGrandParentsTitle"
+    );
+
+
+const hasPaternalGrandParents =
+    (
+        fathersFather &&
+        getName(fathersFather)
+    ) ||
+    (
+        fathersMother &&
+        getName(fathersMother)
+    );
+
+
+const hasMaternalGrandParents =
+    (
+        mothersFather &&
+        getName(mothersFather)
+    ) ||
+    (
+        mothersMother &&
+        getName(mothersMother)
+    );
+
+
+if(paternalGrandParentsTitle){
+
+    paternalGrandParentsTitle.style.display =
+        hasPaternalGrandParents
+            ? ""
+            : "none";
+
+}
+
+
+if(maternalGrandParentsTitle){
+
+    maternalGrandParentsTitle.style.display =
+        hasMaternalGrandParents
+            ? ""
+            : "none";
+
+}
 
 
       
