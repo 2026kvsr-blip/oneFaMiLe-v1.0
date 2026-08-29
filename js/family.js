@@ -1065,8 +1065,10 @@ if(familyBackBtn){
 
 </div>
 
-<!-- BACK BUTTON -->
-<div align="center">
+<!-- BACK + HOME BUTTONS -->
+<div
+    class="relations-navigation"
+    align="center">
 
     <button
         id="relationsBackBtn"
@@ -1076,8 +1078,15 @@ if(familyBackBtn){
 
     </button>
 
-</div>
-            
+    <button
+        id="relationsHomeBtn"
+        class="back-btn">
+
+        🏠 Home
+
+    </button>
+
+</div>            
         </div>
 
         `
