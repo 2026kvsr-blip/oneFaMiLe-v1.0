@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -3190,6 +3189,78 @@ else{
     );
 
 }
+
+      /* =================================
+   SPECIAL SIBLING RELATION CHECK
+   ================================= */
+
+function areSiblingsForSpecialRelation(
+    person1,
+    person2
+){
+
+    if(
+        !person1 ||
+        !person2
+    ){
+
+        return false;
+
+    }
+
+
+    const person1Id =
+        String(
+            person1.memberId || ""
+        ).trim();
+
+
+    const person2Id =
+        String(
+            person2.memberId || ""
+        ).trim();
+
+
+    if(
+        !person1Id ||
+        !person2Id ||
+        person1Id === person2Id
+    ){
+
+        return false;
+
+    }
+
+
+    const sameFather =
+        person1.fatherId &&
+        person2.fatherId &&
+        String(
+            person1.fatherId
+        ).trim() ===
+        String(
+            person2.fatherId
+        ).trim();
+
+
+    const sameMother =
+        person1.motherId &&
+        person2.motherId &&
+        String(
+            person1.motherId
+        ).trim() ===
+        String(
+            person2.motherId
+        ).trim();
+
+
+    return (
+        sameFather ||
+        sameMother
+    );
+
+}
+      
     /* =================================
        8. FATHER-IN-LAW SIBLINGS
        ================================= */
