@@ -4037,7 +4037,7 @@ if(
 
 
         specialMessage.textContent =
-            "Same as " +
+            "Same as mine " +
             (
                 getName(member) ||
                 "my"
