@@ -1385,3 +1385,9 @@
 .relation-grandparents{
     background-color: #D9F2D9;
 }
+.relations-navigation{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
