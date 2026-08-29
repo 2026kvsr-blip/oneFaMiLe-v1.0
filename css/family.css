@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    FAMILY → CREATE TREE
@@ -1358,7 +1357,7 @@
 .relation-grand-grandparents
 .grand-grandparent-row{
     display: grid;
-    grid-template-columns: 145px 20px minmax(0, 1fr);
+    grid-template-columns: 130px 20px minmax(0, 1fr);
     align-items: start;
 }
 
