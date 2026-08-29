@@ -1300,3 +1300,22 @@
 .relations-inlaws .relation-label{
     white-space: nowrap;
 }
+/* =================================
+   IN-LAWS
+   ================================= */
+
+.relations-inlaws .relation-row{
+    display: flex;
+    align-items: flex-start;
+}
+
+.relations-inlaws .relation-label{
+    width: auto;
+    white-space: nowrap;
+}
+
+.relations-inlaws .relation-colon{
+    margin-left: 8px;
+    margin-right: 8px;
+    white-space: nowrap;
+}
