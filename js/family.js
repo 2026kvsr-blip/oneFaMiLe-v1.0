@@ -4011,11 +4011,6 @@ else{
    ================================= */
 
 
-const fathersFatherField =
-    document.getElementById(
-        "relationFathersFather"
-    );
-
 
 if(
     father &&
