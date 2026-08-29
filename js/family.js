@@ -762,6 +762,7 @@ if(familyBackBtn){
 
 </div>
 
+
 <!-- 10. GRAND PARENTS -->
 <div
     id="relationGrandParentsSection"
@@ -772,7 +773,6 @@ if(familyBackBtn){
     </h3>
 
 
-    <!-- PATERNAL GRAND PARENTS -->
     <strong>
         Paternal Grand Parents
     </strong>
@@ -782,7 +782,6 @@ if(familyBackBtn){
         id="paternalGrandParents">
 
 
-        <!-- FATHER'S FATHER -->
         <div
             id="relationFathersFatherRow"
             class="grandparent-row">
@@ -803,7 +802,6 @@ if(familyBackBtn){
         </div>
 
 
-        <!-- FATHER'S MOTHER -->
         <div
             id="relationFathersMotherRow"
             class="grandparent-row">
@@ -823,14 +821,9 @@ if(familyBackBtn){
 
         </div>
 
-
     </div>
 
 
-    <br>
-
-
-    <!-- MATERNAL GRAND PARENTS -->
     <strong>
         Maternal Grand Parents
     </strong>
@@ -840,7 +833,6 @@ if(familyBackBtn){
         id="maternalGrandParents">
 
 
-        <!-- MOTHER'S FATHER -->
         <div
             id="relationMothersFatherRow"
             class="grandparent-row">
@@ -861,7 +853,6 @@ if(familyBackBtn){
         </div>
 
 
-        <!-- MOTHER'S MOTHER -->
         <div
             id="relationMothersMotherRow"
             class="grandparent-row">
@@ -881,11 +872,9 @@ if(familyBackBtn){
 
         </div>
 
-
     </div>
 
 </div>
-
 <!-- 11. GRAND GRAND PARENTS -->
 <div
     id="relationGrandGrandParentsSection"
