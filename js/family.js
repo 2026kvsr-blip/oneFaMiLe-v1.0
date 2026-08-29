@@ -3315,7 +3315,16 @@ function areSiblingsForSpecialRelation(
             )
             : [];
 
+/* =================================
+   SPECIAL CASE
+   FATHER-IN-LAW IS MOTHER'S BROTHER
+   ================================= */
 
+const fatherInLawIsMothersSibling =
+    areSiblingsForSpecialRelation(
+        fatherInLaw,
+        mother
+    );
    /* =================================
    FATHER-IN-LAW SIBLINGS
    BROTHERS / SISTERS
@@ -3375,52 +3384,16 @@ if(fatherInLawSiblingsTitle){
 
 }
 
-
 /* =================================
-   SEPARATE BROTHERS
-   ================================= */
-
-const fatherInLawBrothers =
-    fatherInLawSiblings.filter(
-        function(item){
-
-            return String(
-                item.gender || ""
-            )
-            .trim()
-            .toLowerCase() ===
-            "male";
-
-        }
-    );
-
-
-/* =================================
-   SEPARATE SISTERS
-   ================================= */
-
-const fatherInLawSisters =
-    fatherInLawSiblings.filter(
-        function(item){
-
-            return String(
-                item.gender || ""
-            )
-            .trim()
-            .toLowerCase() ===
-            "female";
-
-        }
-    );
-
-
-/* =================================
-   BROTHERS
+   FATHER-IN-LAW SIBLINGS
+   SPECIAL CONDITION
    ================================= */
 
 if(
-    fatherInLawBrothers.length === 0
+    fatherInLawIsMothersSibling
 ){
+
+    /* Hide normal Brothers row */
 
     if(fatherInLawSiblingsBrothersRow){
 
@@ -3429,72 +3402,8 @@ if(
 
     }
 
-}
-else{
 
-    if(fatherInLawSiblingsBrothersRow){
-
-        fatherInLawSiblingsBrothersRow.style.display =
-            "";
-
-    }
-
-
-    if(fatherInLawSiblingsBrothersTitle){
-
-        fatherInLawSiblingsBrothersTitle.textContent =
-            "Brothers : " +
-            fatherInLawBrothers.length;
-
-    }
-
-
-    if(fatherInLawSiblingsBrothers){
-
-        fatherInLawSiblingsBrothers.innerHTML =
-            "";
-
-
-        fatherInLawBrothers.forEach(
-            function(
-                item,
-                index
-            ){
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                div.textContent =
-                    (index + 1) +
-                    ". " +
-                    (
-                        getName(item) ||
-                        "--------"
-                    );
-
-
-                fatherInLawSiblingsBrothers.appendChild(
-                    div
-                );
-
-            }
-        );
-
-    }
-
-}
-
-
-/* =================================
-   SISTERS
-   ================================= */
-
-if(
-    fatherInLawSisters.length === 0
-){
+    /* Hide normal Sisters row */
 
     if(fatherInLawSiblingsSistersRow){
 
@@ -3503,59 +3412,221 @@ if(
 
     }
 
+
+    /* Show special message */
+
+    if(fatherInLawSiblings){
+
+        fatherInLawSiblings.innerHTML =
+            "";
+
+    }
+
+
+    const fatherInLawSpecialMessage =
+        document.createElement(
+            "div"
+        );
+
+
+    fatherInLawSpecialMessage.textContent =
+        "Same as " +
+        (
+            getName(mother) ||
+            "Mother"
+        ) +
+        " siblings because Father-in-Law is my mother's brother";
+
+
+    if(fatherInLawSiblings){
+
+        fatherInLawSiblings.appendChild(
+            fatherInLawSpecialMessage
+        );
+
+    }
+
 }
 else{
 
-    if(fatherInLawSiblingsSistersRow){
+    /* =================================
+       NORMAL BROTHERS / SISTERS
+       ================================= */
 
-        fatherInLawSiblingsSistersRow.style.display =
-            "";
+    const fatherInLawBrothers =
+        fatherInLawSiblings.filter(
+            function(item){
 
-    }
-
-
-    if(fatherInLawSiblingsSistersTitle){
-
-        fatherInLawSiblingsSistersTitle.textContent =
-            "Sisters : " +
-            fatherInLawSisters.length;
-
-    }
-
-
-    if(fatherInLawSiblingsSisters){
-
-        fatherInLawSiblingsSisters.innerHTML =
-            "";
-
-
-        fatherInLawSisters.forEach(
-            function(
-                item,
-                index
-            ){
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                div.textContent =
-                    (index + 1) +
-                    ". " +
-                    (
-                        getName(item) ||
-                        "--------"
-                    );
-
-
-                fatherInLawSiblingsSisters.appendChild(
-                    div
-                );
+                return String(
+                    item.gender || ""
+                )
+                .trim()
+                .toLowerCase() ===
+                "male";
 
             }
         );
+
+
+    const fatherInLawSisters =
+        fatherInLawSiblings.filter(
+            function(item){
+
+                return String(
+                    item.gender || ""
+                )
+                .trim()
+                .toLowerCase() ===
+                "female";
+
+            }
+        );
+
+
+    /* =================================
+       BROTHERS
+       ================================= */
+
+    if(
+        fatherInLawBrothers.length === 0
+    ){
+
+        if(fatherInLawSiblingsBrothersRow){
+
+            fatherInLawSiblingsBrothersRow.style.display =
+                "none";
+
+        }
+
+    }
+    else{
+
+        if(fatherInLawSiblingsBrothersRow){
+
+            fatherInLawSiblingsBrothersRow.style.display =
+                "";
+
+        }
+
+
+        if(fatherInLawSiblingsBrothersTitle){
+
+            fatherInLawSiblingsBrothersTitle.textContent =
+                "Brothers : " +
+                fatherInLawBrothers.length;
+
+        }
+
+
+        if(fatherInLawSiblingsBrothers){
+
+            fatherInLawSiblingsBrothers.innerHTML =
+                "";
+
+
+            fatherInLawBrothers.forEach(
+                function(
+                    item,
+                    index
+                ){
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    div.textContent =
+                        (index + 1) +
+                        ". " +
+                        (
+                            getName(item) ||
+                            "--------"
+                        );
+
+
+                    fatherInLawSiblingsBrothers.appendChild(
+                        div
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* =================================
+       SISTERS
+       ================================= */
+
+    if(
+        fatherInLawSisters.length === 0
+    ){
+
+        if(fatherInLawSiblingsSistersRow){
+
+            fatherInLawSiblingsSistersRow.style.display =
+                "none";
+
+        }
+
+    }
+    else{
+
+        if(fatherInLawSiblingsSistersRow){
+
+            fatherInLawSiblingsSistersRow.style.display =
+                "";
+
+        }
+
+
+        if(fatherInLawSiblingsSistersTitle){
+
+            fatherInLawSiblingsSistersTitle.textContent =
+                "Sisters : " +
+                fatherInLawSisters.length;
+
+        }
+
+
+        if(fatherInLawSiblingsSisters){
+
+            fatherInLawSiblingsSisters.innerHTML =
+                "";
+
+
+            fatherInLawSisters.forEach(
+                function(
+                    item,
+                    index
+                ){
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    div.textContent =
+                        (index + 1) +
+                        ". " +
+                        (
+                            getName(item) ||
+                            "--------"
+                        );
+
+
+                    fatherInLawSiblingsSisters.appendChild(
+                        div
+                    );
+
+                }
+            );
+
+        }
 
     }
 
