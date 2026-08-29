@@ -4192,16 +4192,6 @@ else{
    MOTHER'S MOTHER
    ================================= */
 
-const mothersMotherRow =
-    document.getElementById(
-        "relationMothersMotherRow"
-    );
-
-const mothersMotherField =
-    document.getElementById(
-        "relationMothersMother"
-    );
-
 
 if(
     mother &&
