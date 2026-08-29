@@ -4010,10 +4010,6 @@ else{
    FATHER'S FATHER
    ================================= */
 
-const fathersFatherRow =
-    document.getElementById(
-        "relationFathersFatherRow"
-    );
 
 const fathersFatherField =
     document.getElementById(
