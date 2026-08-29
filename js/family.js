@@ -4081,7 +4081,7 @@ if(
 
 
         specialMessage.textContent =
-            "Same as " +
+            "Same as Father" +
             (
                 getName(father) ||
                 "Father"
