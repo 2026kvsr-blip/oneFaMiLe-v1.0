@@ -4252,11 +4252,6 @@ else{
    SHOW / HIDE GRAND PARENTS SECTION
    ================================= */
 
-const grandParentsSection =
-    document.getElementById(
-        "relationGrandParentsSection"
-    );
-
 
 const hasGrandParents =
     (
