@@ -1839,7 +1839,18 @@ else{
 
             }
         );
+const siblingsTitle =
+    document.getElementById(
+        "relationSiblingsTitle"
+    );
 
+if(siblingsTitle){
+
+    siblingsTitle.textContent =
+        "Siblings : " +
+        siblings.length;
+
+}
 
     const brothers =
         siblings.filter(
