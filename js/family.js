@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -3388,12 +3389,9 @@ if(fatherInLawSiblingsTitle){
    FATHER-IN-LAW SIBLINGS
    SPECIAL CONDITION
    ================================= */
-
 if(
     fatherInLawIsMothersSibling
 ){
-
-    /* Hide normal Brothers row */
 
     if(fatherInLawSiblingsBrothersRow){
 
@@ -3403,8 +3401,6 @@ if(
     }
 
 
-    /* Hide normal Sisters row */
-
     if(fatherInLawSiblingsSistersRow){
 
         fatherInLawSiblingsSistersRow.style.display =
@@ -3413,35 +3409,30 @@ if(
     }
 
 
-    /* Show special message */
-
-    if(fatherInLawSiblings){
-
-        fatherInLawSiblings.innerHTML =
-            "";
-
-    }
-
-
-    const fatherInLawSpecialMessage =
-        document.createElement(
-            "div"
+    const fatherInLawSiblingsContainer =
+        document.getElementById(
+            "relationFatherInLawSiblings"
         );
 
 
-    fatherInLawSpecialMessage.textContent =
-        "Same as " +
-        (
-            getName(mother) ||
-            "Mother"
-        ) +
-        " siblings because Father-in-Law is my mother's brother";
+    if(fatherInLawSiblingsContainer){
+
+        fatherInLawSiblingsContainer.innerHTML =
+            "";
 
 
-    if(fatherInLawSiblings){
+        const message =
+            document.createElement(
+                "div"
+            );
 
-        fatherInLawSiblings.appendChild(
-            fatherInLawSpecialMessage
+
+        message.textContent =
+            "Same as Mother siblings because Father-in-Law is my mother's brother";
+
+
+        fatherInLawSiblingsContainer.appendChild(
+            message
         );
 
     }
