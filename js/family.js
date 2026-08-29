@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -879,15 +880,190 @@ if(familyBackBtn){
 <div
     id="relationGrandGrandParentsSection"
     class="relations-section relation-grand-grandparents">
-    <h3>Grand Grand Parents</h3>
 
-    <div
-        id="relationGrandGrandParents">
-        --------
+    <h3>
+        Grand Grand Parents
+    </h3>
+
+
+    <!-- PATERNAL GRAND PARENTS -->
+    <strong id="grandGrandPaternalTitle">
+        Paternal Grand Parents
+    </strong>
+
+    <div id="grandGrandPaternal">
+
+        <div
+            id="ggPaternalFatherFatherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Fa - Father
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggPaternalFatherFather"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+
+        <div
+            id="ggPaternalFatherMotherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Fa - Mother
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggPaternalFatherMother"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+
+        <div
+            id="ggPaternalMotherFatherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Ma - Father
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggPaternalMotherFather"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+
+        <div
+            id="ggPaternalMotherMotherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Ma - Mother
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggPaternalMotherMother"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- MATERNAL GRAND PARENTS -->
+    <strong id="grandGrandMaternalTitle">
+        Maternal Grand Parents
+    </strong>
+
+    <div id="grandGrandMaternal">
+
+        <div
+            id="ggMaternalFatherFatherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Fa - Father
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggMaternalFatherFather"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+
+        <div
+            id="ggMaternalFatherMotherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Fa - Mother
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggMaternalFatherMother"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+
+        <div
+            id="ggMaternalMotherFatherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Ma - Father
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggMaternalMotherFather"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+
+        <div
+            id="ggMaternalMotherMotherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Ma - Mother
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggMaternalMotherMother"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
     </div>
 
 </div>
-
 
 <!-- BACK BUTTON -->
 <div align="center">
@@ -4057,138 +4233,325 @@ if(maternalGrandParentsTitle){
 
 }
 
-
-      
-    /* =================================
-       11. GRAND GRAND PARENTS
-       ================================= */
-
-    const grandGrandParents = [];
+/* =================================
+   11. GRAND GRAND PARENTS
+   ================================= */
 
 
-    grandParents.forEach(
-        function(grandParent){
+/* =================================
+   HELPER FUNCTION
+   ================================= */
 
-            const ggFather =
-                findMember(
-                    grandParent.fatherId
-                );
+function setGrandGrandParentRow(
+    rowId,
+    fieldId,
+    person
+){
 
-            const ggMother =
-                findMember(
-                    grandParent.motherId
-                );
+    const row =
+        document.getElementById(
+            rowId
+        );
 
-
-            if(
-                ggFather &&
-                !grandGrandParents.some(
-                    function(item){
-
-                        return String(
-                            item.memberId
-                        ) === String(
-                            ggFather.memberId
-                        );
-
-                    }
-                )
-            ){
-
-                grandGrandParents.push(
-                    ggFather
-                );
-
-            }
+    const field =
+        document.getElementById(
+            fieldId
+        );
 
 
-            if(
-                ggMother &&
-                !grandGrandParents.some(
-                    function(item){
+    if(
+        person &&
+        getName(person)
+    ){
 
-                        return String(
-                            item.memberId
-                        ) === String(
-                            ggMother.memberId
-                        );
+        if(field){
 
-                    }
-                )
-            ){
-
-                grandGrandParents.push(
-                    ggMother
-                );
-
-            }
+            field.textContent =
+                getName(person);
 
         }
-    );
 
+        if(row){
 
-    const grandGrandParentsField =
-        document.getElementById(
-            "relationGrandGrandParents"
-        );
+            row.style.display =
+                "";
 
+        }
 
-    if(grandGrandParentsField){
-
-        grandGrandParentsField.innerHTML =
-            "";
-
-
-        grandGrandParents.forEach(
-            function(
-                item,
-                index
-            ){
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-                div.textContent =
-                    (index + 1) +
-                    ". " +
-                    getName(item);
-
-                grandGrandParentsField.appendChild(
-                    div
-                );
-
-            }
-        );
+        return true;
 
     }
 
 
-   if(
-    grandGrandParents.length
-){
+    if(row){
 
-    const grandGrandParentsSection =
-        document.getElementById(
-            "relationGrandGrandParentsSection"
-        );
+        row.style.display =
+            "none";
 
-    if(grandGrandParentsSection){
+    }
+
+    return false;
+
+}
+
+
+/* =================================
+   PATERNAL GRAND PARENTS
+   ================================= */
+
+
+/* Grand Fa - Father */
+
+const ggPaternalFatherFather =
+    fathersFather &&
+    fathersFather.fatherId
+        ? findMember(
+            fathersFather.fatherId
+        )
+        : null;
+
+
+/* Grand Fa - Mother */
+
+const ggPaternalFatherMother =
+    fathersFather &&
+    fathersFather.motherId
+        ? findMember(
+            fathersFather.motherId
+        )
+        : null;
+
+
+/* Grand Ma - Father */
+
+const ggPaternalMotherFather =
+    fathersMother &&
+    fathersMother.fatherId
+        ? findMember(
+            fathersMother.fatherId
+        )
+        : null;
+
+
+/* Grand Ma - Mother */
+
+const ggPaternalMotherMother =
+    fathersMother &&
+    fathersMother.motherId
+        ? findMember(
+            fathersMother.motherId
+        )
+        : null;
+
+
+/* =================================
+   MATERNAL GRAND PARENTS
+   ================================= */
+
+
+/* Grand Fa - Father */
+
+const ggMaternalFatherFather =
+    mothersFather &&
+    mothersFather.fatherId
+        ? findMember(
+            mothersFather.fatherId
+        )
+        : null;
+
+
+/* Grand Fa - Mother */
+
+const ggMaternalFatherMother =
+    mothersFather &&
+    mothersFather.motherId
+        ? findMember(
+            mothersFather.motherId
+        )
+        : null;
+
+
+/* Grand Ma - Father */
+
+const ggMaternalMotherFather =
+    mothersMother &&
+    mothersMother.fatherId
+        ? findMember(
+            mothersMother.fatherId
+        )
+        : null;
+
+
+/* Grand Ma - Mother */
+
+const ggMaternalMotherMother =
+    mothersMother &&
+    mothersMother.motherId
+        ? findMember(
+            mothersMother.motherId
+        )
+        : null;
+
+
+/* =================================
+   SHOW / HIDE PATERNAL ROWS
+   ================================= */
+
+const hasGGPaternalFatherFather =
+    setGrandGrandParentRow(
+        "ggPaternalFatherFatherRow",
+        "ggPaternalFatherFather",
+        ggPaternalFatherFather
+    );
+
+
+const hasGGPaternalFatherMother =
+    setGrandGrandParentRow(
+        "ggPaternalFatherMotherRow",
+        "ggPaternalFatherMother",
+        ggPaternalFatherMother
+    );
+
+
+const hasGGPaternalMotherFather =
+    setGrandGrandParentRow(
+        "ggPaternalMotherFatherRow",
+        "ggPaternalMotherFather",
+        ggPaternalMotherFather
+    );
+
+
+const hasGGPaternalMotherMother =
+    setGrandGrandParentRow(
+        "ggPaternalMotherMotherRow",
+        "ggPaternalMotherMother",
+        ggPaternalMotherMother
+    );
+
+
+/* =================================
+   SHOW / HIDE MATERNAL ROWS
+   ================================= */
+
+const hasGGMaternalFatherFather =
+    setGrandGrandParentRow(
+        "ggMaternalFatherFatherRow",
+        "ggMaternalFatherFather",
+        ggMaternalFatherFather
+    );
+
+
+const hasGGMaternalFatherMother =
+    setGrandGrandParentRow(
+        "ggMaternalFatherMotherRow",
+        "ggMaternalFatherMother",
+        ggMaternalFatherMother
+    );
+
+
+const hasGGMaternalMotherFather =
+    setGrandGrandParentRow(
+        "ggMaternalMotherFatherRow",
+        "ggMaternalMotherFather",
+        ggMaternalMotherFather
+    );
+
+
+const hasGGMaternalMotherMother =
+    setGrandGrandParentRow(
+        "ggMaternalMotherMotherRow",
+        "ggMaternalMotherMother",
+        ggMaternalMotherMother
+    );
+
+
+/* =================================
+   PATERNAL TITLE SHOW / HIDE
+   ================================= */
+
+const grandGrandPaternalTitle =
+    document.getElementById(
+        "grandGrandPaternalTitle"
+    );
+
+
+const hasAnyGGPaternal =
+    hasGGPaternalFatherFather ||
+    hasGGPaternalFatherMother ||
+    hasGGPaternalMotherFather ||
+    hasGGPaternalMotherMother;
+
+
+if(grandGrandPaternalTitle){
+
+    grandGrandPaternalTitle.style.display =
+        hasAnyGGPaternal
+            ? ""
+            : "none";
+
+}
+
+
+/* =================================
+   MATERNAL TITLE SHOW / HIDE
+   ================================= */
+
+const grandGrandMaternalTitle =
+    document.getElementById(
+        "grandGrandMaternalTitle"
+    );
+
+
+const hasAnyGGMaternal =
+    hasGGMaternalFatherFather ||
+    hasGGMaternalFatherMother ||
+    hasGGMaternalMotherFather ||
+    hasGGMaternalMotherMother;
+
+
+if(grandGrandMaternalTitle){
+
+    grandGrandMaternalTitle.style.display =
+        hasAnyGGMaternal
+            ? ""
+            : "none";
+
+}
+
+
+/* =================================
+   SHOW / HIDE GRAND GRAND PARENTS
+   ================================= */
+
+const grandGrandParentsSection =
+    document.getElementById(
+        "relationGrandGrandParentsSection"
+    );
+
+
+const hasAnyGrandGrandParents =
+    hasAnyGGPaternal ||
+    hasAnyGGMaternal;
+
+
+if(grandGrandParentsSection){
+
+    if(hasAnyGrandGrandParents){
 
         grandGrandParentsSection.style.display =
             "block";
 
     }
+    else{
+
+        grandGrandParentsSection.style.display =
+            "none";
+
+    }
 
 }
-else{
-
-    hideSection(
-        "relationGrandGrandParentsSection"
-    );
-
-}
+      
+   
       
 console.log(
     "RELATIONS SECTIONS IN DOM:",
@@ -4223,7 +4586,14 @@ console.log(
         }
     );
 
+      
 }
+
+
+
+
+
+   
 /* =====================================
    FAMILY → ADD MEMBER
    ===================================== */
