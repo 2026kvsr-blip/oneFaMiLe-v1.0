@@ -766,16 +766,126 @@ if(familyBackBtn){
 <!-- 10. GRAND PARENTS -->
 <div
     id="relationGrandParentsSection"
-    class="relations-section relations-grandparents">
-    <h3>Grand Parents</h3>
+    class="relations-section relation-grandparents">
+
+    <h3>
+        Grand Parents
+    </h3>
+
+
+    <!-- PATERNAL GRAND PARENTS -->
+    <strong>
+        Paternal Grand Parents
+    </strong>
+
 
     <div
-        id="relationGrandParents">
-        --------
+        id="paternalGrandParents">
+
+
+        <!-- FATHER'S FATHER -->
+        <div
+            id="relationFathersFatherRow"
+            class="grandparent-row">
+
+            <span class="grandparent-label">
+                Father's Father
+            </span>
+
+            <span class="grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="relationFathersFather"
+                class="grandparent-value">
+            </span>
+
+        </div>
+
+
+        <!-- FATHER'S MOTHER -->
+        <div
+            id="relationFathersMotherRow"
+            class="grandparent-row">
+
+            <span class="grandparent-label">
+                Father's Mother
+            </span>
+
+            <span class="grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="relationFathersMother"
+                class="grandparent-value">
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+    <br>
+
+
+    <!-- MATERNAL GRAND PARENTS -->
+    <strong>
+        Maternal Grand Parents
+    </strong>
+
+
+    <div
+        id="maternalGrandParents">
+
+
+        <!-- MOTHER'S FATHER -->
+        <div
+            id="relationMothersFatherRow"
+            class="grandparent-row">
+
+            <span class="grandparent-label">
+                Mother's Father
+            </span>
+
+            <span class="grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="relationMothersFather"
+                class="grandparent-value">
+            </span>
+
+        </div>
+
+
+        <!-- MOTHER'S MOTHER -->
+        <div
+            id="relationMothersMotherRow"
+            class="grandparent-row">
+
+            <span class="grandparent-label">
+                Mother's Mother
+            </span>
+
+            <span class="grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="relationMothersMother"
+                class="grandparent-value">
+            </span>
+
+        </div>
+
+
     </div>
 
 </div>
-
 
 <!-- 11. GRAND GRAND PARENTS -->
 <div
