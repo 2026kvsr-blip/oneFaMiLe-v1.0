@@ -4980,7 +4980,9 @@ function bindAddMemberButton(){
                  FAMILY ID
                  ================================= -->
 
-            <div class="common-form-group">
+           <div
+    class="common-form-group"
+    style="display:none;">
 
                 <label class="common-form-label">
                     Family ID
@@ -5003,8 +5005,9 @@ function bindAddMemberButton(){
                  FAMILY NAME
                  ================================= -->
 
-            <div class="common-form-group">
-
+<div
+    class="common-form-group"
+    style="display:none;">
                 <label class="common-form-label">
                     Family Name
                 </label>
