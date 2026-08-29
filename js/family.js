@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1961,7 +1962,276 @@ else{
 
     }
 
+/* =================================
+   10. GRAND PARENTS
+   ================================= */
 
+
+/* =================================
+   FIND PATERNAL GRAND PARENTS
+   ================================= */
+
+const fathersFather =
+    father &&
+    father.fatherId
+        ? familyMembers.find(
+            function(item){
+
+                return String(
+                    item.memberId || ""
+                ).trim() ===
+                String(
+                    father.fatherId
+                ).trim();
+
+            }
+        )
+        : null;
+
+
+const fathersMother =
+    father &&
+    father.motherId
+        ? familyMembers.find(
+            function(item){
+
+                return String(
+                    item.memberId || ""
+                ).trim() ===
+                String(
+                    father.motherId
+                ).trim();
+
+            }
+        )
+        : null;
+
+
+/* =================================
+   FIND MATERNAL GRAND PARENTS
+   ================================= */
+
+const mothersFather =
+    mother &&
+    mother.fatherId
+        ? familyMembers.find(
+            function(item){
+
+                return String(
+                    item.memberId || ""
+                ).trim() ===
+                String(
+                    mother.fatherId
+                ).trim();
+
+            }
+        )
+        : null;
+
+
+const mothersMother =
+    mother &&
+    mother.motherId
+        ? familyMembers.find(
+            function(item){
+
+                return String(
+                    item.memberId || ""
+                ).trim() ===
+                String(
+                    mother.motherId
+                ).trim();
+
+            }
+        )
+        : null;
+
+
+/* =================================
+   FATHER'S FATHER
+   ================================= */
+
+const fathersFatherRow =
+    document.getElementById(
+        "relationFathersFatherRow"
+    );
+
+const fathersFatherField =
+    document.getElementById(
+        "relationFathersFather"
+    );
+
+
+if(
+    fathersFather &&
+    getName(fathersFather)
+){
+
+    fathersFatherField.textContent =
+        getName(fathersFather);
+
+    fathersFatherRow.style.display =
+        "";
+
+}
+else{
+
+    fathersFatherRow.style.display =
+        "none";
+
+}
+
+
+/* =================================
+   FATHER'S MOTHER
+   ================================= */
+
+const fathersMotherRow =
+    document.getElementById(
+        "relationFathersMotherRow"
+    );
+
+const fathersMotherField =
+    document.getElementById(
+        "relationFathersMother"
+    );
+
+
+if(
+    fathersMother &&
+    getName(fathersMother)
+){
+
+    fathersMotherField.textContent =
+        getName(fathersMother);
+
+    fathersMotherRow.style.display =
+        "";
+
+}
+else{
+
+    fathersMotherRow.style.display =
+        "none";
+
+}
+
+
+/* =================================
+   MOTHER'S FATHER
+   ================================= */
+
+const mothersFatherRow =
+    document.getElementById(
+        "relationMothersFatherRow"
+    );
+
+const mothersFatherField =
+    document.getElementById(
+        "relationMothersFather"
+    );
+
+
+if(
+    mothersFather &&
+    getName(mothersFather)
+){
+
+    mothersFatherField.textContent =
+        getName(mothersFather);
+
+    mothersFatherRow.style.display =
+        "";
+
+}
+else{
+
+    mothersFatherRow.style.display =
+        "none";
+
+}
+
+
+/* =================================
+   MOTHER'S MOTHER
+   ================================= */
+
+const mothersMotherRow =
+    document.getElementById(
+        "relationMothersMotherRow"
+    );
+
+const mothersMotherField =
+    document.getElementById(
+        "relationMothersMother"
+    );
+
+
+if(
+    mothersMother &&
+    getName(mothersMother)
+){
+
+    mothersMotherField.textContent =
+        getName(mothersMother);
+
+    mothersMotherRow.style.display =
+        "";
+
+}
+else{
+
+    mothersMotherRow.style.display =
+        "none";
+
+}
+
+
+/* =================================
+   SHOW / HIDE GRAND PARENTS
+   ================================= */
+
+const grandParentsSection =
+    document.getElementById(
+        "relationGrandParentsSection"
+    );
+
+
+const hasGrandParents =
+    (
+        fathersFather &&
+        getName(fathersFather)
+    ) ||
+    (
+        fathersMother &&
+        getName(fathersMother)
+    ) ||
+    (
+        mothersFather &&
+        getName(mothersFather)
+    ) ||
+    (
+        mothersMother &&
+        getName(mothersMother)
+    );
+
+
+if(grandParentsSection){
+
+    if(hasGrandParents){
+
+        grandParentsSection.style.display =
+            "block";
+
+    }
+    else{
+
+        grandParentsSection.style.display =
+            "none";
+
+    }
+
+}
     /* =================================
        4. SIBLINGS
        ================================= */
