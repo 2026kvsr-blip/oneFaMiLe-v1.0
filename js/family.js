@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -1420,7 +1419,21 @@ relationsMemberSearch.addEventListener(
             };
 
     }
+const relationsHomeBtn =
+    document.getElementById(
+        "relationsHomeBtn"
+    );
 
+if(relationsHomeBtn){
+
+    relationsHomeBtn.onclick =
+        function(){
+
+            homeBtn.click();
+
+        };
+
+}
 }
 
 
