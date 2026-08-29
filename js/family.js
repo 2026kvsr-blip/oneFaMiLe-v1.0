@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -454,8 +455,9 @@ if(familyBackBtn){
     id="relationSiblingsSection"
     class="relations-section relations-siblings">
 
-    <h3>Siblings</h3>
-
+<h3 id="relationSiblingsTitle">
+    Siblings
+</h3>
     <strong>Brothers</strong>
 
     <div
@@ -479,8 +481,9 @@ if(familyBackBtn){
     id="relationFatherSiblingsSection"
     class="relations-section relation-father-siblings">
 
-    <h3>Father Siblings</h3>
-
+<h3 id="relationFatherSiblingsTitle">
+    Father Siblings
+</h3>
     <div
     id="relationFatherSiblings">
 
@@ -528,17 +531,53 @@ if(familyBackBtn){
     id="relationMotherSiblingsSection"
     class="relations-section relation-mother-siblings">
 
-    <h3>Mother Siblings</h3>
+    <h3 id="relationMotherSiblingsTitle">
+        Mother Siblings
+    </h3>
 
-   <div
-    id="relationMotherSiblings">
 
     <div
-        id="relationMotherSiblingsTitle"
-        class="relation-siblings-title">
+        id="relationMotherSiblings">
+
+
+        <!-- BROTHERS -->
+        <div
+            id="relationMotherSiblingsBrothersRow"
+            class="relation-siblings-group">
+
+            <div
+                id="relationMotherSiblingsBrothersTitle"
+                class="relation-siblings-subtitle">
+            </div>
+
+            <div
+                id="relationMotherSiblingsBrothers">
+            </div>
+
+        </div>
+
+
+        <!-- SISTERS -->
+        <div
+            id="relationMotherSiblingsSistersRow"
+            class="relation-siblings-group">
+
+            <div
+                id="relationMotherSiblingsSistersTitle"
+                class="relation-siblings-subtitle">
+            </div>
+
+            <div
+                id="relationMotherSiblingsSisters">
+            </div>
+
+        </div>
+
+
     </div>
 
-    <div
+</div>   
+<div
         id="relationMotherSiblingsBrothersRow"
         class="relation-siblings-group">
 
@@ -2172,14 +2211,18 @@ const fatherSisters =
    TOTAL COUNT
    ================================= */
 
-if(fatherSiblingsTitle){
+const fatherSiblingsHeading =
+    document.getElementById(
+        "relationFatherSiblingsTitle"
+    );
 
-    fatherSiblingsTitle.textContent =
+if(fatherSiblingsHeading){
+
+    fatherSiblingsHeading.textContent =
         "Father Siblings : " +
         fatherSiblings.length;
 
 }
-
 
 /* =================================
    BROTHERS
