@@ -1405,20 +1405,104 @@ relationsMemberSearch.addEventListener(
 
 }
       const relationsBackBtn =
-        document.getElementById(
-            "relationsBackBtn"
-        );
+    document.getElementById(
+        "relationsBackBtn"
+    );
 
-    if(relationsBackBtn){
+if(relationsBackBtn){
 
-        relationsBackBtn.onclick =
-            function(){
+    relationsBackBtn.onclick =
+        function(){
+
+            /* =================================
+               MEMBER SELECTED
+               → GO BACK TO MEMBER SELECTION
+               ================================= */
+
+            if(
+                relationsMemberSearch &&
+                relationsMemberSearch.value.trim() !== ""
+            ){
+
+                /* Clear selected member */
+
+                relationsMemberSearch.value =
+                    "";
+
+
+                /* Hide member details header */
+
+                const memberHeader =
+                    document.querySelector(
+                        ".relations-member-header"
+                    );
+
+                if(memberHeader){
+
+                    memberHeader.style.display =
+                        "none";
+
+                }
+
+
+                /* Show member selection */
+
+                const memberGroup =
+                    document.getElementById(
+                        "relationsMemberGroup"
+                    );
+
+                if(memberGroup){
+
+                    memberGroup.style.display =
+                        "";
+
+                }
+
+
+                /* Hide all relation details */
+
+                document.querySelectorAll(
+                    ".relations-section"
+                ).forEach(
+                    function(section){
+
+                        section.style.display =
+                            "none";
+
+                    }
+                );
+
+
+                /* Clear member dropdown list */
+
+                if(relationsMemberDropdown){
+
+                    relationsMemberDropdown.innerHTML =
+                        "";
+
+                    relationsMemberDropdown.style.display =
+                        "none";
+
+                }
+
+            }
+
+            /* =================================
+               NO MEMBER SELECTED
+               → ONE STEP BACK
+               ================================= */
+
+            else{
 
                 familyBtn.click();
 
-            };
+            }
 
-    }
+        };
+
+}
+      
 const relationsHomeBtn =
     document.getElementById(
         "relationsHomeBtn"
@@ -4878,6 +4962,7 @@ function bindAddMemberButton(){
 
     addMemberBtn.onclick = () => {
 
+       
     showPage(
 
     pageTitle(
