@@ -5829,11 +5829,6 @@ const memberName =
         "memberName"
     );
 
-const memberGender =
-    document.getElementById(
-        "memberGender"
-    );
-
 
 function updateMemberFormState(){
 
