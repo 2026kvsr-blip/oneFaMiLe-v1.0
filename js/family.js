@@ -5498,7 +5498,10 @@ const memberPartnerGroup =
         "memberPartnerGroup"
     );
 
-
+const marriageDateGroup =
+    document.getElementById(
+        "marriageDateGroup"
+    );
 /* =================================
    CALCULATE AGE
    ================================= */
@@ -5598,6 +5601,12 @@ function hideMarriageConfirmation(){
 
         confirmMarriageNo.checked =
             false;
+
+    }
+       if(marriageDateGroup){
+
+        marriageDateGroup.style.display =
+            "none";
 
     }
 
@@ -5818,13 +5827,23 @@ if(marriageConfirmation){
         "none";
 
 }
+/* =============================
+   SHOW PARTNER
+   ============================= */
 
-            /* =============================
-               SHOW PARTNER
-               ============================= */
+showPartner();
 
-            showPartner();
 
+/* =============================
+   SHOW MARRIAGE DATE
+   ============================= */
+
+if(marriageDateGroup){
+
+    marriageDateGroup.style.display =
+        "flex";
+
+}
         }
     );
 
@@ -5833,7 +5852,8 @@ if(marriageConfirmation){
 
 /* =================================
    CONFIRMATION NO
-   ================================= */
+   ========================
+   ========= */
 
 /* =================================
    CONFIRMATION NO
