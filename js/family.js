@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5693,15 +5692,13 @@ function bindAddMemberButton(){
         :
     </span>
 
-    <input
-        type="text"
-        id="memberAboutMe"
-        class="common-form-input"
-        maxlength="500"
-        rows="10"
-        placeholder="Write Something about yourself..."
-        autocomplete="off">
-
+    <textarea
+    id="memberAboutMe"
+    class="common-form-input"
+    maxlength="500"
+    rows="10"
+    placeholder="Write something about yourself..."
+    autocomplete="off"></textarea>
 </div>
 <!-- =================================
      MEMBER ACTIONS
