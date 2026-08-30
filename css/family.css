@@ -1429,7 +1429,7 @@
 /* =================================
    ADD MEMBER - REMOVE GREY BOX
    ================================= */
-
+#memberAboutMe,
 #memberFather,
 #memberMother,
 #memberLifeStatus,
@@ -1471,7 +1471,7 @@
    ADD MEMBER - DISABLED FIELDS
    KEEP NORMAL WHITE LOOK
    ================================= */
-
+#memberAboutMe:disabled,
 #memberFather:disabled,
 #memberMother:disabled,
 #memberLifeStatus:disabled,
