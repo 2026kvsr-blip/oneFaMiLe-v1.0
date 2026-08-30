@@ -7,7 +7,6 @@
    FAMILY FORM CONTAINER
    ===================================== */
 
-
 .family-box{
 
     width: calc(100% - 40px);
@@ -1582,5 +1581,18 @@
 .occupation-option:hover{
 
     background: #f0f0f0;
+
+}
+#memberAboutMe{
+
+    height: 28px !important;
+    min-height: 28px !important;
+
+    overflow-y: auto;
+
+    resize: none;
+
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
 
 }
