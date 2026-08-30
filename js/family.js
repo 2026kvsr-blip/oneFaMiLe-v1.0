@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5697,6 +5698,7 @@ function bindAddMemberButton(){
         id="memberAboutMe"
         class="common-form-input"
         maxlength="500"
+        rows="10"
         placeholder="Write Something about yourself..."
         autocomplete="off">
 
