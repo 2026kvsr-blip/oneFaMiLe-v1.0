@@ -1391,3 +1391,54 @@
     align-items: center;
     gap: 10px;
 }
+/* =================================
+   ADD MEMBER - COMPACT FORM
+   ================================= */
+
+#memberName,
+#memberGender,
+#memberDob,
+#memberPartner,
+#memberFather,
+#memberMother,
+#memberLifeStatus,
+#memberNativePlace,
+#memberOccupation,
+#memberQualification,
+#memberBloodGroup,
+#memberMobileNumber,
+#memberCurrentPlace,
+#memberDeceasedDate{
+
+    height: 32px;
+    min-height: 32px;
+    padding: 4px 8px;
+    box-sizing: border-box;
+
+}
+
+
+/* =================================
+   REDUCE ROW HEIGHT
+   ================================= */
+
+.common-form-group{
+
+    min-height: 32px;
+    margin-bottom: 6px;
+
+}
+
+
+/* =================================
+   MEMBER ID - NO BOX
+   ================================= */
+
+#memberId{
+
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+
+}
