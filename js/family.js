@@ -5619,7 +5619,7 @@ function bindAddMemberButton(){
         id="memberAboutMe"
         class="common-form-input"
         maxlength="500"
-        placeholder="Something about yourself..."
+        placeholder="Write Something about yourself..."
         autocomplete="off">
 
 </div>
