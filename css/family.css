@@ -1354,6 +1354,7 @@
    GRAND GRAND PARENTS ALIGNMENT
    ================================= */
 
+
 .relation-grand-grandparents
 .grand-grandparent-row{
     display: grid;
@@ -1465,5 +1466,23 @@
     background: transparent !important;
     padding: 0 !important;
     box-shadow: none !important;
+
+}
+/* =================================
+   ADD MEMBER - DISABLED FIELDS
+   KEEP NORMAL WHITE LOOK
+   ================================= */
+
+#memberFather:disabled,
+#memberMother:disabled,
+#memberLifeStatus:disabled,
+#memberNativePlace:disabled,
+#memberOccupation:disabled,
+#memberQualification:disabled{
+
+    background-color: white !important;
+    color: #666 !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: #666 !important;
 
 }
