@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5304,14 +5305,15 @@ function bindAddMemberButton(){
     <select
         id="memberFather"
         class="common-form-select">
-
-        <option value="__ADD_NEW__">
-            Add New Person
-        </option>
-
-        <option value="">
+<option value="">
             Select Father
         </option>
+        <option value="__ADD_NEW__">
+            Add New Person
+            
+        </option>
+
+        
 
     </select>
 
@@ -5337,15 +5339,15 @@ function bindAddMemberButton(){
     <select
         id="memberMother"
         class="common-form-select">
+ <option value="">
+            Select Mother
+        </option>
 
         <option value="__ADD_NEW__">
             Add New Person
         </option>
 
-        <option value="">
-            Select Mother
-        </option>
-
+       
     </select>
 
 </div>
