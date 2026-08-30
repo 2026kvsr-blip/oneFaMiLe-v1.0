@@ -5271,15 +5271,15 @@ function bindAddMemberButton(){
                <select
     id="memberPartner"
     class="common-form-select">
+<option value="">
+        Select Partner
+    </option>
 
     <option value="__ADD_NEW__">
         Add New Person
     </option>
 
-    <option value="">
-        Select Partner
-    </option>
-
+    
 </select>
             </div>
 
