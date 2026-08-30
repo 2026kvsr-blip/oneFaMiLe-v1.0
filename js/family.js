@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5933,6 +5932,152 @@ const memberDob =
     document.getElementById(
         "memberDob"
     );
+       const memberOccupation =
+    document.getElementById(
+        "memberOccupation"
+    );
+       /* =================================
+   OCCUPATION DROPDOWN
+   ================================= */
+
+const occupationList =
+    document.getElementById(
+        "occupationList"
+    );
+
+const occupationOptions =
+    document.querySelectorAll(
+        ".occupation-option"
+    );
+
+
+if(memberOccupation){
+
+    memberOccupation.addEventListener(
+        "focus",
+        function(){
+
+            if(occupationList){
+
+                occupationList.style.display =
+                    "block";
+
+            }
+
+        }
+    );
+
+
+    memberOccupation.addEventListener(
+        "input",
+        function(){
+
+            const searchText =
+                this.value
+                    .trim()
+                    .toLowerCase();
+
+
+            occupationOptions.forEach(
+                function(option){
+
+                    const text =
+                        option.textContent
+                            .trim()
+                            .toLowerCase();
+
+
+                    if(
+                        searchText === "" ||
+                        text.includes(searchText)
+                    ){
+
+                        option.style.display =
+                            "block";
+
+                    }
+                    else{
+
+                        option.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+
+            if(occupationList){
+
+                occupationList.style.display =
+                    "block";
+
+            }
+
+        }
+    );
+
+
+    occupationOptions.forEach(
+        function(option){
+
+            option.addEventListener(
+                "click",
+                function(){
+
+                    memberOccupation.value =
+                        this.textContent.trim();
+
+
+                    if(occupationList){
+
+                        occupationList.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
+       /* =================================
+   CLOSE OCCUPATION DROPDOWN
+   WHEN CLICKING OUTSIDE
+   ================================= */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const occupationDropdown =
+            document.querySelector(
+                ".occupation-dropdown"
+            );
+
+        if(!occupationDropdown){
+            return;
+        }
+
+        if(
+            !occupationDropdown.contains(
+                event.target
+            )
+        ){
+
+            if(occupationList){
+
+                occupationList.style.display =
+                    "none";
+
+            }
+
+        }
+
+    }
+);
 /* =================================
    ENABLE FORM AFTER NAME + GENDER + DOB
    ================================= */
