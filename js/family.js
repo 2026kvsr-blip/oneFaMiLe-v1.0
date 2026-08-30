@@ -5433,17 +5433,55 @@ function bindAddMemberButton(){
         :
     </span>
 
-    <input
-        type="text"
-        id="memberOccupation"
-        class="common-form-input"
-        placeholder="Enter Occupation"
-            maxlength="15"
+    <div class="occupation-dropdown">
 
-        autocomplete="off">
+        <input
+            type="text"
+            id="memberOccupation"
+            class="common-form-input"
+            placeholder="Select / Enter Occupation"
+            maxlength="15"
+            autocomplete="off">
+
+        <div
+            id="occupationList"
+            class="occupation-list">
+
+            <div class="occupation-option">
+                Engineer
+            </div>
+
+            <div class="occupation-option">
+                Doctor
+            </div>
+
+            <div class="occupation-option">
+                Teacher
+            </div>
+
+            <div class="occupation-option">
+                Government Employee
+            </div>
+              <div class="occupation-option">
+                Private Employee
+                 </div>
+             <div class="occupation-option">
+                Software Engineer
+            </div>
+
+            <div class="occupation-option">
+                Business
+            </div>
+
+            <div class="occupation-option">
+                Farmer
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
-
 
 <!-- =================================
      QUALIFICATION
