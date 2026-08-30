@@ -4187,7 +4187,7 @@ if(
 
 
         specialMessage.textContent =
-            "Same as Father" +
+            "Same as Father " +
             (
                 getName(father) ||
                 "Father"
@@ -4235,32 +4235,7 @@ else{
 
 }
 
-   if(
-    isMarried &&
-    motherInLawSiblings.length
-){
-
-    const motherInLawSiblingsSection =
-        document.getElementById(
-            "relationMotherInLawSiblingsSection"
-        );
-
-    if(motherInLawSiblingsSection){
-
-        motherInLawSiblingsSection.style.display =
-            "block";
-
-    }
-
-}
-else{
-
-    hideSection(
-        "relationMotherInLawSiblingsSection"
-    );
-
-}
-
+   
 /* =================================
    10. GRAND PARENTS
    ================================= */
