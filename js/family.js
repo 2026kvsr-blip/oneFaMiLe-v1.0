@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5903,8 +5902,119 @@ const memberName =
     document.getElementById(
         "memberName"
     );
+const memberQualification =
+    document.getElementById(
+        "memberQualification"
+    );
+/* =================================
+   QUALIFICATION DROPDOWN
+   ================================= */
+
+const qualificationList =
+    document.getElementById(
+        "qualificationList"
+    );
 
 
+const qualificationOptions =
+    document.querySelectorAll(
+        ".qualification-option"
+    );
+
+
+if(memberQualification){
+
+    memberQualification.addEventListener(
+        "focus",
+        function(){
+
+            if(qualificationList){
+
+                qualificationList.style.display =
+                    "block";
+
+            }
+
+        }
+    );
+
+
+    memberQualification.addEventListener(
+        "input",
+        function(){
+
+            const searchText =
+                this.value
+                    .trim()
+                    .toLowerCase();
+
+
+            qualificationOptions.forEach(
+                function(option){
+
+                    const text =
+                        option.textContent
+                            .trim()
+                            .toLowerCase();
+
+
+                    if(
+                        searchText === "" ||
+                        text.includes(searchText)
+                    ){
+
+                        option.style.display =
+                            "block";
+
+                    }
+                    else{
+
+                        option.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+
+            if(qualificationList){
+
+                qualificationList.style.display =
+                    "block";
+
+            }
+
+        }
+    );
+
+
+    qualificationOptions.forEach(
+        function(option){
+
+            option.addEventListener(
+                "click",
+                function(){
+
+                    memberQualification.value =
+                        this.textContent.trim();
+
+
+                    if(qualificationList){
+
+                        qualificationList.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
+       
 /* =================================
    ENABLE / DISABLE MEMBER FORM
    NAME + GENDER + DOB REQUIRED
