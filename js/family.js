@@ -5410,6 +5410,8 @@ function bindAddMemberButton(){
         id="memberNativePlace"
         class="common-form-input"
         placeholder="Enter Native Place"
+            maxlength="15"
+
         autocomplete="off">
 
 </div>
@@ -5436,6 +5438,8 @@ function bindAddMemberButton(){
         id="memberOccupation"
         class="common-form-input"
         placeholder="Enter Occupation"
+            maxlength="15"
+
         autocomplete="off">
 
 </div>
@@ -5462,6 +5466,8 @@ function bindAddMemberButton(){
         id="memberQualification"
         class="common-form-input"
         placeholder="Enter Qualification"
+            maxlength="15"
+
         autocomplete="off">
 
 </div>
@@ -5531,7 +5537,9 @@ function bindAddMemberButton(){
         id="memberMobileNumber"
         class="common-form-input"
         placeholder="Enter Mobile Number"
-        inputmode="numeric"
+        maxlength="10"
+    inputmode="numeric"
+    pattern="[0-9]{10}"
         autocomplete="tel">
 
 </div>
@@ -5588,6 +5596,32 @@ function bindAddMemberButton(){
         type="date"
         id="memberDeceasedDate"
         class="common-form-input">
+
+</div>
+
+<!-- =================================
+     ABOUT ME
+     ================================= -->
+
+<div class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberAboutMe">
+        About Me
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="text"
+        id="memberAboutMe"
+        class="common-form-input"
+        maxlength="500"
+        placeholder="Something about yourself..."
+        autocomplete="off">
 
 </div>
 <!-- =================================
@@ -5878,6 +5912,7 @@ function updateMemberFormState(){
         "memberNativePlace",
         "memberOccupation",
         "memberQualification",
+        "memberAboutMe",
 
         "memberBloodGroup",
         "memberMobileNumber",
