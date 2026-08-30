@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -6753,10 +6752,10 @@ console.log(
             "Add New Person";
 
 
-        select.insertBefore(
-            option,
-            select.firstChild
-        );
+       select.insertBefore(
+    option,
+    select.children[1] || null
+);
 
     }
 
@@ -6766,16 +6765,7 @@ console.log(
     );
 
 
-    addNewPersonOption(
-        fatherField
-    );
-
-
-    addNewPersonOption(
-        motherField
-    );
-
-
+   
     /* =================================
        ADD MEMBER OPTION
        ================================= */
@@ -7018,7 +7008,26 @@ if(
         }
     );
 
+/* =================================
+   ADD NEW PERSON
+   FATHER / MOTHER
+   ================================= */
 
+if(fatherField){
+
+    addNewPersonOption(
+        fatherField
+    );
+
+}
+
+if(motherField){
+
+    addNewPersonOption(
+        motherField
+    );
+
+}
        /* =================================
    REFRESH RELATIONS WHEN GENDER CHANGES
    ================================= */
