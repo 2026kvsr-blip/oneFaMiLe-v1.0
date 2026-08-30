@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5460,17 +5461,56 @@ function bindAddMemberButton(){
         :
     </span>
 
-    <input
-        type="text"
-        id="memberQualification"
-        class="common-form-input"
-        placeholder="Enter Qualification"
-            maxlength="15"
+    <div
+        class="qualification-dropdown">
 
-        autocomplete="off">
+        <input
+            type="text"
+            id="memberQualification"
+            class="common-form-input"
+            placeholder="Select / Enter Qualification"
+            maxlength="15"
+            autocomplete="off">
+
+        <div
+            id="qualificationList"
+            class="qualification-list">
+
+            <div
+                class="qualification-option">
+                10th
+            </div>
+
+            <div
+                class="qualification-option">
+                Intermediate
+            </div>
+
+            <div
+                class="qualification-option">
+                Diploma
+            </div>
+
+            <div
+                class="qualification-option">
+                Graduation
+            </div>
+
+            <div
+                class="qualification-option">
+                Post Graduation
+            </div>
+
+            <div
+                class="qualification-option">
+                PhD
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
-
 <!-- =================================
      BLOOD GROUP
      ================================= -->
