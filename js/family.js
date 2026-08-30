@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -6984,7 +6983,6 @@ if(
 
 if(
     memberGender === "female" &&
-    isMarried &&
     currentAge !== null &&
     memberAge !== null &&
     memberAge >= currentAge + 15
