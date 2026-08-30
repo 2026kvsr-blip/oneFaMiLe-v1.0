@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5948,6 +5949,7 @@ function updateMemberFormState(){
     );
 
 }
+       updateMemberFormState();
 const marriedYes =
     document.getElementById(
         "marriedYes"
