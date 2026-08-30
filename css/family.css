@@ -1536,3 +1536,51 @@
     background: #f0f0f0;
 
 }
+/* =================================
+   OCCUPATION DROPDOWN
+   ================================= */
+
+.occupation-dropdown{
+
+    position: relative;
+    width: 100%;
+
+}
+
+.occupation-list{
+
+    display: none;
+
+    position: absolute;
+
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    background: white;
+
+    border: 1px solid #ccc;
+
+    max-height: 180px;
+
+    overflow-y: auto;
+
+    z-index: 1000;
+
+}
+
+.occupation-option{
+
+    padding: 7px 10px;
+
+    cursor: pointer;
+
+    background: white;
+
+}
+
+.occupation-option:hover{
+
+    background: #f0f0f0;
+
+}
