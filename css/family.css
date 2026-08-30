@@ -1485,3 +1485,54 @@
     -webkit-text-fill-color: #666 !important;
 
 }
+/* =================================
+   QUALIFICATION DROPDOWN
+   ================================= */
+
+.qualification-dropdown{
+
+    position: relative;
+    width: 100%;
+
+}
+
+
+.qualification-list{
+
+    display: none;
+
+    position: absolute;
+
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    background: white;
+
+    border: 1px solid #ccc;
+
+    max-height: 180px;
+
+    overflow-y: auto;
+
+    z-index: 1000;
+
+}
+
+
+.qualification-option{
+
+    padding: 7px 10px;
+
+    cursor: pointer;
+
+    background: white;
+
+}
+
+
+.qualification-option:hover{
+
+    background: #f0f0f0;
+
+}
