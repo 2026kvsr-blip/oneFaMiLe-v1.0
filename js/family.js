@@ -5387,6 +5387,182 @@ function bindAddMemberButton(){
     </select>
 
 </div>
+
+<!-- =================================
+     NATIVE PLACE
+     ================================= -->
+
+<div class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberNativePlace">
+        Native Place
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="text"
+        id="memberNativePlace"
+        class="common-form-input"
+        placeholder="Enter Native Place"
+        autocomplete="off">
+
+</div>
+
+
+<!-- =================================
+     OCCUPATION
+     ================================= -->
+
+<div class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberOccupation">
+        Occupation
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="text"
+        id="memberOccupation"
+        class="common-form-input"
+        placeholder="Enter Occupation"
+        autocomplete="off">
+
+</div>
+
+
+<!-- =================================
+     QUALIFICATION
+     ================================= -->
+
+<div class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberQualification">
+        Qualification
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="text"
+        id="memberQualification"
+        class="common-form-input"
+        placeholder="Enter Qualification"
+        autocomplete="off">
+
+</div>
+
+<!-- =================================
+     BLOOD GROUP
+     ================================= -->
+
+<div
+    id="bloodGroupGroup"
+    class="common-form-group"
+    style="display:none;">
+
+    <label
+        class="common-form-label"
+        for="memberBloodGroup">
+        Blood Group
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <select
+        id="memberBloodGroup"
+        class="common-form-select">
+
+        <option value="">
+            Select Blood Group
+        </option>
+
+        <option value="A+">A+</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B-">B-</option>
+        <option value="AB+">AB+</option>
+        <option value="AB-">AB-</option>
+        <option value="O+">O+</option>
+        <option value="O-">O-</option>
+
+    </select>
+
+</div>
+
+
+<!-- =================================
+     MOBILE NUMBER
+     ================================= -->
+
+<div
+    id="mobileNumberGroup"
+    class="common-form-group"
+    style="display:none;">
+
+    <label
+        class="common-form-label"
+        for="memberMobileNumber">
+        Mobile Number
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="tel"
+        id="memberMobileNumber"
+        class="common-form-input"
+        placeholder="Enter Mobile Number"
+        inputmode="numeric"
+        autocomplete="tel">
+
+</div>
+
+
+<!-- =================================
+     CURRENT PLACE
+     ================================= -->
+
+<div
+    id="currentPlaceGroup"
+    class="common-form-group"
+    style="display:none;">
+
+    <label
+        class="common-form-label"
+        for="memberCurrentPlace">
+        Current Place
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="text"
+        id="memberCurrentPlace"
+        class="common-form-input"
+        placeholder="Enter Current Place"
+        autocomplete="off">
+
+</div>
 <!-- =================================
      MEMBER ACTIONS
      ================================= -->
@@ -5459,6 +5635,137 @@ if(
         };
 
 }
+
+
+/* =================================
+   LIFE STATUS LOGIC
+   ================================= */
+
+const memberLifeStatus =
+    document.getElementById(
+        "memberLifeStatus"
+    );
+
+const bloodGroupGroup =
+    document.getElementById(
+        "bloodGroupGroup"
+    );
+
+const mobileNumberGroup =
+    document.getElementById(
+        "mobileNumberGroup"
+    );
+
+const currentPlaceGroup =
+    document.getElementById(
+        "currentPlaceGroup"
+    );
+
+
+/* =================================
+   LIFE STATUS CHANGE
+   ================================= */
+
+if(memberLifeStatus){
+
+    memberLifeStatus.addEventListener(
+        "change",
+        function(){
+
+            /* =============================
+               LIVING
+               ============================= */
+
+            if(this.value === "Living"){
+
+                if(bloodGroupGroup){
+
+                    bloodGroupGroup.style.display =
+                        "flex";
+
+                }
+
+                if(mobileNumberGroup){
+
+                    mobileNumberGroup.style.display =
+                        "flex";
+
+                }
+
+                if(currentPlaceGroup){
+
+                    currentPlaceGroup.style.display =
+                        "flex";
+
+                }
+
+            }
+
+
+            /* =============================
+               DECEASED
+               ============================= */
+
+            else if(this.value === "Deceased"){
+
+                if(bloodGroupGroup){
+
+                    bloodGroupGroup.style.display =
+                        "none";
+
+                }
+
+                if(mobileNumberGroup){
+
+                    mobileNumberGroup.style.display =
+                        "none";
+
+                }
+
+                if(currentPlaceGroup){
+
+                    currentPlaceGroup.style.display =
+                        "none";
+
+                }
+
+            }
+
+
+            /* =============================
+               NOTHING SELECTED
+               ============================= */
+
+            else{
+
+                if(bloodGroupGroup){
+
+                    bloodGroupGroup.style.display =
+                        "none";
+
+                }
+
+                if(mobileNumberGroup){
+
+                    mobileNumberGroup.style.display =
+                        "none";
+
+                }
+
+                if(currentPlaceGroup){
+
+                    currentPlaceGroup.style.display =
+                        "none";
+
+                }
+
+            }
+
+        }
+    );
+
+}
+       
    /* =================================
    MARITAL STATUS LOGIC
    ================================= */
