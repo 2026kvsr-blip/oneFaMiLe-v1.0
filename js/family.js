@@ -3499,6 +3499,8 @@ if(
     fatherInLawIsMothersSibling
 ){
 
+    /* Hide normal Brothers row */
+
     if(fatherInLawSiblingsBrothersRow){
 
         fatherInLawSiblingsBrothersRow.style.display =
@@ -3507,6 +3509,8 @@ if(
     }
 
 
+    /* Hide normal Sisters row */
+
     if(fatherInLawSiblingsSistersRow){
 
         fatherInLawSiblingsSistersRow.style.display =
@@ -3514,6 +3518,17 @@ if(
 
     }
 
+
+    /* Change title */
+
+    if(fatherInLawSiblingsTitle){
+
+        fatherInLawSiblingsTitle.textContent =
+            "Father-in-Law Siblings";
+    }
+
+
+    /* Show special message */
 
     const fatherInLawSiblingsContainer =
         document.getElementById(
@@ -3534,7 +3549,12 @@ if(
 
 
         message.textContent =
-            "Same as Mother siblings because Father-in-Law is my mother's brother";
+            "Same as Mother " +
+            (
+                getName(mother) ||
+                "Mother"
+            ) +
+            " siblings because Father-in-Law is my mother's brother";
 
 
         fatherInLawSiblingsContainer.appendChild(
@@ -3544,7 +3564,7 @@ if(
     }
 
 }
-else{
+      else{
 
     /* =================================
        NORMAL BROTHERS / SISTERS
@@ -3761,31 +3781,6 @@ else{
 
 }
 
-   if(
-    isMarried &&
-    fatherInLawSiblings.length
-){
-
-    const fatherInLawSiblingsSection =
-        document.getElementById(
-            "relationFatherInLawSiblingsSection"
-        );
-
-    if(fatherInLawSiblingsSection){
-
-        fatherInLawSiblingsSection.style.display =
-            "block";
-
-    }
-
-}
-else{
-
-    hideSection(
-        "relationFatherInLawSiblingsSection"
-    );
-
-}
 
     /* =================================
        9. MOTHER-IN-LAW SIBLINGS
