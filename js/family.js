@@ -6962,7 +6962,6 @@ console.log(
 
 if(
     memberGender === "male" &&
-    isMarried &&
     currentAge !== null &&
     memberAge !== null &&
     memberAge >= currentAge + 15
