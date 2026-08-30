@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5326,7 +5327,42 @@ function bindAddMemberButton(){
 
 </div>
 
+<!-- =================================
+     LIFE STATUS
+     ================================= -->
 
+<div class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberLifeStatus">
+        Life Status
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <select
+        id="memberLifeStatus"
+        class="common-form-select"
+        required>
+
+        <option value="">
+            Select Status
+        </option>
+
+        <option value="Living">
+            Living
+        </option>
+
+        <option value="Deceased">
+            Deceased
+        </option>
+
+    </select>
+
+</div>
 <!-- =================================
      MEMBER ACTIONS
      ================================= -->
