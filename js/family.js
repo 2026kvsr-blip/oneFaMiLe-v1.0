@@ -5764,10 +5764,21 @@ if(marriedYes){
 
             /* 18 or above */
 
-            hideMarriageConfirmation();
+hideMarriageConfirmation();
 
-            showPartner();
+showPartner();
 
+
+/* =============================
+   SHOW MARRIAGE DATE
+   ============================= */
+
+if(marriageDateGroup){
+
+    marriageDateGroup.style.display =
+        "flex";
+
+}
         }
     );
 
