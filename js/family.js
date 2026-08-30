@@ -5563,6 +5563,32 @@ function bindAddMemberButton(){
         autocomplete="off">
 
 </div>
+
+<!-- =================================
+     DECEASED DATE
+     ================================= -->
+
+<div
+    id="deceasedDateGroup"
+    class="common-form-group"
+    style="display:none;">
+
+    <label
+        class="common-form-label"
+        for="memberDeceasedDate">
+        Deceased Date
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="date"
+        id="memberDeceasedDate"
+        class="common-form-input">
+
+</div>
 <!-- =================================
      MEMBER ACTIONS
      ================================= -->
@@ -5660,7 +5686,10 @@ const currentPlaceGroup =
     document.getElementById(
         "currentPlaceGroup"
     );
-
+const deceasedDateGroup =
+    document.getElementById(
+        "deceasedDateGroup"
+    );
 
 /* =================================
    LIFE STATUS CHANGE
@@ -5698,6 +5727,12 @@ if(memberLifeStatus){
                         "flex";
 
                 }
+               if(deceasedDateGroup){
+
+    deceasedDateGroup.style.display =
+        "none";
+
+}
 
             }
 
@@ -5728,6 +5763,12 @@ if(memberLifeStatus){
                         "none";
 
                 }
+               if(deceasedDateGroup){
+
+    deceasedDateGroup.style.display =
+        "flex";
+
+}
 
             }
 
@@ -5758,6 +5799,12 @@ if(memberLifeStatus){
                         "none";
 
                 }
+               if(deceasedDateGroup){
+
+    deceasedDateGroup.style.display =
+        "none";
+
+}
 
             }
 
