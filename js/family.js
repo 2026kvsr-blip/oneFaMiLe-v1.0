@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -7025,6 +7026,26 @@ if(
 if(genderField){
 
     genderField.onchange = function(){
+
+        loadMemberRelations();
+
+    };
+
+}
+
+
+/* =================================
+   REFRESH RELATIONS WHEN DOB CHANGES
+   ================================= */
+
+const dobField =
+    document.getElementById(
+        "memberDob"
+    );
+
+if(dobField){
+
+    dobField.onchange = function(){
 
         loadMemberRelations();
 
