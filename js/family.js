@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -6014,7 +6015,41 @@ if(memberQualification){
     );
 
 }
-       
+   /* =================================
+   CLOSE QUALIFICATION DROPDOWN
+   WHEN CLICKING OUTSIDE
+   ================================= */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const qualificationDropdown =
+            document.querySelector(
+                ".qualification-dropdown"
+            );
+
+        if(!qualificationDropdown){
+            return;
+        }
+
+        if(
+            !qualificationDropdown.contains(
+                event.target
+            )
+        ){
+
+            if(qualificationList){
+
+                qualificationList.style.display =
+                    "none";
+
+            }
+
+        }
+
+    }
+);    
 /* =================================
    ENABLE / DISABLE MEMBER FORM
    NAME + GENDER + DOB REQUIRED
