@@ -1410,13 +1410,20 @@
 #memberCurrentPlace,
 #memberDeceasedDate{
 
-    height: 25px;
-    min-height: 25px;
+    height: 28px;
+    min-height: 28px;
     padding: 4px 8px;
     box-sizing: border-box;
 
 }
 
+/* =================================
+   ADD MEMBER - REMOVE GREY BOX
+   ================================= */
+
+#memberFather,
+#memberMother,
+#memberLifeStatus,
 #memberNativePlace,
 #memberOccupation,
 #memberQualification{
