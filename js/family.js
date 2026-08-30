@@ -5830,6 +5830,11 @@ const memberName =
     );
 
 
+/* =================================
+   ENABLE / DISABLE MEMBER FORM
+   NAME + GENDER + DOB REQUIRED
+   ================================= */
+
 function updateMemberFormState(){
 
     const nameReady =
@@ -5849,6 +5854,10 @@ function updateMemberFormState(){
         genderReady &&
         dobReady;
 
+
+    /* =============================
+       ELEMENTS TO ENABLE / DISABLE
+       ============================= */
 
     const fieldsToEnable = [
 
@@ -5877,6 +5886,10 @@ function updateMemberFormState(){
     ];
 
 
+    /* =============================
+       APPLY DISABLED STATE
+       ============================= */
+
     fieldsToEnable.forEach(
         function(id){
 
@@ -5893,6 +5906,23 @@ function updateMemberFormState(){
         }
     );
 
+
+    /* =============================
+       PHOTO BUTTON
+       ============================= */
+
+    const photoBtn =
+        document.getElementById(
+            "memberPhotoBtn"
+        );
+
+    if(photoBtn){
+
+        photoBtn.disabled =
+            !basicDetailsReady;
+
+    }
+
 }
        if(memberName){
 
@@ -5905,6 +5935,14 @@ function updateMemberFormState(){
        if(memberGender){
 
     memberGender.addEventListener(
+        "change",
+        updateMemberFormState
+    );
+
+}
+       if(memberDob){
+
+    memberDob.addEventListener(
         "change",
         updateMemberFormState
     );
