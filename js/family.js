@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5821,7 +5820,101 @@ const memberDob =
     document.getElementById(
         "memberDob"
     );
+/* =================================
+   ENABLE FORM AFTER NAME + GENDER + DOB
+   ================================= */
 
+const memberName =
+    document.getElementById(
+        "memberName"
+    );
+
+const memberGender =
+    document.getElementById(
+        "memberGender"
+    );
+
+
+function updateMemberFormState(){
+
+    const nameReady =
+        memberName &&
+        memberName.value.trim() !== "";
+
+    const genderReady =
+        memberGender &&
+        memberGender.value !== "";
+
+    const dobReady =
+        memberDob &&
+        memberDob.value !== "";
+
+    const basicDetailsReady =
+        nameReady &&
+        genderReady &&
+        dobReady;
+
+
+    const fieldsToEnable = [
+
+        "memberPhotoBtn",
+
+        "marriedYes",
+        "marriedNo",
+
+        "memberPartner",
+
+        "memberFather",
+        "memberMother",
+
+        "memberLifeStatus",
+
+        "memberNativePlace",
+        "memberOccupation",
+        "memberQualification",
+
+        "memberBloodGroup",
+        "memberMobileNumber",
+        "memberCurrentPlace",
+
+        "memberDeceasedDate"
+
+    ];
+
+
+    fieldsToEnable.forEach(
+        function(id){
+
+            const element =
+                document.getElementById(id);
+
+            if(element){
+
+                element.disabled =
+                    !basicDetailsReady;
+
+            }
+
+        }
+    );
+
+}
+       if(memberName){
+
+    memberName.addEventListener(
+        "input",
+        updateMemberFormState
+    );
+
+}
+       if(memberGender){
+
+    memberGender.addEventListener(
+        "change",
+        updateMemberFormState
+    );
+
+}
 const marriedYes =
     document.getElementById(
         "marriedYes"
