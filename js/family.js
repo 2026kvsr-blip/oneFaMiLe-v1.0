@@ -5224,7 +5224,31 @@ function bindAddMemberButton(){
 
             </div>
 
+<!-- =================================
+     MARRIAGE DATE
+     ================================= -->
 
+<div
+    id="marriageDateGroup"
+    class="common-form-group"
+    style="display:none;">
+
+    <label
+        class="common-form-label"
+        for="memberMarriageDate">
+        Marriage Date
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="date"
+        id="memberMarriageDate"
+        class="common-form-input">
+
+</div>
             <!-- =================================
                  PARTNER
                  ================================= -->
