@@ -8434,14 +8434,123 @@ familyMembers.push(
     newMember
 );
 
-
+       
 localStorage.setItem(
     "familyMembers",
     JSON.stringify(
         familyMembers
     )
 );
+/* ================================
+   NEW MEMBER ADDED → NOT FOR EDIT
+   ================================ */
 
+/* ================================
+   CHANGE PAGE TITLE
+   ================================ */
+
+const addMemberPageTitle =
+    document.querySelector(
+        ".page-title"
+    );
+
+if(addMemberPageTitle){
+
+    addMemberPageTitle.textContent =
+        "New Member added";
+
+}
+
+
+/* ================================
+   DISABLE ALL MEMBER FIELDS
+   ================================ */
+
+const memberFields =
+    [
+
+        "memberName",
+        "memberGender",
+        "memberDob",
+
+        "memberPhotoBtn",
+
+        "marriedYes",
+        "marriedNo",
+
+        "confirmMarriageYes",
+        "confirmMarriageNo",
+
+        "memberPartner",
+        "memberFather",
+        "memberMother",
+
+        "memberLifeStatus",
+        "memberNativePlace",
+        "memberOccupation",
+        "memberQualification",
+
+        "memberBloodGroup",
+        "memberMobileNumber",
+        "memberCurrentPlace",
+
+        "memberDeceasedDate",
+        "memberAboutMe"
+
+    ];
+
+
+memberFields.forEach(
+    function(id){
+
+        const field =
+            document.getElementById(id);
+
+        if(field){
+
+            field.disabled =
+                true;
+
+        }
+
+    }
+);
+
+
+/* ================================
+   HIDE SAVE BUTTON
+   ================================ */
+
+if(saveMemberBtn){
+
+    saveMemberBtn.style.display =
+        "none";
+
+}
+
+
+/* ================================
+   BACK → ADD MEMBER
+   ================================ */
+
+if(memberBackBtn){
+
+    memberBackBtn.onclick =
+        function(){
+
+            console.log(
+                "NEW MEMBER → ADD MEMBER"
+            );
+
+            if(addMemberBtn){
+
+                addMemberBtn.click();
+
+            }
+
+        };
+
+}
         saveMemberBtn.disabled =
             false;
 
