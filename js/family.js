@@ -6328,6 +6328,31 @@ function updateMemberFormState(){
     }
 
 }
+       /* ================================
+   MOBILE NUMBER - NUMBERS ONLY
+   ================================ */
+
+const memberMobileNumber =
+    document.getElementById(
+        "memberMobileNumber"
+    );
+
+if(memberMobileNumber){
+
+    memberMobileNumber.addEventListener(
+        "input",
+        function(){
+
+            this.value =
+                this.value.replace(
+                    /[^0-9]/g,
+                    ""
+                );
+
+        }
+    );
+
+}
        if(memberName){
 
     memberName.addEventListener(
@@ -7936,6 +7961,25 @@ if(deceasedDate){
 
     }
 
+/* ================================
+   DECEASED DATE BEFORE DOB
+   ================================ */
+
+if(
+    selectedDeceasedDate <
+    selectedDob
+){
+
+    showMessage(
+        "Date cannot be before Date of Birth.",
+        "warning",
+        3000
+    );
+
+    return;
+
+}
+   
 }
 
    
@@ -8553,22 +8597,77 @@ const memberFields =
     ];
 
 
+/* ================================
+   NEW MEMBER → TEXT ONLY
+   REMOVE INPUT BOXES
+   ================================ */
+
+const memberFields =
+    [
+
+        "memberName",
+        "memberGender",
+        "memberDob",
+
+        "memberPartner",
+        "memberFather",
+        "memberMother",
+
+        "memberLifeStatus",
+        "memberNativePlace",
+        "memberOccupation",
+        "memberQualification",
+
+        "memberBloodGroup",
+        "memberMobileNumber",
+        "memberCurrentPlace",
+
+        "memberDeceasedDate",
+        "memberAboutMe"
+
+    ];
+
+
 memberFields.forEach(
     function(id){
 
         const field =
             document.getElementById(id);
 
-        if(field){
-
-            field.disabled =
-                true;
-
+        if(!field){
+            return;
         }
+
+
+        /* Keep entered value */
+
+        const value =
+            field.value || "";
+
+
+        /* Create text */
+
+        const text =
+            document.createElement(
+                "span"
+            );
+
+        text.className =
+            "common-form-value";
+
+
+        text.textContent =
+            value || "--------";
+
+
+        /* Replace box */
+
+        field.replaceWith(
+            text
+        );
 
     }
 );
-
 
 /* ================================
    HIDE SAVE BUTTON
