@@ -8848,6 +8848,7 @@ const maritalStatusGroup =
         ".common-form-group"
     );
 
+
 const selectedMarital =
     document.querySelector(
         'input[name="memberMaritalStatus"]:checked'
@@ -8857,39 +8858,60 @@ const selectedMarital =
 if(maritalStatusGroup){
 
     /* ================================
-       HIDE ONLY YES / NO CONTROLS
+       GET SELECTED VALUE
        ================================ */
 
-    maritalStatusGroup
-        .querySelectorAll(
-            'input[name="memberMaritalStatus"]'
-        )
-        .forEach(
-            function(input){
-
-                input.style.display =
-                    "none";
-
-            }
-        );
-
-
-    maritalStatusGroup
-        .querySelectorAll(
-            'label[for="marriedYes"], label[for="marriedNo"]'
-        )
-        .forEach(
-            function(label){
-
-                label.style.display =
-                    "none";
-
-            }
-        );
+    const maritalValue =
+        selectedMarital
+            ? String(
+                selectedMarital.value || ""
+              ).trim()
+            : "";
 
 
     /* ================================
-       REMOVE OLD DISPLAY TEXT
+       HIDE ALL MARITAL CONTROLS
+       KEEP ONLY:
+       Marital Status label
+       :
+       ================================ */
+
+    Array.from(
+        maritalStatusGroup.children
+    ).forEach(
+        function(element){
+
+            if(
+                element.classList.contains(
+                    "common-form-label"
+                )
+            ){
+
+                return;
+
+            }
+
+
+            if(
+                element.classList.contains(
+                    "common-form-colon"
+                )
+            ){
+
+                return;
+
+            }
+
+
+            element.style.display =
+                "none";
+
+        }
+    );
+
+
+    /* ================================
+       REMOVE OLD DISPLAY
        ================================ */
 
     const oldMaritalDisplay =
@@ -8905,7 +8927,7 @@ if(maritalStatusGroup){
 
 
     /* ================================
-       CREATE SINGLE STATUS TEXT
+       CREATE SINGLE TEXT
        ================================ */
 
     const maritalDisplay =
@@ -8916,11 +8938,14 @@ if(maritalStatusGroup){
     maritalDisplay.className =
         "common-form-value saved-marital-status";
 
-    maritalDisplay.textContent =
-        selectedMarital
-            ? selectedMarital.value
-            : "--------";
 
+    maritalDisplay.textContent =
+        maritalValue || "--------";
+
+
+    /* ================================
+       ADD ONLY SELECTED STATUS
+       ================================ */
 
     maritalStatusGroup.appendChild(
         maritalDisplay
