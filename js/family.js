@@ -1,3 +1,4 @@
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -6326,6 +6327,120 @@ function updateMemberFormState(){
 
     }
 
+   /* ================================
+   LIFE STATUS CHANGE
+   CLEAR DECEASED DATE WHEN LIVING
+   ================================ */
+
+const lifeStatusField =
+    document.getElementById(
+        "memberLifeStatus"
+    );
+
+const deceasedDateField =
+    document.getElementById(
+        "memberDeceasedDate"
+    );
+
+
+if(lifeStatusField){
+
+    lifeStatusField.onchange =
+        function(){
+
+            const status =
+                String(
+                    lifeStatusField.value || ""
+                )
+                .trim()
+                .toLowerCase();
+
+
+            /* =========================
+               LIVING
+               ========================= */
+
+            if(
+                status === "living"
+            ){
+
+                /* CLEAR OLD DECEASED DATE */
+
+                if(deceasedDateField){
+
+                    deceasedDateField.value =
+                        "";
+
+                }
+
+
+                /* DISABLE DECEASED DATE */
+
+                if(deceasedDateField){
+
+                    deceasedDateField.disabled =
+                        true;
+
+                }
+
+
+                /* HIDE DECEASED DATE ROW */
+
+                const deceasedGroup =
+                    deceasedDateField
+                        ?.closest(
+                            ".common-form-group"
+                        );
+
+                if(deceasedGroup){
+
+                    deceasedGroup.style.display =
+                        "none";
+
+                }
+
+            }
+
+
+            /* =========================
+               DECEASED
+               ========================= */
+
+            else if(
+                status === "deceased"
+            ){
+
+                /* ENABLE DECEASED DATE */
+
+                if(deceasedDateField){
+
+                    deceasedDateField.disabled =
+                        false;
+
+                }
+
+
+                /* SHOW DECEASED DATE ROW */
+
+                const deceasedGroup =
+                    deceasedDateField
+                        ?.closest(
+                            ".common-form-group"
+                        );
+
+                if(deceasedGroup){
+
+                    deceasedGroup.style.display =
+                        "";
+
+                }
+
+            }
+
+        };
+
+}
+
 }
        /* ================================
    MOBILE NUMBER - NUMBERS ONLY
@@ -8415,13 +8530,34 @@ params.append(
     )?.value || ""
 );
 
+/* ================================
+   DECEASED DATE
+   ================================ */
+
+const currentLifeStatus =
+    String(
+        document.getElementById(
+            "memberLifeStatus"
+        )?.value || ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+const currentDeceasedDate =
+    currentLifeStatus === "deceased"
+        ? (
+            document.getElementById(
+                "memberDeceasedDate"
+            )?.value || ""
+        )
+        : "";
+
+
 params.append(
     "deceasedDate",
-    document.getElementById(
-        "memberDeceasedDate"
-    )?.value || ""
+    currentDeceasedDate
 );
-
 params.append(
     "aboutMe",
     document.getElementById(
