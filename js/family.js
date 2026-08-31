@@ -7889,6 +7889,56 @@ if(selectedDob > todayDate){
 
 }
 
+/* ================================
+   DECEASED DATE VALIDATION
+   ================================ */
+
+const deceasedDateField =
+    document.getElementById(
+        "memberDeceasedDate"
+    );
+
+const deceasedDate =
+    deceasedDateField
+        ? deceasedDateField.value
+        : "";
+
+
+if(deceasedDate){
+
+    const selectedDeceasedDate =
+        new Date(deceasedDate);
+
+    const todayDeceasedDate =
+        new Date();
+
+    todayDeceasedDate.setHours(
+        0, 0, 0, 0
+    );
+
+    selectedDeceasedDate.setHours(
+        0, 0, 0, 0
+    );
+
+
+    if(
+        selectedDeceasedDate >
+        todayDeceasedDate
+    ){
+
+        showMessage(
+            "Future date not allowed.",
+            "warning",
+            3000
+        );
+
+        return;
+
+    }
+
+}
+
+   
     /* ================================
        MARITAL STATUS
        ================================ */
@@ -8307,6 +8357,24 @@ params.append(
             3000
         );
 
+
+ /* ================================
+   CHANGE TITLE AFTER SAVE
+   ================================ */
+
+const addMemberPageTitle =
+    document.querySelector(
+        "h2.page-title"
+    );
+
+if(addMemberPageTitle){
+
+    addMemberPageTitle.innerHTML =
+        "New Member added";
+
+}
+}
+       
 /* ================================
    DISPLAY GENERATED MEMBER ID
    ================================ */
@@ -8449,19 +8517,21 @@ localStorage.setItem(
    CHANGE PAGE TITLE
    ================================ */
 
+/* ================================
+   CHANGE TITLE AFTER SAVE
+   ================================ */
+
 const addMemberPageTitle =
     document.querySelector(
-        ".page-title"
+        "h2.page-title"
     );
 
 if(addMemberPageTitle){
 
-    addMemberPageTitle.textContent =
+    addMemberPageTitle.innerHTML =
         "New Member added";
 
 }
-
-
 /* ================================
    DISABLE ALL MEMBER FIELDS
    ================================ */
