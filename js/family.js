@@ -8160,7 +8160,70 @@ const memberId = "";
         "partnerId",
         partnerId
     );
+/* ================================
+   ADDITIONAL MEMBER DETAILS
+   ================================ */
+params.append(
+    "lifeStatus",
+    document.getElementById(
+        "memberLifeStatus"
+    )?.value || ""
+);
+params.append(
+    "nativePlace",
+    document.getElementById(
+        "memberNativePlace"
+    )?.value || ""
+);
 
+params.append(
+    "occupation",
+    document.getElementById(
+        "memberOccupation"
+    )?.value || ""
+);
+
+params.append(
+    "qualification",
+    document.getElementById(
+        "memberQualification"
+    )?.value || ""
+);
+
+params.append(
+    "bloodGroup",
+    document.getElementById(
+        "memberBloodGroup"
+    )?.value || ""
+);
+
+params.append(
+    "mobileNumber",
+    document.getElementById(
+        "memberMobileNumber"
+    )?.value || ""
+);
+
+params.append(
+    "currentPlace",
+    document.getElementById(
+        "memberCurrentPlace"
+    )?.value || ""
+);
+
+params.append(
+    "deceasedDate",
+    document.getElementById(
+        "memberDeceasedDate"
+    )?.value || ""
+);
+
+params.append(
+    "aboutMe",
+    document.getElementById(
+        "memberAboutMe"
+    )?.value || ""
+);
 
     params.append(
         "createdBy",
