@@ -1596,3 +1596,44 @@
     overflow-wrap: break-word;
 
 }
+/* =================================
+   NEW MEMBER - TEXT ONLY
+   ================================= */
+
+.common-form-value{
+    display: block;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
+    padding: 4px 0;
+
+    background: transparent;
+    border: none;
+    box-shadow: none;
+
+    color: #000;
+
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+
+/* =================================
+   ABOUT ME - FULL TEXT WRAP
+   ================================= */
+
+.member-about-me-value{
+
+    white-space: pre-wrap;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
+
+    line-height: 1.4;
+
+    min-height: 28px;
+
+}
