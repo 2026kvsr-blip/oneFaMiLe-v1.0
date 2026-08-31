@@ -1,5 +1,3 @@
-
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -8070,6 +8068,63 @@ console.log(
     maritalField
         ? String(maritalField.value || "").trim()
         : "";
+
+
+   /* ================================
+   MARRIAGE DATE
+   ================================ */
+
+const marriageDateField =
+    document.getElementById(
+        "memberMarriageDate"
+    );
+
+const marriageDate =
+    marriageDateField
+        ? marriageDateField.value
+        : "";
+
+   /* ================================
+   DECEASED DATE AFTER MARRIAGE DATE
+   ================================ */
+
+if(
+    maritalStatus.toLowerCase() === "yes" &&
+    deceasedDate &&
+    marriageDate
+){
+
+    const selectedMarriageDate =
+        new Date(marriageDate);
+
+    const selectedDeceasedDate =
+        new Date(deceasedDate);
+
+    selectedMarriageDate.setHours(
+        0, 0, 0, 0
+    );
+
+    selectedDeceasedDate.setHours(
+        0, 0, 0, 0
+    );
+
+
+    if(
+        selectedDeceasedDate <=
+        selectedMarriageDate
+    ){
+
+        showMessage(
+            "Deceased Date must be after Marriage Date.",
+            "warning",
+            3000
+        );
+
+        return;
+
+    }
+
+}
 /* ================================
    UNDER 18 MARRIAGE CONFIRMATION
    ================================ */
@@ -8637,9 +8692,6 @@ const memberFields =
 
         "memberPhotoBtn",
 
-        "marriedYes",
-        "marriedNo",
-
         "memberPartner",
         "memberMarriageDate",
         "memberFather",
@@ -8659,14 +8711,99 @@ const memberFields =
 
     ];
 
+/* ================================
+   MARITAL STATUS → SINGLE TEXT
+   ================================ */
 
+const maritalStatusGroup =
+    document.getElementById(
+        "marriedYes"
+    )?.closest(
+        ".common-form-group"
+    );
+
+const selectedMarital =
+    document.querySelector(
+        'input[name="memberMaritalStatus"]:checked'
+    );
+
+const maritalDisplay =
+    document.createElement(
+        "span"
+    );
+
+maritalDisplay.className =
+    "common-form-value";
+
+maritalDisplay.textContent =
+    selectedMarital
+        ? selectedMarital.value
+        : "--------";
+
+
+if(maritalStatusGroup){
+
+    maritalStatusGroup
+        .querySelectorAll(
+            "input"
+        )
+        .forEach(
+            function(input){
+
+                input.style.display =
+                    "none";
+
+            }
+        );
+
+
+    maritalStatusGroup
+        .querySelectorAll(
+            "label"
+        )
+        .forEach(
+            function(label){
+
+                label.style.display =
+                    "none";
+
+            }
+        );
+
+
+    maritalStatusGroup.appendChild(
+        maritalDisplay
+    );
+
+}
+       /* ================================
+   HIDE MARRIAGE CONFIRMATION
+   AFTER SAVE
+   ================================ */
+
+const confirmMarriageYesField =
+    document.getElementById(
+        "confirmMarriageYes"
+    );
+
+if(confirmMarriageYesField){
+
+    const confirmationGroup =
+        confirmMarriageYesField.closest(
+            ".common-form-group"
+        );
+
+    if(confirmationGroup){
+
+        confirmationGroup.style.display =
+            "none";
+
+    }
+
+}
 /* ================================
    NEW MEMBER → TEXT ONLY
    REMOVE INPUT BOXES
-   ================================ */
-
-/* ================================
-   NEW MEMBER → TEXT ONLY
    ================================ */
 
 memberFields.forEach(
