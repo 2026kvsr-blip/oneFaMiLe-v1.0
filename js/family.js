@@ -8373,7 +8373,16 @@ if(addMemberPageTitle){
         "New Member added";
 
 }
-}
+
+
+
+
+       
+    }
+
+
+
+
 }      
 /* ================================
    DISPLAY GENERATED MEMBER ID
