@@ -7982,7 +7982,71 @@ if(
    
 }
 
-   
+   /* ================================
+   MARRIAGE DATE VALIDATION
+   ================================ */
+
+const marriageDateField =
+    document.getElementById(
+        "memberMarriageDate"
+    );
+
+const marriageDate =
+    marriageDateField
+        ? marriageDateField.value
+        : "";
+
+
+if(marriageDate){
+
+    const selectedMarriageDate =
+        new Date(marriageDate);
+
+    selectedMarriageDate.setHours(
+        0, 0, 0, 0
+    );
+
+
+    /* ================================
+       MARRIAGE DATE BEFORE DOB
+       ================================ */
+
+    if(
+        selectedMarriageDate <
+        selectedDob
+    ){
+
+        showMessage(
+            "Marriage Date cannot be before Date of Birth.",
+            "warning",
+            3000
+        );
+
+        return;
+
+    }
+
+
+    /* ================================
+       FUTURE MARRIAGE DATE
+       ================================ */
+
+    if(
+        selectedMarriageDate >
+        todayDate
+    ){
+
+        showMessage(
+            "Future date not allowed.",
+            "warning",
+            3000
+        );
+
+        return;
+
+    }
+
+}
     /* ================================
        MARITAL STATUS
        ================================ */
@@ -8602,6 +8666,9 @@ const memberFields =
    REMOVE INPUT BOXES
    ================================ */
 
+/* ================================
+   NEW MEMBER → TEXT ONLY
+   ================================ */
 
 memberFields.forEach(
     function(id){
@@ -8614,13 +8681,48 @@ memberFields.forEach(
         }
 
 
-        /* Keep entered value */
+        /* ================================
+           GET DISPLAY VALUE
+           ================================ */
 
-        const value =
-            field.value || "";
+        let displayValue = "";
 
 
-        /* Create text */
+        /* SELECT FIELD */
+
+        if(
+            field.tagName ===
+            "SELECT"
+        ){
+
+            const selectedOption =
+                field.options[
+                    field.selectedIndex
+                ];
+
+            if(selectedOption){
+
+                displayValue =
+                    selectedOption.textContent
+                        .trim();
+
+            }
+
+        }
+
+        /* INPUT / TEXTAREA */
+
+        else{
+
+            displayValue =
+                field.value || "";
+
+        }
+
+
+        /* ================================
+           CREATE TEXT
+           ================================ */
 
         const text =
             document.createElement(
@@ -8630,12 +8732,29 @@ memberFields.forEach(
         text.className =
             "common-form-value";
 
-
         text.textContent =
-            value || "--------";
+            displayValue || "--------";
 
 
-        /* Replace box */
+        /* ================================
+           ABOUT ME
+           ================================ */
+
+        if(
+            id ===
+            "memberAboutMe"
+        ){
+
+            text.classList.add(
+                "member-about-me-value"
+            );
+
+        }
+
+
+        /* ================================
+           REPLACE BOX
+           ================================ */
 
         field.replaceWith(
             text
