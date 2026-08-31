@@ -8602,31 +8602,6 @@ const memberFields =
    REMOVE INPUT BOXES
    ================================ */
 
-const memberFields =
-    [
-
-        "memberName",
-        "memberGender",
-        "memberDob",
-
-        "memberPartner",
-        "memberFather",
-        "memberMother",
-
-        "memberLifeStatus",
-        "memberNativePlace",
-        "memberOccupation",
-        "memberQualification",
-
-        "memberBloodGroup",
-        "memberMobileNumber",
-        "memberCurrentPlace",
-
-        "memberDeceasedDate",
-        "memberAboutMe"
-
-    ];
-
 
 memberFields.forEach(
     function(id){
