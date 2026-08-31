@@ -8377,13 +8377,8 @@ if(addMemberPageTitle){
 
 
 
-       
-    }
 
-
-
-
-}      
+    
 /* ================================
    DISPLAY GENERATED MEMBER ID
    ================================ */
