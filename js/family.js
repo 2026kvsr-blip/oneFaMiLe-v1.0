@@ -8074,16 +8074,6 @@ console.log(
    MARRIAGE DATE
    ================================ */
 
-const marriageDateField =
-    document.getElementById(
-        "memberMarriageDate"
-    );
-
-const marriageDate =
-    marriageDateField
-        ? marriageDateField.value
-        : "";
-
    /* ================================
    DECEASED DATE AFTER MARRIAGE DATE
    ================================ */
