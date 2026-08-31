@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -8639,10 +8640,8 @@ const memberFields =
         "marriedYes",
         "marriedNo",
 
-        "confirmMarriageYes",
-        "confirmMarriageNo",
-
         "memberPartner",
+        "memberMarriageDate",
         "memberFather",
         "memberMother",
 
