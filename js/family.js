@@ -8717,25 +8717,16 @@ const selectedMarital =
         'input[name="memberMaritalStatus"]:checked'
     );
 
-const maritalDisplay =
-    document.createElement(
-        "span"
-    );
-
-maritalDisplay.className =
-    "common-form-value";
-
-maritalDisplay.textContent =
-    selectedMarital
-        ? selectedMarital.value
-        : "--------";
-
 
 if(maritalStatusGroup){
 
+    /* ================================
+       HIDE ONLY YES / NO CONTROLS
+       ================================ */
+
     maritalStatusGroup
         .querySelectorAll(
-            "input"
+            'input[name="memberMaritalStatus"]'
         )
         .forEach(
             function(input){
@@ -8749,7 +8740,7 @@ if(maritalStatusGroup){
 
     maritalStatusGroup
         .querySelectorAll(
-            "label"
+            'label[for="marriedYes"], label[for="marriedNo"]'
         )
         .forEach(
             function(label){
@@ -8761,11 +8752,46 @@ if(maritalStatusGroup){
         );
 
 
+    /* ================================
+       REMOVE OLD DISPLAY TEXT
+       ================================ */
+
+    const oldMaritalDisplay =
+        maritalStatusGroup.querySelector(
+            ".saved-marital-status"
+        );
+
+    if(oldMaritalDisplay){
+
+        oldMaritalDisplay.remove();
+
+    }
+
+
+    /* ================================
+       CREATE SINGLE STATUS TEXT
+       ================================ */
+
+    const maritalDisplay =
+        document.createElement(
+            "span"
+        );
+
+    maritalDisplay.className =
+        "common-form-value saved-marital-status";
+
+    maritalDisplay.textContent =
+        selectedMarital
+            ? selectedMarital.value
+            : "--------";
+
+
     maritalStatusGroup.appendChild(
         maritalDisplay
     );
 
 }
+       
        /* ================================
    HIDE MARRIAGE CONFIRMATION
    AFTER SAVE
@@ -8816,26 +8842,38 @@ memberFields.forEach(
 
         /* SELECT FIELD */
 
-        if(
-            field.tagName ===
-            "SELECT"
-        ){
+        /* SELECT FIELD */
 
-            const selectedOption =
-                field.options[
-                    field.selectedIndex
-                ];
+if(
+    field.tagName ===
+    "SELECT"
+){
 
-            if(selectedOption){
+    const selectedOption =
+        field.options[
+            field.selectedIndex
+        ];
 
-                displayValue =
-                    selectedOption.textContent
-                        .trim();
 
-            }
+    if(
+        selectedOption &&
+        field.selectedIndex > 0 &&
+        selectedOption.value
+    ){
 
-        }
+        displayValue =
+            selectedOption.textContent
+                .trim();
 
+    }
+    else{
+
+        displayValue =
+            "";
+
+    }
+
+}
         /* INPUT / TEXTAREA */
 
         else{
