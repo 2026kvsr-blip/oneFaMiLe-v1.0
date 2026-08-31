@@ -8358,27 +8358,6 @@ params.append(
         );
 
 
- /* ================================
-   CHANGE TITLE AFTER SAVE
-   ================================ */
-
-const addMemberPageTitle =
-    document.querySelector(
-        "h2.page-title"
-    );
-
-if(addMemberPageTitle){
-
-    addMemberPageTitle.innerHTML =
-        "New Member added";
-
-}
-
-
-
-
-
-    
 /* ================================
    DISPLAY GENERATED MEMBER ID
    ================================ */
