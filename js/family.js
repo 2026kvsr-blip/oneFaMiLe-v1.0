@@ -5697,7 +5697,7 @@ function bindAddMemberButton(){
     class="common-form-input"
     maxlength="500"
     rows="10"
-    placeholder="Write something about yourself..."
+    placeholder="Write about yourself..."
     autocomplete="off"></textarea>
 </div>
 <!-- =================================
