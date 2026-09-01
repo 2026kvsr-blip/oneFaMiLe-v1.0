@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -9704,14 +9705,39 @@ if(savedFamily){
 
     if(newFamilyNameField){
 
-        newFamilyNameField.value =
-            savedFamily.familyName || "";
+    const familyNameText =
+        document.createElement("span");
 
-        newFamilyNameField.disabled =
-            true;
+    familyNameText.id =
+        "newFamilyName";
+
+    familyNameText.className =
+        "family-value";
+
+    familyNameText.textContent =
+        savedFamily.familyName || "--------";
+
+
+    const familyNameContainer =
+        newFamilyNameField.closest(
+            ".family-name-field"
+        );
+
+    if(familyNameContainer){
+
+        familyNameContainer.replaceWith(
+            familyNameText
+        );
+
+    }else{
+
+        newFamilyNameField.replaceWith(
+            familyNameText
+        );
 
     }
 
+}
 
     const statusField =
         document.getElementById(
