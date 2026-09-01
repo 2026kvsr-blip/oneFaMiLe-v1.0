@@ -1,6 +1,5 @@
 /* =========
 
-
 ============================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -1637,27 +1636,5 @@
     line-height: 1.4;
 
     min-height: 28px;
-
-}
-#newFamilyId{
-    color:#B5B5B5 !important;
-}
-#newFamilyName{
-
-    color:#B5B5B5 !important;
-
-    background:none !important;
-
-    border:none !important;
-
-    box-shadow:none !important;
-
-    outline:none !important;
-
-    padding:0 !important;
-
-    margin:0 !important;
-
-    font-weight:400;
 
 }
