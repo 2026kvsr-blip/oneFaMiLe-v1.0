@@ -1401,12 +1401,15 @@ if(homeHeading){
 }
 
 }
+
 function showPage(html){
 
     hideNavigation();
 
 
-    /* HIDE SIDE MENU */
+    /* ================================
+       HIDE SIDE MENU
+       ================================ */
 
     const menuBtn =
         document.getElementById("menuBtn");
@@ -1418,13 +1421,76 @@ function showPage(html){
     }
 
 
+    /* ================================
+       RESET SCROLL POSITION
+       ================================ */
+
     homeContent.scrollTop = 0;
 
     window.scrollTo(0,0);
 
+
+    /* ================================
+       LOAD NEW PAGE
+       ================================ */
+
     homeContent.innerHTML = html;
 
+
+    /* ================================
+       RESET MOBILE ZOOM
+       ================================ */
+
+    const viewport =
+        document.querySelector(
+            'meta[name="viewport"]'
+        );
+
+    if(viewport){
+
+        const originalContent =
+            viewport.getAttribute(
+                "content"
+            );
+
+        viewport.setAttribute(
+            "content",
+            "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+        );
+
+
+        setTimeout(
+            function(){
+
+                viewport.setAttribute(
+                    "content",
+                    originalContent
+                );
+
+            },
+            100
+        );
+
+    }
+
+
+    /* ================================
+       SCROLL TO TOP AGAIN
+       ================================ */
+
+    setTimeout(
+        function(){
+
+            homeContent.scrollTop = 0;
+
+            window.scrollTo(0,0);
+
+        },
+        50
+    );
+
 }
+
 function pageTitle(title,image){
 
 return `
