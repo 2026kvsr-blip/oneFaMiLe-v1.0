@@ -3,7 +3,6 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
-
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -9733,7 +9732,80 @@ backResetPassCodeBtn.onclick = ()=>{
     document.querySelector("#signupOTPPage input[type='text']").value = "";
 
 };
+/* =====================================
+   FIX WELCOME PAGE ON INITIAL LOAD
+   ===================================== */
 
+function fixWelcomeLayout(){
+
+    const welcomePage =
+        document.getElementById(
+            "welcomePage"
+        );
+
+    const welcomeBox =
+        document.querySelector(
+            "#welcomePage .welcome-box"
+        );
+
+    if(
+        !welcomePage ||
+        !welcomeBox
+    ){
+        return;
+    }
+
+
+    /* Force browser to calculate
+       the current viewport first */
+
+    requestAnimationFrame(
+        function(){
+
+            requestAnimationFrame(
+                function(){
+
+                    welcomePage.style.height =
+                        "calc(100dvh - 140px)";
+
+                    welcomeBox.style.height =
+                        "100%";
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================
+   INITIAL APP LOAD
+   ===================================== */
+
+window.addEventListener(
+    "load",
+    function(){
+
+        fixWelcomeLayout();
+
+    }
+);
+
+
+/* =====================================
+   MOBILE VIEWPORT CHANGE
+   ===================================== */
+
+window.addEventListener(
+    "resize",
+    function(){
+
+        fixWelcomeLayout();
+
+    }
+);
 
 /* ======================
 APP START
