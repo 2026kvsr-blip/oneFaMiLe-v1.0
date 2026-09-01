@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -9972,14 +9971,39 @@ localStorage.setItem(
 
             if(familyNameInput){
 
-                familyNameInput.value =
-                    result.familyName;
+    const familyNameText =
+        document.createElement("span");
 
-                familyNameInput.disabled =
-                    true;
+    familyNameText.id =
+        "newFamilyName";
 
-            }
+    familyNameText.className =
+        "family-value";
 
+    familyNameText.textContent =
+        result.familyName || "--------";
+
+
+    const familyNameContainer =
+        familyNameInput.closest(
+            ".family-name-field"
+        );
+
+    if(familyNameContainer){
+
+        familyNameContainer.replaceWith(
+            familyNameText
+        );
+
+    }else{
+
+        familyNameInput.replaceWith(
+            familyNameText
+        );
+
+    }
+
+}
 
             /* =========================
                SHOW MESSAGE
