@@ -9585,11 +9585,10 @@ const memberIdField =
             :
         </span>
 
-       <strong
-    id="newFamilyId"
-    style="color:#aaa;">
-    auto generation
-</strong>
+        <strong id="newFamilyId">
+            auto generation
+        </strong>
+
     </div>
 
 
@@ -9704,39 +9703,14 @@ if(savedFamily){
 
     if(newFamilyNameField){
 
-    const familyNameText =
-        document.createElement("span");
+        newFamilyNameField.value =
+            savedFamily.familyName || "";
 
-    familyNameText.id =
-        "newFamilyName";
-
-    familyNameText.className =
-        "family-value";
-
-    familyNameText.textContent =
-        savedFamily.familyName || "--------";
-
-
-    const familyNameContainer =
-        newFamilyNameField.closest(
-            ".family-name-field"
-        );
-
-    if(familyNameContainer){
-
-        familyNameContainer.replaceWith(
-            familyNameText
-        );
-
-    }else{
-
-        newFamilyNameField.replaceWith(
-            familyNameText
-        );
+        newFamilyNameField.disabled =
+            true;
 
     }
 
-}
 
     const statusField =
         document.getElementById(
@@ -9971,39 +9945,14 @@ localStorage.setItem(
 
             if(familyNameInput){
 
-    const familyNameText =
-        document.createElement("span");
+                familyNameInput.value =
+                    result.familyName;
 
-    familyNameText.id =
-        "newFamilyName";
+                familyNameInput.disabled =
+                    true;
 
-    familyNameText.className =
-        "family-value";
+            }
 
-    familyNameText.textContent =
-        result.familyName || "--------";
-
-
-    const familyNameContainer =
-        familyNameInput.closest(
-            ".family-name-field"
-        );
-
-    if(familyNameContainer){
-
-        familyNameContainer.replaceWith(
-            familyNameText
-        );
-
-    }else{
-
-        familyNameInput.replaceWith(
-            familyNameText
-        );
-
-    }
-
-}
 
             /* =========================
                SHOW MESSAGE
