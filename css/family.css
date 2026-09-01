@@ -1,5 +1,6 @@
-/* =========
-============================
+
+
+/* =====================================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
    ===================================== */
@@ -696,7 +697,7 @@
 }
 
 .relation-label{
-    width:70px;
+    width:100px;
     flex-shrink:0;
 }
 
@@ -756,9 +757,10 @@
    ===================================== */
 
 .relations-parents{
-    background:#fff4e6;
-    border-color:#d99a4a;
+    background:#eaf4ff;
+    border-color:#2a6eb0;
 }
+
 
 
 /* =====================================
@@ -766,8 +768,8 @@
    ===================================== */
 
 .relations-partner{
-    background:#fdeaf1;
-    border-color:#d65a86;
+    background:#f4ecff;
+    border-color:#8a4bd8;
 }
 
 
@@ -786,13 +788,19 @@
    ===================================== */
 
 .relations-siblings{
-    background:#f3e8ff;
-    border-color:#9b6bd3;
+    background:#fff3df;
+    border-color:#e58a20;
 }
+
 
 /* =====================================
    IN-LAWS
    ===================================== */
+
+.relations-inlaws{
+    background:#fdeaf1;
+    border-color:#d65a86;
+}
 
 
 /* =====================================
@@ -800,8 +808,8 @@
    ===================================== */
 
 .relations-grandparents{
-    background:#e9f7ef;
-    border-color:#58a878;
+    background:#e8f7fa;
+    border-color:#2999aa;
 }
 .relations-section{
     display:none;
@@ -1132,455 +1140,4 @@
 .relations-no-match{
     padding:10px 12px;
     color:#777;
-}
-.relations-member-header{
-    display:flex;
-    align-items:center;
-    gap:15px;
-}
-.relations-member-header{
-    display:flex;
-    align-items:center;
-    gap:12px;
-}
-
-#relationMemberPhoto{
-    width:60px;
-    height:60px;
-    flex:0 0 60px;
-    border-radius:50%;
-    overflow:hidden;
-}
-
-#relationMemberPhoto img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-}
-
-#relationMemberName{
-    display:flex;
-    align-items:center;
-}
-
-#relationMemberGender{
-    display:flex;
-    align-items:flex-end;
-}
-.relations-member-header{
-    display:flex;
-    align-items:center;
-    gap:12px;
-}
-
-#relationMemberPhoto{
-    width:60px;
-    height:60px;
-    flex:0 0 60px;
-    border-radius:50%;
-    overflow:hidden;
-}
-
-#relationMemberPhoto img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-}
-
-#relationMemberName{
-    font-weight:600;
-    line-height:22px;
-}
-
-#relationMemberGender{
-    margin-top:0;
-    font-size:14px;
-    line-height:22px;
-}
-.relations-member-header{
-    display:flex;
-    align-items:center;
-    gap:12px;
-}
-
-#relationMemberPhoto{
-    width:60px;
-    height:60px;
-    flex:0 0 60px;
-    border-radius:50%;
-    overflow:hidden;
-}
-
-#relationMemberPhoto img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-}
-
-#relationMemberName{
-    font-weight:600;
-    line-height:22px;
-}
-
-#relationMemberGender{
-    margin-top:0;
-    font-size:14px;
-    line-height:22px;
-}
-#relationMemberPhoto{
-    width:60px;
-    height:60px;
-    flex:0 0 60px;
-    border-radius:50%;
-    overflow:hidden;
-}
-
-#relationMemberPhoto img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-}
-.partner-label{
-    font-weight: bold;
-    color: #2A6EB0;
-    font-size:16px;
-
-}
-.relation-direct-row{
-    font-size:inherit;
-}
-.relation-father-siblings{
-    background:#fff8e1;
-    border-color:#d6a72c;
-}
-
-.relation-mother-siblings{
-    background:#fcebf3;
-    border-color:#d88aa8;
-}
-.relations-inlaws{
-    background:#fff0df;
-    border-color:#d9954d;
-}
-.relation-father-inlaw-siblings{
-        background:#fff0f5;          // background:#ffe8e8;
-        border-color:#c9829a;       //  border-color:#d66b6b;
-}
-.relation-mother-inlaw-siblings{
-    background:#f5eafb;
-    border-color:#a77bc5;
-}
-.relation-grand-grandparents{
-    background:#fff0df;
-    border-color:#d9954d;
-}
-.relation-child-title {
-    font-weight: 700;
-    font-size: 16px;
-}
-.relation-siblings-title{
-    font-weight: 700;
-    font-size: 16px;
-}
-
-.relation-siblings-subtitle{
-    font-weight: 700;
-    font-size: 16px;
-}
-/* =================================
-   IN-LAWS LABELS
-   ================================= */
-
-/* =================================
-   IN-LAWS
-   ================================= */
-
-.relations-inlaws .relation-row{
-    display: flex;
-    align-items: flex-start;
-}
-
-.relations-inlaws .relation-label{
-    width: 95px;
-    flex-shrink: 0;
-    white-space: nowrap;
-}
-
-.relations-inlaws .relation-colon{
-    margin-left: 8px;
-    margin-right: 8px;
-    white-space: nowrap;
-}
-/* =================================
-   GRAND PARENTS
-   ================================= */
-
-.relation-grandparents .grandparent-row{
-    display: flex;
-    align-items: flex-start;
-}
-
-
-.relation-grandparents .grandparent-label{
-    width: 115px;
-    flex-shrink: 0;
-    white-space: nowrap;
-}
-
-
-.relation-grandparents .grandparent-colon{
-    width: 20px;
-    flex-shrink: 0;
-    text-align: center;
-}
-
-
-.relation-grandparents .grandparent-value{
-    flex: 1;
-}
-
-
-.relation-grandparents > strong{
-    display: block;
-    font-weight: 700;
-    margin-bottom: 3px;
-}
-/* =================================
-   GRAND GRAND PARENTS ALIGNMENT
-   ================================= */
-
-
-.relation-grand-grandparents
-.grand-grandparent-row{
-    display: grid;
-    grid-template-columns: 130px 20px minmax(0, 1fr);
-    align-items: start;
-}
-
-
-.relation-grand-grandparents
-.grand-grandparent-label{
-    width: auto;
-    white-space: nowrap;
-}
-
-
-.relation-grand-grandparents
-.grand-grandparent-colon{
-    width: auto;
-    text-align: center;
-}
-
-
-.relation-grand-grandparents
-.grand-grandparent-value{
-    min-width: 0;
-    overflow-wrap: break-word;
-    word-break: normal;
-}
-.relation-grandparents{
-    background-color: #D9F2D9;
-}
-.relations-navigation{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
-/* =================================
-   ADD MEMBER - COMPACT FORM
-   ================================= */
-
-#memberName,
-#memberGender,
-#memberDob,
-#memberPartner,
-#memberFather,
-#memberMother,
-#memberLifeStatus,
-#memberNativePlace,
-#memberOccupation,
-#memberQualification,
-#memberBloodGroup,
-#memberMobileNumber,
-#memberCurrentPlace,
-#memberDeceasedDate{
-
-    height: 28px;
-    min-height: 28px;
-    padding: 4px 8px;
-    box-sizing: border-box;
-
-}
-#memberNativePlace,
-#memberOccupation,
-#memberQualification{
-
-    background: white !important;
-    color: #000 !important;
-    border: 1px solid #ccc !important;
-    box-shadow: none !important;
-
-}
-/* =================================
-   ADD MEMBER - REMOVE GREY BOX
-   ================================= */
-#memberAboutMe,
-#memberFather,
-#memberMother,
-#memberLifeStatus,
-#memberNativePlace,
-#memberOccupation,
-#memberQualification{
-
-    background: white !important;
-    color: #000 !important;
-    border: 1px solid #ccc !important;
-    box-shadow: none !important;
-
-}
-/* =================================
-   REDUCE ROW HEIGHT
-   ================================= */
-
-.common-form-group{
-
-    min-height: 32px;
-    margin-bottom: 6px;
-
-}
-
-
-/* =================================
-   MEMBER ID - NO BOX
-   ================================= */
-
-#memberId{
-
-    border: none !important;
-    background: transparent !important;
-    padding: 0 !important;
-    box-shadow: none !important;
-
-}
-/* =================================
-   ADD MEMBER - DISABLED FIELDS
-   KEEP NORMAL WHITE LOOK
-   ================================= */
-#memberAboutMe:disabled,
-#memberFather:disabled,
-#memberMother:disabled,
-#memberLifeStatus:disabled,
-#memberNativePlace:disabled,
-#memberOccupation:disabled,
-#memberQualification:disabled{
-
-    background-color: white !important;
-    color: #666 !important;
-    opacity: 1 !important;
-    -webkit-text-fill-color: #666 !important;
-
-}
-/* =================================
-   QUALIFICATION DROPDOWN
-   ================================= */
-
-.qualification-dropdown{
-
-    position: relative;
-    width: 100%;
-
-}
-
-
-.qualification-list{
-
-    display: none;
-
-    position: absolute;
-
-    top: 100%;
-    left: 0;
-    right: 0;
-
-    background: white;
-
-    border: 1px solid #ccc;
-
-    max-height: 180px;
-
-    overflow-y: auto;
-
-    z-index: 1000;
-
-}
-
-
-.qualification-option{
-
-    padding: 7px 10px;
-
-    cursor: pointer;
-
-    background: white;
-
-}
-
-
-.qualification-option:hover{
-
-    background: #f0f0f0;
-
-}
-/* =================================
-   OCCUPATION DROPDOWN
-   ================================= */
-
-.occupation-dropdown{
-
-    position: relative;
-    width: 100%;
-
-}
-
-.occupation-list{
-
-    display: none;
-
-    position: absolute;
-
-    top: 100%;
-    left: 0;
-    right: 0;
-
-    background: white;
-
-    border: 1px solid #ccc;
-
-    max-height: 180px;
-
-    overflow-y: auto;
-
-    z-index: 1000;
-
-}
-
-.occupation-option{
-
-    padding: 7px 10px;
-
-    cursor: pointer;
-
-    background: white;
-
-}
-
-.occupation-option:hover{
-
-    background: #f0f0f0;
-
 }
