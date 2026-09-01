@@ -1,3 +1,4 @@
+
 *{
 margin:0;
 padding:0;
@@ -131,22 +132,22 @@ overflow:hidden;
 
 .welcome-box{
 
-width:94%;
+    width:94%;
 
-margin:5px auto 0 auto;
+    margin:5px auto 0 auto;
 
-background:white;
+    background:white;
 
-border-radius:30px;
+    border-radius:30px;
 
-padding:20px 20px 30px 20px;
+    padding:20px 20px 30px 20px;
 
-height:calc(100vh - 280px);
+    height:auto;
 
-display:flex;
+    display:flex;
 
-flex-direction:column;
-overflow:hidden;
+    flex-direction:column;
+
 }
 #welcomeAbout{
 
