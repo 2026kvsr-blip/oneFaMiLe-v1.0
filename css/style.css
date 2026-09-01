@@ -142,12 +142,15 @@ overflow:hidden;
 
     padding:20px 20px 30px 20px;
 
+    min-height:0;
+
     height:auto;
 
     display:flex;
 
     flex-direction:column;
 
+    overflow:visible;
 }
 #welcomeAbout{
 
