@@ -1401,15 +1401,12 @@ if(homeHeading){
 }
 
 }
-
 function showPage(html){
 
     hideNavigation();
 
 
-    /* ================================
-       HIDE SIDE MENU
-       ================================ */
+    /* HIDE SIDE MENU */
 
     const menuBtn =
         document.getElementById("menuBtn");
@@ -1421,46 +1418,11 @@ function showPage(html){
     }
 
 
-    /* ================================
-       LOAD NEW PAGE
-       ================================ */
-
-    homeContent.innerHTML = html;
-
-
-    /* ================================
-       RESET PAGE SCROLL
-       ================================ */
-
     homeContent.scrollTop = 0;
 
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
 
-
-    /* ================================
-       RESET MOBILE ZOOM
-       ================================ */
-
-       /* ================================
-       FORCE SCROLL + FOCUS RESET
-       ================================ */
-
-    if(document.activeElement){
-
-        document.activeElement.blur();
-
-    }
-
-
-    requestAnimationFrame(
-        function(){
-
-            homeContent.scrollTop = 0;
-
-            window.scrollTo(0, 0);
-
-        }
-    );
+    homeContent.innerHTML = html;
 
 }
 function pageTitle(title,image){
@@ -9705,80 +9667,7 @@ backResetPassCodeBtn.onclick = ()=>{
     document.querySelector("#signupOTPPage input[type='text']").value = "";
 
 };
-/* =====================================
-   FIX WELCOME PAGE ON INITIAL LOAD
-   ===================================== */
 
-function fixWelcomeLayout(){
-
-    const welcomePage =
-        document.getElementById(
-            "welcomePage"
-        );
-
-    const welcomeBox =
-        document.querySelector(
-            "#welcomePage .welcome-box"
-        );
-
-    if(
-        !welcomePage ||
-        !welcomeBox
-    ){
-        return;
-    }
-
-
-    /* Force browser to calculate
-       the current viewport first */
-
-    requestAnimationFrame(
-        function(){
-
-            requestAnimationFrame(
-                function(){
-
-                    welcomePage.style.height =
-                        "calc(100dvh - 140px)";
-
-                    welcomeBox.style.height =
-                        "100%";
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================
-   INITIAL APP LOAD
-   ===================================== */
-
-window.addEventListener(
-    "load",
-    function(){
-
-        fixWelcomeLayout();
-
-    }
-);
-
-
-/* =====================================
-   MOBILE VIEWPORT CHANGE
-   ===================================== */
-
-window.addEventListener(
-    "resize",
-    function(){
-
-        fixWelcomeLayout();
-
-    }
-);
 
 /* ======================
 APP START
