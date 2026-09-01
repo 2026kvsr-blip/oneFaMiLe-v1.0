@@ -9585,10 +9585,11 @@ const memberIdField =
             :
         </span>
 
-        <strong id="newFamilyId">
-            auto generation
-        </strong>
-
+       <strong
+    id="newFamilyId"
+    style="color:#aaa;">
+    auto generation
+</strong>
     </div>
 
 
