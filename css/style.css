@@ -131,33 +131,23 @@ overflow:hidden;
 
 .welcome-box{
 
-    width:94%;
+width:94%;
 
-    margin:5px auto 0 auto;
+margin:5px auto 0 auto;
 
-    background:white;
+background:white;
 
-    border-radius:30px;
+border-radius:30px;
 
-    padding:20px 20px 30px 20px;
+padding:20px 20px 30px 20px;
 
-    height:calc(100vh - 280px);
+height:calc(100vh - 280px);
 
-    display:flex;
+display:flex;
 
-    flex-direction:column;
-
-    overflow:hidden;
-
-    box-sizing:border-box;
-
+flex-direction:column;
+overflow:hidden;
 }
-#welcomeAbout{
-
-padding-bottom:20px;
-
-}
-
 .welcome-box h2{
 
 color:#2A6EB0;
