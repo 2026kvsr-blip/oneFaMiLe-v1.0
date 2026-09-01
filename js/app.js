@@ -3,6 +3,7 @@ oneFaMiLe V1
 Part 1A.3
 ===================================== */
 
+
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 let otpMode = "signup";
@@ -1421,19 +1422,19 @@ function showPage(html){
 
 
     /* ================================
-       RESET SCROLL POSITION
-       ================================ */
-
-    homeContent.scrollTop = 0;
-
-    window.scrollTo(0,0);
-
-
-    /* ================================
        LOAD NEW PAGE
        ================================ */
 
     homeContent.innerHTML = html;
+
+
+    /* ================================
+       RESET PAGE SCROLL
+       ================================ */
+
+    homeContent.scrollTop = 0;
+
+    window.scrollTo(0, 0);
 
 
     /* ================================
@@ -1447,49 +1448,36 @@ function showPage(html){
 
     if(viewport){
 
-        const originalContent =
-            viewport.getAttribute(
-                "content"
-            );
-
         viewport.setAttribute(
             "content",
             "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-        );
-
-
-        setTimeout(
-            function(){
-
-                viewport.setAttribute(
-                    "content",
-                    originalContent
-                );
-
-            },
-            100
         );
 
     }
 
 
     /* ================================
-       SCROLL TO TOP AGAIN
+       FORCE SCROLL + FOCUS RESET
        ================================ */
 
-    setTimeout(
+    if(document.activeElement){
+
+        document.activeElement.blur();
+
+    }
+
+
+    requestAnimationFrame(
         function(){
 
             homeContent.scrollTop = 0;
 
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
 
-        },
-        50
+        }
     );
 
 }
-
 function pageTitle(title,image){
 
 return `
