@@ -142,15 +142,16 @@ overflow:hidden;
 
     padding:20px 20px 30px 20px;
 
-    height:100%;
-
-    box-sizing:border-box;
+    height:calc(100vh - 280px);
 
     display:flex;
 
     flex-direction:column;
 
     overflow:hidden;
+
+    box-sizing:border-box;
+
 }
 #welcomeAbout{
 
