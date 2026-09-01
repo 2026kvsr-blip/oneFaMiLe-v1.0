@@ -9690,13 +9690,20 @@ const newFamilyNameField =
         "newFamilyName"
     );
 
-
 if(savedFamily){
 
     if(newFamilyIdField){
 
         newFamilyIdField.textContent =
-            savedFamily.familyId || "-";
+            savedFamily.familyId || "";
+
+        newFamilyIdField.classList.remove(
+            "generated"
+        );
+
+        newFamilyIdField.classList.add(
+            "family-id-grey"
+        );
 
     }
 
@@ -9708,6 +9715,10 @@ if(savedFamily){
 
         newFamilyNameField.disabled =
             true;
+
+        newFamilyNameField.classList.add(
+            "family-name-grey"
+        );
 
     }
 
@@ -9923,37 +9934,42 @@ localStorage.setItem(
             }
 
 
-            /* =========================
-               SHOW FAMILY ID
-               ========================= */
+/* =========================
+   SHOW FAMILY ID
+   ========================= */
 
-            if(familyIdField){
+if(familyIdField){
 
-                familyIdField.textContent =
-                    result.familyId;
+    familyIdField.textContent =
+        result.familyId || "";
 
-                familyIdField.classList.add(
-                    "generated"
-                );
+    familyIdField.classList.remove(
+        "generated"
+    );
 
-            }
+    familyIdField.classList.add(
+        "family-id-grey"
+    );
 
+}
 
-            /* =========================
-               SHOW FAMILY NAME
-               ========================= */
+       /* =========================
+   SHOW FAMILY NAME
+   ========================= */
 
-            if(familyNameInput){
+if(familyNameInput){
 
-                familyNameInput.value =
-                    result.familyName;
+    familyNameInput.value =
+        result.familyName || "";
 
-                familyNameInput.disabled =
-                    true;
+    familyNameInput.disabled =
+        true;
 
-            }
+    familyNameInput.classList.add(
+        "family-name-grey"
+    );
 
-
+}
             /* =========================
                SHOW MESSAGE
                ========================= */
