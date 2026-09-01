@@ -3432,3 +3432,37 @@ width:100%;
     cursor: default;
     user-select: none;
 }
+/* =====================================
+   CREATE FAMILY TREE
+   EXISTING FAMILY DISPLAY
+   ===================================== */
+
+#createFamilyTreePage #newFamilyId,
+#newFamilyId{
+    color:#999 !important;
+    background:transparent !important;
+    border:none !important;
+    box-shadow:none !important;
+    outline:none !important;
+}
+
+#createFamilyTreePage #newFamilyName,
+#newFamilyName{
+    color:#999 !important;
+    background:transparent !important;
+    border:none !important;
+    box-shadow:none !important;
+    outline:none !important;
+    padding:0 !important;
+    margin:0 !important;
+}
+
+#newFamilyName:disabled{
+    color:#999 !important;
+    -webkit-text-fill-color:#999 !important;
+    opacity:1 !important;
+    background:transparent !important;
+    border:none !important;
+    box-shadow:none !important;
+    outline:none !important;
+}
