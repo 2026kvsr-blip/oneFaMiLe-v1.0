@@ -10,6 +10,7 @@
    F-NAME-RANDOM4
    ===================================== */
 
+
 function generateFamilyId(familyName){
 
     const cleanName =
@@ -4163,12 +4164,7 @@ if(
                 "div"
             );
         specialMessage.textContent =
-            "Same as " +
-(
-    getName(member) ||
-    "my"
-) +
-" siblings because Mother-in-Law is my sister";
+               "Same as my siblings because Mother-in-Law is my sister";       
        motherInLawSiblingsContainer.appendChild(
             specialMessage
         );
