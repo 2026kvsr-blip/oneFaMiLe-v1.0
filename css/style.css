@@ -21,7 +21,7 @@ TOP BAR
 ======================= */
 .topbar{
 
-position:absolute;
+position:fixed;
 
 top:0;
 
