@@ -4143,11 +4143,22 @@ else{
         "relationMotherInLawSiblings"
     );
 
-if(motherInLawSiblingsContainer){
 
-    motherInLawSiblingsContainer.innerHTML =
-        "";
-}
+       /* =================================
+   REMOVE OLD SPECIAL MESSAGE
+   ================================= */
+
+document
+    .querySelectorAll(
+        ".mother-in-law-special-message"
+    )
+    .forEach(
+        function(message){
+            message.remove();
+        }
+    );
+
+
 /* =================================
    MOTHER-IN-LAW IS MY SIBLING
    ================================= */
@@ -4172,18 +4183,21 @@ if(
             "relationMotherInLawSiblings"
         );
     if(motherInLawSiblingsContainer){
-        motherInLawSiblingsContainer.innerHTML =
-            "";
-        const specialMessage =
-            document.createElement(
-                "div"
-            );
-        specialMessage.textContent =
-               "Same as my siblings because Mother-in-Law is my sister";       
-       motherInLawSiblingsContainer.appendChild(
-            specialMessage
-        );
+       
+       const specialMessage =
+    document.createElement(
+        "div"
+    );
 
+specialMessage.className =
+    "mother-in-law-special-message";
+
+specialMessage.textContent =
+    "Same as my siblings because Mother-in-Law is my sister";
+
+motherInLawSiblingsContainer.appendChild(
+    specialMessage
+);
     }
 
 }else if(
@@ -4222,15 +4236,12 @@ if(
 
     if(motherInLawSiblingsContainer){
 
-        motherInLawSiblingsContainer.innerHTML =
-            "";
-
-
-        const specialMessage =
+           const specialMessage =
             document.createElement(
                 "div"
             );
-
+        specialMessage.className =
+       "mother-in-law-special-message";
 
         specialMessage.textContent =
             "Same as Father " +
