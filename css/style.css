@@ -7,7 +7,8 @@ font-family:Arial,Helvetica,sans-serif;
 
 
 body{
-          background:#EAF8FF;
+  
+   background:#EAF8FF;
 
 min-height:100vh;
 
@@ -30,8 +31,6 @@ left:0;
 
 right:0;
 
-width:100%;
-
 height:60px;
 
 background:#4A9FE8;
@@ -45,6 +44,8 @@ padding:0 15px;
 z-index:999;
 
 }
+
+
 .menu-btn{
 
 font-size:24px;
@@ -126,10 +127,10 @@ left:0;
 right:0;
 
 padding:10px 8px 10px 8px;
-
 overflow:hidden;
 
 }
+
 .welcome-box{
 
 width:94%;
@@ -143,6 +144,7 @@ border-radius:30px;
 padding:20px 20px 30px 20px;
 
 height:calc(100vh - 280px);
+
 display:flex;
 
 flex-direction:column;
@@ -809,10 +811,9 @@ font-weight:700;
 
 color:#2A6EB0;
 
-    margin-top: 3px !important;
-    padding-top: 0 !important;
+margin-top:5px;
 
-margin-bottom:10px;
+margin-bottom:15px;
 
 }
 
@@ -836,6 +837,23 @@ justify-items:center;
 
 }
 
+.page-title{
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:10px;
+
+font-size:24px;
+
+font-weight:bold;
+
+color:#2A6EB0;
+
+}
 
 .title-icon{
 
@@ -3412,68 +3430,4 @@ width:100%;
         content: "";
     }
 
-}
-
-/* =================================
-   MEMBER FORM - AUTO VALUES
-   FAMILY ID / FAMILY NAME / MEMBER ID
-   ================================= */
-
-.common-form-value {
-    color: #9a9a9a;
-    background: #f1f1f1;
-    border: 1px solid #d8d8d8;
-    border-radius: 6px;
-    padding: 5px 10px;
-    display: inline-block;
-    min-width: 150px;
-    font-weight: 500;
-    cursor: default;
-    user-select: none;
-}
-/* =====================================
-   CREATE FAMILY TREE
-   EXISTING FAMILY DISPLAY
-   ===================================== */
-
-#createFamilyTreePage #newFamilyId,
-#newFamilyId{
-    color:#999 !important;
-    background:transparent !important;
-    border:none !important;
-    box-shadow:none !important;
-    outline:none !important;
-}
-
-#createFamilyTreePage #newFamilyName,
-#newFamilyName{
-    color:#999 !important;
-    background:transparent !important;
-    border:none !important;
-    box-shadow:none !important;
-    outline:none !important;
-    padding:0 !important;
-    margin:0 !important;
-}
-
-#newFamilyName:disabled{
-    color:#999 !important;
-    -webkit-text-fill-color:#999 !important;
-    opacity:1 !important;
-    background:transparent !important;
-    border:none !important;
-    box-shadow:none !important;
-    outline:none !important;
-}
-.family-id-grey{
-    color:#999 !important;
-}
-
-.family-name-grey{
-    color:#999 !important;
-    -webkit-text-fill-color:#999 !important;
-    background:transparent !important;
-    border:none !important;
-    box-shadow:none !important;
-    outline:none !important;
 }
