@@ -3527,16 +3527,19 @@ if(fatherInLawSiblingsTitle){
         fatherInLawSiblings.length;
 
 }
-const fatherInLawSiblingsContainer =
-    document.getElementById(
-        "relationFatherInLawSiblings"
-    );
+  /* =================================
+   REMOVE OLD SPECIAL MESSAGE
+   ================================= */
 
-if(fatherInLawSiblingsContainer){
-
-    fatherInLawSiblingsContainer.innerHTML =
-        "";
-}
+document
+    .querySelectorAll(
+        ".father-in-law-special-message"
+    )
+    .forEach(
+        function(message){
+            message.remove();
+        }
+    );    
 /* =================================
    FATHER-IN-LAW SIBLINGS
    SPECIAL CONDITION
@@ -3578,16 +3581,13 @@ if(
 
    if(fatherInLawSiblingsContainer){
 
-        fatherInLawSiblingsContainer.innerHTML =
-            "";
-
-
         const message =
             document.createElement(
                 "div"
             );
 
-
+        message.className =
+    "father-in-law-special-message";
         message.textContent =
             "Same as Mother " +
             (
