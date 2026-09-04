@@ -5,6 +5,7 @@ box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
 }
 
+
 body{
           background:#EAF8FF;
 
@@ -114,7 +115,7 @@ WELCOME
 
 #welcomePage{
 
-position:absolute;
+position:fixed;
 
 top:60px;
 
