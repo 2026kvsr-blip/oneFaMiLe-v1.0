@@ -5094,24 +5094,21 @@ console.log(
 );
 
     console.log(
-        "RELATIONS COMPLETE:",
-        {
-            partner,
-            children,
-            father,
-            mother,
-            siblings,
-            fatherSiblings,
-            motherSiblings,
-            fatherInLaw,
-            motherInLaw,
-            fatherInLawSiblings,
-            motherInLawSiblings,
-            grandParents,
-            grandGrandParents
-        }
-    );
-
+    "RELATIONS COMPLETE:",
+    {
+        partner,
+        children,
+        father,
+        mother,
+        siblings,
+        fatherSiblings,
+        motherSiblings,
+        fatherInLaw,
+        motherInLaw,
+        fatherInLawSiblings,
+        motherInLawSiblings
+    }
+);
       
 }
 
