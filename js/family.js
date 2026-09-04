@@ -110,6 +110,23 @@ familyBtn.onclick = () => {
 
         <div class="grid-3x2">
 
+ <button
+                id="addFamilyBtn"
+                class="grid-btn">
+
+                <img
+                    src="images/colorbtns/AddFamily1.png"
+                    class="btn-icon">
+
+                <span>
+                    Create Family Tree
+                </span>
+
+            </button>
+
+
+
+
             <button
                 id="addMemberBtn"
                 class="grid-btn">
@@ -125,20 +142,7 @@ familyBtn.onclick = () => {
             </button>
 
 
-            <button
-                id="addFamilyBtn"
-                class="grid-btn">
-
-                <img
-                    src="images/colorbtns/AddFamily1.png"
-                    class="btn-icon">
-
-                <span>
-                    Create Family Tree
-                </span>
-
-            </button>
-
+           
 
             <button
                 id="searchMemberBtn"
