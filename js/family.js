@@ -3526,7 +3526,16 @@ if(fatherInLawSiblingsTitle){
         fatherInLawSiblings.length;
 
 }
+const fatherInLawSiblingsContainer =
+    document.getElementById(
+        "relationFatherInLawSiblings"
+    );
 
+if(fatherInLawSiblingsContainer){
+
+    fatherInLawSiblingsContainer.innerHTML =
+        "";
+}
 /* =================================
    FATHER-IN-LAW SIBLINGS
    SPECIAL CONDITION
@@ -3566,13 +3575,7 @@ if(
 
     /* Show special message */
 
-    const fatherInLawSiblingsContainer =
-        document.getElementById(
-            "relationFatherInLawSiblings"
-        );
-
-
-    if(fatherInLawSiblingsContainer){
+   if(fatherInLawSiblingsContainer){
 
         fatherInLawSiblingsContainer.innerHTML =
             "";
