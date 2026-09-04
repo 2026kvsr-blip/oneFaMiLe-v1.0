@@ -3301,6 +3301,10 @@ else{
    SPECIAL SIBLING RELATION CHECK
    ================================= */
 
+/* =================================
+   SPECIAL SIBLING RELATION CHECK
+   ================================= */
+
 function areSiblingsForSpecialRelation(
     person1,
     person2
@@ -3310,65 +3314,93 @@ function areSiblingsForSpecialRelation(
         !person1 ||
         !person2
     ){
-
         return false;
-
     }
 
+    /* SAME PERSON CHECK */
 
     const person1Id =
         String(
             person1.memberId || ""
         ).trim();
 
-
     const person2Id =
         String(
             person2.memberId || ""
         ).trim();
-
 
     if(
         !person1Id ||
         !person2Id ||
         person1Id === person2Id
     ){
-
         return false;
-
     }
 
 
-    const sameFather =
-        person1.fatherId &&
-        person2.fatherId &&
+    /* SAME FAMILY CHECK */
+
+    const family1 =
         String(
-            person1.fatherId
-        ).trim() ===
-        String(
-            person2.fatherId
+            person1.familyId || ""
         ).trim();
 
+    const family2 =
+        String(
+            person2.familyId || ""
+        ).trim();
+
+    if(
+        family1 &&
+        family2 &&
+        family1 !== family2
+    ){
+        return false;
+    }
+
+
+    /* FATHER CHECK */
+
+    const father1 =
+        String(
+            person1.fatherId || ""
+        ).trim();
+
+    const father2 =
+        String(
+            person2.fatherId || ""
+        ).trim();
+
+    const sameFather =
+        father1 &&
+        father2 &&
+        father1 === father2;
+
+
+    /* MOTHER CHECK */
+
+    const mother1 =
+        String(
+            person1.motherId || ""
+        ).trim();
+
+    const mother2 =
+        String(
+            person2.motherId || ""
+        ).trim();
 
     const sameMother =
-        person1.motherId &&
-        person2.motherId &&
-        String(
-            person1.motherId
-        ).trim() ===
-        String(
-            person2.motherId
-        ).trim();
+        mother1 &&
+        mother2 &&
+        mother1 === mother2;
 
 
-    return (
+    return !!(
         sameFather ||
         sameMother
     );
-
 }
-      
-    /* =================================
+      /* =================================
        8. FATHER-IN-LAW SIBLINGS
        ================================= */
 
@@ -3428,10 +3460,13 @@ function areSiblingsForSpecialRelation(
    ================================= */
 
 const fatherInLawIsMothersSibling =
+    !!fatherInLaw &&
+    !!mother &&
     areSiblingsForSpecialRelation(
         fatherInLaw,
         mother
     );
+      
    /* =================================
    FATHER-IN-LAW SIBLINGS
    BROTHERS / SISTERS
@@ -3839,16 +3874,21 @@ else{
       
 
 const motherInLawIsMySibling =
+    !!motherInLaw &&
+    !!member &&
     areSiblingsForSpecialRelation(
         motherInLaw,
         member
     );
-      const motherInLawIsFathersSibling =
+
+const motherInLawIsFathersSibling =
+    !!motherInLaw &&
+    !!father &&
     areSiblingsForSpecialRelation(
         motherInLaw,
         father
     );
-  /* =================================
+      /* =================================
    MOTHER-IN-LAW SIBLINGS
    BROTHERS / SISTERS
    ================================= */
@@ -4123,13 +4163,13 @@ if(
                 "div"
             );
         specialMessage.textContent =
-            "Same as mine " +
-            (
-                getName(member) ||
-                "my"
-            ) +
-            " siblings because Mother-in-Law is my sister";
-        motherInLawSiblingsContainer.appendChild(
+            "Same as " +
+(
+    getName(member) ||
+    "my"
+) +
+" siblings because Mother-in-Law is my sister";
+       motherInLawSiblingsContainer.appendChild(
             specialMessage
         );
 
