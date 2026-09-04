@@ -9669,17 +9669,14 @@ backResetPassCodeBtn.onclick = ()=>{
 };
 
 
-
 /* ======================
 APP START
 ====================== */
-
 sessionStorage.removeItem("user");
 sessionStorage.removeItem("passCode");
-
 showScreen(welcomePage);
 updateWelcomePage();
 updateMenuIcon();
 updateSideMenuUser();
-closeSideMenu();
+closeSideMenu();   // <-- Add this
 updateCurrentLanguage();
