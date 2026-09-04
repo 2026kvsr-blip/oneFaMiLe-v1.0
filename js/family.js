@@ -119,7 +119,7 @@ familyBtn.onclick = () => {
                     class="btn-icon">
 
                 <span>
-                    Create Family
+                    Create Family Tree
                 </span>
 
             </button>
