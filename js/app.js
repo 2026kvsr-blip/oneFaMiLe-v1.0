@@ -9676,6 +9676,14 @@ APP START
 sessionStorage.removeItem("user");
 sessionStorage.removeItem("passCode");
 showScreen(welcomePage);
+
+requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+        window.dispatchEvent(new Event("resize"));
+        window.scrollTo(0,0);
+    });
+});
+
 updateWelcomePage();
 updateMenuIcon();
 updateSideMenuUser();
