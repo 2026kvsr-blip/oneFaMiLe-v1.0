@@ -3893,6 +3893,34 @@ const motherInLawIsFathersSibling =
         motherInLaw,
         father
     );
+
+      console.log(
+    "SELECTED MEMBER =",
+    getName(member),
+    member
+);
+
+console.log(
+    "MOTHER-IN-LAW =",
+    getName(motherInLaw),
+    motherInLaw
+);
+
+console.log(
+    "FATHER =",
+    getName(father),
+    father
+);
+
+console.log(
+    "MIL IS MY SIBLING =",
+    motherInLawIsMySibling
+);
+
+console.log(
+    "MIL IS FATHER SIBLING =",
+    motherInLawIsFathersSibling
+);
       /* =================================
    MOTHER-IN-LAW SIBLINGS
    BROTHERS / SISTERS
