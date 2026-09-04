@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -4135,6 +4136,17 @@ else{
 
     }
 
+}
+
+      const motherInLawSiblingsContainer =
+    document.getElementById(
+        "relationMotherInLawSiblings"
+    );
+
+if(motherInLawSiblingsContainer){
+
+    motherInLawSiblingsContainer.innerHTML =
+        "";
 }
 /* =================================
    MOTHER-IN-LAW IS MY SIBLING
