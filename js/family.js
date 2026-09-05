@@ -133,7 +133,7 @@ familyBtn.onclick = () => {
                     class="btn-icon">
 
                 <span>
-                    Create Family Tree
+                    Create Family
                 </span>
 
             </button>
