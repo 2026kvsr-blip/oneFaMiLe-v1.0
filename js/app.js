@@ -2763,15 +2763,20 @@ async function sendSignupOTP(){
 
     const formData = new FormData();
 
-    formData.append(
-        "action",
-        "sendSignupOTP"
-    );
+formData.append(
+    "action",
+    "sendSignupOTP"
+);
 
+
+formData.append(
+    "mobile",
+    mobileNo.value.trim()
+);
     formData.append(
-        "mobile",
-        mobileNo.value.trim()
-    );
+    "email",
+    emailId.value.trim()
+);
 
     try{
 
