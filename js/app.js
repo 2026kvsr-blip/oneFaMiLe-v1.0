@@ -6,6 +6,138 @@ Part 1A.3
 
 /* WELCOME SCREEN */
 const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
+// ============================================
+// CORS-SAFE API REQUEST USING HIDDEN IFRAME
+// ============================================
+
+function postToAPI(data){
+
+    return new Promise((resolve,reject)=>{
+
+        const iframeName =
+            "apiFrame_" +
+            Date.now() +
+            "_" +
+            Math.random().toString(36).slice(2);
+
+        const iframe =
+            document.createElement("iframe");
+
+        iframe.name = iframeName;
+        iframe.style.display = "none";
+
+        document.body.appendChild(iframe);
+
+
+        const form =
+            document.createElement("form");
+
+        form.method = "POST";
+        form.action = API_URL;
+        form.target = iframeName;
+        form.style.display = "none";
+
+
+        const requestData = {
+            ...data,
+            transport: "iframe"
+        };
+
+
+        Object.keys(requestData).forEach(key=>{
+
+            const input =
+                document.createElement("input");
+
+            input.type = "hidden";
+            input.name = key;
+            input.value =
+                requestData[key] == null
+                    ? ""
+                    : requestData[key];
+
+            form.appendChild(input);
+
+        });
+
+
+        document.body.appendChild(form);
+
+
+        let completed = false;
+
+
+        function cleanup(){
+
+            window.removeEventListener(
+                "message",
+                onMessage
+            );
+
+            clearTimeout(timeout);
+
+            form.remove();
+
+            iframe.remove();
+
+        }
+
+
+        function onMessage(event){
+
+            if(completed){
+                return;
+            }
+
+
+            if(
+                event.data &&
+                typeof event.data === "object" &&
+                typeof event.data.status === "string"
+            ){
+
+                completed = true;
+
+                cleanup();
+
+                resolve(event.data);
+
+            }
+
+        }
+
+
+        window.addEventListener(
+            "message",
+            onMessage
+        );
+
+
+        const timeout =
+            setTimeout(()=>{
+
+                if(completed){
+                    return;
+                }
+
+                completed = true;
+
+                cleanup();
+
+                reject(
+                    new Error(
+                        "API request timed out."
+                    )
+                );
+
+            },30000);
+
+
+        form.submit();
+
+    });
+
+}
 let otpMode = "signup";
 const loginSubmitBtn =
 document.getElementById("loginSubmitBtn");
@@ -2778,20 +2910,26 @@ formData.append(
     emailId.value.trim()
 );
 
-    try{
+   try{
 
-        const response = await fetch(API_URL,{
+    const result =
+        await postToAPI({
 
-            method:"POST",
+            action: "sendSignupOTP",
 
-            body:formData
+            mobile:
+                mobileNo.value.trim(),
+
+            email:
+                emailId.value.trim()
 
         });
 
-        const result = await response.json();
 
-        console.log("Signup OTP Result:", result);
-
+    console.log(
+        "Signup OTP Result:",
+        result
+    );
         // ================================
         // OTP FAILED
         // ================================
@@ -3364,28 +3502,60 @@ CHECK SIGHUP
 
 ====================== */
 
-async function checkSignup() {
+async function checkSignup(){
 
-  const response = await fetch(API_URL, {
-    method: "POST",
-    body: new URLSearchParams({
-      action: "checkSignup",
-      loginUserName: loginUserName.value.trim(),
-      mobile: mobileNo.value.trim()
-    })
-  });
+    try{
 
-  const result = await response.json();
+        const result =
+            await postToAPI({
 
-  if (result.status !== "success") {
-    showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
-    return false;
-  }
+                action: "checkSignup",
 
-  return true;
+                loginUserName:
+                    loginUserName.value.trim(),
+
+                mobile:
+                    mobileNo.value.trim()
+
+            });
+
+
+        if(result.status !== "success"){
+
+            showMessage(
+                result.message,
+                result.status === "success"
+                    ? "success"
+                    : "warning",
+                3000
+            );
+
+            return false;
+
+        }
+
+
+        return true;
+
+    }
+    catch(error){
+
+        console.log(
+            "checkSignup Error:",
+            error
+        );
+
+        showMessage(
+            "Unable to connect to server.",
+            "error",
+            3000
+        );
+
+        return false;
+
+    }
 
 }
-
 
 /* ======================
 
