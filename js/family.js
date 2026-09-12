@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5502,40 +5501,6 @@ dropdown.style.display =
     "block";
 
 
-/* =================================
-   POSITION DROPDOWN BELOW INPUT
-   ================================= */
-
-const inputRect =
-    searchInput.getBoundingClientRect();
-
-
-dropdown.style.position =
-    "fixed";
-
-
-dropdown.style.left =
-    inputRect.left + "px";
-
-
-dropdown.style.top =
-    (inputRect.bottom + 4) + "px";
-
-
-dropdown.style.width =
-    inputRect.width + "px";
-
-
-dropdown.style.maxHeight =
-    "250px";
-
-
-dropdown.style.overflowY =
-    "auto";
-
-
-dropdown.style.zIndex =
-    "99999";
         }
 
 
