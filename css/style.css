@@ -16,6 +16,7 @@ padding-bottom:80px;
 overflow-x:hidden;
 }
 
+
 /* =======================
 TOP BAR
 ======================= */
@@ -3486,31 +3487,6 @@ width:100%;
 }
 
 
-#searchEditMemberDropdown{
-    position: absolute !important;
-
-    top: calc(100% + 4px) !important;
-
-    left: 130px !important;
-
-    right: 0 !important;
-
-    width: auto !important;
-
-    max-height: 250px !important;
-
-    overflow-y: auto !important;
-
-    background: white !important;
-
-    border: 1px solid #ccc !important;
-
-    border-radius: 6px !important;
-
-    z-index: 99999 !important;
-
-    box-sizing: border-box !important;
-}
 
 
 #searchEditMemberDropdown
@@ -3542,4 +3518,74 @@ width:100%;
 
     background: white !important;
 
+}
+/* =====================================
+   SEARCH EDIT MEMBER DROPDOWN
+   ===================================== */
+
+.search-edit-member-wrapper{
+    position: relative;
+    flex: 1;
+}
+
+
+.search-edit-member-wrapper
+#searchEditMember{
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+#searchEditMemberDropdown{
+
+    position: absolute;
+
+    top: calc(100% + 3px);
+
+    left: 0;
+
+    width: 100%;
+
+    max-height: 250px;
+
+    overflow-y: auto;
+
+    background: #ffffff;
+
+    border: 1px solid #cccccc;
+
+    border-radius: 5px;
+
+    box-sizing: border-box;
+
+    z-index: 99999;
+}
+
+
+#searchEditMemberDropdown
+.relations-member-option{
+
+    padding: 9px 10px;
+
+    background: #ffffff;
+
+    cursor: pointer;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+#searchEditMemberDropdown
+.relations-member-option:hover{
+
+    background: #f2f2f2;
+}
+
+
+#searchEditMemberDropdown
+.relations-no-match{
+
+    padding: 9px 10px;
+
+    background: #ffffff;
 }
