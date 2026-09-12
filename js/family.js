@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5418,24 +5419,23 @@ function bindSearchMemberButton(){
                 );
 
 
-            if(
-                matchingMembers.length === 0
-            ){
+           if(
+    matchingMembers.length === 0
+){
 
-                dropdown.innerHTML =
-                    `
-                    <div class="relations-no-match">
-                        No matching member
-                    </div>
-                    `;
+    dropdown.innerHTML =
+        `
+        <div class="relations-no-match">
+            No matching member
+        </div>
+        `;
 
-                dropdown.style.display =
-                    "block";
+    dropdown.style.display =
+        "block";
 
-                return;
+    return;
 
-            }
-
+}
 
             matchingMembers.forEach(
                 function(member){
