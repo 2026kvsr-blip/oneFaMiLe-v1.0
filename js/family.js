@@ -5112,7 +5112,457 @@ console.log(
 }
 
 
+/* =====================================
+   FAMILY → SEARCH / EDIT MEMBER
+   ===================================== */
 
+function bindSearchMemberButton(){
+
+    const searchMemberBtn =
+        document.getElementById("searchMemberBtn");
+
+
+    if(!searchMemberBtn) return;
+
+
+    searchMemberBtn.onclick = async function(){
+
+        const currentFamily =
+            JSON.parse(
+                localStorage.getItem(
+                    "currentFamily"
+                ) || "null"
+            );
+
+
+        if(!currentFamily){
+
+            alert("Family not found.");
+
+            return;
+
+        }
+
+
+        /* =================================
+           LOAD SEARCH PAGE
+           ================================= */
+
+        showPage(
+
+            pageTitle(
+                "Search - Edit Member",
+                "images/colorbtns/CustomSearch1.png"
+            )
+
+            +
+
+            `
+            <div class="common-page">
+
+                <div class="common-form">
+
+                    <div class="common-form-group">
+
+                        <label
+                            class="common-form-label"
+                            for="searchEditMember">
+                            Member
+                        </label>
+
+                        <span class="common-form-colon">
+                            :
+                        </span>
+
+                        <input
+                            type="text"
+                            id="searchEditMember"
+                            class="common-form-input"
+                            placeholder="Search Member"
+                            autocomplete="off">
+
+                    </div>
+
+
+                    <div
+                        id="searchEditMemberDropdown"
+                        class="relations-member-dropdown"
+                        style="display:none;">
+                    </div>
+
+                </div>
+
+
+                <div class="page-bottom-actions">
+
+                    <button
+                        type="button"
+                        id="searchEditBackBtn"
+                        class="back-btn">
+                        🏠 Home
+                    </button>
+
+                </div>
+
+            </div>
+            `
+        );
+
+
+        const searchInput =
+            document.getElementById(
+                "searchEditMember"
+            );
+
+        const dropdown =
+            document.getElementById(
+                "searchEditMemberDropdown"
+            );
+
+        const backBtn =
+            document.getElementById(
+                "searchEditBackBtn"
+            );
+
+
+        /* =================================
+           BACK
+           ================================= */
+
+        if(backBtn){
+
+            backBtn.onclick =
+                function(){
+
+                    const familyBtn =
+                        document.getElementById(
+                            "familyBtn"
+                        );
+
+                    if(familyBtn){
+                        familyBtn.click();
+                    }
+
+                };
+
+        }
+
+
+        /* =================================
+           GET MEMBERS FROM GOOGLE SHEET
+           ================================= */
+
+        let members = [];
+
+
+        try{
+
+            const params =
+                new URLSearchParams();
+
+
+            params.append(
+                "action",
+                "getFamilyMembers"
+            );
+
+
+            params.append(
+                "familyId",
+                currentFamily.familyId || ""
+            );
+
+
+            const response =
+                await fetch(
+
+                    API_URL,
+
+                    {
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":
+                                "application/x-www-form-urlencoded"
+                        },
+
+                        body:
+                            params.toString()
+                    }
+
+                );
+
+
+            const result =
+                await response.json();
+
+
+            console.log(
+                "SEARCH EDIT MEMBERS:",
+                result
+            );
+
+
+            if(
+                result.status !== "success"
+            ){
+
+                alert(
+                    result.message ||
+                    "Members could not be loaded."
+                );
+
+                return;
+
+            }
+
+
+            members =
+                Array.isArray(
+                    result.members
+                )
+                    ? result.members
+                    : [];
+
+
+        }catch(error){
+
+            console.error(
+                "Search Edit Load Error:",
+                error
+            );
+
+
+            alert(
+                "Unable to load members."
+            );
+
+
+            return;
+
+        }
+
+
+        /* =================================
+           SHOW MEMBER DROPDOWN
+           ================================= */
+
+        function showSearchMembers(){
+
+            const searchText =
+                String(
+                    searchInput.value || ""
+                )
+                .trim()
+                .toLowerCase();
+
+
+            dropdown.innerHTML = "";
+
+
+            const matchingMembers =
+                members.filter(
+                    function(member){
+
+                        if(
+                            !member ||
+                            !member.memberId
+                        ){
+
+                            return false;
+
+                        }
+
+
+                        const memberName =
+                            String(
+                                member.name || ""
+                            )
+                            .trim()
+                            .toLowerCase();
+
+
+                        const memberId =
+                            String(
+                                member.memberId || ""
+                            )
+                            .trim()
+                            .toLowerCase();
+
+
+                        if(
+                            searchText === ""
+                        ){
+
+                            return (
+                                memberName !== ""
+                            );
+
+                        }
+
+
+                        return (
+
+                            memberName.includes(
+                                searchText
+                            )
+
+                            ||
+
+                            memberId.includes(
+                                searchText
+                            )
+
+                        );
+
+                    }
+                );
+
+
+            if(
+                matchingMembers.length === 0
+            ){
+
+                dropdown.innerHTML =
+                    `
+                    <div class="relations-no-match">
+                        No matching member
+                    </div>
+                    `;
+
+                dropdown.style.display =
+                    "block";
+
+                return;
+
+            }
+
+
+            matchingMembers.forEach(
+                function(member){
+
+                    const option =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    option.className =
+                        "relations-member-option";
+
+
+                    option.textContent =
+                        member.name +
+                        " (" +
+                        member.memberId +
+                        ")";
+
+
+                    option.dataset.memberId =
+                        member.memberId;
+
+
+                    option.onclick =
+                        function(){
+
+                            console.log(
+                                "SELECTED MEMBER:",
+                                member
+                            );
+
+
+                            searchInput.value =
+                                member.name || "";
+
+
+                            dropdown.style.display =
+                                "none";
+
+
+                            /* ==========================
+                               TEMPORARY TEST
+                               ========================== */
+
+                            alert(
+                                "Selected: " +
+                                (member.name || "")
+                            );
+
+                        };
+
+
+                    dropdown.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+
+            dropdown.style.display =
+                "block";
+
+        }
+
+
+        /* =================================
+           SEARCH EVENTS
+           ================================= */
+
+        searchInput.addEventListener(
+            "focus",
+            function(){
+
+                showSearchMembers();
+
+            }
+        );
+
+
+        searchInput.addEventListener(
+            "input",
+            function(){
+
+                showSearchMembers();
+
+            }
+        );
+
+
+        document.addEventListener(
+            "click",
+            function(event){
+
+                if(
+                    !searchInput.contains(
+                        event.target
+                    )
+
+                    &&
+
+                    !dropdown.contains(
+                        event.target
+                    )
+                ){
+
+                    dropdown.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+    };
+
+}
+
+
+/* =====================================
+   BIND SEARCH MEMBER BUTTON
+   ================================= */
+
+bindSearchMemberButton();
 
 
    
