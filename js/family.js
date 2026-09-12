@@ -5478,7 +5478,7 @@ let membersLoaded =
                             member.memberId;
 
 
-                        option.onclick =
+                       option.onclick =
     function(){
 
         console.log(
@@ -5510,20 +5510,58 @@ let membersLoaded =
 
 
         /* =================================
-           OPEN ADD MEMBER FORM
+           FIRST OPEN FAMILY PAGE
            ================================= */
 
-        const addMemberBtn =
+        const familyBtn =
             document.getElementById(
-                "addMemberBtn"
+                "familyBtn"
             );
 
 
-        if(addMemberBtn){
+        if(!familyBtn){
 
-            addMemberBtn.click();
+            console.error(
+                "Family button not found"
+            );
+
+            return;
 
         }
+
+
+        familyBtn.click();
+
+
+        /* =================================
+           THEN OPEN ADD MEMBER PAGE
+           ================================= */
+
+        setTimeout(
+            function(){
+
+                const addMemberBtn =
+                    document.getElementById(
+                        "addMemberBtn"
+                    );
+
+
+                if(addMemberBtn){
+
+                    addMemberBtn.click();
+
+                }
+                else{
+
+                    console.error(
+                        "Add Member button not found"
+                    );
+
+                }
+
+            },
+            50
+        );
 
     };
                         dropdown.appendChild(
