@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -7315,8 +7314,16 @@ if(editLifeStatusField){
     editLifeStatusField.value =
         editMember.lifeStatus || "";
 
-}
+    editLifeStatusField.dispatchEvent(
+        new Event(
+            "change",
+            {
+                bubbles: true
+            }
+        )
+    );
 
+}
 
 /* NATIVE PLACE */
 
