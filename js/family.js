@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5250,13 +5249,20 @@ function bindSearchMemberButton(){
             /* =================================
                VARIABLES
                ================================= */
+let members =
+    JSON.parse(
+        localStorage.getItem(
+            "familyMembers"
+        ) || "[]"
+    );
 
-            let members = [];
 
-            let membersLoading = true;
+let membersLoading =
+    members.length === 0;
 
-            let membersLoaded = false;
 
+let membersLoaded =
+    members.length > 0;
 
             /* =================================
                BACK
@@ -5672,7 +5678,12 @@ function bindSearchMemberButton(){
                         )
                             ? result.members
                             : [];
-
+localStorage.setItem(
+    "familyMembers",
+    JSON.stringify(
+        members
+    )
+);
 
                     membersLoading =
                         false;
