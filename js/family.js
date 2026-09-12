@@ -7159,6 +7159,53 @@ if(editDobField){
     );
 
 }
+
+/* =================================
+   MARITAL STATUS
+   ================================= */
+
+const editMaritalStatus =
+    String(
+        editMember.maritalStatus || ""
+    )
+    .trim()
+    .toLowerCase();
+
+const editMarriedYes =
+    document.getElementById(
+        "marriedYes"
+    );
+
+const editMarriedNo =
+    document.getElementById(
+        "marriedNo"
+    );
+
+
+if(editMaritalStatus === "yes"){
+
+    if(editMarriedYes){
+        editMarriedYes.checked = true;
+    }
+
+    if(editMarriedNo){
+        editMarriedNo.checked = false;
+    }
+
+}
+else if(editMaritalStatus === "no"){
+
+    if(editMarriedYes){
+        editMarriedYes.checked = false;
+    }
+
+    if(editMarriedNo){
+        editMarriedNo.checked = true;
+    }
+
+}
+
+   
 }
 /* =================================
    ENABLE FORM AFTER NAME + GENDER + DOB
