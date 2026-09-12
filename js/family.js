@@ -10284,21 +10284,122 @@ const newMember = {
     partnerId:
         partnerId,
 
+    marriageDate:
+        document.getElementById(
+            "memberMarriageDate"
+        )?.value || "",
+
+    lifeStatus:
+        document.getElementById(
+            "memberLifeStatus"
+        )?.value || "",
+
+    nativePlace:
+        document.getElementById(
+            "memberNativePlace"
+        )?.value || "",
+
+    occupation:
+        document.getElementById(
+            "memberOccupation"
+        )?.value || "",
+
+    qualification:
+        document.getElementById(
+            "memberQualification"
+        )?.value || "",
+
+    bloodGroup:
+        document.getElementById(
+            "memberBloodGroup"
+        )?.value || "",
+
+    mobileNumber:
+        document.getElementById(
+            "memberMobileNumber"
+        )?.value || "",
+
+    currentPlace:
+        document.getElementById(
+            "memberCurrentPlace"
+        )?.value || "",
+
+    deceasedDate:
+        document.getElementById(
+            "memberDeceasedDate"
+        )?.value || "",
+
+    aboutMe:
+        document.getElementById(
+            "memberAboutMe"
+        )?.value || "",
+
     createdAt:
-        new Date().toISOString()
+        editMember
+            ? (
+                editMember.createdAt || ""
+              )
+            : new Date().toISOString()
 
 };
-familyMembers.push(
-    newMember
-);
+       if(editMember){
+
+    const index =
+        familyMembers.findIndex(
+            function(member){
+
+                return String(
+                    member.memberId || ""
+                ).trim() ===
+                String(
+                    editMember.memberId || ""
+                ).trim();
+
+            }
+        );
+
+    if(index !== -1){
+
+        familyMembers[index] =
+            newMember;
+
+    }
+
+}
+else{
+
+    familyMembers.push(
+        newMember
+    );
+
+} 
 
        
+
+/* =================================
+   SAVE UPDATED MEMBERS TO CACHE
+   ================================= */
+
 localStorage.setItem(
     "familyMembers",
     JSON.stringify(
         familyMembers
     )
 );
+
+
+/* =================================
+   CLEAR EDIT MEMBER AFTER UPDATE
+   ================================= */
+
+if(editMember){
+
+    localStorage.removeItem(
+        "editMember"
+    );
+
+}
+       
 /* ================================
    NEW MEMBER ADDED → NOT FOR EDIT
    ================================ */
