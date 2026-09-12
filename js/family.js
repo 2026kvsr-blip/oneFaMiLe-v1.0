@@ -7242,7 +7242,15 @@ if(editMarriageDateField){
         String(
             editMember.marriageDate || ""
         ).trim();
+console.log(
+    "EDIT MARRIAGE DATE RAW:",
+    editMember.marriageDate
+);
 
+console.log(
+    "FULL EDIT MEMBER:",
+    editMember
+);
     if(marriageDateValue.includes("T")){
 
         marriageDateValue =
