@@ -148,7 +148,7 @@ familyBtn.onclick = () => {
                     class="btn-icon">
 
                 <span>
-                    Search Member
+                    Search - edit
                 </span>
 
             </button>
