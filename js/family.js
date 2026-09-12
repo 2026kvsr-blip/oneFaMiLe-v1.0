@@ -7571,7 +7571,8 @@ if(lifeStatusField){
 }
 
 }
-       /* ================================
+       
+/* ================================
    MOBILE NUMBER - NUMBERS ONLY
    ================================ */
 
@@ -7962,9 +7963,6 @@ if(marriedNo){
 }
 
 
-/* =================================
-   CONFIRMATION YES
-   ================================= */
 
 /* =================================
    CONFIRMATION YES
@@ -8014,10 +8012,6 @@ if(marriageDateGroup){
 }
 
 
-/* =================================
-   CONFIRMATION NO
-   ========================
-   ========= */
 
 /* =================================
    CONFIRMATION NO
@@ -8091,94 +8085,49 @@ async function loadMemberRelations(){
    GET MEMBERS FROM GOOGLE SHEET
    ================================= */
 
+/* =================================
+   LOAD MEMBERS FROM CACHE
+   ================================= */
+
 let members = [];
 
 try{
 
-    const params =
-        new URLSearchParams();
-
-    params.append(
-        "action",
-        "getFamilyMembers"
-    );
-
-    params.append(
-        "familyId",
-        currentFamily.familyId || ""
-    );
-
-    const response =
-        await fetch(
-            API_URL,
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "application/x-www-form-urlencoded"
-                },
-
-                body:
-                    params.toString()
-            }
+    const cachedMembers =
+        JSON.parse(
+            localStorage.getItem(
+                "familyMembers"
+            ) || "[]"
         );
-
-
-    const result =
-        await response.json();
-
-
-    console.log(
-        "GET FAMILY MEMBERS RESULT:",
-        result
-    );
 
 
     if(
-        result.status !== "success"
+        Array.isArray(cachedMembers)
     ){
 
-        console.error(
-            "Members could not be loaded:",
-            result.message
-        );
-
-        return;
+        members =
+            cachedMembers;
 
     }
 
 
-    members =
-        Array.isArray(result.members)
-            ? result.members
-            : [];
-
-
-    /* =============================
-       UPDATE LOCAL STORAGE
-       ============================= */
-
-    localStorage.setItem(
-        "familyMembers",
-        JSON.stringify(
-            members
-        )
+    console.log(
+        "RELATIONS MEMBERS FROM CACHE:",
+        members.length
     );
 
-
-}catch(error){
+}
+catch(error){
 
     console.error(
-        "Load Members Error:",
+        "Members Cache Error:",
         error
     );
 
-    return;
+    members = [];
 
 }
-
-
+   
 /* =================================
    CURRENT FAMILY MEMBERS
    ================================= */
