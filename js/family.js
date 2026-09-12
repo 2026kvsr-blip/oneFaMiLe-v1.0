@@ -1,6 +1,5 @@
 
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5163,34 +5162,38 @@ function bindSearchMemberButton(){
 
                 <div class="common-form">
 
-                    <div class="common-form-group">
+                   <div class="common-form-group">
 
-                        <label
-                            class="common-form-label"
-                            for="searchEditMember">
-                            Member
-                        </label>
+    <label
+        class="common-form-label"
+        for="searchEditMember">
+        Member
+    </label>
 
-                        <span class="common-form-colon">
-                            :
-                        </span>
-
-                        <input
-                            type="text"
-                            id="searchEditMember"
-                            class="common-form-input"
-                            placeholder="Search Member"
-                            autocomplete="off">
-
-                    </div>
+    <span class="common-form-colon">
+        :
+    </span>
 
 
-                    <div
-                        id="searchEditMemberDropdown"
-                        class="relations-member-dropdown"
-                        style="display:none;">
-                    </div>
+    <div class="search-edit-member-wrapper">
 
+        <input
+            type="text"
+            id="searchEditMember"
+            class="common-form-input"
+            placeholder="Search Member"
+            autocomplete="off">
+
+
+        <div
+            id="searchEditMemberDropdown"
+            class="relations-member-dropdown"
+            style="display:none;">
+        </div>
+
+    </div>
+
+</div>
                 </div>
 
 
@@ -5583,11 +5586,7 @@ dropdown.style.zIndex =
 
             }
         );
-/* =================================
-   SHOW MEMBERS IMMEDIATELY
-   ================================= */
 
-showSearchMembers();
        
     };
 
