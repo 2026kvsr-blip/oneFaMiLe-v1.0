@@ -8616,10 +8616,8 @@ console.log(
             }
 
 
-           /* =============================
-   FATHER
-   MALE + MARRIED
-   + 15 YEARS OLDER
+/* =============================
+   FATHER     MALE + MARRIED   + 15 YEARS OLDER
    ============================= */
 
 if(
@@ -8638,10 +8636,8 @@ if(
 
 
 
-           /* =============================
-   MOTHER
-   FEMALE + MARRIED
-   + 15 YEARS OLDER
+/* =============================
+   MOTHER   FEMALE + MARRIED   + 15 YEARS OLDER
    ============================= */
 
 if(
@@ -8700,7 +8696,134 @@ if(motherField){
     );
 
 }
-       /* =================================
+
+   /* =====================================
+   EDIT MEMBER - SELECT EXISTING RELATIONS
+   ===================================== */
+
+const relationEditMember =
+    JSON.parse(
+        localStorage.getItem(
+            "editMember"
+        ) || "null"
+    );
+
+
+if(
+    relationEditMember &&
+    String(
+        relationEditMember.memberId || ""
+    ).trim() === currentMemberId
+){
+
+    /* =================================
+       HELPER
+       ================================= */
+
+    function selectExistingRelation(
+        selectField,
+        relationId
+    ){
+
+        if(
+            !selectField ||
+            !relationId
+        ){
+            return;
+        }
+
+
+        const relationIdText =
+            String(
+                relationId
+            ).trim();
+
+
+        const relationMember =
+            familyMembers.find(
+                function(member){
+
+                    return String(
+                        member.memberId || ""
+                    ).trim() ===
+                    relationIdText;
+
+                }
+            );
+
+
+        if(!relationMember){
+            return;
+        }
+
+
+        /* CHECK WHETHER OPTION EXISTS */
+
+        const optionExists =
+            Array.from(
+                selectField.options
+            ).some(
+                function(option){
+
+                    return String(
+                        option.value
+                    ) === relationIdText;
+
+                }
+            );
+
+
+        /* ADD OPTION IF FILTER DID NOT ADD IT */
+
+        if(!optionExists){
+
+            addMemberOption(
+                selectField,
+                relationMember
+            );
+
+        }
+
+
+        /* SELECT EXISTING VALUE */
+
+        selectField.value =
+            relationIdText;
+
+    }
+
+
+    /* =================================
+       FATHER
+       ================================= */
+
+    selectExistingRelation(
+        fatherField,
+        relationEditMember.fatherId
+    );
+
+
+    /* =================================
+       MOTHER
+       ================================= */
+
+    selectExistingRelation(
+        motherField,
+        relationEditMember.motherId
+    );
+
+
+    /* =================================
+       PARTNER
+       ================================= */
+
+    selectExistingRelation(
+        partnerField,
+        relationEditMember.partnerId
+    );
+
+}
+/* =================================
    REFRESH RELATIONS WHEN GENDER CHANGES
    ================================= */
 
