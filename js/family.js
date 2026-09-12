@@ -1,5 +1,6 @@
 
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5437,70 +5438,101 @@ function bindSearchMemberButton(){
 
 }
 
-            matchingMembers.forEach(
-                function(member){
+           matchingMembers.forEach(
+    function(member){
 
-                    const option =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    option.className =
-                        "relations-member-option";
-
-
-                    option.textContent =
-                        member.name +
-                        " (" +
-                        member.memberId +
-                        ")";
-
-
-                    option.dataset.memberId =
-                        member.memberId;
-
-
-                    option.onclick =
-                        function(){
-
-                            console.log(
-                                "SELECTED MEMBER:",
-                                member
-                            );
-
-
-                            searchInput.value =
-                                member.name || "";
-
-
-                            dropdown.style.display =
-                                "none";
-
-
-                            /* ==========================
-                               TEMPORARY TEST
-                               ========================== */
-
-                            alert(
-                                "Selected: " +
-                                (member.name || "")
-                            );
-
-                        };
-
-
-                    dropdown.appendChild(
-                        option
-                    );
-
-                }
+        const option =
+            document.createElement(
+                "div"
             );
 
 
-            dropdown.style.display =
-                "block";
+        option.className =
+            "relations-member-option";
 
+
+        option.textContent =
+            member.name +
+            " (" +
+            member.memberId +
+            ")";
+
+
+        option.dataset.memberId =
+            member.memberId;
+
+
+        option.onclick =
+            function(){
+
+                console.log(
+                    "SELECTED MEMBER:",
+                    member
+                );
+
+
+                searchInput.value =
+                    member.name || "";
+
+
+                dropdown.style.display =
+                    "none";
+
+
+                alert(
+                    "Selected: " +
+                    (member.name || "")
+                );
+
+            };
+
+
+        dropdown.appendChild(
+            option
+        );
+
+    }
+);
+
+
+dropdown.style.display =
+    "block";
+
+
+/* =================================
+   POSITION DROPDOWN BELOW INPUT
+   ================================= */
+
+const inputRect =
+    searchInput.getBoundingClientRect();
+
+
+dropdown.style.position =
+    "fixed";
+
+
+dropdown.style.left =
+    inputRect.left + "px";
+
+
+dropdown.style.top =
+    (inputRect.bottom + 4) + "px";
+
+
+dropdown.style.width =
+    inputRect.width + "px";
+
+
+dropdown.style.maxHeight =
+    "250px";
+
+
+dropdown.style.overflowY =
+    "auto";
+
+
+dropdown.style.zIndex =
+    "99999";
         }
 
 
