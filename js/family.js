@@ -7298,6 +7298,158 @@ console.log(
         marriageDateValue;
 
 }
+
+/* =================================
+   EDIT MEMBER - ADDITIONAL DETAILS
+   ================================= */
+
+/* LIFE STATUS */
+
+const editLifeStatusField =
+    document.getElementById(
+        "memberLifeStatus"
+    );
+
+if(editLifeStatusField){
+
+    editLifeStatusField.value =
+        editMember.lifeStatus || "";
+
+}
+
+
+/* NATIVE PLACE */
+
+const editNativePlaceField =
+    document.getElementById(
+        "memberNativePlace"
+    );
+
+if(editNativePlaceField){
+
+    editNativePlaceField.value =
+        editMember.nativePlace || "";
+
+}
+
+
+/* OCCUPATION */
+
+const editOccupationField =
+    document.getElementById(
+        "memberOccupation"
+    );
+
+if(editOccupationField){
+
+    editOccupationField.value =
+        editMember.occupation || "";
+
+}
+
+
+/* QUALIFICATION */
+
+const editQualificationField =
+    document.getElementById(
+        "memberQualification"
+    );
+
+if(editQualificationField){
+
+    editQualificationField.value =
+        editMember.qualification || "";
+
+}
+
+
+/* BLOOD GROUP */
+
+const editBloodGroupField =
+    document.getElementById(
+        "memberBloodGroup"
+    );
+
+if(editBloodGroupField){
+
+    editBloodGroupField.value =
+        editMember.bloodGroup || "";
+
+}
+
+
+/* MOBILE NUMBER */
+
+const editMobileNumberField =
+    document.getElementById(
+        "memberMobileNumber"
+    );
+
+if(editMobileNumberField){
+
+    editMobileNumberField.value =
+        editMember.mobileNumber || "";
+
+}
+
+
+/* CURRENT PLACE */
+
+const editCurrentPlaceField =
+    document.getElementById(
+        "memberCurrentPlace"
+    );
+
+if(editCurrentPlaceField){
+
+    editCurrentPlaceField.value =
+        editMember.currentPlace || "";
+
+}
+
+
+/* DECEASED DATE */
+
+const editDeceasedDateField =
+    document.getElementById(
+        "memberDeceasedDate"
+    );
+
+if(editDeceasedDateField){
+
+    let deceasedDateValue =
+        String(
+            editMember.deceasedDate || ""
+        ).trim();
+
+    if(
+        deceasedDateValue.includes("T")
+    ){
+
+        deceasedDateValue =
+            deceasedDateValue.split("T")[0];
+
+    }
+
+    editDeceasedDateField.value =
+        deceasedDateValue;
+
+}
+
+
+/* ABOUT ME */
+
+const editAboutMeField =
+    document.getElementById(
+        "memberAboutMe"
+    );
+
+if(editAboutMeField){
+
+    editAboutMeField.value =
+        editMember.aboutMe || "";
+
+}
    
 }
 
