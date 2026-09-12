@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -7090,13 +7091,80 @@ if(editMember){
         );
 
 
-    if(editDobField){
+    const editDobField =
+    document.getElementById(
+        "memberDob"
+    );
 
-        editDobField.value =
-            editMember.dob || "";
+
+if(editDobField){
+
+    let dobValue =
+        String(
+            editMember.dob || ""
+        ).trim();
+
+
+    if(
+        dobValue.includes("T")
+    ){
+
+        dobValue =
+            dobValue.split("T")[0];
 
     }
 
+    else if(
+        dobValue.includes("/")
+    ){
+
+        const parts =
+            dobValue.split("/");
+
+        if(parts.length === 3){
+
+            dobValue =
+                parts[2] +
+                "-" +
+                parts[1].padStart(2, "0") +
+                "-" +
+                parts[0].padStart(2, "0");
+
+        }
+
+    }
+
+    else if(
+        /^\d{2}-\d{2}-\d{4}$/.test(
+            dobValue
+        )
+    ){
+
+        const parts =
+            dobValue.split("-");
+
+        dobValue =
+            parts[2] +
+            "-" +
+            parts[1] +
+            "-" +
+            parts[0];
+
+    }
+
+
+    editDobField.value =
+        dobValue;
+
+
+    console.log(
+        "EDIT DOB:",
+        editMember.dob,
+        "→",
+        dobValue
+    );
+
+}
 }
 /* =================================
    ENABLE FORM AFTER NAME + GENDER + DOB
