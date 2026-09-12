@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -9801,7 +9800,16 @@ const memberId = "";
         partnerId
     );
 
-   
+   params.append(
+    "marriageDate",
+    maritalStatus.toLowerCase() === "yes"
+        ? (
+            document.getElementById(
+                "memberMarriageDate"
+            )?.value || ""
+        )
+        : ""
+);
 /* ================================
    MARRIAGE DATE
    ================================ */
