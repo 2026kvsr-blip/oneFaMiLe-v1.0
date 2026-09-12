@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -8132,7 +8131,7 @@ catch(error){
    CURRENT FAMILY MEMBERS
    ================================= */
 
-const familyMembers =
+const filteredFamilyMembers =
     members.filter(
         function(member){
 
@@ -8147,7 +8146,28 @@ const familyMembers =
 
         }
     );
-    /* =================================
+
+
+/* =================================
+   FALLBACK
+
+   Search/Edit API already fetched
+   members using current familyId.
+   ================================= */
+
+const familyMembers =
+    filteredFamilyMembers.length > 0
+        ? filteredFamilyMembers
+        : members;
+
+
+console.log(
+    "TOTAL CACHE MEMBERS:",
+    members.length,
+    "CURRENT FAMILY MEMBERS:",
+    familyMembers.length
+);
+   /* =================================
        GET CURRENT GENDER
        ================================= */
 
