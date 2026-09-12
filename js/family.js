@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -7200,6 +7199,69 @@ else if(editMaritalStatus === "no"){
 
 }
 
+   /* =================================
+   MARRIAGE DATE
+   ================================= */
+
+const editMarriageDateField =
+    document.getElementById(
+        "memberMarriageDate"
+    );
+
+if(editMarriageDateField){
+
+    let marriageDateValue =
+        String(
+            editMember.marriageDate || ""
+        ).trim();
+
+    if(marriageDateValue.includes("T")){
+
+        marriageDateValue =
+            marriageDateValue.split("T")[0];
+
+    }
+
+    else if(marriageDateValue.includes("/")){
+
+        const parts =
+            marriageDateValue.split("/");
+
+        if(parts.length === 3){
+
+            marriageDateValue =
+                parts[2] +
+                "-" +
+                parts[1].padStart(2, "0") +
+                "-" +
+                parts[0].padStart(2, "0");
+
+        }
+
+    }
+
+    else if(
+        /^\d{2}-\d{2}-\d{4}$/.test(
+            marriageDateValue
+        )
+    ){
+
+        const parts =
+            marriageDateValue.split("-");
+
+        marriageDateValue =
+            parts[2] +
+            "-" +
+            parts[1] +
+            "-" +
+            parts[0];
+
+    }
+
+    editMarriageDateField.value =
+        marriageDateValue;
+
+}
    
 }
 
