@@ -6984,6 +6984,120 @@ document.addEventListener(
 
     }
 );
+       /* =====================================
+   EDIT MEMBER MODE
+   ===================================== */
+
+const editMember =
+    JSON.parse(
+        localStorage.getItem(
+            "editMember"
+        ) || "null"
+    );
+
+
+if(editMember){
+
+    console.log(
+        "EDIT MEMBER LOADED:",
+        editMember
+    );
+
+
+    /* =================================
+       CHANGE PAGE TITLE
+       ================================= */
+
+    const pageHeading =
+        document.querySelector(
+            "h2.page-title"
+        );
+
+
+    if(pageHeading){
+
+        pageHeading.textContent =
+            "Edit Member";
+
+    }
+
+
+    /* =================================
+       MEMBER ID
+       ================================= */
+
+    const editMemberIdField =
+        document.getElementById(
+            "memberId"
+        );
+
+
+    if(editMemberIdField){
+
+        editMemberIdField.textContent =
+            editMember.memberId || "-";
+
+
+        editMemberIdField.dataset.memberId =
+            editMember.memberId || "";
+
+    }
+
+
+    /* =================================
+       NAME
+       ================================= */
+
+    const editNameField =
+        document.getElementById(
+            "memberName"
+        );
+
+
+    if(editNameField){
+
+        editNameField.value =
+            editMember.name || "";
+
+    }
+
+
+    /* =================================
+       GENDER
+       ================================= */
+
+    const editGenderField =
+        document.getElementById(
+            "memberGender"
+        );
+
+
+    if(editGenderField){
+
+        editGenderField.value =
+            editMember.gender || "";
+
+    }
+
+
+    /* =================================
+       DATE OF BIRTH
+       ================================= */
+
+    const editDobField =
+        document.getElementById(
+            "memberDob"
+        );
+
+
+    if(editDobField){
+
+        editDobField.value =
+            editMember.dob || "";
+
+    }
+
+}
 /* =================================
    ENABLE FORM AFTER NAME + GENDER + DOB
    ================================= */
