@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5552,7 +5551,12 @@ function bindSearchMemberButton(){
 
             }
         );
+/* =================================
+   SHOW MEMBERS IMMEDIATELY
+   ================================= */
 
+showSearchMembers();
+       
     };
 
 }
