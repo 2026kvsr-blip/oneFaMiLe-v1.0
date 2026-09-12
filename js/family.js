@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -9840,8 +9841,19 @@ const memberIdField =
         "memberId"
     );
 
-const memberId = "";
-   
+const editMember =
+    JSON.parse(
+        localStorage.getItem(
+            "editMember"
+        ) || "null"
+    );
+
+const memberId =
+    editMember
+        ? String(
+            editMember.memberId || ""
+          ).trim()
+        : "";   
     /* ================================
        PHOTO
        ================================ */
