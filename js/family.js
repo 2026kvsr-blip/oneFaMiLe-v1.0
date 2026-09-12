@@ -5479,38 +5479,53 @@ let membersLoaded =
 
 
                         option.onclick =
-                            function(){
+    function(){
 
-                                console.log(
-                                    "SELECTED MEMBER:",
-                                    member
-                                );
-
-
-                                searchInput.value =
-                                    member.name || "";
+        console.log(
+            "SELECTED MEMBER:",
+            member
+        );
 
 
-                                dropdown.innerHTML =
-                                    "";
+        /* =================================
+           SAVE SELECTED MEMBER FOR EDIT
+           ================================= */
+
+        localStorage.setItem(
+            "editMember",
+            JSON.stringify(member)
+        );
 
 
-                                dropdown.style.display =
-                                    "none";
+        searchInput.value =
+            member.name || "";
 
 
-                                /* ==========================
-                                   TEMPORARY TEST
-                                   ========================== */
-
-                                alert(
-                                    "Selected: " +
-                                    (member.name || "")
-                                );
-
-                            };
+        dropdown.innerHTML =
+            "";
 
 
+        dropdown.style.display =
+            "none";
+
+
+        /* =================================
+           OPEN ADD MEMBER FORM
+           ================================= */
+
+        const addMemberBtn =
+            document.getElementById(
+                "addMemberBtn"
+            );
+
+
+        if(addMemberBtn){
+
+            addMemberBtn.click();
+
+        }
+
+    };
                         dropdown.appendChild(
                             option
                         );
