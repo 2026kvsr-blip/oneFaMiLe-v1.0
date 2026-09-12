@@ -6624,11 +6624,6 @@ function bindAddMemberButton(){
 );
 
 /* =================================
-   LOAD RELATIONS
-   ================================= */
-
-loadMemberRelations();
-       /* =================================
    REFRESH RELATIONS WHEN GENDER CHANGES
    ================================= */
 
@@ -7207,6 +7202,12 @@ else if(editMaritalStatus === "no"){
 
    
 }
+
+/* =================================
+   LOAD RELATIONS AFTER EDIT VALUES
+   ================================= */
+
+loadMemberRelations();
 /* =================================
    ENABLE FORM AFTER NAME + GENDER + DOB
    ================================= */
@@ -10681,7 +10682,6 @@ if(!currentFamily){
                     "-";
 
             }
-
 
             /* =========================
                LOAD RELATIONS
