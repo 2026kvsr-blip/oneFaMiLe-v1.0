@@ -7085,13 +7085,7 @@ if(editMember){
        DATE OF BIRTH
        ================================= */
 
-    const editDobField =
-        document.getElementById(
-            "memberDob"
-        );
-
-
-    const editDobField =
+   const editDobField =
     document.getElementById(
         "memberDob"
     );
