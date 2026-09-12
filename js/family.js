@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -7186,6 +7187,20 @@ if(editMaritalStatus === "yes"){
         editMarriedNo.checked = false;
     }
 
+    /* SHOW MARRIAGE DATE ROW */
+
+    const editMarriageDateGroup =
+        document.getElementById(
+            "marriageDateGroup"
+        );
+
+    if(editMarriageDateGroup){
+
+        editMarriageDateGroup.style.display =
+            "flex";
+
+    }
+
 }
 else if(editMaritalStatus === "no"){
 
@@ -7197,8 +7212,19 @@ else if(editMaritalStatus === "no"){
         editMarriedNo.checked = true;
     }
 
-}
+    const editMarriageDateGroup =
+        document.getElementById(
+            "marriageDateGroup"
+        );
 
+    if(editMarriageDateGroup){
+
+        editMarriageDateGroup.style.display =
+            "none";
+
+    }
+
+}
    /* =================================
    MARRIAGE DATE
    ================================= */
@@ -9764,6 +9790,21 @@ const memberId = "";
         "partnerId",
         partnerId
     );
+   
+/* ================================
+   MARRIAGE DATE
+   ================================ */
+
+params.append(
+    "marriageDate",
+    maritalStatus.toLowerCase() === "yes"
+        ? (
+            document.getElementById(
+                "memberMarriageDate"
+            )?.value || ""
+        )
+        : ""
+);
 /* ================================
    ADDITIONAL MEMBER DETAILS
    ================================ */
