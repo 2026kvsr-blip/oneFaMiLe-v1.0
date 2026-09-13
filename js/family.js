@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13297,6 +13298,20 @@ let childrenHTML = "";
 children.forEach(
     child => {
 
+        const childPartner =
+            members.find(
+                m =>
+                    String(m.memberId) ===
+                    String(child.partnerId || "")
+            )
+            ||
+            members.find(
+                m =>
+                    String(m.partnerId || "") ===
+                    String(child.memberId)
+            );
+
+
         const grandChildren =
             getChildren(child);
 
@@ -13305,10 +13320,23 @@ children.forEach(
 
             <div class="family-tree-child-branch">
 
-                ${treeBox(
-                    child,
-                    "tree-child-node"
-                )}
+                <div class="family-tree-child-couple">
+
+                    ${treeBox(
+                        child,
+                        "tree-child-node"
+                    )}
+
+                    ${
+                        childPartner
+                            ? treeBox(
+                                childPartner,
+                                "tree-child-partner"
+                              )
+                            : ""
+                    }
+
+                </div>
 
 
                 ${
@@ -13341,7 +13369,6 @@ children.forEach(
 
     }
 );
-
 
 /* =====================================
    MAIN TREE HTML
@@ -14131,19 +14158,182 @@ function fitFamilyTreeToScreen(){
        CHILDREN
        ================================ */
 
-    const children =
-        Array.from(
-            canvas.querySelectorAll(
-                ".tree-child-node"
+    const childBranches =
+    Array.from(
+        canvas.querySelectorAll(
+            ".family-tree-child-branch"
+        )
+    );
+
+
+const childTargets =
+    childBranches
+        .map(
+            branch => {
+
+                const child =
+                    branch.querySelector(
+                        ".tree-child-node"
+                    );
+
+                const childPartner =
+                    branch.querySelector(
+                        ".tree-child-partner"
+                    );
+
+
+                if(
+                    child &&
+                    childPartner
+                ){
+
+                    return {
+                        child,
+                        childPartner,
+                        couple: true
+                    };
+
+                }
+
+
+                if(child){
+
+                    return {
+                        child,
+                        childPartner: null,
+                        couple: false
+                    };
+
+                }
+
+
+                return null;
+
+            }
+        )
+        .filter(Boolean);
+
+
+/* CHILD / CHILD-PARTNER COUPLE LINES */
+
+const childCenters = [];
+
+
+childTargets.forEach(
+    item => {
+
+        if(
+            item.couple &&
+            item.childPartner
+        ){
+
+            const coupleCenter =
+                connectCouple(
+                    item.child,
+                    item.childPartner
+                );
+
+            childCenters.push(
+                {
+                    element:
+                        item.child,
+
+                    x:
+                        coupleCenter.x,
+
+                    y:
+                        getPoint(
+                            item.child,
+                            "top"
+                        ).y
+                }
+            );
+
+        }
+        else{
+
+            const topPoint =
+                getPoint(
+                    item.child,
+                    "top"
+                );
+
+            childCenters.push(
+                {
+                    element:
+                        item.child,
+
+                    x:
+                        topPoint.x,
+
+                    y:
+                        topPoint.y
+                }
+            );
+
+        }
+
+    }
+);
+
+
+/* SELECTED COUPLE → CHILDREN */
+
+if(
+    selectedCoupleCenter &&
+    childCenters.length
+){
+
+    const childBusY =
+        selectedCoupleCenter.y + 28;
+
+
+    addLine(
+        selectedCoupleCenter.x,
+        selectedCoupleCenter.y,
+        selectedCoupleCenter.x,
+        childBusY
+    );
+
+
+    const minX =
+        Math.min(
+            ...childCenters.map(
+                p => p.x
             )
         );
 
 
-    connectParentsToChildren(
-        selectedCoupleCenter,
-        children
+    const maxX =
+        Math.max(
+            ...childCenters.map(
+                p => p.x
+            )
+        );
+
+
+    addLine(
+        minX,
+        childBusY,
+        maxX,
+        childBusY
     );
 
+
+    childCenters.forEach(
+        point => {
+
+            addLine(
+                point.x,
+                childBusY,
+                point.x,
+                point.y
+            );
+
+        }
+    );
+
+}
 
     /* ================================
        GRAND CHILDREN
@@ -14180,18 +14370,59 @@ function fitFamilyTreeToScreen(){
             }
 
 
-            const childBottom =
-                getPoint(
-                    child,
-                    "bottom"
-                );
+            const childPartner =
+    branch.querySelector(
+        ".tree-child-partner"
+    );
 
 
-            connectParentsToChildren(
-                childBottom,
-                grandChildren
-            );
+let childParentCenter;
 
+
+if(
+    childPartner
+){
+
+    const childRight =
+        getPoint(
+            child,
+            "right"
+        );
+
+    const partnerLeft =
+        getPoint(
+            childPartner,
+            "left"
+        );
+
+
+    childParentCenter = {
+        x:
+            (
+                childRight.x +
+                partnerLeft.x
+            ) / 2,
+
+        y:
+            childRight.y
+    };
+
+}
+else{
+
+    childParentCenter =
+        getPoint(
+            child,
+            "bottom"
+        );
+
+}
+
+
+connectParentsToChildren(
+    childParentCenter,
+    grandChildren
+);
         }
     );
 
