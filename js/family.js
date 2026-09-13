@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12989,80 +12988,923 @@ if(partner){
 }
 
 
-diagram.innerHTML = `
+/* =====================================
+   FAMILY TREE RELATIONS
+   ===================================== */
 
-    <!-- =========================
-         FATHER + MOTHER
-         ========================= -->
+const getMemberById =
+    function(id){
 
-    ${
-        father || mother
-        ? `
+        if(!id){
+            return null;
+        }
 
-            <div class="family-tree-parent-row">
+        return members.find(
+            m =>
+                String(m.memberId) ===
+                String(id)
+        ) || null;
 
-                ${
-                    father
-                        ? createTreeMemberBox(father)
-                        : ""
-                }
-
-                ${
-                    father && mother
-                        ? `
-                            <div class="family-tree-spouse-line"></div>
-                          `
-                        : ""
-                }
-
-                ${
-                    mother
-                        ? createTreeMemberBox(mother)
-                        : ""
-                }
-
-            </div>
+    };
 
 
-            <div class="family-tree-parent-child-line">
+const getChildren =
+    function(member){
 
-                <div class="family-tree-vertical-line"></div>
+        if(!member){
+            return [];
+        }
 
-            </div>
+        return members.filter(
+            m =>
+                String(m.fatherId || "") ===
+                    String(member.memberId)
+                ||
+                String(m.motherId || "") ===
+                    String(member.memberId)
+        );
 
-          `
-        : ""
+    };
+
+
+const father =
+    getMemberById(
+        selectedMember.fatherId
+    );
+
+
+const mother =
+    getMemberById(
+        selectedMember.motherId
+    );
+
+
+/* =====================================
+   SELECTED MEMBER SIBLINGS
+   ===================================== */
+
+const siblings =
+    members.filter(
+        m => {
+
+            if(
+                String(m.memberId) ===
+                String(selectedMember.memberId)
+            ){
+                return false;
+            }
+
+            const sameFather =
+                selectedMember.fatherId &&
+                String(m.fatherId || "") ===
+                String(selectedMember.fatherId);
+
+            const sameMother =
+                selectedMember.motherId &&
+                String(m.motherId || "") ===
+                String(selectedMember.motherId);
+
+            return sameFather || sameMother;
+
+        }
+    );
+
+
+/* =====================================
+   PARTNER PARENTS
+   ===================================== */
+
+const partnerFather =
+    partner
+        ? getMemberById(
+            partner.fatherId
+          )
+        : null;
+
+
+const partnerMother =
+    partner
+        ? getMemberById(
+            partner.motherId
+          )
+        : null;
+
+
+/* =====================================
+   CHILDREN
+   ===================================== */
+
+const children =
+    members.filter(
+        m =>
+            String(m.fatherId || "") ===
+                String(selectedMember.memberId)
+            ||
+            String(m.motherId || "") ===
+                String(selectedMember.memberId)
+            ||
+            (
+                partner &&
+                (
+                    String(m.fatherId || "") ===
+                        String(partner.memberId)
+                    ||
+                    String(m.motherId || "") ===
+                        String(partner.memberId)
+                )
+            )
+    );
+
+
+/* =====================================
+   TREE BOX
+   ===================================== */
+
+function treeBox(member, extraClass = ""){
+
+    if(!member){
+        return "";
     }
 
+    const gender =
+        String(member.gender)
+            .toLowerCase() === "female"
+            ? "F"
+            : "M";
 
-    <!-- =========================
-         SELECTED MEMBER + PARTNER
-         ========================= -->
+    const genderClass =
+        gender === "M"
+            ? "gender-male"
+            : "gender-female";
 
-    <div class="family-tree-couple-row">
 
-        <div class="family-tree-test-node">
+    return `
+
+        <div
+            class="family-tree-test-node ${extraClass}"
+            data-tree-member="${member.memberId}">
 
             <strong>
-                ${selectedMember.name}
+                ${member.name || ""}
             </strong>
 
-            <span class="${
-                genderLetter === "M"
-                    ? "gender-male"
-                    : "gender-female"
-            }">
-                ${genderLetter}
+            <span class="${genderClass}">
+                ${gender}
             </span>
 
         </div>
 
-        ${partnerHTML}
+    `;
+
+}
+
+
+/* =====================================
+   GRAND CHILDREN HTML
+   ===================================== */
+
+let childrenHTML = "";
+
+
+children.forEach(
+    child => {
+
+        const grandChildren =
+            getChildren(child);
+
+
+        childrenHTML += `
+
+            <div class="family-tree-child-branch">
+
+                ${treeBox(
+                    child,
+                    "tree-child-node"
+                )}
+
+
+                ${
+                    grandChildren.length
+                    ? `
+
+                        <div class="family-tree-grandchildren-row">
+
+                            ${
+                                grandChildren
+                                    .map(
+                                        grandChild =>
+                                            treeBox(
+                                                grandChild,
+                                                "tree-grandchild-node"
+                                            )
+                                    )
+                                    .join("")
+                            }
+
+                        </div>
+
+                      `
+                    : ""
+                }
+
+            </div>
+
+        `;
+
+    }
+);
+
+
+/* =====================================
+   MAIN TREE HTML
+   ===================================== */
+
+diagram.innerHTML = `
+
+    <div class="family-tree-scroll">
+
+        <div
+            id="familyTreeCanvas"
+            class="family-tree-canvas">
+
+
+            <svg
+                id="familyTreeLines"
+                class="family-tree-lines">
+            </svg>
+
+
+            <!-- =====================
+                 PARENTS ROW
+                 ===================== -->
+
+            <div class="family-tree-top-row">
+
+
+                <div class="family-tree-parent-group">
+
+                    ${
+                        father
+                            ? treeBox(
+                                father,
+                                "tree-father"
+                              )
+                            : ""
+                    }
+
+                    ${
+                        mother
+                            ? treeBox(
+                                mother,
+                                "tree-mother"
+                              )
+                            : ""
+                    }
+
+                </div>
+
+
+                ${
+                    partner
+                    ? `
+
+                        <div class="family-tree-parent-group">
+
+                            ${
+                                partnerMother
+                                    ? treeBox(
+                                        partnerMother,
+                                        "tree-partner-mother"
+                                      )
+                                    : ""
+                            }
+
+                            ${
+                                partnerFather
+                                    ? treeBox(
+                                        partnerFather,
+                                        "tree-partner-father"
+                                      )
+                                    : ""
+                            }
+
+                        </div>
+
+                      `
+                    : ""
+                }
+
+            </div>
+
+
+            <!-- =====================
+                 MAIN GENERATION
+                 ===================== -->
+
+            <div class="family-tree-main-row">
+
+
+                <div class="family-tree-siblings-row">
+
+                    ${
+                        siblings
+                            .map(
+                                sibling =>
+                                    treeBox(
+                                        sibling,
+                                        "tree-sibling"
+                                    )
+                            )
+                            .join("")
+                    }
+
+                </div>
+
+
+                ${treeBox(
+                    selectedMember,
+                    "tree-selected"
+                )}
+
+
+                ${
+                    partner
+                        ? treeBox(
+                            partner,
+                            "tree-partner"
+                          )
+                        : ""
+                }
+
+            </div>
+
+
+            <!-- =====================
+                 CHILDREN
+                 ===================== -->
+
+            ${
+                children.length
+                ? `
+
+                    <div class="family-tree-children-row">
+
+                        ${childrenHTML}
+
+                    </div>
+
+                  `
+                : ""
+            }
+
+
+        </div>
 
     </div>
 
 `;
+        
+    requestAnimationFrame(
+    function(){
+
+        drawFamilyTreeLines();
+
+    }
+);    
+        
         };
 
 }
+}
+/* =====================================
+   DRAW FAMILY TREE CONNECTING LINES
+   ===================================== */
+
+function drawFamilyTreeLines(){
+
+    const canvas =
+        document.getElementById(
+            "familyTreeCanvas"
+        );
+
+    const svg =
+        document.getElementById(
+            "familyTreeLines"
+        );
+
+
+    if(!canvas || !svg){
+        return;
+    }
+
+
+    const canvasRect =
+        canvas.getBoundingClientRect();
+
+
+    svg.setAttribute(
+        "width",
+        canvas.scrollWidth
+    );
+
+    svg.setAttribute(
+        "height",
+        canvas.scrollHeight
+    );
+
+
+    svg.innerHTML = "";
+
+
+    function getPoint(
+        element,
+        position
+    ){
+
+        if(!element){
+            return null;
+        }
+
+        const rect =
+            element.getBoundingClientRect();
+
+
+        const left =
+            rect.left -
+            canvasRect.left;
+
+
+        const top =
+            rect.top -
+            canvasRect.top;
+
+
+        if(position === "top"){
+
+            return {
+                x:
+                    left +
+                    rect.width / 2,
+
+                y:
+                    top
+            };
+
+        }
+
+
+        if(position === "bottom"){
+
+            return {
+                x:
+                    left +
+                    rect.width / 2,
+
+                y:
+                    top +
+                    rect.height
+            };
+
+        }
+
+
+        if(position === "left"){
+
+            return {
+                x:
+                    left,
+
+                y:
+                    top +
+                    rect.height / 2
+            };
+
+        }
+
+
+        return {
+            x:
+                left +
+                rect.width,
+
+            y:
+                top +
+                rect.height / 2
+        };
+
+    }
+
+
+    function addLine(
+        x1,
+        y1,
+        x2,
+        y2
+    ){
+
+        const line =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "line"
+            );
+
+
+        line.setAttribute(
+            "x1",
+            x1
+        );
+
+        line.setAttribute(
+            "y1",
+            y1
+        );
+
+        line.setAttribute(
+            "x2",
+            x2
+        );
+
+        line.setAttribute(
+            "y2",
+            y2
+        );
+
+        line.setAttribute(
+            "class",
+            "family-tree-svg-line"
+        );
+
+
+        svg.appendChild(
+            line
+        );
+
+    }
+
+
+    function connectCouple(
+        first,
+        second
+    ){
+
+        if(!first || !second){
+            return null;
+        }
+
+
+        const p1 =
+            getPoint(
+                first,
+                "right"
+            );
+
+
+        const p2 =
+            getPoint(
+                second,
+                "left"
+            );
+
+
+        addLine(
+            p1.x,
+            p1.y,
+            p2.x,
+            p2.y
+        );
+
+
+        return {
+            x:
+                (
+                    p1.x +
+                    p2.x
+                ) / 2,
+
+            y:
+                p1.y
+        };
+
+    }
+
+
+    function connectParentsToChildren(
+        parentCenter,
+        children
+    ){
+
+        if(
+            !parentCenter ||
+            !children ||
+            !children.length
+        ){
+            return;
+        }
+
+
+        const childPoints =
+            children
+                .map(
+                    child =>
+                        getPoint(
+                            child,
+                            "top"
+                        )
+                )
+                .filter(Boolean);
+
+
+        if(!childPoints.length){
+            return;
+        }
+
+
+        const busY =
+            parentCenter.y + 28;
+
+
+        addLine(
+            parentCenter.x,
+            parentCenter.y,
+            parentCenter.x,
+            busY
+        );
+
+
+        const minX =
+            Math.min(
+                ...childPoints.map(
+                    p => p.x
+                )
+            );
+
+
+        const maxX =
+            Math.max(
+                ...childPoints.map(
+                    p => p.x
+                )
+            );
+
+
+        addLine(
+            minX,
+            busY,
+            maxX,
+            busY
+        );
+
+
+        childPoints.forEach(
+            point => {
+
+                addLine(
+                    point.x,
+                    busY,
+                    point.x,
+                    point.y
+                );
+
+            }
+        );
+
+    }
+
+
+    /* ================================
+       SELECTED MEMBER PARENTS
+       ================================ */
+
+    const father =
+        canvas.querySelector(
+            ".tree-father"
+        );
+
+    const mother =
+        canvas.querySelector(
+            ".tree-mother"
+        );
+
+
+    let parentCenter = null;
+
+
+    if(father && mother){
+
+        parentCenter =
+            connectCouple(
+                father,
+                mother
+            );
+
+    }
+    else{
+
+        const singleParent =
+            father || mother;
+
+
+        if(singleParent){
+
+            parentCenter =
+                getPoint(
+                    singleParent,
+                    "bottom"
+                );
+
+        }
+
+    }
+
+
+    const siblings =
+        Array.from(
+            canvas.querySelectorAll(
+                ".tree-sibling"
+            )
+        );
+
+
+    const selected =
+        canvas.querySelector(
+            ".tree-selected"
+        );
+
+
+    const selectedChildrenRow =
+        [
+            ...siblings,
+            selected
+        ].filter(Boolean);
+
+
+    connectParentsToChildren(
+        parentCenter,
+        selectedChildrenRow
+    );
+
+
+    /* ================================
+       PARTNER PARENTS
+       ================================ */
+
+    const partnerFather =
+        canvas.querySelector(
+            ".tree-partner-father"
+        );
+
+    const partnerMother =
+        canvas.querySelector(
+            ".tree-partner-mother"
+        );
+
+    const partner =
+        canvas.querySelector(
+            ".tree-partner"
+        );
+
+
+    let partnerParentCenter = null;
+
+
+    if(
+        partnerFather &&
+        partnerMother
+    ){
+
+        partnerParentCenter =
+            connectCouple(
+                partnerMother,
+                partnerFather
+            );
+
+    }
+    else{
+
+        const singlePartnerParent =
+            partnerFather ||
+            partnerMother;
+
+
+        if(singlePartnerParent){
+
+            partnerParentCenter =
+                getPoint(
+                    singlePartnerParent,
+                    "bottom"
+                );
+
+        }
+
+    }
+
+
+    if(
+        partnerParentCenter &&
+        partner
+    ){
+
+        connectParentsToChildren(
+            partnerParentCenter,
+            [partner]
+        );
+
+    }
+
+
+    /* ================================
+       SELECTED + PARTNER
+       ================================ */
+
+    let selectedCoupleCenter = null;
+
+
+    if(selected && partner){
+
+        selectedCoupleCenter =
+            connectCouple(
+                selected,
+                partner
+            );
+
+    }
+    else if(selected){
+
+        selectedCoupleCenter =
+            getPoint(
+                selected,
+                "bottom"
+            );
+
+    }
+
+
+    /* ================================
+       CHILDREN
+       ================================ */
+
+    const children =
+        Array.from(
+            canvas.querySelectorAll(
+                ".tree-child-node"
+            )
+        );
+
+
+    connectParentsToChildren(
+        selectedCoupleCenter,
+        children
+    );
+
+
+    /* ================================
+       GRAND CHILDREN
+       ================================ */
+
+    const branches =
+        canvas.querySelectorAll(
+            ".family-tree-child-branch"
+        );
+
+
+    branches.forEach(
+        branch => {
+
+            const child =
+                branch.querySelector(
+                    ".tree-child-node"
+                );
+
+
+            const grandChildren =
+                Array.from(
+                    branch.querySelectorAll(
+                        ".tree-grandchild-node"
+                    )
+                );
+
+
+            if(
+                !child ||
+                !grandChildren.length
+            ){
+                return;
+            }
+
+
+            const childBottom =
+                getPoint(
+                    child,
+                    "bottom"
+                );
+
+
+            connectParentsToChildren(
+                childBottom,
+                grandChildren
+            );
+
+        }
+    );
+
 }
