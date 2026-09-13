@@ -13971,11 +13971,63 @@ function connectParentsToChildren(
     }
 
 
-    /* =================================
-       HORIZONTAL CHILDREN BUS
-       ================================= */
+    /* =====================================
+       SINGLE CHILD
+       ===================================== */
 
-    const highestChildTop =
+    if(childPoints.length === 1){
+
+        const childPoint =
+            childPoints[0];
+
+
+        const middleY =
+            parentCenter.y +
+            (
+                childPoint.y -
+                parentCenter.y
+            ) / 2;
+
+
+        /* Parent center ↓ */
+
+        addLine(
+            parentCenter.x,
+            parentCenter.y,
+            parentCenter.x,
+            middleY
+        );
+
+
+        /* Horizontal adjustment */
+
+        addLine(
+            parentCenter.x,
+            middleY,
+            childPoint.x,
+            middleY
+        );
+
+
+        /* ↓ exact child box top-center */
+
+        addLine(
+            childPoint.x,
+            middleY,
+            childPoint.x,
+            childPoint.y
+        );
+
+
+        return;
+    }
+
+
+    /* =====================================
+       MULTIPLE CHILDREN
+       ===================================== */
+
+    const childTopY =
         Math.min(
             ...childPoints.map(
                 point => point.y
@@ -13984,25 +14036,12 @@ function connectParentsToChildren(
 
 
     const busY =
-        highestChildTop - 18;
+        parentCenter.y +
+        (
+            childTopY -
+            parentCenter.y
+        ) / 2;
 
-
-    /* =================================
-       PARENT COUPLE MIDPOINT
-       DOWN TO CHILDREN BUS
-       ================================= */
-
-    addLine(
-        parentCenter.x,
-        parentCenter.y,
-        parentCenter.x,
-        busY
-    );
-
-
-    /* =================================
-       CHILDREN RANGE
-       ================================= */
 
     const minX =
         Math.min(
@@ -14020,19 +14059,46 @@ function connectParentsToChildren(
         );
 
 
-    /* horizontal bus */
+    /*
+       Parent center kuda horizontal bus
+       range lo compulsory include cheyyali
+    */
+
+    const busStartX =
+        Math.min(
+            minX,
+            parentCenter.x
+        );
+
+
+    const busEndX =
+        Math.max(
+            maxX,
+            parentCenter.x
+        );
+
+
+    /* Parent center ↓ bus */
 
     addLine(
-        minX,
-        busY,
-        maxX,
+        parentCenter.x,
+        parentCenter.y,
+        parentCenter.x,
         busY
     );
 
 
-    /* =================================
-       EACH LINE ENDS AT CHILD BOX
-       ================================= */
+    /* Horizontal children bus */
+
+    addLine(
+        busStartX,
+        busY,
+        busEndX,
+        busY
+    );
+
+
+    /* Bus ↓ each actual child box */
 
     childPoints.forEach(
         point => {
@@ -14048,7 +14114,6 @@ function connectParentsToChildren(
     );
 
 }
-
 
     /* ================================
        SELECTED MEMBER PARENTS
