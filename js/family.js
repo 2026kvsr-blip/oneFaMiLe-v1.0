@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -216,6 +217,29 @@ familyBtn.onclick = () => {
         `
 
     );
+   /* =====================================
+   FAMILY → TREE VIEW
+   ===================================== */
+
+const treeViewBtn =
+    document.getElementById(
+        "treeViewBtn"
+    );
+
+if(treeViewBtn){
+
+    treeViewBtn.onclick =
+        function(){
+
+            console.log(
+                "TREE VIEW CLICKED"
+            );
+
+            openFamilyTreePage();
+
+        };
+
+}
 bindAddMemberButton();
 
    /* =====================================
