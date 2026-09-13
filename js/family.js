@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14116,10 +14117,95 @@ function connectParentsToChildren(
         ].filter(Boolean);
 
 
-    connectParentsToChildren(
-        parentCenter,
+   if(
+    parentCenter &&
+    selectedChildrenRow.length
+){
+
+    const childPoints =
         selectedChildrenRow
-    );
+            .map(
+                child =>
+                    getPoint(
+                        child,
+                        "top"
+                    )
+            )
+            .filter(Boolean);
+
+
+    if(childPoints.length){
+
+        const firstChildTopY =
+            Math.min(
+                ...childPoints.map(
+                    p => p.y
+                )
+            );
+
+
+        const busY =
+            parentCenter.y +
+            (
+                firstChildTopY -
+                parentCenter.y
+            ) / 2;
+
+
+        /* Parents midpoint nundi bus varaku */
+
+        addLine(
+            parentCenter.x,
+            parentCenter.y,
+            parentCenter.x,
+            busY
+        );
+
+
+        const minX =
+            Math.min(
+                ...childPoints.map(
+                    p => p.x
+                )
+            );
+
+
+        const maxX =
+            Math.max(
+                ...childPoints.map(
+                    p => p.x
+                )
+            );
+
+
+        /* Siblings + selected member horizontal bus */
+
+        addLine(
+            minX,
+            busY,
+            maxX,
+            busY
+        );
+
+
+        /* Prathi child box top-center ki vertical line */
+
+        childPoints.forEach(
+            point => {
+
+                addLine(
+                    point.x,
+                    busY,
+                    point.x,
+                    point.y
+                );
+
+            }
+        );
+
+    }
+
+}
 
 
     /* ================================
