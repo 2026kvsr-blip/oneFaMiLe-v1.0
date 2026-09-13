@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12940,9 +12941,13 @@ diagram.innerHTML = `
                 ${selectedMember.name}
             </strong>
 
-            <span>
-                ${genderLetter}
-            </span>
+           <span class="${
+    genderLetter === "M"
+        ? "gender-male"
+        : "gender-female"
+}">
+    ${genderLetter}
+</span>
 
         </div>
 
