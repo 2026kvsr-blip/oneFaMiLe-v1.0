@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -1996,26 +1997,31 @@
 .family-tree-top-row{
     display: flex;
 
+    flex-direction: row;
+
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
 
-    gap: 120px;
+    gap: 80px;
 
+    width: 100%;
     min-width: 700px;
 
     margin-bottom: 70px;
-}
 
+    box-sizing: border-box;
+}
 
 .family-tree-parent-group{
     display: flex;
 
+    flex-direction: row;
+
     justify-content: center;
     align-items: center;
 
-    gap: 34px;
+    gap: 28px;
 }
-
 
 /* =====================================
    SELECTED GENERATION
