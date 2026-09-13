@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12880,7 +12881,61 @@ if(showFamilyTreeBtn){
                 document.getElementById(
                     "familyTreeDiagram"
                 );
+/* =====================================
+   GET FATHER AND MOTHER
+   ===================================== */
 
+const father =
+    members.find(
+        member =>
+            String(member.memberId) ===
+            String(selectedMember.fatherId || "")
+    );
+
+
+const mother =
+    members.find(
+        member =>
+            String(member.memberId) ===
+            String(selectedMember.motherId || "")
+    );
+
+
+function createTreeMemberBox(member){
+
+    if(!member){
+        return "";
+    }
+
+    const gender =
+        String(member.gender)
+            .toLowerCase() === "female"
+            ? "F"
+            : "M";
+
+    const genderClass =
+        gender === "M"
+            ? "gender-male"
+            : "gender-female";
+
+
+    return `
+
+        <div class="family-tree-test-node">
+
+            <strong>
+                ${member.name}
+            </strong>
+
+            <span class="${genderClass}">
+                ${gender}
+            </span>
+
+        </div>
+
+    `;
+
+}
 
            const partner =
     members.find(
@@ -12936,6 +12991,54 @@ if(partner){
 
 diagram.innerHTML = `
 
+    <!-- =========================
+         FATHER + MOTHER
+         ========================= -->
+
+    ${
+        father || mother
+        ? `
+
+            <div class="family-tree-parent-row">
+
+                ${
+                    father
+                        ? createTreeMemberBox(father)
+                        : ""
+                }
+
+                ${
+                    father && mother
+                        ? `
+                            <div class="family-tree-spouse-line"></div>
+                          `
+                        : ""
+                }
+
+                ${
+                    mother
+                        ? createTreeMemberBox(mother)
+                        : ""
+                }
+
+            </div>
+
+
+            <div class="family-tree-parent-child-line">
+
+                <div class="family-tree-vertical-line"></div>
+
+            </div>
+
+          `
+        : ""
+    }
+
+
+    <!-- =========================
+         SELECTED MEMBER + PARTNER
+         ========================= -->
+
     <div class="family-tree-couple-row">
 
         <div class="family-tree-test-node">
@@ -12944,16 +13047,15 @@ diagram.innerHTML = `
                 ${selectedMember.name}
             </strong>
 
-           <span class="${
-    genderLetter === "M"
-        ? "gender-male"
-        : "gender-female"
-}">
-    ${genderLetter}
-</span>
+            <span class="${
+                genderLetter === "M"
+                    ? "gender-male"
+                    : "gender-female"
+            }">
+                ${genderLetter}
+            </span>
 
         </div>
-
 
         ${partnerHTML}
 
