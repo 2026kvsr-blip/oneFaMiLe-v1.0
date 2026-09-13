@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13359,8 +13358,10 @@ diagram.innerHTML = `
 
         drawFamilyTreeLines();
 
+        fitFamilyTreeToScreen();
+
     }
-);    
+);  
         
         };
 
@@ -13576,7 +13577,103 @@ function drawFamilyTreeLines(){
         };
 
     }
+/* =====================================
+   AUTO FIT FAMILY TREE TO SCREEN
+   ===================================== */
 
+function fitFamilyTreeToScreen(){
+
+    const wrapper =
+        document.querySelector(
+            ".family-tree-scroll"
+        );
+
+    const canvas =
+        document.getElementById(
+            "familyTreeCanvas"
+        );
+
+    if(!wrapper || !canvas){
+        return;
+    }
+
+
+    /* =================================
+       STEP 1
+       OLD SCALE REMOVE
+       ================================= */
+
+    canvas.style.transform = "none";
+    canvas.style.marginBottom = "0";
+
+
+    /* =================================
+       STEP 2
+       ACTUAL TREE WIDTH
+       ================================= */
+
+    const treeWidth =
+        canvas.scrollWidth;
+
+
+    /* =================================
+       STEP 3
+       SCREEN / WRAPPER WIDTH
+       ================================= */
+
+    const availableWidth =
+        wrapper.clientWidth;
+
+
+    /* =================================
+       STEP 4
+       IF TREE IS WIDER THAN SCREEN
+       SCALE IT DOWN
+       ================================= */
+
+    if(
+        treeWidth > availableWidth &&
+        treeWidth > 0
+    ){
+
+        const scale =
+            availableWidth /
+            treeWidth;
+
+
+        canvas.style.transformOrigin =
+            "top left";
+
+
+        canvas.style.transform =
+            `scale(${scale})`;
+
+
+        /* =================================
+           STEP 5
+           REMOVE EXTRA EMPTY HEIGHT
+           ================================= */
+
+        const originalHeight =
+            canvas.scrollHeight;
+
+
+        const scaledHeight =
+            originalHeight *
+            scale;
+
+
+        const extraHeight =
+            originalHeight -
+            scaledHeight;
+
+
+        canvas.style.marginBottom =
+            `-${extraHeight}px`;
+
+    }
+
+}
 
     function connectParentsToChildren(
         parentCenter,
