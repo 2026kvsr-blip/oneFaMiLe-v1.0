@@ -2104,3 +2104,54 @@
 .tree-selected.tree-female{
     border: 2.5px solid #D96B8A !important;
 }
+/* =====================================
+   FAMILY TREE GENDER LEGEND
+   ===================================== */
+
+.family-tree-legend{
+    display: flex;
+
+    justify-content: flex-start;
+    align-items: center;
+
+    gap: 16px;
+
+    width: 100%;
+
+    margin: 4px 0 8px 4px;
+
+    font-size: 10px;
+
+    color: #2A6EB0;
+}
+
+
+.family-tree-legend-item{
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+}
+
+
+.legend-box{
+    width: 12px;
+    height: 12px;
+
+    display: inline-block;
+
+    border: 1px solid #2A6EB0;
+
+    border-radius: 2px;
+}
+
+
+.legend-male{
+    background: #E4F6E4;
+}
+
+
+.legend-female{
+    background: #FFE4EE;
+}
