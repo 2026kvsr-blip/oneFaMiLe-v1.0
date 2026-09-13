@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5246,7 +5247,10 @@ window.openSearchEditMemberPage =
                 document.getElementById(
                     "searchEditBackBtn"
                 );
-
+            const homeBtn =
+    document.getElementById(
+        "searchEditHomeBtn"
+    );
 
             /* =================================
                VARIABLES
@@ -5291,7 +5295,27 @@ let membersLoaded =
 
             }
 
+/* =================================
+   HOME
+   ================================= */
 
+if(homeBtn){
+
+    homeBtn.onclick =
+        function(){
+
+            const mainHomeBtn =
+                document.getElementById(
+                    "homeBtn"
+                );
+
+            if(mainHomeBtn){
+                mainHomeBtn.click();
+            }
+
+        };
+
+}
             /* =================================
                SHOW SEARCH MEMBERS
                ================================= */
