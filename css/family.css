@@ -1,3 +1,4 @@
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -1817,85 +1818,71 @@
    ===================================== */
 
 .family-tree-test-node{
+    position: relative;
+
     width: 110px !important;
-    height: 46px !important;
+    height: 42px !important;
 
     min-width: 110px !important;
-    min-height: 46px !important;
+    min-height: 42px !important;
 
     max-width: 110px !important;
-    max-height: 46px !important;
+    max-height: 42px !important;
 
-    margin: 0;
+    padding: 1px 2px !important;
+    margin: 0 !important;
 
-    padding: 2px 4px !important;
-
-    border: 1.5px solid #2A6EB0;
-    border-radius: 6px;
+    border: 1px solid #2A6EB0;
+    border-radius: 5px;
 
     background: white;
 
     display: flex;
     flex-direction: column;
-
     justify-content: center;
     align-items: center;
-
-    text-align: center;
 
     box-sizing: border-box;
 
     flex-shrink: 0;
-}
 
+    z-index: 2;
+}
 
 /* FULL MEMBER NAME */
 
 .family-tree-test-node strong{
-    display: block;
-
     width: 100%;
 
-    font-size: 9px !important;
-    font-weight: 400 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 
-    line-height: 10px !important;
+    font-size: 8px !important;
+    font-weight: 400 !important;
+    line-height: 8.5px !important;
 
     color: #2A6EB0;
 
     text-align: center;
 
     white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: unset !important;
-
     overflow-wrap: anywhere;
-    word-break: normal;
-
-    margin: 0 !important;
-    padding: 0 !important;
 }
-
 
 /* GENDER */
 
 .family-tree-test-node span{
-    display: block;
-
     width: 100%;
 
-    font-size: 9px !important;
-    font-weight: 400 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 
-    line-height: 10px !important;
+    font-size: 7px !important;
+    font-weight: 400 !important;
+    line-height: 8px !important;
 
     text-align: center;
-
-    margin: 1px 0 0 0 !important;
-    padding: 0 !important;
 }
-
-
 /* MALE */
 
 .family-tree-test-node span.gender-male{
@@ -1981,28 +1968,27 @@
 .family-tree-scroll{
     width: 100%;
 
-    overflow-x: auto;
-    overflow-y: visible;
+    overflow: hidden !important;
 
-    margin-top: 20px;
+    margin-top: 15px;
 
-    padding: 4px 0 20px;
+    padding: 0 !important;
 
     box-sizing: border-box;
 }
-
 
 .family-tree-canvas{
     position: relative;
 
     width: max-content;
-    min-width: 100%;
+    min-width: 0 !important;
 
-    padding: 15px 18px 35px;
+    padding: 4px !important;
 
     box-sizing: border-box;
-}
 
+    transform-origin: top left;
+}
 
 /* SVG LINES */
 
