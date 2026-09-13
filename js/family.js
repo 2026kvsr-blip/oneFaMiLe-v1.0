@@ -5840,16 +5840,47 @@ function bindAddMemberButton(){
 
     if(!addMemberBtn) return;
 
-    addMemberBtn.onclick = () => {
+   addMemberBtn.onclick = () => {
 
-       
+    /* =================================
+       ADD / EDIT MEMBER MODE
+       ================================= */
+
+    const openMemberMode =
+        sessionStorage.getItem(
+            "openMemberMode"
+        ) || "add";
+
+
+    sessionStorage.removeItem(
+        "openMemberMode"
+    );
+
+
+    /* NORMAL ADD MEMBER
+       → REMOVE OLD EDIT MEMBER */
+
+    if(openMemberMode !== "edit"){
+
+        localStorage.removeItem(
+            "editMember"
+        );
+
+    }
+
+
+    console.log(
+        "OPEN MEMBER MODE:",
+        openMemberMode
+    );
+
+
     showPage(
 
-    pageTitle(
-        "Add Member",
-        "images/colorbtns/AddMember1.png"
-    )
-
+        pageTitle(
+            "Add Member",
+            "images/colorbtns/AddMember1.png"
+        )
     + `
 
     <div class="common-page">
