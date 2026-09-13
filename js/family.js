@@ -1,5 +1,6 @@
 
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -8098,26 +8099,25 @@ if(memberDob){
 
             /* Age 18 or above */
 
-            if(age >= 18){
+           if(age >= 18){
 
-                hideMarriageConfirmation();
+    hideMarriageConfirmation();
 
-                /*
-                   If Yes is already selected,
-                   show Partner immediately
-                */
+    if(
+        marriedYes &&
+        marriedYes.checked
+    ){
 
-                if(
-                    marriedYes &&
-                    marriedYes.checked
-                ){
+        showPartner();
 
-                    showPartner();
+        if(marriageDateGroup){
+            marriageDateGroup.style.display =
+                "flex";
+        }
 
-                }
+    }
 
-            }
-
+}
 
             /* Age below 18 */
 
@@ -10461,9 +10461,12 @@ const addMemberPageTitle =
 if(addMemberPageTitle){
 
     addMemberPageTitle.innerHTML =
-        "New Member added";
+        editMember
+            ? "Member updated"
+            : "New Member added";
 
 }
+       
 /* ================================
    DISABLE ALL MEMBER FIELDS
    ================================ */
@@ -10767,20 +10770,52 @@ if(memberBackBtn){
     memberBackBtn.onclick =
         function(){
 
+            /* EDIT MEMBER UPDATED
+               → SEARCH - EDIT MEMBER */
+
+            if(editMember){
+
+                console.log(
+                    "UPDATED MEMBER → SEARCH EDIT"
+                );
+
+                familyBtn.click();
+
+                setTimeout(
+                    function(){
+
+                        const searchMemberBtn =
+                            document.getElementById(
+                                "searchMemberBtn"
+                            );
+
+                        if(searchMemberBtn){
+                            searchMemberBtn.click();
+                        }
+
+                    },
+                    100
+                );
+
+                return;
+            }
+
+
+            /* NEW MEMBER SAVED
+               → ADD MEMBER */
+
             console.log(
                 "NEW MEMBER → ADD MEMBER"
             );
 
             if(addMemberBtn){
-
                 addMemberBtn.click();
-
             }
 
         };
 
 }
-        saveMemberBtn.disabled =
+       saveMemberBtn.disabled =
             false;
 
         saveMemberBtn.textContent =
