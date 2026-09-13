@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12920,9 +12919,13 @@ if(partner){
                 ${partner.name}
             </strong>
 
-            <span>
-                ${partnerGender}
-            </span>
+            <span class="${
+    partnerGender === "M"
+        ? "gender-male"
+        : "gender-female"
+}">
+    ${partnerGender}
+</span>
 
         </div>
 
