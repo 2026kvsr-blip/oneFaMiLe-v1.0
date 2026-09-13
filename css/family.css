@@ -1665,3 +1665,8 @@
     justify-content: center !important;
     align-items: center !important;
 }
+#memberMarriageDate{
+    height: 44px !important;
+    min-height: 44px !important;
+    box-sizing: border-box !important;
+}
