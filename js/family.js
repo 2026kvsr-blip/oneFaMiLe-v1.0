@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -10177,8 +10178,8 @@ params.append(
 
           saveMemberBtn.textContent =
     editMember
-        ? "Update Member"
-        : "Save Member";
+        ? "Update"
+        : "Save";
 
 
             showMessage(
@@ -10782,8 +10783,8 @@ if(memberBackBtn){
 
         saveMemberBtn.textContent =
     editMember
-        ? "Update Member"
-        : "Save Member";
+        ? "Update"
+        : "Save";
 
     }catch(error){
 
@@ -10798,8 +10799,8 @@ if(memberBackBtn){
 
         saveMemberBtn.textContent =
     editMember
-        ? "Update Member"
-        : "Save Member";
+        ? "Update"
+        : "Save";
 
 
         showMessage(
