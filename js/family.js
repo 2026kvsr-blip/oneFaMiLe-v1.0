@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14063,12 +14064,11 @@ function fitFamilyTreeToScreen(){
         partnerMother
     ){
 
-        partnerParentCenter =
-            connectCouple(
-                partnerMother,
-                partnerFather
-            );
-
+       partnerParentCenter =
+    connectCouple(
+        partnerFather,
+        partnerMother
+    );
     }
     else{
 
