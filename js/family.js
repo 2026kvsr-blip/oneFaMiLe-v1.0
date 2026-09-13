@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14135,91 +14136,150 @@ if(
 
     if(childPoints.length){
 
-        /* CHILD BOXES TOP */
+        /* =====================================
+           SINGLE CHILD
+           ===================================== */
 
-        const childTopY =
-            Math.min(
-                ...childPoints.map(
-                    p => p.y
-                )
+        if(childPoints.length === 1){
+
+            const childPoint =
+                childPoints[0];
+
+            const middleY =
+                parentCenter.y +
+                (
+                    childPoint.y -
+                    parentCenter.y
+                ) / 2;
+
+
+            /* Parents midpoint ↓ */
+
+            addLine(
+                parentCenter.x,
+                parentCenter.y,
+                parentCenter.x,
+                middleY
             );
 
 
-        /* PARENTS & CHILDREN MADHYA
-           HORIZONTAL LINE POSITION */
-
-        const busY =
-            parentCenter.y +
-            (
-                childTopY -
-                parentCenter.y
-            ) * 0.55;
-
-
-        /* =========================
-           PARENTS → BUS
-           ========================= */
-
-        addLine(
-            parentCenter.x,
-            parentCenter.y,
-            parentCenter.x,
-            busY
-        );
-
-
-        /* =========================
-           HORIZONTAL BUS
-           ========================= */
-
-        if(childPoints.length > 1){
-
-            const minX =
-                Math.min(
-                    ...childPoints.map(
-                        p => p.x
-                    )
-                );
-
-            const maxX =
-                Math.max(
-                    ...childPoints.map(
-                        p => p.x
-                    )
-                );
-
+            /* Horizontal → child center */
 
             addLine(
-                minX,
-                busY,
-                maxX,
-                busY
+                parentCenter.x,
+                middleY,
+                childPoint.x,
+                middleY
+            );
+
+
+            /* ↓ exact child box top */
+
+            addLine(
+                childPoint.x,
+                middleY,
+                childPoint.x,
+                childPoint.y
             );
 
         }
 
 
-        /* =========================
-           BUS → EACH CHILD BOX
-           ========================= */
+        /* =====================================
+           MULTIPLE CHILDREN / SIBLINGS
+           ===================================== */
 
-        childPoints.forEach(
-            point => {
+        else{
 
-                addLine(
-                    point.x,
-                    busY,
-                    point.x,
-                    point.y
+            const childTopY =
+                Math.min(
+                    ...childPoints.map(
+                        point => point.y
+                    )
                 );
 
-            }
-        );
+
+            const busY =
+                parentCenter.y +
+                (
+                    childTopY -
+                    parentCenter.y
+                ) / 2;
+
+
+            const minX =
+                Math.min(
+                    ...childPoints.map(
+                        point => point.x
+                    )
+                );
+
+
+            const maxX =
+                Math.max(
+                    ...childPoints.map(
+                        point => point.x
+                    )
+                );
+
+
+            /* Parents ↓ horizontal children bus */
+
+            addLine(
+                parentCenter.x,
+                parentCenter.y,
+                parentCenter.x,
+                busY
+            );
+
+
+            /*
+               IMPORTANT:
+               bus must include parent X also
+            */
+
+            const busStartX =
+                Math.min(
+                    minX,
+                    parentCenter.x
+                );
+
+
+            const busEndX =
+                Math.max(
+                    maxX,
+                    parentCenter.x
+                );
+
+
+            addLine(
+                busStartX,
+                busY,
+                busEndX,
+                busY
+            );
+
+
+            /* Bus ↓ each biological child */
+
+            childPoints.forEach(
+                point => {
+
+                    addLine(
+                        point.x,
+                        busY,
+                        point.x,
+                        point.y
+                    );
+
+                }
+            );
+
+        }
 
     }
 
 }
-
     /* ================================
        PARTNER PARENTS
        ================================ */
