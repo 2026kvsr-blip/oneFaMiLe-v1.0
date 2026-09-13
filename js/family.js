@@ -1,5 +1,6 @@
 
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14182,170 +14183,12 @@ function connectParentsToChildren(
         ].filter(Boolean);
 
 
-if(
-    parentCenter &&
-    selectedChildrenRow.length
-){
-
-    const childPoints =
-        selectedChildrenRow
-            .map(
-                child =>
-                    getPoint(
-                        child,
-                        "top"
-                    )
-            )
-            .filter(Boolean);
-
-
-    if(childPoints.length){
-
-        /* =====================================
-           SINGLE CHILD
-           ===================================== */
-
-        if(childPoints.length === 1){
-
-            const childPoint =
-                childPoints[0];
-
-            const middleY =
-                parentCenter.y +
-                (
-                    childPoint.y -
-                    parentCenter.y
-                ) / 2;
-
-
-            /* Parents midpoint ↓ */
-
-            addLine(
-                parentCenter.x,
-                parentCenter.y,
-                parentCenter.x,
-                middleY
-            );
-
-
-            /* Horizontal → child center */
-
-            addLine(
-                parentCenter.x,
-                middleY,
-                childPoint.x,
-                middleY
-            );
-
-
-            /* ↓ exact child box top */
-
-            addLine(
-                childPoint.x,
-                middleY,
-                childPoint.x,
-                childPoint.y
-            );
-
-        }
-
-
-        /* =====================================
-           MULTIPLE CHILDREN / SIBLINGS
-           ===================================== */
-
-        else{
-
-            const childTopY =
-                Math.min(
-                    ...childPoints.map(
-                        point => point.y
-                    )
-                );
-
-
-            const busY =
-                parentCenter.y +
-                (
-                    childTopY -
-                    parentCenter.y
-                ) / 2;
-
-
-            const minX =
-                Math.min(
-                    ...childPoints.map(
-                        point => point.x
-                    )
-                );
-
-
-            const maxX =
-                Math.max(
-                    ...childPoints.map(
-                        point => point.x
-                    )
-                );
-
-
-            /* Parents ↓ horizontal children bus */
-
-            addLine(
-                parentCenter.x,
-                parentCenter.y,
-                parentCenter.x,
-                busY
-            );
-
-
-            /*
-               IMPORTANT:
-               bus must include parent X also
-            */
-
-            const busStartX =
-                Math.min(
-                    minX,
-                    parentCenter.x
-                );
-
-
-            const busEndX =
-                Math.max(
-                    maxX,
-                    parentCenter.x
-                );
-
-
-            addLine(
-                busStartX,
-                busY,
-                busEndX,
-                busY
-            );
-
-
-            /* Bus ↓ each biological child */
-
-            childPoints.forEach(
-                point => {
-
-                    addLine(
-                        point.x,
-                        busY,
-                        point.x,
-                        point.y
-                    );
-
-                }
-            );
-
-        }
-
-    }
-
-}
-    /* ================================
+connectParentsToChildren(
+    parentCenter,
+    selectedChildrenRow
+);
+   
+   /* ================================
        PARTNER PARENTS
        ================================ */
 
