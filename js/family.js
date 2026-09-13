@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13570,6 +13571,66 @@ diagram.innerHTML = `
         };
 
 }
+
+/* =====================================
+   FAMILY TREE → BACK
+   ===================================== */
+
+const familyTreeBackBtn =
+    document.getElementById(
+        "familyTreeBackBtn"
+    );
+
+if(familyTreeBackBtn){
+
+    familyTreeBackBtn.onclick =
+        function(){
+
+            const mainFamilyBtn =
+                document.getElementById(
+                    "familyBtn"
+                );
+
+            if(mainFamilyBtn){
+
+                mainFamilyBtn.click();
+
+            }
+
+        };
+
+}
+
+
+/* =====================================
+   FAMILY TREE → HOME
+   ===================================== */
+
+const familyTreeHomeBtn =
+    document.getElementById(
+        "familyTreeHomeBtn"
+    );
+
+if(familyTreeHomeBtn){
+
+    familyTreeHomeBtn.onclick =
+        function(){
+
+            const mainHomeBtn =
+                document.getElementById(
+                    "homeBtn"
+                );
+
+            if(mainHomeBtn){
+
+                mainHomeBtn.click();
+
+            }
+
+        };
+
+}
+   
 }
 /* =====================================
    DRAW FAMILY TREE CONNECTING LINES
