@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13026,17 +13027,6 @@ const getChildren =
 
     };
 
-
-const father =
-    getMemberById(
-        selectedMember.fatherId
-    );
-
-
-const mother =
-    getMemberById(
-        selectedMember.motherId
-    );
 
 
 /* =====================================
