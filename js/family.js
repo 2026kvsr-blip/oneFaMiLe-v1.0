@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13417,65 +13416,80 @@ diagram.innerHTML = `
                  PARENTS ROW
                  ===================== -->
 
-            <div class="family-tree-top-row">
+            <!-- =====================
+     PARENTS ROW
+     ===================== -->
+
+<div class="family-tree-top-row">
 
 
-                <div class="family-tree-parent-group">
+    <!-- =====================
+         SELECTED MEMBER
+         FATHER + MOTHER
+         ===================== -->
 
-                    ${
-                        father
-                            ? treeBox(
-                                father,
-                                "tree-father"
-                              )
-                            : ""
-                    }
+    <div class="family-tree-parent-group">
 
-                    ${
-                        mother
-                            ? treeBox(
-                                mother,
-                                "tree-mother"
-                              )
-                            : ""
-                    }
+        ${
+            father
+                ? treeBox(
+                    father,
+                    "tree-father"
+                  )
+                : ""
+        }
 
-                </div>
+
+        ${
+            mother
+                ? treeBox(
+                    mother,
+                    "tree-mother"
+                  )
+                : ""
+        }
+
+    </div>
+
+
+    <!-- =====================
+         PARTNER
+         FATHER + MOTHER
+         ===================== -->
+
+    ${
+        partner
+        ? `
+
+            <div class="family-tree-parent-group">
+
+                ${
+                    partnerFather
+                        ? treeBox(
+                            partnerFather,
+                            "tree-partner-father"
+                          )
+                        : ""
+                }
 
 
                 ${
-                    partner
-                    ? `
-
-                        <div class="family-tree-parent-group">
-
-                            ${
-                                partnerMother
-                                    ? treeBox(
-                                        partnerMother,
-                                        "tree-partner-mother"
-                                      )
-                                    : ""
-                            }
-
-                            ${
-                                partnerFather
-                                    ? treeBox(
-                                        partnerFather,
-                                        "tree-partner-father"
-                                      )
-                                    : ""
-                            }
-
-                        </div>
-
-                      `
-                    : ""
+                    partnerMother
+                        ? treeBox(
+                            partnerMother,
+                            "tree-partner-mother"
+                          )
+                        : ""
                 }
 
             </div>
 
+          `
+        : ""
+    }
 
+
+</div>
             <!-- =====================
                  MAIN GENERATION
                  ===================== -->
