@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14117,7 +14116,7 @@ function connectParentsToChildren(
         ].filter(Boolean);
 
 
-   if(
+if(
     parentCenter &&
     selectedChildrenRow.length
 ){
@@ -14136,7 +14135,9 @@ function connectParentsToChildren(
 
     if(childPoints.length){
 
-        const firstChildTopY =
+        /* CHILD BOXES TOP */
+
+        const childTopY =
             Math.min(
                 ...childPoints.map(
                     p => p.y
@@ -14144,15 +14145,20 @@ function connectParentsToChildren(
             );
 
 
+        /* PARENTS & CHILDREN MADHYA
+           HORIZONTAL LINE POSITION */
+
         const busY =
             parentCenter.y +
             (
-                firstChildTopY -
+                childTopY -
                 parentCenter.y
-            ) / 2;
+            ) * 0.55;
 
 
-        /* Parents midpoint nundi bus varaku */
+        /* =========================
+           PARENTS → BUS
+           ========================= */
 
         addLine(
             parentCenter.x,
@@ -14162,33 +14168,40 @@ function connectParentsToChildren(
         );
 
 
-        const minX =
-            Math.min(
-                ...childPoints.map(
-                    p => p.x
-                )
+        /* =========================
+           HORIZONTAL BUS
+           ========================= */
+
+        if(childPoints.length > 1){
+
+            const minX =
+                Math.min(
+                    ...childPoints.map(
+                        p => p.x
+                    )
+                );
+
+            const maxX =
+                Math.max(
+                    ...childPoints.map(
+                        p => p.x
+                    )
+                );
+
+
+            addLine(
+                minX,
+                busY,
+                maxX,
+                busY
             );
 
-
-        const maxX =
-            Math.max(
-                ...childPoints.map(
-                    p => p.x
-                )
-            );
+        }
 
 
-        /* Siblings + selected member horizontal bus */
-
-        addLine(
-            minX,
-            busY,
-            maxX,
-            busY
-        );
-
-
-        /* Prathi child box top-center ki vertical line */
+        /* =========================
+           BUS → EACH CHILD BOX
+           ========================= */
 
         childPoints.forEach(
             point => {
@@ -14206,7 +14219,6 @@ function connectParentsToChildren(
     }
 
 }
-
 
     /* ================================
        PARTNER PARENTS
