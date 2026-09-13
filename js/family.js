@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5210,8 +5209,7 @@ window.openSearchEditMemberPage =
                     </div>
 
 
-                    <div class="page-bottom-actions">
-
+<div class="search-edit-bottom-actions">
     <button
         type="button"
         id="searchEditBackBtn"
