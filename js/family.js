@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -7018,7 +7017,21 @@ if(editMember){
 
     }
 
+/* =================================
+   CHANGE SAVE BUTTON TEXT
+   ================================= */
 
+const editSaveMemberBtn =
+    document.getElementById(
+        "saveMemberBtn"
+    );
+
+if(editSaveMemberBtn){
+
+    editSaveMemberBtn.textContent =
+        "Update Member";
+
+}
     /* =================================
        MEMBER ID
        ================================= */
