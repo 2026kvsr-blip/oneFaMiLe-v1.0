@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14328,10 +14327,15 @@ childTargets.forEach(
             item.childPartner
         ){
 
-            const coupleCenter =
-                connectCouple(
+            connectCouple(
+                item.child,
+                item.childPartner
+            );
+
+            const childTop =
+                getPoint(
                     item.child,
-                    item.childPartner
+                    "top"
                 );
 
             childCenters.push(
@@ -14340,13 +14344,10 @@ childTargets.forEach(
                         item.child,
 
                     x:
-                        coupleCenter.x,
+                        childTop.x,
 
                     y:
-                        getPoint(
-                            item.child,
-                            "top"
-                        ).y
+                        childTop.y
                 }
             );
 
@@ -14376,8 +14377,7 @@ childTargets.forEach(
 
     }
 );
-
-
+   
 /* SELECTED COUPLE → CHILDREN */
 
 if(
@@ -14385,8 +14385,19 @@ if(
     childCenters.length
 ){
 
-    const childBusY =
-        selectedCoupleCenter.y + 28;
+   const firstChildTopY =
+    Math.min(
+        ...childCenters.map(
+            p => p.y
+        )
+    );
+
+const childBusY =
+    selectedCoupleCenter.y +
+    (
+        firstChildTopY -
+        selectedCoupleCenter.y
+    ) / 2;
 
 
     addLine(
