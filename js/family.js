@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12598,3 +12597,206 @@ const existingFamilies =
         .onclick = showHome;
 
 };
+/* =====================================
+   OPEN FAMILY TREE PAGE
+   ===================================== */
+
+function openFamilyTreePage(){
+
+    const members =
+        JSON.parse(
+            localStorage.getItem(
+                "familyMembers"
+            ) || "[]"
+        );
+
+    showPage(
+
+        pageTitle(
+            "Family Tree",
+            "images/colorbtns/Family1.png"
+        )
+
+        +
+
+        `
+        <div class="family-tree-page">
+
+            <!-- MEMBER -->
+
+            <div class="family-tree-control">
+
+                <label>
+                    Select Member
+                </label>
+
+                <select
+                    id="familyTreeMember"
+                    class="common-form-input">
+
+                    <option value="">
+                        Select Member
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- GENERATIONS -->
+
+            <div class="family-tree-generation-row">
+
+                <div class="family-tree-control">
+
+                    <label>
+                        Before Generations
+                    </label>
+
+                    <select
+                        id="familyTreeBefore"
+                        class="common-form-input">
+
+                        <option value="1">1</option>
+
+                        <option value="2" selected>
+                            2
+                        </option>
+
+                        <option value="3">
+                            3
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="family-tree-control">
+
+                    <label>
+                        After Generations
+                    </label>
+
+                    <select
+                        id="familyTreeAfter"
+                        class="common-form-input">
+
+                        <option value="1">1</option>
+
+                        <option value="2" selected>
+                            2
+                        </option>
+
+                        <option value="3">
+                            3
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="showFamilyTreeBtn"
+                class="family-create-btn">
+
+                Show Family Tree
+
+            </button>
+
+
+            <!-- TREE WILL COME HERE -->
+
+            <div
+                id="familyTreeDiagram"
+                class="family-tree-diagram">
+
+            </div>
+
+
+            <div class="family-tree-bottom-actions">
+
+                <button
+                    type="button"
+                    id="familyTreeBackBtn"
+                    class="back-btn">
+
+                    ← Back
+
+                </button>
+
+                <button
+                    type="button"
+                    id="familyTreeHomeBtn"
+                    class="back-btn">
+
+                    🏠 Home
+
+                </button>
+
+            </div>
+
+        </div>
+        `
+    );
+
+
+    /* ================================
+       LOAD MEMBERS INTO SELECT
+       ================================ */
+
+    const memberSelect =
+        document.getElementById(
+            "familyTreeMember"
+        );
+
+
+    members
+        .filter(
+            member =>
+                member &&
+                member.memberId &&
+                member.name
+        )
+        .sort(
+            (a,b) =>
+                String(a.name)
+                    .localeCompare(
+                        String(b.name)
+                    )
+        )
+        .forEach(
+            function(member){
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    member.memberId;
+
+                option.textContent =
+                    member.name +
+                    " (" +
+                    (
+                        String(member.gender)
+                            .toLowerCase() ===
+                        "female"
+                            ? "F"
+                            : "M"
+                    ) +
+                    ")";
+
+                memberSelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+}
