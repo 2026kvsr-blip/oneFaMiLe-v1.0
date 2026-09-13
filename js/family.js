@@ -13256,31 +13256,29 @@ function treeBox(member, extraClass = ""){
         return "";
     }
 
-    const gender =
+    const isFemale =
         String(member.gender)
-            .toLowerCase() === "female"
-            ? "F"
-            : "M";
+            .toLowerCase() === "female";
 
     const genderClass =
-        gender === "M"
-            ? "gender-male"
-            : "gender-female";
+        isFemale
+            ? "tree-female"
+            : "tree-male";
 
 
     return `
 
         <div
-            class="family-tree-test-node ${extraClass}"
+            class="
+                family-tree-test-node
+                ${genderClass}
+                ${extraClass}
+            "
             data-tree-member="${member.memberId}">
 
             <strong>
                 ${member.name || ""}
             </strong>
-
-            <span class="${genderClass}">
-                ${gender}
-            </span>
 
         </div>
 
@@ -13351,6 +13349,30 @@ children.forEach(
 
 diagram.innerHTML = `
 
+<div class="family-tree-legend">
+
+    <div class="family-tree-legend-item">
+
+        <span class="legend-box legend-male"></span>
+
+        <span>
+            Male
+        </span>
+
+    </div>
+
+
+    <div class="family-tree-legend-item">
+
+        <span class="legend-box legend-female"></span>
+
+        <span>
+            Female
+        </span>
+
+    </div>
+
+</div>
     <div class="family-tree-scroll">
 
         <div
