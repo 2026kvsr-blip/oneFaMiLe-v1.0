@@ -1,3 +1,4 @@
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -1813,36 +1814,71 @@
     align-items: center !important;
 }
 .family-tree-test-node{
-    width: 130px;
-    min-height: 60px;
+    width: 110px !important;
+    height: 50px !important;
+    min-width: 110px !important;
+    min-height: 50px !important;
+    max-width: 110px !important;
+    max-height: 50px !important;
 
-    margin: 30px auto;
+    margin: 0;
 
-    padding: 10px;
+    padding: 5px 6px;
 
-    border: 2px solid #2A6EB0;
-    border-radius: 10px;
+    border: 1.5px solid #2A6EB0;
+    border-radius: 7px;
 
     background: white;
 
     display: flex;
     flex-direction: column;
-
     justify-content: center;
     align-items: center;
 
+    text-align: center;
+
     box-sizing: border-box;
+
+    flex-shrink: 0;
 }
+
+
+/* MEMBER NAME */
 
 .family-tree-test-node strong{
-    font-size: 15px;
+    display: block;
+
+    width: 100%;
+
+    font-size: 12px;
+    font-weight: 400;
+
+    line-height: 15px;
+
+    text-align: center;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
+
+/* M / F */
+
 .family-tree-test-node span{
-    margin-top: 4px;
-    font-weight: 600;
-}
-.family-tree-couple-row{
+    display: block;
+
+    width: 100%;
+
+    margin-top: 2px;
+
+    font-size: 10px;
+    font-weight: 400;
+
+    line-height: 12px;
+
+    text-align: center;
+}.family-tree-couple-row{
     display: flex;
     justify-content: center;
     align-items: center;
