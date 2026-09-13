@@ -10199,11 +10199,12 @@ params.append(
            ================================ */
 
         showMessage(
-            "Member saved successfully.",
-            "success",
-            3000
-        );
-
+    editMember
+        ? "Member updated successfully."
+        : "Member saved successfully.",
+    "success",
+    3000
+);
 
 /* ================================
    DISPLAY GENERATED MEMBER ID
