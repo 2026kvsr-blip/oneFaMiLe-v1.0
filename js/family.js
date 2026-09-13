@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12883,22 +12882,76 @@ if(showFamilyTreeBtn){
                 );
 
 
-            diagram.innerHTML = `
+           const partner =
+    members.find(
+        member =>
+            String(member.memberId) ===
+            String(selectedMember.partnerId || "")
+    )
+    ||
+    members.find(
+        member =>
+            String(member.partnerId || "") ===
+            String(selectedMember.memberId)
+    );
 
-                <div class="family-tree-test-node">
 
-                    <strong>
-                        ${selectedMember.name}
-                    </strong>
+let partnerHTML = "";
 
-                    <span>
-                        ${genderLetter}
-                    </span>
 
-                </div>
+if(partner){
 
-            `;
+    const partnerGender =
+        String(partner.gender)
+            .toLowerCase() === "female"
+            ? "F"
+            : "M";
 
+
+    partnerHTML = `
+
+        <div class="family-tree-spouse-line"></div>
+
+
+        <div class="family-tree-test-node">
+
+            <strong>
+                ${partner.name}
+            </strong>
+
+            <span>
+                ${partnerGender}
+            </span>
+
+        </div>
+
+    `;
+
+}
+
+
+diagram.innerHTML = `
+
+    <div class="family-tree-couple-row">
+
+        <div class="family-tree-test-node">
+
+            <strong>
+                ${selectedMember.name}
+            </strong>
+
+            <span>
+                ${genderLetter}
+            </span>
+
+        </div>
+
+
+        ${partnerHTML}
+
+    </div>
+
+`;
         };
 
 }
