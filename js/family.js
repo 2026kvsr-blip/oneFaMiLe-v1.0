@@ -5546,12 +5546,16 @@ let membersLoaded =
                     );
 
 
-                if(addMemberBtn){
+               if(addMemberBtn){
 
-                    addMemberBtn.click();
+    sessionStorage.setItem(
+        "openMemberMode",
+        "edit"
+    );
 
-                }
-                else{
+    addMemberBtn.click();
+
+}                else{
 
                     console.error(
                         "Add Member button not found"
@@ -10501,8 +10505,7 @@ if(maritalStatusGroup){
 
 
     /* ================================
-       HIDE ALL MARITAL CONTROLS
-       KEEP ONLY:
+       HIDE ALL MARITAL CONTROLS   KEEP ONLY:
        Marital Status label
        :
        ================================ */
@@ -10584,7 +10587,7 @@ if(maritalStatusGroup){
 
 }
        
-       /* ================================
+/* ================================
    HIDE MARRIAGE CONFIRMATION
    AFTER SAVE
    ================================ */
