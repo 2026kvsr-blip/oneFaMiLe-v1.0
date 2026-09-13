@@ -12620,6 +12620,77 @@ const existingFamilies =
         .onclick = showHome;
 
 };
+
+/* =====================================
+   AUTO FIT FAMILY TREE TO SCREEN
+   ===================================== */
+
+function fitFamilyTreeToScreen(){
+
+    const wrapper =
+        document.querySelector(
+            ".family-tree-scroll"
+        );
+
+    const canvas =
+        document.getElementById(
+            "familyTreeCanvas"
+        );
+
+    if(!wrapper || !canvas){
+        return;
+    }
+
+
+    /* OLD SCALE RESET */
+
+    canvas.style.transform = "none";
+    canvas.style.marginBottom = "0";
+    canvas.style.marginLeft = "0";
+
+
+    const treeWidth =
+        canvas.scrollWidth;
+
+    const availableWidth =
+        wrapper.clientWidth;
+
+
+    if(
+        treeWidth > availableWidth &&
+        treeWidth > 0
+    ){
+
+        const scale =
+            availableWidth /
+            treeWidth;
+
+
+        canvas.style.transformOrigin =
+            "top left";
+
+        canvas.style.transform =
+            `scale(${scale})`;
+
+
+        const originalHeight =
+            canvas.scrollHeight;
+
+        const scaledHeight =
+            originalHeight *
+            scale;
+
+        const extraHeight =
+            originalHeight -
+            scaledHeight;
+
+
+        canvas.style.marginBottom =
+            `-${extraHeight}px`;
+
+    }
+
+}
 /* =====================================
    OPEN FAMILY TREE PAGE
    ===================================== */
@@ -12632,14 +12703,26 @@ function openFamilyTreePage(){
                 "familyMembers"
             ) || "[]"
         );
+const currentFamily =
+    JSON.parse(
+        localStorage.getItem(
+            "currentFamily"
+        ) || "{}"
+    );
 
+
+const familyName =
+    currentFamily.familyName ||
+    currentFamily.name ||
+    "";
     showPage(
 
-        pageTitle(
-            "Family Tree",
-            "images/colorbtns/Family1.png"
-        )
-
+       pageTitle(
+    familyName
+        ? familyName + " - Family Tree"
+        : "Family Tree",
+    "images/colorbtns/Family1.png"
+)
         +
 
         `
@@ -12867,7 +12950,65 @@ if(showFamilyTreeBtn){
 
                 return;
             }
+           /* =====================================
+   HIDE TREE SELECTION CONTROLS
+   ===================================== */
 
+const memberControl =
+    document.getElementById(
+        "familyTreeMember"
+    )?.closest(
+        ".family-tree-control"
+    );
+
+
+const beforeControl =
+    document.getElementById(
+        "familyTreeBefore"
+    )?.closest(
+        ".family-tree-control"
+    );
+
+
+const afterControl =
+    document.getElementById(
+        "familyTreeAfter"
+    )?.closest(
+        ".family-tree-control"
+    );
+
+
+if(memberControl){
+    memberControl.style.display =
+        "none";
+}
+
+
+if(beforeControl){
+    beforeControl.style.display =
+        "none";
+}
+
+
+if(afterControl){
+    afterControl.style.display =
+        "none";
+}
+
+
+const generationRow =
+    document.querySelector(
+        ".family-tree-generation-row"
+    );
+
+if(generationRow){
+    generationRow.style.display =
+        "none";
+}
+
+
+showFamilyTreeBtn.style.display =
+    "none";
 
             const genderLetter =
                 String(selectedMember.gender)
