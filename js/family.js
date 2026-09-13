@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12818,5 +12819,87 @@ function openFamilyTreePage(){
 
             }
         );
+/* =====================================
+   SHOW FAMILY TREE BUTTON
+   ===================================== */
 
+const showFamilyTreeBtn =
+    document.getElementById(
+        "showFamilyTreeBtn"
+    );
+
+if(showFamilyTreeBtn){
+
+    showFamilyTreeBtn.onclick =
+        function(){
+
+            const memberId =
+                document.getElementById(
+                    "familyTreeMember"
+                ).value;
+
+            if(!memberId){
+
+                showMessage(
+                    "Please select a member.",
+                    "warning",
+                    2500
+                );
+
+                return;
+            }
+
+
+            const selectedMember =
+                members.find(
+                    member =>
+                        String(member.memberId) ===
+                        String(memberId)
+                );
+
+
+            if(!selectedMember){
+
+                showMessage(
+                    "Member not found.",
+                    "error",
+                    2500
+                );
+
+                return;
+            }
+
+
+            const genderLetter =
+                String(selectedMember.gender)
+                    .toLowerCase() === "female"
+                    ? "F"
+                    : "M";
+
+
+            const diagram =
+                document.getElementById(
+                    "familyTreeDiagram"
+                );
+
+
+            diagram.innerHTML = `
+
+                <div class="family-tree-test-node">
+
+                    <strong>
+                        ${selectedMember.name}
+                    </strong>
+
+                    <span>
+                        ${genderLetter}
+                    </span>
+
+                </div>
+
+            `;
+
+        };
+
+}
 }
