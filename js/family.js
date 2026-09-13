@@ -9119,11 +9119,13 @@ if(memberActions){
        SAVE
        ============================= */
 
-    const saveMemberBtn =
-        createPrimaryButton(
-            "Save Member",
-            "saveMemberBtn"
-        );
+   const saveMemberBtn =
+    createPrimaryButton(
+        editMember
+            ? "Update Member"
+            : "Save Member",
+        "saveMemberBtn"
+    );
 
 /* =================================
    SAVE MEMBER
