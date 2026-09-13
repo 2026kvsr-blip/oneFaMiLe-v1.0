@@ -9108,8 +9108,8 @@ if(memberActions){
    const saveMemberBtn =
     createPrimaryButton(
         editMember
-            ? "Update Member"
-            : "Save Member",
+            ? "Update"
+            : "Save",
         "saveMemberBtn"
     );
 
