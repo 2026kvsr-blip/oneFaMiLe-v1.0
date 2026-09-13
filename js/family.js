@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -10770,8 +10769,10 @@ if(memberBackBtn){
     memberBackBtn.onclick =
         function(){
 
-            /* EDIT MEMBER UPDATED
-               → SEARCH - EDIT MEMBER */
+            /* ================================
+               UPDATED MEMBER
+               → DIRECT SEARCH - EDIT MEMBER
+               ================================ */
 
             if(editMember){
 
@@ -10779,37 +10780,32 @@ if(memberBackBtn){
                     "UPDATED MEMBER → SEARCH EDIT"
                 );
 
-                familyBtn.click();
+                if(
+                    typeof window.openSearchEditMemberPage ===
+                    "function"
+                ){
 
-                setTimeout(
-                    function(){
+                    window.openSearchEditMemberPage();
 
-                        const searchMemberBtn =
-                            document.getElementById(
-                                "searchMemberBtn"
-                            );
-
-                        if(searchMemberBtn){
-                            searchMemberBtn.click();
-                        }
-
-                    },
-                    100
-                );
+                }
 
                 return;
             }
 
 
-            /* NEW MEMBER SAVED
-               → ADD MEMBER */
+            /* ================================
+               NEW MEMBER
+               → ADD MEMBER PAGE
+               ================================ */
 
             console.log(
                 "NEW MEMBER → ADD MEMBER"
             );
 
             if(addMemberBtn){
+
                 addMemberBtn.click();
+
             }
 
         };
