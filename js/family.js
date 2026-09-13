@@ -9924,11 +9924,12 @@ const memberId =
        DISABLE SAVE BUTTON
        ================================ */
 
-    saveMemberBtn.disabled = true;
+  saveMemberBtn.disabled = true;
 
-    saveMemberBtn.textContent =
-        "Saving...";
-
+saveMemberBtn.textContent =
+    editMember
+        ? "Updating..."
+        : "Saving...";
 
     /* ================================
        API PARAMETERS
