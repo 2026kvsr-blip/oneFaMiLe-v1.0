@@ -10156,8 +10156,10 @@ params.append(
             saveMemberBtn.disabled =
                 false;
 
-            saveMemberBtn.textContent =
-                "Save Member";
+          saveMemberBtn.textContent =
+    editMember
+        ? "Update Member"
+        : "Save Member";
 
 
             showMessage(
@@ -10760,8 +10762,9 @@ if(memberBackBtn){
             false;
 
         saveMemberBtn.textContent =
-            "Save Member";
-
+    editMember
+        ? "Update Member"
+        : "Save Member";
 
     }catch(error){
 
@@ -10775,7 +10778,9 @@ if(memberBackBtn){
             false;
 
         saveMemberBtn.textContent =
-            "Save Member";
+    editMember
+        ? "Update Member"
+        : "Save Member";
 
 
         showMessage(
