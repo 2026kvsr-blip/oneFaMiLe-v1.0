@@ -1,6 +1,4 @@
-/* =========
-
-============================
+   ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
    ===================================== */
@@ -1637,4 +1635,28 @@
 
     min-height: 28px;
 
+}
+.page-bottom-actions{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 80px;
+
+    width: 100%;
+    padding: 10px 16px;
+    box-sizing: border-box;
+
+    z-index: 1000;
+}
+
+.page-bottom-actions .back-btn{
+    flex: 1;
+    max-width: 160px;
+    margin: 0;
 }
