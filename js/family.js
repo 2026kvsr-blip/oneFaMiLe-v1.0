@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12650,14 +12649,18 @@ function openFamilyTreePage(){
 
             <div class="family-tree-control">
 
-                <label>
-                    Select Member
-                </label>
+    <label class="family-tree-label">
+        Select Member
+    </label>
 
-                <select
-                    id="familyTreeMember"
-                    class="common-form-input">
+    <span class="family-tree-colon">
+        :
+    </span>
 
+    <select
+        id="familyTreeMember"
+        class="common-form-input">
+        
                     <option value="">
                         Select Member
                     </option>
@@ -12673,53 +12676,46 @@ function openFamilyTreePage(){
 
                 <div class="family-tree-control">
 
-                    <label>
-                        Before Generations
-                    </label>
+    <label class="family-tree-label">
+        Before Generations
+    </label>
 
-                    <select
-                        id="familyTreeBefore"
-                        class="common-form-input">
+    <span class="family-tree-colon">
+        :
+    </span>
 
-                        <option value="1">1</option>
+    <select
+        id="familyTreeBefore"
+        class="common-form-input">
 
-                        <option value="2" selected>
-                            2
-                        </option>
+        <option value="1">1</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
 
-                        <option value="3">
-                            3
-                        </option>
+    </select>
 
-                    </select>
-
-                </div>
-
-
+</div>
                 <div class="family-tree-control">
 
-                    <label>
-                        After Generations
-                    </label>
+    <label class="family-tree-label">
+        After Generations
+    </label>
 
-                    <select
-                        id="familyTreeAfter"
-                        class="common-form-input">
+    <span class="family-tree-colon">
+        :
+    </span>
 
-                        <option value="1">1</option>
+    <select
+        id="familyTreeAfter"
+        class="common-form-input">
 
-                        <option value="2" selected>
-                            2
-                        </option>
+        <option value="1">1</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
 
-                        <option value="3">
-                            3
-                        </option>
+    </select>
 
-                    </select>
-
-                </div>
-
+</div>
             </div>
 
 
