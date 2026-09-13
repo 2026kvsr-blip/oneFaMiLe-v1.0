@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5211,17 +5212,21 @@ window.openSearchEditMemberPage =
 
                     <div class="page-bottom-actions">
 
-                        <button
-                            type="button"
-                            id="searchEditBackBtn"
-                            class="back-btn">
+    <button
+        type="button"
+        id="searchEditBackBtn"
+        class="back-btn">
+        ← Back
+    </button>
 
-                            🏠 Home
+    <button
+        type="button"
+        id="searchEditHomeBtn"
+        class="back-btn">
+        🏠 Home
+    </button>
 
-                        </button>
-
-                    </div>
-
+</div>
                 </div>
                 `
             );
