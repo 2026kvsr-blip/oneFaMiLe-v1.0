@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -1822,13 +1821,11 @@
     position: relative;
 
     width: 110px !important;
-    height: 42px !important;
-
     min-width: 110px !important;
-    min-height: 42px !important;
-
     max-width: 110px !important;
-    max-height: 42px !important;
+
+    height: auto !important;
+    min-height: 28px !important;
 
     padding: 1px 2px !important;
     margin: 0 !important;
@@ -1836,12 +1833,11 @@
     border: 1px solid #2A6EB0;
     border-radius: 5px;
 
-    background: white;
-
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    text-align: center;
 
     box-sizing: border-box;
 
@@ -1849,7 +1845,6 @@
 
     z-index: 2;
 }
-
 /* FULL MEMBER NAME */
 
 .family-tree-test-node strong{
@@ -1869,33 +1864,8 @@
     white-space: normal !important;
     overflow-wrap: anywhere;
 }
-
 /* GENDER */
 
-.family-tree-test-node span{
-    width: 100%;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    font-size: 7px !important;
-    font-weight: 400 !important;
-    line-height: 8px !important;
-
-    text-align: center;
-}
-/* MALE */
-
-.family-tree-test-node span.gender-male{
-    color: green;
-}
-
-
-/* FEMALE */
-
-.family-tree-test-node span.gender-female{
-    color: #ff69b4;
-}
 .family-tree-couple-row{
     display: flex;
     justify-content: center;
@@ -2018,14 +1988,6 @@
 
 /* ALL BOXES ABOVE LINES */
 
-.family-tree-test-node{
-    position: relative;
-
-    z-index: 2;
-
-    padding: 1px 3px !important;
-}
-
 
 /* =====================================
    TOP PARENTS
@@ -2127,4 +2089,18 @@
     align-items: center;
 
     gap: 28px;
+}
+.family-tree-test-node.tree-male{
+    background: #E4F6E4;
+}
+
+.family-tree-test-node.tree-female{
+    background: #FFE4EE;
+}
+.tree-selected.tree-male{
+    border: 2.5px solid #4A9B4A !important;
+}
+
+.tree-selected.tree-female{
+    border: 2.5px solid #D96B8A !important;
 }
