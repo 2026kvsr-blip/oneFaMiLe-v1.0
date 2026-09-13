@@ -1,6 +1,5 @@
 
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -5133,10 +5132,9 @@ function bindSearchMemberButton(){
         return;
     }
 
-
-    searchMemberBtn.onclick =
-        function(){
-
+window.openSearchEditMemberPage =
+    function(){
+    
             const currentFamily =
                 JSON.parse(
                     localStorage.getItem(
@@ -5820,8 +5818,10 @@ localStorage.setItem(
 
         };
 
-}
+    searchMemberBtn.onclick =
+        window.openSearchEditMemberPage;
 
+}
 
 /* =====================================
    BIND SEARCH MEMBER BUTTON
