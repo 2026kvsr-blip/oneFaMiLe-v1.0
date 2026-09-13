@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13880,87 +13879,114 @@ function fitFamilyTreeToScreen(){
 
 }
 
-    function connectParentsToChildren(
-        parentCenter,
-        children
+function connectParentsToChildren(
+    parentCenter,
+    children
+){
+
+    if(
+        !parentCenter ||
+        !children ||
+        !children.length
     ){
-
-        if(
-            !parentCenter ||
-            !children ||
-            !children.length
-        ){
-            return;
-        }
-
-
-        const childPoints =
-            children
-                .map(
-                    child =>
-                        getPoint(
-                            child,
-                            "top"
-                        )
-                )
-                .filter(Boolean);
-
-
-        if(!childPoints.length){
-            return;
-        }
-
-
-        const busY =
-            parentCenter.y + 28;
-
-
-        addLine(
-            parentCenter.x,
-            parentCenter.y,
-            parentCenter.x,
-            busY
-        );
-
-
-        const minX =
-            Math.min(
-                ...childPoints.map(
-                    p => p.x
-                )
-            );
-
-
-        const maxX =
-            Math.max(
-                ...childPoints.map(
-                    p => p.x
-                )
-            );
-
-
-        addLine(
-            minX,
-            busY,
-            maxX,
-            busY
-        );
-
-
-        childPoints.forEach(
-            point => {
-
-                addLine(
-                    point.x,
-                    busY,
-                    point.x,
-                    point.y
-                );
-
-            }
-        );
-
+        return;
     }
+
+
+    const childPoints =
+        children
+            .map(
+                child =>
+                    getPoint(
+                        child,
+                        "top"
+                    )
+            )
+            .filter(Boolean);
+
+
+    if(!childPoints.length){
+        return;
+    }
+
+
+    /* =================================
+       HORIZONTAL CHILDREN BUS
+       ================================= */
+
+    const highestChildTop =
+        Math.min(
+            ...childPoints.map(
+                point => point.y
+            )
+        );
+
+
+    const busY =
+        highestChildTop - 18;
+
+
+    /* =================================
+       PARENT COUPLE MIDPOINT
+       DOWN TO CHILDREN BUS
+       ================================= */
+
+    addLine(
+        parentCenter.x,
+        parentCenter.y,
+        parentCenter.x,
+        busY
+    );
+
+
+    /* =================================
+       CHILDREN RANGE
+       ================================= */
+
+    const minX =
+        Math.min(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    const maxX =
+        Math.max(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    /* horizontal bus */
+
+    addLine(
+        minX,
+        busY,
+        maxX,
+        busY
+    );
+
+
+    /* =================================
+       EACH LINE ENDS AT CHILD BOX
+       ================================= */
+
+    childPoints.forEach(
+        point => {
+
+            addLine(
+                point.x,
+                busY,
+                point.x,
+                point.y
+            );
+
+        }
+    );
+
+}
 
 
     /* ================================
