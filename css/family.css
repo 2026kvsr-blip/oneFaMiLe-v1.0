@@ -2155,3 +2155,11 @@
 .legend-female{
     background: #FFE4EE;
 }
+.family-tree-child-couple{
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 22px;
+}
