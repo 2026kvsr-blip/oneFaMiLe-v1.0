@@ -7049,7 +7049,7 @@ if(editMember){
     if(pageHeading){
 
         pageHeading.textContent =
-            "Edit Member";
+    "Update Member";
 
     }
 
