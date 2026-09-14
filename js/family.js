@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13606,7 +13607,34 @@ children.forEach(
    ===================================== */
 
 diagram.innerHTML = `
+<div class="family-tree-zoom-controls">
 
+    <button
+        type="button"
+        id="familyTreeZoomOut"
+        class="family-tree-zoom-btn">
+        −
+    </button>
+
+    <span id="familyTreeZoomValue">
+        100%
+    </span>
+
+    <button
+        type="button"
+        id="familyTreeZoomIn"
+        class="family-tree-zoom-btn">
+        +
+    </button>
+
+    <button
+        type="button"
+        id="familyTreeZoomReset"
+        class="family-tree-zoom-reset">
+        Reset
+    </button>
+
+</div>
 <div class="family-tree-legend">
 
     <div class="family-tree-legend-item">
