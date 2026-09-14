@@ -14162,9 +14162,9 @@ if(treeWrapper){
 
                     familyTreeZoomFactor =
                         Math.max(
-                            0.25,
+                            0.50,
                             Math.min(
-                                5,
+                                7,
                                 pinchStartZoom *
                                 ratio
                             )
