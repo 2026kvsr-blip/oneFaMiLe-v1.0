@@ -2430,3 +2430,23 @@
     align-items: flex-start;
     gap: 28px;
 }
+.family-tree-partner-sibling-child-branch{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 45px;
+}
+
+.family-tree-partner-sibling-child-couple{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+}
+
+.family-tree-partner-sibling-grandchildren-row{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 28px;
+}
