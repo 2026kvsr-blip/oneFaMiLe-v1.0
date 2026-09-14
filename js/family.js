@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13952,8 +13951,8 @@ if(zoomInBtn){
 
            familyTreeZoomFactor =
     Math.min(
-        familyTreeZoomFactor + 0.25,
-        5
+        familyTreeZoomFactor + 0.50,
+        7
     );
             applyFamilyTreeZoom();
 
