@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14002,9 +14003,9 @@ if(zoomResetBtn){
 
 }
 
-
 /* =====================================
-   FAMILY TREE PAN / DRAG
+   FAMILY TREE
+   PAN + PINCH ZOOM
    DESKTOP + MOBILE
    ===================================== */
 
@@ -14013,34 +14014,107 @@ const treeWrapper =
         ".family-tree-scroll"
     );
 
+
 if(treeWrapper){
+
+    const activePointers =
+        new Map();
+
+
+    let pinchStartDistance = 0;
+    let pinchStartZoom = 1;
+
+
+    function getPointerDistance(){
+
+        const points =
+            Array.from(
+                activePointers.values()
+            );
+
+        if(points.length < 2){
+            return 0;
+        }
+
+
+        const dx =
+            points[0].x -
+            points[1].x;
+
+        const dy =
+            points[0].y -
+            points[1].y;
+
+
+        return Math.sqrt(
+            dx * dx +
+            dy * dy
+        );
+
+    }
+
 
     treeWrapper.addEventListener(
         "pointerdown",
         function(event){
 
-            familyTreeIsDragging = true;
-
-            treeWrapper.classList.add(
-                "dragging"
+            activePointers.set(
+                event.pointerId,
+                {
+                    x: event.clientX,
+                    y: event.clientY
+                }
             );
-
-            familyTreeDragStartX =
-                event.clientX;
-
-            familyTreeDragStartY =
-                event.clientY;
-
-            familyTreePanStartX =
-                familyTreePanX;
-
-            familyTreePanStartY =
-                familyTreePanY;
 
 
             treeWrapper.setPointerCapture(
                 event.pointerId
             );
+
+
+            if(
+                activePointers.size === 1
+            ){
+
+                familyTreeIsDragging =
+                    true;
+
+                familyTreeDragStartX =
+                    event.clientX;
+
+                familyTreeDragStartY =
+                    event.clientY;
+
+                familyTreePanStartX =
+                    familyTreePanX;
+
+                familyTreePanStartY =
+                    familyTreePanY;
+
+
+                treeWrapper.classList.add(
+                    "dragging"
+                );
+
+            }
+
+
+            if(
+                activePointers.size === 2
+            ){
+
+                familyTreeIsDragging =
+                    false;
+
+
+                pinchStartDistance =
+                    getPointerDistance();
+
+
+                pinchStartZoom =
+                    familyTreeZoomFactor;
+
+            }
 
 
             event.preventDefault();
@@ -14053,30 +14127,98 @@ if(treeWrapper){
         "pointermove",
         function(event){
 
-            if(!familyTreeIsDragging){
+            if(
+                !activePointers.has(
+                    event.pointerId
+                )
+            ){
                 return;
             }
 
 
-            const moveX =
-                event.clientX -
-                familyTreeDragStartX;
-
-            const moveY =
-                event.clientY -
-                familyTreeDragStartY;
-
-
-            familyTreePanX =
-                familyTreePanStartX +
-                moveX;
-
-            familyTreePanY =
-                familyTreePanStartY +
-                moveY;
+            activePointers.set(
+                event.pointerId,
+                {
+                    x: event.clientX,
+                    y: event.clientY
+                }
+            );
 
 
-            applyFamilyTreeZoom();
+            /* =========================
+               TWO FINGER PINCH
+               ========================= */
+
+            if(
+                activePointers.size >= 2
+            ){
+
+                const currentDistance =
+                    getPointerDistance();
+
+
+                if(
+                    pinchStartDistance > 0
+                ){
+
+                    const ratio =
+                        currentDistance /
+                        pinchStartDistance;
+
+
+                    familyTreeZoomFactor =
+                        Math.max(
+                            0.25,
+                            Math.min(
+                                5,
+                                pinchStartZoom *
+                                ratio
+                            )
+                        );
+
+
+                    applyFamilyTreeZoom();
+
+                }
+
+
+                event.preventDefault();
+
+                return;
+
+            }
+
+
+            /* =========================
+               ONE FINGER PAN
+               ========================= */
+
+            if(
+                familyTreeIsDragging
+            ){
+
+                const moveX =
+                    event.clientX -
+                    familyTreeDragStartX;
+
+                const moveY =
+                    event.clientY -
+                    familyTreeDragStartY;
+
+
+                familyTreePanX =
+                    familyTreePanStartX +
+                    moveX;
+
+                familyTreePanY =
+                    familyTreePanStartY +
+                    moveY;
+
+
+                applyFamilyTreeZoom();
+
+            }
+
 
             event.preventDefault();
 
@@ -14084,9 +14226,29 @@ if(treeWrapper){
     );
 
 
-    treeWrapper.addEventListener(
-        "pointerup",
-        function(event){
+    function endPointer(event){
+
+        activePointers.delete(
+            event.pointerId
+        );
+
+
+        if(
+            treeWrapper.hasPointerCapture(
+                event.pointerId
+            )
+        ){
+
+            treeWrapper.releasePointerCapture(
+                event.pointerId
+            );
+
+        }
+
+
+        if(
+            activePointers.size === 0
+        ){
 
             familyTreeIsDragging =
                 false;
@@ -14095,35 +14257,50 @@ if(treeWrapper){
                 "dragging"
             );
 
+        }
 
-            if(
-                treeWrapper.hasPointerCapture(
-                    event.pointerId
-                )
-            ){
 
-                treeWrapper.releasePointerCapture(
-                    event.pointerId
-                );
+        if(
+            activePointers.size === 1
+        ){
 
-            }
+            const remainingPoint =
+                Array.from(
+                    activePointers.values()
+                )[0];
+
+
+            familyTreeIsDragging =
+                true;
+
+
+            familyTreeDragStartX =
+                remainingPoint.x;
+
+            familyTreeDragStartY =
+                remainingPoint.y;
+
+
+            familyTreePanStartX =
+                familyTreePanX;
+
+            familyTreePanStartY =
+                familyTreePanY;
 
         }
+
+    }
+
+
+    treeWrapper.addEventListener(
+        "pointerup",
+        endPointer
     );
 
 
     treeWrapper.addEventListener(
         "pointercancel",
-        function(){
-
-            familyTreeIsDragging =
-                false;
-
-            treeWrapper.classList.remove(
-                "dragging"
-            );
-
-        }
+        endPointer
     );
 
 }
