@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13854,6 +13855,101 @@ siblings.forEach(
 
     }
 );
+ /* =====================================
+   PARTNER SIBLINGS + PARTNERS + CHILDREN
+   ===================================== */
+
+let partnerSiblingsHTML = "";
+
+partnerSiblings.forEach(
+    sibling => {
+
+        const siblingPartner =
+            members.find(
+                member =>
+                    String(member.memberId) ===
+                    String(sibling.partnerId || "")
+            )
+            ||
+            members.find(
+                member =>
+                    String(member.partnerId || "") ===
+                    String(sibling.memberId)
+            );
+
+
+        const siblingChildren =
+            members.filter(
+                child =>
+                    String(child.fatherId || "") ===
+                        String(sibling.memberId)
+                    ||
+                    String(child.motherId || "") ===
+                        String(sibling.memberId)
+                    ||
+                    (
+                        siblingPartner &&
+                        (
+                            String(child.fatherId || "") ===
+                                String(siblingPartner.memberId)
+                            ||
+                            String(child.motherId || "") ===
+                                String(siblingPartner.memberId)
+                        )
+                    )
+            );
+
+
+        partnerSiblingsHTML += `
+
+            <div class="family-tree-partner-sibling-branch">
+
+                <div class="family-tree-partner-sibling-couple">
+
+                    ${treeBox(
+                        sibling,
+                        "tree-partner-sibling"
+                    )}
+
+                    ${
+                        siblingPartner
+                            ? treeBox(
+                                siblingPartner,
+                                "tree-partner-sibling-partner"
+                              )
+                            : ""
+                    }
+
+                </div>
+
+
+                ${
+                    siblingChildren.length
+                        ? `
+                            <div class="family-tree-partner-sibling-children-row">
+
+                                ${
+                                    siblingChildren
+                                        .map(
+                                            child =>
+                                                treeBox(
+                                                    child,
+                                                    "tree-partner-sibling-child"
+                                                )
+                                        )
+                                        .join("")
+                                }
+
+                            </div>
+                          `
+                        : ""
+                }
+
+            </div>
+        `;
+
+    }
+);          
 /* =====================================
    MAIN TREE HTML
    ===================================== */
@@ -14048,21 +14144,11 @@ diagram.innerHTML = `
     ${
         partner
             ? `
-                <div class="family-tree-partner-siblings-row">
+            <div class="family-tree-partner-siblings-row">
 
-                    ${
-                        partnerSiblings
-                            .map(
-                                sibling =>
-                                    treeBox(
-                                        sibling,
-                                        "tree-partner-sibling"
-                                    )
-                            )
-                            .join("")
-                    }
+    ${partnerSiblingsHTML}
 
-                </div>
+</div>
               `
             : ""
     }
