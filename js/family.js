@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13985,8 +13986,10 @@ if(zoomResetBtn){
 
 }
 
+
 /* =====================================
    FAMILY TREE PAN / DRAG
+   DESKTOP + MOBILE
    ===================================== */
 
 const treeWrapper =
@@ -13994,11 +13997,10 @@ const treeWrapper =
         ".family-tree-scroll"
     );
 
-
 if(treeWrapper){
 
     treeWrapper.addEventListener(
-        "mousedown",
+        "pointerdown",
         function(event){
 
             familyTreeIsDragging = true;
@@ -14019,19 +14021,26 @@ if(treeWrapper){
             familyTreePanStartY =
                 familyTreePanY;
 
+
+            treeWrapper.setPointerCapture(
+                event.pointerId
+            );
+
+
             event.preventDefault();
 
         }
     );
 
 
-    window.addEventListener(
-        "mousemove",
+    treeWrapper.addEventListener(
+        "pointermove",
         function(event){
 
             if(!familyTreeIsDragging){
                 return;
             }
+
 
             const moveX =
                 event.clientX -
@@ -14053,12 +14062,42 @@ if(treeWrapper){
 
             applyFamilyTreeZoom();
 
+            event.preventDefault();
+
         }
     );
 
 
-    window.addEventListener(
-        "mouseup",
+    treeWrapper.addEventListener(
+        "pointerup",
+        function(event){
+
+            familyTreeIsDragging =
+                false;
+
+            treeWrapper.classList.remove(
+                "dragging"
+            );
+
+
+            if(
+                treeWrapper.hasPointerCapture(
+                    event.pointerId
+                )
+            ){
+
+                treeWrapper.releasePointerCapture(
+                    event.pointerId
+                );
+
+            }
+
+        }
+    );
+
+
+    treeWrapper.addEventListener(
+        "pointercancel",
         function(){
 
             familyTreeIsDragging =
