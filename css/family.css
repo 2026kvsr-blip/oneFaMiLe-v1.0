@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2358,4 +2359,29 @@
     align-items: flex-start;
 
     gap: 80px;
+}
+/* =====================================
+   PARTNER SIBLING FAMILY BRANCH
+   ===================================== */
+
+.family-tree-partner-sibling-branch{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 45px;
+}
+
+.family-tree-partner-sibling-couple{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+}
+
+.family-tree-partner-sibling-children-row{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 28px;
 }
