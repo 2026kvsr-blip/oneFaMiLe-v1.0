@@ -12717,8 +12717,8 @@ function applyFamilyTreeZoom(){
         familyTreeZoomFactor;
 
 
-    canvas.style.transformOrigin =
-        "top left";
+   canvas.style.transformOrigin =
+    "top center";
 
 
     canvas.style.transform =
