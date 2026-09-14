@@ -14010,21 +14010,40 @@ diagram.innerHTML = `
 </div>
 
 
-    ${treeBox(
-        selectedMember,
-        "tree-selected"
-    )}
+    <div class="family-tree-selected-branch">
+
+    <div class="family-tree-selected-couple">
+
+        ${treeBox(
+            selectedMember,
+            "tree-selected"
+        )}
+
+        ${
+            partner
+                ? treeBox(
+                    partner,
+                    "tree-partner"
+                  )
+                : ""
+        }
+
+    </div>
 
 
     ${
-        partner
-            ? treeBox(
-                partner,
-                "tree-partner"
-              )
+        children.length
+            ? `
+                <div class="family-tree-selected-children-row">
+
+                    ${childrenHTML}
+
+                </div>
+              `
             : ""
     }
 
+</div>
 
     ${
         partner
@@ -14055,20 +14074,7 @@ diagram.innerHTML = `
                  CHILDREN
                  ===================== -->
 
-            ${
-                children.length
-                ? `
-
-                    <div class="family-tree-children-row">
-
-                        ${childrenHTML}
-
-                    </div>
-
-                  `
-                : ""
-            }
-
+          
 
         </div>
 
