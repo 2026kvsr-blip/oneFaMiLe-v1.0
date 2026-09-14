@@ -12869,13 +12869,6 @@ if(
 
 }
    
-const currentFamily =
-    JSON.parse(
-        localStorage.getItem(
-            "currentFamily"
-        ) || "{}"
-    );
-
 
 const familyName =
     currentFamily.familyName ||
