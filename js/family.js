@@ -16310,6 +16310,143 @@ if(
     }
 
 }
+
+   /* =====================================
+   MEMBER SIBLING CHILD + PARTNER
+   → THEIR CHILDREN
+   ===================================== */
+
+const siblingChildBranches =
+    Array.from(
+        canvas.querySelectorAll(
+            ".family-tree-sibling-child-branch"
+        )
+    );
+
+
+siblingChildBranches.forEach(
+    branch => {
+
+        const child =
+            branch.querySelector(
+                ".tree-sibling-child"
+            );
+
+        const childPartner =
+            branch.querySelector(
+                ".tree-sibling-child-partner"
+            );
+
+        const grandChildren =
+            Array.from(
+                branch.querySelectorAll(
+                    ".tree-sibling-grandchild"
+                )
+            );
+
+
+        let childCoupleCenter = null;
+
+
+        if(
+            child &&
+            childPartner
+        ){
+
+            childCoupleCenter =
+                connectCouple(
+                    child,
+                    childPartner
+                );
+
+        }
+        else if(child){
+
+            childCoupleCenter =
+                getPoint(
+                    child,
+                    "bottom"
+                );
+
+        }
+
+
+        connectParentsToChildren(
+            childCoupleCenter,
+            grandChildren
+        );
+
+    }
+);
+
+
+/* =====================================
+   PARTNER SIBLING CHILD + PARTNER
+   → THEIR CHILDREN
+   ===================================== */
+
+const partnerSiblingChildBranches =
+    Array.from(
+        canvas.querySelectorAll(
+            ".family-tree-partner-sibling-child-branch"
+        )
+    );
+
+
+partnerSiblingChildBranches.forEach(
+    branch => {
+
+        const child =
+            branch.querySelector(
+                ".tree-partner-sibling-child"
+            );
+
+        const childPartner =
+            branch.querySelector(
+                ".tree-partner-sibling-child-partner"
+            );
+
+        const grandChildren =
+            Array.from(
+                branch.querySelectorAll(
+                    ".tree-partner-sibling-grandchild"
+                )
+            );
+
+
+        let childCoupleCenter = null;
+
+
+        if(
+            child &&
+            childPartner
+        ){
+
+            childCoupleCenter =
+                connectCouple(
+                    child,
+                    childPartner
+                );
+
+        }
+        else if(child){
+
+            childCoupleCenter =
+                getPoint(
+                    child,
+                    "bottom"
+                );
+
+        }
+
+
+        connectParentsToChildren(
+            childCoupleCenter,
+            grandChildren
+        );
+
+    }
+);
     /* ================================
        GRAND CHILDREN
        ================================ */
