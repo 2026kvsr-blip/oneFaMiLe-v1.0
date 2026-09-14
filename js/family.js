@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14495,56 +14494,30 @@ connectParentsToChildren(
     }
 
 
-   if(
-    partnerParentCenter &&
-    partner
-){
+ /* =====================================
+   PARTNER PARENTS
+   → PARTNER + PARTNER SIBLINGS
+   ===================================== */
 
-    const partnerTop =
-        getPoint(
-            partner,
-            "top"
-        );
-
-
-    const middleY =
-        partnerParentCenter.y +
-        (
-            partnerTop.y -
-            partnerParentCenter.y
-        ) / 2;
-
-
-    /* parent couple midpoint → vertical */
-
-    addLine(
-        partnerParentCenter.x,
-        partnerParentCenter.y,
-        partnerParentCenter.x,
-        middleY
+const partnerSiblings =
+    Array.from(
+        canvas.querySelectorAll(
+            ".tree-partner-sibling"
+        )
     );
 
 
-    /* horizontal adjustment */
-
-    addLine(
-        partnerParentCenter.x,
-        middleY,
-        partnerTop.x,
-        middleY
-    );
+const partnerChildrenRow =
+    [
+        partner,
+        ...partnerSiblings
+    ].filter(Boolean);
 
 
-    /* partner top ki vertical */
-
-    addLine(
-        partnerTop.x,
-        middleY,
-        partnerTop.x,
-        partnerTop.y
-    );
-
-}
+connectParentsToChildren(
+    partnerParentCenter,
+    partnerChildrenRow
+);
 
     /* ================================
        SELECTED + PARTNER
