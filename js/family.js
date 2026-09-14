@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14066,28 +14065,109 @@ partnerSiblings.forEach(
                 </div>
 
 
+               ${
+    siblingChildren.length
+        ? `
+            <div class="family-tree-partner-sibling-children-row">
+
                 ${
-                    siblingChildren.length
-                        ? `
-                            <div class="family-tree-partner-sibling-children-row">
+                    siblingChildren
+                        .map(
+                            child => {
 
-                                ${
-                                    siblingChildren
-                                        .map(
-                                            child =>
-                                                treeBox(
-                                                    child,
-                                                    "tree-partner-sibling-child"
+                                const childPartner =
+                                    members.find(
+                                        member =>
+                                            String(member.memberId) ===
+                                            String(child.partnerId || "")
+                                    )
+                                    ||
+                                    members.find(
+                                        member =>
+                                            String(member.partnerId || "") ===
+                                            String(child.memberId)
+                                    );
+
+
+                                const childChildren =
+                                    members.filter(
+                                        member =>
+                                            String(member.fatherId || "") ===
+                                                String(child.memberId)
+                                            ||
+                                            String(member.motherId || "") ===
+                                                String(child.memberId)
+                                            ||
+                                            (
+                                                childPartner &&
+                                                (
+                                                    String(member.fatherId || "") ===
+                                                        String(childPartner.memberId)
+                                                    ||
+                                                    String(member.motherId || "") ===
+                                                        String(childPartner.memberId)
                                                 )
-                                        )
-                                        .join("")
-                                }
+                                            )
+                                    );
 
-                            </div>
-                          `
-                        : ""
+
+                                return `
+
+                                    <div class="family-tree-partner-sibling-child-branch">
+
+                                        <div class="family-tree-partner-sibling-child-couple">
+
+                                            ${treeBox(
+                                                child,
+                                                "tree-partner-sibling-child"
+                                            )}
+
+                                            ${
+                                                childPartner
+                                                    ? treeBox(
+                                                        childPartner,
+                                                        "tree-partner-sibling-child-partner"
+                                                      )
+                                                    : ""
+                                            }
+
+                                        </div>
+
+
+                                        ${
+                                            childChildren.length
+                                                ? `
+                                                    <div class="family-tree-partner-sibling-grandchildren-row">
+
+                                                        ${
+                                                            childChildren
+                                                                .map(
+                                                                    grandChild =>
+                                                                        treeBox(
+                                                                            grandChild,
+                                                                            "tree-partner-sibling-grandchild"
+                                                                        )
+                                                                )
+                                                                .join("")
+                                                        }
+
+                                                    </div>
+                                                  `
+                                                : ""
+                                        }
+
+                                    </div>
+                                `;
+
+                            }
+                        )
+                        .join("")
                 }
 
+            </div>
+          `
+        : ""
+}
             </div>
         `;
 
