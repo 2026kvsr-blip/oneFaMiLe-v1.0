@@ -13060,6 +13060,36 @@ function showFamilyTreeMembers(){
         "block";
 
 }
+
+/* =====================================
+   TREE VIEW SEARCH EVENTS
+   ===================================== */
+
+familyTreeSearchInput.addEventListener(
+    "focus",
+    function(){
+
+        selectedFamilyTreeMemberId =
+            "";
+
+        showFamilyTreeMembers();
+
+    }
+);
+
+
+familyTreeSearchInput.addEventListener(
+    "input",
+    function(){
+
+        selectedFamilyTreeMemberId =
+            "";
+
+        showFamilyTreeMembers();
+
+    }
+);
+   
 /* =====================================
    SHOW FAMILY TREE BUTTON
    ===================================== */
