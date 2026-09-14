@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13687,59 +13686,54 @@ children.forEach(
    ===================================== */
 
 diagram.innerHTML = `
-<div class="family-tree-zoom-controls">
+<div class="family-tree-toolbar">
 
-    <button
-        type="button"
-        id="familyTreeZoomOut"
-        class="family-tree-zoom-btn">
-        −
-    </button>
+    <div class="family-tree-legend">
 
-    <span id="familyTreeZoomValue">
-        100%
-    </span>
+        <div class="family-tree-legend-item">
+            <span class="legend-box legend-male"></span>
+            <span>Male</span>
+        </div>
 
-    <button
-        type="button"
-        id="familyTreeZoomIn"
-        class="family-tree-zoom-btn">
-        +
-    </button>
-
-    <button
-        type="button"
-        id="familyTreeZoomReset"
-        class="family-tree-zoom-reset">
-        Reset
-    </button>
-
-</div>
-<div class="family-tree-legend">
-
-    <div class="family-tree-legend-item">
-
-        <span class="legend-box legend-male"></span>
-
-        <span>
-            Male
-        </span>
+        <div class="family-tree-legend-item">
+            <span class="legend-box legend-female"></span>
+            <span>Female</span>
+        </div>
 
     </div>
 
 
-    <div class="family-tree-legend-item">
+    <div class="family-tree-zoom-controls">
 
-        <span class="legend-box legend-female"></span>
+        <button
+            type="button"
+            id="familyTreeZoomOut"
+            class="family-tree-zoom-btn">
+            −
+        </button>
 
-        <span>
-            Female
+        <span id="familyTreeZoomValue">
+            100%
         </span>
+
+        <button
+            type="button"
+            id="familyTreeZoomIn"
+            class="family-tree-zoom-btn">
+            +
+        </button>
+
+        <button
+            type="button"
+            id="familyTreeZoomReset"
+            class="family-tree-zoom-reset">
+            Reset
+        </button>
 
     </div>
 
 </div>
-    <div class="family-tree-scroll">
+<div class="family-tree-scroll">
 
         <div
             id="familyTreeCanvas"
