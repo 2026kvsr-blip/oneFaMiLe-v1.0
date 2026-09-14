@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -1954,6 +1953,7 @@
 
     position: relative;
 }
+
 .family-tree-scroll.dragging{
     cursor: grabbing;
 }
@@ -2236,6 +2236,3 @@
 }
 
 
-.family-tree-scroll.dragging{
-    cursor: grabbing;
-}
