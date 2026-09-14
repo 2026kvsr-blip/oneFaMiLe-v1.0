@@ -2121,6 +2121,16 @@
     border: 2.5px solid #D96B8A !important;
 }
 /* =====================================
+   SELECTED MEMBER NAME
+   ===================================== */
+
+.tree-selected strong{
+    font-weight: 700 !important;
+    color: #228B22 !important;
+}
+
+
+/* =====================================
    FAMILY TREE GENDER LEGEND
    ===================================== */
 
