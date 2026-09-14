@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12776,8 +12775,7 @@ function applyFamilyTreeZoom(){
    OPEN FAMILY TREE PAGE
    ===================================== */
 
-function openFamilyTreePage(){
-
+async function openFamilyTreePage(){
     let members =
     JSON.parse(
         localStorage.getItem(
