@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13896,6 +13897,82 @@ diagram.innerHTML = `
         drawFamilyTreeLines();
 
         fitFamilyTreeToScreen();
+       const zoomInBtn =
+    document.getElementById(
+        "familyTreeZoomIn"
+    );
+
+const zoomOutBtn =
+    document.getElementById(
+        "familyTreeZoomOut"
+    );
+
+const zoomResetBtn =
+    document.getElementById(
+        "familyTreeZoomReset"
+    );
+
+
+/* =====================================
+   ZOOM IN
+   ===================================== */
+
+if(zoomInBtn){
+
+    zoomInBtn.onclick =
+        function(){
+
+            familyTreeZoomFactor =
+                Math.min(
+                    familyTreeZoomFactor + 0.1,
+                    2
+                );
+
+            applyFamilyTreeZoom();
+
+        };
+
+}
+
+
+/* =====================================
+   ZOOM OUT
+   ===================================== */
+
+if(zoomOutBtn){
+
+    zoomOutBtn.onclick =
+        function(){
+
+            familyTreeZoomFactor =
+                Math.max(
+                    familyTreeZoomFactor - 0.1,
+                    0.3
+                );
+
+            applyFamilyTreeZoom();
+
+        };
+
+}
+
+
+/* =====================================
+   RESET ZOOM
+   ===================================== */
+
+if(zoomResetBtn){
+
+    zoomResetBtn.onclick =
+        function(){
+
+            familyTreeZoomFactor = 1;
+
+            applyFamilyTreeZoom();
+
+        };
+
+}
 
     }
 );  
