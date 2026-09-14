@@ -14528,7 +14528,7 @@ if(zoomInBtn){
            familyTreeZoomFactor =
     Math.min(
         familyTreeZoomFactor + 1,
-        9
+        12
     );
             applyFamilyTreeZoom();
 
@@ -14745,7 +14745,7 @@ if(treeWrapper){
                         Math.max(
                             1,
                             Math.min(
-                                9,
+                                12,
                                 pinchStartZoom *
                                 ratio
                             )
