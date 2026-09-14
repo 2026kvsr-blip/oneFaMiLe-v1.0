@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13144,11 +13143,10 @@ if(showFamilyTreeBtn){
 
 const memberControl =
     document.getElementById(
-        "familyTreeMember"
+        "familyTreeMemberSearch"
     )?.closest(
         ".family-tree-control"
     );
-
 
 const beforeControl =
     document.getElementById(
