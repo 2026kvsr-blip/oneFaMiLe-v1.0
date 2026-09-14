@@ -2303,3 +2303,27 @@
     box-sizing: border-box;
 }
 
+/* =====================================
+   FAMILY TREE SIBLING FAMILIES
+   ===================================== */
+
+.family-tree-sibling-branch{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 45px;
+}
+
+.family-tree-sibling-couple{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+}
+
+.family-tree-sibling-children-row{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+}
