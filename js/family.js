@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12783,16 +12784,93 @@ function openFamilyTreePage(){
             "familyMembers"
         ) || "[]"
     );
-   if(
+
+
+const currentFamily =
+    JSON.parse(
+        localStorage.getItem(
+            "currentFamily"
+        ) || "{}"
+    );
+
+
+if(
     !Array.isArray(members) ||
     members.length === 0
 ){
 
-    console.log(
-        "familyMembers empty - need server reload"
-    );
+    try{
+
+        const params =
+            new URLSearchParams();
+
+        params.append(
+            "action",
+            "getFamilyMembers"
+        );
+
+        params.append(
+            "familyId",
+            currentFamily.familyId || ""
+        );
+
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method:
+                        "POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+
+                    body:
+                        params.toString()
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(
+            result.status ===
+            "success"
+        ){
+
+            members =
+                Array.isArray(
+                    result.members
+                )
+                    ? result.members
+                    : [];
+
+
+            localStorage.setItem(
+                "familyMembers",
+                JSON.stringify(
+                    members
+                )
+            );
+
+        }
+
+    }
+    catch(error){
+
+        console.error(
+            "Family Tree Members Load Error:",
+            error
+        );
+
+    }
 
 }
+   
 const currentFamily =
     JSON.parse(
         localStorage.getItem(
