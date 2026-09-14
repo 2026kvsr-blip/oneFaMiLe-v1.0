@@ -13759,7 +13759,101 @@ children.forEach(
 
     }
 );
+/* =====================================
+   SIBLINGS + PARTNERS + CHILDREN
+   ===================================== */
 
+let siblingsHTML = "";
+
+siblings.forEach(
+    sibling => {
+
+        const siblingPartner =
+            members.find(
+                member =>
+                    String(member.memberId) ===
+                    String(sibling.partnerId || "")
+            )
+            ||
+            members.find(
+                member =>
+                    String(member.partnerId || "") ===
+                    String(sibling.memberId)
+            );
+
+
+        const siblingChildren =
+            members.filter(
+                child =>
+                    String(child.fatherId || "") ===
+                        String(sibling.memberId)
+                    ||
+                    String(child.motherId || "") ===
+                        String(sibling.memberId)
+                    ||
+                    (
+                        siblingPartner &&
+                        (
+                            String(child.fatherId || "") ===
+                                String(siblingPartner.memberId)
+                            ||
+                            String(child.motherId || "") ===
+                                String(siblingPartner.memberId)
+                        )
+                    )
+            );
+
+
+        siblingsHTML += `
+
+            <div class="family-tree-sibling-branch">
+
+                <div class="family-tree-sibling-couple">
+
+                    ${treeBox(
+                        sibling,
+                        "tree-sibling"
+                    )}
+
+                    ${
+                        siblingPartner
+                            ? treeBox(
+                                siblingPartner,
+                                "tree-sibling-partner"
+                              )
+                            : ""
+                    }
+
+                </div>
+
+
+                ${
+                    siblingChildren.length
+                        ? `
+                            <div class="family-tree-sibling-children-row">
+
+                                ${
+                                    siblingChildren
+                                        .map(
+                                            child =>
+                                                treeBox(
+                                                    child,
+                                                    "tree-sibling-child"
+                                                )
+                                        )
+                                        .join("")
+                                }
+
+                            </div>
+                          `
+                        : ""
+                }
+
+            </div>
+        `;
+
+    }
+);
 /* =====================================
    MAIN TREE HTML
    ===================================== */
@@ -13909,21 +14003,11 @@ diagram.innerHTML = `
 
  <div class="family-tree-main-row">
 
-    <div class="family-tree-siblings-row">
+<div class="family-tree-siblings-row">
 
-        ${
-            siblings
-                .map(
-                    sibling =>
-                        treeBox(
-                            sibling,
-                            "tree-sibling"
-                        )
-                )
-                .join("")
-        }
+    ${siblingsHTML}
 
-    </div>
+</div>
 
 
     ${treeBox(
@@ -15038,7 +15122,74 @@ connectParentsToChildren(
     parentCenter,
     selectedChildrenRow
 );
-   
+
+  /* =====================================
+   SIBLING + PARTNER → THEIR CHILDREN
+   ===================================== */
+
+const siblingBranches =
+    Array.from(
+        canvas.querySelectorAll(
+            ".family-tree-sibling-branch"
+        )
+    );
+
+
+siblingBranches.forEach(
+    branch => {
+
+        const sibling =
+            branch.querySelector(
+                ".tree-sibling"
+            );
+
+        const siblingPartner =
+            branch.querySelector(
+                ".tree-sibling-partner"
+            );
+
+        const siblingChildren =
+            Array.from(
+                branch.querySelectorAll(
+                    ".tree-sibling-child"
+                )
+            );
+
+
+        let siblingCoupleCenter =
+            null;
+
+
+        if(
+            sibling &&
+            siblingPartner
+        ){
+
+            siblingCoupleCenter =
+                connectCouple(
+                    sibling,
+                    siblingPartner
+                );
+
+        }
+        else if(sibling){
+
+            siblingCoupleCenter =
+                getPoint(
+                    sibling,
+                    "bottom"
+                );
+
+        }
+
+
+        connectParentsToChildren(
+            siblingCoupleCenter,
+            siblingChildren
+        );
+
+    }
+); 
    /* ================================
        PARTNER PARENTS
        ================================ */
