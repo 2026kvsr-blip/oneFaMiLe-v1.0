@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2084,27 +2083,26 @@
 
 .family-tree-main-row{
     display: flex;
-
     justify-content: center;
-    align-items: center;
+
+    /* IMPORTANT:
+       sibling, selected member,
+       partner, partner siblings
+       anni same TOP line */
+    align-items: flex-start;
 
     gap: 34px;
-
-   /* min-width: 700px; */
-
     margin-bottom: 75px;
 }
-
 
 .family-tree-siblings-row{
     display: flex;
 
-    align-items: center;
+    /* sibling couples same generation line */
+    align-items: flex-start;
 
     gap: 28px;
 }
-
-
 /* selected box */
 
 .tree-selected{
@@ -2231,11 +2229,13 @@
 
     gap: 22px;
 }
+
 .family-tree-partner-siblings-row{
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 28px;
 }
+
 .family-tree-zoom-controls{
     display: flex;
     justify-content: flex-end;
@@ -2311,6 +2311,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
+
     gap: 45px;
 }
 
