@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13104,10 +13105,8 @@ if(showFamilyTreeBtn){
     showFamilyTreeBtn.onclick =
         function(){
 
-            const memberId =
-                document.getElementById(
-                    "familyTreeMember"
-                ).value;
+           const memberId =
+    selectedFamilyTreeMemberId;
 
             if(!memberId){
 
