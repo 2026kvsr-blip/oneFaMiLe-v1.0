@@ -12740,16 +12740,22 @@ const familyName =
         :
     </span>
 
-    <select
-        id="familyTreeMember"
-        class="common-form-input">
-        
-                    <option value="">
-                        Select Member
-                    </option>
+   <div class="search-edit-member-wrapper">
 
-                </select>
+    <input
+        type="text"
+        id="familyTreeMemberSearch"
+        class="common-form-input"
+        placeholder="Search Member"
+        autocomplete="off">
 
+    <div
+        id="familyTreeMemberDropdown"
+        class="relations-member-dropdown"
+        style="display:none;">
+    </div>
+
+</div>
             </div>
 
 
@@ -12852,55 +12858,208 @@ const familyName =
        LOAD MEMBERS INTO SELECT
        ================================ */
 
-    const memberSelect =
-        document.getElementById(
-            "familyTreeMember"
-        );
+/* =====================================
+   TREE VIEW MEMBER SEARCH
+   ===================================== */
+
+const familyTreeSearchInput =
+    document.getElementById(
+        "familyTreeMemberSearch"
+    );
 
 
-    members
-        .filter(
-            member =>
-                member &&
-                member.memberId &&
-                member.name
+const familyTreeDropdown =
+    document.getElementById(
+        "familyTreeMemberDropdown"
+    );
+
+
+let selectedFamilyTreeMemberId =
+    "";
+
+
+/* =====================================
+   SHOW / FILTER MEMBERS
+   ===================================== */
+
+function showFamilyTreeMembers(){
+
+    const searchText =
+        String(
+            familyTreeSearchInput.value || ""
         )
-        .sort(
-            (a,b) =>
-                String(a.name)
-                    .localeCompare(
-                        String(b.name)
-                    )
-        )
-        .forEach(
-            function(member){
+        .trim()
+        .toLowerCase();
 
-                const option =
-                    document.createElement(
-                        "option"
+
+    familyTreeDropdown.innerHTML =
+        "";
+
+
+    const matchingMembers =
+        members
+            .filter(
+                function(member){
+
+                    if(
+                        !member ||
+                        !member.memberId ||
+                        !member.name
+                    ){
+
+                        return false;
+
+                    }
+
+
+                    const memberName =
+                        String(
+                            member.name || ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+
+                    const memberId =
+                        String(
+                            member.memberId || ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+
+                    /* EMPTY SEARCH
+                       → SHOW ALL MEMBERS */
+
+                    if(
+                        searchText === ""
+                    ){
+
+                        return true;
+
+                    }
+
+
+                    /* NAME OR MEMBER ID SEARCH */
+
+                    return (
+                        memberName.includes(
+                            searchText
+                        )
+                        ||
+                        memberId.includes(
+                            searchText
+                        )
                     );
 
-                option.value =
-                    member.memberId;
+                }
+            )
+            .sort(
+                function(a,b){
 
-                option.textContent =
-                    member.name +
-                    " (" +
-                    (
-                        String(member.gender)
-                            .toLowerCase() ===
-                        "female"
-                            ? "F"
-                            : "M"
-                    ) +
-                    ")";
+                    return String(
+                        a.name || ""
+                    )
+                    .localeCompare(
+                        String(
+                            b.name || ""
+                        )
+                    );
 
-                memberSelect.appendChild(
-                    option
+                }
+            );
+
+
+    /* =====================================
+       NO MATCH
+       ===================================== */
+
+    if(
+        matchingMembers.length === 0
+    ){
+
+        familyTreeDropdown.innerHTML =
+            `
+            <div class="relations-no-match">
+                No matching member
+            </div>
+            `;
+
+
+        familyTreeDropdown.style.display =
+            "block";
+
+
+        return;
+
+    }
+
+
+    /* =====================================
+       CREATE DROPDOWN ITEMS
+       ===================================== */
+
+    matchingMembers.forEach(
+        function(member){
+
+            const option =
+                document.createElement(
+                    "div"
                 );
 
-            }
-        );
+
+            option.className =
+                "relations-member-option";
+
+
+            option.textContent =
+                member.name +
+                " (" +
+                member.memberId +
+                ")";
+
+
+            option.dataset.memberId =
+                member.memberId;
+
+
+            /* =================================
+               MEMBER SELECT
+               ================================= */
+
+            option.onclick =
+                function(){
+
+                    selectedFamilyTreeMemberId =
+                        member.memberId;
+
+
+                    familyTreeSearchInput.value =
+                        member.name;
+
+
+                    familyTreeDropdown.innerHTML =
+                        "";
+
+
+                    familyTreeDropdown.style.display =
+                        "none";
+
+                };
+
+
+            familyTreeDropdown.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    familyTreeDropdown.style.display =
+        "block";
+
+}
 /* =====================================
    SHOW FAMILY TREE BUTTON
    ===================================== */
