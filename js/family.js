@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14322,15 +14323,152 @@ const familyTreeBackBtn =
         "familyTreeBackBtn"
     );
 
+
 if(familyTreeBackBtn){
 
     familyTreeBackBtn.onclick =
         function(){
 
+            const diagram =
+                document.getElementById(
+                    "familyTreeDiagram"
+                );
+
+            const treeCanvas =
+                document.getElementById(
+                    "familyTreeCanvas"
+                );
+
+
+            /* =====================================
+               TREE OPEN UNTE
+               → TREE CLEAR
+               → SELECTION PAGE READY
+               ===================================== */
+
+            if(treeCanvas){
+
+                if(diagram){
+
+                    diagram.innerHTML =
+                        "";
+
+                }
+
+
+                /* MEMBER CONTROL */
+
+                const memberControl =
+                    document.getElementById(
+                        "familyTreeMemberSearch"
+                    )?.closest(
+                        ".family-tree-control"
+                    );
+
+
+                if(memberControl){
+
+                    memberControl.style.display =
+                        "";
+
+                }
+
+
+                /* GENERATION ROW */
+
+                const generationRow =
+                    document.querySelector(
+                        ".family-tree-generation-row"
+                    );
+
+
+                if(generationRow){
+
+                    generationRow.style.display =
+                        "";
+
+                }
+
+
+                /* SHOW BUTTON */
+
+                const showTreeBtn =
+                    document.getElementById(
+                        "showFamilyTreeBtn"
+                    );
+
+
+                if(showTreeBtn){
+
+                    showTreeBtn.style.display =
+                        "";
+
+                }
+
+
+                /* RESET MEMBER SEARCH */
+
+                const searchInput =
+                    document.getElementById(
+                        "familyTreeMemberSearch"
+                    );
+
+
+                if(searchInput){
+
+                    searchInput.value =
+                        "";
+
+                }
+
+
+                selectedFamilyTreeMemberId =
+                    "";
+
+
+                /* CLOSE DROPDOWN */
+
+                const dropdown =
+                    document.getElementById(
+                        "familyTreeMemberDropdown"
+                    );
+
+
+                if(dropdown){
+
+                    dropdown.innerHTML =
+                        "";
+
+                    dropdown.style.display =
+                        "none";
+
+                }
+
+
+                /* RESET ZOOM / PAN */
+
+                familyTreeZoomFactor = 1;
+
+                familyTreePanX = 0;
+
+                familyTreePanY = 0;
+
+
+                return;
+
+            }
+
+
+            /* =====================================
+               TREE LEKAPOTHE
+               → ONE STEP BACK TO FAMILY PAGE
+               ===================================== */
+
             const mainFamilyBtn =
                 document.getElementById(
                     "familyBtn"
                 );
+
 
             if(mainFamilyBtn){
 
@@ -14341,8 +14479,6 @@ if(familyTreeBackBtn){
         };
 
 }
-
-
 /* =====================================
    FAMILY TREE → HOME
    ===================================== */
