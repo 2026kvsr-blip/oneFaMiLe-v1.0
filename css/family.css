@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -1960,6 +1961,16 @@
     height: 30px;
 
     background: #2A6EB0;
+}
+
+/* =====================================
+   FAMILY TREE DIAGRAM AREA
+   ===================================== */
+
+.family-tree-diagram{
+    width: 100%;
+
+    box-sizing: border-box;
 }
 /* =====================================
    FAMILY TREE FULL DIAGRAM
