@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13922,12 +13921,11 @@ if(zoomInBtn){
     zoomInBtn.onclick =
         function(){
 
-            familyTreeZoomFactor =
-                Math.min(
-                    familyTreeZoomFactor + 0.1,
-                    2
-                );
-
+           familyTreeZoomFactor =
+    Math.min(
+        familyTreeZoomFactor + 0.25,
+        5
+    );
             applyFamilyTreeZoom();
 
         };
