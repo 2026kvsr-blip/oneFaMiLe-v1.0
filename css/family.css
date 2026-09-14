@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2222,4 +2223,11 @@
 
     font-size: 10px;
     cursor: pointer;
+}
+.family-tree-scroll{
+    cursor: grab;
+}
+
+.family-tree-scroll.dragging{
+    cursor: grabbing;
 }
