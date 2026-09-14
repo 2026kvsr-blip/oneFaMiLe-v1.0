@@ -12625,6 +12625,16 @@ const existingFamilies =
 
 let familyTreeBaseScale = 1;
 let familyTreeZoomFactor = 1;
+let familyTreePanX = 0;
+let familyTreePanY = 0;
+
+let familyTreeIsDragging = false;
+
+let familyTreeDragStartX = 0;
+let familyTreeDragStartY = 0;
+
+let familyTreePanStartX = 0;
+let familyTreePanStartY = 0;
 /* =====================================
    AUTO FIT FAMILY TREE TO SCREEN
    ===================================== */
@@ -12678,11 +12688,12 @@ function fitFamilyTreeToScreen(){
     }
 
 
-    familyTreeZoomFactor = 1;
+   familyTreeZoomFactor = 1;
 
+familyTreePanX = 0;
+familyTreePanY = 0;
 
-    applyFamilyTreeZoom();
-
+applyFamilyTreeZoom();
 }
 function applyFamilyTreeZoom(){
 
@@ -12711,7 +12722,7 @@ function applyFamilyTreeZoom(){
 
 
     canvas.style.transform =
-        `scale(${finalScale})`;
+    `translate(${familyTreePanX}px, ${familyTreePanY}px) scale(${finalScale})`;
 
 
     const originalHeight =
@@ -13966,12 +13977,104 @@ if(zoomResetBtn){
 
             familyTreeZoomFactor = 1;
 
+            familyTreePanX = 0;
+            familyTreePanY = 0;
             applyFamilyTreeZoom();
 
         };
 
 }
 
+/* =====================================
+   FAMILY TREE PAN / DRAG
+   ===================================== */
+
+const treeWrapper =
+    document.querySelector(
+        ".family-tree-scroll"
+    );
+
+
+if(treeWrapper){
+
+    treeWrapper.addEventListener(
+        "mousedown",
+        function(event){
+
+            familyTreeIsDragging = true;
+
+            treeWrapper.classList.add(
+                "dragging"
+            );
+
+            familyTreeDragStartX =
+                event.clientX;
+
+            familyTreeDragStartY =
+                event.clientY;
+
+            familyTreePanStartX =
+                familyTreePanX;
+
+            familyTreePanStartY =
+                familyTreePanY;
+
+            event.preventDefault();
+
+        }
+    );
+
+
+    window.addEventListener(
+        "mousemove",
+        function(event){
+
+            if(!familyTreeIsDragging){
+                return;
+            }
+
+            const moveX =
+                event.clientX -
+                familyTreeDragStartX;
+
+            const moveY =
+                event.clientY -
+                familyTreeDragStartY;
+
+
+            familyTreePanX =
+                familyTreePanStartX +
+                moveX;
+
+            familyTreePanY =
+                familyTreePanStartY +
+                moveY;
+
+
+            applyFamilyTreeZoom();
+
+        }
+    );
+
+
+    window.addEventListener(
+        "mouseup",
+        function(){
+
+            familyTreeIsDragging =
+                false;
+
+            treeWrapper.classList.remove(
+                "dragging"
+            );
+
+        }
+    );
+
+}
+
+
+       
     }
 );  
         
