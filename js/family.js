@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -15305,7 +15304,263 @@ function connectParentsToChildren(
     );
 
 }
+/* =====================================
+   GRANDPARENTS → PARENTS
+   ===================================== */
 
+
+/* -------------------------
+   FATHER'S PARENTS → FATHER
+   ------------------------- */
+
+const fatherFather =
+    canvas.querySelector(
+        ".tree-father-father"
+    );
+
+const fatherMother =
+    canvas.querySelector(
+        ".tree-father-mother"
+    );
+
+const fatherNode =
+    canvas.querySelector(
+        ".tree-father"
+    );
+
+
+let fatherGrandParentCenter =
+    null;
+
+
+if(
+    fatherFather &&
+    fatherMother
+){
+
+    fatherGrandParentCenter =
+        connectCouple(
+            fatherFather,
+            fatherMother
+        );
+
+}
+else{
+
+    const singleFatherParent =
+        fatherFather ||
+        fatherMother;
+
+    if(singleFatherParent){
+
+        fatherGrandParentCenter =
+            getPoint(
+                singleFatherParent,
+                "bottom"
+            );
+
+    }
+
+}
+
+
+connectParentsToChildren(
+    fatherGrandParentCenter,
+    fatherNode
+        ? [fatherNode]
+        : []
+);
+
+
+/* -------------------------
+   MOTHER'S PARENTS → MOTHER
+   ------------------------- */
+
+const motherFather =
+    canvas.querySelector(
+        ".tree-mother-father"
+    );
+
+const motherMother =
+    canvas.querySelector(
+        ".tree-mother-mother"
+    );
+
+const motherNode =
+    canvas.querySelector(
+        ".tree-mother"
+    );
+
+
+let motherGrandParentCenter =
+    null;
+
+
+if(
+    motherFather &&
+    motherMother
+){
+
+    motherGrandParentCenter =
+        connectCouple(
+            motherFather,
+            motherMother
+        );
+
+}
+else{
+
+    const singleMotherParent =
+        motherFather ||
+        motherMother;
+
+    if(singleMotherParent){
+
+        motherGrandParentCenter =
+            getPoint(
+                singleMotherParent,
+                "bottom"
+            );
+
+    }
+
+}
+
+
+connectParentsToChildren(
+    motherGrandParentCenter,
+    motherNode
+        ? [motherNode]
+        : []
+);
+
+
+/* -------------------------
+   PARTNER FATHER'S PARENTS
+   → PARTNER FATHER
+   ------------------------- */
+
+const partnerFatherFather =
+    canvas.querySelector(
+        ".tree-partner-father-father"
+    );
+
+const partnerFatherMother =
+    canvas.querySelector(
+        ".tree-partner-father-mother"
+    );
+
+const partnerFatherNode =
+    canvas.querySelector(
+        ".tree-partner-father"
+    );
+
+
+let partnerFatherGrandParentCenter =
+    null;
+
+
+if(
+    partnerFatherFather &&
+    partnerFatherMother
+){
+
+    partnerFatherGrandParentCenter =
+        connectCouple(
+            partnerFatherFather,
+            partnerFatherMother
+        );
+
+}
+else{
+
+    const singlePartnerFatherParent =
+        partnerFatherFather ||
+        partnerFatherMother;
+
+    if(singlePartnerFatherParent){
+
+        partnerFatherGrandParentCenter =
+            getPoint(
+                singlePartnerFatherParent,
+                "bottom"
+            );
+
+    }
+
+}
+
+
+connectParentsToChildren(
+    partnerFatherGrandParentCenter,
+    partnerFatherNode
+        ? [partnerFatherNode]
+        : []
+);
+
+
+/* -------------------------
+   PARTNER MOTHER'S PARENTS
+   → PARTNER MOTHER
+   ------------------------- */
+
+const partnerMotherFather =
+    canvas.querySelector(
+        ".tree-partner-mother-father"
+    );
+
+const partnerMotherMother =
+    canvas.querySelector(
+        ".tree-partner-mother-mother"
+    );
+
+const partnerMotherNode =
+    canvas.querySelector(
+        ".tree-partner-mother"
+    );
+
+
+let partnerMotherGrandParentCenter =
+    null;
+
+
+if(
+    partnerMotherFather &&
+    partnerMotherMother
+){
+
+    partnerMotherGrandParentCenter =
+        connectCouple(
+            partnerMotherFather,
+            partnerMotherMother
+        );
+
+}
+else{
+
+    const singlePartnerMotherParent =
+        partnerMotherFather ||
+        partnerMotherMother;
+
+    if(singlePartnerMotherParent){
+
+        partnerMotherGrandParentCenter =
+            getPoint(
+                singlePartnerMotherParent,
+                "bottom"
+            );
+
+    }
+
+}
+
+
+connectParentsToChildren(
+    partnerMotherGrandParentCenter,
+    partnerMotherNode
+        ? [partnerMotherNode]
+        : []
+);
     /* ================================
        SELECTED MEMBER PARENTS
        ================================ */
