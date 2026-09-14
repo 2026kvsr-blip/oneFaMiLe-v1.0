@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2168,4 +2167,9 @@
     align-items: center;
 
     gap: 22px;
+}
+.family-tree-partner-siblings-row{
+    display: flex;
+    align-items: center;
+    gap: 28px;
 }
