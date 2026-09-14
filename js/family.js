@@ -14515,6 +14515,7 @@ const zoomResetBtn =
     );
 
 
+       
 /* =====================================
    ZOOM IN
    ===================================== */
@@ -14526,8 +14527,8 @@ if(zoomInBtn){
 
            familyTreeZoomFactor =
     Math.min(
-        familyTreeZoomFactor + 0.50,
-        7
+        familyTreeZoomFactor + 1,
+        10
     );
             applyFamilyTreeZoom();
 
@@ -14742,9 +14743,9 @@ if(treeWrapper){
 
                     familyTreeZoomFactor =
                         Math.max(
-                            0.50,
+                            1,
                             Math.min(
-                                7,
+                                10,
                                 pinchStartZoom *
                                 ratio
                             )
