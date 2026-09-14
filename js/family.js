@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13405,6 +13406,52 @@ const partnerMother =
           )
         : null;
 
+     /* =====================================
+   PARTNER SIBLINGS
+   ===================================== */
+
+const partnerSiblings =
+    partner
+        ? members.filter(
+            function(member){
+
+                if(
+                    !member ||
+                    String(member.memberId) ===
+                    String(partner.memberId)
+                ){
+                    return false;
+                }
+
+
+                const sameFather =
+                    partner.fatherId &&
+                    String(
+                        member.fatherId || ""
+                    ) ===
+                    String(
+                        partner.fatherId
+                    );
+
+
+                const sameMother =
+                    partner.motherId &&
+                    String(
+                        member.motherId || ""
+                    ) ===
+                    String(
+                        partner.motherId
+                    );
+
+
+                return (
+                    sameFather ||
+                    sameMother
+                );
+
+            }
+        )
+        : [];      
 
 /* =====================================
    CHILDREN
@@ -13680,42 +13727,64 @@ diagram.innerHTML = `
                  MAIN GENERATION
                  ===================== -->
 
-            <div class="family-tree-main-row">
+ <div class="family-tree-main-row">
+
+    <div class="family-tree-siblings-row">
+
+        ${
+            siblings
+                .map(
+                    sibling =>
+                        treeBox(
+                            sibling,
+                            "tree-sibling"
+                        )
+                )
+                .join("")
+        }
+
+    </div>
 
 
-                <div class="family-tree-siblings-row">
+    ${treeBox(
+        selectedMember,
+        "tree-selected"
+    )}
+
+
+    ${
+        partner
+            ? treeBox(
+                partner,
+                "tree-partner"
+              )
+            : ""
+    }
+
+
+    ${
+        partner
+            ? `
+                <div class="family-tree-partner-siblings-row">
 
                     ${
-                        siblings
+                        partnerSiblings
                             .map(
                                 sibling =>
                                     treeBox(
                                         sibling,
-                                        "tree-sibling"
+                                        "tree-partner-sibling"
                                     )
                             )
                             .join("")
                     }
 
                 </div>
+              `
+            : ""
+    }
 
-
-                ${treeBox(
-                    selectedMember,
-                    "tree-selected"
-                )}
-
-
-                ${
-                    partner
-                        ? treeBox(
-                            partner,
-                            "tree-partner"
-                          )
-                        : ""
-                }
-
-            </div>
+</div>
 
 
             <!-- =====================
