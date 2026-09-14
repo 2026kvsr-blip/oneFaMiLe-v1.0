@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13563,8 +13564,69 @@ const partnerMother =
             partner.motherId
           )
         : null;
+/* =====================================
+   GRAND PARENTS
+   ===================================== */
 
-     /* =====================================
+/* Selected Member - Father's Parents */
+
+const fatherFather =
+    father
+        ? getMemberById(father.fatherId)
+        : null;
+
+const fatherMother =
+    father
+        ? getMemberById(father.motherId)
+        : null;
+
+
+/* Selected Member - Mother's Parents */
+
+const motherFather =
+    mother
+        ? getMemberById(mother.fatherId)
+        : null;
+
+const motherMother =
+    mother
+        ? getMemberById(mother.motherId)
+        : null;
+
+
+/* Partner - Father's Parents */
+
+const partnerFatherFather =
+    partnerFather
+        ? getMemberById(
+            partnerFather.fatherId
+        )
+        : null;
+
+const partnerFatherMother =
+    partnerFather
+        ? getMemberById(
+            partnerFather.motherId
+        )
+        : null;
+
+
+/* Partner - Mother's Parents */
+
+const partnerMotherFather =
+    partnerMother
+        ? getMemberById(
+            partnerMother.fatherId
+        )
+        : null;
+
+const partnerMotherMother =
+    partnerMother
+        ? getMemberById(
+            partnerMother.motherId
+        )
+        : null;
+/* =====================================
    PARTNER SIBLINGS
    ===================================== */
 
@@ -14011,14 +14073,116 @@ diagram.innerHTML = `
             <svg
                 id="familyTreeLines"
                 class="family-tree-lines">
+   
             </svg>
 
 
-            <!-- =====================
-                 PARENTS ROW
-                 ===================== -->
+   <div class="family-tree-grandparents-row">
 
-            <!-- =====================
+
+    <!-- MEMBER FATHER PARENTS -->
+
+    <div class="family-tree-grandparent-couple">
+
+        ${
+            fatherFather
+                ? treeBox(
+                    fatherFather,
+                    "tree-father-father"
+                  )
+                : ""
+        }
+
+        ${
+            fatherMother
+                ? treeBox(
+                    fatherMother,
+                    "tree-father-mother"
+                  )
+                : ""
+        }
+
+    </div>
+
+
+    <!-- MEMBER MOTHER PARENTS -->
+
+    <div class="family-tree-grandparent-couple">
+
+        ${
+            motherFather
+                ? treeBox(
+                    motherFather,
+                    "tree-mother-father"
+                  )
+                : ""
+        }
+
+        ${
+            motherMother
+                ? treeBox(
+                    motherMother,
+                    "tree-mother-mother"
+                  )
+                : ""
+        }
+
+    </div>
+
+
+    <!-- PARTNER FATHER PARENTS -->
+
+    <div class="family-tree-grandparent-couple">
+
+        ${
+            partnerFatherFather
+                ? treeBox(
+                    partnerFatherFather,
+                    "tree-partner-father-father"
+                  )
+                : ""
+        }
+
+        ${
+            partnerFatherMother
+                ? treeBox(
+                    partnerFatherMother,
+                    "tree-partner-father-mother"
+                  )
+                : ""
+        }
+
+    </div>
+
+
+    <!-- PARTNER MOTHER PARENTS -->
+
+    <div class="family-tree-grandparent-couple">
+
+        ${
+            partnerMotherFather
+                ? treeBox(
+                    partnerMotherFather,
+                    "tree-partner-mother-father"
+                  )
+                : ""
+        }
+
+        ${
+            partnerMotherMother
+                ? treeBox(
+                    partnerMotherMother,
+                    "tree-partner-mother-mother"
+                  )
+                : ""
+        }
+
+    </div>
+
+
+</div>         
+
+<!-- =====================
      PARENTS ROW
      ===================== -->
 
