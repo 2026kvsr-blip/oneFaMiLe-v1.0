@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12777,12 +12778,22 @@ function applyFamilyTreeZoom(){
 
 function openFamilyTreePage(){
 
-    const members =
-        JSON.parse(
-            localStorage.getItem(
-                "familyMembers"
-            ) || "[]"
-        );
+    let members =
+    JSON.parse(
+        localStorage.getItem(
+            "familyMembers"
+        ) || "[]"
+    );
+   if(
+    !Array.isArray(members) ||
+    members.length === 0
+){
+
+    console.log(
+        "familyMembers empty - need server reload"
+    );
+
+}
 const currentFamily =
     JSON.parse(
         localStorage.getItem(
