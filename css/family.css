@@ -1968,9 +1968,15 @@
 .family-tree-scroll{
     width: 100%;
 
+    height: calc(
+        100dvh - 330px - env(safe-area-inset-bottom)
+    );
+
+    min-height: 300px;
+
     overflow: hidden !important;
 
-    margin-top: 15px;
+    margin-top: 8px;
 
     padding: 0 !important;
 
@@ -1982,7 +1988,6 @@
 
     position: relative;
 }
-
 .family-tree-scroll.dragging{
     cursor: grabbing;
 }
