@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12689,10 +12688,28 @@ function fitFamilyTreeToScreen(){
     }
 
 
-   familyTreeZoomFactor = 1;
+  familyTreeZoomFactor = 1;
 
-familyTreePanX = 0;
+
+const scaledTreeWidth =
+    treeWidth *
+    familyTreeBaseScale;
+
+
+familyTreePanX =
+    Math.max(
+        0,
+        (
+            availableWidth -
+            scaledTreeWidth
+        ) / 2
+    );
+
+
 familyTreePanY = 0;
+
+
+applyFamilyTreeZoom();
 
 applyFamilyTreeZoom();
 }
@@ -12719,8 +12736,7 @@ function applyFamilyTreeZoom(){
 
 
    canvas.style.transformOrigin =
-    "top center";
-
+    "top left";
 
     canvas.style.transform =
     `translate(${familyTreePanX}px, ${familyTreePanY}px) scale(${finalScale})`;
