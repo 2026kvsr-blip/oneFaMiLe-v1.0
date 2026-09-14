@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -15361,6 +15360,79 @@ connectParentsToChildren(
     partnerChildrenRow
 );
 
+/* =====================================
+   PARTNER SIBLING + PARTNER
+   → THEIR CHILDREN
+   ===================================== */
+
+const partnerSiblingBranches =
+    Array.from(
+        canvas.querySelectorAll(
+            ".family-tree-partner-sibling-branch"
+        )
+    );
+
+
+partnerSiblingBranches.forEach(
+    branch => {
+
+        const sibling =
+            branch.querySelector(
+                ".tree-partner-sibling"
+            );
+
+        const siblingPartner =
+            branch.querySelector(
+                ".tree-partner-sibling-partner"
+            );
+
+        const siblingChildren =
+            Array.from(
+                branch.querySelectorAll(
+                    ".tree-partner-sibling-child"
+                )
+            );
+
+
+        let siblingCoupleCenter =
+            null;
+
+
+        if(
+            sibling &&
+            siblingPartner
+        ){
+
+            /* sibling ↔ partner horizontal line */
+
+            siblingCoupleCenter =
+                connectCouple(
+                    sibling,
+                    siblingPartner
+                );
+
+        }
+        else if(sibling){
+
+            siblingCoupleCenter =
+                getPoint(
+                    sibling,
+                    "bottom"
+                );
+
+        }
+
+
+        /* couple → biological children */
+
+        connectParentsToChildren(
+            siblingCoupleCenter,
+            siblingChildren
+        );
+
+    }
+);
+   
     /* ================================
        SELECTED + PARTNER
        ================================ */
