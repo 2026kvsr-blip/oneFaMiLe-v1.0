@@ -1,5 +1,6 @@
 
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -15537,7 +15538,33 @@ if(familyTreeBackBtn){
 
                 }
 
+              /* =====================================
+   SHOW FAMILY TREE CONTROLS AGAIN
+   ===================================== */
 
+document.querySelectorAll(
+    ".family-tree-control"
+).forEach(
+    function(control){
+
+        control.style.display = "";
+
+    }
+);
+
+
+/* SHOW BUTTON AGAIN */
+
+const showTreeBtn =
+    document.getElementById(
+        "showFamilyTreeBtn"
+    );
+
+if(showTreeBtn){
+
+    showTreeBtn.style.display = "";
+
+}
                 /* RESET ZOOM / PAN */
 
                 familyTreeZoomFactor = 1;
