@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12636,6 +12635,95 @@ let familyTreeDragStartY = 0;
 
 let familyTreePanStartX = 0;
 let familyTreePanStartY = 0;
+
+
+/* =====================================
+   BEFORE GENERATIONS VISIBILITY
+   ===================================== */
+
+const greatGrandParentsRow =
+    diagram.querySelector(
+        ".family-tree-great-grandparents-row"
+    );
+
+const grandParentsRow =
+    diagram.querySelector(
+        ".family-tree-grandparents-row"
+    );
+
+const parentsRow =
+    diagram.querySelector(
+        ".family-tree-parents-row"
+    );
+
+
+/* BEFORE = 1
+   Parents only
+*/
+if(beforeGen === 1){
+
+    if(greatGrandParentsRow){
+        greatGrandParentsRow.style.display =
+            "none";
+    }
+
+    if(grandParentsRow){
+        grandParentsRow.style.display =
+            "none";
+    }
+
+    if(parentsRow){
+        parentsRow.style.display =
+            "flex";
+    }
+}
+
+
+/* BEFORE = 2
+   Parents + Grandparents
+*/
+if(beforeGen === 2){
+
+    if(greatGrandParentsRow){
+        greatGrandParentsRow.style.display =
+            "none";
+    }
+
+    if(grandParentsRow){
+        grandParentsRow.style.display =
+            "flex";
+    }
+
+    if(parentsRow){
+        parentsRow.style.display =
+            "flex";
+    }
+}
+
+
+/* BEFORE = 3
+   Parents + Grandparents + Great Grandparents
+*/
+if(beforeGen === 3){
+
+    if(greatGrandParentsRow){
+        greatGrandParentsRow.style.display =
+            "flex";
+    }
+
+    if(grandParentsRow){
+        grandParentsRow.style.display =
+            "flex";
+    }
+
+    if(parentsRow){
+        parentsRow.style.display =
+            "flex";
+    }
+}
+
+
+
 /* =====================================
    AUTO FIT FAMILY TREE TO SCREEN
    ===================================== */
