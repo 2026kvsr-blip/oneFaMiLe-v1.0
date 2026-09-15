@@ -15555,10 +15555,6 @@ document.querySelectorAll(
 
 /* SHOW BUTTON AGAIN */
 
-const showTreeBtn =
-    document.getElementById(
-        "showFamilyTreeBtn"
-    );
 
 if(showTreeBtn){
 
