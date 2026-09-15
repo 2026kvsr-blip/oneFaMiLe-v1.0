@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14296,16 +14295,96 @@ siblings.forEach(
                                                     <div class="family-tree-sibling-grandchildren-row">
 
                                                         ${
-                                                            childChildren
-                                                                .map(
-                                                                    grandChild =>
-                                                                        treeBox(
-                                                                            grandChild,
-                                                                            "tree-sibling-grandchild"
-                                                                        )
-                                                                )
-                                                                .join("")
-                                                        }
+                                                           childChildren
+    .map(
+        grandChild => {
+
+            const grandChildPartner =
+                members.find(
+                    member =>
+                        String(member.memberId) ===
+                        String(grandChild.partnerId || "")
+                )
+                ||
+                members.find(
+                    member =>
+                        String(member.partnerId || "") ===
+                        String(grandChild.memberId)
+                );
+
+
+            const greatGrandChildren =
+                members.filter(
+                    member =>
+                        String(member.fatherId || "") ===
+                            String(grandChild.memberId)
+                        ||
+                        String(member.motherId || "") ===
+                            String(grandChild.memberId)
+                        ||
+                        (
+                            grandChildPartner &&
+                            (
+                                String(member.fatherId || "") ===
+                                    String(grandChildPartner.memberId)
+                                ||
+                                String(member.motherId || "") ===
+                                    String(grandChildPartner.memberId)
+                            )
+                        )
+                );
+
+
+            return `
+
+                <div class="family-tree-sibling-grandchild-branch">
+
+                    <div class="family-tree-sibling-grandchild-couple">
+
+                        ${treeBox(
+                            grandChild,
+                            "tree-sibling-grandchild"
+                        )}
+
+                        ${
+                            grandChildPartner
+                                ? treeBox(
+                                    grandChildPartner,
+                                    "tree-sibling-grandchild-partner"
+                                  )
+                                : ""
+                        }
+
+                    </div>
+
+
+                    ${
+                        greatGrandChildren.length
+                            ? `
+                                <div class="family-tree-sibling-great-grandchildren-row">
+
+                                    ${
+                                        greatGrandChildren
+                                            .map(
+                                                greatGrandChild =>
+                                                    treeBox(
+                                                        greatGrandChild,
+                                                        "tree-sibling-great-grandchild"
+                                                    )
+                                            )
+                                            .join("")
+                                    }
+
+                                </div>
+                              `
+                            : ""
+                    }
+
+                </div>
+            `;
+        }
+    )
+    .join("")                                                        }
 
                                                     </div>
                                                   `
@@ -15050,9 +15129,11 @@ generation2Rows.forEach(
 
 const generation3Rows =
     diagram.querySelectorAll(
-        ".family-tree-great-grandchildren-row"
+        [
+            ".family-tree-great-grandchildren-row",
+            ".family-tree-sibling-great-grandchildren-row"
+        ].join(",")
     );
-
 generation3Rows.forEach(
     function(row){
 
