@@ -2453,3 +2453,23 @@
     align-items: flex-start;
     gap: 28px;
 }
+.family-tree-grandchild-branch{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 45px;
+}
+
+.family-tree-grandchild-couple{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+}
+
+.family-tree-great-grandchildren-row{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 28px;
+}
