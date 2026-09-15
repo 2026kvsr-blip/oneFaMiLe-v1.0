@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12964,6 +12965,60 @@ const familyName =
     </select>
 
 </div>
+
+<div class="family-tree-control">
+
+    <label class="family-tree-label">
+        Member Siblings
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreeShowSiblings"
+        class="common-form-input">
+
+        <option value="yes">
+            Yes
+        </option>
+
+        <option value="no" selected>
+            No
+        </option>
+
+    </select>
+
+</div>
+
+
+<div class="family-tree-control">
+
+    <label class="family-tree-label">
+        Partner
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreeShowPartner"
+        class="common-form-input">
+
+        <option value="yes" selected>
+            Yes
+        </option>
+
+        <option value="no">
+            No
+        </option>
+
+    </select>
+
+</div>
+
             </div>
 
 
@@ -13262,7 +13317,47 @@ if(showFamilyTreeBtn){
 
     showFamilyTreeBtn.onclick =
         function(){
+   /* =========================
+         TREE OPTIONS
+      ========================= */
+const beforeGen =
+    Number(
+        document.getElementById(
+            "familyTreeBefore"
+        ).value
+    );
 
+const afterGen =
+    Number(
+        document.getElementById(
+            "familyTreeAfter"
+        ).value
+    );
+
+const showSiblings =
+    document.getElementById(
+        "familyTreeShowSiblings"
+    ).value === "yes";
+
+const showPartner =
+    document.getElementById(
+        "familyTreeShowPartner"
+    ).value === "yes";
+
+
+console.log(
+    "FAMILY TREE OPTIONS:",
+    {
+        beforeGen,
+        afterGen,
+        showSiblings,
+        showPartner
+    }
+);
+
+           
+
+           
            const memberId =
     selectedFamilyTreeMemberId;
 
@@ -14432,7 +14527,9 @@ diagram.innerHTML = `
 <!-- =====================
      GREAT GRANDPARENTS ROW
      ===================== -->
-
+${
+    beforeGen >= 3
+        ? `
 <div class="family-tree-great-grandparents-row">
 
     <div class="family-tree-great-grandparent-couple">
@@ -14450,7 +14547,9 @@ diagram.innerHTML = `
               )
             : ""}
     </div>
-
+`
+        : ""
+}
     <div class="family-tree-great-grandparent-couple">
         ${fatherMotherFather
             ? treeBox(
@@ -14567,6 +14666,9 @@ diagram.innerHTML = `
     </div>
 
 </div>
+${
+    beforeGen >= 2
+        ? `
    <div class="family-tree-grandparents-row">
 
 
@@ -14593,7 +14695,9 @@ diagram.innerHTML = `
         }
 
     </div>
-
+`
+        : ""
+}
 
     <!-- MEMBER MOTHER PARENTS -->
 
