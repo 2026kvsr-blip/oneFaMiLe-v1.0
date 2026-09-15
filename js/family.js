@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13799,14 +13798,91 @@ children.forEach(
 
                             ${
                                 grandChildren
-                                    .map(
-                                        grandChild =>
-                                            treeBox(
-                                                grandChild,
-                                                "tree-grandchild-node"
+    .map(
+        grandChild => {
+
+            const grandChildPartner =
+                members.find(
+                    member =>
+                        String(member.memberId) ===
+                        String(grandChild.partnerId || "")
+                )
+                ||
+                members.find(
+                    member =>
+                        String(member.partnerId || "") ===
+                        String(grandChild.memberId)
+                );
+
+            const greatGrandChildren =
+                members.filter(
+                    member =>
+                        String(member.fatherId || "") ===
+                            String(grandChild.memberId)
+                        ||
+                        String(member.motherId || "") ===
+                            String(grandChild.memberId)
+                        ||
+                        (
+                            grandChildPartner &&
+                            (
+                                String(member.fatherId || "") ===
+                                    String(grandChildPartner.memberId)
+                                ||
+                                String(member.motherId || "") ===
+                                    String(grandChildPartner.memberId)
+                            )
+                        )
+                );
+
+            return `
+                <div class="family-tree-grandchild-branch">
+
+                    <div class="family-tree-grandchild-couple">
+
+                        ${treeBox(
+                            grandChild,
+                            "tree-grandchild-node"
+                        )}
+
+                        ${
+                            grandChildPartner
+                                ? treeBox(
+                                    grandChildPartner,
+                                    "tree-grandchild-partner"
+                                  )
+                                : ""
+                        }
+
+                    </div>
+
+                    ${
+                        greatGrandChildren.length
+                            ? `
+                                <div class="family-tree-great-grandchildren-row">
+
+                                    ${
+                                        greatGrandChildren
+                                            .map(
+                                                greatGrandChild =>
+                                                    treeBox(
+                                                        greatGrandChild,
+                                                        "tree-great-grandchild-node"
+                                                    )
                                             )
-                                    )
-                                    .join("")
+                                            .join("")
+                                    }
+
+                                </div>
+                              `
+                            : ""
+                    }
+
+                </div>
+            `;
+        }
+    )
+    .join("")
                             }
 
                         </div>
