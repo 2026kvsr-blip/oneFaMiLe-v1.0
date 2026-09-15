@@ -12672,12 +12672,55 @@ function fitFamilyTreeToScreen(){
         "0";
 
 
-    const treeWidth =
+    const canvasRect =
+    canvas.getBoundingClientRect();
+
+const visibleNodes =
+    Array.from(
+        canvas.querySelectorAll(
+            ".family-tree-test-node"
+        )
+    ).filter(
+        node =>
+            node.offsetParent !== null
+    );
+
+
+let treeWidth = 0;
+
+
+if(visibleNodes.length){
+
+    const rightMost =
+        Math.max(
+            ...visibleNodes.map(
+                node => {
+
+                    const rect =
+                        node.getBoundingClientRect();
+
+                    return (
+                        rect.right -
+                        canvasRect.left
+                    );
+                }
+            )
+        );
+
+    treeWidth =
+        rightMost;
+
+}
+else{
+
+    treeWidth =
         canvas.scrollWidth;
 
-    const availableWidth =
-        wrapper.clientWidth;
+}
 
+
+const availableWidth =
+    wrapper.clientWidth;
 
     familyTreeBaseScale = 1;
 
@@ -12717,7 +12760,6 @@ familyTreePanY = 0;
 
 applyFamilyTreeZoom();
 
-applyFamilyTreeZoom();
 }
 function applyFamilyTreeZoom(){
 
