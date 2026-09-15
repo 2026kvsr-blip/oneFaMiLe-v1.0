@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -15794,6 +15793,127 @@ function connectParentsToChildren(
     );
 
 }
+
+   /* =====================================
+   GREAT GRANDPARENTS
+   → GRANDPARENTS
+   ===================================== */
+
+function connectGreatGrandParents(
+    fatherSelector,
+    motherSelector,
+    childSelector
+){
+
+    const greatGrandFather =
+        canvas.querySelector(
+            fatherSelector
+        );
+
+    const greatGrandMother =
+        canvas.querySelector(
+            motherSelector
+        );
+
+    const grandParent =
+        canvas.querySelector(
+            childSelector
+        );
+
+    if(!grandParent){
+        return;
+    }
+
+    let coupleCenter = null;
+
+    if(
+        greatGrandFather &&
+        greatGrandMother
+    ){
+
+        coupleCenter =
+            connectCouple(
+                greatGrandFather,
+                greatGrandMother
+            );
+
+    }
+    else{
+
+        const singleParent =
+            greatGrandFather ||
+            greatGrandMother;
+
+        if(singleParent){
+
+            coupleCenter =
+                getPoint(
+                    singleParent,
+                    "bottom"
+                );
+
+        }
+    }
+
+    connectParentsToChildren(
+        coupleCenter,
+        [grandParent]
+    );
+}
+
+
+/* SELECTED MEMBER SIDE */
+
+connectGreatGrandParents(
+    ".tree-father-father-father",
+    ".tree-father-father-mother",
+    ".tree-father-father"
+);
+
+connectGreatGrandParents(
+    ".tree-father-mother-father",
+    ".tree-father-mother-mother",
+    ".tree-father-mother"
+);
+
+connectGreatGrandParents(
+    ".tree-mother-father-father",
+    ".tree-mother-father-mother",
+    ".tree-mother-father"
+);
+
+connectGreatGrandParents(
+    ".tree-mother-mother-father",
+    ".tree-mother-mother-mother",
+    ".tree-mother-mother"
+);
+
+
+/* PARTNER SIDE */
+
+connectGreatGrandParents(
+    ".tree-partner-father-father-father",
+    ".tree-partner-father-father-mother",
+    ".tree-partner-father-father"
+);
+
+connectGreatGrandParents(
+    ".tree-partner-father-mother-father",
+    ".tree-partner-father-mother-mother",
+    ".tree-partner-father-mother"
+);
+
+connectGreatGrandParents(
+    ".tree-partner-mother-father-father",
+    ".tree-partner-mother-father-mother",
+    ".tree-partner-mother-father"
+);
+
+connectGreatGrandParents(
+    ".tree-partner-mother-mother-father",
+    ".tree-partner-mother-mother-mother",
+    ".tree-partner-mother-mother"
+);
 /* =====================================
    GRANDPARENTS → PARENTS
    ===================================== */
