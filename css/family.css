@@ -2326,8 +2326,11 @@
 .family-tree-sibling-children-row{
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: flex-start !important;
+    align-content: flex-start !important;
     gap: 28px;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
 }
 .family-tree-sibling-child-branch{
     display: flex;
