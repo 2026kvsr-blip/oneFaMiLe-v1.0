@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12760,7 +12761,7 @@ function applyFamilyTreeZoom(){
         `-${extraHeight}px`;
 
 
-    if(zoomValue){
+   if(zoomValue){
 
     zoomValue.textContent =
         Math.round(
@@ -14548,16 +14549,13 @@ if(zoomOutBtn){
 
             familyTreeZoomFactor =
                 Math.max(
-                    familyTreeZoomFactor - 0.1,
-                    0.3
+                    familyTreeZoomFactor / 1.5,
+                    0.1
                 );
 
             applyFamilyTreeZoom();
-
         };
-
 }
-
 
 /* =====================================
    RESET ZOOM
