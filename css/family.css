@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2330,7 +2329,23 @@
     align-items: flex-start;
     gap: 28px;
 }
+.family-tree-sibling-child-branch{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: flex-start;
+    gap: 45px;
+}
 
+.family-tree-sibling-child-couple{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    align-self: flex-start;
+    gap: 22px;
+    margin-top: 0 !important;
+}
 
 /* =====================================
    SELECTED MEMBER FAMILY BRANCH
