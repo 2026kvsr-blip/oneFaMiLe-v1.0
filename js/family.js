@@ -1,6 +1,4 @@
 
-
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -15607,12 +15605,24 @@ function drawFamilyTreeLines(){
     ){
 
         if(!element){
-            return null;
-        }
+    return null;
+}
 
-        const rect =
-            element.getBoundingClientRect();
 
+/* =====================================
+   IGNORE HIDDEN TREE NODES
+   ===================================== */
+
+if(
+    element.offsetParent === null ||
+    window.getComputedStyle(element).display === "none"
+){
+    return null;
+}
+
+
+const rect =
+    element.getBoundingClientRect();
 
         const left =
             rect.left -
