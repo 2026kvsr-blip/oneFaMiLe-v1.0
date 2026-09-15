@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14958,6 +14957,7 @@ diagram.innerHTML = `
 
     </div>
 
+
 `;
         
     requestAnimationFrame(
@@ -14998,9 +14998,46 @@ diagram.innerHTML = `
         }
 
 
-        /* =====================================
-           DRAW AFTER GENERATION FILTER
-           ===================================== */
+/* =====================================
+   AFTER GENERATIONS VISIBILITY
+   ===================================== */
+
+const grandChildrenRows =
+    diagram.querySelectorAll(
+        ".family-tree-grandchildren-row"
+    );
+
+const greatGrandChildrenRows =
+    diagram.querySelectorAll(
+        ".family-tree-great-grandchildren-row"
+    );
+
+
+grandChildrenRows.forEach(
+    function(row){
+
+        row.style.display =
+            afterGen >= 2
+                ? "flex"
+                : "none";
+
+    }
+);
+
+
+greatGrandChildrenRows.forEach(
+    function(row){
+
+        row.style.display =
+            afterGen >= 3
+                ? "flex"
+                : "none";
+
+    }
+);
+
+
+       
 /* =====================================
    CLEAR OLD FAMILY TREE LINES
    ===================================== */
