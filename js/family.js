@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13696,7 +13697,121 @@ const children =
                 )
             )
     );
+/* =====================================
+   GREAT GRANDPARENTS
+   Parents of Grandparents
+   ===================================== */
 
+// Father's Father parents
+const fatherFatherFather =
+    fatherFather
+        ? getMemberById(fatherFather.fatherId)
+        : null;
+
+const fatherFatherMother =
+    fatherFather
+        ? getMemberById(fatherFather.motherId)
+        : null;
+
+
+// Father's Mother parents
+const fatherMotherFather =
+    fatherMother
+        ? getMemberById(fatherMother.fatherId)
+        : null;
+
+const fatherMotherMother =
+    fatherMother
+        ? getMemberById(fatherMother.motherId)
+        : null;
+
+
+// Mother's Father parents
+const motherFatherFather =
+    motherFather
+        ? getMemberById(motherFather.fatherId)
+        : null;
+
+const motherFatherMother =
+    motherFather
+        ? getMemberById(motherFather.motherId)
+        : null;
+
+
+// Mother's Mother parents
+const motherMotherFather =
+    motherMother
+        ? getMemberById(motherMother.fatherId)
+        : null;
+
+const motherMotherMother =
+    motherMother
+        ? getMemberById(motherMother.motherId)
+        : null;
+
+
+// Partner Father's Father parents
+const partnerFatherFatherFather =
+    partnerFatherFather
+        ? getMemberById(
+            partnerFatherFather.fatherId
+        )
+        : null;
+
+const partnerFatherFatherMother =
+    partnerFatherFather
+        ? getMemberById(
+            partnerFatherFather.motherId
+        )
+        : null;
+
+
+// Partner Father's Mother parents
+const partnerFatherMotherFather =
+    partnerFatherMother
+        ? getMemberById(
+            partnerFatherMother.fatherId
+        )
+        : null;
+
+const partnerFatherMotherMother =
+    partnerFatherMother
+        ? getMemberById(
+            partnerFatherMother.motherId
+        )
+        : null;
+
+
+// Partner Mother's Father parents
+const partnerMotherFatherFather =
+    partnerMotherFather
+        ? getMemberById(
+            partnerMotherFather.fatherId
+        )
+        : null;
+
+const partnerMotherFatherMother =
+    partnerMotherFather
+        ? getMemberById(
+            partnerMotherFather.motherId
+        )
+        : null;
+
+
+// Partner Mother's Mother parents
+const partnerMotherMotherFather =
+    partnerMotherMother
+        ? getMemberById(
+            partnerMotherMother.fatherId
+        )
+        : null;
+
+const partnerMotherMotherMother =
+    partnerMotherMother
+        ? getMemberById(
+            partnerMotherMother.motherId
+        )
+        : null;
 
 /* =====================================
    TREE BOX
@@ -14315,7 +14430,144 @@ diagram.innerHTML = `
    
             </svg>
 
+<!-- =====================
+     GREAT GRANDPARENTS ROW
+     ===================== -->
 
+<div class="family-tree-great-grandparents-row">
+
+    <div class="family-tree-great-grandparent-couple">
+        ${fatherFatherFather
+            ? treeBox(
+                fatherFatherFather,
+                "tree-father-father-father"
+              )
+            : ""}
+
+        ${fatherFatherMother
+            ? treeBox(
+                fatherFatherMother,
+                "tree-father-father-mother"
+              )
+            : ""}
+    </div>
+
+    <div class="family-tree-great-grandparent-couple">
+        ${fatherMotherFather
+            ? treeBox(
+                fatherMotherFather,
+                "tree-father-mother-father"
+              )
+            : ""}
+
+        ${fatherMotherMother
+            ? treeBox(
+                fatherMotherMother,
+                "tree-father-mother-mother"
+              )
+            : ""}
+    </div>
+
+    <div class="family-tree-great-grandparent-couple">
+        ${motherFatherFather
+            ? treeBox(
+                motherFatherFather,
+                "tree-mother-father-father"
+              )
+            : ""}
+
+        ${motherFatherMother
+            ? treeBox(
+                motherFatherMother,
+                "tree-mother-father-mother"
+              )
+            : ""}
+    </div>
+
+    <div class="family-tree-great-grandparent-couple">
+        ${motherMotherFather
+            ? treeBox(
+                motherMotherFather,
+                "tree-mother-mother-father"
+              )
+            : ""}
+
+        ${motherMotherMother
+            ? treeBox(
+                motherMotherMother,
+                "tree-mother-mother-mother"
+              )
+            : ""}
+    </div>
+
+
+    <!-- PARTNER SIDE -->
+
+    <div class="family-tree-great-grandparent-couple">
+        ${partnerFatherFatherFather
+            ? treeBox(
+                partnerFatherFather,
+                "tree-partner-father-father-father"
+              )
+            : ""}
+
+        ${partnerFatherFatherMother
+            ? treeBox(
+                partnerFatherFatherMother,
+                "tree-partner-father-father-mother"
+              )
+            : ""}
+    </div>
+
+    <div class="family-tree-great-grandparent-couple">
+        ${partnerFatherMotherFather
+            ? treeBox(
+                partnerFatherMotherFather,
+                "tree-partner-father-mother-father"
+              )
+            : ""}
+
+        ${partnerFatherMotherMother
+            ? treeBox(
+                partnerFatherMotherMother,
+                "tree-partner-father-mother-mother"
+              )
+            : ""}
+    </div>
+
+    <div class="family-tree-great-grandparent-couple">
+        ${partnerMotherFatherFather
+            ? treeBox(
+                partnerMotherFatherFather,
+                "tree-partner-mother-father-father"
+              )
+            : ""}
+
+        ${partnerMotherFatherMother
+            ? treeBox(
+                partnerMotherFatherMother,
+                "tree-partner-mother-father-mother"
+              )
+            : ""}
+    </div>
+
+    <div class="family-tree-great-grandparent-couple">
+        ${partnerMotherMotherFather
+            ? treeBox(
+                partnerMotherMotherFather,
+                "tree-partner-mother-mother-father"
+              )
+            : ""}
+
+        ${partnerMotherMotherMother
+            ? treeBox(
+                partnerMotherMotherMother,
+                "tree-partner-mother-mother-mother"
+              )
+            : ""}
+    </div>
+
+</div>
    <div class="family-tree-grandparents-row">
 
 
