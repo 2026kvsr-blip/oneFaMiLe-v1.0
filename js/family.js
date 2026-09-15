@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14997,23 +14998,40 @@ diagram.innerHTML = `
 
         }
 
-
 /* =====================================
    AFTER GENERATIONS VISIBILITY
+   ALL FAMILY BRANCHES
    ===================================== */
 
-const grandChildrenRows =
+
+/* =====================================
+   AFTER GENERATION 1+
+
+   CHILDREN LEVEL
+
+   Selected member children are already
+   always visible.
+
+   Sibling children and Partner sibling
+   children should also remain visible.
+   ===================================== */
+
+
+/* =====================================
+   AFTER GENERATION 2
+   GRANDCHILDREN LEVEL
+   ===================================== */
+
+const generation2Rows =
     diagram.querySelectorAll(
-        ".family-tree-grandchildren-row"
+        [
+            ".family-tree-grandchildren-row",
+            ".family-tree-sibling-grandchildren-row",
+            ".family-tree-partner-sibling-grandchildren-row"
+        ].join(",")
     );
 
-const greatGrandChildrenRows =
-    diagram.querySelectorAll(
-        ".family-tree-great-grandchildren-row"
-    );
-
-
-grandChildrenRows.forEach(
+generation2Rows.forEach(
     function(row){
 
         row.style.display =
@@ -15025,7 +15043,17 @@ grandChildrenRows.forEach(
 );
 
 
-greatGrandChildrenRows.forEach(
+/* =====================================
+   AFTER GENERATION 3
+   GREAT-GRANDCHILDREN LEVEL
+   ===================================== */
+
+const generation3Rows =
+    diagram.querySelectorAll(
+        ".family-tree-great-grandchildren-row"
+    );
+
+generation3Rows.forEach(
     function(row){
 
         row.style.display =
@@ -15035,7 +15063,6 @@ greatGrandChildrenRows.forEach(
 
     }
 );
-
 
        
 /* =====================================
