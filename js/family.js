@@ -14527,9 +14527,6 @@ diagram.innerHTML = `
 <!-- =====================
      GREAT GRANDPARENTS ROW
      ===================== -->
-${
-    beforeGen >= 3
-        ? `
 <div class="family-tree-great-grandparents-row">
 
     <div class="family-tree-great-grandparent-couple">
@@ -14547,9 +14544,6 @@ ${
               )
             : ""}
     </div>
-`
-        : ""
-}
     <div class="family-tree-great-grandparent-couple">
         ${fatherMotherFather
             ? treeBox(
@@ -14666,9 +14660,6 @@ ${
     </div>
 
 </div>
-${
-    beforeGen >= 2
-        ? `
    <div class="family-tree-grandparents-row">
 
 
@@ -14695,9 +14686,6 @@ ${
         }
 
     </div>
-`
-        : ""
-}
 
     <!-- MEMBER MOTHER PARENTS -->
 
