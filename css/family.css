@@ -2512,32 +2512,68 @@
 }
 /* =====================================
    FAMILY TREE
-   SAME GENERATION HORIZONTAL FORMAT
+   FINAL GENERATION LAYOUT
    ===================================== */
 
-.family-tree-selected-children-row,
-.family-tree-grandchildren-row,
-.family-tree-great-grandchildren-row,
 
-.family-tree-siblings-row,
-.family-tree-sibling-children-row,
-.family-tree-sibling-grandchildren-row,
-.family-tree-sibling-great-grandchildren-row,
+/* =====================================
+   MAIN GENERATION
+   siblings + selected + partner siblings
+   ===================================== */
 
-.family-tree-partner-siblings-row,
-.family-tree-partner-sibling-children-row,
-.family-tree-partner-sibling-grandchildren-row,
-.family-tree-partner-sibling-great-grandchildren-row {
+.family-tree-main-row{
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
     justify-content: center;
-    flex-wrap: nowrap;
-    gap: 18px;
+    align-items: flex-start;
+    gap: 50px;
+    width: max-content;
+    min-width: 100%;
+    margin-bottom: 0;
 }
 
 
-/* EACH FAMILY BRANCH */
+/* =====================================
+   SAME GENERATION ROWS
+   ===================================== */
+
+.family-tree-siblings-row,
+.family-tree-partner-siblings-row,
+
+.family-tree-selected-children-row,
+.family-tree-sibling-children-row,
+.family-tree-partner-sibling-children-row,
+
+.family-tree-grandchildren-row,
+.family-tree-sibling-grandchildren-row,
+.family-tree-partner-sibling-grandchildren-row,
+
+.family-tree-great-grandchildren-row,
+.family-tree-sibling-great-grandchildren-row,
+.family-tree-partner-sibling-great-grandchildren-row {
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+
+    align-items: flex-start;
+
+    flex-wrap: nowrap;
+
+    gap: 28px;
+
+    width: max-content;
+}
+
+
+/* =====================================
+   FAMILY BRANCHES
+   parent generation → child generation
+   ===================================== */
+
+.family-tree-selected-branch,
 
 .family-tree-child-branch,
 .family-tree-grandchild-branch,
@@ -2549,14 +2585,31 @@
 .family-tree-partner-sibling-branch,
 .family-tree-partner-sibling-child-branch,
 .family-tree-partner-sibling-grandchild-branch {
+
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
+
+    justify-content: flex-start;
+
     flex: 0 0 auto;
+
+    gap: 45px;
+
+    margin: 0;
+
+    padding: 0;
 }
 
 
-/* HUSBAND + WIFE SIDE BY SIDE */
+/* =====================================
+   ALL COUPLES
+   MEMBER + PARTNER SIDE BY SIDE
+   ===================================== */
+
+.family-tree-selected-couple,
 
 .family-tree-child-couple,
 .family-tree-grandchild-couple,
@@ -2568,10 +2621,86 @@
 .family-tree-partner-sibling-couple,
 .family-tree-partner-sibling-child-couple,
 .family-tree-partner-sibling-grandchild-couple {
+
     display: flex;
+
     flex-direction: row;
-    align-items: center;
+
     justify-content: center;
+
+    align-items: center;
+
     flex-wrap: nowrap;
-    gap: 8px;
+
+    gap: 22px;
+
+    width: max-content;
+
+    margin: 0;
+
+    padding: 0;
+}
+
+
+/* =====================================
+   DIRECT CHILD GENERATION
+   MORE SPACE BETWEEN FAMILY BRANCHES
+   ===================================== */
+
+.family-tree-selected-children-row{
+    gap: 50px;
+}
+
+
+/* =====================================
+   DESCENDANT ROW SPACING
+   ===================================== */
+
+.family-tree-grandchildren-row,
+.family-tree-sibling-grandchildren-row,
+.family-tree-partner-sibling-grandchildren-row{
+    gap: 28px;
+}
+
+
+.family-tree-great-grandchildren-row,
+.family-tree-sibling-great-grandchildren-row,
+.family-tree-partner-sibling-great-grandchildren-row{
+    gap: 28px;
+}
+
+
+/* =====================================
+   GRANDCHILD BRANCH
+   ===================================== */
+
+.family-tree-grandchild-branch,
+.family-tree-sibling-grandchild-branch,
+.family-tree-partner-sibling-grandchild-branch{
+    align-self: flex-start;
+}
+
+
+/* =====================================
+   KEEP EVERY MEMBER BOX SAME SIZE
+   ===================================== */
+
+.family-tree-test-node{
+    flex: 0 0 110px !important;
+}
+
+
+/* =====================================
+   ANCESTOR GENERATIONS
+   ===================================== */
+
+.family-tree-great-grandparents-row,
+.family-tree-grandparents-row,
+.family-tree-top-row{
+
+    width: max-content;
+
+    min-width: 100%;
+
+    align-items: flex-start;
 }
