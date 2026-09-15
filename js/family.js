@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -17273,97 +17274,90 @@ partnerSiblingChildBranches.forEach(
 
     }
 );
-    /* ================================
-       GRAND CHILDREN
-       ================================ */
+   /* =====================================
+   CHILD + PARTNER
+   → GRANDCHILDREN
+   ===================================== */
 
-    const branches =
+const selectedChildBranches =
+    Array.from(
         canvas.querySelectorAll(
             ".family-tree-child-branch"
-        );
-
-
-    branches.forEach(
-        branch => {
-
-            const child =
-                branch.querySelector(
-                    ".tree-child-node"
-                );
-
-
-            const grandChildren =
-                Array.from(
-                    branch.querySelectorAll(
-                        ".tree-grandchild-node"
-                    )
-                );
-
-
-            if(
-                !child ||
-                !grandChildren.length
-            ){
-                return;
-            }
-
-
-            const childPartner =
-    branch.querySelector(
-        ".tree-child-partner"
+        )
     );
 
 
-let childParentCenter;
+selectedChildBranches.forEach(
+    branch => {
+
+        const child =
+            branch.querySelector(
+                ".tree-child-node"
+            );
+
+        const childPartner =
+            branch.querySelector(
+                ".tree-child-partner"
+            );
+
+        const grandChildren =
+            Array.from(
+                branch.querySelectorAll(
+                    ".tree-grandchild-node"
+                )
+            );
 
 
-if(
-    childPartner
-){
-
-    const childRight =
-        getPoint(
-            child,
-            "right"
-        );
-
-    const partnerLeft =
-        getPoint(
-            childPartner,
-            "left"
-        );
-
-
-    childParentCenter = {
-        x:
-            (
-                childRight.x +
-                partnerLeft.x
-            ) / 2,
-
-        y:
-            childRight.y
-    };
-
-}
-else{
-
-    childParentCenter =
-        getPoint(
-            child,
-            "bottom"
-        );
-
-}
-
-
-connectParentsToChildren(
-    childParentCenter,
-    grandChildren
-);
+        if(
+            !child ||
+            !grandChildren.length
+        ){
+            return;
         }
-    );
-/* =====================================
+
+
+        let childCoupleCenter = null;
+
+
+        /* CHILD ↔ PARTNER */
+        if(
+            child &&
+            childPartner
+        ){
+
+            childCoupleCenter =
+                connectCouple(
+                    child,
+                    childPartner
+                );
+
+        }
+
+        /* NO PARTNER */
+        else{
+
+            childCoupleCenter =
+                getPoint(
+                    child,
+                    "bottom"
+                );
+
+        }
+
+
+        /* =================================
+           COUPLE → BIOLOGICAL CHILDREN
+           grandchild box TOP-CENTER only
+           ================================= */
+
+        connectParentsToChildren(
+            childCoupleCenter,
+            grandChildren
+        );
+
+    }
+);
+   /* =====================================
    GRANDCHILD + PARTNER
    → GREAT GRANDCHILDREN
    ===================================== */
