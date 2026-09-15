@@ -15790,27 +15790,34 @@ const rect =
         }
 
 
-        const p1 =
-            getPoint(
-                first,
-                "right"
-            );
+       const p1 =
+    getPoint(
+        first,
+        "right"
+    );
+
+const p2 =
+    getPoint(
+        second,
+        "left"
+    );
 
 
-        const p2 =
-            getPoint(
-                second,
-                "left"
-            );
+/* =====================================
+   HIDDEN COUPLE → NO LINE
+   ===================================== */
+
+if(!p1 || !p2){
+    return null;
+}
 
 
-        addLine(
-            p1.x,
-            p1.y,
-            p2.x,
-            p2.y
-        );
-
+addLine(
+    p1.x,
+    p1.y,
+    p2.x,
+    p2.y
+);
 
         return {
             x:
