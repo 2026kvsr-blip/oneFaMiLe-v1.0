@@ -14528,8 +14528,8 @@ if(zoomInBtn){
 
            familyTreeZoomFactor =
     Math.min(
-        familyTreeZoomFactor + 5,
-        50
+        familyTreeZoomFactor * 1.5,
+        10 / familyTreeBaseScale
     );
             applyFamilyTreeZoom();
 
