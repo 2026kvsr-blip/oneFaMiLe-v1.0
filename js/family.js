@@ -16612,5 +16612,68 @@ connectParentsToChildren(
 );
         }
     );
+/* =====================================
+   GRANDCHILD + PARTNER
+   → GREAT GRANDCHILDREN
+   ===================================== */
 
+const grandChildBranches =
+    Array.from(
+        canvas.querySelectorAll(
+            ".family-tree-grandchild-branch"
+        )
+    );
+
+grandChildBranches.forEach(
+    branch => {
+
+        const grandChild =
+            branch.querySelector(
+                ".tree-grandchild-node"
+            );
+
+        const grandChildPartner =
+            branch.querySelector(
+                ".tree-grandchild-partner"
+            );
+
+        const greatGrandChildren =
+            Array.from(
+                branch.querySelectorAll(
+                    ".tree-great-grandchild-node"
+                )
+            );
+
+        let grandChildCoupleCenter = null;
+
+        if(
+            grandChild &&
+            grandChildPartner
+        ){
+
+            grandChildCoupleCenter =
+                connectCouple(
+                    grandChild,
+                    grandChildPartner
+                );
+
+        }
+        else if(grandChild){
+
+            grandChildCoupleCenter =
+                getPoint(
+                    grandChild,
+                    "bottom"
+                );
+
+        }
+
+        connectParentsToChildren(
+            grandChildCoupleCenter,
+            greatGrandChildren
+        );
+
+    }
+);
 }
+
