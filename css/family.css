@@ -2143,12 +2143,11 @@
 
 .family-tree-grandchildren-row{
     display: flex;
-
     justify-content: center;
-    align-items: center;
-
+    align-items: flex-start !important;
     gap: 28px;
 }
+
 .family-tree-test-node.tree-male{
     background: #E4F6E4;
 }
@@ -2472,14 +2471,20 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
+    align-self: flex-start !important;
     gap: 45px;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .family-tree-grandchild-couple{
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start !important;
     gap: 22px;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .family-tree-great-grandchildren-row{
