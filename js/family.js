@@ -12762,13 +12762,13 @@ function applyFamilyTreeZoom(){
 
     if(zoomValue){
 
-        zoomValue.textContent =
-            Math.round(
-                familyTreeZoomFactor *
-                100
-            ) + "%";
+    zoomValue.textContent =
+        Math.round(
+            finalScale *
+            100
+        ) + "%";
 
-    }
+}
 
 }
 /* =====================================
@@ -14527,8 +14527,8 @@ if(zoomInBtn){
 
            familyTreeZoomFactor =
     Math.min(
-        familyTreeZoomFactor + 1,
-        15
+        familyTreeZoomFactor + 5,
+        50
     );
             applyFamilyTreeZoom();
 
@@ -14743,9 +14743,9 @@ if(treeWrapper){
 
                     familyTreeZoomFactor =
                         Math.max(
-                            1,
+                            5,
                             Math.min(
-                                15,
+                                50,
                                 pinchStartZoom *
                                 ratio
                             )
