@@ -1,5 +1,6 @@
 
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14959,7 +14960,20 @@ diagram.innerHTML = `
         /* =====================================
            DRAW AFTER GENERATION FILTER
            ===================================== */
+/* =====================================
+   CLEAR OLD FAMILY TREE LINES
+   ===================================== */
 
+const familyTreeSvg =
+    document.getElementById(
+        "familyTreeLines"
+    );
+
+if(familyTreeSvg){
+
+    familyTreeSvg.innerHTML = "";
+
+}
         drawFamilyTreeLines();
 
         fitFamilyTreeToScreen();
