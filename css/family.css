@@ -2872,7 +2872,7 @@
 
     grid-template-columns:
         max-content
-        40px
+        80px
         max-content;
 
     justify-content: center;
@@ -2881,44 +2881,63 @@
     width: max-content;
     min-width: 100%;
 
+    margin-left: auto;
+    margin-right: auto;
     margin-bottom: 60px;
 }
 
 
-/* MEMBER FAMILY — LEFT */
+/* =====================================
+   MEMBER ANCESTORS — LEFT SIDE ONLY
+   ===================================== */
 
 .family-tree-member-ancestor-tree{
 
     grid-column: 1;
 
     display: flex;
+
     justify-content: flex-end;
     align-items: flex-end;
+
+    width: max-content;
+
+    justify-self: end;
 }
 
 
-/* IMAGINARY CENTER SPACE */
+/* =====================================
+   IMAGINARY VERTICAL CENTER
+   BETWEEN MEMBER + PARTNER
+   ===================================== */
 
 .family-tree-ancestor-center-space{
 
     grid-column: 2;
 
-    width: 40px;
+    width: 80px;
+
+    flex: 0 0 80px;
 }
 
 
-/* PARTNER FAMILY — RIGHT */
+/* =====================================
+   PARTNER ANCESTORS — RIGHT SIDE ONLY
+   ===================================== */
 
 .family-tree-partner-ancestor-tree{
 
     grid-column: 3;
 
     display: flex;
+
     justify-content: flex-start;
     align-items: flex-end;
+
+    width: max-content;
+
+    justify-self: start;
 }
-
-
 /* =====================================
    RECURSIVE ANCESTOR BRANCH
    ===================================== */
