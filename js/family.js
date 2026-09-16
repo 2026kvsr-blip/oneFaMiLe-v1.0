@@ -17671,18 +17671,15 @@ connectParentsToChildren(
         );
 
 
-    const selectedChildrenRow =
-        [
-            ...siblings,
-            selected
-        ].filter(Boolean);
-
+/* =====================================
+   MEMBER PARENTS
+   → SELECTED MEMBER ONLY
+   ===================================== */
 
 connectParentsToChildren(
     parentCenter,
-    selectedChildrenRow
+    [selected].filter(Boolean)
 );
-
   /* =====================================
    SIBLING + PARTNER → THEIR CHILDREN
    ===================================== */
@@ -17817,18 +17814,15 @@ const partnerSiblings =
     );
 
 
-const partnerChildrenRow =
-    [
-        partner,
-        ...partnerSiblings
-    ].filter(Boolean);
-
+/* =====================================
+   PARTNER PARENTS
+   → PARTNER ONLY
+   ===================================== */
 
 connectParentsToChildren(
     partnerParentCenter,
-    partnerChildrenRow
+    [partner].filter(Boolean)
 );
-
    
 /* =====================================
    PARTNER SIBLING + PARTNER
