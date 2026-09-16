@@ -15366,6 +15366,12 @@ diagram.innerHTML = `
     </div>
 
 
+    <!-- END PARTNER SIDE -->
+    </div>
+
+<!-- END GEN 2 ROW -->
+</div>
+
 </div>         
 
 <!-- =====================
