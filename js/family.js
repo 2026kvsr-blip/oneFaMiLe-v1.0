@@ -15171,17 +15171,13 @@ diagram.innerHTML = `
                 "tree-mother-mother-mother"
               )
             : ""}
-    </div>
-
-
-    <!-- PARTNER SIDE -->
+        </div>
 
     <!-- END SELECTED MEMBER SIDE -->
     </div>
 
     <!-- PARTNER SIDE -->
     <div class="family-tree-ancestor-partner-side">
-
     <div class="family-tree-great-grandparent-couple">
         ${partnerFatherFatherFather
             ? treeBox(
@@ -15244,11 +15240,20 @@ diagram.innerHTML = `
                 "tree-partner-mother-mother-mother"
               )
             : ""}
+        </div>
+
+    <!-- END PARTNER SIDE -->
     </div>
 
+<!-- END GEN 3 ROW -->
 </div>
-   <div class="family-tree-grandparents-row">
 
+
+<!-- =====================
+     GRANDPARENTS ROW
+     ===================== -->
+
+<div class="family-tree-grandparents-row">
 
     <!-- MEMBER FATHER PARENTS -->
 
