@@ -15380,14 +15380,15 @@ diagram.innerHTML = `
 
 <div class="family-tree-top-row">
 
+    <!-- =========================
+         SELECTED MEMBER SIDE
+         ========================= -->
+    <div class="family-tree-ancestor-selected-side">
 
-    <!-- =====================
-         SELECTED MEMBER
-         FATHER + MOTHER
-         ===================== -->
-
-    <div class="family-tree-parent-group">
-
+        <!-- SELECTED MEMBER
+             FATHER + MOTHER -->
+        <div class="family-tree-parent-group">
+        
         ${
             father
                 ? treeBox(
