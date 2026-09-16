@@ -1,6 +1,5 @@
 
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -15859,20 +15858,16 @@ const zoomResetBtn =
 
 if(zoomInBtn){
 
-    zoomInBtn.onclick =
-        function(){
+    zoomInBtn.onclick = function(){
 
-           familyTreeZoomFactor =
-    Math.min(
-        familyTreeZoomFactor * 1.5,
-        10 / familyTreeBaseScale
-    );
-            applyFamilyTreeZoom();
+        alert("ZOOM PLUS CLICKED");
 
-        };
+        familyTreeZoomFactor =
+            familyTreeZoomFactor * 1.5;
 
+        applyFamilyTreeZoom();
+    };
 }
-
 
 /* =====================================
    ZOOM OUT
