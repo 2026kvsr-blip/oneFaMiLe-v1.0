@@ -12664,105 +12664,118 @@ function fitFamilyTreeToScreen(){
     }
 
 
-    canvas.style.transform =
-        "none";
+    /* RESET BEFORE MEASURING */
 
-    canvas.style.marginBottom =
-        "0";
-
-    canvas.style.marginLeft =
-        "0";
+    canvas.style.transform = "none";
+    canvas.style.marginBottom = "0";
+    canvas.style.marginLeft = "0";
 
 
     const canvasRect =
-    canvas.getBoundingClientRect();
-
-const visibleNodes =
-    Array.from(
-        canvas.querySelectorAll(
-            ".family-tree-test-node"
-        )
-    ).filter(
-        node =>
-            node.offsetParent !== null
-    );
+        canvas.getBoundingClientRect();
 
 
-let treeWidth = 0;
-
-
-if(visibleNodes.length){
-
-    const rightMost =
-        Math.max(
-            ...visibleNodes.map(
-                node => {
-
-                    const rect =
-                        node.getBoundingClientRect();
-
-                    return (
-                        rect.right -
-                        canvasRect.left
-                    );
-                }
+    const visibleNodes =
+        Array.from(
+            canvas.querySelectorAll(
+                ".family-tree-test-node"
             )
+        ).filter(
+            node =>
+                node.offsetParent !== null
         );
 
-    treeWidth =
-        rightMost;
 
-}
-else{
+    if(!visibleNodes.length){
 
-    treeWidth =
-        canvas.scrollWidth;
+        familyTreeBaseScale = 1;
+        familyTreeZoomFactor = 1;
+        familyTreePanX = 0;
+        familyTreePanY = 0;
 
-}
+        applyFamilyTreeZoom();
 
-
-const availableWidth =
-    wrapper.clientWidth;
-
-    familyTreeBaseScale = 1;
-
-
-    if(
-        treeWidth > availableWidth &&
-        treeWidth > 0
-    ){
-
-        familyTreeBaseScale =
-            availableWidth /
-            treeWidth;
-
+        return;
     }
 
 
-  familyTreeZoomFactor = 1;
+    const nodeRects =
+        visibleNodes.map(
+            node =>
+                node.getBoundingClientRect()
+        );
 
 
-const scaledTreeWidth =
-    treeWidth *
-    familyTreeBaseScale;
+    const leftMost =
+        Math.min(
+            ...nodeRects.map(
+                rect => rect.left
+            )
+        );
 
 
-familyTreePanX =
-    Math.max(
-        0,
+    const rightMost =
+        Math.max(
+            ...nodeRects.map(
+                rect => rect.right
+            )
+        );
+
+
+    const contentLeft =
+        leftMost -
+        canvasRect.left;
+
+
+    const treeWidth =
+        rightMost -
+        leftMost;
+
+
+    const availableWidth =
+        wrapper.clientWidth;
+
+
+    /* AUTO FIT — NEVER AUTO ENLARGE */
+
+    familyTreeBaseScale =
+        treeWidth > 0
+            ? Math.min(
+                1,
+                availableWidth / treeWidth
+              )
+            : 1;
+
+
+    familyTreeZoomFactor = 1;
+
+
+    const scaledTreeWidth =
+        treeWidth *
+        familyTreeBaseScale;
+
+
+    /* CENTER ACTUAL TREE CONTENT */
+
+    familyTreePanX =
         (
             availableWidth -
             scaledTreeWidth
         ) / 2
-    );
+        -
+        (
+            contentLeft *
+            familyTreeBaseScale
+        );
 
 
-familyTreePanY = 0;
+    familyTreePanY = 0;
 
 
-applyFamilyTreeZoom();
-
+    applyFamilyTreeZoom();
 }
+
+
 function applyFamilyTreeZoom(){
 
     const canvas =
@@ -12775,6 +12788,7 @@ function applyFamilyTreeZoom(){
             "familyTreeZoomValue"
         );
 
+
     if(!canvas){
         return;
     }
@@ -12785,11 +12799,12 @@ function applyFamilyTreeZoom(){
         familyTreeZoomFactor;
 
 
-   canvas.style.transformOrigin =
-    "top left";
+    canvas.style.transformOrigin =
+        "top left";
+
 
     canvas.style.transform =
-    `translate(${familyTreePanX}px, ${familyTreePanY}px) scale(${finalScale})`;
+        `translate(${familyTreePanX}px, ${familyTreePanY}px) scale(${finalScale})`;
 
 
     const originalHeight =
@@ -12801,25 +12816,19 @@ function applyFamilyTreeZoom(){
         finalScale;
 
 
-    const extraHeight =
-        originalHeight -
-        scaledHeight;
-
+    /* KEEP PAGE HEIGHT CORRECT */
 
     canvas.style.marginBottom =
-        `-${extraHeight}px`;
+        `${scaledHeight - originalHeight}px`;
 
 
-   if(zoomValue){
+    if(zoomValue){
 
-    zoomValue.textContent =
-        Math.round(
-            finalScale *
-            100
-        ) + "%";
-
-}
-
+        zoomValue.textContent =
+            Math.round(
+                finalScale * 100
+            ) + "%";
+    }
 }
 /* =====================================
    OPEN FAMILY TREE PAGE
@@ -16066,16 +16075,15 @@ if(treeWrapper){
                         pinchStartDistance;
 
 
-                    familyTreeZoomFactor =
-                        Math.max(
-                            5,
-                            Math.min(
-                                50,
-                                pinchStartZoom *
-                                ratio
-                            )
-                        );
-
+                   familyTreeZoomFactor =
+    Math.max(
+        0.1,
+        Math.min(
+            10 / familyTreeBaseScale,
+            pinchStartZoom *
+            ratio
+        )
+    );
 
                     applyFamilyTreeZoom();
 
