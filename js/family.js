@@ -15011,10 +15011,13 @@ diagram.innerHTML = `
 </div>
 <div class="family-tree-scroll">
 
-        <div
-            id="familyTreeCanvas"
-            class="family-tree-canvas">
-
+       <div
+    id="familyTreeCanvas"
+    class="family-tree-canvas ${
+        partner
+            ? "family-tree-has-partner"
+            : "family-tree-no-partner"
+    }">
 
             <svg
                 id="familyTreeLines"
