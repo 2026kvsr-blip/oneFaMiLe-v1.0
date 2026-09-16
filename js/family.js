@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13955,6 +13954,273 @@ const partnerMotherMotherMother =
         : null;
 
 /* =====================================
+   GENERATION 4
+   GREAT-GREAT-GRANDPARENTS
+   SELECTED MEMBER SIDE
+   ===================================== */
+
+/* Father → Father → Father */
+const fatherFatherFatherFather =
+    getMemberById(
+        fatherFatherFather
+            ? fatherFatherFather.fatherId
+            : ""
+    );
+
+const fatherFatherFatherMother =
+    getMemberById(
+        fatherFatherFather
+            ? fatherFatherFather.motherId
+            : ""
+    );
+
+
+/* Father → Father → Mother */
+const fatherFatherMotherFather =
+    getMemberById(
+        fatherFatherMother
+            ? fatherFatherMother.fatherId
+            : ""
+    );
+
+const fatherFatherMotherMother =
+    getMemberById(
+        fatherFatherMother
+            ? fatherFatherMother.motherId
+            : ""
+    );
+
+
+/* Father → Mother → Father */
+const fatherMotherFatherFather =
+    getMemberById(
+        fatherMotherFather
+            ? fatherMotherFather.fatherId
+            : ""
+    );
+
+const fatherMotherFatherMother =
+    getMemberById(
+        fatherMotherFather
+            ? fatherMotherFather.motherId
+            : ""
+    );
+
+
+/* Father → Mother → Mother */
+const fatherMotherMotherFather =
+    getMemberById(
+        fatherMotherMother
+            ? fatherMotherMother.fatherId
+            : ""
+    );
+
+const fatherMotherMotherMother =
+    getMemberById(
+        fatherMotherMother
+            ? fatherMotherMother.motherId
+            : ""
+    );
+
+
+/* Mother → Father → Father */
+const motherFatherFatherFather =
+    getMemberById(
+        motherFatherFather
+            ? motherFatherFather.fatherId
+            : ""
+    );
+
+const motherFatherFatherMother =
+    getMemberById(
+        motherFatherFather
+            ? motherFatherFather.motherId
+            : ""
+    );
+
+
+/* Mother → Father → Mother */
+const motherFatherMotherFather =
+    getMemberById(
+        motherFatherMother
+            ? motherFatherMother.fatherId
+            : ""
+    );
+
+const motherFatherMotherMother =
+    getMemberById(
+        motherFatherMother
+            ? motherFatherMother.motherId
+            : ""
+    );
+
+
+/* Mother → Mother → Father */
+const motherMotherFatherFather =
+    getMemberById(
+        motherMotherFather
+            ? motherMotherFather.fatherId
+            : ""
+    );
+
+const motherMotherFatherMother =
+    getMemberById(
+        motherMotherFather
+            ? motherMotherFather.motherId
+            : ""
+    );
+
+
+/* Mother → Mother → Mother */
+const motherMotherMotherFather =
+    getMemberById(
+        motherMotherMother
+            ? motherMotherMother.fatherId
+            : ""
+    );
+
+const motherMotherMotherMother =
+    getMemberById(
+        motherMotherMother
+            ? motherMotherMother.motherId
+            : ""
+    );
+
+/* =====================================
+   GENERATION 4
+   GREAT-GREAT-GRANDPARENTS
+   PARTNER SIDE
+   ===================================== */
+
+/* Partner Father → Father → Father */
+const partnerFatherFatherFatherFather =
+    getMemberById(
+        partnerFatherFather
+            ? partnerFatherFather.fatherId
+            : ""
+    );
+
+const partnerFatherFatherFatherMother =
+    getMemberById(
+        partnerFatherFather
+            ? partnerFatherFather.motherId
+            : ""
+    );
+
+
+/* Partner Father → Father → Mother */
+const partnerFatherFatherMotherFather =
+    getMemberById(
+        partnerFatherFatherMother
+            ? partnerFatherFatherMother.fatherId
+            : ""
+    );
+
+const partnerFatherFatherMotherMother =
+    getMemberById(
+        partnerFatherFatherMother
+            ? partnerFatherFatherMother.motherId
+            : ""
+    );
+
+
+/* Partner Father → Mother → Father */
+const partnerFatherMotherFatherFather =
+    getMemberById(
+        partnerFatherMotherFather
+            ? partnerFatherMotherFather.fatherId
+            : ""
+    );
+
+const partnerFatherMotherFatherMother =
+    getMemberById(
+        partnerFatherMotherFather
+            ? partnerFatherMotherFather.motherId
+            : ""
+    );
+
+
+/* Partner Father → Mother → Mother */
+const partnerFatherMotherMotherFather =
+    getMemberById(
+        partnerFatherMotherMother
+            ? partnerFatherMotherMother.fatherId
+            : ""
+    );
+
+const partnerFatherMotherMotherMother =
+    getMemberById(
+        partnerFatherMotherMother
+            ? partnerFatherMotherMother.motherId
+            : ""
+    );
+
+
+/* Partner Mother → Father → Father */
+const partnerMotherFatherFatherFather =
+    getMemberById(
+        partnerMotherFatherFather
+            ? partnerMotherFatherFather.fatherId
+            : ""
+    );
+
+const partnerMotherFatherFatherMother =
+    getMemberById(
+        partnerMotherFatherFather
+            ? partnerMotherFatherFather.motherId
+            : ""
+    );
+
+
+/* Partner Mother → Father → Mother */
+const partnerMotherFatherMotherFather =
+    getMemberById(
+        partnerMotherFatherMother
+            ? partnerMotherFatherMother.fatherId
+            : ""
+    );
+
+const partnerMotherFatherMotherMother =
+    getMemberById(
+        partnerMotherFatherMother
+            ? partnerMotherFatherMother.motherId
+            : ""
+    );
+
+
+/* Partner Mother → Mother → Father */
+const partnerMotherMotherFatherFather =
+    getMemberById(
+        partnerMotherMotherFather
+            ? partnerMotherMotherFather.fatherId
+            : ""
+    );
+
+const partnerMotherMotherFatherMother =
+    getMemberById(
+        partnerMotherMotherFather
+            ? partnerMotherMotherFather.motherId
+            : ""
+    );
+
+
+/* Partner Mother → Mother → Mother */
+const partnerMotherMotherMotherFather =
+    getMemberById(
+        partnerMotherMotherMother
+            ? partnerMotherMotherMother.fatherId
+            : ""
+    );
+
+const partnerMotherMotherMotherMother =
+    getMemberById(
+        partnerMotherMotherMother
+            ? partnerMotherMotherMother.motherId
+            : ""
+    );
+
+           
+/* =====================================
    TREE BOX
    ===================================== */
 
@@ -14651,6 +14917,183 @@ diagram.innerHTML = `
    
             </svg>
 
+<!-- ============================
+     GREAT-GREAT-GRANDPARENTS ROW
+     GENERATION 4
+     ============================ -->
+
+<div class="family-tree-great-great-grandparents-row">
+
+    <!-- SELECTED MEMBER SIDE -->
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${fatherFatherFatherFather
+            ? treeBox(fatherFatherFatherFather, "tree-father-father-father-father")
+            : ""}
+
+        ${fatherFatherFatherMother
+            ? treeBox(fatherFatherFatherMother, "tree-father-father-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${fatherFatherMotherFather
+            ? treeBox(fatherFatherMotherFather, "tree-father-father-mother-father")
+            : ""}
+
+        ${fatherFatherMotherMother
+            ? treeBox(fatherFatherMotherMother, "tree-father-father-mother-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${fatherMotherFatherFather
+            ? treeBox(fatherMotherFatherFather, "tree-father-mother-father-father")
+            : ""}
+
+        ${fatherMotherFatherMother
+            ? treeBox(fatherMotherFatherMother, "tree-father-mother-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${fatherMotherMotherFather
+            ? treeBox(fatherMotherMotherFather, "tree-father-mother-mother-father")
+            : ""}
+
+        ${fatherMotherMotherMother
+            ? treeBox(fatherMotherMotherMother, "tree-father-mother-mother-mother")
+            : ""}
+    </div>
+
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${motherFatherFatherFather
+            ? treeBox(motherFatherFatherFather, "tree-mother-father-father-father")
+            : ""}
+
+        ${motherFatherFatherMother
+            ? treeBox(motherFatherFatherMother, "tree-mother-father-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${motherFatherMotherFather
+            ? treeBox(motherFatherMotherFather, "tree-mother-father-mother-father")
+            : ""}
+
+        ${motherFatherMotherMother
+            ? treeBox(motherFatherMotherMother, "tree-mother-father-mother-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${motherMotherFatherFather
+            ? treeBox(motherMotherFatherFather, "tree-mother-mother-father-father")
+            : ""}
+
+        ${motherMotherFatherMother
+            ? treeBox(motherMotherFatherMother, "tree-mother-mother-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${motherMotherMotherFather
+            ? treeBox(motherMotherMotherFather, "tree-mother-mother-mother-father")
+            : ""}
+
+        ${motherMotherMotherMother
+            ? treeBox(motherMotherMotherMother, "tree-mother-mother-mother-mother")
+            : ""}
+    </div>
+
+
+    <!-- PARTNER SIDE -->
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerFatherFatherFatherFather
+            ? treeBox(partnerFatherFatherFatherFather, "tree-partner-father-father-father-father")
+            : ""}
+
+        ${partnerFatherFatherFatherMother
+            ? treeBox(partnerFatherFatherFatherMother, "tree-partner-father-father-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerFatherFatherMotherFather
+            ? treeBox(partnerFatherFatherMotherFather, "tree-partner-father-father-mother-father")
+            : ""}
+
+        ${partnerFatherFatherMotherMother
+            ? treeBox(partnerFatherFatherMotherMother, "tree-partner-father-father-mother-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerFatherMotherFatherFather
+            ? treeBox(partnerFatherMotherFatherFather, "tree-partner-father-mother-father-father")
+            : ""}
+
+        ${partnerFatherMotherFatherMother
+            ? treeBox(partnerFatherMotherFatherMother, "tree-partner-father-mother-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerFatherMotherMotherFather
+            ? treeBox(partnerFatherMotherMotherFather, "tree-partner-father-mother-mother-father")
+            : ""}
+
+        ${partnerFatherMotherMotherMother
+            ? treeBox(partnerFatherMotherMotherMother, "tree-partner-father-mother-mother-mother")
+            : ""}
+    </div>
+
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerMotherFatherFatherFather
+            ? treeBox(partnerMotherFatherFatherFather, "tree-partner-mother-father-father-father")
+            : ""}
+
+        ${partnerMotherFatherFatherMother
+            ? treeBox(partnerMotherFatherFatherMother, "tree-partner-mother-father-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerMotherFatherMotherFather
+            ? treeBox(partnerMotherFatherMotherFather, "tree-partner-mother-father-mother-father")
+            : ""}
+
+        ${partnerMotherFatherMotherMother
+            ? treeBox(partnerMotherFatherMotherMother, "tree-partner-mother-father-mother-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerMotherMotherFatherFather
+            ? treeBox(partnerMotherMotherFatherFather, "tree-partner-mother-mother-father-father")
+            : ""}
+
+        ${partnerMotherMotherFatherMother
+            ? treeBox(partnerMotherMotherFatherMother, "tree-partner-mother-mother-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerMotherMotherMotherFather
+            ? treeBox(partnerMotherMotherMotherFather, "tree-partner-mother-mother-mother-father")
+            : ""}
+
+        ${partnerMotherMotherMotherMother
+            ? treeBox(partnerMotherMotherMotherMother, "tree-partner-mother-mother-mother-mother")
+            : ""}
+    </div>
+
+</div>
+
+
 <!-- =====================
      GREAT GRANDPARENTS ROW
      ===================== -->
@@ -15044,40 +15487,54 @@ diagram.innerHTML = `
     requestAnimationFrame(
     function(){
 
-        /* =====================================
-           BEFORE GENERATIONS VISIBILITY
-           ===================================== */
+      /* =====================================
+   BEFORE GENERATIONS VISIBILITY
+   ===================================== */
 
-        const greatGrandParentsRow =
-            diagram.querySelector(
-                ".family-tree-great-grandparents-row"
-            );
+const greatGreatGrandParentsRow =
+    diagram.querySelector(
+        ".family-tree-great-great-grandparents-row"
+    );
 
-        const grandParentsRow =
-            diagram.querySelector(
-                ".family-tree-grandparents-row"
-            );
+const greatGrandParentsRow =
+    diagram.querySelector(
+        ".family-tree-great-grandparents-row"
+    );
 
-
-        if(greatGrandParentsRow){
-
-            greatGrandParentsRow.style.display =
-                beforeGen >= 3
-                    ? "flex"
-                    : "none";
-
-        }
+const grandParentsRow =
+    diagram.querySelector(
+        ".family-tree-grandparents-row"
+    );
 
 
-        if(grandParentsRow){
+/* GENERATION 4 */
+if(greatGreatGrandParentsRow){
 
-            grandParentsRow.style.display =
-                beforeGen >= 2
-                    ? "flex"
-                    : "none";
+    greatGreatGrandParentsRow.style.display =
+        beforeGen >= 4
+            ? "flex"
+            : "none";
+}
 
-        }
 
+/* GENERATION 3 */
+if(greatGrandParentsRow){
+
+    greatGrandParentsRow.style.display =
+        beforeGen >= 3
+            ? "flex"
+            : "none";
+}
+
+
+/* GENERATION 2 */
+if(grandParentsRow){
+
+    grandParentsRow.style.display =
+        beforeGen >= 2
+            ? "flex"
+            : "none";
+}
 /* =====================================
    AFTER GENERATIONS VISIBILITY
    ALL FAMILY BRANCHES
