@@ -5535,6 +5535,7 @@ if(homeBtn){
         );
 
 
+       
         /* =================================
            SAVE SELECTED MEMBER FOR EDIT
            ================================= */
@@ -14926,6 +14927,8 @@ diagram.innerHTML = `
 
     <!-- SELECTED MEMBER SIDE -->
 
+    <div class="family-tree-ancestor-selected-side">
+    
     <div class="family-tree-great-great-grandparent-couple">
         ${fatherFatherFatherFather
             ? treeBox(fatherFatherFatherFather, "tree-father-father-father-father")
@@ -15008,7 +15011,11 @@ diagram.innerHTML = `
     </div>
 
 
+        </div>
+
     <!-- PARTNER SIDE -->
+
+    <div class="family-tree-ancestor-partner-side">
 
     <div class="family-tree-great-great-grandparent-couple">
         ${partnerFatherFatherFatherFather
@@ -15091,6 +15098,7 @@ diagram.innerHTML = `
             : ""}
     </div>
 
+</div>
 </div>
 
 
