@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2085,19 +2084,66 @@
    ===================================== */
 
 .family-tree-main-row{
-    display: flex;
-    justify-content: center;
 
-    /* IMPORTANT:
-       sibling, selected member,
-       partner, partner siblings
-       anni same TOP line */
-    align-items: flex-start;
+    display: grid;
 
-    gap: 34px;
+    /*
+       LEFT  = Member siblings
+       CENTER = Selected + Partner
+       RIGHT = Partner siblings
+
+       Left / Right columns equal width.
+       Kabatti center couple exact tree center lo untundi.
+    */
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        max-content
+        minmax(0, 1fr);
+
+    align-items: start;
+
+    column-gap: 34px;
+
+    width: 100%;
+
+    min-width: max-content;
+
     margin-bottom: 75px;
 }
 
+
+/* MEMBER SIBLINGS — LEFT */
+
+.family-tree-main-row
+> .family-tree-siblings-row{
+
+    grid-column: 1;
+
+    justify-self: end;
+}
+
+
+/* SELECTED MEMBER + PARTNER — EXACT CENTER */
+
+.family-tree-main-row
+> .family-tree-selected-branch{
+
+    grid-column: 2;
+
+    justify-self: center;
+}
+
+
+/* PARTNER SIBLINGS — RIGHT */
+
+.family-tree-main-row
+> .family-tree-partner-siblings-row{
+
+    grid-column: 3;
+
+    justify-self: start;
+}
 .family-tree-siblings-row{
     display: flex;
 
