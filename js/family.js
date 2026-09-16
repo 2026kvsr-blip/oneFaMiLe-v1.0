@@ -15409,7 +15409,8 @@ diagram.innerHTML = `
         }
 
     </div>
-
+    <!-- END SELECTED MEMBER SIDE -->
+    </div>
 
     <!-- =====================
          PARTNER
