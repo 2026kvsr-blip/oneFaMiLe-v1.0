@@ -15417,12 +15417,16 @@ diagram.innerHTML = `
          FATHER + MOTHER
          ===================== -->
 
-    ${
-        partner
-        ? `
+   ${
+    partner
+    ? `
+        <!-- =========================
+             PARTNER SIDE
+             ========================= -->
+        <div class="family-tree-ancestor-partner-side">
 
             <div class="family-tree-parent-group">
-
+            
                 ${
                     partnerFather
                         ? treeBox(
@@ -15443,6 +15447,8 @@ diagram.innerHTML = `
                 }
 
             </div>
+                    <!-- END PARTNER SIDE -->
+        </div>
 
           `
         : ""
