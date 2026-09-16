@@ -16839,6 +16839,88 @@ function connectParentsToChildren(
 }
 
 /* =====================================
+   NEW SPLIT ANCESTOR
+   PARENT COUPLE → BIOLOGICAL CHILD
+   ===================================== */
+
+function connectSplitAncestorFamily(
+    fatherSelector,
+    motherSelector,
+    childSelector
+){
+
+    const fatherNode =
+        canvas.querySelector(
+            fatherSelector
+        );
+
+    const motherNode =
+        canvas.querySelector(
+            motherSelector
+        );
+
+    const childNode =
+        canvas.querySelector(
+            childSelector
+        );
+
+
+    if(!childNode){
+        return;
+    }
+
+
+    let parentCenter = null;
+
+
+    /* BOTH PARENTS */
+
+    if(
+        fatherNode &&
+        motherNode
+    ){
+
+        parentCenter =
+            connectCouple(
+                fatherNode,
+                motherNode
+            );
+
+    }
+
+    /* ONLY ONE PARENT */
+
+    else{
+
+        const singleParent =
+            fatherNode ||
+            motherNode;
+
+
+        if(singleParent){
+
+            parentCenter =
+                getPoint(
+                    singleParent,
+                    "bottom"
+                );
+
+        }
+
+    }
+
+
+    /* PARENTS → BIOLOGICAL CHILD */
+
+    connectParentsToChildren(
+        parentCenter,
+        [childNode]
+    );
+
+}
+
+   
+/* =====================================
    GREAT-GREAT-GRANDPARENTS
    → GREAT-GRANDPARENTS
    GENERATION 4 → GENERATION 3
