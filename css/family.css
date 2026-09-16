@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2872,7 +2873,7 @@
 
     grid-template-columns:
         max-content
-        80px
+        22px
         max-content;
 
     justify-content: center;
@@ -2915,7 +2916,7 @@
 
     grid-column: 2;
 
-    width: 80px;
+    width: 22px;
 
     flex: 0 0 80px;
 }
