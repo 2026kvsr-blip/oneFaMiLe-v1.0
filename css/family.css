@@ -1,3 +1,4 @@
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2052,19 +2053,20 @@
 
     flex-direction: row;
 
-    justify-content: space-between;
-    align-items: center;
+    justify-content: center;
 
-    gap: 80px;
+    align-items: flex-start;
 
-   /* width: 100%;
-    min-width: 700px; */
+    gap: 22px;
+
+    width: max-content;
+
+    min-width: 100%;
 
     margin-bottom: 70px;
 
     box-sizing: border-box;
 }
-
 .family-tree-parent-group{
     display: flex;
 
