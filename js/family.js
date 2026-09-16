@@ -14858,8 +14858,15 @@ partnerSiblings.forEach(
    ===================================== */
 
 diagram.innerHTML = `
-<div class="family-tree-toolbar">
+<div
+    class="family-tree-layout-root ${
+        partner
+            ? "family-tree-has-partner"
+            : "family-tree-no-partner"
+    }"
+>
 
+<div class="family-tree-toolbar">
     <div class="family-tree-legend">
 
         <div class="family-tree-legend-item">
@@ -15517,15 +15524,17 @@ diagram.innerHTML = `
 </div>
 
 
-            <!-- =====================
-                 CHILDREN
-                 ===================== -->
+          <!-- =====================
+             CHILDREN
+             ===================== -->
 
           
 
         </div>
 
     </div>
+
+</div> <!-- END family-tree-layout-root -->
 
 
 `;
