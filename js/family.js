@@ -15680,7 +15680,6 @@ ${partner ? `
 
     </div>
 
-</div> <!-- END family-tree-layout-root -->
 
 
 `;
