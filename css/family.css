@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2777,4 +2776,67 @@
     width: max-content;
 
     flex: 0 0 auto;
+}
+/* =====================================
+   FAMILY TREE
+   PARTNER PRESENT → ANCESTOR SPLIT
+   ===================================== */
+
+.family-tree-has-partner
+.family-tree-great-great-grandparents-row,
+
+.family-tree-has-partner
+.family-tree-great-grandparents-row,
+
+.family-tree-has-partner
+.family-tree-grandparents-row,
+
+.family-tree-has-partner
+.family-tree-top-row{
+
+    display: grid;
+
+    grid-template-columns:
+        max-content
+        max-content;
+
+    justify-content: center;
+
+    align-items: start;
+
+    column-gap: 80px;
+}
+
+
+/* MEMBER ANCESTORS = LEFT */
+
+.family-tree-has-partner
+.family-tree-ancestor-selected-side{
+
+    grid-column: 1;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: flex-start;
+
+    flex-wrap: nowrap;
+}
+
+
+/* PARTNER ANCESTORS = RIGHT */
+
+.family-tree-has-partner
+.family-tree-ancestor-partner-side{
+
+    grid-column: 2;
+
+    display: flex;
+
+    justify-content: flex-start;
+
+    align-items: flex-start;
+
+    flex-wrap: nowrap;
 }
