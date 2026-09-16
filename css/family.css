@@ -2840,3 +2840,112 @@
 
     flex-wrap: nowrap;
 }
+/* =====================================
+   PARTNER PRESENT
+   HIDE OLD FLAT ANCESTOR ROWS
+   ===================================== */
+
+.family-tree-has-partner
+.family-tree-great-great-grandparents-row,
+
+.family-tree-has-partner
+.family-tree-great-grandparents-row,
+
+.family-tree-has-partner
+.family-tree-grandparents-row,
+
+.family-tree-has-partner
+.family-tree-top-row{
+
+    display: none !important;
+}
+
+
+/* =====================================
+   NEW SPLIT ANCESTOR ZONE
+   MEMBER LEFT | PARTNER RIGHT
+   ===================================== */
+
+.family-tree-split-ancestor-zone{
+
+    display: grid;
+
+    grid-template-columns:
+        max-content
+        40px
+        max-content;
+
+    justify-content: center;
+    align-items: end;
+
+    width: max-content;
+    min-width: 100%;
+
+    margin-bottom: 60px;
+}
+
+
+/* MEMBER FAMILY — LEFT */
+
+.family-tree-member-ancestor-tree{
+
+    grid-column: 1;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+
+/* IMAGINARY CENTER SPACE */
+
+.family-tree-ancestor-center-space{
+
+    grid-column: 2;
+
+    width: 40px;
+}
+
+
+/* PARTNER FAMILY — RIGHT */
+
+.family-tree-partner-ancestor-tree{
+
+    grid-column: 3;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+
+/* =====================================
+   RECURSIVE ANCESTOR BRANCH
+   ===================================== */
+
+.family-tree-ancestor-generation-branch{
+
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+    align-items: flex-end;
+
+    gap: 28px;
+
+    width: max-content;
+}
+
+
+.family-tree-ancestor-parent-branch{
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 45px;
+
+    width: max-content;
+}
