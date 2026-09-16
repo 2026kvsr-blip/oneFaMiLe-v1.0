@@ -16915,7 +16915,98 @@ function connectGreatGreatGrandParents(
     );
 }
 
+/* =====================================
+   SPLIT ANCESTOR TREE CONNECTOR
+   MEMBER LEFT | PARTNER RIGHT
+   ===================================== */
 
+function connectSplitAncestorBranch(
+    person,
+    depth,
+    prefix = ""
+){
+
+    if(!person || depth <= 0){
+        return;
+    }
+
+
+    const father =
+        getMemberById(
+            person.fatherId
+        );
+
+    const mother =
+        getMemberById(
+            person.motherId
+        );
+
+
+    const fatherPath =
+        prefix
+            ? `${prefix}-father`
+            : "father";
+
+    const motherPath =
+        prefix
+            ? `${prefix}-mother`
+            : "mother";
+
+
+    const fatherNode =
+        father
+            ? canvas.querySelector(
+                `.tree-${fatherPath}`
+              )
+            : null;
+
+    const motherNode =
+        mother
+            ? canvas.querySelector(
+                `.tree-${motherPath}`
+              )
+            : null;
+
+
+    /* =====================================
+       FIRST CONNECT OLDER GENERATIONS
+       ===================================== */
+
+    if(father){
+
+        connectSplitAncestorBranch(
+            father,
+            depth - 1,
+            fatherPath
+        );
+    }
+
+
+    if(mother){
+
+        connectSplitAncestorBranch(
+            mother,
+            depth - 1,
+            motherPath
+        );
+    }
+
+
+    /* =====================================
+       FATHER ↔ MOTHER COUPLE
+       ===================================== */
+
+    if(
+        fatherNode &&
+        motherNode
+    ){
+
+        connectCouple(
+            fatherNode,
+            motherNode
+        );
+    }
+}
 /* =====================================
    SELECTED MEMBER SIDE
    ===================================== */
@@ -17020,6 +17111,31 @@ connectGreatGreatGrandParents(
     ".tree-partner-mother-mother-mother-mother",
     ".tree-partner-mother-mother-mother"
 );
+/* =====================================
+   NEW SPLIT ANCESTOR TREE CONNECTORS
+   PARTNER PRESENT ONLY
+   ===================================== */
+
+if(partner){
+
+    /* MEMBER RELATED — LEFT SIDE */
+
+    connectSplitAncestorBranch(
+        selectedMember,
+        beforeGen,
+        ""
+    );
+
+
+    /* PARTNER RELATED — RIGHT SIDE */
+
+    connectSplitAncestorBranch(
+        partner,
+        beforeGen,
+        "partner"
+    );
+
+}
    
    /* =====================================
    GREAT GRANDPARENTS
