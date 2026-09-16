@@ -15372,8 +15372,6 @@ diagram.innerHTML = `
 <!-- END GEN 2 ROW -->
 </div>
 
-</div>         
-
 <!-- =====================
      PARENTS ROW
      ===================== -->
