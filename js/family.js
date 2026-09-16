@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -15858,17 +15857,18 @@ const zoomResetBtn =
 
 if(zoomInBtn){
 
-    zoomInBtn.onclick = function(){
+    zoomInBtn.onclick =
+        function(){
 
-        alert("ZOOM PLUS CLICKED");
+            familyTreeZoomFactor =
+                Math.min(
+                    familyTreeZoomFactor * 1.5,
+                    10 / familyTreeBaseScale
+                );
 
-        familyTreeZoomFactor =
-            familyTreeZoomFactor * 1.5;
-
-        applyFamilyTreeZoom();
-    };
+            applyFamilyTreeZoom();
+        };
 }
-
 /* =====================================
    ZOOM OUT
    ===================================== */
@@ -17115,27 +17115,6 @@ connectGreatGreatGrandParents(
    PARTNER PRESENT ONLY
    ===================================== */
 
-if(partner){
-
-    /* MEMBER RELATED — LEFT SIDE */
-
-    connectSplitAncestorBranch(
-        selectedMember,
-        beforeGen,
-        ""
-    );
-
-
-    /* PARTNER RELATED — RIGHT SIDE */
-
-    connectSplitAncestorBranch(
-        partner,
-        beforeGen,
-        "partner"
-    );
-
-}
-   
    /* =====================================
    GREAT GRANDPARENTS
    → GRANDPARENTS
