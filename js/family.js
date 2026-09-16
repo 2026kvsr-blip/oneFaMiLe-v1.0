@@ -14260,7 +14260,111 @@ function treeBox(member, extraClass = ""){
     `;
 
 }
+/* =====================================
+   ANCESTOR HIERARCHY RENDERER
 
+   Selected Member:
+   prefix = ""
+
+   Partner:
+   prefix = "partner"
+
+   depth = beforeGen
+   ===================================== */
+
+function renderAncestorParents(
+    person,
+    depth,
+    prefix = ""
+){
+
+    if(!person || depth <= 0){
+        return "";
+    }
+
+
+    const father =
+        getMemberById(
+            person.fatherId
+        );
+
+    const mother =
+        getMemberById(
+            person.motherId
+        );
+
+
+    if(!father && !mother){
+        return "";
+    }
+
+
+    const fatherPath =
+        prefix
+            ? `${prefix}-father`
+            : "father";
+
+    const motherPath =
+        prefix
+            ? `${prefix}-mother`
+            : "mother";
+
+
+    return `
+
+        <div class="family-tree-ancestor-generation-branch">
+
+            <!-- FATHER BRANCH -->
+
+            ${
+                father
+                    ? `
+                        <div class="family-tree-ancestor-parent-branch">
+
+                            ${renderAncestorParents(
+                                father,
+                                depth - 1,
+                                fatherPath
+                            )}
+
+                            ${treeBox(
+                                father,
+                                `tree-${fatherPath}`
+                            )}
+
+                        </div>
+                      `
+                    : ""
+            }
+
+
+            <!-- MOTHER BRANCH -->
+
+            ${
+                mother
+                    ? `
+                        <div class="family-tree-ancestor-parent-branch">
+
+                            ${renderAncestorParents(
+                                mother,
+                                depth - 1,
+                                motherPath
+                            )}
+
+                            ${treeBox(
+                                mother,
+                                `tree-${motherPath}`
+                            )}
+
+                        </div>
+                      `
+                    : ""
+            }
+
+        </div>
+
+    `;
+}
 
 /* =====================================
    GRAND CHILDREN HTML
@@ -14924,6 +15028,55 @@ diagram.innerHTML = `
                 class="family-tree-lines">
    
             </svg>
+
+${partner ? `
+
+    <!-- =====================================
+         PARTNER PRESENT
+         MEMBER LEFT | PARTNER RIGHT
+         ===================================== -->
+
+    <div class="family-tree-split-ancestor-zone">
+
+        <!-- MEMBER RELATED ANCESTORS - LEFT -->
+
+        <div class="family-tree-member-ancestor-tree">
+
+            ${renderAncestorParents(
+                selectedMember,
+                beforeGen,
+                ""
+            )}
+
+        </div>
+
+
+        <!-- IMAGINARY CENTER LINE -->
+
+        <div class="family-tree-ancestor-center-space"></div>
+
+
+        <!-- PARTNER RELATED ANCESTORS - RIGHT -->
+
+        <div class="family-tree-partner-ancestor-tree">
+
+            ${renderAncestorParents(
+                partner,
+                beforeGen,
+                "partner"
+            )}
+
+        </div>
+
+    </div>
+
+` : ""}
+
+<!-- ============================
+     GREAT-GREAT-GRANDPARENTS ROW
+     GENERATION 4
+     ============================ -->
+
 
 <!-- ============================
      GREAT-GREAT-GRANDPARENTS ROW
