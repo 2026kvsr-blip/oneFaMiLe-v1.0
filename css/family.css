@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2696,16 +2697,43 @@
    ANCESTOR GENERATIONS
    ===================================== */
 
+.family-tree-great-great-grandparents-row,
 .family-tree-great-grandparents-row,
 .family-tree-grandparents-row,
 .family-tree-top-row{
 
-    width: max-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
 
+    width: max-content;
     min-width: 100%;
 
-    align-items: flex-start;
+    gap: 60px;
 }
+
+
+/* =====================================
+   ANCESTOR LEFT / RIGHT SIDES
+   ===================================== */
+
+.family-tree-ancestor-selected-side,
+.family-tree-ancestor-partner-side{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+
+    flex-wrap: nowrap;
+
+    width: max-content;
+    flex: 0 0 auto;
+
+    gap: 28px;
+}
+
 /* =====================================
    GENERATION 4
    GREAT-GREAT-GRANDPARENTS
