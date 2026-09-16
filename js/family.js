@@ -17192,6 +17192,42 @@ connectGreatGreatGrandParents(
     ".tree-partner-mother-mother-mother-mother",
     ".tree-partner-mother-mother-mother"
 );
+
+   /* =====================================
+   NEW SPLIT TREE
+   GENERATION 2 → GENERATION 1
+
+   MEMBER SIDE — LEFT
+   ===================================== */
+
+connectSplitAncestorFamily(
+    ".tree-father-father",
+    ".tree-father-mother",
+    ".tree-father"
+);
+
+connectSplitAncestorFamily(
+    ".tree-mother-father",
+    ".tree-mother-mother",
+    ".tree-mother"
+);
+
+
+/* =====================================
+   PARTNER SIDE — RIGHT
+   ===================================== */
+
+connectSplitAncestorFamily(
+    ".tree-partner-father-father",
+    ".tree-partner-father-mother",
+    ".tree-partner-father"
+);
+
+connectSplitAncestorFamily(
+    ".tree-partner-mother-father",
+    ".tree-partner-mother-mother",
+    ".tree-partner-mother"
+);
 /* =====================================
    NEW SPLIT ANCESTOR TREE CONNECTORS
    PARTNER PRESENT ONLY
