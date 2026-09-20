@@ -14470,7 +14470,7 @@ children.forEach(
                     )}
 
                     ${
-                        childPartner
+                       showPartner && childPartner
                             ? treeBox(
                                 childPartner,
                                 "tree-child-partner"
@@ -14537,7 +14537,8 @@ children.forEach(
                         )}
 
                         ${
-                            grandChildPartner
+                                showPartner && grandChildPartner
+
                                 ? treeBox(
                                     grandChildPartner,
                                     "tree-grandchild-partner"
@@ -14646,7 +14647,8 @@ siblings.forEach(
                     )}
 
                     ${
-                        siblingPartner
+                            showPartner && siblingPartner
+
                             ? treeBox(
                                 siblingPartner,
                                 "tree-sibling-partner"
@@ -14715,7 +14717,8 @@ siblings.forEach(
                                             )}
 
                                             ${
-                                                childPartner
+                                                    showPartner && childPartner
+
                                                     ? treeBox(
                                                         childPartner,
                                                         "tree-sibling-child-partner"
@@ -14784,7 +14787,8 @@ siblings.forEach(
                         )}
 
                         ${
-                            grandChildPartner
+                                showPartner && grandChildPartner
+
                                 ? treeBox(
                                     grandChildPartner,
                                     "tree-sibling-grandchild-partner"
@@ -15703,10 +15707,10 @@ ${
             </div>
 
 
-            ${
-                partner
-                    ? `
-                        <div class="family-tree-selected-partner-slot">
+           ${
+    showMemberPartner && partner
+        ? `
+        <div class="family-tree-selected-partner-slot">
 
                             ${treeBox(
                                 partner,
