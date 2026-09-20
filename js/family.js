@@ -14530,7 +14530,82 @@ function renderAncestorParentBranch(
 
     `;
 }
+/* =====================================
+   ANCESTRY LEFT / RIGHT HTML
+   ===================================== */
 
+let leftAncestorHTML = "";
+let rightAncestorHTML = "";
+
+
+if(ancestryCase === 1){
+
+    /* CASE 1
+       LEFT  = Complete Member Ancestry
+       RIGHT = Complete Partner Ancestry
+    */
+
+    leftAncestorHTML =
+        renderAncestorParents(
+            selectedMember,
+            beforeGen,
+            ""
+        );
+
+    rightAncestorHTML =
+        renderAncestorParents(
+            partner,
+            beforeGen,
+            "partner"
+        );
+
+
+}else if(
+    ancestryCase === 2 ||
+    ancestryCase === 3
+){
+
+    /* CASE 2 / CASE 3
+       LEFT  = Member Father Ancestry
+       RIGHT = Member Mother Ancestry
+    */
+
+    leftAncestorHTML =
+        renderAncestorParentBranch(
+            father,
+            beforeGen,
+            "father"
+        );
+
+    rightAncestorHTML =
+        renderAncestorParentBranch(
+            mother,
+            beforeGen,
+            "mother"
+        );
+
+
+}else if(ancestryCase === 4){
+
+    /* CASE 4
+       LEFT  = Partner Father Ancestry
+       RIGHT = Partner Mother Ancestry
+    */
+
+    leftAncestorHTML =
+        renderAncestorParentBranch(
+            partnerFather,
+            beforeGen,
+            "partner-father"
+        );
+
+    rightAncestorHTML =
+        renderAncestorParentBranch(
+            partnerMother,
+            beforeGen,
+            "partner-mother"
+        );
+}
            
 /* =====================================
    GRAND CHILDREN HTML
@@ -15204,19 +15279,15 @@ diagram.innerHTML = `
             </svg>
 
 ${
-    partner
+    ancestryCase > 0
         ? `
             <div class="family-tree-split-ancestor-zone">
 
-                <!-- MEMBER RELATED ANCESTORS - LEFT -->
+                <!-- LEFT ANCESTRY -->
 
                 <div class="family-tree-member-ancestor-tree">
 
-                    ${renderAncestorParents(
-                        selectedMember,
-                        beforeGen,
-                        ""
-                    )}
+                    ${leftAncestorHTML}
 
                 </div>
 
@@ -15226,15 +15297,11 @@ ${
                 <div class="family-tree-ancestor-center-space"></div>
 
 
-                <!-- PARTNER RELATED ANCESTORS - RIGHT -->
+                <!-- RIGHT ANCESTRY -->
 
                 <div class="family-tree-partner-ancestor-tree">
 
-                    ${renderAncestorParents(
-                        partner,
-                        beforeGen,
-                        "partner"
-                    )}
+                    ${rightAncestorHTML}
 
                 </div>
 
