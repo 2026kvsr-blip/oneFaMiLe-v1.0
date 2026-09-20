@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -16625,6 +16626,95 @@ const rect =
         );
 
     }
+   /* =====================================
+   ALIGN ROOT ANCESTOR BRANCHES
+   MEMBER → SELECTED
+   PARTNER → PARTNER
+   ===================================== */
+
+function alignRootAncestorBranches(){
+
+    const memberRoot =
+        canvas.querySelector(
+            ".family-tree-member-ancestor-tree > .family-tree-root-ancestor-branch"
+        );
+
+    const partnerRoot =
+        canvas.querySelector(
+            ".family-tree-partner-ancestor-tree > .family-tree-root-partner-ancestor-branch"
+        );
+
+    const selectedNode =
+        canvas.querySelector(
+            ".tree-selected"
+        );
+
+    const partnerNode =
+        canvas.querySelector(
+            ".tree-partner"
+        );
+
+
+    /* RESET FIRST */
+
+    if(memberRoot){
+        memberRoot.style.transform = "";
+    }
+
+    if(partnerRoot){
+        partnerRoot.style.transform = "";
+    }
+
+
+    /* MEMBER ROOT */
+
+    if(memberRoot && selectedNode){
+
+        const rootRect =
+            memberRoot.getBoundingClientRect();
+
+        const selectedRect =
+            selectedNode.getBoundingClientRect();
+
+
+        const rootCenterX =
+            rootRect.left +
+            rootRect.width / 2;
+
+        const selectedCenterX =
+            selectedRect.left +
+            selectedRect.width / 2;
+
+
+        memberRoot.style.transform =
+            `translateX(${selectedCenterX - rootCenterX}px)`;
+    }
+
+
+    /* PARTNER ROOT */
+
+    if(partnerRoot && partnerNode){
+
+        const rootRect =
+            partnerRoot.getBoundingClientRect();
+
+        const partnerRect =
+            partnerNode.getBoundingClientRect();
+
+
+        const rootCenterX =
+            rootRect.left +
+            rootRect.width / 2;
+
+        const partnerCenterX =
+            partnerRect.left +
+            partnerRect.width / 2;
+
+
+        partnerRoot.style.transform =
+            `translateX(${partnerCenterX - rootCenterX}px)`;
+    }
+}
     function connectCouple(
         first,
         second
@@ -17102,9 +17192,14 @@ function connectSplitAncestorBranch(
     }
 }
 /* =====================================
-   SELECTED MEMBER SIDE
+   ALIGN ROOTS BEFORE DRAWING LINES
    ===================================== */
 
+alignRootAncestorBranches();
+
+/* =====================================
+   SELECTED MEMBER SIDE
+   ===================================== */
 connectGreatGreatGrandParents(
     ".tree-father-father-father-father",
     ".tree-father-father-father-mother",
