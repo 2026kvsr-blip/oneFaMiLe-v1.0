@@ -2888,25 +2888,17 @@
     flex-wrap: nowrap;
 }
 /* =====================================
-   PARTNER PRESENT
    HIDE OLD FLAT ANCESTOR ROWS
+   NEW CASE 1-4 ANCESTRY IS USED
    ===================================== */
 
-.family-tree-has-partner
 .family-tree-great-great-grandparents-row,
-
-.family-tree-has-partner
 .family-tree-great-grandparents-row,
-
-.family-tree-has-partner
 .family-tree-grandparents-row,
-
-.family-tree-has-partner
 .family-tree-top-row{
 
     display: none !important;
 }
-
 
 /* =====================================
    NEW SPLIT ANCESTOR ZONE
