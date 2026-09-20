@@ -16474,7 +16474,6 @@ function drawFamilyTreeLines(){
 
 
     svg.innerHTML = "";
-alignSplitAncestorRoots();
 
     function getPoint(
         element,
@@ -16612,109 +16611,6 @@ const rect =
         );
 
     }
-/* =====================================
-   ALIGN ANCESTOR ROOTS
-   WITH SELECTED + PARTNER
-   ===================================== */
-
-function alignSplitAncestorRoots(){
-
-    const memberTree =
-        canvas.querySelector(
-            ".family-tree-member-ancestor-tree"
-        );
-
-    const partnerTree =
-        canvas.querySelector(
-            ".family-tree-partner-ancestor-tree"
-        );
-
-    const selectedNode =
-        canvas.querySelector(
-            ".tree-selected"
-        );
-
-    const partnerNode =
-        canvas.querySelector(
-            ".tree-partner"
-        );
-
-
-    if(
-        !memberTree ||
-        !partnerTree ||
-        !selectedNode ||
-        !partnerNode
-    ){
-        return;
-    }
-
-
-    /* RESET OLD CORRECTIONS */
-
-    memberTree.style.transform = "";
-    partnerTree.style.transform = "";
-
-
-    const memberRect =
-        memberTree.getBoundingClientRect();
-
-    const partnerTreeRect =
-        partnerTree.getBoundingClientRect();
-
-    const selectedRect =
-        selectedNode.getBoundingClientRect();
-
-    const partnerRect =
-        partnerNode.getBoundingClientRect();
-
-
-    /*
-       Member ancestry RIGHT edge should meet
-       selected member center.
-    */
-
-    const selectedCenterX =
-        selectedRect.left +
-        selectedRect.width / 2;
-
-
-    const memberRootX =
-        memberRect.right;
-
-
-    const memberMoveX =
-        selectedCenterX -
-        memberRootX;
-
-
-    /*
-       Partner ancestry LEFT edge should meet
-       partner center.
-    */
-
-    const partnerCenterX =
-        partnerRect.left +
-        partnerRect.width / 2;
-
-
-    const partnerRootX =
-        partnerTreeRect.left;
-
-
-    const partnerMoveX =
-        partnerCenterX -
-        partnerRootX;
-
-
-    memberTree.style.transform =
-        `translateX(${memberMoveX}px)`;
-
-
-    partnerTree.style.transform =
-        `translateX(${partnerMoveX}px)`;
-}
-
     function connectCouple(
         first,
         second
