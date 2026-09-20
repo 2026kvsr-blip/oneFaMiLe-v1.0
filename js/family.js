@@ -14910,7 +14910,8 @@ partnerSiblings.forEach(
                     )}
 
                     ${
-                        siblingPartner
+                            showPartner && siblingPartner
+
                             ? treeBox(
                                 siblingPartner,
                                 "tree-partner-sibling-partner"
@@ -14979,7 +14980,8 @@ partnerSiblings.forEach(
                                             )}
 
                                             ${
-                                                childPartner
+                                                    showPartner && childPartner
+
                                                     ? treeBox(
                                                         childPartner,
                                                         "tree-partner-sibling-child-partner"
