@@ -17272,9 +17272,7 @@ function connectSplitAncestorBranch(
             : null;
 
 
-    /* =====================================
-       FIRST CONNECT OLDER GENERATIONS
-       ===================================== */
+    /* FIRST CONNECT OLDER GENERATIONS */
 
     if(father){
 
@@ -17296,22 +17294,76 @@ function connectSplitAncestorBranch(
     }
 
 
-    /* =====================================
-       FATHER ↔ MOTHER COUPLE
-       ===================================== */
+    /* ROOT MEMBER / ROOT PARTNER
+       ARE CONNECTED SEPARATELY */
+
+    if(
+        prefix === "" ||
+        prefix === "partner"
+    ){
+        return;
+    }
+
+
+    /* BIOLOGICAL CHILD */
+
+    const childNode =
+        canvas.querySelector(
+            `.tree-${prefix}`
+        );
+
+
+    if(!childNode){
+        return;
+    }
+
+
+    let parentCenter = null;
+
+
+    /* BOTH BIOLOGICAL PARENTS */
 
     if(
         fatherNode &&
         motherNode
     ){
 
-        connectCouple(
-            fatherNode,
-            motherNode
+        parentCenter =
+            connectCouple(
+                fatherNode,
+                motherNode
+            );
+
+    }else{
+
+        /* ONLY ONE BIOLOGICAL PARENT */
+
+        const singleParent =
+            fatherNode ||
+            motherNode;
+
+
+        if(singleParent){
+
+            parentCenter =
+                getPoint(
+                    singleParent,
+                    "bottom"
+                );
+        }
+    }
+
+
+    /* PARENTS → BIOLOGICAL CHILD TOP-CENTER */
+
+    if(parentCenter){
+
+        connectParentsToChildren(
+            parentCenter,
+            [childNode]
         );
     }
 }
-
 /* =====================================
    SELECTED MEMBER SIDE
    ===================================== */
