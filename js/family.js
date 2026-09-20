@@ -13052,7 +13052,7 @@ const familyName =
 <div class="family-tree-control">
 
     <label class="family-tree-label">
-        Partner
+        Member Partner
     </label>
 
     <span class="family-tree-colon">
@@ -13060,7 +13060,7 @@ const familyName =
     </span>
 
     <select
-        id="familyTreeShowPartner"
+        id="familyTreeShowMemberPartner"
         class="common-form-input">
 
         <option value="yes" selected>
@@ -13075,12 +13075,42 @@ const familyName =
 
 </div>
 
+
+<!-- PARTNER SIBLINGS -->
+
+<div class="family-tree-control">
+
+    <label class="family-tree-label">
+        Partner Siblings
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreeShowPartnerSiblings"
+        class="common-form-input">
+
+        <option value="yes">
+            Yes
+        </option>
+
+        <option value="no" selected>
+            No
+        </option>
+
+    </select>
+
+</div>
+
+
             </div>
 
 
             <button
                 type="button"
-                id="showFamilyTreeBtn"
+                id="showFamilyTreeBtn"                
                 class="family-create-btn">
 
                 Show Family Tree
@@ -13400,6 +13430,15 @@ const showPartner =
         "familyTreeShowPartner"
     ).value === "yes";
 
+const showMemberPartner =
+    document.getElementById(
+        "familyTreeShowMemberPartner"
+    ).value === "yes";
+
+const showPartnerSiblings =
+    document.getElementById(
+        "familyTreeShowPartnerSiblings"
+    ).value === "yes";
 
 console.log(
     "FAMILY TREE OPTIONS:",
@@ -13407,10 +13446,11 @@ console.log(
         beforeGen,
         afterGen,
         showSiblings,
-        showPartner
+        showPartner,
+        showMemberPartner,
+        showPartnerSiblings
     }
 );
-
            
 
            
@@ -14554,9 +14594,10 @@ children.forEach(
 
 let siblingsHTML = "";
 
+if(showSiblings){
+
 siblings.forEach(
     sibling => {
-
         const siblingPartner =
             members.find(
                 member =>
@@ -14805,10 +14846,12 @@ siblings.forEach(
 
     }
 );
+
+} // END showSiblings
+
  /* =====================================
    PARTNER SIBLINGS + PARTNERS + CHILDREN
    ===================================== */
-
 let partnerSiblingsHTML = "";
 
 partnerSiblings.forEach(
