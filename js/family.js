@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -15945,51 +15944,29 @@ ${
    BEFORE GENERATIONS VISIBILITY
    ===================================== */
 
-const greatGreatGrandParentsRow =
-    diagram.querySelector(
-        ".family-tree-great-great-grandparents-row"
-    );
-
-const greatGrandParentsRow =
-    diagram.querySelector(
-        ".family-tree-great-grandparents-row"
-    );
-
-const grandParentsRow =
-    diagram.querySelector(
-        ".family-tree-grandparents-row"
-    );
-
-
-/* GENERATION 4 */
-if(greatGreatGrandParentsRow){
-
-    greatGreatGrandParentsRow.style.display =
-        beforeGen >= 4
-            ? "flex"
-            : "none";
-}
-
-
-/* GENERATION 3 */
-if(greatGrandParentsRow){
-
-    greatGrandParentsRow.style.display =
-        beforeGen >= 3
-            ? "flex"
-            : "none";
-}
-
-
-/* GENERATION 2 */
-if(grandParentsRow){
-
-    grandParentsRow.style.display =
-        beforeGen >= 2
-            ? "flex"
-            : "none";
-}
 /* =====================================
+   OLD FLAT ANCESTOR ROWS
+   DISABLED - CASE 1 TO 4 TREE IS USED
+   ===================================== */
+
+const oldAncestorRows =
+    diagram.querySelectorAll(
+        ".family-tree-great-great-grandparents-row, " +
+        ".family-tree-great-grandparents-row, " +
+        ".family-tree-grandparents-row, " +
+        ".family-tree-top-row"
+    );
+
+oldAncestorRows.forEach(
+    row => {
+        row.style.setProperty(
+            "display",
+            "none",
+            "important"
+        );
+    }
+);
+       /* =====================================
    AFTER GENERATIONS VISIBILITY
    ALL FAMILY BRANCHES
    ===================================== */
