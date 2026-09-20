@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13047,7 +13048,33 @@ const familyName =
     </select>
 
 </div>
+<!-- SHOW PARTNER -->
 
+<div class="family-tree-control">
+
+    <label class="family-tree-label">
+        Show Partner
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreeShowPartner"
+        class="common-form-input">
+
+        <option value="yes" selected>
+            Yes
+        </option>
+
+        <option value="no">
+            No
+        </option>
+
+    </select>
+
+</div>
 
 <div class="family-tree-control">
 
@@ -13389,7 +13416,76 @@ familyTreeSearchInput.addEventListener(
 
     }
 );
-   
+
+
+   /* =====================================
+   SHOW PARTNER
+   → PARTNER SIBLINGS VISIBILITY
+   ===================================== */
+
+const familyTreeShowPartnerControl =
+    document.getElementById(
+        "familyTreeShowPartner"
+    );
+
+const familyTreeShowPartnerSiblingsControl =
+    document.getElementById(
+        "familyTreeShowPartnerSiblings"
+    );
+
+const partnerSiblingsControlRow =
+    familyTreeShowPartnerSiblingsControl
+        ?.closest(
+            ".family-tree-control"
+        );
+
+
+function updatePartnerSiblingsVisibility(){
+
+    if(
+        !familyTreeShowPartnerControl ||
+        !familyTreeShowPartnerSiblingsControl ||
+        !partnerSiblingsControlRow
+    ){
+        return;
+    }
+
+
+    if(
+        familyTreeShowPartnerControl.value === "yes"
+    ){
+
+        /* Show Partner = YES
+           → Partner Siblings control visible */
+
+        partnerSiblingsControlRow.style.display =
+            "";
+
+    }else{
+
+        /* Show Partner = NO
+           → Partner Siblings control hidden */
+
+        familyTreeShowPartnerSiblingsControl.value =
+            "no";
+
+        partnerSiblingsControlRow.style.display =
+            "none";
+    }
+}
+
+
+/* INITIAL STATE */
+
+updatePartnerSiblingsVisibility();
+
+
+/* WHEN SHOW PARTNER CHANGES */
+
+familyTreeShowPartnerControl?.addEventListener(
+    "change",
+    updatePartnerSiblingsVisibility
+);
 /* =====================================
    SHOW FAMILY TREE BUTTON
    ===================================== */
