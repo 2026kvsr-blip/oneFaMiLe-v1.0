@@ -13053,7 +13053,7 @@ const familyName =
 <div class="family-tree-control">
 
     <label class="family-tree-label">
-        Show Partner
+        Other Partners
     </label>
 
     <span class="family-tree-colon">
