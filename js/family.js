@@ -14854,9 +14854,10 @@ siblings.forEach(
    ===================================== */
 let partnerSiblingsHTML = "";
 
+if(showPartnerSiblings){
+
 partnerSiblings.forEach(
     sibling => {
-
         const siblingPartner =
             members.find(
                 member =>
@@ -15023,7 +15024,10 @@ partnerSiblings.forEach(
         `;
 
     }
-);          
+);   
+
+   } // END showPartnerSiblings
+
 /* =====================================
    MAIN TREE HTML
    ===================================== */
