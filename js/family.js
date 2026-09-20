@@ -15651,22 +15651,31 @@ ${partner ? `
 
     <div class="family-tree-selected-couple">
 
+    <div class="family-tree-selected-member-slot">
+
         ${treeBox(
             selectedMember,
             "tree-selected"
         )}
 
-        ${
-            partner
-                ? treeBox(
-                    partner,
-                    "tree-partner"
-                  )
-                : ""
-        }
-
     </div>
 
+    ${
+        partner
+            ? `
+                <div class="family-tree-selected-partner-slot">
+
+                    ${treeBox(
+                        partner,
+                        "tree-partner"
+                    )}
+
+                </div>
+              `
+            : ""
+    }
+
+</div>
 
     ${
         children.length
@@ -15845,7 +15854,6 @@ if(familyTreeSvg){
     familyTreeSvg.innerHTML = "";
 
 }
-       alignSplitAncestorGrid();
 
         drawFamilyTreeLines();
 
@@ -16454,97 +16462,6 @@ if(familyTreeHomeBtn){
    
 }
 
-function alignSplitAncestorGrid(){
-
-    const zone =
-        document.querySelector(
-            ".family-tree-split-ancestor-zone"
-        );
-
-    const memberTree =
-        document.querySelector(
-            ".family-tree-member-ancestor-tree"
-        );
-
-    const partnerTree =
-        document.querySelector(
-            ".family-tree-partner-ancestor-tree"
-        );
-
-    const selected =
-        document.querySelector(
-            ".tree-selected"
-        );
-
-    const partner =
-        document.querySelector(
-            ".tree-partner"
-        );
-
-    if(
-        !zone ||
-        !memberTree ||
-        !partnerTree ||
-        !selected ||
-        !partner
-    ){
-        return;
-    }
-
-    /*
-       Selected + Partner madhyalo
-       imaginary vertical center line
-    */
-
-    const selectedRect =
-        selected.getBoundingClientRect();
-
-    const partnerRect =
-        partner.getBoundingClientRect();
-
-    const selectedCenter =
-        selectedRect.left +
-        selectedRect.width / 2;
-
-    const partnerCenter =
-        partnerRect.left +
-        partnerRect.width / 2;
-
-    const centerGap =
-        partnerCenter -
-        selectedCenter;
-
-    /*
-       Ancestor columns width ni
-       selected/partner actual positions
-       base chesi set chestunnam.
-
-       No translateX.
-    */
-
-    const memberWidth =
-        memberTree.scrollWidth;
-
-    const partnerWidth =
-        partnerTree.scrollWidth;
-
-    const requiredCenterGap =
-        Math.max(
-            22,
-            centerGap
-        );
-
-    zone.style.gridTemplateColumns =
-        `${memberWidth}px ` +
-        `${requiredCenterGap}px ` +
-        `${partnerWidth}px`;
-
-    memberTree.style.justifySelf =
-        "end";
-
-    partnerTree.style.justifySelf =
-        "start";
-}
 
 /* =====================================
    DRAW FAMILY TREE CONNECTING LINES
