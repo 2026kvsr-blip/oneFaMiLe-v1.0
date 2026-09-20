@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13754,6 +13755,72 @@ const partnerMother =
             partner.motherId
           )
         : null;
+           /* =====================================
+   ANCESTRY LAYOUT CASE
+   ===================================== */
+
+const memberHasParents =
+    !!(father || mother);
+
+const partnerHasParents =
+    !!(
+        partner &&
+        (partnerFather || partnerMother)
+    );
+
+let ancestryCase = 0;
+
+if(
+    memberHasParents &&
+    partnerHasParents
+){
+    // CASE 1
+    // LEFT  = Complete Member Ancestry
+    // RIGHT = Complete Partner Ancestry
+
+    ancestryCase = 1;
+
+}else if(
+    memberHasParents &&
+    partner
+){
+    // CASE 2
+    // Member has parents
+    // Partner exists but partner has no parents
+    // LEFT  = Member Father Ancestry
+    // RIGHT = Member Mother Ancestry
+
+    ancestryCase = 2;
+
+}else if(
+    memberHasParents &&
+    !partner
+){
+    // CASE 3
+    // Member has parents
+    // No Partner
+    // LEFT  = Member Father Ancestry
+    // RIGHT = Member Mother Ancestry
+
+    ancestryCase = 3;
+
+}else if(
+    !memberHasParents &&
+    partnerHasParents
+){
+    // CASE 4
+    // Member has no parents
+    // Partner has parents
+    // LEFT  = Partner Father Ancestry
+    // RIGHT = Partner Mother Ancestry
+
+    ancestryCase = 4;
+}
+
+console.log(
+    "FAMILY TREE ANCESTRY CASE:",
+    ancestryCase
+);
 /* =====================================
    GRAND PARENTS
    ===================================== */
@@ -14430,6 +14497,41 @@ function renderAncestorParents(
     `;
 }
 
+/* =====================================
+   SINGLE ANCESTOR SIDE RENDERER
+   ===================================== */
+
+function renderAncestorParentBranch(
+    parent,
+    depth,
+    path
+){
+
+    if(!parent || depth <= 0){
+        return "";
+    }
+
+    return `
+
+        <div class="family-tree-ancestor-parent-branch">
+
+            ${renderAncestorParents(
+                parent,
+                depth - 1,
+                path
+            )}
+
+            ${treeBox(
+                parent,
+                `tree-${path}`
+            )}
+
+        </div>
+
+    `;
+}
+
+           
 /* =====================================
    GRAND CHILDREN HTML
    ===================================== */
