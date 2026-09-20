@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2991,17 +2992,21 @@
 
 .family-tree-ancestor-generation-branch{
 
-    display: flex;
-    flex-direction: row;
+    display: grid;
+
+    grid-template-columns:
+        max-content
+        max-content;
 
     justify-content: center;
-    align-items: flex-end;
+    align-items: end;
 
-    gap: 28px;
+    column-gap: 28px;
 
     width: max-content;
-}
 
+    position: relative;
+}
 
 .family-tree-ancestor-parent-branch{
 
@@ -3014,4 +3019,6 @@
     gap: 45px;
 
     width: max-content;
+
+    position: relative;
 }
