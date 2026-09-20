@@ -13026,59 +13026,6 @@ const familyName =
 <div class="family-tree-control">
 
     <label class="family-tree-label">
-        Member Siblings
-    </label>
-
-    <span class="family-tree-colon">
-        :
-    </span>
-
-    <select
-        id="familyTreeShowSiblings"
-        class="common-form-input">
-
-        <option value="yes">
-            Yes
-        </option>
-
-        <option value="no" selected>
-            No
-        </option>
-
-    </select>
-
-</div>
-<!-- SHOW PARTNER -->
-
-<div class="family-tree-control">
-
-    <label class="family-tree-label">
-        Other Partners
-    </label>
-
-    <span class="family-tree-colon">
-        :
-    </span>
-
-    <select
-        id="familyTreeShowPartner"
-        class="common-form-input">
-
-        <option value="yes" selected>
-            Yes
-        </option>
-
-        <option value="no">
-            No
-        </option>
-
-    </select>
-
-</div>
-
-<div class="family-tree-control">
-
-    <label class="family-tree-label">
         Member Partner
     </label>
 
@@ -13102,6 +13049,31 @@ const familyName =
 
 </div>
 
+<div class="family-tree-control">
+
+    <label class="family-tree-label">
+        Member Siblings
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreeShowSiblings"
+        class="common-form-input">
+
+        <option value="yes">
+            Yes
+        </option>
+
+        <option value="no" selected>
+            No
+        </option>
+
+    </select>
+
+</div>
 
 <!-- PARTNER SIBLINGS -->
 
@@ -13130,6 +13102,36 @@ const familyName =
     </select>
 
 </div>
+
+<!-- SHOW PARTNER -->
+
+<div class="family-tree-control">
+
+    <label class="family-tree-label">
+        Other Partners
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreeShowPartner"
+        class="common-form-input">
+
+        <option value="yes" selected>
+            Yes
+        </option>
+
+        <option value="no">
+            No
+        </option>
+
+    </select>
+
+</div>
+
+
 
 
             </div>
