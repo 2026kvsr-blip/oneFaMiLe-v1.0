@@ -13420,14 +13420,14 @@ familyTreeSearchInput.addEventListener(
 );
 
 
-   /* =====================================
-   SHOW PARTNER
+  /* =====================================
+   MEMBER PARTNER
    → PARTNER SIBLINGS VISIBILITY
    ===================================== */
 
-const familyTreeShowPartnerControl =
+const familyTreeMemberPartnerControl =
     document.getElementById(
-        "familyTreeShowPartner"
+        "familyTreeShowMemberPartner"
     );
 
 const familyTreeShowPartnerSiblingsControl =
@@ -13445,7 +13445,7 @@ const partnerSiblingsControlRow =
 function updatePartnerSiblingsVisibility(){
 
     if(
-        !familyTreeShowPartnerControl ||
+        !familyTreeMemberPartnerControl ||
         !familyTreeShowPartnerSiblingsControl ||
         !partnerSiblingsControlRow
     ){
@@ -13454,19 +13454,20 @@ function updatePartnerSiblingsVisibility(){
 
 
     if(
-        familyTreeShowPartnerControl.value === "yes"
+        familyTreeMemberPartnerControl.value === "yes"
     ){
 
-        /* Show Partner = YES
-           → Partner Siblings control visible */
+        /* MEMBER PARTNER = YES
+           → PARTNER SIBLINGS VISIBLE */
 
         partnerSiblingsControlRow.style.display =
             "";
 
     }else{
 
-        /* Show Partner = NO
-           → Partner Siblings control hidden */
+        /* MEMBER PARTNER = NO
+           → PARTNER SIBLINGS HIDDEN
+           → VALUE AUTOMATICALLY NO */
 
         familyTreeShowPartnerSiblingsControl.value =
             "no";
@@ -13482,9 +13483,9 @@ function updatePartnerSiblingsVisibility(){
 updatePartnerSiblingsVisibility();
 
 
-/* WHEN SHOW PARTNER CHANGES */
+/* MEMBER PARTNER YES / NO CHANGE */
 
-familyTreeShowPartnerControl?.addEventListener(
+familyTreeMemberPartnerControl?.addEventListener(
     "change",
     updatePartnerSiblingsVisibility
 );
