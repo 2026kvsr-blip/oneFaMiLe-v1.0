@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14293,6 +14292,10 @@ function renderAncestorParents(
     }
 
 
+    const isRootAncestorBranch =
+        prefix === "" ||
+        prefix === "partner";
+
     const father =
         getMemberById(
             person.fatherId
@@ -14322,8 +14325,19 @@ function renderAncestorParents(
 
     return `
 
-        <div class="family-tree-ancestor-generation-branch">
-
+    <div class="
+        family-tree-ancestor-generation-branch
+        ${
+            isRootAncestorBranch
+                ? "family-tree-root-ancestor-branch"
+                : ""
+        }
+        ${
+            prefix === "partner"
+                ? "family-tree-root-partner-ancestor-branch"
+                : ""
+        }
+    ">
             <!-- FATHER BRANCH -->
 
             ${
