@@ -13429,8 +13429,7 @@ const showSiblings =
 const showPartner =
     document.getElementById(
         "familyTreeShowPartner"
-    ).value === "yes";
-
+    )?.value === "yes";
 const showMemberPartner =
     document.getElementById(
         "familyTreeShowMemberPartner"
