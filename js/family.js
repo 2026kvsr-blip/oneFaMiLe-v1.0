@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -15055,43 +15054,136 @@ ${partner ? `
          PARTNER PRESENT
          MEMBER LEFT | PARTNER RIGHT
          ===================================== -->
+<div class="family-tree-main-row">
 
-    <div class="family-tree-split-ancestor-zone">
+    <!-- =========================
+         MEMBER SIBLINGS - LEFT
+         ========================= -->
 
-        <!-- MEMBER RELATED ANCESTORS - LEFT -->
+    <div class="family-tree-siblings-row">
 
-        <div class="family-tree-member-ancestor-tree">
+        ${siblingsHTML}
 
-            ${renderAncestorParents(
-                selectedMember,
-                beforeGen,
-                ""
-            )}
-
-        </div>
+    </div>
 
 
-        <!-- IMAGINARY CENTER LINE -->
+    <!-- =========================================
+         SELECTED + PARTNER PEDIGREE CORE
+         ========================================= -->
 
-        <div class="family-tree-ancestor-center-space"></div>
+    <div class="family-tree-couple-core">
+
+        ${
+            partner
+                ? `
+                    <div class="family-tree-split-ancestor-zone">
+
+                        <!-- MEMBER ANCESTORS -->
+
+                        <div class="family-tree-member-ancestor-tree">
+
+                            ${renderAncestorParents(
+                                selectedMember,
+                                beforeGen,
+                                ""
+                            )}
+
+                        </div>
 
 
-        <!-- PARTNER RELATED ANCESTORS - RIGHT -->
+                        <!-- IMAGINARY CENTER -->
 
-        <div class="family-tree-partner-ancestor-tree">
+                        <div class="family-tree-ancestor-center-space"></div>
 
-            ${renderAncestorParents(
-                partner,
-                beforeGen,
-                "partner"
-            )}
+
+                        <!-- PARTNER ANCESTORS -->
+
+                        <div class="family-tree-partner-ancestor-tree">
+
+                            ${renderAncestorParents(
+                                partner,
+                                beforeGen,
+                                "partner"
+                            )}
+
+                        </div>
+
+                    </div>
+                  `
+                : ""
+        }
+
+
+        <!-- =========================
+             SELECTED FAMILY BRANCH
+             ========================= -->
+
+        <div class="family-tree-selected-branch">
+
+            <div class="family-tree-selected-couple">
+
+                <div class="family-tree-selected-member-slot">
+
+                    ${treeBox(
+                        selectedMember,
+                        "tree-selected"
+                    )}
+
+                </div>
+
+
+                ${
+                    partner
+                        ? `
+                            <div class="family-tree-selected-partner-slot">
+
+                                ${treeBox(
+                                    partner,
+                                    "tree-partner"
+                                )}
+
+                            </div>
+                          `
+                        : ""
+                }
+
+            </div>
+
+
+            ${
+                children.length
+                    ? `
+                        <div class="family-tree-selected-children-row">
+
+                            ${childrenHTML}
+
+                        </div>
+                      `
+                    : ""
+            }
 
         </div>
 
     </div>
 
-` : ""}
 
+    <!-- =========================
+         PARTNER SIBLINGS - RIGHT
+         ========================= -->
+
+    ${
+        partner
+            ? `
+                <div class="family-tree-partner-siblings-row">
+
+                    ${partnerSiblingsHTML}
+
+                </div>
+              `
+            : ""
+    }
+
+</div>
 <!-- ============================
      GREAT-GREAT-GRANDPARENTS ROW
      GENERATION 4
@@ -15640,65 +15732,119 @@ ${partner ? `
 
  <div class="family-tree-main-row">
 
-<div class="family-tree-siblings-row">
+    <!-- MEMBER SIBLINGS - LEFT -->
 
-    ${siblingsHTML}
+    <div class="family-tree-siblings-row">
 
-</div>
-
-
-    <div class="family-tree-selected-branch">
-
-    <div class="family-tree-selected-couple">
-
-    <div class="family-tree-selected-member-slot">
-
-        ${treeBox(
-            selectedMember,
-            "tree-selected"
-        )}
+        ${siblingsHTML}
 
     </div>
 
-    ${
-        partner
-            ? `
-                <div class="family-tree-selected-partner-slot">
+
+    <!-- SELECTED / PARTNER CORE -->
+
+    <div class="family-tree-couple-core">
+
+        ${
+            partner
+                ? `
+                    <div class="family-tree-split-ancestor-zone">
+
+                        <!-- MEMBER RELATED ANCESTORS - LEFT -->
+
+                        <div class="family-tree-member-ancestor-tree">
+
+                            ${renderAncestorParents(
+                                selectedMember,
+                                beforeGen,
+                                ""
+                            )}
+
+                        </div>
+
+
+                        <!-- IMAGINARY CENTER LINE -->
+
+                        <div class="family-tree-ancestor-center-space"></div>
+
+
+                        <!-- PARTNER RELATED ANCESTORS - RIGHT -->
+
+                        <div class="family-tree-partner-ancestor-tree">
+
+                            ${renderAncestorParents(
+                                partner,
+                                beforeGen,
+                                "partner"
+                            )}
+
+                        </div>
+
+                    </div>
+                  `
+                : ""
+        }
+
+
+        <div class="family-tree-selected-branch">
+
+            <div class="family-tree-selected-couple">
+
+                <div class="family-tree-selected-member-slot">
 
                     ${treeBox(
-                        partner,
-                        "tree-partner"
+                        selectedMember,
+                        "tree-selected"
                     )}
 
                 </div>
-              `
-            : ""
-    }
 
-</div>
 
-    ${
-        children.length
-            ? `
-                <div class="family-tree-selected-children-row">
+                ${
+                    partner
+                        ? `
+                            <div class="family-tree-selected-partner-slot">
 
-                    ${childrenHTML}
+                                ${treeBox(
+                                    partner,
+                                    "tree-partner"
+                                )}
 
-                </div>
-              `
-            : ""
-    }
+                            </div>
+                          `
+                        : ""
+                }
 
-</div>
+            </div>
+
+
+            ${
+                children.length
+                    ? `
+                        <div class="family-tree-selected-children-row">
+
+                            ${childrenHTML}
+
+                        </div>
+                      `
+                    : ""
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- PARTNER SIBLINGS - RIGHT -->
 
     ${
         partner
             ? `
-            <div class="family-tree-partner-siblings-row">
+                <div class="family-tree-partartner-siblings-row family-tree-partner-siblings-row">
 
-    ${partnerSiblingsHTML}
+                    ${partnerSiblingsHTML}
 
-</div>
+                </div>
               `
             : ""
     }
