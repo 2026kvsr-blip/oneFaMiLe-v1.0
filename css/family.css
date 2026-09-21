@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3016,8 +3015,10 @@
 }
 /* =====================================
    BEFORE GENERATIONS
-   COMPACT ANCESTOR BOXES ONLY
+   COMPACT BOX + MORE VERTICAL GAP
    ===================================== */
+
+/* BEFORE GENERATION BOXES ONLY */
 
 .family-tree-split-ancestor-zone
 .family-tree-test-node{
@@ -3026,17 +3027,34 @@
     min-width: 80px !important;
     max-width: 80px !important;
 
-    min-height: 24px !important;
+    height: 20px !important;
+    min-height: 20px !important;
+    max-height: 20px !important;
 
-    padding: 1px 2px !important;
+    padding: 0 2px !important;
 }
 
 
-/* ANCESTOR NAME */
+/* BEFORE GENERATION NAME */
 
 .family-tree-split-ancestor-zone
 .family-tree-test-node strong{
 
     font-size: 7px !important;
-    line-height: 7.5px !important;
+    line-height: 7px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+/* =====================================
+   BEFORE GENERATIONS
+   VERTICAL GENERATION GAP
+   ===================================== */
+
+.family-tree-split-ancestor-zone
+.family-tree-ancestor-parent-branch{
+
+    gap: 70px !important;
 }
