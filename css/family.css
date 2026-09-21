@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3014,38 +3013,6 @@
 
     position: relative;
 }
-/* =====================================
-   BEFORE GENERATIONS
-   SAME BOX SIZE AS AFTER GENERATIONS
-   ===================================== */
-
-.family-tree-split-ancestor-zone
-.family-tree-test-node{
-
-    width: 110px !important;
-    min-width: 110px !important;
-    max-width: 110px !important;
-
-    height: auto !important;
-    min-height: 28px !important;
-    max-height: none !important;
-
-    padding: 1px 2px !important;
-}
-
-
-/* SAME NAME SIZE AS AFTER GENERATIONS */
-
-.family-tree-split-ancestor-zone
-.family-tree-test-node strong{
-
-    font-size: 8px !important;
-    line-height: 8.5px !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
 
 /* =====================================
    BEFORE GENERATIONS
