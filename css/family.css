@@ -2653,7 +2653,6 @@ max-height: 28px !important;
     padding: 0;
 }
 
-
 /* =====================================
    ALL COUPLES
    MEMBER + PARTNER SIDE BY SIDE
@@ -3023,5 +3022,5 @@ max-height: 28px !important;
 .family-tree-split-ancestor-zone
 .family-tree-ancestor-parent-branch{
 
-    gap: 80px !important;
+    gap: 90px !important;
 }
