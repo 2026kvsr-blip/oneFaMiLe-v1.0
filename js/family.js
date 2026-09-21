@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13861,10 +13860,10 @@ const memberHasParents =
 
 const partnerHasParents =
     !!(
+        showMemberPartner &&
         partner &&
         (partnerFather || partnerMother)
     );
-
 let ancestryCase = 0;
 
 if(
@@ -16009,17 +16008,18 @@ ${
 
 
     ${
-        partner
-            ? `
-                <div class="family-tree-partner-siblings-row">
+    showMemberPartner &&
+    partner &&
+    showPartnerSiblings
+        ? `
+            <div class="family-tree-partner-siblings-row">
 
-                    ${partnerSiblingsHTML}
+                ${partnerSiblingsHTML}
 
-                </div>
-              `
-            : ""
-    }
-
+            </div>
+          `
+        : ""
+}
 </div>
 
           <!-- =====================
