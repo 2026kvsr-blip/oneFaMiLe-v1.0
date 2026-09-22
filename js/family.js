@@ -16987,9 +16987,9 @@ addLine(
     }
 function connectParentsToChildren(
     parentCenter,
-    children
+    children,
+    centerBusOnParent = false
 ){
-
     if(
         !parentCenter ||
         !children ||
@@ -17109,18 +17109,43 @@ function connectParentsToChildren(
        range lo compulsory include cheyyali
     */
 
-    const busStartX =
+ let busStartX;
+let busEndX;
+
+if(centerBusOnParent){
+
+    const maxDistance =
+        Math.max(
+            Math.abs(
+                parentCenter.x - minX
+            ),
+            Math.abs(
+                maxX - parentCenter.x
+            )
+        );
+
+    busStartX =
+        parentCenter.x -
+        maxDistance;
+
+    busEndX =
+        parentCenter.x +
+        maxDistance;
+
+}else{
+
+    busStartX =
         Math.min(
             minX,
             parentCenter.x
         );
 
-
-    const busEndX =
+    busEndX =
         Math.max(
             maxX,
             parentCenter.x
         );
+}
 
 
     /* Parent center ↓ bus */
@@ -18096,11 +18121,11 @@ siblingBranches.forEach(
         }
 
 
-        connectParentsToChildren(
-            siblingCoupleCenter,
-            siblingChildren
-        );
-
+       connectParentsToChildren(
+    siblingCoupleCenter,
+    siblingChildren,
+    !siblingPartner
+);
     }
 ); 
    /* ================================
