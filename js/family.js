@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -119,13 +120,93 @@ function preloadFamilyPageImages(){
         }
     );
 }
+
+
+/* =====================================
+   CLEAR FAMILY CACHE IF LOGIN USER CHANGED
+   ===================================== */
+
+function clearOldFamilyCacheForCurrentUser(){
+
+    const loggedUser =
+        JSON.parse(
+            sessionStorage.getItem("user") || "null"
+        );
+
+    const storedFamily =
+        JSON.parse(
+            localStorage.getItem("currentFamily") || "null"
+        );
+
+    if(!loggedUser){
+        return;
+    }
+
+    if(!storedFamily){
+
+        localStorage.removeItem("familyMembers");
+        return;
+    }
+
+
+    const loginMatch =
+        storedFamily.loginId &&
+        loggedUser.loginUserName &&
+        String(storedFamily.loginId)
+            .trim()
+            .toLowerCase() ===
+        String(loggedUser.loginUserName)
+            .trim()
+            .toLowerCase();
+
+
+    const emailMatch =
+        storedFamily.userMail &&
+        loggedUser.email &&
+        String(storedFamily.userMail)
+            .trim()
+            .toLowerCase() ===
+        String(loggedUser.email)
+            .trim()
+            .toLowerCase();
+
+
+    const mobileMatch =
+        storedFamily.mobile &&
+        loggedUser.mobile &&
+        String(storedFamily.mobile)
+            .trim() ===
+        String(loggedUser.mobile)
+            .trim();
+
+
+    if(
+        !loginMatch &&
+        !emailMatch &&
+        !mobileMatch
+    ){
+
+        console.log(
+            "LOGIN USER CHANGED → CLEAR OLD FAMILY CACHE"
+        );
+
+        localStorage.removeItem("currentFamily");
+        localStorage.removeItem("familyMembers");
+        localStorage.removeItem("editMember");
+
+    }
+}
+
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
 
 familyBtn.onclick = () => {
+
+    clearOldFamilyCacheForCurrentUser();
+
     setActiveButton(familyBtn);
-     showPage(
+   showPage(
         pageTitle(
             "Family",
             "images/colorbtns/Family1.png"
