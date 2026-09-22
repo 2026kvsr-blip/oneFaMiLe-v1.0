@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12726,14 +12725,47 @@ function fitFamilyTreeToScreen(){
         canvasRect.left;
 
 
-    const treeWidth =
-        rightMost -
-        leftMost;
+   const treeWidth =
+    rightMost -
+    leftMost;
 
 
-    const availableWidth =
-        wrapper.clientWidth;
+/* =====================================
+   ACTUAL TREE VERTICAL BOUNDS
+   ===================================== */
 
+const topMost =
+    Math.min(
+        ...nodeRects.map(
+            rect => rect.top
+        )
+    );
+
+
+const bottomMost =
+    Math.max(
+        ...nodeRects.map(
+            rect => rect.bottom
+        )
+    );
+
+
+const contentTop =
+    topMost -
+    canvasRect.top;
+
+
+const treeHeight =
+    bottomMost -
+    topMost;
+
+
+const availableWidth =
+    wrapper.clientWidth;
+
+
+const availableHeight =
+    wrapper.clientHeight;
 
     /* AUTO FIT — NEVER AUTO ENLARGE */
 
@@ -12768,10 +12800,31 @@ function fitFamilyTreeToScreen(){
         );
 
 
-    familyTreePanY = 0;
+   /* =====================================
+   CENTER TREE VERTICALLY
+   ===================================== */
+
+const scaledTreeHeight =
+    treeHeight *
+    familyTreeBaseScale;
 
 
-    applyFamilyTreeZoom();
+familyTreePanY =
+    Math.max(
+        0,
+        (
+            availableHeight -
+            scaledTreeHeight
+        ) / 2
+        -
+        (
+            contentTop *
+            familyTreeBaseScale
+        )
+    );
+
+
+applyFamilyTreeZoom();
 }
 
 
