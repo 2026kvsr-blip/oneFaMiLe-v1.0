@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -16149,10 +16150,11 @@ if(familyTreeSvg){
 
 }
 
-        drawFamilyTreeLines();
+       alignSiblingChildrenToGrandChildren();
 
-        fitFamilyTreeToScreen();
+drawFamilyTreeLines();
 
+fitFamilyTreeToScreen();
 
         const zoomInBtn =          
     document.getElementById(
