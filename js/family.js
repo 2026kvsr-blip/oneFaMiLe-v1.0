@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -18071,8 +18070,9 @@ connectParentsToChildren(
     memberChildrenOfParents
 );
    
-  /* =====================================
+/* =====================================
    SIBLING + PARTNER → THEIR CHILDREN
+   FINAL CLEAN VERSION
    ===================================== */
 
 const siblingBranches =
@@ -18097,166 +18097,40 @@ siblingBranches.forEach(
             );
 
         const siblingChildren =
-    Array.from(
-        branch.querySelectorAll(
-            ".tree-sibling-child"
-        )
-    );
-
-/* =====================================
-   SINGLE SIBLING PARENT
-   → CENTER EXACTLY OVER DIRECT CHILDREN
-   → ZOOM SAFE
-   ===================================== */
-
-if(
-    sibling &&
-    !siblingPartner &&
-    siblingChildren.length > 1
-){
-
-    const siblingCouple =
-        branch.querySelector(
-            ".family-tree-sibling-couple"
-        );
-
-
-    if(siblingCouple){
-
-        /* Remove old movement first */
-
-        siblingCouple.style.transform =
-            "none";
-
-
-        const childCenters =
-            siblingChildren.map(
-                child => {
-
-                    const rect =
-                        child.getBoundingClientRect();
-
-                    return (
-                        rect.left +
-                        rect.width / 2
-                    );
-
-                }
-            );
-
-
-        const childrenCenter =
-            (
-                Math.min(...childCenters) +
-                Math.max(...childCenters)
-            ) / 2;
-
-
-        const siblingRect =
-            sibling.getBoundingClientRect();
-
-
-        const siblingCenter =
-            siblingRect.left +
-            siblingRect.width / 2;
-
-
-        /* =================================
-           CURRENT CANVAS SCALE
-           ================================= */
-
-        const canvasScreenWidth =
-            canvas.getBoundingClientRect().width;
-
-        const canvasLayoutWidth =
-            canvas.offsetWidth;
-
-
-        const canvasScale =
-            canvasLayoutWidth > 0
-                ? canvasScreenWidth /
-                  canvasLayoutWidth
-                : 1;
-
-
-        /* Screen distance → layout distance */
-
-        const moveX =
-            canvasScale > 0
-                ? (
-                    childrenCenter -
-                    siblingCenter
-                  ) / canvasScale
-                : 0;
-
-
-        siblingCouple.style.transform =
-            `translateX(${moveX}px)`;
-
-    }
-
-}
-
-
-let siblingCoupleCenter =
-    null;
-
-        if(
-            sibling &&
-            siblingPartner
-        ){
-
-            siblingCoupleCenter =
-                connectCouple(
-                    sibling,
-                    siblingPartner
-                );
-
-        }
-        else if(sibling){
-
-            siblingCoupleCenter =
-                getPoint(
-                    sibling,
-                    "bottom"
-                );
-
-        }
-
-
-      if(
-    siblingCoupleCenter &&
-    siblingChildren.length
-){
-
-    const childPoints =
-        siblingChildren
-            .map(
-                child =>
-                    getPoint(
-                        child,
-                        "top"
-                    )
-            )
-            .filter(Boolean);
-
-
-    if(childPoints.length){
-
-        const childTopY =
-            Math.min(
-                ...childPoints.map(
-                    point => point.y
+            Array.from(
+                branch.querySelectorAll(
+                    ".tree-sibling-child"
                 )
             );
 
 
-        const busY =
-            siblingCoupleCenter.y +
-            (
-                childTopY -
-                siblingCoupleCenter.y
-            ) / 2;
+        if(
+            !sibling ||
+            !siblingChildren.length
+        ){
+            return;
+        }
+
+
+        /* =================================
+           DIRECT CHILD BOX CENTERS
+           ================================= */
+
+        const childPoints =
+            siblingChildren
+                .map(
+                    child =>
+                        getPoint(
+                            child,
+                            "top"
+                        )
+                )
+                .filter(Boolean);
+
+
+        if(!childPoints.length){
+            return;
+        }
 
 
         const minChildX =
@@ -18282,54 +18156,291 @@ let siblingCoupleCenter =
             ) / 2;
 
 
-   /* =====================================
-   SIBLING → EXACT CHILDREN MIDPOINT
-   ===================================== */
+        /* =================================
+           PARENT SOURCE
+           ================================= */
 
-if(!siblingPartner){
+        let parentBottomY = null;
 
-    addLine(
-        childrenCenterX,
-        siblingCoupleCenter.y,
-        childrenCenterX,
-        busY
-    );
 
-}else{
+        if(siblingPartner){
 
-    addLine(
-        siblingCoupleCenter.x,
-        siblingCoupleCenter.y,
-        siblingCoupleCenter.x,
-        busY
-    );
+            /*
+               Partner visible:
+               sibling ↔ partner line
+            */
 
-    addLine(
-        siblingCoupleCenter.x,
-        busY,
-        childrenCenterX,
-        busY
-    );
+            const coupleCenter =
+                connectCouple(
+                    sibling,
+                    siblingPartner
+                );
 
-}
-        /* CHILDREN HORIZONTAL BUS */
+
+            if(!coupleCenter){
+                return;
+            }
+
+
+            parentBottomY =
+                coupleCenter.y;
+
+
+            /*
+               Couple midpoint is the
+               biological-family source.
+            */
+
+            const childTopY =
+                Math.min(
+                    ...childPoints.map(
+                        point => point.y
+                    )
+                );
+
+
+            const busY =
+                parentBottomY +
+                (
+                    childTopY -
+                    parentBottomY
+                ) / 2;
+
+
+            /* couple midpoint ↓ */
+
+            addLine(
+                coupleCenter.x,
+                parentBottomY,
+                coupleCenter.x,
+                busY
+            );
+
+
+            /* bus level → children midpoint */
+
+            if(
+                coupleCenter.x !==
+                childrenCenterX
+            ){
+
+                addLine(
+                    coupleCenter.x,
+                    busY,
+                    childrenCenterX,
+                    busY
+                );
+
+            }
+
+
+            /* children bus */
+
+            addLine(
+                minChildX,
+                busY,
+                maxChildX,
+                busY
+            );
+
+
+            /* bus ↓ each biological child */
+
+            childPoints.forEach(
+                point => {
+
+                    addLine(
+                        point.x,
+                        busY,
+                        point.x,
+                        point.y
+                    );
+
+                }
+            );
+
+
+            return;
+        }
+
+
+        /* =================================
+           NO PARTNER
+           SINGLE PARENT
+           ================================= */
+
+        const siblingBottom =
+            getPoint(
+                sibling,
+                "bottom"
+            );
+
+
+        if(!siblingBottom){
+            return;
+        }
+
+
+        const childTopY =
+            Math.min(
+                ...childPoints.map(
+                    point => point.y
+                )
+            );
+
+
+        const busY =
+            siblingBottom.y +
+            (
+                childTopY -
+                siblingBottom.y
+            ) / 2;
+
+
+        /*
+           IMPORTANT:
+           Straight vertical must start
+           from sibling box bottom-center.
+
+           Therefore first move the sibling
+           box itself exactly above the
+           direct children's midpoint.
+        */
+
+        const siblingCouple =
+            branch.querySelector(
+                ".family-tree-sibling-couple"
+            );
+
+
+        if(siblingCouple){
+
+            const currentSiblingX =
+                siblingBottom.x;
+
+
+            const moveX =
+                childrenCenterX -
+                currentSiblingX;
+
+
+            siblingCouple.style.position =
+                "relative";
+
+            siblingCouple.style.left =
+                `${moveX}px`;
+
+        }
+
+
+        /*
+           Position changed.
+           Read sibling position AGAIN.
+        */
+
+        const correctedSiblingBottom =
+            getPoint(
+                sibling,
+                "bottom"
+            );
+
+
+        if(!correctedSiblingBottom){
+            return;
+        }
+
+
+        /*
+           Re-read children also.
+           They themselves have not moved,
+           but this guarantees current DOM
+           coordinates are used.
+        */
+
+        const correctedChildPoints =
+            siblingChildren
+                .map(
+                    child =>
+                        getPoint(
+                            child,
+                            "top"
+                        )
+                )
+                .filter(Boolean);
+
+
+        if(!correctedChildPoints.length){
+            return;
+        }
+
+
+        const correctedMinX =
+            Math.min(
+                ...correctedChildPoints.map(
+                    point => point.x
+                )
+            );
+
+
+        const correctedMaxX =
+            Math.max(
+                ...correctedChildPoints.map(
+                    point => point.x
+                )
+            );
+
+
+        const correctedCenterX =
+            (
+                correctedMinX +
+                correctedMaxX
+            ) / 2;
+
+
+        const correctedChildTopY =
+            Math.min(
+                ...correctedChildPoints.map(
+                    point => point.y
+                )
+            );
+
+
+        const correctedBusY =
+            correctedSiblingBottom.y +
+            (
+                correctedChildTopY -
+                correctedSiblingBottom.y
+            ) / 2;
+
+
+        /* sibling straight ↓ to bus */
 
         addLine(
-            minChildX,
-            busY,
-            maxChildX,
-            busY
+            correctedCenterX,
+            correctedSiblingBottom.y,
+            correctedCenterX,
+            correctedBusY
         );
 
 
-        /* BUS → EACH CHILD */
+        /* exact child-to-child bus */
 
-        childPoints.forEach(
+        addLine(
+            correctedMinX,
+            correctedBusY,
+            correctedMaxX,
+            correctedBusY
+        );
+
+
+        /* bus ↓ each child */
+
+        correctedChildPoints.forEach(
             point => {
 
                 addLine(
                     point.x,
-                    busY,
+                    correctedBusY,
                     point.x,
                     point.y
                 );
@@ -18338,11 +18449,7 @@ if(!siblingPartner){
         );
 
     }
-
-}
-    }
-); 
-   
+);   
    /* ================================
        PARTNER PARENTS
        ================================ */
