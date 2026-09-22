@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -18173,13 +18172,20 @@ const partnerSiblings =
 
 /* =====================================
    PARTNER PARENTS
-   → PARTNER ONLY
+   → PARTNER + PARTNER SIBLINGS
    ===================================== */
+
+const partnerChildrenOfParents =
+    [
+        partner,
+        ...partnerSiblings
+    ].filter(Boolean);
+
 
 connectParentsToChildren(
     partnerParentCenter,
-    [partner].filter(Boolean)
-);
+    partnerChildrenOfParents
+);  
    
 /* =====================================
    PARTNER SIBLING + PARTNER
