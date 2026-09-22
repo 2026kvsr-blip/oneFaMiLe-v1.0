@@ -18194,11 +18194,113 @@ let siblingCoupleCenter =
         }
 
 
-       connectParentsToChildren(
-    siblingCoupleCenter,
-    siblingChildren,
-    !siblingPartner
-);
+      if(
+    siblingCoupleCenter &&
+    siblingChildren.length
+){
+
+    const childPoints =
+        siblingChildren
+            .map(
+                child =>
+                    getPoint(
+                        child,
+                        "top"
+                    )
+            )
+            .filter(Boolean);
+
+
+    if(childPoints.length){
+
+        const childTopY =
+            Math.min(
+                ...childPoints.map(
+                    point => point.y
+                )
+            );
+
+
+        const busY =
+            siblingCoupleCenter.y +
+            (
+                childTopY -
+                siblingCoupleCenter.y
+            ) / 2;
+
+
+        const minChildX =
+            Math.min(
+                ...childPoints.map(
+                    point => point.x
+                )
+            );
+
+
+        const maxChildX =
+            Math.max(
+                ...childPoints.map(
+                    point => point.x
+                )
+            );
+
+
+        const childrenCenterX =
+            (
+                minChildX +
+                maxChildX
+            ) / 2;
+
+
+        /* SIBLING → CHILDREN CENTER */
+
+        addLine(
+            siblingCoupleCenter.x,
+            siblingCoupleCenter.y,
+            siblingCoupleCenter.x,
+            busY
+        );
+
+
+        /* MOVE AT BUS LEVEL TO EXACT
+           CHILDREN MIDPOINT */
+
+        addLine(
+            siblingCoupleCenter.x,
+            busY,
+            childrenCenterX,
+            busY
+        );
+
+
+        /* CHILDREN HORIZONTAL BUS */
+
+        addLine(
+            minChildX,
+            busY,
+            maxChildX,
+            busY
+        );
+
+
+        /* BUS → EACH CHILD */
+
+        childPoints.forEach(
+            point => {
+
+                addLine(
+                    point.x,
+                    busY,
+                    point.x,
+                    point.y
+                );
+
+            }
+        );
+
+    }
+
+}
     }
 ); 
    
