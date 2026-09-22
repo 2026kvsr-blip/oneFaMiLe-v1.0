@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13417,7 +13418,45 @@ familyTreeSearchInput.addEventListener(
 
     }
 );
+/* =====================================
+   CLOSE FAMILY TREE MEMBER DROPDOWN
+   WHEN CLICKING OUTSIDE
+   ===================================== */
 
+document.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            !familyTreeSearchInput ||
+            !familyTreeDropdown
+        ){
+            return;
+        }
+
+        const clickedSearchInput =
+            familyTreeSearchInput.contains(
+                event.target
+            );
+
+        const clickedDropdown =
+            familyTreeDropdown.contains(
+                event.target
+            );
+
+
+        if(
+            !clickedSearchInput &&
+            !clickedDropdown
+        ){
+
+            familyTreeDropdown.style.display =
+                "none";
+
+        }
+
+    }
+);
 
   /* =====================================
    MEMBER PARTNER
