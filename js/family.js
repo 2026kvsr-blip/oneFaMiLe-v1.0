@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -16273,15 +16274,66 @@ if(zoomInBtn){
     zoomInBtn.onclick =
         function(){
 
-            familyTreeZoomFactor =
+            const wrapper =
+                document.querySelector(
+                    ".family-tree-scroll"
+                );
+
+            if(!wrapper){
+                return;
+            }
+
+            const oldScale =
+                familyTreeBaseScale *
+                familyTreeZoomFactor;
+
+            const newZoomFactor =
                 Math.min(
                     familyTreeZoomFactor * 1.5,
                     10 / familyTreeBaseScale
                 );
 
+            const newScale =
+                familyTreeBaseScale *
+                newZoomFactor;
+
+            const anchorX =
+                wrapper.clientWidth / 2;
+
+            const anchorY =
+                wrapper.clientHeight / 2;
+
+
+            if(oldScale > 0){
+
+                const ratio =
+                    newScale /
+                    oldScale;
+
+                familyTreePanX =
+                    anchorX -
+                    (
+                        anchorX -
+                        familyTreePanX
+                    ) * ratio;
+
+                familyTreePanY =
+                    anchorY -
+                    (
+                        anchorY -
+                        familyTreePanY
+                    ) * ratio;
+
+            }
+
+
+            familyTreeZoomFactor =
+                newZoomFactor;
+
             applyFamilyTreeZoom();
+
         };
-}
+}       
 /* =====================================
    ZOOM OUT
    ===================================== */
