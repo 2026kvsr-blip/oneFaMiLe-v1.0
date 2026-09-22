@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -18087,16 +18088,79 @@ siblingBranches.forEach(
             );
 
         const siblingChildren =
-            Array.from(
-                branch.querySelectorAll(
-                    ".tree-sibling-child"
-                )
-            );
+    Array.from(
+        branch.querySelectorAll(
+            ".tree-sibling-child"
+        )
+    );
 
 
-        let siblingCoupleCenter =
-            null;
+/* =====================================
+   SINGLE SIBLING PARENT
+   → CENTER EXACTLY OVER DIRECT CHILDREN
+   ===================================== */
 
+if(
+    sibling &&
+    !siblingPartner &&
+    siblingChildren.length > 1
+){
+
+    const siblingCouple =
+        branch.querySelector(
+            ".family-tree-sibling-couple"
+        );
+
+
+    const childCenters =
+        siblingChildren.map(
+            child => {
+
+                const rect =
+                    child.getBoundingClientRect();
+
+                return (
+                    rect.left +
+                    rect.width / 2
+                );
+
+            }
+        );
+
+
+    const childrenCenter =
+        (
+            Math.min(...childCenters) +
+            Math.max(...childCenters)
+        ) / 2;
+
+
+    const siblingRect =
+        sibling.getBoundingClientRect();
+
+
+    const siblingCenter =
+        siblingRect.left +
+        siblingRect.width / 2;
+
+
+    const moveX =
+        childrenCenter -
+        siblingCenter;
+
+
+    if(siblingCouple){
+
+        siblingCouple.style.transform =
+            `translateX(${moveX}px)`;
+
+    }
+
+}
+
+
+let siblingCoupleCenter =
+    null;
 
         if(
             sibling &&
