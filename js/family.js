@@ -18252,27 +18252,36 @@ let siblingCoupleCenter =
             ) / 2;
 
 
-        /* SIBLING → CHILDREN CENTER */
+   /* =====================================
+   SIBLING → EXACT CHILDREN MIDPOINT
+   ===================================== */
 
-        addLine(
-            siblingCoupleCenter.x,
-            siblingCoupleCenter.y,
-            siblingCoupleCenter.x,
-            busY
-        );
+if(!siblingPartner){
 
+    addLine(
+        childrenCenterX,
+        siblingCoupleCenter.y,
+        childrenCenterX,
+        busY
+    );
 
-        /* MOVE AT BUS LEVEL TO EXACT
-           CHILDREN MIDPOINT */
+}else{
 
-        addLine(
-            siblingCoupleCenter.x,
-            busY,
-            childrenCenterX,
-            busY
-        );
+    addLine(
+        siblingCoupleCenter.x,
+        siblingCoupleCenter.y,
+        siblingCoupleCenter.x,
+        busY
+    );
 
+    addLine(
+        siblingCoupleCenter.x,
+        busY,
+        childrenCenterX,
+        busY
+    );
 
+}
         /* CHILDREN HORIZONTAL BUS */
 
         addLine(
