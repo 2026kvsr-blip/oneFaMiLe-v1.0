@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -16766,6 +16765,10 @@ if(familyTreeHomeBtn){
    SaiLaxmi → Reya + Shivesti
    Sravani  → Prerana + Thaneesha
    ===================================== */
+/* =====================================
+   ALIGN SIBLING CHILD COUPLES
+   OVER THEIR DIRECT CHILDREN
+   ===================================== */
 
 function alignSiblingChildrenToGrandChildren(){
 
@@ -16795,7 +16798,12 @@ function alignSiblingChildrenToGrandChildren(){
                     ".tree-sibling-child"
                 );
 
-            const childCouple =
+            const partner =
+                branch.querySelector(
+                    ".tree-sibling-child-partner"
+                );
+
+            const couple =
                 branch.querySelector(
                     ".family-tree-sibling-child-couple"
                 );
@@ -16810,30 +16818,21 @@ function alignSiblingChildrenToGrandChildren(){
 
             if(
                 !child ||
-                !childCouple ||
+                !couple ||
                 grandChildren.length < 2
             ){
                 return;
             }
 
 
-            /*
-               Remove any previous adjustment
-               before measuring.
-            */
+            /* reset previous adjustment */
 
-            childCouple.style.transform =
-                "none";
+            couple.style.transform = "none";
 
 
-            const childRect =
-                child.getBoundingClientRect();
-
-
-            const childCenterX =
-                childRect.left +
-                childRect.width / 2;
-
+            /* =================================
+               CHILDREN MIDPOINT
+               ================================= */
 
             const grandChildCenters =
                 grandChildren.map(
@@ -16851,37 +16850,74 @@ function alignSiblingChildrenToGrandChildren(){
                 );
 
 
-            const minX =
-                Math.min(
-                    ...grandChildCenters
-                );
-
-
-            const maxX =
-                Math.max(
-                    ...grandChildCenters
-                );
-
-
-            /*
-               Exact midpoint:
-               Reya ↔ Shivesti
-               Prerana ↔ Thaneesha
-            */
-
-            const grandChildrenCenterX =
+            const childrenCenterX =
                 (
-                    minX +
-                    maxX
+                    Math.min(...grandChildCenters) +
+                    Math.max(...grandChildCenters)
                 ) / 2;
 
 
+            /* =================================
+               PARENT SOURCE X
+
+               Partner exists:
+               child ↔ partner midpoint
+
+               No partner:
+               child box center
+               ================================= */
+
+            let parentCenterX;
+
+
+            if(partner){
+
+                const childRect =
+                    child.getBoundingClientRect();
+
+                const partnerRect =
+                    partner.getBoundingClientRect();
+
+
+                const childRightX =
+                    childRect.right;
+
+                const partnerLeftX =
+                    partnerRect.left;
+
+
+                parentCenterX =
+                    (
+                        childRightX +
+                        partnerLeftX
+                    ) / 2;
+
+            }
+            else{
+
+                const childRect =
+                    child.getBoundingClientRect();
+
+
+                parentCenterX =
+                    childRect.left +
+                    childRect.width / 2;
+
+            }
+
+
+            /* =================================
+               MOVE COMPLETE COUPLE
+
+               Not child alone.
+               ================================= */
+
             const moveX =
-                grandChildrenCenterX -
-                childCenterX;
+                childrenCenterX -
+                parentCenterX;
 
 
-            childCouple.style.transform =
+            couple.style.transform =
                 `translateX(${moveX}px)`;
 
         }
