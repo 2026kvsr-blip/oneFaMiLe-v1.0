@@ -16756,7 +16756,136 @@ if(familyTreeHomeBtn){
    
 }
 
+/* =====================================
+   ALIGN MEMBER-SIBLING CHILDREN
+   OVER THEIR DIRECT CHILDREN
 
+   Example:
+   SaiLaxmi → Reya + Shivesti
+   Sravani  → Prerana + Thaneesha
+   ===================================== */
+
+function alignSiblingChildrenToGrandChildren(){
+
+    const canvas =
+        document.getElementById(
+            "familyTreeCanvas"
+        );
+
+    if(!canvas){
+        return;
+    }
+
+
+    const branches =
+        Array.from(
+            canvas.querySelectorAll(
+                ".family-tree-sibling-child-branch"
+            )
+        );
+
+
+    branches.forEach(
+        branch => {
+
+            const child =
+                branch.querySelector(
+                    ".tree-sibling-child"
+                );
+
+            const childCouple =
+                branch.querySelector(
+                    ".family-tree-sibling-child-couple"
+                );
+
+            const grandChildren =
+                Array.from(
+                    branch.querySelectorAll(
+                        ".tree-sibling-grandchild"
+                    )
+                );
+
+
+            if(
+                !child ||
+                !childCouple ||
+                grandChildren.length < 2
+            ){
+                return;
+            }
+
+
+            /*
+               Remove any previous adjustment
+               before measuring.
+            */
+
+            childCouple.style.transform =
+                "none";
+
+
+            const childRect =
+                child.getBoundingClientRect();
+
+
+            const childCenterX =
+                childRect.left +
+                childRect.width / 2;
+
+
+            const grandChildCenters =
+                grandChildren.map(
+                    grandChild => {
+
+                        const rect =
+                            grandChild.getBoundingClientRect();
+
+                        return (
+                            rect.left +
+                            rect.width / 2
+                        );
+
+                    }
+                );
+
+
+            const minX =
+                Math.min(
+                    ...grandChildCenters
+                );
+
+
+            const maxX =
+                Math.max(
+                    ...grandChildCenters
+                );
+
+
+            /*
+               Exact midpoint:
+               Reya ↔ Shivesti
+               Prerana ↔ Thaneesha
+            */
+
+            const grandChildrenCenterX =
+                (
+                    minX +
+                    maxX
+                ) / 2;
+
+
+            const moveX =
+                grandChildrenCenterX -
+                childCenterX;
+
+
+            childCouple.style.transform =
+                `translateX(${moveX}px)`;
+
+        }
+    );
+
+}
 /* =====================================
    DRAW FAMILY TREE CONNECTING LINES
    ===================================== */
