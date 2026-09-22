@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -16343,17 +16342,67 @@ if(zoomOutBtn){
     zoomOutBtn.onclick =
         function(){
 
-            familyTreeZoomFactor =
+            const wrapper =
+                document.querySelector(
+                    ".family-tree-scroll"
+                );
+
+            if(!wrapper){
+                return;
+            }
+
+            const oldScale =
+                familyTreeBaseScale *
+                familyTreeZoomFactor;
+
+            const newZoomFactor =
                 Math.max(
                     familyTreeZoomFactor / 1.5,
                     0.1
                 );
 
+            const newScale =
+                familyTreeBaseScale *
+                newZoomFactor;
+
+            const anchorX =
+                wrapper.clientWidth / 2;
+
+            const anchorY =
+                wrapper.clientHeight / 2;
+
+
+            if(oldScale > 0){
+
+                const ratio =
+                    newScale /
+                    oldScale;
+
+                familyTreePanX =
+                    anchorX -
+                    (
+                        anchorX -
+                        familyTreePanX
+                    ) * ratio;
+
+                familyTreePanY =
+                    anchorY -
+                    (
+                        anchorY -
+                        familyTreePanY
+                    ) * ratio;
+
+            }
+
+
+            familyTreeZoomFactor =
+                newZoomFactor;
+
             applyFamilyTreeZoom();
+
         };
 }
-
-/* =====================================
+       /* =====================================
    RESET ZOOM
    ===================================== */
 
