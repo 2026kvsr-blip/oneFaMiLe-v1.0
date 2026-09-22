@@ -88,55 +88,70 @@ function isFamilyIdAvailable(familyId){
             family.familyId === familyId
     );
 }
+
+
+/* =====================================
+   PRELOAD FAMILY PAGE IMAGES
+   ===================================== */
+
+function preloadFamilyPageImages(){
+
+    const familyImages = [
+
+        "images/colorbtns/Family1.png",
+        "images/colorbtns/AddMember1.png",
+        "images/colorbtns/AddFamily1.png",
+        "images/colorbtns/CustomSearch1.png",
+        "images/colorbtns/Relations1.png",
+        "images/colorbtns/TreeView1.png",
+        "images/colorbtns/About1.png"
+
+    ];
+
+    familyImages.forEach(
+        function(src){
+
+            const img =
+                new Image();
+
+            img.src = src;
+
+        }
+    );
+}
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
 
 familyBtn.onclick = () => {
-
     setActiveButton(familyBtn);
- 
-
-    showPage(
-
+     showPage(
         pageTitle(
             "Family",
             "images/colorbtns/Family1.png"
         )
-
         +`
-
         <div class="grid-3x2">
-
             <button
                 id="addMemberBtn"
                 class="grid-btn">
-
                 <img
                     src="images/colorbtns/AddMember1.png"
                     class="btn-icon">
-
                 <span>
                     Add Member
                 </span>
-
             </button>
-
-
             <button
                 id="addFamilyBtn"
                 class="grid-btn">
-
                 <img
                     src="images/colorbtns/AddFamily1.png"
                     class="btn-icon">
-
                 <span>
                     Create Family
                 </span>
-
             </button>
-
 
             <button
                 id="searchMemberBtn"
@@ -152,7 +167,6 @@ familyBtn.onclick = () => {
 
             </button>
 
-
             <button
                 id="relationsBtn"
                 class="grid-btn">
@@ -166,7 +180,6 @@ familyBtn.onclick = () => {
                 </span>
 
             </button>
-
 
             <button
                 id="treeViewBtn"
