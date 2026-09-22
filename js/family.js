@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -18021,13 +18022,21 @@ connectParentsToChildren(
 
 /* =====================================
    MEMBER PARENTS
-   → SELECTED MEMBER ONLY
+   → SELECTED MEMBER + SIBLINGS
    ===================================== */
+
+const memberChildrenOfParents =
+    [
+        ...siblings,
+        selected
+    ].filter(Boolean);
+
 
 connectParentsToChildren(
     parentCenter,
-    [selected].filter(Boolean)
+    memberChildrenOfParents
 );
+   
   /* =====================================
    SIBLING + PARTNER → THEIR CHILDREN
    ===================================== */
