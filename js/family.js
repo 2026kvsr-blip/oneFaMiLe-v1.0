@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -17114,23 +17115,8 @@ let busEndX;
 
 if(centerBusOnParent){
 
-    const maxDistance =
-        Math.max(
-            Math.abs(
-                parentCenter.x - minX
-            ),
-            Math.abs(
-                maxX - parentCenter.x
-            )
-        );
-
-    busStartX =
-        parentCenter.x -
-        maxDistance;
-
-    busEndX =
-        parentCenter.x +
-        maxDistance;
+    busStartX = minX;
+    busEndX = maxX;
 
 }else{
 
@@ -17148,15 +17134,39 @@ if(centerBusOnParent){
 }
 
 
-    /* Parent center ↓ bus */
+   
+   /* Parent ↓ exact children bus center */
+
+const busCenterX =
+    centerBusOnParent
+        ? (
+            busStartX +
+            busEndX
+          ) / 2
+        : parentCenter.x;
+
+
+addLine(
+    parentCenter.x,
+    parentCenter.y,
+    parentCenter.x,
+    busY
+);
+
+
+if(
+    centerBusOnParent &&
+    parentCenter.x !== busCenterX
+){
 
     addLine(
         parentCenter.x,
-        parentCenter.y,
-        parentCenter.x,
+        busY,
+        busCenterX,
         busY
     );
 
+}
 
     /* Horizontal children bus */
 
