@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -18103,10 +18102,10 @@ siblingBranches.forEach(
         )
     );
 
-
 /* =====================================
    SINGLE SIBLING PARENT
    → CENTER EXACTLY OVER DIRECT CHILDREN
+   → ZOOM SAFE
    ===================================== */
 
 if(
@@ -18121,44 +18120,74 @@ if(
         );
 
 
-    const childCenters =
-        siblingChildren.map(
-            child => {
-
-                const rect =
-                    child.getBoundingClientRect();
-
-                return (
-                    rect.left +
-                    rect.width / 2
-                );
-
-            }
-        );
-
-
-    const childrenCenter =
-        (
-            Math.min(...childCenters) +
-            Math.max(...childCenters)
-        ) / 2;
-
-
-    const siblingRect =
-        sibling.getBoundingClientRect();
-
-
-    const siblingCenter =
-        siblingRect.left +
-        siblingRect.width / 2;
-
-
-    const moveX =
-        childrenCenter -
-        siblingCenter;
-
-
     if(siblingCouple){
+
+        /* Remove old movement first */
+
+        siblingCouple.style.transform =
+            "none";
+
+
+        const childCenters =
+            siblingChildren.map(
+                child => {
+
+                    const rect =
+                        child.getBoundingClientRect();
+
+                    return (
+                        rect.left +
+                        rect.width / 2
+                    );
+
+                }
+            );
+
+
+        const childrenCenter =
+            (
+                Math.min(...childCenters) +
+                Math.max(...childCenters)
+            ) / 2;
+
+
+        const siblingRect =
+            sibling.getBoundingClientRect();
+
+
+        const siblingCenter =
+            siblingRect.left +
+            siblingRect.width / 2;
+
+
+        /* =================================
+           CURRENT CANVAS SCALE
+           ================================= */
+
+        const canvasScreenWidth =
+            canvas.getBoundingClientRect().width;
+
+        const canvasLayoutWidth =
+            canvas.offsetWidth;
+
+
+        const canvasScale =
+            canvasLayoutWidth > 0
+                ? canvasScreenWidth /
+                  canvasLayoutWidth
+                : 1;
+
+
+        /* Screen distance → layout distance */
+
+        const moveX =
+            canvasScale > 0
+                ? (
+                    childrenCenter -
+                    siblingCenter
+                  ) / canvasScale
+                : 0;
+
 
         siblingCouple.style.transform =
             `translateX(${moveX}px)`;
