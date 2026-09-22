@@ -18962,11 +18962,157 @@ siblingChildBranches.forEach(
         }
 
 
-        connectParentsToChildren(
-            childCoupleCenter,
-            grandChildren
+        /* =====================================
+   SIBLING CHILD → GRANDCHILDREN
+   AFTER GENERATION 2
+   Example:
+   SaiLaxmi → Reya + Shivesti
+   ===================================== */
+
+if(
+    childCoupleCenter &&
+    grandChildren.length
+){
+
+    const grandChildPoints =
+        grandChildren
+            .map(
+                grandChild =>
+                    getPoint(
+                        grandChild,
+                        "top"
+                    )
+            )
+            .filter(Boolean);
+
+
+    if(grandChildPoints.length === 1){
+
+        const grandChildPoint =
+            grandChildPoints[0];
+
+        const middleY =
+            childCoupleCenter.y +
+            (
+                grandChildPoint.y -
+                childCoupleCenter.y
+            ) / 2;
+
+
+        addLine(
+            childCoupleCenter.x,
+            childCoupleCenter.y,
+            childCoupleCenter.x,
+            middleY
         );
 
+
+        addLine(
+            childCoupleCenter.x,
+            middleY,
+            grandChildPoint.x,
+            middleY
+        );
+
+
+        addLine(
+            grandChildPoint.x,
+            middleY,
+            grandChildPoint.x,
+            grandChildPoint.y
+        );
+
+    }
+    else if(grandChildPoints.length > 1){
+
+        const minGrandChildX =
+            Math.min(
+                ...grandChildPoints.map(
+                    point => point.x
+                )
+            );
+
+
+        const maxGrandChildX =
+            Math.max(
+                ...grandChildPoints.map(
+                    point => point.x
+                )
+            );
+
+
+        /*
+           Reya + Shivesti exact midpoint
+        */
+
+        const grandChildrenCenterX =
+            (
+                minGrandChildX +
+                maxGrandChildX
+            ) / 2;
+
+
+        const grandChildTopY =
+            Math.min(
+                ...grandChildPoints.map(
+                    point => point.y
+                )
+            );
+
+
+        const busY =
+            childCoupleCenter.y +
+            (
+                grandChildTopY -
+                childCoupleCenter.y
+            ) / 2;
+
+
+        /*
+           SaiLaxmi ↓
+           EXACT Reya/Shivesti midpoint
+        */
+
+        addLine(
+            grandChildrenCenterX,
+            childCoupleCenter.y,
+            grandChildrenCenterX,
+            busY
+        );
+
+
+        /*
+           Reya ─────── Shivesti
+        */
+
+        addLine(
+            minGrandChildX,
+            busY,
+            maxGrandChildX,
+            busY
+        );
+
+
+        /*
+           Bus ↓ each child
+        */
+
+        grandChildPoints.forEach(
+            point => {
+
+                addLine(
+                    point.x,
+                    busY,
+                    point.x,
+                    point.y
+                );
+
+            }
+        );
+
+    }
+
+}
     }
 );
 
