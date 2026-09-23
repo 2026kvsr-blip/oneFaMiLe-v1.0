@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -15046,9 +15047,29 @@ if(ancestryCase === 1){
 let childrenHTML = "";
 
 
-children.forEach(
-    child => {
+[
+    ...partnerOneChildren.map(
+        child => ({
+            child,
+            parentPartner: "partner1"
+        })
+    ),
 
+    ...partnerTwoChildren.map(
+        child => ({
+            child,
+            parentPartner: "partner2"
+        })
+    )
+
+].forEach(
+    item => {
+
+        const child =
+            item.child;
+
+        const parentPartner =
+            item.parentPartner;
         const childPartner =
             members.find(
                 m =>
@@ -15069,8 +15090,10 @@ children.forEach(
 
         childrenHTML += `
 
-            <div class="family-tree-child-branch">
-
+<div
+    class="family-tree-child-branch"
+    data-parent-partner="${parentPartner}"
+>
                 <div class="family-tree-child-couple">
 
                     ${treeBox(
@@ -19247,38 +19270,75 @@ partnerSiblingBranches.forEach(
     }
 );
    
-    /* ================================
-       SELECTED + PARTNER
-       ================================ */
+/* =====================================
+   SELECTED MEMBER + PARTNERS
+   ===================================== */
 
-    let selectedCoupleCenter = null;
-
-
-    if(selected && partner){
-
-        selectedCoupleCenter =
-            connectCouple(
-                selected,
-                partner
-            );
-
-    }
-    else if(selected){
-
-        selectedCoupleCenter =
-            getPoint(
-                selected,
-                "bottom"
-            );
-
-    }
+let partnerOneCoupleCenter = null;
+let partnerTwoCoupleCenter = null;
 
 
-    /* ================================
-       CHILDREN
-       ================================ */
+/* =====================================
+   PARTNER 1 ↔ SELECTED MEMBER
+   ===================================== */
 
-    const childBranches =
+if(
+    selected &&
+    partner &&
+    showMemberPartner
+){
+
+    partnerOneCoupleCenter =
+        connectCouple(
+            partner,
+            selected
+        );
+
+}
+
+
+/* =====================================
+   SELECTED MEMBER ↔ PARTNER 2
+   ===================================== */
+
+if(
+    selected &&
+    secondPartner &&
+    showMemberPartner
+){
+
+    partnerTwoCoupleCenter =
+        connectCouple(
+            selected,
+            secondPartner
+        );
+
+}
+
+
+/* =====================================
+   NO VISIBLE PARTNER
+   ===================================== */
+
+if(
+    selected &&
+    !showMemberPartner
+){
+
+    partnerOneCoupleCenter =
+        getPoint(
+            selected,
+            "bottom"
+        );
+
+}
+
+
+/* =====================================
+   CHILD BRANCHES
+   ===================================== */
+
+const childBranches =
     Array.from(
         canvas.querySelectorAll(
             ".family-tree-child-branch"
@@ -19286,127 +19346,129 @@ partnerSiblingBranches.forEach(
     );
 
 
-const childTargets =
+/* =====================================
+   CONNECT CHILD + CHILD PARTNER
+   AND RETURN CHILD TOP POINT
+   ===================================== */
+
+function getSelectedChildPoint(
+    branch
+){
+
+    const child =
+        branch.querySelector(
+            ".tree-child-node"
+        );
+
+    const childPartner =
+        branch.querySelector(
+            ".tree-child-partner"
+        );
+
+
+    if(!child){
+        return null;
+    }
+
+
+    if(childPartner){
+
+        connectCouple(
+            child,
+            childPartner
+        );
+
+    }
+
+
+    /*
+       IMPORTANT:
+       Parent line must connect to
+       biological CHILD box top-center,
+       not child + spouse midpoint.
+    */
+
+    const childTop =
+        getPoint(
+            child,
+            "top"
+        );
+
+
+    if(!childTop){
+        return null;
+    }
+
+
+    return {
+
+        element: child,
+
+        x: childTop.x,
+
+        y: childTop.y
+
+    };
+
+}
+
+
+/* =====================================
+   PARTNER 1 CHILDREN
+   ===================================== */
+
+const partnerOneChildCenters =
     childBranches
+        .filter(
+            branch =>
+                branch.dataset.parentPartner ===
+                "partner1"
+        )
         .map(
-            branch => {
-
-                const child =
-                    branch.querySelector(
-                        ".tree-child-node"
-                    );
-
-                const childPartner =
-                    branch.querySelector(
-                        ".tree-child-partner"
-                    );
-
-
-                if(
-                    child &&
-                    childPartner
-                ){
-
-                    return {
-                        child,
-                        childPartner,
-                        couple: true
-                    };
-
-                }
-
-
-                if(child){
-
-                    return {
-                        child,
-                        childPartner: null,
-                        couple: false
-                    };
-
-                }
-
-
-                return null;
-
-            }
+            branch =>
+                getSelectedChildPoint(
+                    branch
+                )
         )
         .filter(Boolean);
 
 
-/* CHILD / CHILD-PARTNER COUPLE LINES */
-
-const childCenters = [];
-
-
-childTargets.forEach(
-    item => {
-
-        if(
-            item.couple &&
-            item.childPartner
-        ){
-
-            connectCouple(
-                item.child,
-                item.childPartner
-            );
-
-            const childTop =
-                getPoint(
-                    item.child,
-                    "top"
-                );
-
-            childCenters.push(
-                {
-                    element:
-                        item.child,
-
-                    x:
-                        childTop.x,
-
-                    y:
-                        childTop.y
-                }
-            );
-
-        }
-        else{
-
-            const topPoint =
-                getPoint(
-                    item.child,
-                    "top"
-                );
-
-            childCenters.push(
-                {
-                    element:
-                        item.child,
-
-                    x:
-                        topPoint.x,
-
-                    y:
-                        topPoint.y
-                }
-            );
-
-        }
-
-    }
-);
-   
-
 /* =====================================
-   SELECTED COUPLE → CHILDREN
+   PARTNER 2 CHILDREN
    ===================================== */
 
-if(
-    selectedCoupleCenter &&
-    childCenters.length
+const partnerTwoChildCenters =
+    childBranches
+        .filter(
+            branch =>
+                branch.dataset.parentPartner ===
+                "partner2"
+        )
+        .map(
+            branch =>
+                getSelectedChildPoint(
+                    branch
+                )
+        )
+        .filter(Boolean);
+
+
+/* =====================================
+   COUPLE MIDPOINT → OWN CHILDREN
+   ===================================== */
+
+function connectSelectedCoupleToChildren(
+    coupleCenter,
+    childCenters
 ){
+
+    if(
+        !coupleCenter ||
+        !childCenters.length
+    ){
+        return;
+    }
+
 
     const childTopY =
         Math.min(
@@ -19416,50 +19478,43 @@ if(
         );
 
 
-    /* parents/spouse line mariyu
-       children madhya bus position */
-
     const childBusY =
-        selectedCoupleCenter.y +
+        coupleCenter.y +
         (
             childTopY -
-            selectedCoupleCenter.y
+            coupleCenter.y
         ) / 2;
 
 
-    /* =================================
-       COUPLE MIDPOINT → DOWN TO BUS
-       ================================= */
+    /* marriage midpoint → children bus */
 
     addLine(
-        selectedCoupleCenter.x,
-        selectedCoupleCenter.y,
-        selectedCoupleCenter.x,
+        coupleCenter.x,
+        coupleCenter.y,
+        coupleCenter.x,
         childBusY
     );
 
 
     /* =================================
-       ONLY ONE CHILD
+       ONE CHILD
        ================================= */
 
-    if(childCenters.length === 1){
+    if(
+        childCenters.length === 1
+    ){
 
         const childPoint =
             childCenters[0];
 
 
-        /* bus level lo child X varaku */
-
         addLine(
-            selectedCoupleCenter.x,
+            coupleCenter.x,
             childBusY,
             childPoint.x,
             childBusY
         );
 
-
-        /* child box TOP-CENTER varaku */
 
         addLine(
             childPoint.x,
@@ -19468,6 +19523,9 @@ if(
             childPoint.y
         );
 
+
+        return;
+
     }
 
 
@@ -19475,73 +19533,79 @@ if(
        TWO OR MORE CHILDREN
        ================================= */
 
-    else{
-
-        const minChildX =
-            Math.min(
-                ...childCenters.map(
-                    point => point.x
-                )
-            );
-
-
-        const maxChildX =
-            Math.max(
-                ...childCenters.map(
-                    point => point.x
-                )
-            );
-
-
-        /*
-           Couple midpoint horizontal bus
-           range bayata unna kuda
-           line disconnect kakunda include chestam
-        */
-
-        const busStartX =
-            Math.min(
-                minChildX,
-                selectedCoupleCenter.x
-            );
-
-
-        const busEndX =
-            Math.max(
-                maxChildX,
-                selectedCoupleCenter.x
-            );
-
-
-        /* horizontal children bus */
-
-        addLine(
-            busStartX,
-            childBusY,
-            busEndX,
-            childBusY
+    const minChildX =
+        Math.min(
+            ...childCenters.map(
+                point => point.x
+            )
         );
 
 
-        /* bus → ONLY actual child boxes */
-
-        childCenters.forEach(
-            childPoint => {
-
-                addLine(
-                    childPoint.x,
-                    childBusY,
-                    childPoint.x,
-                    childPoint.y
-                );
-
-            }
+    const maxChildX =
+        Math.max(
+            ...childCenters.map(
+                point => point.x
+            )
         );
 
-    }
+
+    const busStartX =
+        Math.min(
+            minChildX,
+            coupleCenter.x
+        );
+
+
+    const busEndX =
+        Math.max(
+            maxChildX,
+            coupleCenter.x
+        );
+
+
+    addLine(
+        busStartX,
+        childBusY,
+        busEndX,
+        childBusY
+    );
+
+
+    childCenters.forEach(
+        childPoint => {
+
+            addLine(
+                childPoint.x,
+                childBusY,
+                childPoint.x,
+                childPoint.y
+            );
+
+        }
+    );
 
 }
 
+
+/* =====================================
+   CONNECT PARTNER 1 FAMILY
+   ===================================== */
+
+connectSelectedCoupleToChildren(
+    partnerOneCoupleCenter,
+    partnerOneChildCenters
+);
+
+
+/* =====================================
+   CONNECT PARTNER 2 FAMILY
+   ===================================== */
+
+connectSelectedCoupleToChildren(
+    partnerTwoCoupleCenter,
+    partnerTwoChildCenters
+);
+   
    /* =====================================
    MEMBER SIBLING CHILD + PARTNER
    → THEIR CHILDREN
