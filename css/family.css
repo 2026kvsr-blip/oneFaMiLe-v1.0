@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3130,4 +3129,97 @@ max-height: 28px !important;
 .family-tree-partner-two-ancestor-tree{
     grid-column: 4;
     justify-self: start;
+}
+/* =====================================
+   TWO PARTNER CHILDREN
+   IMAGINARY CENTER SPLIT
+
+   PARTNER 1 CHILDREN = LEFT
+   PARTNER 2 CHILDREN = RIGHT
+   ===================================== */
+
+.family-tree-selected-children-row{
+    display:grid !important;
+
+    grid-template-columns:
+        max-content
+        80px
+        max-content;
+
+    align-items:start;
+
+    justify-content:center;
+
+    column-gap:45px;
+
+    width:max-content;
+
+    margin:35px auto 0;
+}
+
+
+/* =====================================
+   PARTNER 1 CHILDREN — LEFT HALF
+   ===================================== */
+
+.family-tree-partner-one-children-group{
+    grid-column:1;
+
+    display:flex !important;
+
+    flex-direction:row !important;
+
+    flex-wrap:nowrap !important;
+
+    align-items:flex-start;
+
+    justify-content:flex-end;
+
+    gap:28px;
+
+    width:max-content;
+
+    justify-self:end;
+}
+
+
+/* =====================================
+   EMPTY IMAGINARY CENTER
+   ===================================== */
+
+.family-tree-selected-children-row::before{
+    content:"";
+
+    grid-column:2;
+
+    grid-row:1;
+
+    width:80px;
+
+    min-width:80px;
+}
+
+
+/* =====================================
+   PARTNER 2 CHILDREN — RIGHT HALF
+   ===================================== */
+
+.family-tree-partner-two-children-group{
+    grid-column:3;
+
+    display:flex !important;
+
+    flex-direction:row !important;
+
+    flex-wrap:nowrap !important;
+
+    align-items:flex-start;
+
+    justify-content:flex-start;
+
+    gap:28px;
+
+    width:max-content;
+
+    justify-self:start;
 }
