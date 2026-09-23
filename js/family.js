@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14078,7 +14079,25 @@ const partnerMother =
             partner.motherId
           )
         : null;
-           /* =====================================
+/* =====================================
+   PARTNER 2 PARENTS
+   ===================================== */
+
+const secondPartnerFather =
+    secondPartner
+        ? getMemberById(
+            secondPartner.fatherId
+          )
+        : null;
+
+
+const secondPartnerMother =
+    secondPartner
+        ? getMemberById(
+            secondPartner.motherId
+          )
+        : null;
+/* =====================================
    ANCESTRY LAYOUT CASE
    ===================================== */
 
@@ -14968,8 +14987,51 @@ function renderAncestorParentBranch(
 
 let leftAncestorHTML = "";
 let rightAncestorHTML = "";
+let partnerOneAncestorHTML = "";
+let selectedMemberAncestorHTML = "";
+let partnerTwoAncestorHTML = "";
+/* =====================================
+   TWO PARTNER SPECIAL ANCESTRY
+
+   LEFT        = PARTNER 1
+   RIGHT-1     = SELECTED MEMBER
+   RIGHT-2     = PARTNER 2
+   ===================================== */
+
+const useTwoPartnerLayout =
+    !!(
+        showMemberPartner &&
+        partner &&
+        secondPartner
+    );
 
 
+if(useTwoPartnerLayout){
+
+    partnerOneAncestorHTML =
+        renderAncestorParents(
+            partner,
+            beforeGen,
+            "partner"
+        );
+
+
+    selectedMemberAncestorHTML =
+        renderAncestorParents(
+            selectedMember,
+            beforeGen,
+            ""
+        );
+
+
+    partnerTwoAncestorHTML =
+        renderAncestorParents(
+            secondPartner,
+            beforeGen,
+            "partner2"
+        );
+
+}
 if(ancestryCase === 1){
 
     /* CASE 1
