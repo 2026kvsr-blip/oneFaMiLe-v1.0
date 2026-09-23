@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -19287,8 +19288,7 @@ const secondPartner =
 
 if(
     selected &&
-    partner &&
-    showMemberPartner
+    partner
 ){
 
     partnerOneCoupleCenter =
@@ -19298,7 +19298,6 @@ if(
         );
 
 }
-
 
 /* =====================================
    SELECTED MEMBER ↔ PARTNER 2
