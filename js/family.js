@@ -1,6 +1,5 @@
 
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12980,11 +12979,10 @@ function applyFamilyTreeZoom(){
 /* =====================================
    OPEN FAMILY TREE PAGE
    ===================================== */
-
 async function openFamilyTreePage(){
 
     /* =====================================
-       CURRENT LOGIN USER
+       USE FAMILY DATA LOADED AT LOGIN
        ===================================== */
 
     const loggedUser =
@@ -13003,212 +13001,27 @@ async function openFamilyTreePage(){
     }
 
 
-    let currentFamily = null;
-    let members = [];
-
-
-    try{
-
-        /* =====================================
-           1. GET CURRENT USER FAMILY
-           ===================================== */
-
-        const familyParams =
-            new URLSearchParams();
-
-        familyParams.append(
-            "action",
-            "getUserFamilyTree"
-        );
-
-        familyParams.append(
-            "loginUserName",
-            loggedUser.loginUserName || ""
-        );
-
-        familyParams.append(
-            "email",
-            loggedUser.email || ""
-        );
-
-        familyParams.append(
-            "mobile",
-            loggedUser.mobile || ""
-        );
-
-
-        const familyResponse =
-            await fetch(
-                API_URL,
-                {
-                    method: "POST",
-
-                    headers:{
-                        "Content-Type":
-                            "application/x-www-form-urlencoded"
-                    },
-
-                    body:
-                        familyParams.toString()
-                }
-            );
-
-
-        const familyResult =
-            await familyResponse.json();
-
-
-        /* =====================================
-           NO FAMILY FOR CURRENT USER
-           ===================================== */
-
-        if(
-            familyResult.status !==
-            "success"
-        ){
-
-            localStorage.removeItem(
+    const currentFamily =
+        JSON.parse(
+            localStorage.getItem(
                 "currentFamily"
-            );
+            ) || "null"
+        );
 
-            localStorage.removeItem(
+
+    const members =
+        JSON.parse(
+            localStorage.getItem(
                 "familyMembers"
-            );
-
-            showMessage(
-                "No Family Tree found for this login.",
-                "error",
-                3000
-            );
-
-            return;
-        }
-
-
-        /* =====================================
-           CURRENT USER FAMILY ONLY
-           ===================================== */
-
-        currentFamily = {
-
-            familyId:
-                familyResult.familyId || "",
-
-            familyName:
-                familyResult.familyName || "",
-
-            loginId:
-                loggedUser.loginUserName || "",
-
-            userId:
-                loggedUser.userId || "",
-
-            userMail:
-                loggedUser.email || "",
-
-            mobile:
-                loggedUser.mobile || "",
-
-            createdAt:
-                new Date().toISOString()
-
-        };
-
-
-        localStorage.setItem(
-            "currentFamily",
-            JSON.stringify(
-                currentFamily
-            )
+            ) || "[]"
         );
 
 
-        /* =====================================
-           REMOVE PREVIOUS USER MEMBERS
-           ===================================== */
-
-        localStorage.removeItem(
-            "familyMembers"
-        );
-
-
-        /* =====================================
-           2. GET MEMBERS OF THIS FAMILY
-           ===================================== */
-
-        const memberParams =
-            new URLSearchParams();
-
-        memberParams.append(
-            "action",
-            "getFamilyMembers"
-        );
-
-        memberParams.append(
-            "familyId",
-            currentFamily.familyId
-        );
-
-
-        const memberResponse =
-            await fetch(
-                API_URL,
-                {
-                    method: "POST",
-
-                    headers:{
-                        "Content-Type":
-                            "application/x-www-form-urlencoded"
-                    },
-
-                    body:
-                        memberParams.toString()
-                }
-            );
-
-
-        const memberResult =
-            await memberResponse.json();
-
-
-        if(
-            memberResult.status ===
-            "success"
-        ){
-
-            members =
-                Array.isArray(
-                    memberResult.members
-                )
-                    ? memberResult.members
-                    : [];
-
-        }
-
-
-        /* =====================================
-           SAVE CURRENT FAMILY MEMBERS ONLY
-           ===================================== */
-
-        localStorage.setItem(
-            "familyMembers",
-            JSON.stringify(
-                members
-            )
-        );
-
-
-    }
-    catch(error){
-
-        console.error(
-            "Family Tree Current User Load Error:",
-            error
-        );
+    if(!currentFamily){
 
         showMessage(
-            "Unable to load Family Tree.",
-            "error",
+            "Family information not available.",
+            "warning",
             3000
         );
 
