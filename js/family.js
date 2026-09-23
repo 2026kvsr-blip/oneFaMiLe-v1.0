@@ -19549,27 +19549,39 @@ function connectSelectedCoupleToChildren(
         );
 
 
-    const busStartX =
-        Math.min(
-            minChildX,
-            coupleCenter.x
-        );
+   /*
+   Each marriage must have its own
+   independent children bus.
 
+   Bus should run ONLY between
+   that marriage midpoint and
+   that marriage's biological children.
+*/
 
-    const busEndX =
-        Math.max(
-            maxChildX,
-            coupleCenter.x
-        );
-
-
-    addLine(
-        busStartX,
-        childBusY,
-        busEndX,
-        childBusY
+const busStartX =
+    Math.min(
+        coupleCenter.x,
+        ...childCenters.map(
+            point => point.x
+        )
     );
 
+
+const busEndX =
+    Math.max(
+        coupleCenter.x,
+        ...childCenters.map(
+            point => point.x
+        )
+    );
+
+
+addLine(
+    busStartX,
+    childBusY,
+    busEndX,
+    childBusY
+);
 
     childCenters.forEach(
         childPoint => {
