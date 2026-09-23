@@ -15045,6 +15045,8 @@ if(ancestryCase === 1){
 
 let childrenHTML = "";
 
+let partnerOneChildrenHTML = "";
+let partnerTwoChildrenHTML = "";
 
 [
     ...partnerOneChildren.map(
@@ -15086,8 +15088,8 @@ let childrenHTML = "";
         const grandChildren =
             getChildren(child);
 
+let currentChildHTML = `
 
-        childrenHTML += `
 
 <div
     class="family-tree-child-branch"
@@ -15218,8 +15220,40 @@ let childrenHTML = "";
 
         `;
 
+
+/* =====================================
+   PUT CHILD INTO CORRECT PARTNER GROUP
+   ===================================== */
+
+if(
+    parentPartner === "partner1"
+){
+
+    partnerOneChildrenHTML +=
+        currentChildHTML;
+
+}
+else if(
+    parentPartner === "partner2"
+){
+
+    partnerTwoChildrenHTML +=
+        currentChildHTML;
+
+}
+
+
+/* Keep combined HTML also available */
+
+childrenHTML +=
+    currentChildHTML;
+
+
     }
 );
+
+
+           
 /* =====================================
    SIBLINGS + PARTNERS + CHILDREN
    ===================================== */
@@ -16386,18 +16420,47 @@ ${
 </div>
 
 
-        ${
-            children.length
-                ? `
-                    <div class="family-tree-selected-children-row">
+       ${
+    (
+        partnerOneChildrenHTML ||
+        partnerTwoChildrenHTML
+    )
+        ? `
+            <div class="family-tree-selected-children-row">
 
-                        ${childrenHTML}
+                <!-- PARTNER 1 CHILDREN -->
 
-                    </div>
-                  `
-                : ""
-        }
+                <div
+                    class="
+                        family-tree-selected-children-group
+                        family-tree-partner-one-children-group
+                    "
+                    data-children-group="partner1"
+                >
 
+                    ${partnerOneChildrenHTML}
+
+                </div>
+
+
+                <!-- PARTNER 2 CHILDREN -->
+
+                <div
+                    class="
+                        family-tree-selected-children-group
+                        family-tree-partner-two-children-group
+                    "
+                    data-children-group="partner2"
+                >
+
+                    ${partnerTwoChildrenHTML}
+
+                </div>
+
+            </div>
+          `
+        : ""
+}
     </div>
 
 
