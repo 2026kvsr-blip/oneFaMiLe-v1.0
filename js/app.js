@@ -1,3 +1,4 @@
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -3894,6 +3895,211 @@ showMessage(
 }
 
 
+/* =====================================
+   LOAD CURRENT LOGIN USER FAMILY
+   AFTER LOGIN
+   ===================================== */
+
+async function loadCurrentLoginFamily(){
+
+    const loggedUser =
+        JSON.parse(
+            sessionStorage.getItem("user") ||
+            "null"
+        );
+
+    if(!loggedUser){
+        return;
+    }
+
+
+    /* REMOVE ANY OLD CACHE FIRST */
+
+    localStorage.removeItem(
+        "currentFamily"
+    );
+
+    localStorage.removeItem(
+        "familyMembers"
+    );
+
+
+    try{
+
+        /* =====================================
+           GET CURRENT USER FAMILY
+           ===================================== */
+
+        const familyParams =
+            new URLSearchParams();
+
+        familyParams.append(
+            "action",
+            "getUserFamilyTree"
+        );
+
+        familyParams.append(
+            "loginUserName",
+            loggedUser.loginUserName || ""
+        );
+
+        familyParams.append(
+            "email",
+            loggedUser.email || ""
+        );
+
+        familyParams.append(
+            "mobile",
+            loggedUser.mobile || ""
+        );
+
+
+        const familyResponse =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+
+                    body:
+                        familyParams.toString()
+                }
+            );
+
+
+        const familyResult =
+            await familyResponse.json();
+
+
+        if(
+            familyResult.status !==
+            "success"
+        ){
+            return;
+        }
+
+
+        /* =====================================
+           SAVE CURRENT FAMILY
+           ===================================== */
+
+        const currentFamily = {
+
+            familyId:
+                familyResult.familyId || "",
+
+            familyName:
+                familyResult.familyName || "",
+
+            loginId:
+                loggedUser.loginUserName || "",
+
+            userId:
+                loggedUser.userId || "",
+
+            userMail:
+                loggedUser.email || "",
+
+            mobile:
+                loggedUser.mobile || "",
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+
+        localStorage.setItem(
+            "currentFamily",
+            JSON.stringify(
+                currentFamily
+            )
+        );
+
+
+        /* =====================================
+           GET CURRENT FAMILY MEMBERS
+           ===================================== */
+
+        if(!currentFamily.familyId){
+            return;
+        }
+
+
+        const memberParams =
+            new URLSearchParams();
+
+        memberParams.append(
+            "action",
+            "getFamilyMembers"
+        );
+
+        memberParams.append(
+            "familyId",
+            currentFamily.familyId
+        );
+
+
+        const memberResponse =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+
+                    body:
+                        memberParams.toString()
+                }
+            );
+
+
+        const memberResult =
+            await memberResponse.json();
+
+
+        if(
+            memberResult.status ===
+            "success"
+        ){
+
+            const members =
+                Array.isArray(
+                    memberResult.members
+                )
+                    ? memberResult.members
+                    : [];
+
+
+            localStorage.setItem(
+                "familyMembers",
+                JSON.stringify(
+                    members
+                )
+            );
+
+        }
+
+
+    }
+    catch(error){
+
+        console.error(
+            "LOGIN FAMILY LOAD ERROR:",
+            error
+        );
+
+    }
+
+}
+
 loginSubmitBtn.onclick = async ()=>{
 
    if(isLocked("login")){
@@ -3990,13 +4196,15 @@ const formData = new FormData();
            loginAttempts = 0;
 
             sessionStorage.setItem(
-                "user",
-                JSON.stringify(result)
-            );
-            
-            updateSideMenuUser();
-            updateMenuIcon();
-            
+    "user",
+    JSON.stringify(result)
+);
+
+/* LOAD CURRENT LOGIN USER FAMILY */
+await loadCurrentLoginFamily();
+
+updateSideMenuUser();
+updateMenuIcon();            
             sessionStorage.setItem(
         "passCode",
         passCode
@@ -5714,10 +5922,28 @@ editProfileBtn.onclick = ()=>{
 };
 logoutMenuBtn.onclick = ()=>{
 
-    sessionStorage.removeItem("user");
-    sessionStorage.removeItem("passCode"); 
+    /* =====================================
+       CLEAR LOGIN SESSION
+       ===================================== */
 
-    updateSideMenuUser();
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("passCode");
+
+
+    /* =====================================
+       CLEAR CURRENT USER FAMILY CACHE
+       ===================================== */
+
+    localStorage.removeItem(
+        "currentFamily"
+    );
+
+    localStorage.removeItem(
+        "familyMembers"
+    );
+
+
+    updateSideMenuUser();    
     updateMenuIcon();
     sideMenu.classList.remove("open");
     menuOverlay.classList.remove("show");
