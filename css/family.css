@@ -3023,3 +3023,32 @@ max-height: 28px !important;
 
     gap: 90px !important;
 }
+
+/* =====================================
+   SELECTED MEMBER - TWO PARTNER
+   CHILD GROUP LAYOUT
+   ===================================== */
+
+.family-tree-selected-children-row{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    gap:70px;
+    width:max-content;
+    margin:35px auto 0;
+}
+
+
+.family-tree-selected-children-group{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    gap:28px;
+    width:max-content;
+}
+
+
+.family-tree-partner-one-children-group,
+.family-tree-partner-two-children-group{
+    flex-direction:row;
+}
