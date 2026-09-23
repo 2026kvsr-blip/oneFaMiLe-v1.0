@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -16299,34 +16298,70 @@ ${
 
     <div class="family-tree-selected-branch">
 
-        <div class="family-tree-selected-couple">
+<div class="family-tree-selected-couple">
 
-            <div class="family-tree-selected-member-slot">
+    <!-- =================================
+         PARTNER 1 - LEFT
+         ================================= -->
 
-                ${treeBox(
-                    selectedMember,
-                    "tree-selected"
-                )}
+    ${
+        showMemberPartner &&
+        partner
+            ? `
+                <div class="
+                    family-tree-selected-partner-slot
+                    family-tree-selected-partner-left-slot
+                ">
 
-            </div>
+                    ${treeBox(
+                        partner,
+                        "tree-partner tree-partner-left"
+                    )}
+
+                </div>
+              `
+            : ""
+    }
 
 
-           ${
-    showMemberPartner && partner
-        ? `
-        <div class="family-tree-selected-partner-slot">
+    <!-- =================================
+         SELECTED MEMBER - CENTER
+         ================================= -->
 
-                            ${treeBox(
-                                partner,
-                                "tree-partner"
-                            )}
+    <div class="family-tree-selected-member-slot">
 
-                        </div>
-                      `
-                    : ""
-            }
+        ${treeBox(
+            selectedMember,
+            "tree-selected"
+        )}
 
-        </div>
+    </div>
+
+
+    <!-- =================================
+         PARTNER 2 - RIGHT
+         ================================= -->
+
+    ${
+        showMemberPartner &&
+        secondPartner
+            ? `
+                <div class="
+                    family-tree-selected-partner-slot
+                    family-tree-selected-partner-right-slot
+                ">
+
+                    ${treeBox(
+                        secondPartner,
+                        "tree-partner-second tree-partner-right"
+                    )}
+
+                </div>
+              `
+            : ""
+    }
+
+</div>
 
 
         ${
