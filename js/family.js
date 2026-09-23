@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -19276,7 +19275,11 @@ partnerSiblingBranches.forEach(
 
 let partnerOneCoupleCenter = null;
 let partnerTwoCoupleCenter = null;
-
+   
+const secondPartner =
+    canvas.querySelector(
+        ".tree-partner-second"
+    );
 
 /* =====================================
    PARTNER 1 ↔ SELECTED MEMBER
@@ -19303,8 +19306,7 @@ if(
 
 if(
     selected &&
-    secondPartner &&
-    showMemberPartner
+    secondPartner
 ){
 
     partnerTwoCoupleCenter =
@@ -19315,14 +19317,14 @@ if(
 
 }
 
-
 /* =====================================
    NO VISIBLE PARTNER
    ===================================== */
 
 if(
     selected &&
-    !showMemberPartner
+    !partner &&
+    !secondPartner
 ){
 
     partnerOneCoupleCenter =
@@ -19332,7 +19334,6 @@ if(
         );
 
 }
-
 
 /* =====================================
    CHILD BRANCHES
