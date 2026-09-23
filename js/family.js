@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -7367,7 +7366,27 @@ if(editMaritalStatus === "yes"){
         editMarriedNo.checked = false;
     }
 
-    /* SHOW MARRIAGE DATE ROW */
+
+    /* =================================
+       SHOW PARTNER ROW
+       ================================= */
+
+    const editPartnerGroup =
+        document.getElementById(
+            "memberPartnerGroup"
+        );
+
+    if(editPartnerGroup){
+
+        editPartnerGroup.style.display =
+            "flex";
+
+    }
+
+
+    /* =================================
+       SHOW MARRIAGE DATE ROW
+       ================================= */
 
     const editMarriageDateGroup =
         document.getElementById(
@@ -7381,7 +7400,7 @@ if(editMaritalStatus === "yes"){
 
     }
 
-}
+}   
 else if(editMaritalStatus === "no"){
 
     if(editMarriedYes){
