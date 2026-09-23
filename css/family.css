@@ -3029,6 +3029,7 @@ max-height: 28px !important;
    CHILD GROUP LAYOUT
    ===================================== */
 
+
 .family-tree-selected-children-row{
     display:flex;
     align-items:flex-start;
