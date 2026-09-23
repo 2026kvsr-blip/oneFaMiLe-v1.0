@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3052,4 +3053,81 @@ max-height: 28px !important;
 .family-tree-partner-one-children-group,
 .family-tree-partner-two-children-group{
     flex-direction:row;
+}
+/* =====================================
+   TWO PARTNER - THREE ANCESTRY LAYOUT
+
+   LEFT    : PARTNER 1 ANCESTRY
+   RIGHT 1 : SELECTED MEMBER ANCESTRY
+   RIGHT 2 : PARTNER 2 ANCESTRY
+   ===================================== */
+
+.family-tree-three-ancestor-zone{
+    display: grid;
+
+    grid-template-columns:
+        minmax(max-content, 1fr)
+        80px
+        minmax(max-content, 1fr)
+        minmax(max-content, 1fr);
+
+    align-items: end;
+
+    column-gap: 45px;
+
+    width: max-content;
+
+    min-width: 100%;
+
+    margin: 0 auto 70px;
+}
+
+
+.family-tree-three-ancestor-column{
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    width: max-content;
+
+    min-width: 0;
+}
+
+
+/* PARTNER 1 — LEFT */
+
+.family-tree-partner-one-ancestor-tree{
+    grid-column: 1;
+    justify-self: end;
+}
+
+
+/* IMAGINARY SELECTED-MEMBER CENTER */
+
+.family-tree-three-ancestor-center-space{
+    grid-column: 2;
+
+    width: 80px;
+
+    min-width: 80px;
+}
+
+
+/* SELECTED MEMBER PARENTS — RIGHT */
+
+.family-tree-selected-member-ancestor-tree{
+    grid-column: 3;
+    justify-self: start;
+}
+
+
+/* PARTNER 2 PARENTS — FURTHER RIGHT */
+
+.family-tree-partner-two-ancestor-tree{
+    grid-column: 4;
+    justify-self: start;
 }
