@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -15829,36 +15828,91 @@ diagram.innerHTML = `
             </svg>
 
 ${
-    ancestryCase > 0
+    useTwoPartnerLayout
+
         ? `
-            <div class="family-tree-split-ancestor-zone">
+            <!-- =================================
+                 TWO PARTNER ANCESTRY LAYOUT
 
-                <!-- LEFT ANCESTRY -->
+                 LEFT    = PARTNER 1
+                 RIGHT 1 = SELECTED MEMBER
+                 RIGHT 2 = PARTNER 2
+                 ================================= -->
 
-                <div class="family-tree-member-ancestor-tree">
+            <div class="family-tree-three-ancestor-zone">
 
-                    ${leftAncestorHTML}
+                <!-- PARTNER 1 ANCESTRY - LEFT -->
+
+                <div class="
+                    family-tree-three-ancestor-column
+                    family-tree-partner-one-ancestor-tree
+                ">
+
+                    ${partnerOneAncestorHTML}
 
                 </div>
 
 
-                <!-- IMAGINARY CENTER LINE -->
+                <!-- IMAGINARY MEMBER CENTER LINE -->
 
-                <div class="family-tree-ancestor-center-space"></div>
+                <div class="family-tree-three-ancestor-center-space">
+                </div>
 
 
-                <!-- RIGHT ANCESTRY -->
+                <!-- SELECTED MEMBER ANCESTRY - RIGHT -->
 
-                <div class="family-tree-partner-ancestor-tree">
+                <div class="
+                    family-tree-three-ancestor-column
+                    family-tree-selected-member-ancestor-tree
+                ">
 
-                    ${rightAncestorHTML}
+                    ${selectedMemberAncestorHTML}
+
+                </div>
+
+
+                <!-- PARTNER 2 ANCESTRY - FURTHER RIGHT -->
+
+                <div class="
+                    family-tree-three-ancestor-column
+                    family-tree-partner-two-ancestor-tree
+                ">
+
+                    ${partnerTwoAncestorHTML}
 
                 </div>
 
             </div>
           `
-        : ""
+
+        : ancestryCase > 0
+
+            ? `
+                <div class="family-tree-split-ancestor-zone">
+
+                    <div class="family-tree-member-ancestor-tree">
+
+                        ${leftAncestorHTML}
+
+                    </div>
+
+
+                    <div class="family-tree-ancestor-center-space">
+                    </div>
+
+
+                    <div class="family-tree-partner-ancestor-tree">
+
+                        ${rightAncestorHTML}
+
+                    </div>
+
+                </div>
+              `
+
+            : ""
 }
+
 <!-- ============================
      GREAT-GREAT-GRANDPARENTS ROW
      GENERATION 4
