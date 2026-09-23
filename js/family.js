@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13869,18 +13870,86 @@ function createTreeMemberBox(member){
 
 }
 
-           const partner =
-    members.find(
-        member =>
-            String(member.memberId) ===
-            String(selectedMember.partnerId || "")
-    )
-    ||
-    members.find(
-        member =>
-            String(member.partnerId || "") ===
-            String(selectedMember.memberId)
+           /* =====================================
+   SELECTED MEMBER - ALL PARTNERS
+   ===================================== */
+
+const selectedMemberId =
+    String(
+        selectedMember.memberId || ""
+    ).trim();
+
+
+const partners =
+    members.filter(
+        member => {
+
+            const memberId =
+                String(
+                    member.memberId || ""
+                ).trim();
+
+            const memberPartnerId =
+                String(
+                    member.partnerId || ""
+                ).trim();
+
+            const selectedPartnerId =
+                String(
+                    selectedMember.partnerId || ""
+                ).trim();
+
+
+            return (
+
+                /* selected member points to partner */
+
+                (
+                    selectedPartnerId &&
+                    memberId ===
+                    selectedPartnerId
+                )
+
+                ||
+
+                /* partner points to selected member */
+
+                (
+                    memberPartnerId &&
+                    memberPartnerId ===
+                    selectedMemberId
+                )
+
+            );
+
+        }
     );
+
+
+/* REMOVE DUPLICATES */
+
+const uniquePartners =
+    Array.from(
+        new Map(
+            partners.map(
+                member => [
+                    String(member.memberId),
+                    member
+                ]
+            )
+        ).values()
+    );
+
+
+/* =====================================
+   PARTNER 1 / PARTNER 2
+   ===================================== */
+
+const partner =
+    uniquePartners[0] || null;
+
+const secondPartner =
+    uniquePartners[1] || null;
 
 
 let partnerHTML = "";
@@ -14209,6 +14278,115 @@ const children =
                 )
             )
     );
+
+
+           /* =====================================
+   SELECTED MEMBER CHILDREN
+   GROUPED BY PARTNER
+   ===================================== */
+
+function isParentOf(
+    child,
+    parentMember
+){
+
+    if(
+        !child ||
+        !parentMember
+    ){
+        return false;
+    }
+
+    const parentId =
+        String(
+            parentMember.memberId || ""
+        ).trim();
+
+    if(!parentId){
+        return false;
+    }
+
+    return (
+        String(
+            child.fatherId || ""
+        ).trim() === parentId
+        ||
+        String(
+            child.motherId || ""
+        ).trim() === parentId
+    );
+}
+
+
+/* =====================================
+   PARTNER 1 CHILDREN
+   ===================================== */
+
+const partnerOneChildren =
+    partner
+        ? members.filter(
+            child =>
+                isParentOf(
+                    child,
+                    selectedMember
+                )
+                &&
+                isParentOf(
+                    child,
+                    partner
+                )
+        )
+        : [];
+
+
+/* =====================================
+   PARTNER 2 CHILDREN
+   ===================================== */
+
+const partnerTwoChildren =
+    secondPartner
+        ? members.filter(
+            child =>
+                isParentOf(
+                    child,
+                    selectedMember
+                )
+                &&
+                isParentOf(
+                    child,
+                    secondPartner
+                )
+        )
+        : [];
+
+
+console.log(
+    "SELECTED MEMBER PARTNERS:",
+    {
+        selectedMember:
+            selectedMember.name,
+
+        partner1:
+            partner
+                ? partner.name
+                : "",
+
+        partner1Children:
+            partnerOneChildren.map(
+                child => child.name
+            ),
+
+        partner2:
+            secondPartner
+                ? secondPartner.name
+                : "",
+
+        partner2Children:
+            partnerTwoChildren.map(
+                child => child.name
+            )
+    }
+);
 /* =====================================
    GREAT GRANDPARENTS
    Parents of Grandparents
