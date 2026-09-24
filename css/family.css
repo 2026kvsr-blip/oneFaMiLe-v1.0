@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2644,36 +2645,6 @@ max-height: 28px !important;
     justify-self: start;
 }
 
-/* PARTNER 1 SIBLINGS — LEFT */
-
-.family-tree-left-partner-relations{
-    grid-column: 1;
-
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
-
-    width: max-content;
-
-    justify-self: end;
-}
-
-
-/* SELECTED MEMBER SIBLINGS */
-
-.family-tree-member-siblings-zone{
-    grid-column: 2;
-
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
-
-    width: max-content;
-
-    justify-self: end;
-}
-
-
 /* SELECTED MEMBER + PARTNERS */
 
 .family-tree-main-row
@@ -2683,20 +2654,6 @@ max-height: 28px !important;
     justify-self: center;
 }
 
-
-/* PARTNER 2 SIBLINGS — RIGHT */
-
-.family-tree-right-partner-relations{
-    grid-column: 4;
-
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-
-    width: max-content;
-
-    justify-self: start;
-}
 
 /* =====================================
    SAME GENERATION ROWS
