@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -19656,13 +19657,22 @@ function connectSelectedCoupleToChildren(
         );
 
 
-    const childBusY =
-        coupleCenter.y +
-        (
-            childTopY -
-            coupleCenter.y
-        ) / 2;
+    const isPartnerTwoGroup =
+    childCenters ===
+    partnerTwoChildCenters;
 
+
+const childBusY =
+    coupleCenter.y +
+    (
+        childTopY -
+        coupleCenter.y
+    ) *
+    (
+        isPartnerTwoGroup
+            ? 0.68
+            : 0.32
+    );
 
     /* marriage midpoint → children bus */
 
