@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12842,7 +12843,31 @@ function fitFamilyTreeToScreen(){
     rightMost -
     leftMost;
 
-
+console.log(
+    "TREE FIT DEBUG:",
+    {
+        zoomBeforeFit: familyTreeZoom,
+        treeWidth,
+        leftMost,
+        rightMost,
+        leftNode:
+            visibleNodes.reduce(
+                (a, b) =>
+                    a.getBoundingClientRect().left <
+                    b.getBoundingClientRect().left
+                        ? a
+                        : b
+            ).textContent.trim(),
+        rightNode:
+            visibleNodes.reduce(
+                (a, b) =>
+                    a.getBoundingClientRect().right >
+                    b.getBoundingClientRect().right
+                        ? a
+                        : b
+            ).textContent.trim()
+    }
+);
 /* =====================================
    ACTUAL TREE VERTICAL BOUNDS
    ===================================== */
