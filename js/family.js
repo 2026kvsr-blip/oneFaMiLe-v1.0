@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -89,55 +88,150 @@ function isFamilyIdAvailable(familyId){
             family.familyId === familyId
     );
 }
+
+
+/* =====================================
+   PRELOAD FAMILY PAGE IMAGES
+   ===================================== */
+
+function preloadFamilyPageImages(){
+
+    const familyImages = [
+
+        "images/colorbtns/Family1.png",
+        "images/colorbtns/AddMember1.png",
+        "images/colorbtns/AddFamily1.png",
+        "images/colorbtns/CustomSearch1.png",
+        "images/colorbtns/Relations1.png",
+        "images/colorbtns/TreeView1.png",
+        "images/colorbtns/About1.png"
+
+    ];
+
+    familyImages.forEach(
+        function(src){
+
+            const img =
+                new Image();
+
+            img.src = src;
+
+        }
+    );
+}
+
+
+/* =====================================
+   CLEAR FAMILY CACHE IF LOGIN USER CHANGED
+   ===================================== */
+
+function clearOldFamilyCacheForCurrentUser(){
+
+    const loggedUser =
+        JSON.parse(
+            sessionStorage.getItem("user") || "null"
+        );
+
+    const storedFamily =
+        JSON.parse(
+            localStorage.getItem("currentFamily") || "null"
+        );
+
+    if(!loggedUser){
+        return;
+    }
+
+    if(!storedFamily){
+
+        localStorage.removeItem("familyMembers");
+        return;
+    }
+
+
+    const loginMatch =
+        storedFamily.loginId &&
+        loggedUser.loginUserName &&
+        String(storedFamily.loginId)
+            .trim()
+            .toLowerCase() ===
+        String(loggedUser.loginUserName)
+            .trim()
+            .toLowerCase();
+
+
+    const emailMatch =
+        storedFamily.userMail &&
+        loggedUser.email &&
+        String(storedFamily.userMail)
+            .trim()
+            .toLowerCase() ===
+        String(loggedUser.email)
+            .trim()
+            .toLowerCase();
+
+
+    const mobileMatch =
+        storedFamily.mobile &&
+        loggedUser.mobile &&
+        String(storedFamily.mobile)
+            .trim() ===
+        String(loggedUser.mobile)
+            .trim();
+
+
+    if(
+        !loginMatch &&
+        !emailMatch &&
+        !mobileMatch
+    ){
+
+        console.log(
+            "LOGIN USER CHANGED → CLEAR OLD FAMILY CACHE"
+        );
+
+        localStorage.removeItem("currentFamily");
+        localStorage.removeItem("familyMembers");
+        localStorage.removeItem("editMember");
+
+    }
+}
+
 /* =====================================
    FAMILY MAIN PAGE
    ===================================== */
 
 familyBtn.onclick = () => {
 
+    clearOldFamilyCacheForCurrentUser();
+
     setActiveButton(familyBtn);
- 
-
-    showPage(
-
+   showPage(
         pageTitle(
             "Family",
             "images/colorbtns/Family1.png"
         )
-
         +`
-
         <div class="grid-3x2">
-
             <button
                 id="addMemberBtn"
                 class="grid-btn">
-
                 <img
                     src="images/colorbtns/AddMember1.png"
                     class="btn-icon">
-
                 <span>
                     Add Member
                 </span>
-
             </button>
-
-
             <button
                 id="addFamilyBtn"
                 class="grid-btn">
-
                 <img
                     src="images/colorbtns/AddFamily1.png"
                     class="btn-icon">
-
                 <span>
                     Create Family
                 </span>
-
             </button>
-
 
             <button
                 id="searchMemberBtn"
@@ -153,7 +247,6 @@ familyBtn.onclick = () => {
 
             </button>
 
-
             <button
                 id="relationsBtn"
                 class="grid-btn">
@@ -167,7 +260,6 @@ familyBtn.onclick = () => {
                 </span>
 
             </button>
-
 
             <button
                 id="treeViewBtn"
@@ -7274,7 +7366,27 @@ if(editMaritalStatus === "yes"){
         editMarriedNo.checked = false;
     }
 
-    /* SHOW MARRIAGE DATE ROW */
+
+    /* =================================
+       SHOW PARTNER ROW
+       ================================= */
+
+    const editPartnerGroup =
+        document.getElementById(
+            "memberPartnerGroup"
+        );
+
+    if(editPartnerGroup){
+
+        editPartnerGroup.style.display =
+            "flex";
+
+    }
+
+
+    /* =================================
+       SHOW MARRIAGE DATE ROW
+       ================================= */
 
     const editMarriageDateGroup =
         document.getElementById(
@@ -7288,7 +7400,7 @@ if(editMaritalStatus === "yes"){
 
     }
 
-}
+}   
 else if(editMaritalStatus === "no"){
 
     if(editMarriedYes){
@@ -12726,14 +12838,47 @@ function fitFamilyTreeToScreen(){
         canvasRect.left;
 
 
-    const treeWidth =
-        rightMost -
-        leftMost;
+   const treeWidth =
+    rightMost -
+    leftMost;
 
 
-    const availableWidth =
-        wrapper.clientWidth;
+/* =====================================
+   ACTUAL TREE VERTICAL BOUNDS
+   ===================================== */
 
+const topMost =
+    Math.min(
+        ...nodeRects.map(
+            rect => rect.top
+        )
+    );
+
+
+const bottomMost =
+    Math.max(
+        ...nodeRects.map(
+            rect => rect.bottom
+        )
+    );
+
+
+const contentTop =
+    topMost -
+    canvasRect.top;
+
+
+const treeHeight =
+    bottomMost -
+    topMost;
+
+
+const availableWidth =
+    wrapper.clientWidth;
+
+
+const availableHeight =
+    wrapper.clientHeight;
 
     /* AUTO FIT — NEVER AUTO ENLARGE */
 
@@ -12768,10 +12913,31 @@ function fitFamilyTreeToScreen(){
         );
 
 
-    familyTreePanY = 0;
+   /* =====================================
+   CENTER TREE VERTICALLY
+   ===================================== */
+
+const scaledTreeHeight =
+    treeHeight *
+    familyTreeBaseScale;
 
 
-    applyFamilyTreeZoom();
+familyTreePanY =
+    Math.max(
+        0,
+        (
+            availableHeight -
+            scaledTreeHeight
+        ) / 2
+        -
+        (
+            contentTop *
+            familyTreeBaseScale
+        )
+    );
+
+
+applyFamilyTreeZoom();
 }
 
 
@@ -12832,100 +12998,54 @@ function applyFamilyTreeZoom(){
 /* =====================================
    OPEN FAMILY TREE PAGE
    ===================================== */
-
 async function openFamilyTreePage(){
-    let members =
-    JSON.parse(
-        localStorage.getItem(
-            "familyMembers"
-        ) || "[]"
-    );
 
+    /* =====================================
+       USE FAMILY DATA LOADED AT LOGIN
+       ===================================== */
 
-const currentFamily =
-    JSON.parse(
-        localStorage.getItem(
-            "currentFamily"
-        ) || "{}"
-    );
-
-
-if(
-    !Array.isArray(members) ||
-    members.length === 0
-){
-
-    try{
-
-        const params =
-            new URLSearchParams();
-
-        params.append(
-            "action",
-            "getFamilyMembers"
+    const loggedUser =
+        JSON.parse(
+            sessionStorage.getItem("user") ||
+            "null"
         );
 
-        params.append(
-            "familyId",
-            currentFamily.familyId || ""
-        );
-
-
-        const response =
-            await fetch(
-                API_URL,
-                {
-                    method:
-                        "POST",
-
-                    headers:{
-                        "Content-Type":
-                            "application/x-www-form-urlencoded"
-                    },
-
-                    body:
-                        params.toString()
-                }
-            );
-
-
-        const result =
-            await response.json();
-
-
-        if(
-            result.status ===
-            "success"
-        ){
-
-            members =
-                Array.isArray(
-                    result.members
-                )
-                    ? result.members
-                    : [];
-
-
-            localStorage.setItem(
-                "familyMembers",
-                JSON.stringify(
-                    members
-                )
-            );
-
-        }
-
-    }
-    catch(error){
+    if(!loggedUser){
 
         console.error(
-            "Family Tree Members Load Error:",
-            error
+            "Family Tree: Login user not found"
         );
 
+        return;
     }
 
-}
+
+    const currentFamily =
+        JSON.parse(
+            localStorage.getItem(
+                "currentFamily"
+            ) || "null"
+        );
+
+
+    const members =
+        JSON.parse(
+            localStorage.getItem(
+                "familyMembers"
+            ) || "[]"
+        );
+
+
+    if(!currentFamily){
+
+        showMessage(
+            "Family information not available.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
    
 
 const familyName =
@@ -13026,33 +13146,6 @@ const familyName =
 <div class="family-tree-control">
 
     <label class="family-tree-label">
-        Member Siblings
-    </label>
-
-    <span class="family-tree-colon">
-        :
-    </span>
-
-    <select
-        id="familyTreeShowSiblings"
-        class="common-form-input">
-
-        <option value="yes">
-            Yes
-        </option>
-
-        <option value="no" selected>
-            No
-        </option>
-
-    </select>
-
-</div>
-
-
-<div class="family-tree-control">
-
-    <label class="family-tree-label">
         Member Partner
     </label>
 
@@ -13076,6 +13169,31 @@ const familyName =
 
 </div>
 
+<div class="family-tree-control">
+
+    <label class="family-tree-label">
+        Member Siblings
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreeShowSiblings"
+        class="common-form-input">
+
+        <option value="yes">
+            Yes
+        </option>
+
+        <option value="no" selected>
+            No
+        </option>
+
+    </select>
+
+</div>
 
 <!-- PARTNER SIBLINGS -->
 
@@ -13104,6 +13222,36 @@ const familyName =
     </select>
 
 </div>
+
+<!-- SHOW PARTNER -->
+
+<div class="family-tree-control">
+
+    <label class="family-tree-label">
+        Other Partners
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreeShowPartner"
+        class="common-form-input">
+
+        <option value="yes" selected>
+            Yes
+        </option>
+
+        <option value="no">
+            No
+        </option>
+
+    </select>
+
+</div>
+
+
 
 
             </div>
@@ -13390,7 +13538,115 @@ familyTreeSearchInput.addEventListener(
 
     }
 );
-   
+/* =====================================
+   CLOSE FAMILY TREE MEMBER DROPDOWN
+   WHEN CLICKING OUTSIDE
+   ===================================== */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            !familyTreeSearchInput ||
+            !familyTreeDropdown
+        ){
+            return;
+        }
+
+        const clickedSearchInput =
+            familyTreeSearchInput.contains(
+                event.target
+            );
+
+        const clickedDropdown =
+            familyTreeDropdown.contains(
+                event.target
+            );
+
+
+        if(
+            !clickedSearchInput &&
+            !clickedDropdown
+        ){
+
+            familyTreeDropdown.style.display =
+                "none";
+
+        }
+
+    }
+);
+
+  /* =====================================
+   MEMBER PARTNER
+   → PARTNER SIBLINGS VISIBILITY
+   ===================================== */
+
+const familyTreeMemberPartnerControl =
+    document.getElementById(
+        "familyTreeShowMemberPartner"
+    );
+
+const familyTreeShowPartnerSiblingsControl =
+    document.getElementById(
+        "familyTreeShowPartnerSiblings"
+    );
+
+const partnerSiblingsControlRow =
+    familyTreeShowPartnerSiblingsControl
+        ?.closest(
+            ".family-tree-control"
+        );
+
+
+function updatePartnerSiblingsVisibility(){
+
+    if(
+        !familyTreeMemberPartnerControl ||
+        !familyTreeShowPartnerSiblingsControl ||
+        !partnerSiblingsControlRow
+    ){
+        return;
+    }
+
+
+    if(
+        familyTreeMemberPartnerControl.value === "yes"
+    ){
+
+        /* MEMBER PARTNER = YES
+           → PARTNER SIBLINGS VISIBLE */
+
+        partnerSiblingsControlRow.style.display =
+            "";
+
+    }else{
+
+        /* MEMBER PARTNER = NO
+           → PARTNER SIBLINGS HIDDEN
+           → VALUE AUTOMATICALLY NO */
+
+        familyTreeShowPartnerSiblingsControl.value =
+            "no";
+
+        partnerSiblingsControlRow.style.display =
+            "none";
+    }
+}
+
+
+/* INITIAL STATE */
+
+updatePartnerSiblingsVisibility();
+
+
+/* MEMBER PARTNER YES / NO CHANGE */
+
+familyTreeMemberPartnerControl?.addEventListener(
+    "change",
+    updatePartnerSiblingsVisibility
+);
 /* =====================================
    SHOW FAMILY TREE BUTTON
    ===================================== */
@@ -13763,10 +14019,10 @@ const memberHasParents =
 
 const partnerHasParents =
     !!(
+        showMemberPartner &&
         partner &&
         (partnerFather || partnerMother)
     );
-
 let ancestryCase = 0;
 
 if(
@@ -15911,17 +16167,18 @@ ${
 
 
     ${
-        partner
-            ? `
-                <div class="family-tree-partner-siblings-row">
+    showMemberPartner &&
+    partner &&
+    showPartnerSiblings
+        ? `
+            <div class="family-tree-partner-siblings-row">
 
-                    ${partnerSiblingsHTML}
+                ${partnerSiblingsHTML}
 
-                </div>
-              `
-            : ""
-    }
-
+            </div>
+          `
+        : ""
+}
 </div>
 
           <!-- =====================
@@ -15945,51 +16202,29 @@ ${
    BEFORE GENERATIONS VISIBILITY
    ===================================== */
 
-const greatGreatGrandParentsRow =
-    diagram.querySelector(
-        ".family-tree-great-great-grandparents-row"
-    );
-
-const greatGrandParentsRow =
-    diagram.querySelector(
-        ".family-tree-great-grandparents-row"
-    );
-
-const grandParentsRow =
-    diagram.querySelector(
-        ".family-tree-grandparents-row"
-    );
-
-
-/* GENERATION 4 */
-if(greatGreatGrandParentsRow){
-
-    greatGreatGrandParentsRow.style.display =
-        beforeGen >= 4
-            ? "flex"
-            : "none";
-}
-
-
-/* GENERATION 3 */
-if(greatGrandParentsRow){
-
-    greatGrandParentsRow.style.display =
-        beforeGen >= 3
-            ? "flex"
-            : "none";
-}
-
-
-/* GENERATION 2 */
-if(grandParentsRow){
-
-    grandParentsRow.style.display =
-        beforeGen >= 2
-            ? "flex"
-            : "none";
-}
 /* =====================================
+   OLD FLAT ANCESTOR ROWS
+   DISABLED - CASE 1 TO 4 TREE IS USED
+   ===================================== */
+
+const oldAncestorRows =
+    diagram.querySelectorAll(
+        ".family-tree-great-great-grandparents-row, " +
+        ".family-tree-great-grandparents-row, " +
+        ".family-tree-grandparents-row, " +
+        ".family-tree-top-row"
+    );
+
+oldAncestorRows.forEach(
+    row => {
+        row.style.setProperty(
+            "display",
+            "none",
+            "important"
+        );
+    }
+);
+       /* =====================================
    AFTER GENERATIONS VISIBILITY
    ALL FAMILY BRANCHES
    ===================================== */
@@ -16073,10 +16308,11 @@ if(familyTreeSvg){
 
 }
 
-        drawFamilyTreeLines();
+       alignSiblingChildrenToGrandChildren();
 
-        fitFamilyTreeToScreen();
+drawFamilyTreeLines();
 
+fitFamilyTreeToScreen();
 
         const zoomInBtn =          
     document.getElementById(
@@ -16104,15 +16340,66 @@ if(zoomInBtn){
     zoomInBtn.onclick =
         function(){
 
-            familyTreeZoomFactor =
+            const wrapper =
+                document.querySelector(
+                    ".family-tree-scroll"
+                );
+
+            if(!wrapper){
+                return;
+            }
+
+            const oldScale =
+                familyTreeBaseScale *
+                familyTreeZoomFactor;
+
+            const newZoomFactor =
                 Math.min(
                     familyTreeZoomFactor * 1.5,
                     10 / familyTreeBaseScale
                 );
 
+            const newScale =
+                familyTreeBaseScale *
+                newZoomFactor;
+
+            const anchorX =
+                wrapper.clientWidth / 2;
+
+            const anchorY =
+                wrapper.clientHeight / 2;
+
+
+            if(oldScale > 0){
+
+                const ratio =
+                    newScale /
+                    oldScale;
+
+                familyTreePanX =
+                    anchorX -
+                    (
+                        anchorX -
+                        familyTreePanX
+                    ) * ratio;
+
+                familyTreePanY =
+                    anchorY -
+                    (
+                        anchorY -
+                        familyTreePanY
+                    ) * ratio;
+
+            }
+
+
+            familyTreeZoomFactor =
+                newZoomFactor;
+
             applyFamilyTreeZoom();
+
         };
-}
+}       
 /* =====================================
    ZOOM OUT
    ===================================== */
@@ -16122,17 +16409,67 @@ if(zoomOutBtn){
     zoomOutBtn.onclick =
         function(){
 
-            familyTreeZoomFactor =
+            const wrapper =
+                document.querySelector(
+                    ".family-tree-scroll"
+                );
+
+            if(!wrapper){
+                return;
+            }
+
+            const oldScale =
+                familyTreeBaseScale *
+                familyTreeZoomFactor;
+
+            const newZoomFactor =
                 Math.max(
                     familyTreeZoomFactor / 1.5,
                     0.1
                 );
 
+            const newScale =
+                familyTreeBaseScale *
+                newZoomFactor;
+
+            const anchorX =
+                wrapper.clientWidth / 2;
+
+            const anchorY =
+                wrapper.clientHeight / 2;
+
+
+            if(oldScale > 0){
+
+                const ratio =
+                    newScale /
+                    oldScale;
+
+                familyTreePanX =
+                    anchorX -
+                    (
+                        anchorX -
+                        familyTreePanX
+                    ) * ratio;
+
+                familyTreePanY =
+                    anchorY -
+                    (
+                        anchorY -
+                        familyTreePanY
+                    ) * ratio;
+
+            }
+
+
+            familyTreeZoomFactor =
+                newZoomFactor;
+
             applyFamilyTreeZoom();
+
         };
 }
-
-/* =====================================
+       /* =====================================
    RESET ZOOM
    ===================================== */
 
@@ -16680,7 +17017,173 @@ if(familyTreeHomeBtn){
    
 }
 
+/* =====================================
+   ALIGN MEMBER-SIBLING CHILDREN
+   OVER THEIR DIRECT CHILDREN
 
+   Example:
+   SaiLaxmi → Reya + Shivesti
+   Sravani  → Prerana + Thaneesha
+   ===================================== */
+/* =====================================
+   ALIGN SIBLING CHILD COUPLES
+   OVER THEIR DIRECT CHILDREN
+   ===================================== */
+
+function alignSiblingChildrenToGrandChildren(){
+
+    const canvas =
+        document.getElementById(
+            "familyTreeCanvas"
+        );
+
+    if(!canvas){
+        return;
+    }
+
+
+    const branches =
+        Array.from(
+            canvas.querySelectorAll(
+                ".family-tree-sibling-child-branch"
+            )
+        );
+
+
+    branches.forEach(
+        branch => {
+
+            const child =
+                branch.querySelector(
+                    ".tree-sibling-child"
+                );
+
+            const partner =
+                branch.querySelector(
+                    ".tree-sibling-child-partner"
+                );
+
+            const couple =
+                branch.querySelector(
+                    ".family-tree-sibling-child-couple"
+                );
+
+            const grandChildren =
+                Array.from(
+                    branch.querySelectorAll(
+                        ".tree-sibling-grandchild"
+                    )
+                );
+
+
+            if(
+                !child ||
+                !couple ||
+                grandChildren.length < 2
+            ){
+                return;
+            }
+
+
+            /* reset previous adjustment */
+
+            couple.style.transform = "none";
+
+
+            /* =================================
+               CHILDREN MIDPOINT
+               ================================= */
+
+            const grandChildCenters =
+                grandChildren.map(
+                    grandChild => {
+
+                        const rect =
+                            grandChild.getBoundingClientRect();
+
+                        return (
+                            rect.left +
+                            rect.width / 2
+                        );
+
+                    }
+                );
+
+
+            const childrenCenterX =
+                (
+                    Math.min(...grandChildCenters) +
+                    Math.max(...grandChildCenters)
+                ) / 2;
+
+
+            /* =================================
+               PARENT SOURCE X
+
+               Partner exists:
+               child ↔ partner midpoint
+
+               No partner:
+               child box center
+               ================================= */
+
+            let parentCenterX;
+
+
+            if(partner){
+
+                const childRect =
+                    child.getBoundingClientRect();
+
+                const partnerRect =
+                    partner.getBoundingClientRect();
+
+
+                const childRightX =
+                    childRect.right;
+
+                const partnerLeftX =
+                    partnerRect.left;
+
+
+                parentCenterX =
+                    (
+                        childRightX +
+                        partnerLeftX
+                    ) / 2;
+
+            }
+            else{
+
+                const childRect =
+                    child.getBoundingClientRect();
+
+
+                parentCenterX =
+                    childRect.left +
+                    childRect.width / 2;
+
+            }
+
+
+            /* =================================
+               MOVE COMPLETE COUPLE
+
+               Not child alone.
+               ================================= */
+
+            const moveX =
+                childrenCenterX -
+                parentCenterX;
+
+
+            couple.style.transform =
+                `translateX(${moveX}px)`;
+
+        }
+    );
+
+}
 /* =====================================
    DRAW FAMILY TREE CONNECTING LINES
    ===================================== */
@@ -16911,9 +17414,9 @@ addLine(
     }
 function connectParentsToChildren(
     parentCenter,
-    children
+    children,
+    centerBusOnParent = false
 ){
-
     if(
         !parentCenter ||
         !children ||
@@ -17033,29 +17536,63 @@ function connectParentsToChildren(
        range lo compulsory include cheyyali
     */
 
-    const busStartX =
+ let busStartX;
+let busEndX;
+
+if(centerBusOnParent){
+
+    busStartX = minX;
+    busEndX = maxX;
+
+}else{
+
+    busStartX =
         Math.min(
             minX,
             parentCenter.x
         );
 
-
-    const busEndX =
+    busEndX =
         Math.max(
             maxX,
             parentCenter.x
         );
+}
 
 
-    /* Parent center ↓ bus */
+   
+   /* Parent ↓ exact children bus center */
+
+const busCenterX =
+    centerBusOnParent
+        ? (
+            busStartX +
+            busEndX
+          ) / 2
+        : parentCenter.x;
+
+
+addLine(
+    parentCenter.x,
+    parentCenter.y,
+    parentCenter.x,
+    busY
+);
+
+
+if(
+    centerBusOnParent &&
+    parentCenter.x !== busCenterX
+){
 
     addLine(
         parentCenter.x,
-        parentCenter.y,
-        parentCenter.x,
+        busY,
+        busCenterX,
         busY
     );
 
+}
 
     /* Horizontal children bus */
 
@@ -17295,9 +17832,7 @@ function connectSplitAncestorBranch(
             : null;
 
 
-    /* =====================================
-       FIRST CONNECT OLDER GENERATIONS
-       ===================================== */
+    /* FIRST CONNECT OLDER GENERATIONS */
 
     if(father){
 
@@ -17319,22 +17854,76 @@ function connectSplitAncestorBranch(
     }
 
 
-    /* =====================================
-       FATHER ↔ MOTHER COUPLE
-       ===================================== */
+    /* ROOT MEMBER / ROOT PARTNER
+       ARE CONNECTED SEPARATELY */
+
+    if(
+        prefix === "" ||
+        prefix === "partner"
+    ){
+        return;
+    }
+
+
+    /* BIOLOGICAL CHILD */
+
+    const childNode =
+        canvas.querySelector(
+            `.tree-${prefix}`
+        );
+
+
+    if(!childNode){
+        return;
+    }
+
+
+    let parentCenter = null;
+
+
+    /* BOTH BIOLOGICAL PARENTS */
 
     if(
         fatherNode &&
         motherNode
     ){
 
-        connectCouple(
-            fatherNode,
-            motherNode
+        parentCenter =
+            connectCouple(
+                fatherNode,
+                motherNode
+            );
+
+    }else{
+
+        /* ONLY ONE BIOLOGICAL PARENT */
+
+        const singleParent =
+            fatherNode ||
+            motherNode;
+
+
+        if(singleParent){
+
+            parentCenter =
+                getPoint(
+                    singleParent,
+                    "bottom"
+                );
+        }
+    }
+
+
+    /* PARENTS → BIOLOGICAL CHILD TOP-CENTER */
+
+    if(parentCenter){
+
+        connectParentsToChildren(
+            parentCenter,
+            [childNode]
         );
     }
 }
-
 /* =====================================
    SELECTED MEMBER SIDE
    ===================================== */
@@ -17893,15 +18482,24 @@ connectParentsToChildren(
 
 /* =====================================
    MEMBER PARENTS
-   → SELECTED MEMBER ONLY
+   → SELECTED MEMBER + SIBLINGS
    ===================================== */
+
+const memberChildrenOfParents =
+    [
+        ...siblings,
+        selected
+    ].filter(Boolean);
+
 
 connectParentsToChildren(
     parentCenter,
-    [selected].filter(Boolean)
+    memberChildrenOfParents
 );
-  /* =====================================
+   
+/* =====================================
    SIBLING + PARTNER → THEIR CHILDREN
+   FINAL CLEAN VERSION
    ===================================== */
 
 const siblingBranches =
@@ -17933,40 +18531,352 @@ siblingBranches.forEach(
             );
 
 
-        let siblingCoupleCenter =
-            null;
-
-
         if(
-            sibling &&
-            siblingPartner
+            !sibling ||
+            !siblingChildren.length
         ){
+            return;
+        }
 
-            siblingCoupleCenter =
+
+        /* =================================
+           DIRECT CHILD BOX CENTERS
+           ================================= */
+
+        const childPoints =
+            siblingChildren
+                .map(
+                    child =>
+                        getPoint(
+                            child,
+                            "top"
+                        )
+                )
+                .filter(Boolean);
+
+
+        if(!childPoints.length){
+            return;
+        }
+
+
+        const minChildX =
+            Math.min(
+                ...childPoints.map(
+                    point => point.x
+                )
+            );
+
+
+        const maxChildX =
+            Math.max(
+                ...childPoints.map(
+                    point => point.x
+                )
+            );
+
+
+        const childrenCenterX =
+            (
+                minChildX +
+                maxChildX
+            ) / 2;
+
+
+        /* =================================
+           PARENT SOURCE
+           ================================= */
+
+        let parentBottomY = null;
+
+
+        if(siblingPartner){
+
+            /*
+               Partner visible:
+               sibling ↔ partner line
+            */
+
+            const coupleCenter =
                 connectCouple(
                     sibling,
                     siblingPartner
                 );
 
-        }
-        else if(sibling){
 
-            siblingCoupleCenter =
-                getPoint(
-                    sibling,
-                    "bottom"
+            if(!coupleCenter){
+                return;
+            }
+
+
+            parentBottomY =
+                coupleCenter.y;
+
+
+            /*
+               Couple midpoint is the
+               biological-family source.
+            */
+
+            const childTopY =
+                Math.min(
+                    ...childPoints.map(
+                        point => point.y
+                    )
                 );
 
+
+            const busY =
+                parentBottomY +
+                (
+                    childTopY -
+                    parentBottomY
+                ) / 2;
+
+
+            /* couple midpoint ↓ */
+
+            addLine(
+                coupleCenter.x,
+                parentBottomY,
+                coupleCenter.x,
+                busY
+            );
+
+
+            /* bus level → children midpoint */
+
+            if(
+                coupleCenter.x !==
+                childrenCenterX
+            ){
+
+                addLine(
+                    coupleCenter.x,
+                    busY,
+                    childrenCenterX,
+                    busY
+                );
+
+            }
+
+
+            /* children bus */
+
+            addLine(
+                minChildX,
+                busY,
+                maxChildX,
+                busY
+            );
+
+
+            /* bus ↓ each biological child */
+
+            childPoints.forEach(
+                point => {
+
+                    addLine(
+                        point.x,
+                        busY,
+                        point.x,
+                        point.y
+                    );
+
+                }
+            );
+
+
+            return;
         }
 
 
-        connectParentsToChildren(
-            siblingCoupleCenter,
+        /* =================================
+           NO PARTNER
+           SINGLE PARENT
+           ================================= */
+
+        const siblingBottom =
+            getPoint(
+                sibling,
+                "bottom"
+            );
+
+
+        if(!siblingBottom){
+            return;
+        }
+
+
+        const childTopY =
+            Math.min(
+                ...childPoints.map(
+                    point => point.y
+                )
+            );
+
+
+        const busY =
+            siblingBottom.y +
+            (
+                childTopY -
+                siblingBottom.y
+            ) / 2;
+
+
+        /*
+           IMPORTANT:
+           Straight vertical must start
+           from sibling box bottom-center.
+
+           Therefore first move the sibling
+           box itself exactly above the
+           direct children's midpoint.
+        */
+
+        const siblingCouple =
+            branch.querySelector(
+                ".family-tree-sibling-couple"
+            );
+
+
+        if(siblingCouple){
+
+            const currentSiblingX =
+                siblingBottom.x;
+
+
+            const moveX =
+                childrenCenterX -
+                currentSiblingX;
+
+
+            siblingCouple.style.position =
+                "relative";
+
+            siblingCouple.style.left =
+                `${moveX}px`;
+
+        }
+
+
+        /*
+           Position changed.
+           Read sibling position AGAIN.
+        */
+
+        const correctedSiblingBottom =
+            getPoint(
+                sibling,
+                "bottom"
+            );
+
+
+        if(!correctedSiblingBottom){
+            return;
+        }
+
+
+        /*
+           Re-read children also.
+           They themselves have not moved,
+           but this guarantees current DOM
+           coordinates are used.
+        */
+
+        const correctedChildPoints =
             siblingChildren
+                .map(
+                    child =>
+                        getPoint(
+                            child,
+                            "top"
+                        )
+                )
+                .filter(Boolean);
+
+
+        if(!correctedChildPoints.length){
+            return;
+        }
+
+
+        const correctedMinX =
+            Math.min(
+                ...correctedChildPoints.map(
+                    point => point.x
+                )
+            );
+
+
+        const correctedMaxX =
+            Math.max(
+                ...correctedChildPoints.map(
+                    point => point.x
+                )
+            );
+
+
+        const correctedCenterX =
+            (
+                correctedMinX +
+                correctedMaxX
+            ) / 2;
+
+
+        const correctedChildTopY =
+            Math.min(
+                ...correctedChildPoints.map(
+                    point => point.y
+                )
+            );
+
+
+        const correctedBusY =
+            correctedSiblingBottom.y +
+            (
+                correctedChildTopY -
+                correctedSiblingBottom.y
+            ) / 2;
+
+
+        /* sibling straight ↓ to bus */
+
+        addLine(
+            correctedCenterX,
+            correctedSiblingBottom.y,
+            correctedCenterX,
+            correctedBusY
+        );
+
+
+        /* exact child-to-child bus */
+
+        addLine(
+            correctedMinX,
+            correctedBusY,
+            correctedMaxX,
+            correctedBusY
+        );
+
+
+        /* bus ↓ each child */
+
+        correctedChildPoints.forEach(
+            point => {
+
+                addLine(
+                    point.x,
+                    correctedBusY,
+                    point.x,
+                    point.y
+                );
+
+            }
         );
 
     }
-); 
+);   
    /* ================================
        PARTNER PARENTS
        ================================ */
@@ -18036,13 +18946,20 @@ const partnerSiblings =
 
 /* =====================================
    PARTNER PARENTS
-   → PARTNER ONLY
+   → PARTNER + PARTNER SIBLINGS
    ===================================== */
+
+const partnerChildrenOfParents =
+    [
+        partner,
+        ...partnerSiblings
+    ].filter(Boolean);
+
 
 connectParentsToChildren(
     partnerParentCenter,
-    [partner].filter(Boolean)
-);
+    partnerChildrenOfParents
+);  
    
 /* =====================================
    PARTNER SIBLING + PARTNER
@@ -18472,11 +19389,157 @@ siblingChildBranches.forEach(
         }
 
 
-        connectParentsToChildren(
-            childCoupleCenter,
-            grandChildren
+        /* =====================================
+   SIBLING CHILD → GRANDCHILDREN
+   AFTER GENERATION 2
+   Example:
+   SaiLaxmi → Reya + Shivesti
+   ===================================== */
+
+if(
+    childCoupleCenter &&
+    grandChildren.length
+){
+
+    const grandChildPoints =
+        grandChildren
+            .map(
+                grandChild =>
+                    getPoint(
+                        grandChild,
+                        "top"
+                    )
+            )
+            .filter(Boolean);
+
+
+    if(grandChildPoints.length === 1){
+
+        const grandChildPoint =
+            grandChildPoints[0];
+
+        const middleY =
+            childCoupleCenter.y +
+            (
+                grandChildPoint.y -
+                childCoupleCenter.y
+            ) / 2;
+
+
+        addLine(
+            childCoupleCenter.x,
+            childCoupleCenter.y,
+            childCoupleCenter.x,
+            middleY
         );
 
+
+        addLine(
+            childCoupleCenter.x,
+            middleY,
+            grandChildPoint.x,
+            middleY
+        );
+
+
+        addLine(
+            grandChildPoint.x,
+            middleY,
+            grandChildPoint.x,
+            grandChildPoint.y
+        );
+
+    }
+    else if(grandChildPoints.length > 1){
+
+        const minGrandChildX =
+            Math.min(
+                ...grandChildPoints.map(
+                    point => point.x
+                )
+            );
+
+
+        const maxGrandChildX =
+            Math.max(
+                ...grandChildPoints.map(
+                    point => point.x
+                )
+            );
+
+
+        /*
+           Reya + Shivesti exact midpoint
+        */
+
+        const grandChildrenCenterX =
+            (
+                minGrandChildX +
+                maxGrandChildX
+            ) / 2;
+
+
+        const grandChildTopY =
+            Math.min(
+                ...grandChildPoints.map(
+                    point => point.y
+                )
+            );
+
+
+        const busY =
+            childCoupleCenter.y +
+            (
+                grandChildTopY -
+                childCoupleCenter.y
+            ) / 2;
+
+
+        /*
+           SaiLaxmi ↓
+           EXACT Reya/Shivesti midpoint
+        */
+
+        addLine(
+            grandChildrenCenterX,
+            childCoupleCenter.y,
+            grandChildrenCenterX,
+            busY
+        );
+
+
+        /*
+           Reya ─────── Shivesti
+        */
+
+        addLine(
+            minGrandChildX,
+            busY,
+            maxGrandChildX,
+            busY
+        );
+
+
+        /*
+           Bus ↓ each child
+        */
+
+        grandChildPoints.forEach(
+            point => {
+
+                addLine(
+                    point.x,
+                    busY,
+                    point.x,
+                    point.y
+                );
+
+            }
+        );
+
+    }
+
+}
     }
 );
 
