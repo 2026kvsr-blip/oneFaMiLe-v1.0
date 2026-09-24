@@ -14269,12 +14269,57 @@ const partnerSiblings =
 
             }
         )
-        : [];      
+        : [];
+
+
+/* =====================================
+   PARTNER 2 SIBLINGS
+   ===================================== */
+
+const partnerTwoSiblings =
+    secondPartner
+        ? members.filter(
+            function(member){
+
+                if(
+                    !member ||
+                    String(member.memberId) ===
+                    String(secondPartner.memberId)
+                ){
+                    return false;
+                }
+
+                const sameFather =
+                    secondPartner.fatherId &&
+                    String(
+                        member.fatherId || ""
+                    ) ===
+                    String(
+                        secondPartner.fatherId
+                    );
+
+                const sameMother =
+                    secondPartner.motherId &&
+                    String(
+                        member.motherId || ""
+                    ) ===
+                    String(
+                        secondPartner.motherId
+                    );
+
+                return (
+                    sameFather ||
+                    sameMother
+                );
+
+            }
+        )
+        : [];
+
 
 /* =====================================
    CHILDREN
    ===================================== */
-
 const children =
     members.filter(
         m =>
@@ -15758,12 +15803,161 @@ partnerSiblings.forEach(
     }
 );   
 
-   } // END showPartnerSiblings
+    } // END showPartnerSiblings
+
+
+/* =====================================
+   PARTNER 2 SIBLINGS
+   + PARTNERS + CHILDREN
+   ===================================== */
+
+let partnerTwoSiblingsHTML = "";
+
+if(
+    showMemberPartner &&
+    secondPartner &&
+    showPartnerSiblings
+){
+
+    partnerTwoSiblings.forEach(
+        sibling => {
+
+            const siblingPartner =
+                members.find(
+                    member =>
+                        String(member.memberId) ===
+                        String(sibling.partnerId || "")
+                )
+                ||
+                members.find(
+                    member =>
+                        String(member.partnerId || "") ===
+                        String(sibling.memberId)
+                );
+
+
+            const siblingChildren =
+                members.filter(
+                    child =>
+                        String(child.fatherId || "") ===
+                            String(sibling.memberId)
+                        ||
+                        String(child.motherId || "") ===
+                            String(sibling.memberId)
+                        ||
+                        (
+                            siblingPartner &&
+                            (
+                                String(child.fatherId || "") ===
+                                    String(siblingPartner.memberId)
+                                ||
+                                String(child.motherId || "") ===
+                                    String(siblingPartner.memberId)
+                            )
+                        )
+                );
+
+
+            partnerTwoSiblingsHTML += `
+
+                <div class="family-tree-partner-two-sibling-branch">
+
+                    <div class="family-tree-partner-two-sibling-couple">
+
+                        ${treeBox(
+                            sibling,
+                            "tree-partner-two-sibling"
+                        )}
+
+                        ${
+                            showPartner &&
+                            siblingPartner
+
+                                ? treeBox(
+                                    siblingPartner,
+                                    "tree-partner-two-sibling-partner"
+                                  )
+
+                                : ""
+                        }
+
+                    </div>
+
+
+                    ${
+                        siblingChildren.length
+                            ? `
+                                <div class="family-tree-partner-two-sibling-children-row">
+
+                                    ${
+                                        siblingChildren
+                                            .map(
+                                                child => {
+
+                                                    const childPartner =
+                                                        members.find(
+                                                            member =>
+                                                                String(member.memberId) ===
+                                                                String(child.partnerId || "")
+                                                        )
+                                                        ||
+                                                        members.find(
+                                                            member =>
+                                                                String(member.partnerId || "") ===
+                                                                String(child.memberId)
+                                                        );
+
+
+                                                    return `
+
+                                                        <div class="family-tree-partner-two-sibling-child-branch">
+
+                                                            <div class="family-tree-partner-two-sibling-child-couple">
+
+                                                                ${treeBox(
+                                                                    child,
+                                                                    "tree-partner-two-sibling-child"
+                                                                )}
+
+                                                                ${
+                                                                    showPartner &&
+                                                                    childPartner
+
+                                                                        ? treeBox(
+                                                                            childPartner,
+                                                                            "tree-partner-two-sibling-child-partner"
+                                                                          )
+
+                                                                        : ""
+                                                                }
+
+                                                            </div>
+
+                                                        </div>
+                                                    `;
+
+                                                }
+                                            )
+                                            .join("")
+                                    }
+
+                                </div>
+                              `
+                            : ""
+                    }
+
+                </div>
+            `;
+
+        }
+    );
+
+}
+
 
 /* =====================================
    MAIN TREE HTML
    ===================================== */
-
 diagram.innerHTML = `
 <div class="family-tree-toolbar">
     <div class="family-tree-legend">
@@ -16461,6 +16655,11 @@ ${
 
 <div class="family-tree-main-row">
 
+    <!-- =================================
+         LEFT SIDE
+         PARTNER 1 - MAHALAXMAMMA RELATIONS
+         ================================= -->
+
     <div class="family-tree-left-relations-zone">
 
         ${
@@ -16477,141 +16676,156 @@ ${
                 : ""
         }
 
+    </div>
+
+
+    <!-- =================================
+         CENTER
+         SELECTED MEMBER + PARTNERS
+         ================================= -->
+
+    <div class="family-tree-selected-branch">
+
+        <div class="family-tree-selected-couple">
+
+            <!-- PARTNER 1 - LEFT -->
+
+            ${
+                showMemberPartner &&
+                partner
+                    ? `
+                        <div class="
+                            family-tree-selected-partner-slot
+                            family-tree-selected-partner-left-slot
+                        ">
+
+                            ${treeBox(
+                                partner,
+                                "tree-partner tree-partner-left"
+                            )}
+
+                        </div>
+                      `
+                    : ""
+            }
+
+
+            <!-- SELECTED MEMBER - CENTER -->
+
+            <div class="family-tree-selected-member-slot">
+
+                ${treeBox(
+                    selectedMember,
+                    "tree-selected"
+                )}
+
+            </div>
+
+
+            <!-- PARTNER 2 - RIGHT -->
+
+            ${
+                showMemberPartner &&
+                secondPartner
+                    ? `
+                        <div class="
+                            family-tree-selected-partner-slot
+                            family-tree-selected-partner-right-slot
+                        ">
+
+                            ${treeBox(
+                                secondPartner,
+                                "tree-partner-second tree-partner-right"
+                            )}
+
+                        </div>
+                      `
+                    : ""
+            }
+
+        </div>
+
+
+        <!-- =================================
+             PARTNER 1 / PARTNER 2 CHILDREN
+             ================================= -->
+
+        ${
+            (
+                partnerOneChildrenHTML ||
+                partnerTwoChildrenHTML
+            )
+                ? `
+                    <div class="family-tree-selected-children-row">
+
+                        <div
+                            class="
+                                family-tree-selected-children-group
+                                family-tree-partner-one-children-group
+                            "
+                            data-children-group="partner1"
+                        >
+
+                            ${partnerOneChildrenHTML}
+
+                        </div>
+
+
+                        <div
+                            class="
+                                family-tree-selected-children-group
+                                family-tree-partner-two-children-group
+                            "
+                            data-children-group="partner2"
+                        >
+
+                            ${partnerTwoChildrenHTML}
+
+                        </div>
+
+                    </div>
+                  `
+                : ""
+        }
+
+    </div>
+
+
+    <!-- =================================
+         RIGHT SIDE
+         SELECTED MEMBER + PARTNER 2 RELATIONS
+         ================================= -->
+
+    <div class="family-tree-right-relations-zone">
+
+        <!-- LAXMINARASAIAH SIBLINGS -->
+
         <div class="family-tree-siblings-row">
 
             ${siblingsHTML}
 
         </div>
 
-    </div>
 
+        <!-- CHENCHAMMA SIBLINGS -->
 
-    <div class="family-tree-selected-branch">
-<div class="family-tree-selected-couple">
+        ${
+            showMemberPartner &&
+            secondPartner &&
+            showPartnerSiblings
+                ? `
+                    <div class="family-tree-partner-two-siblings-row">
 
-    <!-- =================================
-         PARTNER 1 - LEFT
-         ================================= -->
+                        ${partnerTwoSiblingsHTML}
 
-    ${
-        showMemberPartner &&
-        partner
-            ? `
-                <div class="
-                    family-tree-selected-partner-slot
-                    family-tree-selected-partner-left-slot
-                ">
-
-                    ${treeBox(
-                        partner,
-                        "tree-partner tree-partner-left"
-                    )}
-
-                </div>
-              `
-            : ""
-    }
-
-
-    <!-- =================================
-         SELECTED MEMBER - CENTER
-         ================================= -->
-
-    <div class="family-tree-selected-member-slot">
-
-        ${treeBox(
-            selectedMember,
-            "tree-selected"
-        )}
+                    </div>
+                  `
+                : ""
+        }
 
     </div>
-
-
-    <!-- =================================
-         PARTNER 2 - RIGHT
-         ================================= -->
-
-    ${
-        showMemberPartner &&
-        secondPartner
-            ? `
-                <div class="
-                    family-tree-selected-partner-slot
-                    family-tree-selected-partner-right-slot
-                ">
-
-                    ${treeBox(
-                        secondPartner,
-                        "tree-partner-second tree-partner-right"
-                    )}
-
-                </div>
-              `
-            : ""
-    }
 
 </div>
-
-
-       ${
-    (
-        partnerOneChildrenHTML ||
-        partnerTwoChildrenHTML
-    )
-        ? `
-            <div class="family-tree-selected-children-row">
-
-                <!-- PARTNER 1 CHILDREN -->
-
-                <div
-                    class="
-                        family-tree-selected-children-group
-                        family-tree-partner-one-children-group
-                    "
-                    data-children-group="partner1"
-                >
-
-                    ${partnerOneChildrenHTML}
-
-                </div>
-
-
-                <!-- PARTNER 2 CHILDREN -->
-
-                <div
-                    class="
-                        family-tree-selected-children-group
-                        family-tree-partner-two-children-group
-                    "
-                    data-children-group="partner2"
-                >
-
-                    ${partnerTwoChildrenHTML}
-
-                </div>
-
-            </div>
-          `
-        : ""
-}
-    </div>
-
-
-    ${
-    showMemberPartner &&
-    partner &&
-    showPartnerSiblings
-        ? `
-            <div class="family-tree-partner-siblings-row">
-
-                ${partnerSiblingsHTML}
-
-            </div>
-          `
-        : ""
-}
-</div>
-
           <!-- =====================
              CHILDREN
              ===================== -->
