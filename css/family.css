@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2050,24 +2051,25 @@ max-height: 28px !important;
 
 
 .family-tree-top-row{
-    display: flex;
+    display: grid;
 
-    flex-direction: row;
+    grid-template-columns:
+        max-content
+        max-content;
 
     justify-content: center;
+    align-items: start;
 
-    align-items: flex-start;
-
-    gap: 22px;
+    column-gap: 80px;
 
     width: max-content;
-
     min-width: 100%;
 
     margin-bottom: 70px;
 
     box-sizing: border-box;
 }
+
 .family-tree-parent-group{
     display: flex;
 
