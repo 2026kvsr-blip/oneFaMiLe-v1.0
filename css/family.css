@@ -1,5 +1,3 @@
-
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3139,21 +3137,22 @@ max-height: 28px !important;
     display: grid;
 
     grid-template-columns:
-        minmax(max-content, 1fr)
-        80px
-        minmax(max-content, 1fr)
-        minmax(max-content, 1fr);
+        max-content
+        40px
+        max-content
+        max-content;
 
     align-items: end;
+    justify-content: center;
 
-    column-gap: 45px;
+    column-gap: 20px;
 
     width: max-content;
-
-    min-width: 100%;
+    min-width: 0;
 
     margin: 0 auto 70px;
 }
+
 .family-tree-three-ancestor-column{
     display: flex;
 
@@ -3182,11 +3181,9 @@ max-height: 28px !important;
 .family-tree-three-ancestor-center-space{
     grid-column: 2;
 
-    width: 80px;
-
-    min-width: 80px;
+    width: 40px;
+    min-width: 40px;
 }
-
 
 /* SELECTED MEMBER PARENTS — RIGHT */
 
