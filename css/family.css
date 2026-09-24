@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2571,16 +2572,79 @@ max-height: 28px !important;
    ===================================== */
 
 .family-tree-main-row{
-    display: flex;
-    flex-direction: row;
+    display: grid;
+
+    grid-template-columns:
+        max-content
+        max-content
+        max-content
+        max-content;
+
+    align-items: start;
     justify-content: center;
-    align-items: flex-start;
-    gap: 50px;
+
+    column-gap: 40px;
+
     width: max-content;
     min-width: 100%;
-    margin-bottom: 0;
+
+    margin: 0 auto;
 }
 
+
+/* PARTNER 1 SIBLINGS — LEFT */
+
+.family-tree-left-partner-relations{
+    grid-column: 1;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+
+    width: max-content;
+
+    justify-self: end;
+}
+
+
+/* SELECTED MEMBER SIBLINGS */
+
+.family-tree-member-siblings-zone{
+    grid-column: 2;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+
+    width: max-content;
+
+    justify-self: end;
+}
+
+
+/* SELECTED MEMBER + PARTNERS */
+
+.family-tree-main-row
+> .family-tree-selected-branch{
+    grid-column: 3;
+
+    justify-self: center;
+}
+
+
+/* PARTNER 2 SIBLINGS — RIGHT */
+
+.family-tree-right-partner-relations{
+    grid-column: 4;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    width: max-content;
+
+    justify-self: start;
+}
 
 /* =====================================
    SAME GENERATION ROWS
@@ -2588,6 +2652,7 @@ max-height: 28px !important;
 
 .family-tree-siblings-row,
 .family-tree-partner-siblings-row,
+.family-tree-partner-two-siblings-row,
 
 .family-tree-selected-children-row,
 .family-tree-sibling-children-row,
