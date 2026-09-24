@@ -3122,7 +3122,7 @@ max-height: 28px !important;
 .family-tree-selected-member-ancestor-tree{
     grid-column: 3;
 
-    justify-self: end;
+    justify-self: start;
 
 }
 
