@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -16963,12 +16962,17 @@ if(familyTreeSvg){
 
 }
 
-       alignSiblingChildrenToGrandChildren();
+      /* TEMPORARILY DISABLED:
+   this transform can create an extreme
+   left/right outlier before auto-fit
+*/
+
+// alignSiblingChildrenToGrandChildren();
 
 drawFamilyTreeLines();
 
 fitFamilyTreeToScreen();
-
+       
         const zoomInBtn =          
     document.getElementById(
         "familyTreeZoomIn"
