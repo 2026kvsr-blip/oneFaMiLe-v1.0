@@ -3062,27 +3062,24 @@ max-height: 28px !important;
    ===================================== */
 
 .family-tree-three-ancestor-zone{
-    display:grid;
+    display: grid;
 
     grid-template-columns:
-        max-content
-        140px
-        max-content
-        max-content;
+        minmax(max-content, 1fr)
+        80px
+        minmax(max-content, 1fr)
+        minmax(max-content, 1fr);
 
-    align-items:end;
+    align-items: end;
 
-    justify-content:center;
+    column-gap: 45px;
 
-    column-gap:70px;
+    width: max-content;
 
-    width:max-content;
+    min-width: 100%;
 
-    min-width:100%;
-
-    margin:0 auto 70px;
+    margin: 0 auto 70px;
 }
-
 .family-tree-three-ancestor-column{
     display: flex;
 
@@ -3124,7 +3121,6 @@ max-height: 28px !important;
 
     justify-self:start;
 
-    margin-left:70px;
 }
 /* PARTNER 2 PARENTS — FURTHER RIGHT */
 
