@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3063,25 +3062,26 @@ max-height: 28px !important;
    ===================================== */
 
 .family-tree-three-ancestor-zone{
-    display: grid;
+    display:grid;
 
     grid-template-columns:
-        minmax(max-content, 1fr)
-        80px
-        minmax(max-content, 1fr)
-        minmax(max-content, 1fr);
+        max-content
+        140px
+        max-content
+        max-content;
 
-    align-items: end;
+    align-items:end;
 
-    column-gap: 45px;
+    justify-content:center;
 
-    width: max-content;
+    column-gap:70px;
 
-    min-width: 100%;
+    width:max-content;
 
-    margin: 0 auto 70px;
+    min-width:100%;
+
+    margin:0 auto 70px;
 }
-
 
 .family-tree-three-ancestor-column{
     display: flex;
@@ -3120,12 +3120,12 @@ max-height: 28px !important;
 /* SELECTED MEMBER PARENTS — RIGHT */
 
 .family-tree-selected-member-ancestor-tree{
-    grid-column: 3;
+    grid-column:3;
 
-    justify-self: start;
+    justify-self:start;
 
+    margin-left:70px;
 }
-
 /* PARTNER 2 PARENTS — FURTHER RIGHT */
 
 .family-tree-partner-two-ancestor-tree{
