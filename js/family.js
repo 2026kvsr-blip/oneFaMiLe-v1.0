@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -16462,15 +16461,32 @@ ${
 
 <div class="family-tree-main-row">
 
-    <div class="family-tree-siblings-row">
+    <div class="family-tree-left-relations-zone">
 
-        ${siblingsHTML}
+        ${
+            showMemberPartner &&
+            partner &&
+            showPartnerSiblings
+                ? `
+                    <div class="family-tree-partner-siblings-row">
+
+                        ${partnerSiblingsHTML}
+
+                    </div>
+                  `
+                : ""
+        }
+
+        <div class="family-tree-siblings-row">
+
+            ${siblingsHTML}
+
+        </div>
 
     </div>
 
 
     <div class="family-tree-selected-branch">
-
 <div class="family-tree-selected-couple">
 
     <!-- =================================
