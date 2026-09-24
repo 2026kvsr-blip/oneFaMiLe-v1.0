@@ -16665,11 +16665,12 @@ ${
 
 
     <!-- =================================
-         LEFT SIDE
+         LEFT RELATIONS
          PARTNER 1 SIBLINGS
+         + MEMBER SIBLINGS
          ================================= -->
 
-    <div class="family-tree-left-partner-relations">
+    <div class="family-tree-left-relations-zone">
 
         ${
             showMemberPartner &&
@@ -16685,14 +16686,6 @@ ${
                 : ""
         }
 
-    </div>
-
-
-    <!-- =================================
-         MEMBER SIBLINGS
-         ================================= -->
-
-    <div class="family-tree-member-siblings-zone">
 
         <div class="family-tree-siblings-row">
 
@@ -16704,9 +16697,8 @@ ${
 
 
     <!-- =================================
-         SELECTED MEMBER
-         + PARTNER 1
-         + PARTNER 2
+         CENTER
+         PARTNER 1 + SELECTED + PARTNER 2
          ================================= -->
 
     <div class="family-tree-selected-branch">
@@ -16761,7 +16753,8 @@ ${
 
                             ${treeBox(
                                 secondPartner,
-"tree-partner-second tree-partner-right"                            )}
+                                "tree-partner-second tree-partner-right"
+                            )}
 
                         </div>
                       `
@@ -16772,10 +16765,10 @@ ${
 
 
         <!-- =================================
-             SELECTED MEMBER CHILDREN
+             CHILDREN
 
-             PARTNER 1 CHILDREN = LEFT
-             PARTNER 2 CHILDREN = RIGHT
+             PARTNER 1 = LEFT
+             PARTNER 2 = RIGHT
              ================================= -->
 
         ${
@@ -16820,11 +16813,11 @@ ${
 
 
     <!-- =================================
-         RIGHT SIDE
+         RIGHT RELATIONS
          PARTNER 2 SIBLINGS
          ================================= -->
 
-    <div class="family-tree-right-partner-relations">
+    <div class="family-tree-right-relations-zone">
 
         ${
             showMemberPartner &&
@@ -16843,8 +16836,7 @@ ${
     </div>
 
 
-</div>
-        
+</div>        
         <!-- =====================
              CHILDREN
              ===================== -->
