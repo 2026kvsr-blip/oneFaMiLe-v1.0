@@ -1853,9 +1853,9 @@
     min-width: 110px !important;
     max-width: 110px !important;
 
-    height: auto !important;
-    min-height: 28px !important;
-
+    height: 28px !important;
+min-height: 28px !important;
+max-height: 28px !important;
     padding: 1px 2px !important;
     margin: 0 !important;
 
@@ -2652,7 +2652,6 @@
     padding: 0;
 }
 
-
 /* =====================================
    ALL COUPLES
    MEMBER + PARTNER SIDE BY SIDE
@@ -2888,25 +2887,17 @@
     flex-wrap: nowrap;
 }
 /* =====================================
-   PARTNER PRESENT
    HIDE OLD FLAT ANCESTOR ROWS
+   NEW CASE 1-4 ANCESTRY IS USED
    ===================================== */
 
-.family-tree-has-partner
 .family-tree-great-great-grandparents-row,
-
-.family-tree-has-partner
 .family-tree-great-grandparents-row,
-
-.family-tree-has-partner
 .family-tree-grandparents-row,
-
-.family-tree-has-partner
 .family-tree-top-row{
 
     display: none !important;
 }
-
 
 /* =====================================
    NEW SPLIT ANCESTOR ZONE
@@ -3020,4 +3011,15 @@
     width: max-content;
 
     position: relative;
+}
+
+/* =====================================
+   BEFORE GENERATIONS
+   MORE VERTICAL GAP
+   ===================================== */
+
+.family-tree-split-ancestor-zone
+.family-tree-ancestor-parent-branch{
+
+    gap: 90px !important;
 }
