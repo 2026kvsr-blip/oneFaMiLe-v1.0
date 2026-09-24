@@ -16655,11 +16655,6 @@ ${
 
 <div class="family-tree-main-row">
 
-    <!-- =================================
-         LEFT SIDE
-         PARTNER 1 - MAHALAXMAMMA RELATIONS
-         ================================= -->
-
     <div class="family-tree-left-relations-zone">
 
         ${
@@ -16676,13 +16671,15 @@ ${
                 : ""
         }
 
+
+        <div class="family-tree-siblings-row">
+
+            ${siblingsHTML}
+
+        </div>
+
     </div>
 
-
-    <!-- =================================
-         CENTER
-         SELECTED MEMBER + PARTNERS
-         ================================= -->
 
     <div class="family-tree-selected-branch">
 
@@ -16746,9 +16743,7 @@ ${
         </div>
 
 
-        <!-- =================================
-             PARTNER 1 / PARTNER 2 CHILDREN
-             ================================= -->
+        <!-- PARTNER 1 / PARTNER 2 CHILDREN -->
 
         ${
             (
@@ -16790,43 +16785,9 @@ ${
 
     </div>
 
-
-    <!-- =================================
-         RIGHT SIDE
-         SELECTED MEMBER + PARTNER 2 RELATIONS
-         ================================= -->
-
-    <div class="family-tree-right-relations-zone">
-
-        <!-- LAXMINARASAIAH SIBLINGS -->
-
-        <div class="family-tree-siblings-row">
-
-            ${siblingsHTML}
-
-        </div>
-
-
-        <!-- CHENCHAMMA SIBLINGS -->
-
-        ${
-            showMemberPartner &&
-            secondPartner &&
-            showPartnerSiblings
-                ? `
-                    <div class="family-tree-partner-two-siblings-row">
-
-                        ${partnerTwoSiblingsHTML}
-
-                    </div>
-                  `
-                : ""
-        }
-
-    </div>
-
 </div>
-          <!-- =====================
+        
+        <!-- =====================
              CHILDREN
              ===================== -->
 
