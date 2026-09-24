@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2572,25 +2571,78 @@ max-height: 28px !important;
    ===================================== */
 
 .family-tree-main-row{
-    display: grid;
+    display: grid !important;
 
     grid-template-columns:
+        minmax(0, 1fr)
         max-content
-        max-content
-        max-content
-        max-content;
+        minmax(0, 1fr);
 
     align-items: start;
-    justify-content: center;
 
-    column-gap: 40px;
+    column-gap: 34px;
 
-    width: max-content;
-    min-width: 100%;
+    width: 100%;
+    min-width: max-content;
 
     margin: 0 auto;
 }
 
+
+/* =====================================
+   LEFT RELATIONS
+   PARTNER 1 SIBLINGS + MEMBER SIBLINGS
+   ===================================== */
+
+.family-tree-left-relations-zone{
+    grid-column: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-end;
+    justify-content: flex-start;
+
+    gap: 35px;
+
+    width: max-content;
+
+    justify-self: end;
+}
+
+
+/* =====================================
+   SELECTED MEMBER = CENTER ANCHOR
+   ===================================== */
+
+.family-tree-main-row
+> .family-tree-selected-branch{
+    grid-column: 2;
+
+    justify-self: center;
+
+    width: max-content;
+}
+
+
+/* =====================================
+   RIGHT RELATIONS
+   PARTNER 2 SIBLINGS
+   ===================================== */
+
+.family-tree-right-relations-zone{
+    grid-column: 3;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    width: max-content;
+
+    justify-self: start;
+}
 
 /* PARTNER 1 SIBLINGS — LEFT */
 
