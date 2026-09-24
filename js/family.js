@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -16653,9 +16654,22 @@ ${
                  MAIN GENERATION
                  ===================== -->
 
-<div class="family-tree-main-row">
+<div class="
+    family-tree-main-row
+    ${
+        useTwoPartnerLayout
+            ? "family-tree-main-row-two-partner"
+            : "family-tree-main-row-single-partner"
+    }
+">
 
-    <div class="family-tree-left-relations-zone">
+
+    <!-- =================================
+         LEFT SIDE
+         PARTNER 1 SIBLINGS
+         ================================= -->
+
+    <div class="family-tree-left-partner-relations">
 
         ${
             showMemberPartner &&
@@ -16671,6 +16685,14 @@ ${
                 : ""
         }
 
+    </div>
+
+
+    <!-- =================================
+         MEMBER SIBLINGS
+         ================================= -->
+
+    <div class="family-tree-member-siblings-zone">
 
         <div class="family-tree-siblings-row">
 
@@ -16681,9 +16703,16 @@ ${
     </div>
 
 
+    <!-- =================================
+         SELECTED MEMBER
+         + PARTNER 1
+         + PARTNER 2
+         ================================= -->
+
     <div class="family-tree-selected-branch">
 
         <div class="family-tree-selected-couple">
+
 
             <!-- PARTNER 1 - LEFT -->
 
@@ -16732,8 +16761,7 @@ ${
 
                             ${treeBox(
                                 secondPartner,
-                                "tree-partner-second tree-partner-right"
-                            )}
+"tree-partner-second tree-partner-right"                            )}
 
                         </div>
                       `
@@ -16743,7 +16771,12 @@ ${
         </div>
 
 
-        <!-- PARTNER 1 / PARTNER 2 CHILDREN -->
+        <!-- =================================
+             SELECTED MEMBER CHILDREN
+
+             PARTNER 1 CHILDREN = LEFT
+             PARTNER 2 CHILDREN = RIGHT
+             ================================= -->
 
         ${
             (
@@ -16785,12 +16818,36 @@ ${
 
     </div>
 
+
+    <!-- =================================
+         RIGHT SIDE
+         PARTNER 2 SIBLINGS
+         ================================= -->
+
+    <div class="family-tree-right-partner-relations">
+
+        ${
+            showMemberPartner &&
+            secondPartner &&
+            showPartnerSiblings
+                ? `
+                    <div class="family-tree-partner-two-siblings-row">
+
+                        ${partnerTwoSiblingsHTML}
+
+                    </div>
+                  `
+                : ""
+        }
+
+    </div>
+
+
 </div>
         
         <!-- =====================
              CHILDREN
              ===================== -->
-
           
 
         </div>
