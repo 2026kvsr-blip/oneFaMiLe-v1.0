@@ -1,6 +1,4 @@
 
-
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -13871,86 +13869,18 @@ function createTreeMemberBox(member){
 
 }
 
-           /* =====================================
-   SELECTED MEMBER - ALL PARTNERS
-   ===================================== */
-
-const selectedMemberId =
-    String(
-        selectedMember.memberId || ""
-    ).trim();
-
-
-const partners =
-    members.filter(
-        member => {
-
-            const memberId =
-                String(
-                    member.memberId || ""
-                ).trim();
-
-            const memberPartnerId =
-                String(
-                    member.partnerId || ""
-                ).trim();
-
-            const selectedPartnerId =
-                String(
-                    selectedMember.partnerId || ""
-                ).trim();
-
-
-            return (
-
-                /* selected member points to partner */
-
-                (
-                    selectedPartnerId &&
-                    memberId ===
-                    selectedPartnerId
-                )
-
-                ||
-
-                /* partner points to selected member */
-
-                (
-                    memberPartnerId &&
-                    memberPartnerId ===
-                    selectedMemberId
-                )
-
-            );
-
-        }
+           const partner =
+    members.find(
+        member =>
+            String(member.memberId) ===
+            String(selectedMember.partnerId || "")
+    )
+    ||
+    members.find(
+        member =>
+            String(member.partnerId || "") ===
+            String(selectedMember.memberId)
     );
-
-
-/* REMOVE DUPLICATES */
-
-const uniquePartners =
-    Array.from(
-        new Map(
-            partners.map(
-                member => [
-                    String(member.memberId),
-                    member
-                ]
-            )
-        ).values()
-    );
-
-
-/* =====================================
-   PARTNER 1 / PARTNER 2
-   ===================================== */
-
-const partner =
-    uniquePartners[0] || null;
-
-const secondPartner =
-    uniquePartners[1] || null;
 
 
 let partnerHTML = "";
@@ -14080,25 +14010,7 @@ const partnerMother =
             partner.motherId
           )
         : null;
-/* =====================================
-   PARTNER 2 PARENTS
-   ===================================== */
-
-const secondPartnerFather =
-    secondPartner
-        ? getMemberById(
-            secondPartner.fatherId
-          )
-        : null;
-
-
-const secondPartnerMother =
-    secondPartner
-        ? getMemberById(
-            secondPartner.motherId
-          )
-        : null;
-/* =====================================
+           /* =====================================
    ANCESTRY LAYOUT CASE
    ===================================== */
 
@@ -14271,57 +14183,12 @@ const partnerSiblings =
 
             }
         )
-        : [];
-
-
-/* =====================================
-   PARTNER 2 SIBLINGS
-   ===================================== */
-
-const partnerTwoSiblings =
-    secondPartner
-        ? members.filter(
-            function(member){
-
-                if(
-                    !member ||
-                    String(member.memberId) ===
-                    String(secondPartner.memberId)
-                ){
-                    return false;
-                }
-
-                const sameFather =
-                    secondPartner.fatherId &&
-                    String(
-                        member.fatherId || ""
-                    ) ===
-                    String(
-                        secondPartner.fatherId
-                    );
-
-                const sameMother =
-                    secondPartner.motherId &&
-                    String(
-                        member.motherId || ""
-                    ) ===
-                    String(
-                        secondPartner.motherId
-                    );
-
-                return (
-                    sameFather ||
-                    sameMother
-                );
-
-            }
-        )
-        : [];
-
+        : [];      
 
 /* =====================================
    CHILDREN
    ===================================== */
+
 const children =
     members.filter(
         m =>
@@ -14342,115 +14209,6 @@ const children =
                 )
             )
     );
-
-
-           /* =====================================
-   SELECTED MEMBER CHILDREN
-   GROUPED BY PARTNER
-   ===================================== */
-
-function isParentOf(
-    child,
-    parentMember
-){
-
-    if(
-        !child ||
-        !parentMember
-    ){
-        return false;
-    }
-
-    const parentId =
-        String(
-            parentMember.memberId || ""
-        ).trim();
-
-    if(!parentId){
-        return false;
-    }
-
-    return (
-        String(
-            child.fatherId || ""
-        ).trim() === parentId
-        ||
-        String(
-            child.motherId || ""
-        ).trim() === parentId
-    );
-}
-
-
-/* =====================================
-   PARTNER 1 CHILDREN
-   ===================================== */
-
-const partnerOneChildren =
-    partner
-        ? members.filter(
-            child =>
-                isParentOf(
-                    child,
-                    selectedMember
-                )
-                &&
-                isParentOf(
-                    child,
-                    partner
-                )
-        )
-        : [];
-
-
-/* =====================================
-   PARTNER 2 CHILDREN
-   ===================================== */
-
-const partnerTwoChildren =
-    secondPartner
-        ? members.filter(
-            child =>
-                isParentOf(
-                    child,
-                    selectedMember
-                )
-                &&
-                isParentOf(
-                    child,
-                    secondPartner
-                )
-        )
-        : [];
-
-
-console.log(
-    "SELECTED MEMBER PARTNERS:",
-    {
-        selectedMember:
-            selectedMember.name,
-
-        partner1:
-            partner
-                ? partner.name
-                : "",
-
-        partner1Children:
-            partnerOneChildren.map(
-                child => child.name
-            ),
-
-        partner2:
-            secondPartner
-                ? secondPartner.name
-                : "",
-
-        partner2Children:
-            partnerTwoChildren.map(
-                child => child.name
-            )
-    }
-);
 /* =====================================
    GREAT GRANDPARENTS
    Parents of Grandparents
@@ -15033,51 +14791,8 @@ function renderAncestorParentBranch(
 
 let leftAncestorHTML = "";
 let rightAncestorHTML = "";
-let partnerOneAncestorHTML = "";
-let selectedMemberAncestorHTML = "";
-let partnerTwoAncestorHTML = "";
-/* =====================================
-   TWO PARTNER SPECIAL ANCESTRY
-
-   LEFT        = PARTNER 1
-   RIGHT-1     = SELECTED MEMBER
-   RIGHT-2     = PARTNER 2
-   ===================================== */
-
-const useTwoPartnerLayout =
-    !!(
-        showMemberPartner &&
-        partner &&
-        secondPartner
-    );
 
 
-if(useTwoPartnerLayout){
-
-    partnerOneAncestorHTML =
-        renderAncestorParents(
-            partner,
-            beforeGen,
-            "partner"
-        );
-
-
-    selectedMemberAncestorHTML =
-        renderAncestorParents(
-            selectedMember,
-            beforeGen,
-            ""
-        );
-
-
-    partnerTwoAncestorHTML =
-        renderAncestorParents(
-            secondPartner,
-            beforeGen,
-            "partner2"
-        );
-
-}
 if(ancestryCase === 1){
 
     /* CASE 1
@@ -15153,32 +14868,10 @@ if(ancestryCase === 1){
 
 let childrenHTML = "";
 
-let partnerOneChildrenHTML = "";
-let partnerTwoChildrenHTML = "";
 
-[
-    ...partnerOneChildren.map(
-        child => ({
-            child,
-            parentPartner: "partner1"
-        })
-    ),
+children.forEach(
+    child => {
 
-    ...partnerTwoChildren.map(
-        child => ({
-            child,
-            parentPartner: "partner2"
-        })
-    )
-
-].forEach(
-    item => {
-
-        const child =
-            item.child;
-
-        const parentPartner =
-            item.parentPartner;
         const childPartner =
             members.find(
                 m =>
@@ -15196,13 +14889,11 @@ let partnerTwoChildrenHTML = "";
         const grandChildren =
             getChildren(child);
 
-let currentChildHTML = `
 
+        childrenHTML += `
 
-<div
-    class="family-tree-child-branch"
-    data-parent-partner="${parentPartner}"
->
+            <div class="family-tree-child-branch">
+
                 <div class="family-tree-child-couple">
 
                     ${treeBox(
@@ -15328,40 +15019,8 @@ let currentChildHTML = `
 
         `;
 
-
-/* =====================================
-   PUT CHILD INTO CORRECT PARTNER GROUP
-   ===================================== */
-
-if(
-    parentPartner === "partner1"
-){
-
-    partnerOneChildrenHTML +=
-        currentChildHTML;
-
-}
-else if(
-    parentPartner === "partner2"
-){
-
-    partnerTwoChildrenHTML +=
-        currentChildHTML;
-
-}
-
-
-/* Keep combined HTML also available */
-
-childrenHTML +=
-    currentChildHTML;
-
-
     }
 );
-
-
-           
 /* =====================================
    SIBLINGS + PARTNERS + CHILDREN
    ===================================== */
@@ -15805,161 +15464,12 @@ partnerSiblings.forEach(
     }
 );   
 
-    } // END showPartnerSiblings
-
-
-/* =====================================
-   PARTNER 2 SIBLINGS
-   + PARTNERS + CHILDREN
-   ===================================== */
-
-let partnerTwoSiblingsHTML = "";
-
-if(
-    showMemberPartner &&
-    secondPartner &&
-    showPartnerSiblings
-){
-
-    partnerTwoSiblings.forEach(
-        sibling => {
-
-            const siblingPartner =
-                members.find(
-                    member =>
-                        String(member.memberId) ===
-                        String(sibling.partnerId || "")
-                )
-                ||
-                members.find(
-                    member =>
-                        String(member.partnerId || "") ===
-                        String(sibling.memberId)
-                );
-
-
-            const siblingChildren =
-                members.filter(
-                    child =>
-                        String(child.fatherId || "") ===
-                            String(sibling.memberId)
-                        ||
-                        String(child.motherId || "") ===
-                            String(sibling.memberId)
-                        ||
-                        (
-                            siblingPartner &&
-                            (
-                                String(child.fatherId || "") ===
-                                    String(siblingPartner.memberId)
-                                ||
-                                String(child.motherId || "") ===
-                                    String(siblingPartner.memberId)
-                            )
-                        )
-                );
-
-
-            partnerTwoSiblingsHTML += `
-
-                <div class="family-tree-partner-two-sibling-branch">
-
-                    <div class="family-tree-partner-two-sibling-couple">
-
-                        ${treeBox(
-                            sibling,
-                            "tree-partner-two-sibling"
-                        )}
-
-                        ${
-                            showPartner &&
-                            siblingPartner
-
-                                ? treeBox(
-                                    siblingPartner,
-                                    "tree-partner-two-sibling-partner"
-                                  )
-
-                                : ""
-                        }
-
-                    </div>
-
-
-                    ${
-                        siblingChildren.length
-                            ? `
-                                <div class="family-tree-partner-two-sibling-children-row">
-
-                                    ${
-                                        siblingChildren
-                                            .map(
-                                                child => {
-
-                                                    const childPartner =
-                                                        members.find(
-                                                            member =>
-                                                                String(member.memberId) ===
-                                                                String(child.partnerId || "")
-                                                        )
-                                                        ||
-                                                        members.find(
-                                                            member =>
-                                                                String(member.partnerId || "") ===
-                                                                String(child.memberId)
-                                                        );
-
-
-                                                    return `
-
-                                                        <div class="family-tree-partner-two-sibling-child-branch">
-
-                                                            <div class="family-tree-partner-two-sibling-child-couple">
-
-                                                                ${treeBox(
-                                                                    child,
-                                                                    "tree-partner-two-sibling-child"
-                                                                )}
-
-                                                                ${
-                                                                    showPartner &&
-                                                                    childPartner
-
-                                                                        ? treeBox(
-                                                                            childPartner,
-                                                                            "tree-partner-two-sibling-child-partner"
-                                                                          )
-
-                                                                        : ""
-                                                                }
-
-                                                            </div>
-
-                                                        </div>
-                                                    `;
-
-                                                }
-                                            )
-                                            .join("")
-                                    }
-
-                                </div>
-                              `
-                            : ""
-                    }
-
-                </div>
-            `;
-
-        }
-    );
-
-}
-
+   } // END showPartnerSiblings
 
 /* =====================================
    MAIN TREE HTML
    ===================================== */
+
 diagram.innerHTML = `
 <div class="family-tree-toolbar">
     <div class="family-tree-legend">
@@ -16024,91 +15534,36 @@ diagram.innerHTML = `
             </svg>
 
 ${
-    useTwoPartnerLayout
-
+    ancestryCase > 0
         ? `
-            <!-- =================================
-                 TWO PARTNER ANCESTRY LAYOUT
+            <div class="family-tree-split-ancestor-zone">
 
-                 LEFT    = PARTNER 1
-                 RIGHT 1 = SELECTED MEMBER
-                 RIGHT 2 = PARTNER 2
-                 ================================= -->
+                <!-- LEFT ANCESTRY -->
 
-            <div class="family-tree-three-ancestor-zone">
+                <div class="family-tree-member-ancestor-tree">
 
-                <!-- PARTNER 1 ANCESTRY - LEFT -->
-
-                <div class="
-                    family-tree-three-ancestor-column
-                    family-tree-partner-one-ancestor-tree
-                ">
-
-                    ${partnerOneAncestorHTML}
+                    ${leftAncestorHTML}
 
                 </div>
 
 
-                <!-- IMAGINARY MEMBER CENTER LINE -->
+                <!-- IMAGINARY CENTER LINE -->
 
-                <div class="family-tree-three-ancestor-center-space">
-                </div>
-
-
-                <!-- SELECTED MEMBER ANCESTRY - RIGHT -->
-
-                <div class="
-                    family-tree-three-ancestor-column
-                    family-tree-selected-member-ancestor-tree
-                ">
-
-                    ${selectedMemberAncestorHTML}
-
-                </div>
+                <div class="family-tree-ancestor-center-space"></div>
 
 
-                <!-- PARTNER 2 ANCESTRY - FURTHER RIGHT -->
+                <!-- RIGHT ANCESTRY -->
 
-                <div class="
-                    family-tree-three-ancestor-column
-                    family-tree-partner-two-ancestor-tree
-                ">
+                <div class="family-tree-partner-ancestor-tree">
 
-                    ${partnerTwoAncestorHTML}
+                    ${rightAncestorHTML}
 
                 </div>
 
             </div>
           `
-
-        : ancestryCase > 0
-
-            ? `
-                <div class="family-tree-split-ancestor-zone">
-
-                    <div class="family-tree-member-ancestor-tree">
-
-                        ${leftAncestorHTML}
-
-                    </div>
-
-
-                    <div class="family-tree-ancestor-center-space">
-                    </div>
-
-
-                    <div class="family-tree-partner-ancestor-tree">
-
-                        ${rightAncestorHTML}
-
-                    </div>
-
-                </div>
-              `
-
-            : ""
+        : ""
 }
-
 <!-- ============================
      GREAT-GREAT-GRANDPARENTS ROW
      GENERATION 4
@@ -16655,81 +16110,18 @@ ${
                  MAIN GENERATION
                  ===================== -->
 
-<div class="
-    family-tree-main-row
-    ${
-        useTwoPartnerLayout
-            ? "family-tree-main-row-two-partner"
-            : "family-tree-main-row-single-partner"
-    }
-">
+<div class="family-tree-main-row">
 
+    <div class="family-tree-siblings-row">
 
-    <!-- =================================
-         LEFT RELATIONS
-         PARTNER 1 SIBLINGS
-         + MEMBER SIBLINGS
-         ================================= -->
-
-    <div class="family-tree-left-relations-zone">
-
-        ${
-            showMemberPartner &&
-            partner &&
-            showPartnerSiblings
-                ? `
-                    <div class="family-tree-partner-siblings-row">
-
-                        ${partnerSiblingsHTML}
-
-                    </div>
-                  `
-                : ""
-        }
-
-
-        <div class="family-tree-siblings-row">
-
-            ${siblingsHTML}
-
-        </div>
+        ${siblingsHTML}
 
     </div>
 
 
-    <!-- =================================
-         CENTER
-         PARTNER 1 + SELECTED + PARTNER 2
-         ================================= -->
-
     <div class="family-tree-selected-branch">
 
         <div class="family-tree-selected-couple">
-
-
-            <!-- PARTNER 1 - LEFT -->
-
-            ${
-                showMemberPartner &&
-                partner
-                    ? `
-                        <div class="
-                            family-tree-selected-partner-slot
-                            family-tree-selected-partner-left-slot
-                        ">
-
-                            ${treeBox(
-                                partner,
-                                "tree-partner tree-partner-left"
-                            )}
-
-                        </div>
-                      `
-                    : ""
-            }
-
-
-            <!-- SELECTED MEMBER - CENTER -->
 
             <div class="family-tree-selected-member-slot">
 
@@ -16741,20 +16133,14 @@ ${
             </div>
 
 
-            <!-- PARTNER 2 - RIGHT -->
-
-            ${
-                showMemberPartner &&
-                secondPartner
-                    ? `
-                        <div class="
-                            family-tree-selected-partner-slot
-                            family-tree-selected-partner-right-slot
-                        ">
+           ${
+    showMemberPartner && partner
+        ? `
+        <div class="family-tree-selected-partner-slot">
 
                             ${treeBox(
-                                secondPartner,
-                                "tree-partner-second tree-partner-right"
+                                partner,
+                                "tree-partner"
                             )}
 
                         </div>
@@ -16765,45 +16151,12 @@ ${
         </div>
 
 
-        <!-- =================================
-             CHILDREN
-
-             PARTNER 1 = LEFT
-             PARTNER 2 = RIGHT
-             ================================= -->
-
         ${
-            (
-                partnerOneChildrenHTML ||
-                partnerTwoChildrenHTML
-            )
+            children.length
                 ? `
                     <div class="family-tree-selected-children-row">
 
-                        <div
-                            class="
-                                family-tree-selected-children-group
-                                family-tree-partner-one-children-group
-                            "
-                            data-children-group="partner1"
-                        >
-
-                            ${partnerOneChildrenHTML}
-
-                        </div>
-
-
-                        <div
-                            class="
-                                family-tree-selected-children-group
-                                family-tree-partner-two-children-group
-                            "
-                            data-children-group="partner2"
-                        >
-
-                            ${partnerTwoChildrenHTML}
-
-                        </div>
+                        ${childrenHTML}
 
                     </div>
                   `
@@ -16813,34 +16166,25 @@ ${
     </div>
 
 
-    <!-- =================================
-         RIGHT RELATIONS
-         PARTNER 2 SIBLINGS
-         ================================= -->
+    ${
+    showMemberPartner &&
+    partner &&
+    showPartnerSiblings
+        ? `
+            <div class="family-tree-partner-siblings-row">
 
-    <div class="family-tree-right-relations-zone">
+                ${partnerSiblingsHTML}
 
-        ${
-            showMemberPartner &&
-            secondPartner &&
-            showPartnerSiblings
-                ? `
-                    <div class="family-tree-partner-two-siblings-row">
+            </div>
+          `
+        : ""
+}
+</div>
 
-                        ${partnerTwoSiblingsHTML}
-
-                    </div>
-                  `
-                : ""
-        }
-
-    </div>
-
-
-</div>        
-        <!-- =====================
+          <!-- =====================
              CHILDREN
              ===================== -->
+
           
 
         </div>
@@ -16964,17 +16308,12 @@ if(familyTreeSvg){
 
 }
 
-      /* TEMPORARILY DISABLED:
-   this transform can create an extreme
-   left/right outlier before auto-fit
-*/
-
-// alignSiblingChildrenToGrandChildren();
+       alignSiblingChildrenToGrandChildren();
 
 drawFamilyTreeLines();
 
 fitFamilyTreeToScreen();
-       
+
         const zoomInBtn =          
     document.getElementById(
         "familyTreeZoomIn"
@@ -19695,75 +19034,38 @@ partnerSiblingBranches.forEach(
     }
 );
    
-/* =====================================
-   SELECTED MEMBER + PARTNERS
-   ===================================== */
+    /* ================================
+       SELECTED + PARTNER
+       ================================ */
 
-let partnerOneCoupleCenter = null;
-let partnerTwoCoupleCenter = null;
-   
-const secondPartner =
-    canvas.querySelector(
-        ".tree-partner-second"
-    );
+    let selectedCoupleCenter = null;
 
-/* =====================================
-   PARTNER 1 ↔ SELECTED MEMBER
-   ===================================== */
 
-if(
-    selected &&
-    partner
-){
+    if(selected && partner){
 
-    partnerOneCoupleCenter =
-        connectCouple(
-            partner,
-            selected
-        );
+        selectedCoupleCenter =
+            connectCouple(
+                selected,
+                partner
+            );
 
-}
+    }
+    else if(selected){
 
-/* =====================================
-   SELECTED MEMBER ↔ PARTNER 2
-   ===================================== */
+        selectedCoupleCenter =
+            getPoint(
+                selected,
+                "bottom"
+            );
 
-if(
-    selected &&
-    secondPartner
-){
+    }
 
-    partnerTwoCoupleCenter =
-        connectCouple(
-            selected,
-            secondPartner
-        );
 
-}
+    /* ================================
+       CHILDREN
+       ================================ */
 
-/* =====================================
-   NO VISIBLE PARTNER
-   ===================================== */
-
-if(
-    selected &&
-    !partner &&
-    !secondPartner
-){
-
-    partnerOneCoupleCenter =
-        getPoint(
-            selected,
-            "bottom"
-        );
-
-}
-
-/* =====================================
-   CHILD BRANCHES
-   ===================================== */
-
-const childBranches =
+    const childBranches =
     Array.from(
         canvas.querySelectorAll(
             ".family-tree-child-branch"
@@ -19771,129 +19073,127 @@ const childBranches =
     );
 
 
-/* =====================================
-   CONNECT CHILD + CHILD PARTNER
-   AND RETURN CHILD TOP POINT
-   ===================================== */
-
-function getSelectedChildPoint(
-    branch
-){
-
-    const child =
-        branch.querySelector(
-            ".tree-child-node"
-        );
-
-    const childPartner =
-        branch.querySelector(
-            ".tree-child-partner"
-        );
-
-
-    if(!child){
-        return null;
-    }
-
-
-    if(childPartner){
-
-        connectCouple(
-            child,
-            childPartner
-        );
-
-    }
-
-
-    /*
-       IMPORTANT:
-       Parent line must connect to
-       biological CHILD box top-center,
-       not child + spouse midpoint.
-    */
-
-    const childTop =
-        getPoint(
-            child,
-            "top"
-        );
-
-
-    if(!childTop){
-        return null;
-    }
-
-
-    return {
-
-        element: child,
-
-        x: childTop.x,
-
-        y: childTop.y
-
-    };
-
-}
-
-
-/* =====================================
-   PARTNER 1 CHILDREN
-   ===================================== */
-
-const partnerOneChildCenters =
+const childTargets =
     childBranches
-        .filter(
-            branch =>
-                branch.dataset.parentPartner ===
-                "partner1"
-        )
         .map(
-            branch =>
-                getSelectedChildPoint(
-                    branch
-                )
+            branch => {
+
+                const child =
+                    branch.querySelector(
+                        ".tree-child-node"
+                    );
+
+                const childPartner =
+                    branch.querySelector(
+                        ".tree-child-partner"
+                    );
+
+
+                if(
+                    child &&
+                    childPartner
+                ){
+
+                    return {
+                        child,
+                        childPartner,
+                        couple: true
+                    };
+
+                }
+
+
+                if(child){
+
+                    return {
+                        child,
+                        childPartner: null,
+                        couple: false
+                    };
+
+                }
+
+
+                return null;
+
+            }
         )
         .filter(Boolean);
 
 
-/* =====================================
-   PARTNER 2 CHILDREN
-   ===================================== */
+/* CHILD / CHILD-PARTNER COUPLE LINES */
 
-const partnerTwoChildCenters =
-    childBranches
-        .filter(
-            branch =>
-                branch.dataset.parentPartner ===
-                "partner2"
-        )
-        .map(
-            branch =>
-                getSelectedChildPoint(
-                    branch
-                )
-        )
-        .filter(Boolean);
+const childCenters = [];
 
 
-/* =====================================
-   COUPLE MIDPOINT → OWN CHILDREN
-   ===================================== */
+childTargets.forEach(
+    item => {
 
-function connectSelectedCoupleToChildren(
-    coupleCenter,
-    childCenters
-){
+        if(
+            item.couple &&
+            item.childPartner
+        ){
 
-    if(
-        !coupleCenter ||
-        !childCenters.length
-    ){
-        return;
+            connectCouple(
+                item.child,
+                item.childPartner
+            );
+
+            const childTop =
+                getPoint(
+                    item.child,
+                    "top"
+                );
+
+            childCenters.push(
+                {
+                    element:
+                        item.child,
+
+                    x:
+                        childTop.x,
+
+                    y:
+                        childTop.y
+                }
+            );
+
+        }
+        else{
+
+            const topPoint =
+                getPoint(
+                    item.child,
+                    "top"
+                );
+
+            childCenters.push(
+                {
+                    element:
+                        item.child,
+
+                    x:
+                        topPoint.x,
+
+                    y:
+                        topPoint.y
+                }
+            );
+
+        }
+
     }
+);
+   
 
+/* =====================================
+   SELECTED COUPLE → CHILDREN
+   ===================================== */
+
+if(
+    selectedCoupleCenter &&
+    childCenters.length
+){
 
     const childTopY =
         Math.min(
@@ -19903,52 +19203,50 @@ function connectSelectedCoupleToChildren(
         );
 
 
-    const isPartnerTwoGroup =
-    childCenters ===
-    partnerTwoChildCenters;
+    /* parents/spouse line mariyu
+       children madhya bus position */
+
+    const childBusY =
+        selectedCoupleCenter.y +
+        (
+            childTopY -
+            selectedCoupleCenter.y
+        ) / 2;
 
 
-const childBusY =
-    coupleCenter.y +
-    (
-        childTopY -
-        coupleCenter.y
-    ) *
-    (
-        isPartnerTwoGroup
-            ? 0.68
-            : 0.32
-    );
-
-    /* marriage midpoint → children bus */
+    /* =================================
+       COUPLE MIDPOINT → DOWN TO BUS
+       ================================= */
 
     addLine(
-        coupleCenter.x,
-        coupleCenter.y,
-        coupleCenter.x,
+        selectedCoupleCenter.x,
+        selectedCoupleCenter.y,
+        selectedCoupleCenter.x,
         childBusY
     );
 
 
     /* =================================
-       ONE CHILD
+       ONLY ONE CHILD
        ================================= */
 
-    if(
-        childCenters.length === 1
-    ){
+    if(childCenters.length === 1){
 
         const childPoint =
             childCenters[0];
 
 
+        /* bus level lo child X varaku */
+
         addLine(
-            coupleCenter.x,
+            selectedCoupleCenter.x,
             childBusY,
             childPoint.x,
             childBusY
         );
 
+
+        /* child box TOP-CENTER varaku */
 
         addLine(
             childPoint.x,
@@ -19957,9 +19255,6 @@ const childBusY =
             childPoint.y
         );
 
-
-        return;
-
     }
 
 
@@ -19967,91 +19262,73 @@ const childBusY =
        TWO OR MORE CHILDREN
        ================================= */
 
-    const minChildX =
-        Math.min(
-            ...childCenters.map(
-                point => point.x
-            )
-        );
+    else{
 
-
-    const maxChildX =
-        Math.max(
-            ...childCenters.map(
-                point => point.x
-            )
-        );
-
-
-   /*
-   Each marriage must have its own
-   independent children bus.
-
-   Bus should run ONLY between
-   that marriage midpoint and
-   that marriage's biological children.
-*/
-
-const busStartX =
-    Math.min(
-        coupleCenter.x,
-        ...childCenters.map(
-            point => point.x
-        )
-    );
-
-
-const busEndX =
-    Math.max(
-        coupleCenter.x,
-        ...childCenters.map(
-            point => point.x
-        )
-    );
-
-
-addLine(
-    busStartX,
-    childBusY,
-    busEndX,
-    childBusY
-);
-
-    childCenters.forEach(
-        childPoint => {
-
-            addLine(
-                childPoint.x,
-                childBusY,
-                childPoint.x,
-                childPoint.y
+        const minChildX =
+            Math.min(
+                ...childCenters.map(
+                    point => point.x
+                )
             );
 
-        }
-    );
+
+        const maxChildX =
+            Math.max(
+                ...childCenters.map(
+                    point => point.x
+                )
+            );
+
+
+        /*
+           Couple midpoint horizontal bus
+           range bayata unna kuda
+           line disconnect kakunda include chestam
+        */
+
+        const busStartX =
+            Math.min(
+                minChildX,
+                selectedCoupleCenter.x
+            );
+
+
+        const busEndX =
+            Math.max(
+                maxChildX,
+                selectedCoupleCenter.x
+            );
+
+
+        /* horizontal children bus */
+
+        addLine(
+            busStartX,
+            childBusY,
+            busEndX,
+            childBusY
+        );
+
+
+        /* bus → ONLY actual child boxes */
+
+        childCenters.forEach(
+            childPoint => {
+
+                addLine(
+                    childPoint.x,
+                    childBusY,
+                    childPoint.x,
+                    childPoint.y
+                );
+
+            }
+        );
+
+    }
 
 }
 
-
-/* =====================================
-   CONNECT PARTNER 1 FAMILY
-   ===================================== */
-
-connectSelectedCoupleToChildren(
-    partnerOneCoupleCenter,
-    partnerOneChildCenters
-);
-
-
-/* =====================================
-   CONNECT PARTNER 2 FAMILY
-   ===================================== */
-
-connectSelectedCoupleToChildren(
-    partnerTwoCoupleCenter,
-    partnerTwoChildCenters
-);
-   
    /* =====================================
    MEMBER SIBLING CHILD + PARTNER
    → THEIR CHILDREN
@@ -20481,4 +19758,3 @@ grandChildBranches.forEach(
     }
 );
 }
-
