@@ -1,3 +1,4 @@
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -2641,15 +2642,6 @@ max-height: 28px !important;
     width: max-content;
 
     justify-self: start;
-}
-
-/* SELECTED MEMBER + PARTNERS */
-
-.family-tree-main-row
-> .family-tree-selected-branch{
-    grid-column: 3;
-
-    justify-self: center;
 }
 
 
