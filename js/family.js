@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -18489,13 +18488,102 @@ const memberChildrenOfParents =
     ].filter(Boolean);
 
 
-connectParentsToChildren(
-    parentCenter,
-    memberChildrenOfParents,
-    false,
-    12
-);   
 /* =====================================
+   MEMBER PARENTS
+   → BIOLOGICAL CHILDREN
+   CENTERED BUS
+   ===================================== */
+
+if(
+    parentCenter &&
+    memberChildrenOfParents.length
+){
+
+    const childPoints =
+        memberChildrenOfParents
+            .map(
+                child =>
+                    getPoint(
+                        child,
+                        "top"
+                    )
+            )
+            .filter(Boolean);
+
+
+    if(childPoints.length){
+
+        const minX =
+            Math.min(
+                ...childPoints.map(
+                    point => point.x
+                )
+            );
+
+        const maxX =
+            Math.max(
+                ...childPoints.map(
+                    point => point.x
+                )
+            );
+
+
+        const childTopY =
+            Math.min(
+                ...childPoints.map(
+                    point => point.y
+                )
+            );
+
+
+        const busY =
+            parentCenter.y +
+            (
+                childTopY -
+                parentCenter.y
+            ) / 2 +
+            12;
+
+
+        /* Parents midpoint straight down */
+
+        addLine(
+            parentCenter.x,
+            parentCenter.y,
+            parentCenter.x,
+            busY
+        );
+
+
+        /* Biological children horizontal bus */
+
+        addLine(
+            minX,
+            busY,
+            maxX,
+            busY
+        );
+
+
+        /* Each child exact top-center */
+
+        childPoints.forEach(
+            point => {
+
+                addLine(
+                    point.x,
+                    busY,
+                    point.x,
+                    point.y
+                );
+
+            }
+        );
+
+    }
+
+}
+   /* =====================================
    SIBLING + PARTNER → THEIR CHILDREN
    FINAL CLEAN VERSION
    ===================================== */
