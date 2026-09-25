@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -17576,10 +17577,8 @@ addLine(
 
 
 if(
-    centerBusOnParent &&
     parentCenter.x !== busCenterX
 ){
-
     addLine(
         parentCenter.x,
         busY,
