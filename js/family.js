@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -18820,7 +18821,21 @@ siblingBranches.forEach(
     correctedSiblingBottom.x,
     correctedBusY
 );
+if(
+    correctedSiblingBottom.x !==
+    correctedCenterX
+){
 
+    addLine(
+        correctedSiblingBottom.x,
+        correctedBusY,
+        correctedCenterX,
+        correctedBusY
+    );
+
+}
+
+               
         /* exact child-to-child bus */
 
         addLine(
