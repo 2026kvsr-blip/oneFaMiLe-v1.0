@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -18731,32 +18732,7 @@ siblingBranches.forEach(
            direct children's midpoint.
         */
 
-        const siblingCouple =
-            branch.querySelector(
-                ".family-tree-sibling-couple"
-            );
-
-
-        if(siblingCouple){
-
-            const currentSiblingX =
-                siblingBottom.x;
-
-
-            const moveX =
-                childrenCenterX -
-                currentSiblingX;
-
-
-            siblingCouple.style.position =
-                "relative";
-
-            siblingCouple.style.left =
-                `${moveX}px`;
-
-        }
-
-
+        
         /*
            Position changed.
            Read sibling position AGAIN.
