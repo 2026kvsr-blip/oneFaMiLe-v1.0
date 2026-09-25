@@ -1,4 +1,3 @@
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3019,4 +3018,20 @@ max-height: 28px !important;
 .family-tree-ancestor-parent-branch{
 
     gap: 90px !important;
+}
+/* =====================================
+   SINGLE SIBLING - EXACT CENTER
+   ===================================== */
+
+.family-tree-sibling-couple:has(
+    > .tree-sibling:only-child
+){
+    width: 110px !important;
+    min-width: 110px !important;
+    max-width: 110px !important;
+
+    justify-content: center !important;
+
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
