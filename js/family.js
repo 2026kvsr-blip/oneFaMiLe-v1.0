@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -17546,10 +17547,18 @@ if(centerBusOnParent){
 
 }else{
 
-    busStartX = minX;
-    busEndX = maxX;
-}
+    busStartX =
+        Math.min(
+            minX,
+            parentCenter.x
+        );
 
+    busEndX =
+        Math.max(
+            maxX,
+            parentCenter.x
+        );
+}
    
    /* Parent ↓ exact children bus center */
 
