@@ -18486,7 +18486,7 @@ connectParentsToChildren(
     parentCenter,
     memberChildrenOfParents,
     false,
-    -12
+    12
 );   
 /* =====================================
    SIBLING + PARTNER → THEIR CHILDREN
@@ -18951,7 +18951,7 @@ connectParentsToChildren(
     partnerParentCenter,
     partnerChildrenOfParents,
     false,
-    12
+    -12
 );   
 /* =====================================
    PARTNER SIBLING + PARTNER
