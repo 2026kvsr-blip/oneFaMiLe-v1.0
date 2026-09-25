@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -12924,19 +12923,15 @@ const scaledTreeHeight =
 
 
 familyTreePanY =
-    Math.max(
-        0,
-        (
-            availableHeight -
-            scaledTreeHeight
-        ) / 2
-        -
-        (
-            contentTop *
-            familyTreeBaseScale
-        )
+    (
+        availableHeight -
+        scaledTreeHeight
+    ) / 2
+    -
+    (
+        contentTop *
+        familyTreeBaseScale
     );
-
 
 applyFamilyTreeZoom();
 }
@@ -16481,14 +16476,11 @@ if(zoomResetBtn){
 
             familyTreeZoomFactor = 1;
 
-            familyTreePanX = 0;
-            familyTreePanY = 0;
-            applyFamilyTreeZoom();
+            fitFamilyTreeToScreen();
 
         };
 
 }
-
 /* =====================================
    FAMILY TREE
    PAN + PINCH ZOOM
