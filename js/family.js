@@ -18816,12 +18816,11 @@ siblingBranches.forEach(
         /* sibling straight ↓ to bus */
 
         addLine(
-            correctedCenterX,
-            correctedSiblingBottom.y,
-            correctedCenterX,
-            correctedBusY
-        );
-
+    correctedSiblingBottom.x,
+    correctedSiblingBottom.y,
+    correctedSiblingBottom.x,
+    correctedBusY
+);
 
         /* exact child-to-child bus */
 
