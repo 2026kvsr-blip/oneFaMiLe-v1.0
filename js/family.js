@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -17416,9 +17415,9 @@ addLine(
 function connectParentsToChildren(
     parentCenter,
     children,
-    centerBusOnParent = false
-){
-    if(
+    centerBusOnParent = false,
+    routeOffset = 0
+){    if(
         !parentCenter ||
         !children ||
         !children.length
@@ -17454,13 +17453,13 @@ function connectParentsToChildren(
             childPoints[0];
 
 
-        const middleY =
-            parentCenter.y +
-            (
-                childPoint.y -
-                parentCenter.y
-            ) / 2;
-
+       const middleY =
+    parentCenter.y +
+    (
+        childPoint.y -
+        parentCenter.y
+    ) / 2 +
+    routeOffset;
 
         /* Parent center ↓ */
 
@@ -17508,13 +17507,13 @@ function connectParentsToChildren(
         );
 
 
-    const busY =
-        parentCenter.y +
-        (
-            childTopY -
-            parentCenter.y
-        ) / 2;
-
+   const busY =
+    parentCenter.y +
+    (
+        childTopY -
+        parentCenter.y
+    ) / 2 +
+    routeOffset;
 
     const minX =
         Math.min(
@@ -18495,9 +18494,10 @@ const memberChildrenOfParents =
 
 connectParentsToChildren(
     parentCenter,
-    memberChildrenOfParents
-);
-   
+    memberChildrenOfParents,
+    false,
+    -12
+);   
 /* =====================================
    SIBLING + PARTNER → THEIR CHILDREN
    FINAL CLEAN VERSION
