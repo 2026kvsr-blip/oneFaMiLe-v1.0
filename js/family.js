@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -17562,10 +17563,12 @@ if(centerBusOnParent){
    /* Parent ↓ exact children bus center */
 
 const busCenterX =
-    (
-        minX +
-        maxX
-    ) / 2;
+    centerBusOnParent
+        ? (
+            busStartX +
+            busEndX
+          ) / 2
+        : parentCenter.x;
 
 addLine(
     parentCenter.x,
@@ -17576,9 +17579,10 @@ addLine(
 
 
 if(
+    centerBusOnParent &&
     parentCenter.x !== busCenterX
 ){
-    addLine(
+   addLine(
         parentCenter.x,
         busY,
         busCenterX,
