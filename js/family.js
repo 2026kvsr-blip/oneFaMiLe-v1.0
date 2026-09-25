@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -18959,9 +18960,10 @@ const partnerChildrenOfParents =
 
 connectParentsToChildren(
     partnerParentCenter,
-    partnerChildrenOfParents
-);  
-   
+    partnerChildrenOfParents,
+    false,
+    12
+);   
 /* =====================================
    PARTNER SIBLING + PARTNER
    → THEIR CHILDREN
