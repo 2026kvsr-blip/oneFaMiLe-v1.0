@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -17396,58 +17397,104 @@ const rect =
 
     }
    
-  
-    function connectCouple(
-        first,
-        second
-    ){
+  function connectCouple(
+    first,
+    second
+){
 
-        if(!first || !second){
-            return null;
-        }
-
-
-       const p1 =
-    getPoint(
-        first,
-        "right"
-    );
-
-const p2 =
-    getPoint(
-        second,
-        "left"
-    );
-
-
-/* =====================================
-   HIDDEN COUPLE → NO LINE
-   ===================================== */
-
-if(!p1 || !p2){
-    return null;
-}
-
-
-addLine(
-    p1.x,
-    p1.y,
-    p2.x,
-    p2.y
-);
-
-        return {
-            x:
-                (
-                    p1.x +
-                    p2.x
-                ) / 2,
-
-            y:
-                p1.y
-        };
-
+    if(!first || !second){
+        return null;
     }
+
+
+    /* =====================================
+       DETECT ACTUAL VISUAL LEFT / RIGHT
+       Do not depend on male/female
+       or DOM order
+       ===================================== */
+
+    const firstRect =
+        first.getBoundingClientRect();
+
+    const secondRect =
+        second.getBoundingClientRect();
+
+
+    let leftNode;
+    let rightNode;
+
+
+    if(
+        firstRect.left <=
+        secondRect.left
+    ){
+        leftNode = first;
+        rightNode = second;
+    }
+    else{
+        leftNode = second;
+        rightNode = first;
+    }
+
+
+    /* =====================================
+       INNER EDGE → INNER EDGE ONLY
+       ===================================== */
+
+    const leftPoint =
+        getPoint(
+            leftNode,
+            "right"
+        );
+
+    const rightPoint =
+        getPoint(
+            rightNode,
+            "left"
+        );
+
+
+    /* Hidden couple → no line */
+
+    if(
+        !leftPoint ||
+        !rightPoint
+    ){
+        return null;
+    }
+
+
+    /* Couple horizontal line */
+
+    addLine(
+        leftPoint.x,
+        leftPoint.y,
+        rightPoint.x,
+        rightPoint.y
+    );
+
+
+    /* =====================================
+       EXACT COUPLE MIDPOINT
+       ===================================== */
+
+    return {
+
+        x:
+            (
+                leftPoint.x +
+                rightPoint.x
+            ) / 2,
+
+        y:
+            (
+                leftPoint.y +
+                rightPoint.y
+            ) / 2
+
+    };
+
+}
 function connectParentsToChildren(
     parentCenter,
     children,
