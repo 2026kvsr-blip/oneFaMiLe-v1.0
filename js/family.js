@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -19225,27 +19224,12 @@ if(
         );
 
 
-    /* parents/spouse line mariyu
-       children madhya bus position */
-
     const childBusY =
         selectedCoupleCenter.y +
         (
             childTopY -
             selectedCoupleCenter.y
         ) / 2;
-
-
-    /* =================================
-       COUPLE MIDPOINT → DOWN TO BUS
-       ================================= */
-
-    addLine(
-        selectedCoupleCenter.x,
-        selectedCoupleCenter.y,
-        selectedCoupleCenter.x,
-        childBusY
-    );
 
 
     /* =================================
@@ -19258,7 +19242,17 @@ if(
             childCenters[0];
 
 
-        /* bus level lo child X varaku */
+        /* couple midpoint ↓ */
+
+        addLine(
+            selectedCoupleCenter.x,
+            selectedCoupleCenter.y,
+            selectedCoupleCenter.x,
+            childBusY
+        );
+
+
+        /* bus level → child center */
 
         addLine(
             selectedCoupleCenter.x,
@@ -19268,7 +19262,7 @@ if(
         );
 
 
-        /* child box TOP-CENTER varaku */
+        /* bus ↓ child TOP-CENTER */
 
         addLine(
             childPoint.x,
@@ -19301,67 +19295,77 @@ if(
                 )
             );
 
-const childrenCenterX =
-    (
-        minChildX +
-        maxChildX
-    ) / 2;
 
-       
+        const childrenCenterX =
+            (
+                minChildX +
+                maxChildX
+            ) / 2;
+
+
         /*
-           Couple midpoint horizontal bus
-           range bayata unna kuda
-           line disconnect kakunda include chestam
+           Couple midpoint nundi first
+           children bus CENTER X ki route
         */
 
-        const busStartX =
-            Math.min(
-                minChildX,
-                selectedCoupleCenter.x
-            );
+        const routeY =
+            selectedCoupleCenter.y +
+            (
+                childBusY -
+                selectedCoupleCenter.y
+            ) / 2;
 
 
-        const busEndX =
-            Math.max(
-                maxChildX,
-                selectedCoupleCenter.x
-            );
-
-/* couple midpoint → children bus CENTER */
-
-if(
-    selectedCoupleCenter.x !==
-    childrenCenterX
-){
-
-    addLine(
-        selectedCoupleCenter.x,
-        childBusY,
-        childrenCenterX,
-        childBusY
-    );
-
-}
-        /* horizontal children bus */
+        /* couple midpoint ↓ */
 
         addLine(
-            busStartX,
-            childBusY,
-            busEndX,
+            selectedCoupleCenter.x,
+            selectedCoupleCenter.y,
+            selectedCoupleCenter.x,
+            routeY
+        );
+
+
+        /* children exact center X varaku */
+
+        addLine(
+            selectedCoupleCenter.x,
+            routeY,
+            childrenCenterX,
+            routeY
+        );
+
+
+        /* children bus CENTER varaku ↓ */
+
+        addLine(
+            childrenCenterX,
+            routeY,
+            childrenCenterX,
             childBusY
         );
 
 
-        /* bus → ONLY actual child boxes */
+        /* actual children horizontal bus */
+
+        addLine(
+            minChildX,
+            childBusY,
+            maxChildX,
+            childBusY
+        );
+
+
+        /* bus ↓ ONLY biological child boxes */
 
         childCenters.forEach(
-            childPoint => {
+            point => {
 
                 addLine(
-                    childPoint.x,
+                    point.x,
                     childBusY,
-                    childPoint.x,
-                    childPoint.y
+                    point.x,
+                    point.y
                 );
 
             }
@@ -19370,7 +19374,6 @@ if(
     }
 
 }
-
    /* =====================================
    MEMBER SIBLING CHILD + PARTNER
    → THEIR CHILDREN
