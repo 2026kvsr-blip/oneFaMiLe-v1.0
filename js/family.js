@@ -1,6 +1,3 @@
-
-
-
 /* =========
 ============================
    oneFaMiLe
@@ -18669,43 +18666,88 @@ siblingBranches.forEach(
                 ) / 2;
 
 
-            /* couple midpoint ↓ */
+/* =================================
+   COUPLE → CHILDREN BUS
+   CLEAN OFFSET ROUTING
 
-            addLine(
-                coupleCenter.x,
-                parentBottomY,
-                coupleCenter.x,
-                busY
-            );
-
-
-            /* bus level → children midpoint */
-
-            if(
-                coupleCenter.x !==
-                childrenCenterX
-            ){
-
-                addLine(
-                    coupleCenter.x,
-                    busY,
-                    childrenCenterX,
-                    busY
-                );
-
-            }
+   Parent midpoint
+        ↓
+        └────────→
+                 ↓
+   ──────────────┼──────── children bus
+   ================================= */
 
 
-            /* children bus */
+/*
+   Parent couple nundi children bus varaku
+   available vertical distance.
+*/
 
-            addLine(
-                minChildX,
-                busY,
-                maxChildX,
-                busY
-            );
+const verticalGap =
+    busY - parentBottomY;
 
 
+/*
+   Routing horizontal line ni
+   children bus meeda pettakunda,
+   parent mariyu bus madhyalo pettali.
+
+   50% position simple-ga,
+   clear-ga kanipistundi.
+*/
+
+const routeY =
+    parentBottomY +
+    verticalGap * 0.5;
+
+
+/* 1. Couple midpoint ↓ route level */
+
+addLine(
+    coupleCenter.x,
+    parentBottomY,
+    coupleCenter.x,
+    routeY
+);
+
+
+/* 2. Route level → exact children bus center */
+
+if(
+    coupleCenter.x !==
+    childrenCenterX
+){
+
+    addLine(
+        coupleCenter.x,
+        routeY,
+        childrenCenterX,
+        routeY
+    );
+
+}
+
+
+/* 3. Children center ↓ actual children bus */
+
+addLine(
+    childrenCenterX,
+    routeY,
+    childrenCenterX,
+    busY
+);
+
+
+/* 4. Actual children horizontal bus */
+
+addLine(
+    minChildX,
+    busY,
+    maxChildX,
+    busY
+);
+
+           
             /* bus ↓ each biological child */
 
             childPoints.forEach(
