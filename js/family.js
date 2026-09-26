@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -15121,23 +15120,15 @@ siblings.forEach(
 
                 <div class="family-tree-sibling-couple">
 
-                    ${treeBox(
-                        sibling,
-                        "tree-sibling"
-                    )}
+    ${coupleBoxes(
+        sibling,
+        "tree-sibling",
+        siblingPartner,
+        "tree-sibling-partner",
+        showPartner
+    )}
 
-                    ${
-                            showPartner && siblingPartner
-
-                            ? treeBox(
-                                siblingPartner,
-                                "tree-sibling-partner"
-                              )
-                            : ""
-                    }
-
-                </div>
-
+</div>
 
    ${
     siblingChildren.length
@@ -15189,25 +15180,17 @@ siblings.forEach(
 
                                     <div class="family-tree-sibling-child-branch">
 
-                                        <div class="family-tree-sibling-child-couple">
+                                       <div class="family-tree-sibling-child-couple">
 
-                                            ${treeBox(
-                                                child,
-                                                "tree-sibling-child"
-                                            )}
+    ${coupleBoxes(
+        child,
+        "tree-sibling-child",
+        childPartner,
+        "tree-sibling-child-partner",
+        showPartner
+    )}
 
-                                            ${
-                                                    showPartner && childPartner
-
-                                                    ? treeBox(
-                                                        childPartner,
-                                                        "tree-sibling-child-partner"
-                                                      )
-                                                    : ""
-                                            }
-
-                                        </div>
-
+</div>
 
                                         ${
                                             childChildren.length
@@ -15259,25 +15242,17 @@ siblings.forEach(
 
                 <div class="family-tree-sibling-grandchild-branch">
 
-                    <div class="family-tree-sibling-grandchild-couple">
+                 <div class="family-tree-sibling-grandchild-couple">
 
-                        ${treeBox(
-                            grandChild,
-                            "tree-sibling-grandchild"
-                        )}
+    ${coupleBoxes(
+        grandChild,
+        "tree-sibling-grandchild",
+        grandChildPartner,
+        "tree-sibling-grandchild-partner",
+        showPartner
+    )}
 
-                        ${
-                                showPartner && grandChildPartner
-
-                                ? treeBox(
-                                    grandChildPartner,
-                                    "tree-sibling-grandchild-partner"
-                                  )
-                                : ""
-                        }
-
-                    </div>
-
+</div>
 
                     ${
                         greatGrandChildren.length
@@ -15382,25 +15357,17 @@ partnerSiblings.forEach(
 
             <div class="family-tree-partner-sibling-branch">
 
-                <div class="family-tree-partner-sibling-couple">
+               <div class="family-tree-partner-sibling-couple">
 
-                    ${treeBox(
-                        sibling,
-                        "tree-partner-sibling"
-                    )}
+    ${coupleBoxes(
+        sibling,
+        "tree-partner-sibling",
+        siblingPartner,
+        "tree-partner-sibling-partner",
+        showPartner
+    )}
 
-                    ${
-                            showPartner && siblingPartner
-
-                            ? treeBox(
-                                siblingPartner,
-                                "tree-partner-sibling-partner"
-                              )
-                            : ""
-                    }
-
-                </div>
-
+</div>
 
                ${
     siblingChildren.length
@@ -15454,23 +15421,15 @@ partnerSiblings.forEach(
 
                                         <div class="family-tree-partner-sibling-child-couple">
 
-                                            ${treeBox(
-                                                child,
-                                                "tree-partner-sibling-child"
-                                            )}
+    ${coupleBoxes(
+        child,
+        "tree-partner-sibling-child",
+        childPartner,
+        "tree-partner-sibling-child-partner",
+        showPartner
+    )}
 
-                                            ${
-                                                    showPartner && childPartner
-
-                                                    ? treeBox(
-                                                        childPartner,
-                                                        "tree-partner-sibling-child-partner"
-                                                      )
-                                                    : ""
-                                            }
-
-                                        </div>
-
+</div>
 
                                         ${
                                             childChildren.length
