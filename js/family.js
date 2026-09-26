@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14627,6 +14628,72 @@ function treeBox(member, extraClass = ""){
     `;
 
 }
+ function coupleBoxes(
+    person,
+    personClass,
+    partner,
+    partnerClass,
+    showPartnerBox = true
+){
+
+    if(!person){
+        return "";
+    }
+
+    if(
+        !partner ||
+        !showPartnerBox
+    ){
+        return treeBox(
+            person,
+            personClass
+        );
+    }
+
+    const personIsFemale =
+        String(person.gender || "")
+            .trim()
+            .toLowerCase() === "female";
+
+    const partnerIsFemale =
+        String(partner.gender || "")
+            .trim()
+            .toLowerCase() === "female";
+
+
+    /* MALE LEFT - FEMALE RIGHT */
+
+    if(
+        personIsFemale &&
+        !partnerIsFemale
+    ){
+
+        return (
+            treeBox(
+                partner,
+                partnerClass
+            )
+            +
+            treeBox(
+                person,
+                personClass
+            )
+        );
+    }
+
+
+    return (
+        treeBox(
+            person,
+            personClass
+        )
+        +
+        treeBox(
+            partner,
+            partnerClass
+        )
+    );
+}          
 /* =====================================
    ANCESTOR HIERARCHY RENDERER
 
@@ -14890,24 +14957,17 @@ children.forEach(
 
             <div class="family-tree-child-branch">
 
-                <div class="family-tree-child-couple">
+               <div class="family-tree-child-couple">
 
-                    ${treeBox(
-                        child,
-                        "tree-child-node"
-                    )}
+    ${coupleBoxes(
+        child,
+        "tree-child-node",
+        childPartner,
+        "tree-child-partner",
+        showPartner
+    )}
 
-                    ${
-                       showPartner && childPartner
-                            ? treeBox(
-                                childPartner,
-                                "tree-child-partner"
-                              )
-                            : ""
-                    }
-
-                </div>
-
+</div>
 
                 ${
                     grandChildren.length
