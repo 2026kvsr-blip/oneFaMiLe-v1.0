@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -15019,23 +15018,15 @@ children.forEach(
 
                     <div class="family-tree-grandchild-couple">
 
-                        ${treeBox(
-                            grandChild,
-                            "tree-grandchild-node"
-                        )}
+    ${coupleBoxes(
+        grandChild,
+        "tree-grandchild-node",
+        grandChildPartner,
+        "tree-grandchild-partner",
+        showPartner
+    )}
 
-                        ${
-                                showPartner && grandChildPartner
-
-                                ? treeBox(
-                                    grandChildPartner,
-                                    "tree-grandchild-partner"
-                                  )
-                                : ""
-                        }
-
-                    </div>
-
+</div>
                     ${
                         greatGrandChildren.length
                             ? `
