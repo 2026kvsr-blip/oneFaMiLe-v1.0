@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -19294,33 +19295,43 @@ if(
             );
 
 
-        const maxChildX =
-            Math.max(
-                ...childCenters.map(
-                    point => point.x
-                )
-            );
+       const maxChildX =
+    Math.max(
+        ...childCenters.map(
+            point => point.x
+        )
+    );
 
 
-        /*
-           Couple midpoint horizontal bus
-           range bayata unna kuda
-           line disconnect kakunda include chestam
-        */
+/* =================================
+   EXACT CENTER OF CHILDREN BUS
+   ================================= */
 
-        const busStartX =
-            Math.min(
-                minChildX,
-                selectedCoupleCenter.x
-            );
+const childrenCenterX =
+    (
+        minChildX +
+        maxChildX
+    ) / 2;
 
 
-        const busEndX =
-            Math.max(
-                maxChildX,
-                selectedCoupleCenter.x
-            );
+/*
+   Couple midpoint horizontal bus
+   range bayata unna kuda
+   line disconnect kakunda include chestam
+*/
 
+const busStartX =
+    Math.min(
+        minChildX,
+        selectedCoupleCenter.x
+    );
+
+
+const busEndX =
+    Math.max(
+        maxChildX,
+        selectedCoupleCenter.x
+    );
 
         /* horizontal children bus */
 
