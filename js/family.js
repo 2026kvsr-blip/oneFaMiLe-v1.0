@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -14857,71 +14858,24 @@ let rightAncestorHTML = "";
 
 if(ancestryCase === 1){
 
-    /* =================================
-       GENDER BASED ANCESTRY POSITION
+    /* CASE 1
+       LEFT  = Complete Member Ancestry
+       RIGHT = Complete Partner Ancestry
+    */
 
-       MALE   → LEFT
-       FEMALE → RIGHT
-       ================================= */
+    leftAncestorHTML =
+        renderAncestorParents(
+            selectedMember,
+            beforeGen,
+            ""
+        );
 
-    const selectedIsFemale =
-        String(selectedMember.gender || "")
-            .trim()
-            .toLowerCase() === "female";
-
-    const partnerIsFemale =
-        String(partner.gender || "")
-            .trim()
-            .toLowerCase() === "female";
-
-
-    if(
-        selectedIsFemale &&
-        !partnerIsFemale
-    ){
-
-        /* MALE PARTNER ANCESTRY → LEFT */
-
-        leftAncestorHTML =
-            renderAncestorParents(
-                partner,
-                beforeGen,
-                "partner"
-            );
-
-
-        /* FEMALE SELECTED ANCESTRY → RIGHT */
-
-        rightAncestorHTML =
-            renderAncestorParents(
-                selectedMember,
-                beforeGen,
-                ""
-            );
-
-    }else{
-
-        /* MALE SELECTED ANCESTRY → LEFT */
-
-        leftAncestorHTML =
-            renderAncestorParents(
-                selectedMember,
-                beforeGen,
-                ""
-            );
-
-
-        /* FEMALE PARTNER ANCESTRY → RIGHT */
-
-        rightAncestorHTML =
-            renderAncestorParents(
-                partner,
-                beforeGen,
-                "partner"
-            );
-
-    }
-
+    rightAncestorHTML =
+        renderAncestorParents(
+            partner,
+            beforeGen,
+            "partner"
+        );
 }else if(
     ancestryCase === 2 ||
     ancestryCase === 3
