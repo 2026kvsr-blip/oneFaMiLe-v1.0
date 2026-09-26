@@ -1,3 +1,4 @@
+
 /* =========
 ============================
    oneFaMiLe
@@ -19472,6 +19473,11 @@ siblingChildBranches.forEach(
    SaiLaxmi → Reya + Shivesti
    ===================================== */
 
+/* =====================================
+   SIBLING CHILD → GRANDCHILDREN
+   CLEAN CONNECTOR ROUTING
+   ===================================== */
+
 if(
     childCoupleCenter &&
     grandChildren.length
@@ -19489,12 +19495,22 @@ if(
             .filter(Boolean);
 
 
+    if(!grandChildPoints.length){
+        return;
+    }
+
+
+    /* =================================
+       ONLY ONE GRANDCHILD
+       ================================= */
+
     if(grandChildPoints.length === 1){
 
         const grandChildPoint =
             grandChildPoints[0];
 
-        const middleY =
+
+        const routeY =
             childCoupleCenter.y +
             (
                 grandChildPoint.y -
@@ -19502,118 +19518,183 @@ if(
             ) / 2;
 
 
+        /* Parent ↓ */
+
         addLine(
             childCoupleCenter.x,
             childCoupleCenter.y,
             childCoupleCenter.x,
-            middleY
+            routeY
         );
 
 
-        addLine(
-            childCoupleCenter.x,
-            middleY,
-            grandChildPoint.x,
-            middleY
-        );
+        /* Horizontal only if required */
+
+        if(
+            childCoupleCenter.x !==
+            grandChildPoint.x
+        ){
+
+            addLine(
+                childCoupleCenter.x,
+                routeY,
+                grandChildPoint.x,
+                routeY
+            );
+
+        }
 
 
+        /* ↓ Grandchild top-center */
+
         addLine(
             grandChildPoint.x,
-            middleY,
+            routeY,
             grandChildPoint.x,
             grandChildPoint.y
         );
 
+
+        return;
     }
-    else if(grandChildPoints.length > 1){
-
-        const minGrandChildX =
-            Math.min(
-                ...grandChildPoints.map(
-                    point => point.x
-                )
-            );
 
 
-        const maxGrandChildX =
-            Math.max(
-                ...grandChildPoints.map(
-                    point => point.x
-                )
-            );
+    /* =================================
+       TWO OR MORE GRANDCHILDREN
+       ================================= */
+
+    const minGrandChildX =
+        Math.min(
+            ...grandChildPoints.map(
+                point => point.x
+            )
+        );
 
 
-        /*
-           Reya + Shivesti exact midpoint
-        */
-
-        const grandChildrenCenterX =
-            (
-                minGrandChildX +
-                maxGrandChildX
-            ) / 2;
+    const maxGrandChildX =
+        Math.max(
+            ...grandChildPoints.map(
+                point => point.x
+            )
+        );
 
 
-        const grandChildTopY =
-            Math.min(
-                ...grandChildPoints.map(
-                    point => point.y
-                )
-            );
+    const grandChildrenCenterX =
+        (
+            minGrandChildX +
+            maxGrandChildX
+        ) / 2;
 
 
-        const busY =
-            childCoupleCenter.y +
-            (
-                grandChildTopY -
-                childCoupleCenter.y
-            ) / 2;
+    const grandChildTopY =
+        Math.min(
+            ...grandChildPoints.map(
+                point => point.y
+            )
+        );
 
 
-        /*
-           SaiLaxmi ↓
-           EXACT Reya/Shivesti midpoint
-        */
+    /*
+       Actual children bus.
+       Parent/couple mariyu grandchildren
+       madhyalo untundi.
+    */
+
+    const busY =
+        childCoupleCenter.y +
+        (
+            grandChildTopY -
+            childCoupleCenter.y
+        ) * 0.65;
+
+
+    /*
+       Separate routing level.
+
+       IMPORTANT:
+       Ee horizontal line children bus meeda
+       overlap avvakudadhu.
+    */
+
+    const routeY =
+        childCoupleCenter.y +
+        (
+            busY -
+            childCoupleCenter.y
+        ) * 0.5;
+
+
+    /* =================================
+       1. Parent/couple midpoint ↓
+       ================================= */
+
+    addLine(
+        childCoupleCenter.x,
+        childCoupleCenter.y,
+        childCoupleCenter.x,
+        routeY
+    );
+
+
+    /* =================================
+       2. Separate horizontal route
+       ================================= */
+
+    if(
+        childCoupleCenter.x !==
+        grandChildrenCenterX
+    ){
 
         addLine(
+            childCoupleCenter.x,
+            routeY,
             grandChildrenCenterX,
-            childCoupleCenter.y,
-            grandChildrenCenterX,
-            busY
-        );
-
-
-        /*
-           Reya ─────── Shivesti
-        */
-
-        addLine(
-            minGrandChildX,
-            busY,
-            maxGrandChildX,
-            busY
-        );
-
-
-        /*
-           Bus ↓ each child
-        */
-
-        grandChildPoints.forEach(
-            point => {
-
-                addLine(
-                    point.x,
-                    busY,
-                    point.x,
-                    point.y
-                );
-
-            }
+            routeY
         );
 
     }
+
+
+    /* =================================
+       3. ↓ To grandchildren bus
+       ================================= */
+
+    addLine(
+        grandChildrenCenterX,
+        routeY,
+        grandChildrenCenterX,
+        busY
+    );
+
+
+    /* =================================
+       4. Actual grandchildren bus
+       ================================= */
+
+    addLine(
+        minGrandChildX,
+        busY,
+        maxGrandChildX,
+        busY
+    );
+
+
+    /* =================================
+       5. Bus ↓ each grandchild TOP CENTER
+       ================================= */
+
+    grandChildPoints.forEach(
+        point => {
+
+            addLine(
+                point.x,
+                busY,
+                point.x,
+                point.y
+            );
+
+        }
+    );
 
 }
     }
