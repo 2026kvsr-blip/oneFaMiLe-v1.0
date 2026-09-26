@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -19301,7 +19300,13 @@ if(
                 )
             );
 
+const childrenCenterX =
+    (
+        minChildX +
+        maxChildX
+    ) / 2;
 
+       
         /*
            Couple midpoint horizontal bus
            range bayata unna kuda
@@ -19321,7 +19326,21 @@ if(
                 selectedCoupleCenter.x
             );
 
+/* couple midpoint → children bus CENTER */
 
+if(
+    selectedCoupleCenter.x !==
+    childrenCenterX
+){
+
+    addLine(
+        selectedCoupleCenter.x,
+        childBusY,
+        childrenCenterX,
+        childBusY
+    );
+
+}
         /* horizontal children bus */
 
         addLine(
