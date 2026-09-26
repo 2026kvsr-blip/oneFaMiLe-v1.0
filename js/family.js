@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -19062,7 +19063,48 @@ partnerSiblingBranches.forEach(
     let selectedCoupleCenter = null;
 
 
-    if(selected && partner){
+   if(selected && partner){
+
+    const selectedIsFemale =
+        String(
+            selectedMember.gender || ""
+        )
+        .trim()
+        .toLowerCase() === "female";
+
+
+    const partnerIsMale =
+        String(
+            partner.gender || ""
+        )
+        .trim()
+        .toLowerCase() === "male";
+
+
+    /*
+       DISPLAY RULE:
+       Male   = LEFT
+       Female = RIGHT
+
+       connectCouple(first, second)
+       expects:
+       first  = LEFT box
+       second = RIGHT box
+    */
+
+    if(
+        selectedIsFemale &&
+        partnerIsMale
+    ){
+
+        selectedCoupleCenter =
+            connectCouple(
+                partner,
+                selected
+            );
+
+    }
+    else{
 
         selectedCoupleCenter =
             connectCouple(
@@ -19071,7 +19113,9 @@ partnerSiblingBranches.forEach(
             );
 
     }
-    else if(selected){
+
+}
+   else if(selected){
 
         selectedCoupleCenter =
             getPoint(
