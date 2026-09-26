@@ -17572,84 +17572,94 @@ function connectParentsToChildren(
        range lo compulsory include cheyyali
     */
 
- let busStartX;
-let busEndX;
+ /* =================================
+   CLEAN PARENT → CHILDREN ROUTING
+   Children bus NEVER extends
+   unnecessarily towards parent
+   ================================= */
 
-if(centerBusOnParent){
+const busStartX = minX;
+const busEndX   = maxX;
 
-    busStartX = minX;
-    busEndX = maxX;
+const childrenCenterX =
+    (
+        minX +
+        maxX
+    ) / 2;
 
-}else{
 
-    busStartX =
-        Math.min(
-            minX,
-            parentCenter.x
-        );
+/* Separate route level */
 
-    busEndX =
-        Math.max(
-            maxX,
-            parentCenter.x
-        );
-}
-   
-   /* Parent ↓ exact children bus center */
+const routeY =
+    parentCenter.y +
+    (
+        busY -
+        parentCenter.y
+    ) * 0.5;
 
-const busCenterX =
-    centerBusOnParent
-        ? (
-            busStartX +
-            busEndX
-          ) / 2
-        : parentCenter.x;
+
+/* 1. Parent midpoint ↓ */
 
 addLine(
     parentCenter.x,
     parentCenter.y,
     parentCenter.x,
+    routeY
+);
+
+
+/* 2. Move horizontally towards
+      actual children center */
+
+if(
+    parentCenter.x !==
+    childrenCenterX
+){
+    addLine(
+        parentCenter.x,
+        routeY,
+        childrenCenterX,
+        routeY
+    );
+}
+
+
+/* 3. ↓ actual children bus */
+
+addLine(
+    childrenCenterX,
+    routeY,
+    childrenCenterX,
     busY
 );
 
 
-if(
-    centerBusOnParent &&
-    parentCenter.x !== busCenterX
-){
-   addLine(
-        parentCenter.x,
-        busY,
-        busCenterX,
-        busY
-    );
+/* 4. Children bus ONLY
+      first child → last child */
 
-}
-
-    /* Horizontal children bus */
-
-    addLine(
-        busStartX,
-        busY,
-        busEndX,
-        busY
-    );
+addLine(
+    busStartX,
+    busY,
+    busEndX,
+    busY
+);
 
 
-    /* Bus ↓ each actual child box */
+/* 5. Bus ↓ each child */
 
-    childPoints.forEach(
-        point => {
+childPoints.forEach(
+    point => {
 
-            addLine(
-                point.x,
-                busY,
-                point.x,
-                point.y
-            );
+        addLine(
+            point.x,
+            busY,
+            point.x,
+            point.y
+        );
 
-        }
-    );
+    }
+);
+   
 
 }
 
