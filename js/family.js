@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe
    FAMILY MODULE
@@ -16130,6 +16131,38 @@ ${
 
         <div class="family-tree-selected-couple">
 
+    ${
+        showMemberPartner &&
+        partner &&
+        String(selectedMember.gender || "")
+            .trim()
+            .toLowerCase() === "female"
+        &&
+        String(partner.gender || "")
+            .trim()
+            .toLowerCase() !== "female"
+
+        ? `
+            <div class="family-tree-selected-partner-slot">
+
+                ${treeBox(
+                    partner,
+                    "tree-partner"
+                )}
+
+            </div>
+
+            <div class="family-tree-selected-member-slot">
+
+                ${treeBox(
+                    selectedMember,
+                    "tree-selected"
+                )}
+
+            </div>
+          `
+
+        : `
             <div class="family-tree-selected-member-slot">
 
                 ${treeBox(
@@ -16139,11 +16172,10 @@ ${
 
             </div>
 
-
-           ${
-    showMemberPartner && partner
-        ? `
-        <div class="family-tree-selected-partner-slot">
+            ${
+                showMemberPartner && partner
+                    ? `
+                        <div class="family-tree-selected-partner-slot">
 
                             ${treeBox(
                                 partner,
@@ -16154,8 +16186,10 @@ ${
                       `
                     : ""
             }
+          `
+    }
 
-        </div>
+</div>
 
 
         ${
