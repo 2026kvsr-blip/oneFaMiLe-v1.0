@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -17918,7 +17919,7 @@ function connectDescendantsStandard(
 
 
     /* =================================
-       GET CHILD TOP-CENTER POINTS
+       ACTUAL CHILD TOP-CENTER POINTS
        ================================= */
 
     const childPoints =
@@ -17939,7 +17940,8 @@ function connectDescendantsStandard(
 
 
     /* =================================
-       TOP Y OF CHILD GENERATION
+       SAME STYLE AS
+       KRISHNA CHAITANYA + SRAVANI
        ================================= */
 
     const childTopY =
@@ -17950,32 +17952,33 @@ function connectDescendantsStandard(
         );
 
 
+    /*
+       Couple midpoint mariyu
+       children top madhyalo EXACT midpoint.
+    */
+
+    const childBusY =
+        parentCenter.y +
+        (
+            childTopY -
+            parentCenter.y
+        ) / 2;
+
+
     /* =================================
-       FIXED SHORT STEM NEAR CHILDREN
+       COUPLE MIDPOINT ↓ CHILDREN BUS
        ================================= */
 
-    const availableGap =
-        childTopY -
-        parentCenter.y;
-
-
-    const childStemHeight =
-        Math.min(
-            FAMILY_STEM_HEIGHT,
-            Math.max(
-                4,
-                availableGap / 3
-            )
-        );
-
-
-    const busY =
-        childTopY -
-        childStemHeight;
+    addLine(
+        parentCenter.x,
+        parentCenter.y,
+        parentCenter.x,
+        childBusY
+    );
 
 
     /* =================================
-       SINGLE CHILD
+       ONLY ONE CHILD
        ================================= */
 
     if(childPoints.length === 1){
@@ -17984,28 +17987,6 @@ function connectDescendantsStandard(
             childPoints[0];
 
 
-        const verticalGap =
-            busY -
-            parentCenter.y;
-
-
-        const routeY =
-            parentCenter.y +
-            verticalGap * 0.5;
-
-
-        /* Parent / couple ↓ */
-
-        addLine(
-            parentCenter.x,
-            parentCenter.y,
-            parentCenter.x,
-            routeY
-        );
-
-
-        /* Route → child X */
-
         if(
             parentCenter.x !==
             childPoint.x
@@ -18013,19 +17994,17 @@ function connectDescendantsStandard(
 
             addLine(
                 parentCenter.x,
-                routeY,
+                childBusY,
                 childPoint.x,
-                routeY
+                childBusY
             );
 
         }
 
 
-        /* ↓ child */
-
         addLine(
             childPoint.x,
-            routeY,
+            childBusY,
             childPoint.x,
             childPoint.y
         );
@@ -18055,91 +18034,56 @@ function connectDescendantsStandard(
         );
 
 
-    const childrenCenterX =
-        (
-            minChildX +
-            maxChildX
-        ) / 2;
+    /*
+       Parent couple midpoint children
+       range bayata unna kuda
+       horizontal bus disconnect kakudadhu.
+    */
+
+    const busStartX =
+        Math.min(
+            minChildX,
+            parentCenter.x
+        );
+
+
+    const busEndX =
+        Math.max(
+            maxChildX,
+            parentCenter.x
+        );
 
 
     /* =================================
-       ROUTE BETWEEN COUPLE AND BUS
+       HORIZONTAL CHILDREN BUS
        ================================= */
 
-    const verticalGap =
-        busY -
-        parentCenter.y;
-
-
-    const routeY =
-        parentCenter.y +
-        verticalGap * 0.5;
-
-
-    /* 1. Couple midpoint ↓ */
-
     addLine(
-        parentCenter.x,
-        parentCenter.y,
-        parentCenter.x,
-        routeY
+        busStartX,
+        childBusY,
+        busEndX,
+        childBusY
     );
 
 
-    /* 2. Horizontal route → children center */
-
-    if(
-        parentCenter.x !==
-        childrenCenterX
-    ){
-
-        addLine(
-            parentCenter.x,
-            routeY,
-            childrenCenterX,
-            routeY
-        );
-
-    }
-
-
-    /* 3. ↓ children bus */
-
-    addLine(
-        childrenCenterX,
-        routeY,
-        childrenCenterX,
-        busY
-    );
-
-
-    /* 4. Horizontal children bus */
-
-    addLine(
-        minChildX,
-        busY,
-        maxChildX,
-        busY
-    );
-
-
-    /* 5. Bus ↓ every child */
+    /* =================================
+       BUS ↓ EACH CHILD TOP-CENTER
+       ================================= */
 
     childPoints.forEach(
-        point => {
+        childPoint => {
 
             addLine(
-                point.x,
-                busY,
-                point.x,
-                point.y
+                childPoint.x,
+                childBusY,
+                childPoint.x,
+                childPoint.y
             );
 
         }
     );
 
 }
-
    
    /* =====================================
    STANDARD FAMILY CONNECTOR STEM
