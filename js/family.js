@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -19011,13 +19010,29 @@ siblingBranches.forEach(
                 );
 
 
-            const busY =
-                parentBottomY +
-                (
-                    childTopY -
-                    parentBottomY
-                ) / 2;
+            /* =================================
+   STANDARD CHILDREN BUS HEIGHT
 
+   Children box nundi bus varaku
+   fixed short stem.
+   ================================= */
+
+const availableGap =
+    childTopY -
+    parentBottomY;
+
+const childStemHeight =
+    Math.min(
+        FAMILY_STEM_HEIGHT,
+        Math.max(
+            4,
+            availableGap / 3
+        )
+    );
+
+const busY =
+    childTopY -
+    childStemHeight;
 
 /* =================================
    COUPLE → CHILDREN BUS
