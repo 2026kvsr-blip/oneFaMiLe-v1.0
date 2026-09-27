@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -13252,17 +13251,6 @@ const familyName =
 
     </select>
 
-<div
-    id="familyTreeOtherPartnersHint"
-    style="
-        display:none;
-        margin-top:6px;
-        font-size:12px;
-        color:#666;
-        line-height:1.4;
-    ">
-    Other partners yes select cheste all persons ki partner ni chupistundi okka selected member thappa
-</div>
 
 
 </div>
