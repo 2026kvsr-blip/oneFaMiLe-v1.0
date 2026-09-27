@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -15128,10 +15129,85 @@ children.forEach(
 
     }
 );
+
+/* =====================================
+   PERMANENT FAMILY SIDE RULE
+
+   MALE PERSON FAMILY   → LEFT
+   FEMALE PERSON FAMILY → RIGHT
+   ===================================== */
+
+const selectedIsFemaleForLayout =
+    String(
+        selectedMember.gender || ""
+    )
+    .trim()
+    .toLowerCase() === "female";
+
+
+const partnerIsFemaleForLayout =
+    partner &&
+    String(
+        partner.gender || ""
+    )
+    .trim()
+    .toLowerCase() === "female";
+
+
+/*
+   These variables decide whose siblings
+   belong on LEFT and RIGHT.
+
+   IMPORTANT:
+   siblings          = selected member siblings
+   partnerSiblings   = partner siblings
+*/
+
+let leftSideSiblings = [];
+let rightSideSiblings = [];
+
+
+if(
+    partner &&
+    selectedIsFemaleForLayout &&
+    !partnerIsFemaleForLayout
+){
+
+    /*
+       Partner  = MALE   → LEFT
+       Selected = FEMALE → RIGHT
+    */
+
+    leftSideSiblings =
+        partnerSiblings;
+
+    rightSideSiblings =
+        siblings;
+
+}
+else{
+
+    /*
+       Selected = MALE   → LEFT
+       Partner  = FEMALE → RIGHT
+    */
+
+    leftSideSiblings =
+        siblings;
+
+    rightSideSiblings =
+        partner
+            ? partnerSiblings
+            : [];
+
+}
+
+           
 /* =====================================
    SIBLINGS + PARTNERS + CHILDREN
    ===================================== */
 
+           
 let siblingsHTML = "";
 
 if(showSiblings){
