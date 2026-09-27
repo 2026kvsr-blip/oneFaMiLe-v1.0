@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -19349,9 +19348,11 @@ else{
         12
     );
 
-}   /* =====================================
+}  
+   
+   /* =====================================
    SIBLING + PARTNER → THEIR CHILDREN
-   FINAL CLEAN VERSION
+   STANDARD DESCENDANT CONNECTOR
    ===================================== */
 
 const siblingBranches =
@@ -19391,393 +19392,51 @@ siblingBranches.forEach(
         }
 
 
-        /* =================================
-           DIRECT CHILD BOX CENTERS
-           ================================= */
-
-        const childPoints =
-            siblingChildren
-                .map(
-                    child =>
-                        getPoint(
-                            child,
-                            "top"
-                        )
-                )
-                .filter(Boolean);
-
-
-        if(!childPoints.length){
-            return;
-        }
-
-
-        const minChildX =
-            Math.min(
-                ...childPoints.map(
-                    point => point.x
-                )
-            );
-
-
-        const maxChildX =
-            Math.max(
-                ...childPoints.map(
-                    point => point.x
-                )
-            );
-
-
-        const childrenCenterX =
-            (
-                minChildX +
-                maxChildX
-            ) / 2;
+        let siblingFamilyCenter =
+            null;
 
 
         /* =================================
-           PARENT SOURCE
+           SIBLING + PARTNER
            ================================= */
-
-        let parentBottomY = null;
-
 
         if(siblingPartner){
 
-            /*
-               Partner visible:
-               sibling ↔ partner line
-            */
-
-            const coupleCenter =
+            siblingFamilyCenter =
                 connectCouple(
                     sibling,
                     siblingPartner
                 );
 
-
-            if(!coupleCenter){
-                return;
-            }
-
-
-            parentBottomY =
-                coupleCenter.y;
-
-
-            /*
-               Couple midpoint is the
-               biological-family source.
-            */
-
-            const childTopY =
-                Math.min(
-                    ...childPoints.map(
-                        point => point.y
-                    )
-                );
-
-
-            /* =================================
-   STANDARD CHILDREN BUS HEIGHT
-
-   Children box nundi bus varaku
-   fixed short stem.
-   ================================= */
-
-const availableGap =
-    childTopY -
-    parentBottomY;
-
-const childStemHeight =
-    Math.min(
-        FAMILY_STEM_HEIGHT,
-        Math.max(
-            4,
-            availableGap / 3
-        )
-    );
-
-const busY =
-    childTopY -
-    childStemHeight;
-
-/* =================================
-   COUPLE → CHILDREN BUS
-   CLEAN OFFSET ROUTING
-
-   Parent midpoint
-        ↓
-        └────────→
-                 ↓
-   ──────────────┼──────── children bus
-   ================================= */
-
-
-/*
-   Parent couple nundi children bus varaku
-   available vertical distance.
-*/
-
-const verticalGap =
-    busY - parentBottomY;
-
-
-/*
-   Routing horizontal line ni
-   children bus meeda pettakunda,
-   parent mariyu bus madhyalo pettali.
-
-   50% position simple-ga,
-   clear-ga kanipistundi.
-*/
-
-const routeY =
-    parentBottomY +
-    verticalGap * 0.5;
-
-
-/* 1. Couple midpoint ↓ route level */
-
-addLine(
-    coupleCenter.x,
-    parentBottomY,
-    coupleCenter.x,
-    routeY
-);
-
-
-/* 2. Route level → exact children bus center */
-
-if(
-    coupleCenter.x !==
-    childrenCenterX
-){
-
-    addLine(
-        coupleCenter.x,
-        routeY,
-        childrenCenterX,
-        routeY
-    );
-
-}
-
-
-/* 3. Children center ↓ actual children bus */
-
-addLine(
-    childrenCenterX,
-    routeY,
-    childrenCenterX,
-    busY
-);
-
-
-/* 4. Actual children horizontal bus */
-
-addLine(
-    minChildX,
-    busY,
-    maxChildX,
-    busY
-);
-
-           
-            /* bus ↓ each biological child */
-
-            childPoints.forEach(
-                point => {
-
-                    addLine(
-                        point.x,
-                        busY,
-                        point.x,
-                        point.y
-                    );
-
-                }
-            );
-
-
-            return;
         }
 
 
         /* =================================
-           NO PARTNER
-           SINGLE PARENT
+           SIBLING WITHOUT PARTNER
            ================================= */
 
-        const siblingBottom =
-            getPoint(
-                sibling,
-                "bottom"
-            );
+        else{
 
-
-        if(!siblingBottom){
-            return;
-        }
-
-
-        const childTopY =
-            Math.min(
-                ...childPoints.map(
-                    point => point.y
-                )
-            );
-
-
-        const busY =
-            siblingBottom.y +
-            (
-                childTopY -
-                siblingBottom.y
-            ) / 2;
-
-
-        /*
-           IMPORTANT:
-           Straight vertical must start
-           from sibling box bottom-center.
-
-           Therefore first move the sibling
-           box itself exactly above the
-           direct children's midpoint.
-        */
-
-        
-        /*
-           Position changed.
-           Read sibling position AGAIN.
-        */
-
-        const correctedSiblingBottom =
-            getPoint(
-                sibling,
-                "bottom"
-            );
-
-
-        if(!correctedSiblingBottom){
-            return;
-        }
-
-
-        /*
-           Re-read children also.
-           They themselves have not moved,
-           but this guarantees current DOM
-           coordinates are used.
-        */
-
-        const correctedChildPoints =
-            siblingChildren
-                .map(
-                    child =>
-                        getPoint(
-                            child,
-                            "top"
-                        )
-                )
-                .filter(Boolean);
-
-
-        if(!correctedChildPoints.length){
-            return;
-        }
-
-
-        const correctedMinX =
-            Math.min(
-                ...correctedChildPoints.map(
-                    point => point.x
-                )
-            );
-
-
-        const correctedMaxX =
-            Math.max(
-                ...correctedChildPoints.map(
-                    point => point.x
-                )
-            );
-
-
-        const correctedCenterX =
-            (
-                correctedMinX +
-                correctedMaxX
-            ) / 2;
-
-
-        const correctedChildTopY =
-            Math.min(
-                ...correctedChildPoints.map(
-                    point => point.y
-                )
-            );
-
-
-        const correctedBusY =
-            correctedSiblingBottom.y +
-            (
-                correctedChildTopY -
-                correctedSiblingBottom.y
-            ) / 2;
-
-
-        /* sibling straight ↓ to bus */
-
-        addLine(
-    correctedSiblingBottom.x,
-    correctedSiblingBottom.y,
-    correctedSiblingBottom.x,
-    correctedBusY
-);
-if(
-    correctedSiblingBottom.x !==
-    correctedCenterX
-){
-
-    addLine(
-        correctedSiblingBottom.x,
-        correctedBusY,
-        correctedCenterX,
-        correctedBusY
-    );
-
-}
-
-               
-        /* exact child-to-child bus */
-
-        addLine(
-            correctedMinX,
-            correctedBusY,
-            correctedMaxX,
-            correctedBusY
-        );
-
-
-        /* bus ↓ each child */
-
-        correctedChildPoints.forEach(
-            point => {
-
-                addLine(
-                    point.x,
-                    correctedBusY,
-                    point.x,
-                    point.y
+            siblingFamilyCenter =
+                getPoint(
+                    sibling,
+                    "bottom"
                 );
 
-            }
+        }
+
+
+        /* =================================
+           SAME STANDARD DESCENDANT ROUTING
+           ================================= */
+
+        connectDescendantsStandard(
+            siblingFamilyCenter,
+            siblingChildren
         );
 
     }
-);   
+);  
    /* ================================
        PARTNER PARENTS
        ================================ */
