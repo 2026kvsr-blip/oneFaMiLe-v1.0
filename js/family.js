@@ -1,5 +1,6 @@
 
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -19519,9 +19520,11 @@ function connectFemaleParentsToChildren(
        parent couple daggara short stem.
     */
 
-    const femaleRouteY =
-        parentCenter.y +
-        FAMILY_STEM_HEIGHT;
+   const FEMALE_PARENT_ROUTE_GAP = 35;
+
+const femaleRouteY =
+    parentCenter.y +
+    FEMALE_PARENT_ROUTE_GAP;
 
 
     /*
