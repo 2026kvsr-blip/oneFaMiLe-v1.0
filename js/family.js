@@ -17885,6 +17885,262 @@ const FAMILY_STEM_HEIGHT = 18;
     };
 
 }
+
+/* =====================================
+   STANDARD DESCENDANT CONNECTOR
+
+   Couple / Person
+          │
+          │
+          └──────────────┐
+                         │
+              ───────────┼──────────
+              │          │
+            Child      Child
+
+   Children / Grandchildren /
+   Great-grandchildren ki
+   same routing pattern.
+   ===================================== */
+
+function connectDescendantsStandard(
+    parentCenter,
+    children
+){
+
+    if(
+        !parentCenter ||
+        !children ||
+        !children.length
+    ){
+        return;
+    }
+
+
+    /* =================================
+       GET CHILD TOP-CENTER POINTS
+       ================================= */
+
+    const childPoints =
+        children
+            .map(
+                child =>
+                    getPoint(
+                        child,
+                        "top"
+                    )
+            )
+            .filter(Boolean);
+
+
+    if(!childPoints.length){
+        return;
+    }
+
+
+    /* =================================
+       TOP Y OF CHILD GENERATION
+       ================================= */
+
+    const childTopY =
+        Math.min(
+            ...childPoints.map(
+                point => point.y
+            )
+        );
+
+
+    /* =================================
+       FIXED SHORT STEM NEAR CHILDREN
+       ================================= */
+
+    const availableGap =
+        childTopY -
+        parentCenter.y;
+
+
+    const childStemHeight =
+        Math.min(
+            FAMILY_STEM_HEIGHT,
+            Math.max(
+                4,
+                availableGap / 3
+            )
+        );
+
+
+    const busY =
+        childTopY -
+        childStemHeight;
+
+
+    /* =================================
+       SINGLE CHILD
+       ================================= */
+
+    if(childPoints.length === 1){
+
+        const childPoint =
+            childPoints[0];
+
+
+        const verticalGap =
+            busY -
+            parentCenter.y;
+
+
+        const routeY =
+            parentCenter.y +
+            verticalGap * 0.5;
+
+
+        /* Parent / couple ↓ */
+
+        addLine(
+            parentCenter.x,
+            parentCenter.y,
+            parentCenter.x,
+            routeY
+        );
+
+
+        /* Route → child X */
+
+        if(
+            parentCenter.x !==
+            childPoint.x
+        ){
+
+            addLine(
+                parentCenter.x,
+                routeY,
+                childPoint.x,
+                routeY
+            );
+
+        }
+
+
+        /* ↓ child */
+
+        addLine(
+            childPoint.x,
+            routeY,
+            childPoint.x,
+            childPoint.y
+        );
+
+
+        return;
+    }
+
+
+    /* =================================
+       TWO OR MORE CHILDREN
+       ================================= */
+
+    const minChildX =
+        Math.min(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    const maxChildX =
+        Math.max(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    const childrenCenterX =
+        (
+            minChildX +
+            maxChildX
+        ) / 2;
+
+
+    /* =================================
+       ROUTE BETWEEN COUPLE AND BUS
+       ================================= */
+
+    const verticalGap =
+        busY -
+        parentCenter.y;
+
+
+    const routeY =
+        parentCenter.y +
+        verticalGap * 0.5;
+
+
+    /* 1. Couple midpoint ↓ */
+
+    addLine(
+        parentCenter.x,
+        parentCenter.y,
+        parentCenter.x,
+        routeY
+    );
+
+
+    /* 2. Horizontal route → children center */
+
+    if(
+        parentCenter.x !==
+        childrenCenterX
+    ){
+
+        addLine(
+            parentCenter.x,
+            routeY,
+            childrenCenterX,
+            routeY
+        );
+
+    }
+
+
+    /* 3. ↓ children bus */
+
+    addLine(
+        childrenCenterX,
+        routeY,
+        childrenCenterX,
+        busY
+    );
+
+
+    /* 4. Horizontal children bus */
+
+    addLine(
+        minChildX,
+        busY,
+        maxChildX,
+        busY
+    );
+
+
+    /* 5. Bus ↓ every child */
+
+    childPoints.forEach(
+        point => {
+
+            addLine(
+                point.x,
+                busY,
+                point.x,
+                point.y
+            );
+
+        }
+    );
+
+}
+
+   
    /* =====================================
    STANDARD FAMILY CONNECTOR STEM
    ===================================== */
