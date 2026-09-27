@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -19439,11 +19440,6 @@ else{
    ===================================== */
 
 
-const partnerIsFemaleForConnector =
-    partner &&
-    partner.classList.contains(
-        "tree-female"
-    );
 
   /* =====================================
    FEMALE PARENTS → CHILDREN
