@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -20339,8 +20340,10 @@ childTargets.forEach(
 );
    
 
+
 /* =====================================
    SELECTED COUPLE → CHILDREN
+   STANDARD DESCENDANT CONNECTOR
    ===================================== */
 
 if(
@@ -20348,150 +20351,19 @@ if(
     childCenters.length
 ){
 
-    const childTopY =
-        Math.min(
-            ...childCenters.map(
-                point => point.y
+    connectDescendantsStandard(
+        selectedCoupleCenter,
+        childCenters
+            .map(
+                point => point.element
             )
-        );
-
-
-    /* parents/spouse line mariyu
-       children madhya bus position */
-
-    const childBusY =
-        selectedCoupleCenter.y +
-        (
-            childTopY -
-            selectedCoupleCenter.y
-        ) / 2;
-
-
-    /* =================================
-       COUPLE MIDPOINT → DOWN TO BUS
-       ================================= */
-
-    addLine(
-        selectedCoupleCenter.x,
-        selectedCoupleCenter.y,
-        selectedCoupleCenter.x,
-        childBusY
+            .filter(Boolean)
     );
-
-
-    /* =================================
-       ONLY ONE CHILD
-       ================================= */
-
-    if(childCenters.length === 1){
-
-        const childPoint =
-            childCenters[0];
-
-
-        /* bus level lo child X varaku */
-
-        addLine(
-            selectedCoupleCenter.x,
-            childBusY,
-            childPoint.x,
-            childBusY
-        );
-
-
-        /* child box TOP-CENTER varaku */
-
-        addLine(
-            childPoint.x,
-            childBusY,
-            childPoint.x,
-            childPoint.y
-        );
-
-    }
-
-
-    /* =================================
-       TWO OR MORE CHILDREN
-       ================================= */
-
-    else{
-
-        const minChildX =
-            Math.min(
-                ...childCenters.map(
-                    point => point.x
-                )
-            );
-
-
-       const maxChildX =
-    Math.max(
-        ...childCenters.map(
-            point => point.x
-        )
-    );
-
-
-/* =================================
-   EXACT CENTER OF CHILDREN BUS
-   ================================= */
-
-const childrenCenterX =
-    (
-        minChildX +
-        maxChildX
-    ) / 2;
-
-
-/*
-   Couple midpoint horizontal bus
-   range bayata unna kuda
-   line disconnect kakunda include chestam
-*/
-
-const busStartX =
-    Math.min(
-        minChildX,
-        selectedCoupleCenter.x
-    );
-
-
-const busEndX =
-    Math.max(
-        maxChildX,
-        selectedCoupleCenter.x
-    );
-
-        /* horizontal children bus */
-
-        addLine(
-            busStartX,
-            childBusY,
-            busEndX,
-            childBusY
-        );
-
-
-        /* bus → ONLY actual child boxes */
-
-        childCenters.forEach(
-            childPoint => {
-
-                addLine(
-                    childPoint.x,
-                    childBusY,
-                    childPoint.x,
-                    childPoint.y
-                );
-
-            }
-        );
-
-    }
 
 }
 
+
+   
    /* =====================================
    MEMBER SIBLING CHILD + PARTNER
    → THEIR CHILDREN
