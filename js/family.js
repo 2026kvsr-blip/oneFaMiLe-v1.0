@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -13492,7 +13491,7 @@ function showFamilyTreeMembers(){
                MEMBER SELECT
                ================================= */
 
-            option.onclick =
+      option.onclick =
     function(){
 
         selectedFamilyTreeMemberId =
@@ -13511,25 +13510,31 @@ function showFamilyTreeMembers(){
             "none";
 
 
-        /* ==============================
+        /* =====================================
            MEMBER SELECTED
            → SHOW TREE OPTIONS
-           ============================== */
+           ===================================== */
 
-        const optionsRow =
+        const familyTreeOptionsRow =
             document.getElementById(
                 "familyTreeOptionsRow"
             );
 
-        if(optionsRow){
-            optionsRow.style.display =
+
+        if(familyTreeOptionsRow){
+
+            familyTreeOptionsRow.style.display =
                 "";
+
         }
 
 
-        /* refresh dependent controls */
+        /* =====================================
+           REFRESH DEPENDENT OPTIONS
+           ===================================== */
 
         updatePartnerSiblingsVisibility();
+
         updateOtherPartnersVisibility();
 
     };
