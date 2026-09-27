@@ -13811,11 +13811,7 @@ familyTreeShowPartnerSiblingsControl?.addEventListener(
     "change",
     updateOtherPartnersVisibility
 );
-   const familyTreeOtherPartnersControl =
-    document.getElementById(
-        "familyTreeShowPartner"
-    );
-
+   
 const familyTreeOtherPartnersHint =
     document.getElementById(
         "familyTreeOtherPartnersHint"
