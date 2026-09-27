@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -13634,7 +13635,33 @@ const familyTreeShowPartnerSiblingsControl =
     document.getElementById(
         "familyTreeShowPartnerSiblings"
     );
+/* =====================================
+   OTHER PARTNERS CONTROL
+   ===================================== */
 
+const familyTreeOtherPartnersControl =
+    document.getElementById(
+        "familyTreeShowPartner"
+    );
+
+
+/* =====================================
+   OTHER PARTNERS
+   → TEMPORARY POPUP MESSAGE
+   ===================================== */
+
+familyTreeOtherPartnersControl?.addEventListener(
+    "focus",
+    function(){
+
+        showMessage(
+            "Other partners yes select cheste all persons ki partner ni chupistundi okka selected member thappa",
+            "info",
+            4000
+        );
+
+    }
+);
 const partnerSiblingsControlRow =
     familyTreeShowPartnerSiblingsControl
         ?.closest(
