@@ -1,6 +1,4 @@
 
-
-
 /* =========
 ============================
    oneFaMiLe
@@ -19784,11 +19782,10 @@ partnerSiblingBranches.forEach(
 
         /* couple → biological children */
 
-        connectParentsToChildren(
-            siblingCoupleCenter,
-            siblingChildren
-        );
-
+       connectDescendantsStandard(
+    siblingCoupleCenter,
+    siblingChildren
+);
     }
 );
    
