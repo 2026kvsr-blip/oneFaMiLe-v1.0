@@ -17702,8 +17702,6 @@ const FAMILY_STEM_HEIGHT = 18;
    STANDARD FAMILY CONNECTOR STEM
    ===================================== */
 
-const FAMILY_STEM_HEIGHT = 18;
-
 
 /* =====================================
    PARENTS → CHILDREN
