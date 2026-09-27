@@ -1,5 +1,6 @@
 
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -13096,8 +13097,11 @@ const familyName =
 
             <!-- GENERATIONS -->
 
-            <div class="family-tree-generation-row">
-
+<div
+    class="family-tree-generation-row"
+    id="familyTreeOptionsRow"
+    style="display:none;">
+    
                 <div class="family-tree-control">
 
     <label class="family-tree-label">
@@ -13223,12 +13227,14 @@ const familyName =
 
 <!-- SHOW PARTNER -->
 
-<div class="family-tree-control">
+<div
+    class="family-tree-control"
+    id="familyTreeOtherPartnersRow"
+    style="display:none;">
 
     <label class="family-tree-label">
         Other Partners
     </label>
-
     <span class="family-tree-colon">
         :
     </span>
@@ -13246,6 +13252,19 @@ const familyName =
         </option>
 
     </select>
+
+<div
+    id="familyTreeOtherPartnersHint"
+    style="
+        display:none;
+        margin-top:6px;
+        font-size:12px;
+        color:#666;
+        line-height:1.4;
+    ">
+    Other partners yes select cheste all persons ki partner ni chupistundi okka selected member thappa
+</div>
+
 
 </div>
 
@@ -13475,25 +13494,46 @@ function showFamilyTreeMembers(){
                ================================= */
 
             option.onclick =
-                function(){
+    function(){
 
-                    selectedFamilyTreeMemberId =
-                        member.memberId;
-
-
-                    familyTreeSearchInput.value =
-                        member.name;
+        selectedFamilyTreeMemberId =
+            member.memberId;
 
 
-                    familyTreeDropdown.innerHTML =
-                        "";
+        familyTreeSearchInput.value =
+            member.name;
 
 
-                    familyTreeDropdown.style.display =
-                        "none";
+        familyTreeDropdown.innerHTML =
+            "";
 
-                };
 
+        familyTreeDropdown.style.display =
+            "none";
+
+
+        /* ==============================
+           MEMBER SELECTED
+           → SHOW TREE OPTIONS
+           ============================== */
+
+        const optionsRow =
+            document.getElementById(
+                "familyTreeOptionsRow"
+            );
+
+        if(optionsRow){
+            optionsRow.style.display =
+                "";
+        }
+
+
+        /* refresh dependent controls */
+
+        updatePartnerSiblingsVisibility();
+        updateOtherPartnersVisibility();
+
+    };
 
             familyTreeDropdown.appendChild(
                 option
