@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -16255,15 +16254,35 @@ ${
 
 <div class="family-tree-main-row">
 
-    <div class="family-tree-siblings-row">
+    ${
+        showMemberPartner &&
+        partner &&
+        selectedIsFemaleForLayout &&
+        !partnerIsFemaleForLayout
 
-        ${siblingsHTML}
+        ? `
+            <!-- MALE PARTNER SIBLINGS → LEFT -->
 
-    </div>
+            <div class="family-tree-partner-siblings-row">
+
+                ${partnerSiblingsHTML}
+
+            </div>
+          `
+
+        : `
+            <!-- MALE SELECTED MEMBER SIBLINGS → LEFT -->
+
+            <div class="family-tree-siblings-row">
+
+                ${siblingsHTML}
+
+            </div>
+          `
+    }
 
 
     <div class="family-tree-selected-branch">
-
         <div class="family-tree-selected-couple">
 
     ${
@@ -16342,19 +16361,58 @@ ${
     </div>
 
 
-    ${
+   ${
+
     showMemberPartner &&
-    partner &&
-    showPartnerSiblings
-        ? `
-            <div class="family-tree-partner-siblings-row">
+    partner
 
-                ${partnerSiblingsHTML}
+        ? (
 
-            </div>
-          `
+            selectedIsFemaleForLayout &&
+            !partnerIsFemaleForLayout
+
+                ? (
+
+                    showSiblings
+
+                        ? `
+                            <!-- FEMALE SELECTED SIBLINGS → RIGHT -->
+
+                            <div class="family-tree-siblings-row">
+
+                                ${siblingsHTML}
+
+                            </div>
+                          `
+
+                        : ""
+
+                )
+
+                : (
+
+                    showPartnerSiblings
+
+                        ? `
+                            <!-- FEMALE PARTNER SIBLINGS → RIGHT -->
+
+                            <div class="family-tree-partner-siblings-row">
+
+                                ${partnerSiblingsHTML}
+
+                            </div>
+                          `
+
+                        : ""
+
+                )
+
+        )
+
         : ""
 }
+
+
 </div>
 
           <!-- =====================
