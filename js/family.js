@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -17591,6 +17590,15 @@ const rect =
         );
 
     }
+   /* =====================================
+   STANDARD FAMILY CONNECTOR STEM
+
+   Box / couple midpoint nundi
+   first horizontal turn varaku
+   same short distance.
+   ===================================== */
+
+const FAMILY_STEM_HEIGHT = 18;
    
   function connectCouple(
     first,
@@ -17731,12 +17739,22 @@ function connectParentsToChildren(
             childPoints[0];
 
 
-       const middleY =
+      const availableGap =
+    childPoint.y -
+    parentCenter.y;
+
+const stemHeight =
+    Math.min(
+        FAMILY_STEM_HEIGHT,
+        Math.max(
+            4,
+            availableGap / 3
+        )
+    );
+
+const middleY =
     parentCenter.y +
-    (
-        childPoint.y -
-        parentCenter.y
-    ) / 2 +
+    stemHeight +
     routeOffset;
 
         /* Parent center ↓ */
@@ -17785,14 +17803,30 @@ function connectParentsToChildren(
         );
 
 
-   const busY =
+  const availableGap =
+    childTopY -
+    parentCenter.y;
+
+const routeY =
     parentCenter.y +
-    (
-        childTopY -
-        parentCenter.y
-    ) / 2 +
+    Math.min(
+        FAMILY_STEM_HEIGHT,
+        Math.max(
+            4,
+            availableGap / 3
+        )
+    ) +
     routeOffset;
 
+const busY =
+    childTopY -
+    Math.min(
+        FAMILY_STEM_HEIGHT,
+        Math.max(
+            4,
+            availableGap / 3
+        )
+    );
     const minX =
         Math.min(
             ...childPoints.map(
