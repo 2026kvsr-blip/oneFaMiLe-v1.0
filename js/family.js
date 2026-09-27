@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -17698,12 +17699,37 @@ const FAMILY_STEM_HEIGHT = 18;
     };
 
 }
+   /* =====================================
+   STANDARD FAMILY CONNECTOR STEM
+   ===================================== */
+
+const FAMILY_STEM_HEIGHT = 18;
+
+
+/* =====================================
+   PARENTS → CHILDREN
+
+   STANDARD ROUTING
+
+   Parent / Couple
+        │
+        │ short stem
+        └──────────────┐
+                       │
+                       │
+        ───────────────┼──── bus
+        │              │
+      Child          Child
+   ===================================== */
+
 function connectParentsToChildren(
     parentCenter,
     children,
     centerBusOnParent = false,
     routeOffset = 0
-){    if(
+){
+
+    if(
         !parentCenter ||
         !children ||
         !children.length
@@ -17739,49 +17765,59 @@ function connectParentsToChildren(
             childPoints[0];
 
 
-      const availableGap =
-    childPoint.y -
-    parentCenter.y;
+        const availableGap =
+            childPoint.y -
+            parentCenter.y;
 
-const stemHeight =
-    Math.min(
-        FAMILY_STEM_HEIGHT,
-        Math.max(
-            4,
-            availableGap / 3
-        )
-    );
 
-const middleY =
-    parentCenter.y +
-    stemHeight +
-    routeOffset;
+        const stemHeight =
+            Math.min(
+                FAMILY_STEM_HEIGHT,
+                Math.max(
+                    4,
+                    availableGap / 3
+                )
+            );
 
-        /* Parent center ↓ */
+
+        const routeY =
+            parentCenter.y +
+            stemHeight +
+            routeOffset;
+
+
+        /* 1. Parent ↓ short stem */
 
         addLine(
             parentCenter.x,
             parentCenter.y,
             parentCenter.x,
-            middleY
+            routeY
         );
 
 
-        /* Horizontal adjustment */
+        /* 2. Route level → child X */
+
+        if(
+            parentCenter.x !==
+            childPoint.x
+        ){
+
+            addLine(
+                parentCenter.x,
+                routeY,
+                childPoint.x,
+                routeY
+            );
+
+        }
+
+
+        /* 3. Route ↓ child top-center */
 
         addLine(
-            parentCenter.x,
-            middleY,
             childPoint.x,
-            middleY
-        );
-
-
-        /* ↓ exact child box top-center */
-
-        addLine(
-            childPoint.x,
-            middleY,
+            routeY,
             childPoint.x,
             childPoint.y
         );
@@ -17803,30 +17839,39 @@ const middleY =
         );
 
 
-  const availableGap =
-    childTopY -
-    parentCenter.y;
+    const availableGap =
+        childTopY -
+        parentCenter.y;
 
-const routeY =
-    parentCenter.y +
-    Math.min(
-        FAMILY_STEM_HEIGHT,
-        Math.max(
-            4,
-            availableGap / 3
-        )
-    ) +
-    routeOffset;
 
-const busY =
-    childTopY -
-    Math.min(
-        FAMILY_STEM_HEIGHT,
-        Math.max(
-            4,
-            availableGap / 3
-        )
-    );
+    const stemHeight =
+        Math.min(
+            FAMILY_STEM_HEIGHT,
+            Math.max(
+                4,
+                availableGap / 3
+            )
+        );
+
+
+    /* Parent-side short route level */
+
+    const routeY =
+        parentCenter.y +
+        stemHeight +
+        routeOffset;
+
+
+    /*
+       Actual children bus stays
+       close to children.
+    */
+
+    const busY =
+        childTopY -
+        stemHeight;
+
+
     const minX =
         Math.min(
             ...childPoints.map(
@@ -17843,99 +17888,120 @@ const busY =
         );
 
 
-    /*
-       Parent center kuda horizontal bus
-       range lo compulsory include cheyyali
-    */
-
- /* =================================
-   CLEAN PARENT → CHILDREN ROUTING
-   Children bus NEVER extends
-   unnecessarily towards parent
-   ================================= */
-
-const busStartX = minX;
-const busEndX   = maxX;
-
-const childrenCenterX =
-    (
-        minX +
-        maxX
-    ) / 2;
+    let busStartX;
+    let busEndX;
 
 
-/* Separate route level */
+    if(centerBusOnParent){
 
-const routeY =
-    parentCenter.y +
-    (
-        busY -
-        parentCenter.y
-    ) * 0.5;
+        busStartX =
+            minX;
+
+        busEndX =
+            maxX;
+
+    }
+    else{
+
+        busStartX =
+            Math.min(
+                minX,
+                parentCenter.x
+            );
+
+        busEndX =
+            Math.max(
+                maxX,
+                parentCenter.x
+            );
+
+    }
 
 
-/* 1. Parent midpoint ↓ */
+    /* =====================================
+       EXACT CHILDREN BUS CENTER
+       ===================================== */
 
-addLine(
-    parentCenter.x,
-    parentCenter.y,
-    parentCenter.x,
-    routeY
-);
+    const busCenterX =
+        centerBusOnParent
+            ? (
+                busStartX +
+                busEndX
+              ) / 2
+            : parentCenter.x;
 
 
-/* 2. Move horizontally towards
-      actual children center */
+    /* =====================================
+       1. PARENT ↓ SHORT STEM
+       ===================================== */
 
-if(
-    parentCenter.x !==
-    childrenCenterX
-){
     addLine(
         parentCenter.x,
-        routeY,
-        childrenCenterX,
+        parentCenter.y,
+        parentCenter.x,
         routeY
     );
-}
 
 
-/* 3. ↓ actual children bus */
+    /* =====================================
+       2. ROUTE LEVEL HORIZONTAL
+       ===================================== */
 
-addLine(
-    childrenCenterX,
-    routeY,
-    childrenCenterX,
-    busY
-);
-
-
-/* 4. Children bus ONLY
-      first child → last child */
-
-addLine(
-    busStartX,
-    busY,
-    busEndX,
-    busY
-);
-
-
-/* 5. Bus ↓ each child */
-
-childPoints.forEach(
-    point => {
+    if(
+        parentCenter.x !==
+        busCenterX
+    ){
 
         addLine(
-            point.x,
-            busY,
-            point.x,
-            point.y
+            parentCenter.x,
+            routeY,
+            busCenterX,
+            routeY
         );
 
     }
-);
-   
+
+
+    /* =====================================
+       3. ROUTE ↓ CHILDREN BUS
+       ===================================== */
+
+    addLine(
+        busCenterX,
+        routeY,
+        busCenterX,
+        busY
+    );
+
+
+    /* =====================================
+       4. HORIZONTAL CHILDREN BUS
+       ===================================== */
+
+    addLine(
+        busStartX,
+        busY,
+        busEndX,
+        busY
+    );
+
+
+    /* =====================================
+       5. BUS ↓ EACH CHILD
+       ===================================== */
+
+    childPoints.forEach(
+        point => {
+
+            addLine(
+                point.x,
+                busY,
+                point.x,
+                point.y
+            );
+
+        }
+    );
 
 }
 
