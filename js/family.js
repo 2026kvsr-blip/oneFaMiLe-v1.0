@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -18859,7 +18860,22 @@ connectParentsToChildren(
         canvas.querySelector(
             ".tree-selected"
         );
+const selectedIsFemaleForConnector =
+    selected &&
+    selected.classList.contains(
+        "tree-female"
+    );
 
+const partnerNodeForGender =
+    canvas.querySelector(
+        ".tree-partner"
+    );
+
+const partnerIsFemaleForConnector =
+    partnerNodeForGender &&
+    partnerNodeForGender.classList.contains(
+        "tree-female"
+    );
 
 /* =====================================
    MEMBER PARENTS
@@ -18873,13 +18889,24 @@ const memberChildrenOfParents =
     ].filter(Boolean);
 
 
-connectParentsToChildren(
-    parentCenter,
-    memberChildrenOfParents,
-    false,
-    12
-);
-   /* =====================================
+if(selectedIsFemaleForConnector){
+
+    connectFemaleParentsToChildren(
+        parentCenter,
+        memberChildrenOfParents
+    );
+
+}
+else{
+
+    connectParentsToChildren(
+        parentCenter,
+        memberChildrenOfParents,
+        false,
+        12
+    );
+
+}   /* =====================================
    SIBLING + PARTNER → THEIR CHILDREN
    FINAL CLEAN VERSION
    ===================================== */
@@ -19387,12 +19414,272 @@ const partnerChildrenOfParents =
     ].filter(Boolean);
 
 
-connectParentsToChildren(
-    partnerParentCenter,
-    partnerChildrenOfParents,
-    false,
-    -12
-);   
+if(partnerIsFemaleForConnector){
+
+    connectFemaleParentsToChildren(
+        partnerParentCenter,
+        partnerChildrenOfParents
+    );
+
+}
+else{
+
+    connectParentsToChildren(
+        partnerParentCenter,
+        partnerChildrenOfParents,
+        false,
+        -12
+    );
+
+}
+/* =====================================
+   ACTUAL GENDER FOR PARENT ROUTING
+
+   Male family   → normal route
+   Female family → special upper route
+   ===================================== */
+
+const selectedIsFemaleForConnector =
+    selected &&
+    selected.classList.contains(
+        "tree-female"
+    );
+
+const partnerIsFemaleForConnector =
+    partner &&
+    partner.classList.contains(
+        "tree-female"
+    );
+
+  /* =====================================
+   FEMALE PARENTS → CHILDREN
+
+   SPECIAL RIGHT-SIDE ROUTING
+
+   Female parents
+        │
+        └───────────────┐
+                        │
+                        │
+   male bus ------------│---
+                        │
+                        ↓
+                  female / siblings
+
+   Male routing is NOT changed.
+   ===================================== */
+
+function connectFemaleParentsToChildren(
+    parentCenter,
+    children
+){
+
+    if(
+        !parentCenter ||
+        !children ||
+        !children.length
+    ){
+        return;
+    }
+
+
+    const childPoints =
+        children
+            .map(
+                child =>
+                    getPoint(
+                        child,
+                        "top"
+                    )
+            )
+            .filter(Boolean);
+
+
+    if(!childPoints.length){
+        return;
+    }
+
+
+    const childTopY =
+        Math.min(
+            ...childPoints.map(
+                point => point.y
+            )
+        );
+
+
+    const minChildX =
+        Math.min(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    const maxChildX =
+        Math.max(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    /*
+       Female horizontal route:
+       parent couple daggara short stem.
+    */
+
+    const femaleRouteY =
+        parentCenter.y +
+        FAMILY_STEM_HEIGHT;
+
+
+    /*
+       Actual children bus:
+       child boxes daggara fixed short stem.
+    */
+
+    const femaleBusY =
+        childTopY -
+        FAMILY_STEM_HEIGHT;
+
+
+    /*
+       Female family children midpoint.
+    */
+
+    const childrenCenterX =
+        (
+            minChildX +
+            maxChildX
+        ) / 2;
+
+
+    /* =====================================
+       SINGLE CHILD
+       ===================================== */
+
+    if(childPoints.length === 1){
+
+        const childPoint =
+            childPoints[0];
+
+
+        /* Female parents ↓ short */
+
+        addLine(
+            parentCenter.x,
+            parentCenter.y,
+            parentCenter.x,
+            femaleRouteY
+        );
+
+
+        /* → female child X */
+
+        if(
+            parentCenter.x !==
+            childPoint.x
+        ){
+            addLine(
+                parentCenter.x,
+                femaleRouteY,
+                childPoint.x,
+                femaleRouteY
+            );
+        }
+
+
+        /* ↓ female child */
+
+        addLine(
+            childPoint.x,
+            femaleRouteY,
+            childPoint.x,
+            childPoint.y
+        );
+
+
+        return;
+    }
+
+
+    /* =====================================
+       MULTIPLE CHILDREN
+       ===================================== */
+
+
+    /* 1. Female parents ↓ short stem */
+
+    addLine(
+        parentCenter.x,
+        parentCenter.y,
+        parentCenter.x,
+        femaleRouteY
+    );
+
+
+    /*
+       2. Horizontal route only at
+          female special upper level.
+    */
+
+    if(
+        parentCenter.x !==
+        childrenCenterX
+    ){
+        addLine(
+            parentCenter.x,
+            femaleRouteY,
+            childrenCenterX,
+            femaleRouteY
+        );
+    }
+
+
+    /*
+       3. Female route ↓
+          to its own children bus.
+    */
+
+    addLine(
+        childrenCenterX,
+        femaleRouteY,
+        childrenCenterX,
+        femaleBusY
+    );
+
+
+    /*
+       4. Female children bus.
+    */
+
+    addLine(
+        minChildX,
+        femaleBusY,
+        maxChildX,
+        femaleBusY
+    );
+
+
+    /*
+       5. Bus ↓ each female-family child.
+    */
+
+    childPoints.forEach(
+        point => {
+
+            addLine(
+                point.x,
+                femaleBusY,
+                point.x,
+                point.y
+            );
+
+        }
+    );
+
+} 
 /* =====================================
    PARTNER SIBLING + PARTNER
    → THEIR CHILDREN
