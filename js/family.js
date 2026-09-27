@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -14859,24 +14858,85 @@ let rightAncestorHTML = "";
 
 if(ancestryCase === 1){
 
-    /* CASE 1
-       LEFT  = Complete Member Ancestry
-       RIGHT = Complete Partner Ancestry
+    /* =====================================
+       ANCESTRY SIDE RULE
+
+       MALE PERSON   → ALWAYS LEFT
+       FEMALE PERSON → ALWAYS RIGHT
+
+       Selected member evaraina
+       ee rule maradu.
+       ===================================== */
+
+    const selectedIsFemale =
+        String(
+            selectedMember.gender || ""
+        )
+        .trim()
+        .toLowerCase() === "female";
+
+
+    const partnerIsFemale =
+        partner &&
+        String(
+            partner.gender || ""
+        )
+        .trim()
+        .toLowerCase() === "female";
+
+
+    /*
+       Normal male + female couple
     */
 
-    leftAncestorHTML =
-        renderAncestorParents(
-            selectedMember,
-            beforeGen,
-            ""
-        );
+    if(
+        selectedIsFemale &&
+        !partnerIsFemale
+    ){
 
-    rightAncestorHTML =
-        renderAncestorParents(
-            partner,
-            beforeGen,
-            "partner"
-        );
+        /*
+           Selected = FEMALE
+           Partner  = MALE
+
+           LEFT  → MALE partner ancestry
+           RIGHT → FEMALE selected ancestry
+        */
+
+        leftAncestorHTML =
+            renderAncestorParents(
+                partner,
+                beforeGen,
+                "partner"
+            );
+
+
+        rightAncestorHTML =
+            renderAncestorParents(
+                selectedMember,
+                beforeGen,
+                ""
+            );
+    }
+    else{
+        /*
+           Selected = MALE
+           Partner  = FEMALE
+           LEFT  → MALE selected ancestry
+           RIGHT → FEMALE partner ancestry
+        */
+        leftAncestorHTML =
+            renderAncestorParents(
+                selectedMember,
+                beforeGen,
+                ""
+            );
+        rightAncestorHTML =
+            renderAncestorParents(
+                partner,
+                beforeGen,
+                "partner"
+            );
+    }
 }else if(
     ancestryCase === 2 ||
     ancestryCase === 3
