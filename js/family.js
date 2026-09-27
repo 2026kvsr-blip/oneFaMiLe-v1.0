@@ -1,6 +1,4 @@
 
-
-
 /* =========
 ============================
    oneFaMiLe
@@ -13661,19 +13659,97 @@ function updatePartnerSiblingsVisibility(){
 
     }else{
 
-        /* MEMBER PARTNER = NO
-           → PARTNER SIBLINGS HIDDEN
-           → VALUE AUTOMATICALLY NO */
+    familyTreeShowPartnerSiblingsControl.value =
+        "no";
 
-        familyTreeShowPartnerSiblingsControl.value =
-            "no";
-
-        partnerSiblingsControlRow.style.display =
-            "none";
-    }
+    partnerSiblingsControlRow.style.display =
+        "none";
 }
 
 
+/* OTHER PARTNERS ALSO DEPENDS
+   ON SIBLING OPTIONS */
+
+updateOtherPartnersVisibility();}
+
+/* =====================================
+   MEMBER / PARTNER SIBLINGS
+   → OTHER PARTNERS VISIBILITY
+   ===================================== */
+
+function updateOtherPartnersVisibility(){
+
+    const memberSiblingsControl =
+        document.getElementById(
+            "familyTreeShowSiblings"
+        );
+
+    const partnerSiblingsControl =
+        document.getElementById(
+            "familyTreeShowPartnerSiblings"
+        );
+
+    const otherPartnersControl =
+        document.getElementById(
+            "familyTreeShowPartner"
+        );
+
+    const otherPartnersRow =
+        document.getElementById(
+            "familyTreeOtherPartnersRow"
+        );
+
+    const otherPartnersHint =
+        document.getElementById(
+            "familyTreeOtherPartnersHint"
+        );
+
+
+    if(
+        !memberSiblingsControl ||
+        !partnerSiblingsControl ||
+        !otherPartnersControl ||
+        !otherPartnersRow
+    ){
+        return;
+    }
+
+
+    const memberSiblingsYes =
+        memberSiblingsControl.value ===
+        "yes";
+
+
+    const partnerSiblingsYes =
+        partnerSiblingsControl.value ===
+        "yes";
+
+
+    if(
+        memberSiblingsYes ||
+        partnerSiblingsYes
+    ){
+
+        otherPartnersRow.style.display =
+            "";
+
+    }
+    else{
+
+        otherPartnersRow.style.display =
+            "none";
+
+        otherPartnersControl.value =
+            "no";
+
+        if(otherPartnersHint){
+            otherPartnersHint.style.display =
+                "none";
+        }
+
+    }
+
+}
 /* INITIAL STATE */
 
 updatePartnerSiblingsVisibility();
@@ -13684,6 +13760,59 @@ updatePartnerSiblingsVisibility();
 familyTreeMemberPartnerControl?.addEventListener(
     "change",
     updatePartnerSiblingsVisibility
+);
+
+const familyTreeMemberSiblingsControl =
+    document.getElementById(
+        "familyTreeShowSiblings"
+    );
+
+
+familyTreeMemberSiblingsControl?.addEventListener(
+    "change",
+    updateOtherPartnersVisibility
+);
+
+
+familyTreeShowPartnerSiblingsControl?.addEventListener(
+    "change",
+    updateOtherPartnersVisibility
+);
+   const familyTreeOtherPartnersControl =
+    document.getElementById(
+        "familyTreeShowPartner"
+    );
+
+const familyTreeOtherPartnersHint =
+    document.getElementById(
+        "familyTreeOtherPartnersHint"
+    );
+
+
+function showOtherPartnersHint(){
+
+    if(!familyTreeOtherPartnersHint){
+        return;
+    }
+
+    familyTreeOtherPartnersHint.style.display =
+        "block";
+}
+
+
+familyTreeOtherPartnersControl?.addEventListener(
+    "focus",
+    showOtherPartnersHint
+);
+
+familyTreeOtherPartnersControl?.addEventListener(
+    "click",
+    showOtherPartnersHint
+);
+
+familyTreeOtherPartnersControl?.addEventListener(
+    "change",
+    showOtherPartnersHint
 );
 /* =====================================
    SHOW FAMILY TREE BUTTON
