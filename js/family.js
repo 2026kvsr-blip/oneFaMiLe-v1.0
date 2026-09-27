@@ -13655,7 +13655,7 @@ familyTreeOtherPartnersControl?.addEventListener(
     function(){
 
         showMessage(
-            "Other partners yes select cheste all persons ki partner ni chupistundi okka selected member thappa",
+    'If "Other Partners" is set to "Yes," partners will be shown for all persons except the selected member.',
             "info",
             4000
         );
