@@ -1,5 +1,6 @@
 
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -17957,12 +17958,12 @@ function connectDescendantsStandard(
        children top madhyalo EXACT midpoint.
     */
 
-    const childBusY =
-        parentCenter.y +
-        (
-            childTopY -
-            parentCenter.y
-        ) / 2;
+  const childBusY =
+    parentCenter.y +
+    (
+        childTopY -
+        parentCenter.y
+    ) * 0.60;
 
 
     /* =================================
