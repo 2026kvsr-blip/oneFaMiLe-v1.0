@@ -19439,11 +19439,6 @@ else{
    Female family → special upper route
    ===================================== */
 
-const selectedIsFemaleForConnector =
-    selected &&
-    selected.classList.contains(
-        "tree-female"
-    );
 
 const partnerIsFemaleForConnector =
     partner &&
