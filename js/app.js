@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8768,15 +8767,29 @@ function showProfileChangeOTPPage(){
                     Enter OTP
                 </span>
 
-                <input
-                    id="profileChangeOTP"
-                    type="tel"
-                    inputmode="numeric"
-                    maxlength="6"
-                    placeholder="Enter 6-digit OTP"
-                    autocomplete="one-time-code"
-                >
-
+               <input
+    id="profileChangeOTP"
+    type="text"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    maxlength="6"
+    placeholder="Enter 6-digit OTP"
+    autocomplete="one-time-code"
+    style="
+        width:100%;
+        max-width:260px;
+        height:52px;
+        box-sizing:border-box;
+        padding:8px 14px;
+        border:1px solid #b8cbe5;
+        border-radius:12px;
+        font-size:22px;
+        font-weight:600;
+        text-align:center;
+        letter-spacing:6px;
+        background:#ffffff;
+    "
+>
             </div>
 
         </div>
@@ -8820,7 +8833,9 @@ function showProfileChangeOTPPage(){
     // =====================================
     // NUMBERS ONLY
     // =====================================
-
+otpInput.disabled = false;
+otpInput.readOnly = false;
+    
     otpInput.addEventListener(
         "input",
         ()=>{
