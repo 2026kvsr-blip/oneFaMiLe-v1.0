@@ -1,5 +1,6 @@
 
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -15849,6 +15850,43 @@ diagram.innerHTML = `
     class="family-tree-download-btn">
     Download
 </button>
+
+<div
+    id="familyTreeDownloadMenu"
+    class="family-tree-download-menu"
+    style="display:none;">
+
+    <div class="family-tree-download-title">
+        Select Page Size
+    </div>
+
+    <button type="button" data-tree-page="A4">
+        A4
+    </button>
+
+    <button type="button" data-tree-page="LEGAL">
+        Legal
+    </button>
+
+    <button type="button" data-tree-page="A3">
+        A3
+    </button>
+
+    <button type="button" data-tree-page="A2">
+        A2
+    </button>
+
+    <button type="button" data-tree-page="A1">
+        A1
+    </button>
+
+    <button
+        type="button"
+        id="familyTreeDownloadCancel">
+        Cancel
+    </button>
+
+</div>
     </div>
 
 </div>
@@ -16756,7 +16794,52 @@ const zoomResetBtn =
         "familyTreeZoomReset"
     );
 
+const familyTreeDownloadBtn =
+    document.getElementById(
+        "familyTreeDownloadBtn"
+    );
 
+const familyTreeDownloadMenu =
+    document.getElementById(
+        "familyTreeDownloadMenu"
+    );
+
+const familyTreeDownloadCancel =
+    document.getElementById(
+        "familyTreeDownloadCancel"
+    );
+
+
+if(
+    familyTreeDownloadBtn &&
+    familyTreeDownloadMenu
+){
+
+    familyTreeDownloadBtn.onclick =
+        function(){
+
+            familyTreeDownloadMenu.style.display =
+                "block";
+
+        };
+
+}
+
+
+if(
+    familyTreeDownloadCancel &&
+    familyTreeDownloadMenu
+){
+
+    familyTreeDownloadCancel.onclick =
+        function(){
+
+            familyTreeDownloadMenu.style.display =
+                "none";
+
+        };
+
+}
        
 /* =====================================
    ZOOM IN
