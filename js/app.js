@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6652,35 +6651,22 @@ function showEditProfile(){
 
 </div>
 
-<div class="profile-row phone-test-row">
+<div class="profile-row">
 
-    <span>Mobile Number</span>
+    <span>
+        Mobile Number
+    </span>
 
-    <div class="phone-test-value">
+    <input
+        id="editProfileMobile"
+        type="tel"
+        inputmode="numeric"
+        maxlength="10"
+        value="${user.mobile || ""}"
+        placeholder="Enter Mobile Number"
+    >
 
-        <strong>${user.mobile || "-"}</strong>
-
-        <button
-            id="changeMobileBtn"
-            class="grid-btn">
-
-            ✏️ Change
-
-        </button>
-
-
-<div
-    id="mobileChangeEditLockStatus"
-    style="
-        text-align:center;
-        font-weight:bold;
-        margin-top:6px;
-    "
-></div>
-    </div>
-
-</div>
-            
+</div>            
             <div class="profile-row">
                 <span>Email</span>
 
@@ -6821,18 +6807,28 @@ const saveProfileBtn =
 const editProfileFields = [
 
     "editProfileLoginUserName",
+
     "editProfileSurName",
+
     "editProfileMiddleName",
+
     "editProfileLastName",
+
     "editProfileEmail",
+
+    "editProfileMobile",
+
     "editProfileGender",
+
     "editProfileDateOfBirth",
+
     "editProfilePlace",
+
     "editProfileState",
+
     "editProfileCountry"
 
 ];
-
 
 // =====================================
 // SAVE ORIGINAL VALUES
@@ -6933,7 +6929,35 @@ editProfileFields.forEach(id => {
 
 });
 
+// =====================================
+// EDIT PROFILE MOBILE
+// NUMBERS ONLY
+// =====================================
 
+const editProfileMobile =
+    document.getElementById(
+        "editProfileMobile"
+    );
+
+if(editProfileMobile){
+
+    editProfileMobile.addEventListener(
+        "input",
+        ()=>{
+
+            // REMOVE NON-NUMERIC CHARACTERS
+            editProfileMobile.value =
+                editProfileMobile.value
+                    .replace(/\D/g,"")
+                    .slice(0,10);
+
+            // CHECK WHETHER PROFILE CHANGED
+            checkEditProfileChanges();
+
+        }
+    );
+
+}
 // =====================================
 // CANCEL
 // =====================================
