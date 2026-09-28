@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -17000,10 +16999,6 @@ if(zoomResetBtn){
    LANDSCAPE
    ===================================== */
 
-const familyTreeDownloadMenu =
-    document.getElementById(
-        "familyTreeDownloadMenu"
-    );
 
 if(familyTreeDownloadMenu){
 
