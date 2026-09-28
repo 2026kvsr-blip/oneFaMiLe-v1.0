@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -16993,6 +16994,346 @@ if(zoomResetBtn){
         };
 
 }
+/* =====================================
+   FAMILY TREE PDF DOWNLOAD
+   A4 / LEGAL / A3 / A2 / A1
+   LANDSCAPE
+   ===================================== */
+
+const familyTreeDownloadMenu =
+    document.getElementById(
+        "familyTreeDownloadMenu"
+    );
+
+if(familyTreeDownloadMenu){
+
+    const pageButtons =
+        familyTreeDownloadMenu.querySelectorAll(
+            "[data-tree-page]"
+        );
+
+    pageButtons.forEach(
+        button => {
+
+            button.onclick =
+                async function(){
+
+                    const pageSize =
+                        this.getAttribute(
+                            "data-tree-page"
+                        );
+
+                    const treeCanvas =
+                        document.getElementById(
+                            "familyTreeCanvas"
+                        );
+
+                    if(!treeCanvas){
+                        return;
+                    }
+
+                    if(
+                        typeof html2canvas ===
+                        "undefined"
+                    ){
+                        alert(
+                            "PDF image library is not loaded."
+                        );
+
+                        return;
+                    }
+
+                    if(
+                        !window.jspdf ||
+                        !window.jspdf.jsPDF
+                    ){
+                        alert(
+                            "PDF library is not loaded."
+                        );
+
+                        return;
+                    }
+
+
+                    familyTreeDownloadMenu.style.display =
+                        "none";
+
+
+                    /* =============================
+                       SAVE CURRENT SCREEN TRANSFORM
+                       ============================= */
+
+                    const oldTransform =
+                        treeCanvas.style.transform;
+
+                    const oldTransformOrigin =
+                        treeCanvas.style.transformOrigin;
+
+
+                    try{
+
+                        /* =============================
+                           REMOVE SCREEN ZOOM / PAN
+                           ONLY WHILE CAPTURING PDF
+                           ============================= */
+
+                        treeCanvas.style.transform =
+                            "none";
+
+                        treeCanvas.style.transformOrigin =
+                            "top left";
+
+
+                        await new Promise(
+                            resolve =>
+                                requestAnimationFrame(
+                                    () =>
+                                        requestAnimationFrame(
+                                            resolve
+                                        )
+                                )
+                        );
+
+
+                        /* =============================
+                           CAPTURE COMPLETE TREE
+                           ============================= */
+
+                        const capturedCanvas =
+                            await html2canvas(
+                                treeCanvas,
+                                {
+                                    backgroundColor:
+                                        "#ffffff",
+
+                                    scale: 2,
+
+                                    useCORS: true,
+
+                                    logging: false,
+
+                                    width:
+                                        treeCanvas.scrollWidth,
+
+                                    height:
+                                        treeCanvas.scrollHeight,
+
+                                    windowWidth:
+                                        treeCanvas.scrollWidth,
+
+                                    windowHeight:
+                                        treeCanvas.scrollHeight
+                                }
+                            );
+
+
+                        const imageData =
+                            capturedCanvas.toDataURL(
+                                "image/png"
+                            );
+
+
+                        const {
+                            jsPDF
+                        } = window.jspdf;
+
+
+                        /* =============================
+                           SELECT PDF PAPER SIZE
+                           LANDSCAPE
+                           ============================= */
+
+                        let pdfFormat;
+
+                        switch(pageSize){
+
+                            case "LEGAL":
+
+                                pdfFormat =
+                                    [
+                                        215.9,
+                                        355.6
+                                    ];
+
+                                break;
+
+
+                            case "A3":
+
+                                pdfFormat =
+                                    "a3";
+
+                                break;
+
+
+                            case "A2":
+
+                                pdfFormat =
+                                    "a2";
+
+                                break;
+
+
+                            case "A1":
+
+                                pdfFormat =
+                                    "a1";
+
+                                break;
+
+
+                            case "A4":
+
+                            default:
+
+                                pdfFormat =
+                                    "a4";
+
+                                break;
+                        }
+
+
+                        const pdf =
+                            new jsPDF({
+                                orientation:
+                                    "landscape",
+
+                                unit:
+                                    "mm",
+
+                                format:
+                                    pdfFormat
+                            });
+
+
+                        const pageWidth =
+                            pdf.internal.pageSize
+                                .getWidth();
+
+                        const pageHeight =
+                            pdf.internal.pageSize
+                                .getHeight();
+
+
+                        /* =============================
+                           FIT COMPLETE TREE
+                           INSIDE SELECTED PAPER
+                           ============================= */
+
+                        const margin = 8;
+
+                        const availableWidth =
+                            pageWidth -
+                            margin * 2;
+
+                        const availableHeight =
+                            pageHeight -
+                            margin * 2;
+
+
+                        const imageRatio =
+                            capturedCanvas.width /
+                            capturedCanvas.height;
+
+                        const pageRatio =
+                            availableWidth /
+                            availableHeight;
+
+
+                        let imageWidth;
+                        let imageHeight;
+
+
+                        if(
+                            imageRatio >
+                            pageRatio
+                        ){
+
+                            imageWidth =
+                                availableWidth;
+
+                            imageHeight =
+                                imageWidth /
+                                imageRatio;
+
+                        }
+                        else{
+
+                            imageHeight =
+                                availableHeight;
+
+                            imageWidth =
+                                imageHeight *
+                                imageRatio;
+
+                        }
+
+
+                        const imageX =
+                            (
+                                pageWidth -
+                                imageWidth
+                            ) / 2;
+
+                        const imageY =
+                            (
+                                pageHeight -
+                                imageHeight
+                            ) / 2;
+
+
+                        pdf.addImage(
+                            imageData,
+                            "PNG",
+                            imageX,
+                            imageY,
+                            imageWidth,
+                            imageHeight,
+                            undefined,
+                            "FAST"
+                        );
+
+
+                        pdf.save(
+                            "Family-Tree-" +
+                            pageSize +
+                            ".pdf"
+                        );
+
+                    }
+                    catch(error){
+
+                        console.error(
+                            "FAMILY TREE PDF ERROR:",
+                            error
+                        );
+
+                        alert(
+                            "Family Tree PDF could not be created."
+                        );
+
+                    }
+                    finally{
+
+                        /* =============================
+                           RESTORE SCREEN EXACTLY
+                           ============================= */
+
+                        treeCanvas.style.transform =
+                            oldTransform;
+
+                        treeCanvas.style.transformOrigin =
+                            oldTransformOrigin;
+
+                    }
+
+                };
+
+        }
+    );
+
+}
+           
 /* =====================================
    FAMILY TREE
    PAN + PINCH ZOOM
