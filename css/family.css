@@ -3068,3 +3068,49 @@ max-height: 28px !important;
 .family-tree-download-menu button:hover{
     background:#EAF8FF;
 }
+/* =====================================
+   FAMILY TREE DOWNLOAD BUTTON
+   ===================================== */
+
+.family-tree-download-btn{
+    min-width: 105px;
+
+    padding: 8px 15px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: linear-gradient(
+        135deg,
+        #2A6EB0,
+        #4A9FE8
+    );
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 3px 8px rgba(0,0,0,0.20);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.family-tree-download-btn:hover{
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 12px rgba(0,0,0,0.25);
+}
+
+.family-tree-download-btn:active{
+    transform: translateY(1px);
+
+    box-shadow:
+        0 2px 5px rgba(0,0,0,0.18);
+}
