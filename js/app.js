@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -9317,12 +9318,9 @@ async function updateProfileAfterOTP(
 
         setTimeout(()=>{
 
-            updateProfilePage();
+    showProfilePage();
 
-            showEditProfile();
-
-        },500);
-
+},500);
     }
     catch(err){
 
