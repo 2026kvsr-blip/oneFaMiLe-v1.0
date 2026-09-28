@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -17214,7 +17215,21 @@ if(familyTreeDownloadMenu){
                            FIT COMPLETE TREE
                            INSIDE SELECTED PAPER
                            ============================= */
+/* =============================
+   PDF PAGE BORDER
+   ============================= */
 
+const borderMargin = 5;
+
+pdf.setLineWidth(0.6);
+
+pdf.rect(
+    borderMargin,
+    borderMargin,
+    pageWidth - borderMargin * 2,
+    pageHeight - borderMargin * 2
+);
+                       
                         const margin = 8;
 
                         const availableWidth =
