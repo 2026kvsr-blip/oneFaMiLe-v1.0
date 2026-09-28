@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8273,7 +8274,24 @@ if(!isValidName(lastName)){
         return;
     }
 
+// =====================================
+// CHECK SENSITIVE PROFILE CHANGES
+// Login User Name / Email
+// =====================================
 
+const loginUserNameChanged =
+    loginUserName !==
+    String(user.loginUserName || "").trim();
+
+const emailChanged =
+    email.toLowerCase() !==
+    String(user.email || "")
+        .trim()
+        .toLowerCase();
+
+const sensitiveProfileChanged =
+    loginUserNameChanged ||
+    emailChanged;
     // ================================
     // SEND UPDATE TO GOOGLE SHEET
     // ================================
