@@ -1,3 +1,4 @@
+
 *{
 margin:0;
 padding:0;
@@ -3634,8 +3635,8 @@ width:100%;
    ===================================== */
 
 #profileChangeOTP{
-    width:190px !important;
-    height:42px !important;
+    width:125px !important;
+    height:30px !important;
 
     box-sizing:border-box !important;
 
