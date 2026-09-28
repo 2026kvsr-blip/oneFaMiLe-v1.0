@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6976,793 +6977,8 @@ cancelEditProfileBtn.onclick = ()=>{
     showEditProfile();
 
 };
-// =====================================
-// CHANGE MOBILE NUMBER
-// =====================================
 
-document
-    .getElementById("changeMobileBtn")
-    .onclick = ()=>{
 
-
-    // =====================================
-    // CHECK 1 MINUTE LOCK FIRST
-    // =====================================
-
-    const mobileLockUntil =
-        Number(
-            sessionStorage.getItem(
-                "mobileChangeLockUntil"
-            )
-        ) || 0;
-
-
-  if(
-    mobileLockUntil &&
-    mobileLockUntil > Date.now()
-){
-
-    const remainingLockSeconds =
-        Math.ceil(
-            (
-                mobileLockUntil -
-                Date.now()
-            ) / 1000
-        );
-
-
-    const pendingMobile =
-        sessionStorage.getItem(
-            "mobileChangePendingMobile"
-        );
-
-
-    // =====================================
-    // OPEN VERIFY MOBILE NUMBER PAGE
-    // =====================================
-
-    if(pendingMobile){
-
-        showMobileOTPPage(
-    pendingMobile,
-    remainingLockSeconds,
-    true
-);
-
-        // =====================================
-        // USE EXISTING 1 MINUTE LOCK TIMER
-        // =====================================
-
-        startMobileChangeLockTimer(
-            remainingLockSeconds
-        );
-
-
-        return;
-    }
-
-
-    // =====================================
-    // NO PENDING MOBILE
-    // =====================================
-
-    showMessage(
-        "Mobile Number verification session not found.",
-        "warning",
-        3000
-    );
-
-    return;
-}
-    // =====================================
-    // CHECK ACTIVE 30 SECOND OTP
-    // =====================================
-
-    const pendingMobile =
-        sessionStorage.getItem(
-            "mobileChangePendingMobile"
-        );
-
-
-    const otpExpiresAt =
-        Number(
-            sessionStorage.getItem(
-                "mobileChangeOTPExpiresAt"
-            )
-        ) || 0;
-
-
-    if(
-        pendingMobile &&
-        otpExpiresAt &&
-        otpExpiresAt > Date.now()
-    ){
-
-        const remainingSeconds =
-            Math.ceil(
-                (
-                    otpExpiresAt -
-                    Date.now()
-                ) / 1000
-            );
-
-
-        showMobileOTPPage(
-            pendingMobile,
-            remainingSeconds
-        );
-
-        return;
-    }
-
-
-    // =====================================
-    // NO ACTIVE OTP
-    // =====================================
-
-    sessionStorage.removeItem(
-        "mobileChangePendingMobile"
-    );
-
-    sessionStorage.removeItem(
-        "mobileChangeOTPExpiresAt"
-    );
-
-
-   
-    // =====================================
-    // NORMAL CHANGE MOBILE NUMBER PAGE
-    // =====================================
-
-    profilePage.innerHTML = `
-
-        
-        <h3>
-            📱 Change Mobile Number
-        </h3>
-
-        <div class="profile-box">
-<!-- =================================
-     CURRENT MOBILE
-     ================================= -->
-
-<div class="mobile-change-row">
-
-    <span class="mobile-change-label">
-        Current Mobile Number
-    </span>
-
-    <span class="mobile-change-colon">
-        :
-    </span>
-
-    <strong class="mobile-change-value">
-        ${user.mobile || "-"}
-    </strong>
-
-</div>
-
-
-<!-- =================================
-     NEW MOBILE
-     ================================= -->
-
-<div class="mobile-change-row">
-
-    <span class="mobile-change-label">
-        New Mobile Number
-    </span>
-
-    <span class="mobile-change-colon">
-        :
-    </span>
-
-    <div class="new-mobile-area">
-
-    <input
-        id="newMobileNumber"
-        type="tel"
-        inputmode="numeric"
-        maxlength="10"
-    >
-
-    <div
-        id="mobileAvailabilityMsg"
-        class="mobile-availability-msg"
-    ></div>
-
-    <div
-        id="mobileOtpSendingMsg"
-        class="hidden"
-    >
-        <span class="spinner"></span>
-        Sending OTP...
-    </div>
-
-</div>
-
-</div>
-
-</div>
-        </div>
-
-
-        <div align="center">
-
-            <button
-                id="sendMobileOTPBtn"
-                class="grid-btn">
-
-                Send OTP
-
-            </button>
-
-
-            <br><br>
-
-            <button
-                id="mobileChangeBackBtn"
-                class="back-btn">
-
-                ← Back
-
-            </button>
-
-        </div>
-
-    `;
-
-
-    // =====================================
-    // BACK
-    // =====================================
-
-    document.getElementById("mobileChangeBackBtn").onclick = ()=>{
-
-        showEditProfile();
-
-    };
-
-// =====================================
-// LIVE MOBILE AVAILABILITY CHECK
-// =====================================
-
-document
-    .getElementById("newMobileNumber")
-    .addEventListener("input", async function(){
-
-    const mobile =
-        this.value.trim();
-
-    const msg =
-        document.getElementById(
-            "mobileAvailabilityMsg"
-        );
-const sendBtn =
-    document.getElementById(
-        "sendMobileOTPBtn"
-    );
-        if(sendBtn){
-
-    sendBtn.disabled = true;
-
-}
-
-    // Clear message initially
-    msg.textContent = "";
-    msg.style.color = "";
-
-
-    // Only digits
-    if(!/^\d*$/.test(mobile)){
-
-        this.value =
-            mobile.replace(/\D/g,"");
-
-        return;
-    }
-
-
-    // Wait until 10 digits
-   if(mobile.length !== 10){
-
-    if(sendBtn){
-
-        sendBtn.disabled = true;
-
-    }
-
-    return;
-}
-
-        
-    // Indian mobile validation
-        
-    if(!/^[6-9]\d{9}$/.test(mobile)){
-
-    msg.textContent =
-        "❌ Invalid Mobile Number";
-
-    msg.style.color =
-        "red";
-
-
-    if(sendBtn){
-
-        sendBtn.disabled = true;
-
-    }
-
-
-    return;
-}
-
-    // Same as current number
-   if(
-    mobile ===
-    String(user.mobile || "").trim()
-){
-
-    msg.textContent =
-        "❌ Current Mobile Number";
-
-    msg.style.color =
-        "red";
-
-
-    if(sendBtn){
-
-        sendBtn.disabled = true;
-
-    }
-
-
-    return;
-}
-// =====================================
-// VERIFY MOBILE NUMBER
-// =====================================
-
-msg.innerHTML =
-    '<span class="spinner"></span> Verifying Mobile Number...';
-
-msg.style.color = "";
-
-if(sendBtn){
-    sendBtn.disabled = true;
-}
-
-    try{
-
-        const formData =
-            new FormData();
-
-        formData.append(
-            "action",
-            "checkMobile"
-        );
-
-        formData.append(
-            "mobile",
-            mobile
-        );
-
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                body:formData
-
-            });
-
-
-        const result =
-            await response.json();
-
-
-        if(result.status === "exists"){
-
-    msg.textContent =
-        "🔴 Mobile Number Not Available";
-
-    msg.style.color =
-        "red";
-
-
-    if(sendBtn){
-
-        sendBtn.disabled = true;
-
-    }
-
-
-    return;
-}
-
-
-        if(result.status === "success"){
-
-    msg.textContent =
-        "🟢 Mobile Number Available";
-
-    msg.style.color =
-        "green";
-
-
-    if(sendBtn){
-
-        sendBtn.disabled = false;
-
-    }
-
-
-    return;
-}
-
-if(sendBtn){
-
-    sendBtn.disabled = true;
-
-}
-        msg.textContent =
-            result.message ||
-            "Unable to check Mobile Number.";
-
-        msg.style.color =
-            "red";
-
-    }
-   catch(err){
-
-    console.log(err);
-
-
-    if(sendBtn){
-
-        sendBtn.disabled = true;
-
-    }
-
-
-    msg.textContent =
-        "Unable to check Mobile Number.";
-
-    msg.style.color =
-        "red";
-
-}
-
-});
-
-
-    
-    // =====================================
-    // SEND OTP
-    // =====================================
-
-   document.getElementById("sendMobileOTPBtn").onclick = async ()=>{
-
-    const newMobile =
-        document
-            .getElementById("newMobileNumber")
-            .value
-            .trim();
-
-
-    // ================================
-    // EMPTY
-    // ================================
-
-    if(newMobile === ""){
-
-        showMessage(
-            "Please enter new mobile number.",
-            "warning",
-            3000
-        );
-
-        document
-            .getElementById("newMobileNumber")
-            .focus();
-
-        return;
-    }
-
-
-    // ================================
-    // ONLY DIGITS
-    // ================================
-
-    if(!/^\d+$/.test(newMobile)){
-
-        showMessage(
-            "Mobile Number must contain only digits.",
-            "warning",
-            3000
-        );
-
-        document
-            .getElementById("newMobileNumber")
-            .focus();
-
-        return;
-    }
-
-
-    // ================================
-    // EXACTLY 10 DIGITS
-    // ================================
-
-    if(newMobile.length !== 10){
-
-        showMessage(
-            "Mobile Number must contain exactly 10 digits.",
-            "warning",
-            3000
-        );
-
-        document
-            .getElementById("newMobileNumber")
-            .focus();
-
-        return;
-    }
-
-
-    // ================================
-    // INDIAN MOBILE NUMBER
-    // ================================
-
-    if(!/^[6-9]\d{9}$/.test(newMobile)){
-
-        showMessage(
-            "Enter a valid mobile number.",
-            "warning",
-            3000
-        );
-
-        document
-            .getElementById("newMobileNumber")
-            .focus();
-
-        return;
-    }
-
-
-    // ================================
-    // SAME AS CURRENT NUMBER
-    // ================================
-
-    if(
-        newMobile ===
-        String(user.mobile || "").trim()
-    ){
-
-        showMessage(
-            "New Mobile Number must be different from current number.",
-            "warning",
-            3000
-        );
-
-        document
-            .getElementById("newMobileNumber")
-            .focus();
-
-        return;
-    }
-
-
-    // ================================
-    // CHECK MOBILE IN GOOGLE SHEET
-    // ================================
-
-        // ================================
-// =====================================
-// SEND MOBILE CHANGE OTP
-// =====================================
-
-const otpFormData = new FormData();
-
-otpFormData.append(
-    "action",
-    "sendMobileChangeOTP"
-);
-
-otpFormData.append(
-    "mobile",
-    newMobile
-);
-
-
-   try{
-
-   const availabilityMsg =
-    document.getElementById(
-        "mobileAvailabilityMsg"
-    );
-
-const sendBtn =
-    document.getElementById(
-        "sendMobileOTPBtn"
-    );
-
-const sendingMsg =
-    availabilityMsg;
-
-
-
-    // =====================================
-    // HIDE MOBILE AVAILABLE MESSAGE
-    // =====================================
-
-    if(availabilityMsg){
-
-        availabilityMsg.textContent = "";
-
-        availabilityMsg.innerHTML = "";
-
-    }
-
-
-    // =====================================
-    // DISABLE SEND OTP BUTTON
-    // =====================================
-
-    if(sendBtn){
-
-        sendBtn.disabled = true;
-
-    }
-
-
-    // =====================================
-    // SHOW SENDING OTP ANIMATION
-    // =====================================
-
-   // =====================================
-// SHOW SENDING OTP ANIMATION
-// =====================================
-
-if(sendingMsg){
-
-    sendingMsg.innerHTML =
-        '<span class="spinner"></span> Sending OTP...';
-
-}
-
-
-    // =====================================
-    // SEND OTP TO BACKEND
-    // =====================================
-
-    const otpResponse =
-        await fetch(API_URL,{
-            method:"POST",
-            body:otpFormData
-        });
-    
-
-const otpResult =
-    await otpResponse.json();
-  
-if(sendingMsg){
-
-    sendingMsg.classList.add("hidden");
-
-}
-
-if(otpResult.status !== "success"){
-
-        showMessage(
-            otpResult.message ||
-            "Unable to send OTP.",
-            "warning",
-            3000
-        );
-
-        return;
-    }
-
-// =====================================
-// SAVE PENDING MOBILE OTP
-// =====================================
-
-sessionStorage.setItem(
-    "mobileChangePendingMobile",
-    newMobile
-);
-
-sessionStorage.setItem(
-    "mobileChangeOTPExpiresAt",
-    String(
-        Date.now() + (30 * 1000)
-    )
-);
-showMobileOTPPage(
-    newMobile,
-    30
-);
-
-return;
-       
- 
-// =====================================
-// CHECK EXISTING MOBILE CHANGE LOCK
-// =====================================
-
-const savedLockUntil =
-    Number(
-        sessionStorage.getItem(
-            "mobileChangeLockUntil"
-        )
-    );
-
-
-if(
-    savedLockUntil &&
-    savedLockUntil > Date.now()
-){
-
-    const remainingSeconds =
-        Math.ceil(
-            (savedLockUntil - Date.now()) / 1000
-        );
-
-
-    startMobileChangeLockTimer(
-        remainingSeconds
-    );
-
-}
-else{
-
-    sessionStorage.removeItem(
-        "mobileChangeLockUntil"
-    );
-
-
-    startMobileOTPCountdown(30);
-
-}
-    // =====================================
-// RESEND OTP
-// =====================================
-
-    // =====================================
-    // OTP SCREEN BACK
-    // =====================================
-
-    document
-        .getElementById("mobileOTPBackBtn")
-        .onclick = ()=>{
-
-        showEditProfile();
-
-    };
-
-
-    // =====================================
-    // VERIFY OTP
-    // =====================================
-
-}
-catch(err){
-
-    hideLoader();
-
-    console.log(err);
-
-    showMessage(
-        "Unable to send OTP.",
-        "error",
-        3000
-    );
-
-} 
-   };
-    };
     // =====================================
     // SAVE PROFILE
     // =====================================
@@ -8522,7 +7738,36 @@ otpData.append(
             return;
         }
 
+// =====================================
+// START FIRST OTP 30 SECOND TIMER
+// =====================================
 
+// CLEAR ANY OLD PROFILE OTP STATE
+sessionStorage.removeItem(
+    "profileChangeOTPExpiresAt"
+);
+
+sessionStorage.removeItem(
+    "profileChangeLockUntil"
+);
+
+
+// SERVER RETURNS expiresIn = 30
+const profileOTPExpiresIn =
+    Number(
+        otpResult.expiresIn ||
+        30
+    );
+
+
+sessionStorage.setItem(
+    "profileChangeOTPExpiresAt",
+    String(
+        Date.now() +
+        profileOTPExpiresIn * 1000
+    )
+);
+        
         // =====================================
         // SAVE PENDING PROFILE DATA
         // =====================================
@@ -8632,7 +7877,10 @@ formData.append(
         "mobile",
         user.mobile || ""
     );
-
+formData.append(
+    "newMobile",
+    user.mobile || ""
+);
     formData.append(
         "email",
         email
@@ -8901,18 +8149,60 @@ function showProfileChangeOTPPage(){
     );
 
 
+    // =====================================
+    // CLEAR OLD PAGE TIMER
+    // =====================================
+
+    if(window.profileChangeOTPTimer){
+
+        clearInterval(
+            window.profileChangeOTPTimer
+        );
+
+        window.profileChangeOTPTimer = null;
+    }
+
+
+    // =====================================
+    // OTP EXPIRY
+    // FIRST SEND ALREADY HAPPENED
+    // =====================================
+
+    let otpExpiresAt =
+        Number(
+            sessionStorage.getItem(
+                "profileChangeOTPExpiresAt"
+            ) || 0
+        );
+
+
+    if(!otpExpiresAt){
+
+        otpExpiresAt =
+            Date.now() +
+            30 * 1000;
+
+        sessionStorage.setItem(
+            "profileChangeOTPExpiresAt",
+            String(otpExpiresAt)
+        );
+
+    }
+
+
     profilePage.innerHTML = `
 
         <h3>
             🔐 Verify Profile Change
         </h3>
 
+
         <div class="profile-box">
 
             <div class="profile-row">
 
                 <span>
-                    OTP Sent To
+                    Registered Email
                 </span>
 
                 <strong>
@@ -8925,31 +8215,66 @@ function showProfileChangeOTPPage(){
             <div class="profile-row">
 
                 <span>
+                    Registered Mobile
+                </span>
+
+                <strong>
+                    ${user.mobile || "-"}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <span>
                     Enter OTP
                 </span>
 
-               <input
-    id="profileChangeOTP"
-    type="text"
-    inputmode="numeric"
-    pattern="[0-9]*"
-    maxlength="6"
-    placeholder="Enter 6-digit OTP"
-    autocomplete="one-time-code"
-   style="
-    width:190px;
-    height:42px;
-    box-sizing:border-box;
-    padding:6px 10px;
-    border:1px solid #b8cbe5;
-    border-radius:8px;
-    font-size:18px;
-    font-weight:500;
-    text-align:center;
-    letter-spacing:3px;
-    background:#ffffff;
-"
->
+                <input
+                    id="profileChangeOTP"
+                    type="text"
+                    inputmode="numeric"
+                    pattern="[0-9]*"
+                    maxlength="6"
+                    placeholder="6-digit OTP"
+                    autocomplete="one-time-code"
+                    style="
+                        width:133px;
+                        height:32px;
+                        box-sizing:border-box;
+                        padding:4px 7px;
+                        border:1px solid #b8cbe5;
+                        border-radius:7px;
+                        font-size:16px;
+                        font-weight:500;
+                        text-align:center;
+                        letter-spacing:2px;
+                        background:#ffffff;
+                    "
+                >
+
+            </div>
+
+
+            <div
+                class="profile-row"
+            >
+
+                <span>
+                    OTP Status
+                </span>
+
+                <strong
+                    id="profileChangeOTPStatus"
+                    style="
+                        font-size:14px;
+                        font-weight:600;
+                    "
+                >
+                    OTP valid for 30 seconds
+                </strong>
+
             </div>
 
         </div>
@@ -8960,6 +8285,7 @@ function showProfileChangeOTPPage(){
                 display:flex;
                 gap:10px;
                 justify-content:center;
+                flex-wrap:wrap;
                 margin-top:18px;
             "
         >
@@ -8969,6 +8295,15 @@ function showProfileChangeOTPPage(){
                 class="grid-btn"
             >
                 ✅ Verify OTP
+            </button>
+
+
+            <button
+                id="resendProfileChangeOTPBtn"
+                class="grid-btn"
+                disabled
+            >
+                🔄 Resend OTP
             </button>
 
 
@@ -8990,12 +8325,38 @@ function showProfileChangeOTPPage(){
         );
 
 
+    const verifyBtn =
+        document.getElementById(
+            "verifyProfileChangeOTPBtn"
+        );
+
+
+    const resendBtn =
+        document.getElementById(
+            "resendProfileChangeOTPBtn"
+        );
+
+
+    const backBtn =
+        document.getElementById(
+            "profileChangeOTPBackBtn"
+        );
+
+
+    const statusEl =
+        document.getElementById(
+            "profileChangeOTPStatus"
+        );
+
+
+    otpInput.disabled = false;
+    otpInput.readOnly = false;
+
+
     // =====================================
     // NUMBERS ONLY
     // =====================================
-otpInput.disabled = false;
-otpInput.readOnly = false;
-    
+
     otpInput.addEventListener(
         "input",
         ()=>{
@@ -9017,20 +8378,529 @@ otpInput.readOnly = false;
 
 
     // =====================================
+    // START OTP 30 SECOND COUNTDOWN
+    // =====================================
+
+    function startOTPCountdown(){
+
+        if(window.profileChangeOTPTimer){
+
+            clearInterval(
+                window.profileChangeOTPTimer
+            );
+
+        }
+
+
+        const updateTimer = ()=>{
+
+            const remaining =
+                Math.max(
+                    0,
+                    Math.ceil(
+                        (
+                            otpExpiresAt -
+                            Date.now()
+                        ) / 1000
+                    )
+                );
+
+
+            if(remaining > 0){
+
+                statusEl.textContent =
+                    "OTP valid for " +
+                    remaining +
+                    " seconds";
+
+                verifyBtn.disabled =
+                    false;
+
+                resendBtn.disabled =
+                    true;
+
+            }
+            else{
+
+                statusEl.textContent =
+                    "OTP expired. Please resend OTP.";
+
+                verifyBtn.disabled =
+                    true;
+
+                resendBtn.disabled =
+                    false;
+
+
+                if(window.profileChangeOTPTimer){
+
+                    clearInterval(
+                        window.profileChangeOTPTimer
+                    );
+
+                    window.profileChangeOTPTimer =
+                        null;
+
+                }
+
+            }
+
+        };
+
+
+        updateTimer();
+
+
+        window.profileChangeOTPTimer =
+            setInterval(
+                updateTimer,
+                1000
+            );
+
+    }
+
+
+    // =====================================
+    // 1 MINUTE LOCK COUNTDOWN
+    // =====================================
+
+    function startLockCountdown(
+        seconds
+    ){
+
+        if(window.profileChangeOTPTimer){
+
+            clearInterval(
+                window.profileChangeOTPTimer
+            );
+
+            window.profileChangeOTPTimer =
+                null;
+
+        }
+
+
+        const lockUntil =
+            Date.now() +
+            Number(seconds || 60) *
+            1000;
+
+
+        sessionStorage.setItem(
+            "profileChangeLockUntil",
+            String(lockUntil)
+        );
+
+
+        otpInput.disabled =
+            true;
+
+        verifyBtn.disabled =
+            true;
+
+        resendBtn.disabled =
+            true;
+
+
+        const updateLock = ()=>{
+
+            const remaining =
+                Math.max(
+                    0,
+                    Math.ceil(
+                        (
+                            lockUntil -
+                            Date.now()
+                        ) / 1000
+                    )
+                );
+
+
+            if(remaining > 0){
+
+                statusEl.textContent =
+                    "Locked. Please wait " +
+                    remaining +
+                    " seconds.";
+
+                return;
+            }
+
+
+            clearInterval(
+                window.profileChangeOTPTimer
+            );
+
+            window.profileChangeOTPTimer =
+                null;
+
+
+            sessionStorage.removeItem(
+                "profileChangeLockUntil"
+            );
+
+
+            otpInput.disabled =
+                false;
+
+            otpInput.value =
+                "";
+
+
+            statusEl.textContent =
+                "Lock ended. Please resend OTP.";
+
+
+            verifyBtn.disabled =
+                true;
+
+            resendBtn.disabled =
+                false;
+
+
+            otpInput.focus();
+
+        };
+
+
+        updateLock();
+
+
+        window.profileChangeOTPTimer =
+            setInterval(
+                updateLock,
+                1000
+            );
+
+    }
+
+
+    // =====================================
+    // RESTORE ACTIVE LOCK
+    // =====================================
+
+    const savedLockUntil =
+        Number(
+            sessionStorage.getItem(
+                "profileChangeLockUntil"
+            ) || 0
+        );
+
+
+    if(
+        savedLockUntil &&
+        Date.now() < savedLockUntil
+    ){
+
+        const remaining =
+            Math.ceil(
+                (
+                    savedLockUntil -
+                    Date.now()
+                ) / 1000
+            );
+
+
+        startLockCountdown(
+            remaining
+        );
+
+    }
+    else{
+
+        sessionStorage.removeItem(
+            "profileChangeLockUntil"
+        );
+
+        startOTPCountdown();
+
+    }
+
+
+    // =====================================
     // BACK
     // =====================================
 
-    document
-        .getElementById(
-            "profileChangeOTPBackBtn"
-        )
-        .onclick = ()=>{
+    backBtn.onclick = ()=>{
 
-            sessionStorage.removeItem(
-                "pendingProfileUpdate"
+        if(window.profileChangeOTPTimer){
+
+            clearInterval(
+                window.profileChangeOTPTimer
             );
 
-            showEditProfile();
+            window.profileChangeOTPTimer =
+                null;
+
+        }
+
+
+        sessionStorage.removeItem(
+            "pendingProfileUpdate"
+        );
+
+        sessionStorage.removeItem(
+            "profileChangeOTPExpiresAt"
+        );
+
+        sessionStorage.removeItem(
+            "profileChangeLockUntil"
+        );
+
+
+        showEditProfile();
+
+    };
+
+
+    // =====================================
+    // RESEND OTP
+    // =====================================
+
+    resendBtn.onclick =
+        async ()=>{
+
+            resendBtn.disabled =
+                true;
+
+            verifyBtn.disabled =
+                true;
+
+
+            const resendData =
+                new FormData();
+
+
+            resendData.append(
+                "action",
+                "sendProfileChangeOTP"
+            );
+
+
+            resendData.append(
+                "currentMobile",
+                user.mobile || ""
+            );
+
+
+            resendData.append(
+                "loginUserName",
+                pendingProfile.loginUserName ||
+                user.loginUserName ||
+                ""
+            );
+
+
+            resendData.append(
+                "email",
+                pendingProfile.email ||
+                user.email ||
+                ""
+            );
+
+
+            resendData.append(
+                "newMobile",
+                pendingProfile.mobile ||
+                user.mobile ||
+                ""
+            );
+
+
+            try{
+
+                showLoader(
+                    "Sending OTP..."
+                );
+
+
+                const response =
+                    await fetch(
+                        API_URL,
+                        {
+                            method:"POST",
+                            body:resendData
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                hideLoader();
+
+
+                // =====================================
+                // BACKEND LOCK
+                // =====================================
+
+                if(
+                    result.status ===
+                    "locked"
+                ){
+
+                    showMessage(
+                        result.message ||
+                        "OTP verification is locked.",
+                        "warning",
+                        3000
+                    );
+
+
+                    startLockCountdown(
+                        Number(
+                            result.remainingSeconds ||
+                            60
+                        )
+                    );
+
+                    return;
+                }
+
+
+                // =====================================
+                // RESEND LIMIT
+                // =====================================
+
+                if(
+                    result.status ===
+                    "resend_limit"
+                ){
+
+                    const waitSeconds =
+                        Number(
+                            result.remainingSeconds ||
+                            60
+                        );
+
+
+                    showMessage(
+                        result.message ||
+                        "Maximum OTP resends reached.",
+                        "warning",
+                        3000
+                    );
+
+
+                    statusEl.textContent =
+                        "Resend limit reached. Please wait " +
+                        waitSeconds +
+                        " seconds.";
+
+
+                    resendBtn.disabled =
+                        true;
+
+                    verifyBtn.disabled =
+                        true;
+
+
+                    setTimeout(
+                        ()=>{
+
+                            resendBtn.disabled =
+                                false;
+
+                            statusEl.textContent =
+                                "You can resend OTP now.";
+
+                        },
+                        waitSeconds * 1000
+                    );
+
+
+                    return;
+                }
+
+
+                // =====================================
+                // OTHER ERROR
+                // =====================================
+
+                if(
+                    result.status !==
+                    "success"
+                ){
+
+                    resendBtn.disabled =
+                        false;
+
+
+                    showMessage(
+                        result.message ||
+                        "Unable to resend OTP.",
+                        "warning",
+                        3000
+                    );
+
+                    return;
+                }
+
+
+                // =====================================
+                // RESEND SUCCESS
+                // NEW 30 SECOND EXPIRY
+                // =====================================
+
+                otpInput.value =
+                    "";
+
+                otpInput.disabled =
+                    false;
+
+
+                otpExpiresAt =
+                    Date.now() +
+                    Number(
+                        result.expiresIn ||
+                        30
+                    ) *
+                    1000;
+
+
+                sessionStorage.setItem(
+                    "profileChangeOTPExpiresAt",
+                    String(otpExpiresAt)
+                );
+
+
+                showMessage(
+                    result.message ||
+                    "OTP resent successfully.",
+                    "success",
+                    3000
+                );
+
+
+                startOTPCountdown();
+
+
+                setTimeout(()=>{
+
+                    otpInput.focus();
+
+                },100);
+
+            }
+            catch(err){
+
+                hideLoader();
+
+                console.log(err);
+
+
+                resendBtn.disabled =
+                    false;
+
+
+                showMessage(
+                    "Unable to connect to server.",
+                    "error",
+                    3000
+                );
+
+            }
 
         };
 
@@ -9039,11 +8909,8 @@ otpInput.readOnly = false;
     // VERIFY OTP
     // =====================================
 
-    document
-        .getElementById(
-            "verifyProfileChangeOTPBtn"
-        )
-        .onclick = async ()=>{
+    verifyBtn.onclick =
+        async ()=>{
 
             const enteredOTP =
                 otpInput.value.trim();
@@ -9081,13 +8948,8 @@ otpInput.readOnly = false;
             }
 
 
-            const verifyBtn =
-                document.getElementById(
-                    "verifyProfileChangeOTPBtn"
-                );
-
-
-            verifyBtn.disabled = true;
+            verifyBtn.disabled =
+                true;
 
 
             const verifyData =
@@ -9136,6 +8998,90 @@ otpInput.readOnly = false;
                 hideLoader();
 
 
+                // =====================================
+                // OTP EXPIRED
+                // =====================================
+
+                if(
+                    result.status ===
+                    "expired"
+                ){
+
+                    if(window.profileChangeOTPTimer){
+
+                        clearInterval(
+                            window.profileChangeOTPTimer
+                        );
+
+                        window.profileChangeOTPTimer =
+                            null;
+
+                    }
+
+
+                    sessionStorage.removeItem(
+                        "profileChangeOTPExpiresAt"
+                    );
+
+
+                    statusEl.textContent =
+                        "OTP expired. Please resend OTP.";
+
+
+                    verifyBtn.disabled =
+                        true;
+
+                    resendBtn.disabled =
+                        false;
+
+
+                    showMessage(
+                        result.message ||
+                        "OTP expired.",
+                        "warning",
+                        3000
+                    );
+
+                    return;
+                }
+
+
+                // =====================================
+                // 3 WRONG ATTEMPTS / LOCK
+                // =====================================
+
+                if(
+                    result.status ===
+                    "locked"
+                ){
+
+                    otpInput.value =
+                        "";
+
+
+                    showMessage(
+                        result.message ||
+                        "OTP verification is locked.",
+                        "warning",
+                        3000
+                    );
+
+
+                    startLockCountdown(
+                        Number(
+                            result.remainingSeconds ||
+                            60
+                        )
+                    );
+
+                    return;
+                }
+
+
+                // =====================================
+                // WRONG OTP / OTHER ERROR
+                // =====================================
+
                 if(
                     result.status !==
                     "success"
@@ -9144,12 +9090,16 @@ otpInput.readOnly = false;
                     verifyBtn.disabled =
                         false;
 
+
                     showMessage(
                         result.message ||
                         "OTP verification failed.",
                         "warning",
                         3000
                     );
+
+
+                    otpInput.select();
 
                     return;
                 }
@@ -9166,6 +9116,7 @@ otpInput.readOnly = false;
                     verifyBtn.disabled =
                         false;
 
+
                     showMessage(
                         "Verification token not received.",
                         "error",
@@ -9177,8 +9128,33 @@ otpInput.readOnly = false;
 
 
                 // =====================================
-                // OTP VERIFIED
-                // NOW UPDATE PROFILE
+                // VERIFIED
+                // CLEAN OTP TIMER DATA
+                // =====================================
+
+                if(window.profileChangeOTPTimer){
+
+                    clearInterval(
+                        window.profileChangeOTPTimer
+                    );
+
+                    window.profileChangeOTPTimer =
+                        null;
+
+                }
+
+
+                sessionStorage.removeItem(
+                    "profileChangeOTPExpiresAt"
+                );
+
+                sessionStorage.removeItem(
+                    "profileChangeLockUntil"
+                );
+
+
+                // =====================================
+                // UPDATE COMPLETE PROFILE
                 // =====================================
 
                 await updateProfileAfterOTP(
@@ -9192,8 +9168,10 @@ otpInput.readOnly = false;
 
                 console.log(err);
 
+
                 verifyBtn.disabled =
                     false;
+
 
                 showMessage(
                     "Unable to connect to server.",
@@ -9206,6 +9184,8 @@ otpInput.readOnly = false;
         };
 
 }
+
+
 // =====================================
 // UPDATE PROFILE AFTER OTP VERIFICATION
 // =====================================
