@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8291,6 +8292,146 @@ const emailChanged =
 const sensitiveProfileChanged =
     loginUserNameChanged ||
     emailChanged;
+
+   // =====================================
+// SENSITIVE PROFILE CHANGE
+// SEND OTP BEFORE UPDATE
+// =====================================
+
+if(sensitiveProfileChanged){
+
+    const otpData =
+        new FormData();
+
+    otpData.append(
+        "action",
+        "sendProfileChangeOTP"
+    );
+
+    otpData.append(
+        "currentMobile",
+        user.mobile || ""
+    );
+
+    otpData.append(
+        "loginUserName",
+        loginUserName
+    );
+
+    otpData.append(
+        "email",
+        email
+    );
+
+
+    try{
+
+        showLoader(
+            "Sending OTP..."
+        );
+
+
+        const otpResponse =
+            await fetch(
+                API_URL,
+                {
+                    method:"POST",
+                    body:otpData
+                }
+            );
+
+
+        const otpResult =
+            await otpResponse.json();
+
+
+        hideLoader();
+
+
+        if(
+            otpResult.status !==
+            "success"
+        ){
+
+            showMessage(
+                otpResult.message ||
+                "Unable to send OTP.",
+                "warning",
+                3000
+            );
+
+            return;
+        }
+
+
+        // =====================================
+        // SAVE PENDING PROFILE DATA
+        // =====================================
+
+        sessionStorage.setItem(
+            "pendingProfileUpdate",
+            JSON.stringify({
+
+                loginUserName:
+                    loginUserName,
+
+                gender:
+                    gender,
+
+                dateOfBirth:
+                    dateOfBirth,
+
+                surName:
+                    surName,
+
+                middleName:
+                    middleName,
+
+                lastName:
+                    lastName,
+
+                email:
+                    email,
+
+                place:
+                    place,
+
+                state:
+                    state,
+
+                country:
+                    country
+
+            })
+        );
+
+
+        // =====================================
+        // SHOW PROFILE OTP PAGE
+        // =====================================
+
+        showProfileChangeOTPPage();
+
+
+        return;
+
+    }
+    catch(err){
+
+        hideLoader();
+
+        console.log(err);
+
+        showMessage(
+            "Unable to connect to server.",
+            "error",
+            3000
+        );
+
+        return;
+    }
+
+}     
     // ================================
     // SEND UPDATE TO GOOGLE SHEET
     // ================================
@@ -8545,6 +8686,643 @@ if(profileEditBackBtn){
     };
 
 }
+}
+
+// =====================================
+// PROFILE CHANGE OTP PAGE
+// Login User Name / Email Verification
+// =====================================
+
+function showProfileChangeOTPPage(){
+
+    const user =
+        JSON.parse(
+            sessionStorage.getItem("user")
+        );
+
+    const pendingProfile =
+        JSON.parse(
+            sessionStorage.getItem(
+                "pendingProfileUpdate"
+            )
+        );
+
+
+    if(!user){
+
+        showMessage(
+            "User session not found.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    if(!pendingProfile){
+
+        showMessage(
+            "Pending profile update not found.",
+            "warning",
+            3000
+        );
+
+        showEditProfile();
+
+        return;
+    }
+
+
+    hideAllPages();
+
+    profilePage.classList.remove(
+        "hidden"
+    );
+
+
+    profilePage.innerHTML = `
+
+        <h3>
+            🔐 Verify Profile Change
+        </h3>
+
+        <div class="profile-box">
+
+            <div class="profile-row">
+
+                <span>
+                    OTP Sent To
+                </span>
+
+                <strong>
+                    ${user.email || "-"}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <span>
+                    Enter OTP
+                </span>
+
+                <input
+                    id="profileChangeOTP"
+                    type="tel"
+                    inputmode="numeric"
+                    maxlength="6"
+                    placeholder="Enter 6-digit OTP"
+                    autocomplete="one-time-code"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div
+            style="
+                display:flex;
+                gap:10px;
+                justify-content:center;
+                margin-top:18px;
+            "
+        >
+
+            <button
+                id="verifyProfileChangeOTPBtn"
+                class="grid-btn"
+            >
+                ✅ Verify OTP
+            </button>
+
+
+            <button
+                id="profileChangeOTPBackBtn"
+                class="grid-btn"
+            >
+                ← Back
+            </button>
+
+        </div>
+
+    `;
+
+
+    const otpInput =
+        document.getElementById(
+            "profileChangeOTP"
+        );
+
+
+    // =====================================
+    // NUMBERS ONLY
+    // =====================================
+
+    otpInput.addEventListener(
+        "input",
+        ()=>{
+
+            otpInput.value =
+                otpInput.value
+                    .replace(/\D/g,"")
+                    .slice(0,6);
+
+        }
+    );
+
+
+    setTimeout(()=>{
+
+        otpInput.focus();
+
+    },100);
+
+
+    // =====================================
+    // BACK
+    // =====================================
+
+    document
+        .getElementById(
+            "profileChangeOTPBackBtn"
+        )
+        .onclick = ()=>{
+
+            sessionStorage.removeItem(
+                "pendingProfileUpdate"
+            );
+
+            showEditProfile();
+
+        };
+
+
+    // =====================================
+    // VERIFY OTP
+    // =====================================
+
+    document
+        .getElementById(
+            "verifyProfileChangeOTPBtn"
+        )
+        .onclick = async ()=>{
+
+            const enteredOTP =
+                otpInput.value.trim();
+
+
+            if(enteredOTP === ""){
+
+                showMessage(
+                    "Please enter OTP.",
+                    "warning",
+                    3000
+                );
+
+                otpInput.focus();
+
+                return;
+            }
+
+
+            if(
+                !/^\d{6}$/.test(
+                    enteredOTP
+                )
+            ){
+
+                showMessage(
+                    "OTP must contain exactly 6 digits.",
+                    "warning",
+                    3000
+                );
+
+                otpInput.focus();
+
+                return;
+            }
+
+
+            const verifyBtn =
+                document.getElementById(
+                    "verifyProfileChangeOTPBtn"
+                );
+
+
+            verifyBtn.disabled = true;
+
+
+            const verifyData =
+                new FormData();
+
+
+            verifyData.append(
+                "action",
+                "verifyProfileChangeOTP"
+            );
+
+
+            verifyData.append(
+                "currentMobile",
+                user.mobile || ""
+            );
+
+
+            verifyData.append(
+                "otp",
+                enteredOTP
+            );
+
+
+            try{
+
+                showLoader(
+                    "Verifying OTP..."
+                );
+
+
+                const response =
+                    await fetch(
+                        API_URL,
+                        {
+                            method:"POST",
+                            body:verifyData
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                hideLoader();
+
+
+                if(
+                    result.status !==
+                    "success"
+                ){
+
+                    verifyBtn.disabled =
+                        false;
+
+                    showMessage(
+                        result.message ||
+                        "OTP verification failed.",
+                        "warning",
+                        3000
+                    );
+
+                    return;
+                }
+
+
+                // =====================================
+                // TOKEN REQUIRED
+                // =====================================
+
+                if(
+                    !result.verificationToken
+                ){
+
+                    verifyBtn.disabled =
+                        false;
+
+                    showMessage(
+                        "Verification token not received.",
+                        "error",
+                        3000
+                    );
+
+                    return;
+                }
+
+
+                // =====================================
+                // OTP VERIFIED
+                // NOW UPDATE PROFILE
+                // =====================================
+
+                await updateProfileAfterOTP(
+                    result.verificationToken
+                );
+
+            }
+            catch(err){
+
+                hideLoader();
+
+                console.log(err);
+
+                verifyBtn.disabled =
+                    false;
+
+                showMessage(
+                    "Unable to connect to server.",
+                    "error",
+                    3000
+                );
+
+            }
+
+        };
+
+}
+// =====================================
+// UPDATE PROFILE AFTER OTP VERIFICATION
+// =====================================
+
+async function updateProfileAfterOTP(
+    verificationToken
+){
+
+    const user =
+        JSON.parse(
+            sessionStorage.getItem("user")
+        );
+
+
+    const pendingProfile =
+        JSON.parse(
+            sessionStorage.getItem(
+                "pendingProfileUpdate"
+            )
+        );
+
+
+    // =====================================
+    // CHECK SESSION
+    // =====================================
+
+    if(!user){
+
+        showMessage(
+            "User session not found.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    // =====================================
+    // CHECK PENDING PROFILE
+    // =====================================
+
+    if(!pendingProfile){
+
+        showMessage(
+            "Pending profile update not found.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    // =====================================
+    // CHECK TOKEN
+    // =====================================
+
+    if(!verificationToken){
+
+        showMessage(
+            "OTP verification token not found.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    // =====================================
+    // CREATE UPDATE DATA
+    // =====================================
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "action",
+        "updateProfile"
+    );
+
+
+    formData.append(
+        "loginUserName",
+        pendingProfile.loginUserName || ""
+    );
+
+
+    formData.append(
+        "gender",
+        pendingProfile.gender || ""
+    );
+
+
+    formData.append(
+        "dateOfBirth",
+        pendingProfile.dateOfBirth || ""
+    );
+
+
+    formData.append(
+        "surName",
+        pendingProfile.surName || ""
+    );
+
+
+    formData.append(
+        "middleName",
+        pendingProfile.middleName || ""
+    );
+
+
+    formData.append(
+        "lastName",
+        pendingProfile.lastName || ""
+    );
+
+
+    formData.append(
+        "mobile",
+        user.mobile || ""
+    );
+
+
+    formData.append(
+        "email",
+        pendingProfile.email || ""
+    );
+
+
+    formData.append(
+        "place",
+        pendingProfile.place || ""
+    );
+
+
+    formData.append(
+        "state",
+        pendingProfile.state || ""
+    );
+
+
+    formData.append(
+        "country",
+        pendingProfile.country || ""
+    );
+
+
+    // =====================================
+    // OTP VERIFICATION TOKEN
+    // =====================================
+
+    formData.append(
+        "verificationToken",
+        verificationToken
+    );
+
+
+    try{
+
+        showLoader(
+            "Updating Profile..."
+        );
+
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method:"POST",
+                    body:formData
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        hideLoader();
+
+
+        // =====================================
+        // UPDATE FAILED
+        // =====================================
+
+        if(
+            result.status !==
+            "success"
+        ){
+
+            showMessage(
+                result.message ||
+                "Unable to update profile.",
+                "warning",
+                3000
+            );
+
+            return;
+        }
+
+
+        // =====================================
+        // UPDATE USER SESSION
+        // =====================================
+
+        user.loginUserName =
+            pendingProfile.loginUserName || "";
+
+        user.surName =
+            pendingProfile.surName || "";
+
+        user.middleName =
+            pendingProfile.middleName || "";
+
+        user.lastName =
+            pendingProfile.lastName || "";
+
+        user.gender =
+            pendingProfile.gender || "";
+
+        user.dateOfBirth =
+            pendingProfile.dateOfBirth || "";
+
+        user.email =
+            pendingProfile.email || "";
+
+        user.place =
+            pendingProfile.place || "";
+
+        user.state =
+            pendingProfile.state || "";
+
+        user.country =
+            pendingProfile.country || "";
+
+
+        sessionStorage.setItem(
+            "user",
+            JSON.stringify(user)
+        );
+
+
+        // =====================================
+        // REMOVE PENDING PROFILE DATA
+        // =====================================
+
+        sessionStorage.removeItem(
+            "pendingProfileUpdate"
+        );
+
+
+        // =====================================
+        // SUCCESS MESSAGE
+        // =====================================
+
+        showMessage(
+            "Profile Updated Successfully.",
+            "success",
+            2000
+        );
+
+
+        // =====================================
+        // REFRESH PROFILE PAGE
+        // =====================================
+
+        setTimeout(()=>{
+
+            updateProfilePage();
+
+            showEditProfile();
+
+        },500);
+
+    }
+    catch(err){
+
+        hideLoader();
+
+        console.log(err);
+
+        showMessage(
+            "Unable to connect to server.",
+            "error",
+            3000
+        );
+
+    }
+
 }
 // =====================================
 // SHOW MOBILE OTP PAGE
