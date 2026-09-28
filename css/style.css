@@ -3628,3 +3628,41 @@ width:100%;
     letter-spacing:0 !important;
     opacity:1 !important;
 }
+
+/* =====================================
+   PROFILE CHANGE OTP BOX
+   ===================================== */
+
+#profileChangeOTP{
+    width:190px !important;
+    height:42px !important;
+
+    box-sizing:border-box !important;
+
+    padding:6px 10px !important;
+
+    border:1px solid #b8cbe5 !important;
+    border-radius:8px !important;
+
+    font-size:18px !important;
+    font-weight:500 !important;
+
+    text-align:center !important;
+    letter-spacing:3px !important;
+
+    background:#ffffff !important;
+}
+
+
+/* OTP HINT TEXT */
+
+#profileChangeOTP::placeholder{
+    color:#9aa7b5 !important;
+
+    font-size:14px !important;
+    font-weight:400 !important;
+
+    letter-spacing:0 !important;
+
+    opacity:1 !important;
+}
