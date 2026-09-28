@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -9307,16 +9306,23 @@ async function updateProfileAfterOTP(
 
 
     formData.append(
-        "mobile",
-        user.mobile || ""
-    );
+    "mobile",
+    user.mobile || ""
+);
 
 
-    formData.append(
-        "email",
-        pendingProfile.email || ""
-    );
+formData.append(
+    "newMobile",
+    pendingProfile.mobile ||
+    user.mobile ||
+    ""
+);
 
+
+formData.append(
+    "email",
+    pendingProfile.email || ""
+);
 
     formData.append(
         "place",
@@ -9412,12 +9418,16 @@ async function updateProfileAfterOTP(
         user.dateOfBirth =
             pendingProfile.dateOfBirth || "";
 
-        user.email =
-            pendingProfile.email || "";
+       user.email =
+    pendingProfile.email || "";
 
-        user.place =
-            pendingProfile.place || "";
+user.mobile =
+    pendingProfile.mobile ||
+    user.mobile ||
+    "";
 
+user.place =
+    pendingProfile.place || "";
         user.state =
             pendingProfile.state || "";
 
