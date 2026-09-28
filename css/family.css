@@ -3020,3 +3020,49 @@ max-height: 28px !important;
 
     gap: 90px !important;
 }
+.family-tree-download-menu{
+    position:fixed;
+    left:50%;
+    top:50%;
+    transform:translate(-50%, -50%);
+    z-index:10000;
+
+    width:220px;
+    padding:18px;
+
+    background:#ffffff;
+    border:2px solid #4A9FE8;
+    border-radius:14px;
+
+    box-shadow:
+        0 6px 25px rgba(0,0,0,0.25);
+
+    text-align:center;
+}
+
+.family-tree-download-title{
+    margin-bottom:12px;
+    font-size:17px;
+    font-weight:bold;
+}
+
+.family-tree-download-menu button{
+    display:block;
+    width:100%;
+
+    margin:8px 0;
+    padding:10px;
+
+    border:1px solid #4A9FE8;
+    border-radius:8px;
+
+    background:#ffffff;
+    color:#2A6EB0;
+
+    font-size:15px;
+    cursor:pointer;
+}
+
+.family-tree-download-menu button:hover{
+    background:#EAF8FF;
+}
