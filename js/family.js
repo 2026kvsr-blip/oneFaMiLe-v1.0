@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -15842,7 +15843,12 @@ diagram.innerHTML = `
             class="family-tree-zoom-reset">
             Reset
         </button>
-
+<button
+    type="button"
+    id="familyTreeDownloadBtn"
+    class="family-tree-download-btn">
+    Download
+</button>
     </div>
 
 </div>
