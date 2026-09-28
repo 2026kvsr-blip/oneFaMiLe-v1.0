@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8300,12 +8301,54 @@ if(!isValidName(lastName)){
 
 // =====================================
 // CHECK SENSITIVE PROFILE CHANGES
-// Login User Name / Email
+// Login User Name / Email / Mobile
 // =====================================
 
+const newMobile =
+    document
+        .getElementById("editProfileMobile")
+        .value
+        .trim();
+
+// =====================================
+// VALIDATE MOBILE NUMBER
+// =====================================
+
+if(newMobile === ""){
+
+    showMessage(
+        "Mobile Number is required.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileMobile")
+        .focus();
+
+    return;
+}
+
+
+if(!isValidMobile(newMobile)){
+
+    showMessage(
+        "Please enter a valid 10-digit Mobile Number.",
+        "warning",
+        3000
+    );
+
+    document
+        .getElementById("editProfileMobile")
+        .focus();
+
+    return;
+}
 const loginUserNameChanged =
     loginUserName !==
-    String(user.loginUserName || "").trim();
+    String(user.loginUserName || "")
+        .trim();
+
 
 const emailChanged =
     email.toLowerCase() !==
@@ -8313,10 +8356,100 @@ const emailChanged =
         .trim()
         .toLowerCase();
 
+
+const mobileChanged =
+    newMobile !==
+    String(user.mobile || "")
+        .trim();
+
+
 const sensitiveProfileChanged =
     loginUserNameChanged ||
-    emailChanged;
+    emailChanged ||
+    mobileChanged;
 
+        // =====================================
+// CHECK NEW MOBILE AVAILABILITY
+// ONLY WHEN MOBILE NUMBER CHANGED
+// =====================================
+
+if(mobileChanged){
+
+    const mobileCheckData =
+        new FormData();
+
+    mobileCheckData.append(
+        "action",
+        "checkMobile"
+    );
+
+    mobileCheckData.append(
+        "mobile",
+        newMobile
+    );
+
+
+    try{
+
+        showLoader(
+            "Checking Mobile Number..."
+        );
+
+
+        const mobileCheckResponse =
+            await fetch(
+                API_URL,
+                {
+                    method:"POST",
+                    body:mobileCheckData
+                }
+            );
+
+
+        const mobileCheckResult =
+            await mobileCheckResponse.json();
+
+
+        hideLoader();
+
+
+        if(
+            mobileCheckResult.status ===
+            "exists"
+        ){
+
+            showMessage(
+                "This Mobile Number is already registered.",
+                "warning",
+                3000
+            );
+
+            document
+                .getElementById(
+                    "editProfileMobile"
+                )
+                .focus();
+
+            return;
+        }
+
+    }
+    catch(err){
+
+        hideLoader();
+
+        console.log(err);
+
+        showMessage(
+            "Unable to check Mobile Number.",
+            "error",
+            3000
+        );
+
+        return;
+    }
+
+}
    // =====================================
 // SENSITIVE PROFILE CHANGE
 // SEND OTP BEFORE UPDATE
@@ -8346,7 +8479,10 @@ if(sensitiveProfileChanged){
         "email",
         email
     );
-
+otpData.append(
+    "newMobile",
+    newMobile
+);
 
     try{
 
@@ -8393,43 +8529,44 @@ if(sensitiveProfileChanged){
         // =====================================
 
         sessionStorage.setItem(
-            "pendingProfileUpdate",
-            JSON.stringify({
+    "pendingProfileUpdate",
+    JSON.stringify({
 
-                loginUserName:
-                    loginUserName,
+        loginUserName:
+            loginUserName,
 
-                gender:
-                    gender,
+        gender:
+            gender,
 
-                dateOfBirth:
-                    dateOfBirth,
+        dateOfBirth:
+            dateOfBirth,
 
-                surName:
-                    surName,
+        surName:
+            surName,
 
-                middleName:
-                    middleName,
+        middleName:
+            middleName,
 
-                lastName:
-                    lastName,
+        lastName:
+            lastName,
 
-                email:
-                    email,
+        email:
+            email,
 
-                place:
-                    place,
+        mobile:
+            newMobile,
 
-                state:
-                    state,
+        place:
+            place,
 
-                country:
-                    country
+        state:
+            state,
 
-            })
-        );
+        country:
+            country
 
-
+    })
+);
         // =====================================
         // SHOW PROFILE OTP PAGE
         // =====================================
