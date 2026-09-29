@@ -1,6 +1,4 @@
 
-
-
 /* =========
 ============================
    oneFaMiLe
@@ -7298,7 +7296,54 @@ if(editMember){
         editMember
     );
 
+/* =================================
+   EXISTING MEMBER PHOTO PREVIEW
+   ================================= */
 
+const existingPhoto =
+    String(
+        editMember.photo ||
+        editMember.photoUrl ||
+        editMember.profilePhoto ||
+        ""
+    ).trim();
+
+
+if(existingPhoto){
+
+    const previewWrap =
+        document.getElementById(
+            "memberPhotoPreviewWrap"
+        );
+
+    const preview =
+        document.getElementById(
+            "memberPhotoPreview"
+        );
+
+
+    if(
+        previewWrap &&
+        preview
+    ){
+
+        preview.src =
+            existingPhoto;
+
+        previewWrap.style.display =
+            "flex";
+
+    }
+
+
+    if(memberPhotoBtn){
+
+        memberPhotoBtn.textContent =
+            "Change Photo";
+
+    }
+
+}
     /* =================================
        CHANGE PAGE TITLE
        ================================= */
