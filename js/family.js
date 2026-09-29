@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -6853,7 +6854,28 @@ if(
         };
 
 }
+if(
+    memberPhoto &&
+    memberPhotoBtn
+){
 
+    memberPhoto.onchange =
+        function(){
+
+            if(
+                memberPhoto.files &&
+                memberPhoto.files.length > 0
+            ){
+
+                memberPhotoBtn.textContent =
+                    "✓ " +
+                    memberPhoto.files[0].name;
+
+            }
+
+        };
+
+}
 
 /* =================================
    LIFE STATUS LOGIC
@@ -10054,34 +10076,68 @@ const memberId =
             editMember.memberId || ""
           ).trim()
         : "";   
-    /* ================================
-       PHOTO
-       ================================ */
+ /* ================================
+   PHOTO
+   ================================ */
 
-    const photoField =
-        document.getElementById(
-            "memberPhoto"
+const photoField =
+    document.getElementById(
+        "memberPhoto"
+    );
+
+
+let photoData = "";
+let photoName = "";
+
+
+if(
+    photoField &&
+    photoField.files &&
+    photoField.files.length > 0
+){
+
+    const file =
+        photoField.files[0];
+
+    photoName =
+        file.name || "";
+
+
+    photoData =
+        await new Promise(
+            function(resolve,reject){
+
+                const reader =
+                    new FileReader();
+
+                reader.onload =
+                    function(){
+
+                        resolve(
+                            reader.result || ""
+                        );
+
+                    };
+
+                reader.onerror =
+                    function(){
+
+                        reject(
+                            new Error(
+                                "Photo could not be read."
+                            )
+                        );
+
+                    };
+
+                reader.readAsDataURL(
+                    file
+                );
+
+            }
         );
 
-
-    let photo = "";
-
-
-    if(
-        photoField &&
-        photoField.files &&
-        photoField.files.length > 0
-    ){
-
-        const file =
-            photoField.files[0];
-
-
-        photo =
-            file.name;
-
-    }
-
+}
 
     /* ================================
        DISABLE SAVE BUTTON
@@ -10145,10 +10201,25 @@ saveMemberBtn.textContent =
 
 
     params.append(
-        "photo",
-        photo
-    );
+    "photoData",
+    photoData
+);
 
+params.append(
+    "photoName",
+    photoName
+);
+
+params.append(
+    "existingPhoto",
+    editMember
+        ? (
+            editMember.photo ||
+            editMember.photoUrl ||
+            ""
+          )
+        : ""
+);
 
     params.append(
         "maritalStatus",
