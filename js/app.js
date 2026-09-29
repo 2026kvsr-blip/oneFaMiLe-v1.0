@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8775,61 +8774,100 @@ resendData.append(
                 }
 
 
-                // =====================================
-                // RESEND LIMIT
-                // =====================================
+               // =====================================
+// RESEND LIMIT - 1 MINUTE COUNTDOWN
+// =====================================
 
-                if(
-                    result.status ===
-                    "resend_limit"
-                ){
+if(
+    result.status ===
+    "resend_limit"
+){
 
-                    const waitSeconds =
-                        Number(
-                            result.remainingSeconds ||
-                            60
-                        );
-
-
-                    showMessage(
-                        result.message ||
-                        "Maximum OTP resends reached.",
-                        "warning",
-                        3000
-                    );
+    let waitSeconds =
+        Number(
+            result.remainingSeconds ||
+            60
+        );
 
 
-                    statusEl.textContent =
-                        "Resend limit reached. Wait for " +
-                        waitSeconds +
-                        " secs.";
+    showMessage(
+        result.message ||
+        "Maximum OTP resends reached.",
+        "warning",
+        3000
+    );
 
 
-                    resendBtn.disabled =
-                        true;
+    // Hide Verify
+    verifyBtn.disabled = true;
+    verifyBtn.style.display = "none";
 
-                    verifyBtn.disabled =
-                        true;
-
-
-                    setTimeout(
-                        ()=>{
-
-                            resendBtn.disabled =
-                                false;
-
-                            statusEl.textContent =
-                                "You can resend now.";
-
-                        },
-                        waitSeconds * 1000
-                    );
+    // Show Resend but keep disabled during wait
+    resendBtn.disabled = true;
+    resendBtn.style.display = "inline-block";
 
 
-                    return;
-                }
+    const updateResendWait = ()=>{
+
+        if(waitSeconds > 0){
+
+            statusEl.textContent =
+                "Resend limit. wait for " +
+                waitSeconds +
+                " secs.";
+
+            waitSeconds--;
+
+            return;
+        }
 
 
+        clearInterval(
+            window.profileChangeResendWaitTimer
+        );
+
+        window.profileChangeResendWaitTimer =
+            null;
+
+
+        statusEl.textContent =
+            "Please resend OTP.";
+
+        resendBtn.disabled = false;
+        resendBtn.style.display = "inline-block";
+
+        verifyBtn.disabled = true;
+        verifyBtn.style.display = "none";
+
+    };
+
+
+    // Clear old timer if any
+    if(
+        window.profileChangeResendWaitTimer
+    ){
+
+        clearInterval(
+            window.profileChangeResendWaitTimer
+        );
+
+    }
+
+
+    // Show 60 immediately
+    updateResendWait();
+
+
+    // Then 59, 58, 57...
+    window.profileChangeResendWaitTimer =
+        setInterval(
+            updateResendWait,
+            1000
+        );
+
+
+    return;
+}
                 // =====================================
                 // OTHER ERROR
                 // =====================================
