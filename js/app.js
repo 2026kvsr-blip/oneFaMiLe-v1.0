@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8391,7 +8392,82 @@ function showProfileChangeOTPPage(){
     // =====================================
     // START OTP 30 SECOND COUNTDOWN
     // =====================================
+let profileResendsRemaining = null;
+    function startResendLimitCountdown(seconds = 60){
 
+    if(window.profileChangeOTPTimer){
+
+        clearInterval(
+            window.profileChangeOTPTimer
+        );
+
+        window.profileChangeOTPTimer = null;
+    }
+
+
+    let waitSeconds =
+        Number(seconds || 60);
+
+
+    otpInput.disabled = true;
+
+    verifyBtn.disabled = true;
+    verifyBtn.style.display = "none";
+
+    resendBtn.disabled = true;
+    resendBtn.style.display = "none";
+
+
+    const updateResendLimit = ()=>{
+
+        if(waitSeconds > 0){
+
+            statusEl.textContent =
+                "Limit reached. Wait for " +
+                waitSeconds +
+                " secs.";
+
+            waitSeconds--;
+
+            return;
+        }
+
+
+        clearInterval(
+            window.profileChangeOTPTimer
+        );
+
+        window.profileChangeOTPTimer = null;
+
+
+        profileResendsRemaining = 2;
+
+        otpInput.disabled = false;
+        otpInput.value = "";
+
+
+        statusEl.textContent =
+            "Please resend OTP.";
+
+
+        verifyBtn.disabled = true;
+        verifyBtn.style.display = "none";
+
+        resendBtn.disabled = false;
+        resendBtn.style.display = "inline-block";
+
+    };
+
+
+    updateResendLimit();
+
+
+    window.profileChangeOTPTimer =
+        setInterval(
+            updateResendLimit,
+            1000
+        );
+}
     function startOTPCountdown(){
 
         if(window.profileChangeOTPTimer){
@@ -8436,31 +8512,40 @@ resendBtn.style.display =
             }
             else{
 
-                statusEl.textContent =
-                    "Expired. Please resend.";
+    if(window.profileChangeOTPTimer){
 
-                verifyBtn.disabled = true;
+        clearInterval(
+            window.profileChangeOTPTimer
+        );
 
-verifyBtn.style.display =
-    "none";
+        window.profileChangeOTPTimer = null;
+    }
 
-resendBtn.disabled = false;
 
-resendBtn.style.display =
-    "inline-block";
+    // =====================================
+    // 2ND RESEND COMPLETED
+    // START 1 MINUTE WAIT AUTOMATICALLY
+    // =====================================
 
-                if(window.profileChangeOTPTimer){
+    if(profileResendsRemaining === 0){
 
-                    clearInterval(
-                        window.profileChangeOTPTimer
-                    );
+        startResendLimitCountdown(60);
 
-                    window.profileChangeOTPTimer =
-                        null;
+        return;
+    }
 
-                }
 
-            }
+    statusEl.textContent =
+        "Expired, please resend";
+
+
+    verifyBtn.disabled = true;
+    verifyBtn.style.display = "none";
+
+    resendBtn.disabled = false;
+    resendBtn.style.display = "inline-block";
+
+}
 
         };
 
