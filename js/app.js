@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8635,16 +8636,25 @@ resendBtn.style.display = "none";
 
 
             sessionStorage.removeItem(
-                "profileChangeLockUntil"
-            );
+    "profileChangeLockUntil"
+);
 
 
-            otpInput.disabled =
-                false;
+// =====================================
+// LOCK COMPLETED
+// RESET RESEND CYCLE FRESH
+// =====================================
 
-            otpInput.value =
-                "";
+profileResendsRemaining = 2;
 
+sessionStorage.removeItem(
+    "profileChangeOTPExpiresAt"
+);
+
+
+otpInput.disabled = false;
+
+otpInput.value = "";
 
             statusEl.textContent =
                 "Request for resend.";
