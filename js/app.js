@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8682,9 +8683,13 @@ function showProfileChangeOTPPage(){
             resendData.append(
                 "action",
                 "sendProfileChangeOTP"
+                
             );
 
-
+resendData.append(
+    "isResend",
+    "yes"
+);
             resendData.append(
                 "currentMobile",
                 user.mobile || ""
