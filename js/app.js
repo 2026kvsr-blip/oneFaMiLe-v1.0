@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8249,8 +8248,8 @@ function showProfileChangeOTPPage(){
                     placeholder="6-digit OTP"
                     autocomplete="one-time-code"
                     style="
-                        width:90px;
-                        height:22px;
+                        width:70px;
+                        height:18px;
                         box-sizing:border-box;
 padding:2px 5px;
                         border:1px solid #b8cbe5;
