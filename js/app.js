@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8248,12 +8247,12 @@ function showProfileChangeOTPPage(){
     placeholder="OTP"
     autocomplete="one-time-code"
     style="
-        width:90px !important;
-        min-width:90px !important;
-        max-width:90px !important;
-        height:28px !important;
-        min-height:28px !important;
-        max-height:28px !important;
+        width:110px !important;
+        min-width:110px !important;
+        max-width:110px !important;
+        height:30px !important;
+        min-height:30px !important;
+        max-height:30px !important;
         padding:1px 4px !important;
         box-sizing:border-box !important;
         flex:0 0 80px !important;
