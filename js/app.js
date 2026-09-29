@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8984,7 +8983,10 @@ if(
                 // RESEND SUCCESS
                 // NEW 30 SECOND EXPIRY
                 // =====================================
-
+profileResendsRemaining =
+    Number(
+        result.resendsRemaining
+    );
                 otpInput.value =
                     "";
 
