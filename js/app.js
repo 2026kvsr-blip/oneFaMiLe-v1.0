@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8249,15 +8248,15 @@ function showProfileChangeOTPPage(){
                     placeholder="6-digit OTP"
                     autocomplete="one-time-code"
                     style="
-                        width:133px;
-                        height:32px;
+                        width:90px;
+                        height:22px;
                         box-sizing:border-box;
-                        padding:4px 7px;
+padding:2px 5px;
                         border:1px solid #b8cbe5;
                         border-radius:7px;
-                        font-size:16px;
+                        font-size:15px;
                         font-weight:500;
-                        text-align:center;
+                        text-align:left;
                         letter-spacing:2px;
                         background:#ffffff;
                     "
@@ -8418,7 +8417,7 @@ function showProfileChangeOTPPage(){
             if(remaining > 0){
 
                 statusEl.textContent =
-                    "OTP valid for " +
+                    "Valid for " +
                     remaining +
                     " seconds";
 
@@ -8432,7 +8431,7 @@ function showProfileChangeOTPPage(){
             else{
 
                 statusEl.textContent =
-                    "OTP expired. Please resend OTP.";
+                    "Expired. Please resend.";
 
                 verifyBtn.disabled =
                     true;
@@ -8528,9 +8527,9 @@ function showProfileChangeOTPPage(){
             if(remaining > 0){
 
                 statusEl.textContent =
-                    "Locked. Please wait " +
+                    "Locked. Wait for" +
                     remaining +
-                    " seconds.";
+                    " secs.";
 
                 return;
             }
@@ -8557,7 +8556,7 @@ function showProfileChangeOTPPage(){
 
 
             statusEl.textContent =
-                "Lock ended. Please resend OTP.";
+                "Please resend.";
 
 
             verifyBtn.disabled =
