@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -4195,16 +4194,19 @@ const formData = new FormData();
         if(result.status=="success"){
            loginAttempts = 0;
 
-            sessionStorage.setItem(
+           sessionStorage.setItem(
     "user",
     JSON.stringify(result)
 );
 
-/* LOAD CURRENT LOGIN USER FAMILY */
-await loadCurrentLoginFamily();
+
+// =====================================
+// OPEN DASHBOARD WITHOUT WAITING
+// FOR FAMILY MEMBERS
+// =====================================
 
 updateSideMenuUser();
-updateMenuIcon();            
+updateMenuIcon();           
             sessionStorage.setItem(
         "passCode",
         passCode
@@ -4213,8 +4215,29 @@ updateMenuIcon();
             welcomePage.classList.add("hidden");
             dashboard.classList.remove("hidden");
 
-            homeBtn.click();
+homeBtn.click();
 
+
+// =====================================
+// LOAD FAMILY DATA WITHOUT BLOCKING LOGIN
+// =====================================
+
+loadCurrentLoginFamily()
+    .then(()=>{
+
+        console.log(
+            "Family data loaded after login."
+        );
+
+    })
+    .catch(error=>{
+
+        console.error(
+            "LOGIN FAMILY LOAD ERROR:",
+            error
+        );
+
+    });
         }else{
 
     loginAttempts++;
