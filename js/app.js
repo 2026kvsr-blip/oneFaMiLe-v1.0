@@ -7687,6 +7687,62 @@ if(mobileChanged){
     }
 
 }
+
+    // =====================================
+// CHECK EXISTING PROFILE OTP LOCK
+// User Name / Email / Mobile common lock
+// =====================================
+
+if(sensitiveProfileChanged){
+
+    const savedProfileLockUntil =
+        Number(
+            sessionStorage.getItem(
+                "profileChangeLockUntil"
+            ) || 0
+        );
+
+
+    if(
+        savedProfileLockUntil &&
+        Date.now() < savedProfileLockUntil
+    ){
+
+        const remaining =
+            Math.ceil(
+                (
+                    savedProfileLockUntil -
+                    Date.now()
+                ) / 1000
+            );
+
+
+        showMessage(
+            "OTP locked. Wait for " +
+            remaining +
+            " secs.",
+            "warning",
+            3000
+        );
+
+
+        return;
+    }
+
+
+    // Old completed lock can be removed
+    if(
+        savedProfileLockUntil &&
+        Date.now() >= savedProfileLockUntil
+    ){
+
+        sessionStorage.removeItem(
+            "profileChangeLockUntil"
+        );
+
+    }
+
+}    
    // =====================================
 // SENSITIVE PROFILE CHANGE
 // SEND OTP BEFORE UPDATE
@@ -7776,10 +7832,6 @@ showMessage(
 // CLEAR ANY OLD PROFILE OTP STATE
 sessionStorage.removeItem(
     "profileChangeOTPExpiresAt"
-);
-
-sessionStorage.removeItem(
-    "profileChangeLockUntil"
 );
 
 
@@ -8752,36 +8804,40 @@ resendBtn.style.display = "inline-block";
     // BACK
     // =====================================
 
-    backBtn.onclick = ()=>{
+  backBtn.onclick = ()=>{
 
-        if(window.profileChangeOTPTimer){
+    // Stop only page display timer.
+    // Do NOT remove lock end time.
+    if(window.profileChangeOTPTimer){
 
-            clearInterval(
-                window.profileChangeOTPTimer
-            );
-
-            window.profileChangeOTPTimer =
-                null;
-
-        }
-
-
-        sessionStorage.removeItem(
-            "pendingProfileUpdate"
+        clearInterval(
+            window.profileChangeOTPTimer
         );
 
-        sessionStorage.removeItem(
-            "profileChangeOTPExpiresAt"
-        );
-
-        sessionStorage.removeItem(
-            "profileChangeLockUntil"
-        );
+        window.profileChangeOTPTimer = null;
+    }
 
 
-        showEditProfile();
+    // Pending edited values may be changed again.
+    sessionStorage.removeItem(
+        "pendingProfileUpdate"
+    );
 
-    };
+
+    // Old OTP cannot be used after going back.
+    sessionStorage.removeItem(
+        "profileChangeOTPExpiresAt"
+    );
+
+
+    // IMPORTANT:
+    // DO NOT REMOVE profileChangeLockUntil
+    // Lock must continue even after Back.
+
+
+    showEditProfile();
+
+};
 
 
     // =====================================
