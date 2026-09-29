@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8532,7 +8531,7 @@ resendBtn.style.display = "none";
             if(remaining > 0){
 
                 statusEl.textContent =
-                    "Locked. Wait for" +
+                    "Locked. Wait for " +
                     remaining +
                     " secs.";
 
