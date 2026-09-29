@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -11547,6 +11548,30 @@ const newFamilyNameField =
 
 if(savedFamily){
 
+ if(savedFamily && savedFamily.familyId){
+
+    const createBtn =
+        document.getElementById(
+            "createFamilyTreeBtn"
+        );
+
+
+    // =====================================
+    // HIDE CREATE FAMILY TREE BUTTON
+    // =====================================
+
+    if(createBtn){
+
+        createBtn.style.display =
+            "none";
+
+    }
+
+
+    // =====================================
+    // SHOW EXISTING FAMILY ID
+    // =====================================
+
     if(newFamilyIdField){
 
         newFamilyIdField.textContent =
@@ -11563,6 +11588,10 @@ if(savedFamily){
     }
 
 
+    // =====================================
+    // SHOW EXISTING FAMILY NAME
+    // =====================================
+
     if(newFamilyNameField){
 
         newFamilyNameField.value =
@@ -11578,6 +11607,10 @@ if(savedFamily){
     }
 
 
+    // =====================================
+    // SHOW ALREADY HAVE FAMILY MESSAGE
+    // =====================================
+
     const statusField =
         document.getElementById(
             "familyIdStatus"
@@ -11587,7 +11620,7 @@ if(savedFamily){
     if(statusField){
 
         statusField.textContent =
-            "User already have a Family Tree.";
+            "User already have family tree";
 
         statusField.className =
             "family-id-status available";
