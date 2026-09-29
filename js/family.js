@@ -1,5 +1,6 @@
 
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -6222,7 +6223,32 @@ function bindAddMemberButton(){
                     class="common-photo-input">
                     Select Photo
                 </button>
+<!-- =================================
+     MEMBER PHOTO PREVIEW
+     ================================= -->
 
+<div
+    id="memberPhotoPreviewWrap"
+    style="
+        display:none;
+        margin-left:8px;
+        align-items:center;
+        justify-content:center;
+    ">
+
+    <img
+        id="memberPhotoPreview"
+        alt="Member Photo"
+        style="
+            width:55px;
+            height:55px;
+            object-fit:cover;
+            border-radius:50%;
+            border:1px solid #999;
+            background:#ffffff;
+        ">
+
+</div>
             </div>
 
 
@@ -6827,7 +6853,7 @@ if(memberGender){
 }
        
 /* =================================
-   PHOTO BUTTON
+   PHOTO BUTTON + PHOTO PREVIEW
    ================================= */
 
 const memberPhoto =
@@ -6846,6 +6872,10 @@ if(
     memberPhotoBtn
 ){
 
+    /* =============================
+       OPEN PHOTO SELECTOR
+       ============================= */
+
     memberPhotoBtn.onclick =
         function(){
 
@@ -6853,29 +6883,96 @@ if(
 
         };
 
-}
-if(
-    memberPhoto &&
-    memberPhotoBtn
-){
+
+    /* =============================
+       SELECTED PHOTO PREVIEW
+       ============================= */
 
     memberPhoto.onchange =
         function(){
 
             if(
-                memberPhoto.files &&
-                memberPhoto.files.length > 0
+                !memberPhoto.files ||
+                memberPhoto.files.length === 0
             ){
 
-                memberPhotoBtn.textContent =
-                    "✓ " +
-                    memberPhoto.files[0].name;
+                return;
 
             }
 
+
+            const file =
+                memberPhoto.files[0];
+
+
+            /* =========================
+               CHECK IMAGE FILE
+               ========================= */
+
+            if(
+                !file.type.startsWith(
+                    "image/"
+                )
+            ){
+
+                alert(
+                    "Please select an image file."
+                );
+
+                memberPhoto.value =
+                    "";
+
+                return;
+
+            }
+
+
+            /* =========================
+               GET PREVIEW ELEMENTS
+               ========================= */
+
+            const previewWrap =
+                document.getElementById(
+                    "memberPhotoPreviewWrap"
+                );
+
+            const preview =
+                document.getElementById(
+                    "memberPhotoPreview"
+                );
+
+
+            /* =========================
+               SHOW SELECTED PHOTO
+               ========================= */
+
+            if(
+                previewWrap &&
+                preview
+            ){
+
+                preview.src =
+                    URL.createObjectURL(
+                        file
+                    );
+
+                previewWrap.style.display =
+                    "flex";
+
+            }
+
+
+            /* =========================
+               CHANGE BUTTON TEXT
+               ========================= */
+
+            memberPhotoBtn.textContent =
+                "✓ " +
+                file.name;
+
         };
 
-}
+}      
 
 /* =================================
    LIFE STATUS LOGIC
