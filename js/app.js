@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8560,7 +8561,7 @@ resendBtn.style.display = "none";
 
 
             statusEl.textContent =
-                "Please resend.";
+                "Request for resend.";
 
 
 verifyBtn.disabled = true;
