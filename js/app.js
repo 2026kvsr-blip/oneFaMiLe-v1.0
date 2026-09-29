@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8306,13 +8307,13 @@ padding:2px 5px;
             </button>
 
 
-            <button
-                id="resendProfileChangeOTPBtn"
-                class="grid-btn"
-                disabled
-            >
-                🔄 Resend OTP
-            </button>
+           <button
+    id="resendProfileChangeOTPBtn"
+    class="grid-btn"
+    style="display:none;"
+>
+    🔄 Resend OTP
+</button>
 
 
             <button
@@ -8421,24 +8422,30 @@ padding:2px 5px;
                     remaining +
                     " seconds";
 
-                verifyBtn.disabled =
-                    false;
+              verifyBtn.disabled = false;
 
-                resendBtn.disabled =
-                    true;
+verifyBtn.style.display =
+    "inline-block";
 
+resendBtn.disabled = true;
+
+resendBtn.style.display =
+    "none";
             }
             else{
 
                 statusEl.textContent =
                     "Expired. Please resend.";
 
-                verifyBtn.disabled =
-                    true;
+                verifyBtn.disabled = true;
 
-                resendBtn.disabled =
-                    false;
+verifyBtn.style.display =
+    "none";
 
+resendBtn.disabled = false;
+
+resendBtn.style.display =
+    "inline-block";
 
                 if(window.profileChangeOTPTimer){
 
@@ -8500,15 +8507,13 @@ padding:2px 5px;
         );
 
 
-        otpInput.disabled =
-            true;
+       otpInput.disabled = true;
 
-        verifyBtn.disabled =
-            true;
+verifyBtn.disabled = true;
+verifyBtn.style.display = "none";
 
-        resendBtn.disabled =
-            true;
-
+resendBtn.disabled = true;
+resendBtn.style.display = "none";
 
         const updateLock = ()=>{
 
@@ -8559,12 +8564,11 @@ padding:2px 5px;
                 "Please resend.";
 
 
-            verifyBtn.disabled =
-                true;
+verifyBtn.disabled = true;
+verifyBtn.style.display = "none";
 
-            resendBtn.disabled =
-                false;
-
+resendBtn.disabled = false;
+resendBtn.style.display = "inline-block";
 
             otpInput.focus();
 
@@ -9040,12 +9044,11 @@ resendData.append(
                         "OTP expired. Please resend OTP.";
 
 
-                    verifyBtn.disabled =
-                        true;
+                   verifyBtn.disabled = true;
+verifyBtn.style.display = "none";
 
-                    resendBtn.disabled =
-                        false;
-
+resendBtn.disabled = false;
+resendBtn.style.display = "inline-block";
 
                     showMessage(
                         result.message ||
