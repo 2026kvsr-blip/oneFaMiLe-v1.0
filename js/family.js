@@ -1,6 +1,4 @@
 
-
-
 /* =========
 ============================
    oneFaMiLe
@@ -11559,13 +11557,30 @@ const newFamilyNameField =
     // =====================================
     // HIDE CREATE FAMILY TREE BUTTON
     // =====================================
+if(createBtn){
 
-    if(createBtn){
+    createBtn.style.setProperty(
+        "display",
+        "none",
+        "important"
+    );
 
-        createBtn.style.display =
-            "none";
+    const createAction =
+        createBtn.closest(
+            ".family-create-action"
+        );
+
+    if(createAction){
+
+        createAction.style.setProperty(
+            "display",
+            "none",
+            "important"
+        );
 
     }
+
+}
 
 
     // =====================================
@@ -11814,13 +11829,30 @@ localStorage.setItem(
                HIDE CREATE BUTTON
                ========================= */
 
-            if(createBtn){
+           if(createBtn){
 
-                createBtn.style.display =
-                    "none";
+    createBtn.style.setProperty(
+        "display",
+        "none",
+        "important"
+    );
 
-            }
+    const createAction =
+        createBtn.closest(
+            ".family-create-action"
+        );
 
+    if(createAction){
+
+        createAction.style.setProperty(
+            "display",
+            "none",
+            "important"
+        );
+
+    }
+
+}
 
 /* =========================
    SHOW FAMILY ID
