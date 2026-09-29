@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8799,9 +8800,9 @@ resendData.append(
 
 
                     statusEl.textContent =
-                        "Resend limit reached. Please wait " +
+                        "Resend limit reached. Wait for " +
                         waitSeconds +
-                        " seconds.";
+                        " secs.";
 
 
                     resendBtn.disabled =
