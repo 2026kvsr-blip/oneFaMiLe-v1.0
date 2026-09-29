@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -7737,7 +7736,16 @@ otpData.append(
 
             return;
         }
+// =====================================
+// TEMPORARY OTP SEND DIAGNOSTIC
+// =====================================
 
+showMessage(
+    otpResult.message ||
+    "OTP sent successfully.",
+    "success",
+    5000
+);
 // =====================================
 // START FIRST OTP 30 SECOND TIMER
 // =====================================
