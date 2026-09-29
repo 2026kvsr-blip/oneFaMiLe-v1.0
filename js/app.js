@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8819,7 +8818,7 @@ resendData.append(
                                 false;
 
                             statusEl.textContent =
-                                "You can resend OTP now.";
+                                "You can resend now.";
 
                         },
                         waitSeconds * 1000
