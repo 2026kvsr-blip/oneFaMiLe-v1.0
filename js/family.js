@@ -1,5 +1,6 @@
 
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -11546,7 +11547,6 @@ const newFamilyNameField =
         "newFamilyName"
     );
 
-if(savedFamily){
 
  if(savedFamily && savedFamily.familyId){
 
