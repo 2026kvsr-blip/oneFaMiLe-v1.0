@@ -8811,7 +8811,7 @@ if(
         if(waitSeconds > 0){
 
             statusEl.textContent =
-                "Resend limit. wait for " +
+                "Limit reached. wait for " +
                 waitSeconds +
                 " secs.";
 
