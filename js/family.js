@@ -10558,13 +10558,18 @@ params.append(
         ? "Update"
         : "Save";
 
+console.error(
+    "SAVE MEMBER SERVER ERROR:",
+    result
+);
 
-            showMessage(
-                result.message ||
-                "Member could not be saved.",
-                "error",
-                3000
-            );
+showMessage(
+    result.error ||
+    result.message ||
+    "Member could not be saved.",
+    "error",
+    5000
+);
 
             return;
         }
