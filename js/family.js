@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -11245,7 +11244,73 @@ if(
                 field.value || "";
 
         }
+/* ================================
+   PHOTO → KEEP PHOTO ONLY
+   DO NOT SHOW --------
+   ================================ */
 
+if(id === "memberPhotoBtn"){
+
+    const photoGroup =
+        field.closest(
+            ".common-form-group"
+        );
+
+    const previewWrap =
+        document.getElementById(
+            "memberPhotoPreviewWrap"
+        );
+
+    const preview =
+        document.getElementById(
+            "memberPhotoPreview"
+        );
+
+    /* Remove Select Photo / Change Photo button */
+    field.style.display =
+        "none";
+
+    /* Keep photo immediately after colon */
+    if(
+        previewWrap &&
+        preview &&
+        preview.src
+    ){
+
+        previewWrap.style.display =
+            "flex";
+
+        previewWrap.style.marginLeft =
+            "0";
+
+        previewWrap.style.justifyContent =
+            "flex-start";
+
+        preview.style.width =
+            "55px";
+
+        preview.style.height =
+            "55px";
+
+        preview.style.minWidth =
+            "55px";
+
+        preview.style.borderRadius =
+            "50%";
+
+        preview.style.objectFit =
+            "cover";
+
+        if(photoGroup){
+
+            photoGroup.style.alignItems =
+                "center";
+        }
+
+    }
+
+    return;
+}
 
         /* ================================
            CREATE TEXT
