@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -9460,6 +9461,195 @@ const memberActions =
 
 if(memberActions){
 
+
+async function compressMemberPhotoForSheet(file){
+
+    return new Promise(
+        function(resolve,reject){
+
+            const reader =
+                new FileReader();
+
+            reader.onload =
+                function(){
+
+                    const img =
+                        new Image();
+
+                    img.onload =
+                        function(){
+
+                            try{
+
+                                const MAX_SIZE = 160;
+
+                                let width =
+                                    img.width;
+
+                                let height =
+                                    img.height;
+
+
+                                if(
+                                    width > height &&
+                                    width > MAX_SIZE
+                                ){
+
+                                    height =
+                                        Math.round(
+                                            height *
+                                            MAX_SIZE /
+                                            width
+                                        );
+
+                                    width =
+                                        MAX_SIZE;
+
+                                }
+                                else if(
+                                    height >= width &&
+                                    height > MAX_SIZE
+                                ){
+
+                                    width =
+                                        Math.round(
+                                            width *
+                                            MAX_SIZE /
+                                            height
+                                        );
+
+                                    height =
+                                        MAX_SIZE;
+
+                                }
+
+
+                                const canvas =
+                                    document.createElement(
+                                        "canvas"
+                                    );
+
+                                canvas.width =
+                                    width;
+
+                                canvas.height =
+                                    height;
+
+
+                                const ctx =
+                                    canvas.getContext(
+                                        "2d"
+                                    );
+
+
+                                ctx.drawImage(
+                                    img,
+                                    0,
+                                    0,
+                                    width,
+                                    height
+                                );
+
+
+                                let quality =
+                                    0.65;
+
+                                let compressed =
+                                    canvas.toDataURL(
+                                        "image/jpeg",
+                                        quality
+                                    );
+
+
+                                /*
+                                   Google Sheet cell limit safety.
+                                   Keep photo comfortably below limit.
+                                */
+
+                                while(
+                                    compressed.length > 40000 &&
+                                    quality > 0.25
+                                ){
+
+                                    quality -= 0.10;
+
+                                    compressed =
+                                        canvas.toDataURL(
+                                            "image/jpeg",
+                                            quality
+                                        );
+
+                                }
+
+
+                                if(
+                                    compressed.length > 45000
+                                ){
+
+                                    reject(
+                                        new Error(
+                                            "Photo is too large. Please select another photo."
+                                        )
+                                    );
+
+                                    return;
+
+                                }
+
+
+                                resolve(
+                                    compressed
+                                );
+
+                            }
+                            catch(error){
+
+                                reject(error);
+
+                            }
+
+                        };
+
+
+                    img.onerror =
+                        function(){
+
+                            reject(
+                                new Error(
+                                    "Photo could not be processed."
+                                )
+                            );
+
+                        };
+
+
+                    img.src =
+                        reader.result;
+
+                };
+
+
+            reader.onerror =
+                function(){
+
+                    reject(
+                        new Error(
+                            "Photo could not be read."
+                        )
+                    );
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+
+}
+   
     /* =============================
        SAVE
        ============================= */
@@ -10219,14 +10409,13 @@ const memberId =
           ).trim()
         : "";   
  /* ================================
-   PHOTO
+   PHOTO - COMPRESS FOR GOOGLE SHEET
    ================================ */
 
 const photoField =
     document.getElementById(
         "memberPhoto"
     );
-
 
 let photoData = "";
 let photoName = "";
@@ -10242,41 +10431,12 @@ if(
         photoField.files[0];
 
     photoName =
-        file.name || "";
+        file.name || "member-photo.jpg";
 
 
     photoData =
-        await new Promise(
-            function(resolve,reject){
-
-                const reader =
-                    new FileReader();
-
-                reader.onload =
-                    function(){
-
-                        resolve(
-                            reader.result || ""
-                        );
-
-                    };
-
-                reader.onerror =
-                    function(){
-
-                        reject(
-                            new Error(
-                                "Photo could not be read."
-                            )
-                        );
-
-                    };
-
-                reader.readAsDataURL(
-                    file
-                );
-
-            }
+        await compressMemberPhotoForSheet(
+            file
         );
 
 }
