@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3112,4 +3111,43 @@ max-height: 28px !important;
 
     box-shadow:
         0 2px 5px rgba(0,0,0,0.18);
+}
+/* =====================================
+   MARRIAGE DATE
+   SAME SIZE AS OTHER INPUT BOXES
+   ===================================== */
+
+#memberMarriageDate{
+    width:100%;
+    height:42px;
+    min-height:42px;
+    max-height:42px;
+
+    box-sizing:border-box;
+
+    padding:0 10px;
+
+    font-size:16px;
+    line-height:42px;
+
+    text-align:left;
+
+    -webkit-appearance:none;
+    appearance:none;
+}
+
+
+/* iPhone / Safari date text left align */
+
+#memberMarriageDate::-webkit-date-and-time-value{
+    text-align:left;
+    margin:0;
+    padding:0;
+}
+
+
+/* Keep calendar icon on right */
+
+#memberMarriageDate::-webkit-calendar-picker-indicator{
+    margin-left:auto;
 }
