@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6109,13 +6108,7 @@ profileMenuBtn.onclick = ()=>{
     closeSideMenu();
     hideSideMenuButton();
 
-    hideAllPages();
-
-    profilePage.classList.remove("hidden");
-
-    updateProfilePage();
-
-    window.scrollTo(0,0);
+    showProfilePage();
 
 };
 profileBackBtn.onclick = ()=>{
