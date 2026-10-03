@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -7103,37 +7102,64 @@ function showEditProfile(){
 
            <div align="center">
 
-       <button
-    id="saveProfileBtn"
-    class="grid-btn"
-    disabled>
+    <!-- CANCEL + SAVE -->
+    <div
+        style="
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            gap:12px;
+            margin-top:15px;
+        "
+    >
 
-    💾 Save
+        <button
+            id="cancelEditProfileBtn"
+            class="grid-btn"
+            disabled
+        >
+            ↩ Cancel
+        </button>
 
-</button>
-
-        <div class="profile-action-buttons">
-
-            <button
-    id="cancelEditProfileBtn"
-    class="grid-btn"
-    disabled>
-
-    ↩ Cancel
-
-</button>
-
-            <button
-                id="profileEditBackBtn"
-                class="back-btn">
-
-                ← Back
-
-            </button>
-
-        </div>
+        <button
+            id="saveProfileBtn"
+            class="grid-btn"
+            disabled
+        >
+            💾 Save
+        </button>
 
     </div>
+
+
+    <!-- BACK + HOME -->
+    <div
+        style="
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            gap:12px;
+            margin-top:12px;
+        "
+    >
+
+        <button
+            id="profileEditBackBtn"
+            class="back-btn"
+        >
+            ← Back
+        </button>
+
+        <button
+            id="profileEditHomeBtn"
+            class="grid-btn"
+        >
+            ⌂ Home
+        </button>
+
+    </div>
+
+</div>
 
 `;
 
