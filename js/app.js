@@ -6458,9 +6458,71 @@ function showProfilePage(){
 
     profilePage.innerHTML = `
 
-        <h3>
-            👤 My Profile
-        </h3>
+       <div
+    class="my-profile-title"
+    style="
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:10px;
+        margin:10px 0 16px;
+    "
+>
+
+    <div
+        id="myProfilePhoto"
+        style="
+            width:55px;
+            height:55px;
+            min-width:55px;
+            border-radius:50%;
+            overflow:hidden;
+            border:1px solid #999;
+            background:#ffffff;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        "
+    >
+
+        ${
+            user.photo
+            ? `
+                <img
+                    src="${user.photo}"
+                    alt="Profile Photo"
+                    style="
+                        width:100%;
+                        height:100%;
+                        object-fit:cover;
+                        object-position:center;
+                        display:block;
+                        border-radius:50%;
+                    "
+                >
+              `
+            : `
+                <span
+                    style="
+                        font-size:22px;
+                    "
+                >
+                    👤
+                </span>
+              `
+        }
+
+    </div>
+
+    <h3
+        style="
+            margin:0;
+        "
+    >
+        My Profile
+    </h3>
+
+</div>
 
         <div class="profile-box">
 
@@ -6625,8 +6687,77 @@ function showEditProfile(){
     profilePage.innerHTML = `
 
         <h3>
-            ✏️ Edit Profile
-        </h3>
+    ✏️ Edit Profile
+</h3>
+
+<div
+    style="
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        margin:8px 0 15px;
+    "
+>
+
+    <input
+        type="file"
+        id="editProfilePhoto"
+        accept="image/*"
+        hidden
+    >
+
+    <button
+        type="button"
+        id="editProfilePhotoBtn"
+        aria-label="Select Profile Photo"
+        style="
+            width:70px;
+            height:70px;
+            min-width:70px;
+            padding:0;
+            margin:0;
+            border:1px solid #999;
+            border-radius:50%;
+            background:#ffffff;
+            overflow:hidden;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            cursor:pointer;
+        "
+    >
+
+        <span
+            id="editProfilePhotoPlaceholder"
+            style="
+                font-size:11px;
+                line-height:13px;
+                text-align:center;
+                color:#555;
+                padding:4px;
+                ${user.photo ? "display:none;" : ""}
+            "
+        >
+            Select<br>Photo
+        </span>
+
+        <img
+            id="editProfilePhotoPreview"
+            src="${user.photo || ""}"
+            alt="Profile Photo"
+            style="
+                ${user.photo ? "display:block;" : "display:none;"}
+                width:100%;
+                height:100%;
+                object-fit:cover;
+                object-position:center;
+                border-radius:50%;
+            "
+        >
+
+    </button>
+
+</div>
 
 <div class="profile-box edit-profile-box">
             <div class="profile-row">
@@ -6809,6 +6940,112 @@ function showEditProfile(){
     </div>
 
 `;
+
+    // =====================================
+// EDIT PROFILE PHOTO
+// =====================================
+
+const editProfilePhoto =
+    document.getElementById(
+        "editProfilePhoto"
+    );
+
+const editProfilePhotoBtn =
+    document.getElementById(
+        "editProfilePhotoBtn"
+    );
+
+const editProfilePhotoPreview =
+    document.getElementById(
+        "editProfilePhotoPreview"
+    );
+
+const editProfilePhotoPlaceholder =
+    document.getElementById(
+        "editProfilePhotoPlaceholder"
+    );
+
+if(
+    editProfilePhoto &&
+    editProfilePhotoBtn
+){
+
+    editProfilePhotoBtn.onclick =
+        function(){
+
+            editProfilePhoto.click();
+
+        };
+
+
+    editProfilePhoto.onchange =
+        function(){
+
+            if(
+                !editProfilePhoto.files ||
+                editProfilePhoto.files.length === 0
+            ){
+                return;
+            }
+
+
+            const file =
+                editProfilePhoto.files[0];
+
+
+            if(
+                !file.type.startsWith(
+                    "image/"
+                )
+            ){
+
+                showMessage(
+                    "Please select an image file.",
+                    "warning",
+                    3000
+                );
+
+                editProfilePhoto.value = "";
+
+                return;
+            }
+
+
+            if(editProfilePhotoPreview){
+
+                editProfilePhotoPreview.src =
+                    URL.createObjectURL(
+                        file
+                    );
+
+                editProfilePhotoPreview.style.display =
+                    "block";
+            }
+
+
+            if(editProfilePhotoPlaceholder){
+
+                editProfilePhotoPlaceholder.style.display =
+                    "none";
+            }
+
+
+            // ENABLE SAVE + CANCEL
+     /*       if(saveProfileBtn){
+
+                saveProfileBtn.disabled =
+                    false;
+            }
+
+            if(cancelEditProfileBtn){
+
+                cancelEditProfileBtn.disabled =
+                    false;
+            } */
+
+        };
+
+}
 // =====================================
 // TEST BACK BUTTON
 // =====================================
