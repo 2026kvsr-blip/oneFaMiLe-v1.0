@@ -1,6 +1,5 @@
 
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -777,8 +776,36 @@ if(familyBackBtn){
 
 </div>
 
+<!-- 8. PARTNER SIBLINGS -->
+<div
+    id="relationPartnerSiblingsSection"
+    class="relations-section relations-siblings">
 
-<!-- 8. FATHER-IN-LAW SIBLINGS -->
+    <h3 id="relationPartnerSiblingsTitle">
+        Partner Siblings
+    </h3>
+
+    <strong id="relationPartnerBrothersTitle">
+        Brothers
+    </strong>
+
+    <div id="relationPartnerBrothers">
+        --------
+    </div>
+
+
+    <strong id="relationPartnerSistersTitle">
+        Sisters
+    </strong>
+
+    <div id="relationPartnerSisters">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 9. FATHER-IN-LAW SIBLINGS -->
 <div
     id="relationFatherInLawSiblingsSection"
     class="relations-section relation-father-inlaw-siblings">
@@ -3417,9 +3444,304 @@ else{
 
 }
 
-      /* =================================
-   SPECIAL SIBLING RELATION CHECK
+    /* =================================
+   8. PARTNER SIBLINGS
    ================================= */
+
+const partnerSiblings =
+    partner
+        ? familyMembers.filter(
+            function(item){
+
+                if(
+                    String(
+                        item.memberId || ""
+                    ).trim() ===
+                    String(
+                        partner.memberId || ""
+                    ).trim()
+                ){
+                    return false;
+                }
+
+
+                const sameFather =
+                    partner.fatherId &&
+                    item.fatherId &&
+                    String(
+                        item.fatherId
+                    ).trim() ===
+                    String(
+                        partner.fatherId
+                    ).trim();
+
+
+                const sameMother =
+                    partner.motherId &&
+                    item.motherId &&
+                    String(
+                        item.motherId
+                    ).trim() ===
+                    String(
+                        partner.motherId
+                    ).trim();
+
+
+                return (
+                    sameFather ||
+                    sameMother
+                );
+
+            }
+        )
+        : [];
+
+
+/* =================================
+   SPLIT PARTNER BROTHERS / SISTERS
+   ================================= */
+
+const partnerBrothers =
+    partnerSiblings.filter(
+        function(item){
+
+            return String(
+                item.gender || ""
+            )
+            .trim()
+            .toLowerCase() ===
+            "male";
+
+        }
+    );
+
+
+const partnerSisters =
+    partnerSiblings.filter(
+        function(item){
+
+            return String(
+                item.gender || ""
+            )
+            .trim()
+            .toLowerCase() ===
+            "female";
+
+        }
+    );
+
+
+/* =================================
+   PARTNER SIBLINGS ELEMENTS
+   ================================= */
+
+const partnerSiblingsTitle =
+    document.getElementById(
+        "relationPartnerSiblingsTitle"
+    );
+
+const partnerBrothersTitle =
+    document.getElementById(
+        "relationPartnerBrothersTitle"
+    );
+
+const partnerSistersTitle =
+    document.getElementById(
+        "relationPartnerSistersTitle"
+    );
+
+const partnerBrothersField =
+    document.getElementById(
+        "relationPartnerBrothers"
+    );
+
+const partnerSistersField =
+    document.getElementById(
+        "relationPartnerSisters"
+    );
+
+
+/* =================================
+   TOTAL COUNT
+   ================================= */
+
+if(partnerSiblingsTitle){
+
+    partnerSiblingsTitle.textContent =
+        "Partner Siblings : " +
+        partnerSiblings.length;
+
+}
+
+
+/* =================================
+   BROTHERS
+   ================================= */
+
+if(partnerBrothers.length === 0){
+
+    if(partnerBrothersTitle){
+        partnerBrothersTitle.style.display =
+            "none";
+    }
+
+    if(partnerBrothersField){
+        partnerBrothersField.style.display =
+            "none";
+    }
+
+}
+else{
+
+    if(partnerBrothersTitle){
+
+        partnerBrothersTitle.style.display =
+            "";
+
+        partnerBrothersTitle.textContent =
+            "Brothers : " +
+            partnerBrothers.length;
+
+    }
+
+    if(partnerBrothersField){
+
+        partnerBrothersField.style.display =
+            "";
+
+        partnerBrothersField.innerHTML =
+            "";
+
+        partnerBrothers.forEach(
+            function(
+                item,
+                index
+            ){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        getName(item) ||
+                        "--------"
+                    );
+
+                partnerBrothersField.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =================================
+   SISTERS
+   ================================= */
+
+if(partnerSisters.length === 0){
+
+    if(partnerSistersTitle){
+        partnerSistersTitle.style.display =
+            "none";
+    }
+
+    if(partnerSistersField){
+        partnerSistersField.style.display =
+            "none";
+    }
+
+}
+else{
+
+    if(partnerSistersTitle){
+
+        partnerSistersTitle.style.display =
+            "";
+
+        partnerSistersTitle.textContent =
+            "Sisters : " +
+            partnerSisters.length;
+
+    }
+
+    if(partnerSistersField){
+
+        partnerSistersField.style.display =
+            "";
+
+        partnerSistersField.innerHTML =
+            "";
+
+        partnerSisters.forEach(
+            function(
+                item,
+                index
+            ){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        getName(item) ||
+                        "--------"
+                    );
+
+                partnerSistersField.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =================================
+   SHOW / HIDE PARTNER SIBLINGS
+   ================================= */
+
+if(
+    isMarried &&
+    partner &&
+    partnerSiblings.length
+){
+
+    const partnerSiblingsSection =
+        document.getElementById(
+            "relationPartnerSiblingsSection"
+        );
+
+    if(partnerSiblingsSection){
+
+        partnerSiblingsSection.style.display =
+            "block";
+
+    }
+
+}
+else{
+
+    hideSection(
+        "relationPartnerSiblingsSection"
+    );
+
+}
 
 /* =================================
    SPECIAL SIBLING RELATION CHECK
