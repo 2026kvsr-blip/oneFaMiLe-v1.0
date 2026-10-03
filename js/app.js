@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -7028,7 +7029,12 @@ if(
                 editProfilePhotoPlaceholder.style.display =
                     "none";
             }
+// PHOTO CHANGED
 
+editProfilePhotoChanged =
+    true;
+
+checkEditProfileChanges();
 
             // ENABLE SAVE + CANCEL
      /*       if(saveProfileBtn){
@@ -7090,6 +7096,12 @@ const editProfileFields = [
 
 ];
 
+    // =====================================
+// PROFILE PHOTO CHANGE STATUS
+// =====================================
+
+let editProfilePhotoChanged =
+    false;
 // =====================================
 // SAVE ORIGINAL VALUES
 // =====================================
@@ -7117,8 +7129,8 @@ editProfileFields.forEach(id => {
 
 function checkEditProfileChanges(){
 
-    let changed = false;
-
+    let changed =
+        editProfilePhotoChanged;
 
     editProfileFields.forEach(id => {
 
