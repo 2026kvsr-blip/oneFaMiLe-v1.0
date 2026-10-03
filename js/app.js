@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -8465,7 +8464,16 @@ formData.append(
         country
     );
 
+// =====================================
+// PROFILE PHOTO
+// =====================================
 
+formData.append(
+    "profilePhoto",
+    editProfilePhotoChanged
+        ? profilePhoto
+        : ""
+);
     try{
 
         showLoader("Updating Profile...");
@@ -8522,7 +8530,12 @@ user.state = state;
 
 user.country = country;
 
+if(editProfilePhotoChanged){
 
+    user.photo =
+        profilePhoto;
+
+}
         sessionStorage.setItem(
             "user",
             JSON.stringify(user)
