@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -842,9 +841,7 @@
     border-radius:10px;
 }
 
-.relations-member-header{
-    display:none;
-}
+
 /* =====================================
    RELATION TITLES
    ===================================== */
@@ -1161,18 +1158,6 @@
     padding:10px 12px;
     color:#777;
 }
-.relations-member-header{
-    display:flex;
-    align-items:center;
-    gap:15px;
-}
-.relations-member-header{
-    display:flex;
-    align-items:center;
-    gap:12px;
-}
-
-
 
 #relationMemberName{
     display:flex;
@@ -1182,11 +1167,6 @@
 #relationMemberGender{
     display:flex;
     align-items:flex-end;
-}
-.relations-member-header{
-    display:flex;
-    align-items:center;
-    gap:12px;
 }
 
 
@@ -1200,13 +1180,6 @@
     font-size:14px;
     line-height:22px;
 }
-.relations-member-header{
-    display:flex;
-    align-items:center;
-    gap:12px;
-}
-
-
 
 #relationMemberName{
     font-weight:600;
