@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3122,4 +3123,43 @@ max-height: 28px !important;
 
 #memberMarriageDate::-webkit-calendar-picker-indicator{
     margin-left:auto;
+}
+/* =====================================
+   FAMILY ABOUT
+   Same reading style as Home Welcome
+   ===================================== */
+
+.family-about-content{
+    width:100%;
+    box-sizing:border-box;
+    padding:10px 20px 25px 20px;
+}
+
+/* SECTION HEADINGS */
+
+.family-about-content h3{
+    color:#2A6EB0;
+    font-weight:600;
+    margin-top:24px;
+    margin-bottom:10px;
+    line-height:1.4;
+}
+
+/* FIRST HEADING */
+
+.family-about-content h3:first-child{
+    margin-top:5px;
+}
+
+/* PARAGRAPHS */
+
+.family-about-content p{
+    font-size:15px;
+    font-weight:400;
+    line-height:1.7;
+    color:#444;
+    text-align:justify;
+
+    margin-top:0;
+    margin-bottom:16px;
 }
