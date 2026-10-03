@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -7267,6 +7268,51 @@ cancelEditProfileBtn.onclick = ()=>{
 
         return;
     }
+// =====================================
+// PROFILE PHOTO
+// COMPRESS SAME AS MEMBER PHOTO
+// =====================================
+
+let profilePhoto =
+    user.photo || "";
+
+
+const profilePhotoField =
+    document.getElementById(
+        "editProfilePhoto"
+    );
+
+
+if(
+    editProfilePhotoChanged &&
+    profilePhotoField &&
+    profilePhotoField.files &&
+    profilePhotoField.files.length > 0
+){
+
+    try{
+
+        profilePhoto =
+            await compressMemberPhotoForSheet(
+                profilePhotoField.files[0]
+            );
+
+    }
+    catch(error){
+
+        showMessage(
+            error.message ||
+            "Profile photo could not be processed.",
+            "warning",
+            3000
+        );
+
+        return;
+
+    }
+
+}
+        
 const loginUserName =
     document
         .getElementById("editProfileLoginUserName")
