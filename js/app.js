@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -850,6 +851,194 @@ function isValidPassCode(value){
     return /^[0-9]{6}$/.test(value);
 
 }
+
+// =====================================
+// COMMON PROFILE PHOTO COMPRESSION
+// =====================================
+
+async function compressProfilePhotoForSheet(file){
+
+    return new Promise(
+        function(resolve,reject){
+
+            const reader =
+                new FileReader();
+
+            reader.onload =
+                function(){
+
+                    const img =
+                        new Image();
+
+                    img.onload =
+                        function(){
+
+                            try{
+
+                                const MAX_SIZE = 160;
+
+                                let width =
+                                    img.width;
+
+                                let height =
+                                    img.height;
+
+
+                                if(
+                                    width > height &&
+                                    width > MAX_SIZE
+                                ){
+
+                                    height =
+                                        Math.round(
+                                            height *
+                                            MAX_SIZE /
+                                            width
+                                        );
+
+                                    width =
+                                        MAX_SIZE;
+
+                                }
+                                else if(
+                                    height >= width &&
+                                    height > MAX_SIZE
+                                ){
+
+                                    width =
+                                        Math.round(
+                                            width *
+                                            MAX_SIZE /
+                                            height
+                                        );
+
+                                    height =
+                                        MAX_SIZE;
+
+                                }
+
+
+                                const canvas =
+                                    document.createElement(
+                                        "canvas"
+                                    );
+
+                                canvas.width =
+                                    width;
+
+                                canvas.height =
+                                    height;
+
+
+                                const ctx =
+                                    canvas.getContext(
+                                        "2d"
+                                    );
+
+
+                                ctx.drawImage(
+                                    img,
+                                    0,
+                                    0,
+                                    width,
+                                    height
+                                );
+
+
+                                let quality =
+                                    0.65;
+
+                                let compressed =
+                                    canvas.toDataURL(
+                                        "image/jpeg",
+                                        quality
+                                    );
+
+
+                                while(
+                                    compressed.length > 40000 &&
+                                    quality > 0.25
+                                ){
+
+                                    quality -= 0.10;
+
+                                    compressed =
+                                        canvas.toDataURL(
+                                            "image/jpeg",
+                                            quality
+                                        );
+
+                                }
+
+
+                                if(
+                                    compressed.length > 45000
+                                ){
+
+                                    reject(
+                                        new Error(
+                                            "Photo is too large. Please select another photo."
+                                        )
+                                    );
+
+                                    return;
+
+                                }
+
+
+                                resolve(
+                                    compressed
+                                );
+
+                            }
+                            catch(error){
+
+                                reject(error);
+
+                            }
+
+                        };
+
+
+                    img.onerror =
+                        function(){
+
+                            reject(
+                                new Error(
+                                    "Photo could not be processed."
+                                )
+                            );
+
+                        };
+
+
+                    img.src =
+                        reader.result;
+
+                };
+
+
+            reader.onerror =
+                function(){
+
+                    reject(
+                        new Error(
+                            "Photo could not be read."
+                        )
+                    );
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+
+}
+
 /* =====================================
 COMMON PAGE ARRAY
 ===================================== */
@@ -7267,6 +7456,50 @@ cancelEditProfileBtn.onclick = ()=>{
 
         return;
     }
+
+   // =====================================
+// PREPARE PROFILE PHOTO
+// =====================================
+
+let profilePhoto =
+    user.photo || "";
+
+
+const profilePhotoField =
+    document.getElementById(
+        "editProfilePhoto"
+    );
+
+
+if(
+    editProfilePhotoChanged &&
+    profilePhotoField &&
+    profilePhotoField.files &&
+    profilePhotoField.files.length > 0
+){
+
+    try{
+
+        profilePhoto =
+            await compressProfilePhotoForSheet(
+                profilePhotoField.files[0]
+            );
+
+    }
+    catch(error){
+
+        showMessage(
+            error.message ||
+            "Profile photo could not be processed.",
+            "warning",
+            3000
+        );
+
+        return;
+
+    }
+
+}     
         
 const loginUserName =
     document
