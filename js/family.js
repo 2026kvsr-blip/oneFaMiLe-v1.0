@@ -335,7 +335,83 @@ if(treeViewBtn){
 
 }
 bindAddMemberButton();
+/* =====================================
+   FAMILY → ABOUT
+   ===================================== */
 
+const familyAboutBtn =
+    document.getElementById(
+        "familyAboutBtn"
+    );
+
+if(familyAboutBtn){
+
+    familyAboutBtn.onclick =
+        function(){
+
+            const currentLanguage =
+                languageSelect.value;
+
+            const txt =
+                languageData[
+                    currentLanguage
+                ];
+
+            if(
+                !txt ||
+                !txt.familyAbout
+            ){
+
+                console.log(
+                    "Family About content not found:",
+                    currentLanguage
+                );
+
+                return;
+            }
+
+            showPage(`
+
+                ${pageTitle(
+                    "Family",
+                    "images/colorbtns/About1.png"
+                )}
+
+                <div
+                    class="family-about-content">
+
+                    ${txt.familyAbout}
+
+                </div>
+
+                <div align="center">
+
+                    <button
+                        id="familyAboutBackBtn"
+                        class="back-btn">
+
+                        ← Back
+
+                    </button>
+
+                </div>
+
+            `);
+
+            document
+                .getElementById(
+                    "familyAboutBackBtn"
+                )
+                .onclick =
+                    function(){
+
+                        familyBtn.click();
+
+                    };
+
+        };
+
+}
    /* =====================================
    FAMILY → RELATIONS
    ===================================== */
