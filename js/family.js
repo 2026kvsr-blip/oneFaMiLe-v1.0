@@ -1,5 +1,6 @@
 
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -6200,54 +6201,65 @@ function bindAddMemberButton(){
                  ================================= -->
 
             <div class="common-form-group">
-
                 <label
                     class="common-form-label">
                     Photo
                 </label>
-
-                <span class="common-form-colon">
-                    :
+                <span class="common-form-colon">                    :
                 </span>
 
-                <input
-                    type="file"
-                    id="memberPhoto"
-                    accept="image/*"
-                    hidden>
+                
+               <input
+    type="file"
+    id="memberPhoto"
+    accept="image/*"
+    hidden>
 
-                <button
-                    type="button"
-                    id="memberPhotoBtn"
-                    class="common-photo-input">
-                    Select Photo
-                </button>
-<!-- =================================
-     MEMBER PHOTO PREVIEW
-     ================================= -->
-
-<div
-    id="memberPhotoPreviewWrap"
+<button
+    type="button"
+    id="memberPhotoBtn"
+    aria-label="Select Member Photo"
     style="
-        display:none;
-        margin-left:8px;
+        width:64px;
+        height:64px;
+        min-width:64px;
+        padding:0;
+        margin:0;
+        border:1px solid #999;
+        border-radius:50%;
+        background:#ffffff;
+        overflow:hidden;
+        display:flex;
         align-items:center;
         justify-content:center;
+        cursor:pointer;
     ">
+
+    <span
+        id="memberPhotoPlaceholder"
+        style="
+            font-size:11px;
+            line-height:13px;
+            text-align:center;
+            color:#555;
+            padding:4px;
+        ">
+        Select<br>Photo
+    </span>
 
     <img
         id="memberPhotoPreview"
         alt="Member Photo"
         style="
-            width:55px;
-            height:55px;
+            display:none;
+            width:100%;
+            height:100%;
             object-fit:cover;
+            object-position:center;
             border-radius:50%;
-            border:1px solid #999;
-            background:#ffffff;
         ">
 
-</div>
+</button>
             </div>
 
 
@@ -6852,7 +6864,7 @@ if(memberGender){
 }
        
 /* =================================
-   PHOTO BUTTON + PHOTO PREVIEW
+   PHOTO CIRCLE + PHOTO PREVIEW
    ================================= */
 
 const memberPhoto =
@@ -6865,6 +6877,16 @@ const memberPhotoBtn =
         "memberPhotoBtn"
     );
 
+const memberPhotoPreview =
+    document.getElementById(
+        "memberPhotoPreview"
+    );
+
+const memberPhotoPlaceholder =
+    document.getElementById(
+        "memberPhotoPlaceholder"
+    );
+
 
 if(
     memberPhoto &&
@@ -6872,7 +6894,7 @@ if(
 ){
 
     /* =============================
-       OPEN PHOTO SELECTOR
+       TAP CIRCLE → SELECT PHOTO
        ============================= */
 
     memberPhotoBtn.onclick =
@@ -6884,7 +6906,7 @@ if(
 
 
     /* =============================
-       SELECTED PHOTO PREVIEW
+       NEW PHOTO SELECTED
        ============================= */
 
     memberPhoto.onchange =
@@ -6904,10 +6926,6 @@ if(
                 memberPhoto.files[0];
 
 
-            /* =========================
-               CHECK IMAGE FILE
-               ========================= */
-
             if(
                 !file.type.startsWith(
                     "image/"
@@ -6918,61 +6936,36 @@ if(
                     "Please select an image file."
                 );
 
-                memberPhoto.value =
-                    "";
+                memberPhoto.value = "";
 
                 return;
 
             }
 
 
-            /* =========================
-               GET PREVIEW ELEMENTS
-               ========================= */
+            if(memberPhotoPreview){
 
-            const previewWrap =
-                document.getElementById(
-                    "memberPhotoPreviewWrap"
-                );
-
-            const preview =
-                document.getElementById(
-                    "memberPhotoPreview"
-                );
-
-
-            /* =========================
-               SHOW SELECTED PHOTO
-               ========================= */
-
-            if(
-                previewWrap &&
-                preview
-            ){
-
-                preview.src =
+                memberPhotoPreview.src =
                     URL.createObjectURL(
                         file
                     );
 
-                previewWrap.style.display =
-                    "flex";
+                memberPhotoPreview.style.display =
+                    "block";
 
             }
 
 
-            /* =========================
-               CHANGE BUTTON TEXT
-               ========================= */
+            if(memberPhotoPlaceholder){
 
-            memberPhotoBtn.textContent =
-                "✓ " +
-                file.name;
+                memberPhotoPlaceholder.style.display =
+                    "none";
+
+            }
 
         };
 
-}      
-
+}
 /* =================================
    LIFE STATUS LOGIC
    ================================= */
@@ -7312,40 +7305,26 @@ const existingPhoto =
 
 if(existingPhoto){
 
-    const previewWrap =
-        document.getElementById(
-            "memberPhotoPreviewWrap"
-        );
+    if(memberPhotoPreview){
 
-    const preview =
-        document.getElementById(
-            "memberPhotoPreview"
-        );
-
-
-    if(
-        previewWrap &&
-        preview
-    ){
-
-        preview.src =
+        memberPhotoPreview.src =
             existingPhoto;
 
-        previewWrap.style.display =
-            "flex";
+        memberPhotoPreview.style.display =
+            "block";
 
     }
 
 
-    if(memberPhotoBtn){
+    if(memberPhotoPlaceholder){
 
-        memberPhotoBtn.textContent =
-            "Change Photo";
+        memberPhotoPlaceholder.style.display =
+            "none";
 
     }
 
 }
-    /* =================================
+   /* =================================
        CHANGE PAGE TITLE
        ================================= */
 
