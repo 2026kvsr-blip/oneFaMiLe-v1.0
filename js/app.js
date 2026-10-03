@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -7126,38 +7127,62 @@ function showEditProfile(){
     </div>
 
 
-    <!-- BACK + HOME -->
-    <div
-        style="
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            gap:12px;
-            margin-top:12px;
-        "
-    >
-
-        <button
-            id="profileEditBackBtn"
-            class="back-btn"
-        >
-            ← Back
-        </button>
-
-       <button
-    id="profileEditHomeBtn"
-    class="grid-btn"
+   <!-- BACK + HOME -->
+<div
     style="
-        border:1px solid #2A6EB0;
-        border-radius:5px;
-        color:#2A6EB0;
-        background:transparent;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:20px;
+        width:100%;
+        box-sizing:border-box;
+        padding:0 30px;
+        margin-top:12px;
     "
 >
-    ⌂ Home
-</button>
-    </div>
 
+    <button
+        id="profileEditBackBtn"
+        type="button"
+        style="
+            width:45%;
+            height:52px;
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            border:2px solid red;
+            border-radius:15px;
+            background:transparent;
+            color:red;
+            font-size:16px;
+            font-weight:600;
+        "
+    >
+        ← Back
+    </button>
+
+
+    <button
+        id="profileEditHomeBtn"
+        type="button"
+        style="
+            width:45%;
+            height:52px;
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            border:2px solid #2A6EB0;
+            border-radius:15px;
+            background:transparent;
+            color:#2A6EB0;
+            font-size:16px;
+            font-weight:600;
+        "
+    >
+        ⌂ Home
+    </button>
+
+</div>
 </div>
 
 `;
