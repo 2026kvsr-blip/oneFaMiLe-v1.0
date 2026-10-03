@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6874,16 +6875,13 @@ function showEditProfile(){
 
     profilePage.innerHTML = `
 
-        <h3>
-    ✏️ Edit Profile
-</h3>
-
-<div
+    <div
     style="
         display:flex;
-        justify-content:center;
         align-items:center;
-        margin:8px 0 15px;
+        justify-content:center;
+        gap:10px;
+        margin:10px 0 16px;
     "
 >
 
@@ -6899,9 +6897,9 @@ function showEditProfile(){
         id="editProfilePhotoBtn"
         aria-label="Select Profile Photo"
         style="
-            width:70px;
-            height:70px;
-            min-width:70px;
+            width:55px;
+            height:55px;
+            min-width:55px;
             padding:0;
             margin:0;
             border:1px solid #999;
@@ -6918,11 +6916,11 @@ function showEditProfile(){
         <span
             id="editProfilePhotoPlaceholder"
             style="
-                font-size:11px;
-                line-height:13px;
+                font-size:10px;
+                line-height:12px;
                 text-align:center;
                 color:#555;
-                padding:4px;
+                padding:3px;
                 ${user.photo ? "display:none;" : ""}
             "
         >
@@ -6945,10 +6943,20 @@ function showEditProfile(){
 
     </button>
 
+
+    <h3
+        style="
+            margin:0;
+        "
+    >
+        ✏️ Edit Profile
+    </h3>
+
 </div>
 
+
 <div class="profile-box edit-profile-box">
-            <div class="profile-row">
+<div class="profile-row">
     <span>Login User Name</span>
 
     <input
