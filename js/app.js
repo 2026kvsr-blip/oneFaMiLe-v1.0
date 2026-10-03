@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -7144,13 +7145,18 @@ function showEditProfile(){
             ← Back
         </button>
 
-        <button
-            id="profileEditHomeBtn"
-            class="grid-btn"
-        >
-            ⌂ Home
-        </button>
-
+       <button
+    id="profileEditHomeBtn"
+    class="grid-btn"
+    style="
+        border:1px solid #2A6EB0;
+        border-radius:5px;
+        color:#2A6EB0;
+        background:transparent;
+    "
+>
+    ⌂ Home
+</button>
     </div>
 
 </div>
