@@ -1,6 +1,5 @@
 
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -10998,7 +10997,6 @@ const memberFields =
         "memberGender",
         "memberDob",
 
-        "memberPhotoBtn",
 
         "memberPartner",
         "memberMarriageDate",
@@ -11224,73 +11222,6 @@ if(
                 field.value || "";
 
         }
-/* ================================
-   PHOTO → KEEP PHOTO ONLY
-   DO NOT SHOW --------
-   ================================ */
-
-if(id === "memberPhotoBtn"){
-
-    const photoGroup =
-        field.closest(
-            ".common-form-group"
-        );
-
-    const previewWrap =
-        document.getElementById(
-            "memberPhotoPreviewWrap"
-        );
-
-    const preview =
-        document.getElementById(
-            "memberPhotoPreview"
-        );
-
-    /* Remove Select Photo / Change Photo button */
-    field.style.display =
-        "none";
-
-    /* Keep photo immediately after colon */
-    if(
-        previewWrap &&
-        preview &&
-        preview.src
-    ){
-
-        previewWrap.style.display =
-            "flex";
-
-        previewWrap.style.marginLeft =
-            "0";
-
-        previewWrap.style.justifyContent =
-            "flex-start";
-
-        preview.style.width =
-            "55px";
-
-        preview.style.height =
-            "55px";
-
-        preview.style.minWidth =
-            "55px";
-
-        preview.style.borderRadius =
-            "50%";
-
-        preview.style.objectFit =
-            "cover";
-
-        if(photoGroup){
-
-            photoGroup.style.alignItems =
-                "center";
-        }
-
-    }
-
-    return;
-}
 
         /* ================================
            CREATE TEXT
@@ -11335,6 +11266,49 @@ if(id === "memberPhotoBtn"){
     }
 );
 
+
+/* ================================
+   SAVED MEMBER PHOTO
+   KEEP PHOTO VISIBLE
+   ================================ */
+
+if(memberPhotoBtn){
+
+    memberPhotoBtn.disabled =
+        true;
+
+    memberPhotoBtn.style.pointerEvents =
+        "none";
+
+    memberPhotoBtn.style.cursor =
+        "default";
+
+    memberPhotoBtn.style.display =
+        "flex";
+
+}
+
+
+if(memberPhotoPreview){
+
+    memberPhotoPreview.style.display =
+        memberPhotoPreview.src
+            ? "block"
+            : "none";
+
+}
+
+
+if(memberPhotoPlaceholder){
+
+    memberPhotoPlaceholder.style.display =
+        memberPhotoPreview &&
+        memberPhotoPreview.src
+            ? "none"
+            : "block";
+
+}
+       
 /* ================================
    HIDE SAVE BUTTON
    ================================ */
