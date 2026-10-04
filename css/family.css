@@ -3307,3 +3307,76 @@ max-height: 28px !important;
     flex:1 1 auto !important;
     min-height:0 !important;
 }
+/* =====================================
+   ADD MEMBER - TITLE + PHOTO
+   ===================================== */
+
+.member-page-title{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+
+    margin-top:-35px;
+    margin-bottom:12px;
+}
+
+
+/* ROUND PHOTO BUTTON */
+
+.member-title-photo-btn{
+    width:58px;
+    height:58px;
+    min-width:58px;
+
+    padding:0;
+    margin:0;
+
+    border:2px solid #2A6EB0;
+    border-radius:50%;
+
+    background:#ffffff;
+
+    overflow:hidden;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+}
+
+
+/* SELECT PHOTO TEXT */
+
+.member-title-photo-btn #memberPhotoPlaceholder{
+    font-size:10px;
+    line-height:12px;
+    text-align:center;
+    color:#2A6EB0;
+}
+
+
+/* SELECTED PHOTO */
+
+.member-title-photo-btn #memberPhotoPreview{
+    display:none;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+    object-position:center;
+
+    border-radius:50%;
+}
+
+
+/* ADD MEMBER TITLE */
+
+.member-page-title .page-title{
+    margin:0;
+    padding:0;
+
+    color:#2A6EB0;
+}
