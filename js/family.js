@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -15033,16 +15032,235 @@ let leftPartner = null;
 let rightPartner = null;
 
 
+/* =====================================
+   TWO PARTNER SIDE ASSIGNMENT
+
+   PRIORITY:
+   1. MARRIAGE DATE
+      Earlier marriage → LEFT
+      Later marriage   → RIGHT
+
+   2. DOB
+      Older partner    → LEFT
+      Younger partner  → RIGHT
+
+   3. FALLBACK
+      Existing order
+   ===================================== */
+
 if(twoPartnerMode){
 
-    leftPartner =
+    const partner1 =
         selectedMemberPartners[0];
 
-    rightPartner =
+    const partner2 =
         selectedMemberPartners[1];
 
-}
 
+    /* =================================
+       DATE HELPER
+       ================================= */
+
+    function getTreeDateValue(value){
+
+        if(!value){
+            return null;
+        }
+
+        const text =
+            String(value).trim();
+
+        if(!text){
+            return null;
+        }
+
+
+        /* YYYY-MM-DD */
+
+        if(
+            /^\d{4}-\d{2}-\d{2}$/.test(
+                text
+            )
+        ){
+
+            const time =
+                new Date(
+                    text + "T00:00:00"
+                ).getTime();
+
+            return Number.isNaN(time)
+                ? null
+                : time;
+        }
+
+
+        /* DD-MM-YYYY / DD/MM/YYYY */
+
+        const parts =
+            text.split(
+                /[-\/]/
+            );
+
+        if(parts.length === 3){
+
+            const day =
+                Number(parts[0]);
+
+            const month =
+                Number(parts[1]);
+
+            const year =
+                Number(parts[2]);
+
+            if(
+                day &&
+                month &&
+                year
+            ){
+
+                const time =
+                    new Date(
+                        year,
+                        month - 1,
+                        day
+                    ).getTime();
+
+                return Number.isNaN(time)
+                    ? null
+                    : time;
+            }
+
+        }
+
+
+        const fallbackTime =
+            new Date(text).getTime();
+
+        return Number.isNaN(
+            fallbackTime
+        )
+            ? null
+            : fallbackTime;
+
+    }
+
+
+    /* =================================
+       MARRIAGE DATES
+       ================================= */
+
+    const marriageDate1 =
+        getTreeDateValue(
+            partner1.marriageDate
+        );
+
+    const marriageDate2 =
+        getTreeDateValue(
+            partner2.marriageDate
+        );
+
+
+    if(
+        marriageDate1 !== null &&
+        marriageDate2 !== null &&
+        marriageDate1 !== marriageDate2
+    ){
+
+        if(
+            marriageDate1 <
+            marriageDate2
+        ){
+
+            leftPartner =
+                partner1;
+
+            rightPartner =
+                partner2;
+
+        }
+        else{
+
+            leftPartner =
+                partner2;
+
+            rightPartner =
+                partner1;
+
+        }
+
+    }
+
+
+    /* =================================
+       MARRIAGE DATE NOT AVAILABLE /
+       SAME → USE DATE OF BIRTH
+       ================================= */
+
+    else{
+
+        const dob1 =
+            getTreeDateValue(
+                partner1.dob ||
+                partner1.dateOfBirth
+            );
+
+        const dob2 =
+            getTreeDateValue(
+                partner2.dob ||
+                partner2.dateOfBirth
+            );
+
+
+        if(
+            dob1 !== null &&
+            dob2 !== null &&
+            dob1 !== dob2
+        ){
+
+            /*
+               Earlier DOB = Older Person
+               Older Partner → LEFT
+            */
+
+            if(
+                dob1 <
+                dob2
+            ){
+
+                leftPartner =
+                    partner1;
+
+                rightPartner =
+                    partner2;
+
+            }
+            else{
+
+                leftPartner =
+                    partner2;
+
+                rightPartner =
+                    partner1;
+
+            }
+
+        }
+
+        else{
+
+            /* FALLBACK */
+
+            leftPartner =
+                partner1;
+
+            rightPartner =
+                partner2;
+
+        }
+
+    }
+
+}
 
 /* =====================================
    DEBUG - PARTNER SIDE ASSIGNMENT
@@ -21476,14 +21694,75 @@ partnerSiblingBranches.forEach(
     }
 );
    
-    /* ================================
-       SELECTED + PARTNER
+     /* ================================
+       SELECTED + PARTNER / PARTNERS
        ================================ */
 
 let selectedCoupleCenter = null;
 
 
-if(selected && partner){
+/* =====================================
+   TWO PARTNER MODE
+   LEFT PARTNER ↔ MEMBER ↔ RIGHT PARTNER
+   ===================================== */
+
+const leftPartnerNode =
+    canvas.querySelector(
+        ".tree-left-partner"
+    );
+
+const rightPartnerNode =
+    canvas.querySelector(
+        ".tree-right-partner"
+    );
+
+
+if(
+    selected &&
+    leftPartnerNode &&
+    rightPartnerNode
+){
+
+    /* LEFT PARTNER ↔ SELECTED MEMBER */
+
+    connectCouple(
+        leftPartnerNode,
+        selected
+    );
+
+
+    /* SELECTED MEMBER ↔ RIGHT PARTNER */
+
+    connectCouple(
+        selected,
+        rightPartnerNode
+    );
+
+
+    /*
+       For the moment keep selected member
+       as the descendant center point.
+       Children split connectors will be
+       handled separately in next step.
+    */
+
+    selectedCoupleCenter =
+        getPoint(
+            selected,
+            "bottom"
+        );
+
+}
+
+
+/* =====================================
+   NORMAL SINGLE PARTNER MODE
+   ===================================== */
+
+else if(
+    selected &&
+    partner
+){
 
     selectedCoupleCenter =
         connectCouple(
@@ -21492,6 +21771,12 @@ if(selected && partner){
         );
 
 }
+
+
+/* =====================================
+   NO PARTNER
+   ===================================== */
+
 else if(selected){
 
     selectedCoupleCenter =
