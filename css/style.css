@@ -3723,9 +3723,9 @@ width:100%;
 .edit-profile-box .profile-row > select,
 .edit-profile-box #editProfileDateOfBirth,
 .edit-profile-box #editProfileGender{
-    height:25px !important;
-    min-height:25px !important;
-    max-height:25px !important;
+    height:28px !important;
+    min-height:28px !important;
+    max-height:28px !important;
 
     margin:0 !important;
     padding-top:0 !important;
