@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3130,11 +3129,18 @@ max-height: 28px !important;
    ===================================== */
 
 .family-about-content{
-    width:100%;
+    width:calc(100% - 24px);
     box-sizing:border-box;
-    padding:10px 20px 25px 20px;
-}
 
+    margin:12px auto 20px auto;
+    padding:20px 20px 28px 20px;
+
+    background:#ffffff;
+
+    border-radius:25px;
+
+    overflow:hidden;
+}
 /* SECTION HEADINGS */
 
 .family-about-content h3{
