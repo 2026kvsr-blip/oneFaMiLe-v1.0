@@ -3169,3 +3169,27 @@ max-height: 28px !important;
     margin-top:0;
     margin-bottom:16px;
 }
+/* =====================================
+   FAMILY ABOUT PAGE TITLE
+   ===================================== */
+
+.family-about-page-title{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    margin-top:0;
+    margin-bottom:12px;
+}
+
+.family-about-page-title img{
+    display:block;
+    margin:0;
+}
+
+.family-about-page-title h2,
+.family-about-page-title h3{
+    margin:0;
+    line-height:1;
+}
