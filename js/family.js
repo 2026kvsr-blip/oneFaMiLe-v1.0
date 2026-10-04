@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -6438,14 +6437,39 @@ function bindAddMemberButton(){
 
     showPage(
 
-        pageTitle(
-            "Add Member",
-            "images/colorbtns/AddMember1.png"
-        )
-    + `
+       showPage(`
 
-    <div class="common-page">
+<div class="member-page-title">
 
+    <input
+        type="file"
+        id="memberPhoto"
+        accept="image/*"
+        hidden>
+
+    <button
+        type="button"
+        id="memberPhotoBtn"
+        aria-label="Select Member Photo"
+        class="member-title-photo-btn">
+
+        <span id="memberPhotoPlaceholder">
+            Select<br>Photo
+        </span>
+
+        <img
+            id="memberPhotoPreview"
+            alt="Member Photo">
+
+    </button>
+
+    <h2 class="page-title">
+        Add Member
+    </h2>
+
+</div>
+
+<div class="common-page">
         <div class="common-form">
 
             <!-- =================================
@@ -6607,73 +6631,6 @@ function bindAddMemberButton(){
                     class="common-form-input"
                     required>
 
-            </div>
-
-
-            <!-- =================================
-                 PHOTO
-                 ================================= -->
-
-            <div class="common-form-group">
-                <label
-                    class="common-form-label">
-                    Photo
-                </label>
-                <span class="common-form-colon">                    :
-                </span>
-
-                
-               <input
-    type="file"
-    id="memberPhoto"
-    accept="image/*"
-    hidden>
-
-<button
-    type="button"
-    id="memberPhotoBtn"
-    aria-label="Select Member Photo"
-    style="
-        width:64px;
-        height:64px;
-        min-width:64px;
-        padding:0;
-        margin:0;
-        border:1px solid #999;
-        border-radius:50%;
-        background:#ffffff;
-        overflow:hidden;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        cursor:pointer;
-    ">
-
-    <span
-        id="memberPhotoPlaceholder"
-        style="
-            font-size:11px;
-            line-height:13px;
-            text-align:center;
-            color:#555;
-            padding:4px;
-        ">
-        Select<br>Photo
-    </span>
-
-    <img
-        id="memberPhotoPreview"
-        alt="Member Photo"
-        style="
-            display:none;
-            width:100%;
-            height:100%;
-            object-fit:cover;
-            object-position:center;
-            border-radius:50%;
-        ">
-
-</button>
             </div>
 
 
