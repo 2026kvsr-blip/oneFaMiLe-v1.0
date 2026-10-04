@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -369,40 +370,49 @@ if(familyAboutBtn){
                 return;
             }
 
-            showPage(`
+          showPage(`
 
-                <div
-    class="family-about-page-title">
+    <div class="family-about-page">
 
-    <img
-        src="images/colorbtns/About1.png"
-        style="width:42px;height:42px;object-fit:contain;">
+        <div class="family-about-page-title">
 
-    <h2>
-        Family
-    </h2>
+            <img
+                src="images/colorbtns/About1.png"
+                class="family-about-title-icon">
 
-</div>
-                <div
-                    class="family-about-content">
+            <h2>
+                About Family App
+            </h2>
 
-                    ${txt.familyAbout}
+        </div>
 
-                </div>
 
-                <div align="center">
+        <div class="family-about-scroll-box">
 
-                    <button
-                        id="familyAboutBackBtn"
-                        class="back-btn">
+            <div class="family-about-content">
 
-                        ← Back
+                ${txt.familyAbout}
 
-                    </button>
+            </div>
 
-                </div>
+        </div>
 
-            `);
+
+        <div class="family-about-bottom">
+
+            <button
+                id="familyAboutBackBtn"
+                class="back-btn">
+
+                ← Back
+
+            </button>
+
+        </div>
+
+    </div>
+
+`);
 
             document
                 .getElementById(
