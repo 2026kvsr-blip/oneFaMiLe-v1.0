@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3216,16 +3215,15 @@ max-height: 28px !important;
 /* TITLE */
 
 .family-about-page-title{
-    flex:0 0 175px;
+    flex:0 0 auto;
 
     display:flex;
     align-items:center;
     justify-content:center;
     gap:10px;
 
-    margin:0;
+    margin:0 0 10px 0;
 }
-
 .family-about-title-icon{
     width:42px;
     height:42px;
