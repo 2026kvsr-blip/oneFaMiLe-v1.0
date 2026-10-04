@@ -3437,3 +3437,115 @@ max-height: 28px !important;
 
     z-index:9998 !important;
 }
+/* =====================================
+   TWO PARTNER CHILDREN LAYOUT
+
+   LEFT CHILDREN | CENTER | RIGHT CHILDREN
+   ===================================== */
+
+.family-tree-two-partner-children-row{
+
+    display: grid;
+
+    grid-template-columns:
+        max-content
+        110px
+        max-content;
+
+    align-items: start;
+
+    justify-content: center;
+
+    column-gap: 50px;
+
+    width: max-content;
+
+    min-width: 100%;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+
+/* =====================================
+   LEFT PARTNER CHILDREN
+   ===================================== */
+
+.family-tree-left-children-group{
+
+    grid-column: 1;
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: flex-end;
+
+    align-items: flex-start;
+
+    gap: 50px;
+
+    width: max-content;
+
+    justify-self: end;
+
+}
+
+
+/* =====================================
+   SELECTED MEMBER IMAGINARY CENTER
+   ===================================== */
+
+.family-tree-children-center-space{
+
+    grid-column: 2;
+
+    width: 110px;
+
+    min-width: 110px;
+
+    height: 1px;
+
+}
+
+
+/* =====================================
+   RIGHT PARTNER CHILDREN
+   ===================================== */
+
+.family-tree-right-children-group{
+
+    grid-column: 3;
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: flex-start;
+
+    align-items: flex-start;
+
+    gap: 50px;
+
+    width: max-content;
+
+    justify-self: start;
+
+}
+
+
+/* =====================================
+   KEEP CHILD BRANCHES NORMAL
+   ===================================== */
+
+.family-tree-left-children-group
+.family-tree-child-branch,
+
+.family-tree-right-children-group
+.family-tree-child-branch{
+
+    flex: 0 0 auto;
+
+}
