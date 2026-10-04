@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -364,16 +365,23 @@ if(familyAboutBtn){
 
         <div class="family-about-bottom">
 
-            <button
-                id="familyAboutBackBtn"
-                class="back-btn">
+    <button
+        id="familyAboutBackBtn"
+        class="family-about-nav-btn">
 
-                ← Back
+        ← Back
 
-            </button>
+    </button>
 
-        </div>
+    <button
+        id="familyAboutHomeBtn"
+        class="family-about-nav-btn">
 
+        🏠 Home
+
+    </button>
+
+</div>
     </div>
 
 `);
@@ -388,6 +396,21 @@ if(familyAboutBtn){
                         familyBtn.click();
 
                     };
+           const familyAboutHomeBtn =
+    document.getElementById(
+        "familyAboutHomeBtn"
+    );
+
+if(familyAboutHomeBtn){
+
+    familyAboutHomeBtn.onclick =
+        function(){
+
+            homeBtn.click();
+
+        };
+
+}
 
         };
 
