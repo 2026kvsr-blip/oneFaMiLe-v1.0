@@ -1,5 +1,3 @@
-
-
 /* =========
 ============================
    oneFaMiLe
@@ -11,15 +9,11 @@
    FORMAT:	
    F-NAME-RANDOM4
    ===================================== */
-
-
 function generateFamilyId(familyName){
-
     const cleanName =
         familyName
             .toUpperCase()
             .replace(/[^A-Z0-9]/g, "");
-
     const namePart =
         cleanName
             .substring(0,4)
@@ -28,7 +22,6 @@ function generateFamilyId(familyName){
        /* =================================
        GET EXISTING FAMILY IDs
        ================================= */
-
     const existingFamilies =
         JSON.parse(
             localStorage.getItem(
@@ -43,26 +36,19 @@ function generateFamilyId(familyName){
                 family.familyId
         );
 
-
     let familyId;
     let uniquePart;
-
-
     /* =================================
        GENERATE UNIQUE RANDOM 4
        ================================= */
-
     do{
-
         uniquePart =
             Math.random()
                 .toString(36)
                 .substring(2,6)
                 .toUpperCase();
-
         familyId =
             `F-${namePart}-${uniquePart}`;
-
     }
     while(
         existingIds.includes(
@@ -77,29 +63,21 @@ function generateFamilyId(familyName){
 /* =====================================
    CHECK FAMILY ID AVAILABILITY
    ===================================== */
-
 function isFamilyIdAvailable(familyId){
-
     const existingFamilies =
         JSON.parse(
             localStorage.getItem("familyTrees") || "[]"
         );
-
     return !existingFamilies.some(
         family =>
             family.familyId === familyId
     );
 }
-
-
 /* =====================================
    PRELOAD FAMILY PAGE IMAGES
    ===================================== */
-
 function preloadFamilyPageImages(){
-
     const familyImages = [
-
         "images/colorbtns/Family1.png",
         "images/colorbtns/AddMember1.png",
         "images/colorbtns/AddFamily1.png",
@@ -107,17 +85,13 @@ function preloadFamilyPageImages(){
         "images/colorbtns/Relations1.png",
         "images/colorbtns/TreeView1.png",
         "images/colorbtns/About1.png"
-
     ];
 
     familyImages.forEach(
         function(src){
-
             const img =
                 new Image();
-
             img.src = src;
-
         }
     );
 }
@@ -126,30 +100,23 @@ function preloadFamilyPageImages(){
 /* =====================================
    CLEAR FAMILY CACHE IF LOGIN USER CHANGED
    ===================================== */
-
 function clearOldFamilyCacheForCurrentUser(){
-
     const loggedUser =
         JSON.parse(
             sessionStorage.getItem("user") || "null"
         );
-
     const storedFamily =
         JSON.parse(
             localStorage.getItem("currentFamily") || "null"
         );
-
     if(!loggedUser){
         return;
     }
 
     if(!storedFamily){
-
         localStorage.removeItem("familyMembers");
         return;
     }
-
-
     const loginMatch =
         storedFamily.loginId &&
         loggedUser.loginUserName &&
@@ -159,8 +126,6 @@ function clearOldFamilyCacheForCurrentUser(){
         String(loggedUser.loginUserName)
             .trim()
             .toLowerCase();
-
-
     const emailMatch =
         storedFamily.userMail &&
         loggedUser.email &&
@@ -170,8 +135,6 @@ function clearOldFamilyCacheForCurrentUser(){
         String(loggedUser.email)
             .trim()
             .toLowerCase();
-
-
     const mobileMatch =
         storedFamily.mobile &&
         loggedUser.mobile &&
