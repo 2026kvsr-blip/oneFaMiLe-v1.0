@@ -6647,7 +6647,7 @@ style="
     align-items:center;
     justify-content:center;
     gap:10px;
-    margin:-35px 0 16px;
+    margin:-50px 0 16px;
 "
 >
 
@@ -6874,7 +6874,7 @@ style="
     align-items:center;
     justify-content:center;
     gap:10px;
-    margin:-35px 0 16px;
+    margin:-50px 0 16px;
 "
 >
 
