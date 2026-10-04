@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -14870,6 +14869,157 @@ function createTreeMemberBox(member){
 
 }
 
+
+/* =====================================
+   TREE VIEW - GET ALL PARTNERS
+   ===================================== */
+
+function getAllTreePartners(person){
+
+    if(!person){
+        return [];
+    }
+
+    const personId =
+        String(
+            person.memberId || ""
+        ).trim();
+
+    const partnerIds =
+        new Set();
+
+
+    /* DIRECT PARTNER */
+
+    if(person.partnerId){
+
+        partnerIds.add(
+            String(
+                person.partnerId
+            ).trim()
+        );
+
+    }
+
+
+    /* REVERSE PARTNER LINKS */
+
+    members.forEach(
+        function(member){
+
+            if(!member){
+                return;
+            }
+
+            if(
+                String(
+                    member.partnerId || ""
+                ).trim() === personId
+            ){
+
+                partnerIds.add(
+                    String(
+                        member.memberId || ""
+                    ).trim()
+                );
+
+            }
+
+        }
+    );
+
+
+    /* PARTNERS FOUND THROUGH CHILDREN */
+
+    members.forEach(
+        function(child){
+
+            if(!child){
+                return;
+            }
+
+            const fatherId =
+                String(
+                    child.fatherId || ""
+                ).trim();
+
+            const motherId =
+                String(
+                    child.motherId || ""
+                ).trim();
+
+
+            if(
+                fatherId === personId &&
+                motherId &&
+                motherId !== personId
+            ){
+
+                partnerIds.add(
+                    motherId
+                );
+
+            }
+
+
+            if(
+                motherId === personId &&
+                fatherId &&
+                fatherId !== personId
+            ){
+
+                partnerIds.add(
+                    fatherId
+                );
+
+            }
+
+        }
+    );
+
+
+    partnerIds.delete("");
+    partnerIds.delete(personId);
+
+
+    return Array.from(
+        partnerIds
+    )
+    .map(
+        function(partnerId){
+
+            return members.find(
+                function(member){
+
+                    return String(
+                        member.memberId || ""
+                    ).trim() === partnerId;
+
+                }
+            ) || null;
+
+        }
+    )
+    .filter(Boolean);
+
+}
+
+
+/* =====================================
+   ALL PARTNERS OF SELECTED MEMBER
+   ===================================== */
+
+const selectedMemberPartners =
+    getAllTreePartners(
+        selectedMember
+    );
+
+
+console.log(
+    "TREE SELECTED MEMBER PARTNERS:",
+    selectedMemberPartners
+);
+           
            const partner =
     members.find(
         member =>
