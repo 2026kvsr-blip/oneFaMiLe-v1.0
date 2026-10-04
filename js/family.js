@@ -1,3 +1,4 @@
+
 /* =========
 ============================
    oneFaMiLe
@@ -6402,7 +6403,6 @@ function bindAddMemberButton(){
        showPage(`
 
 <div class="member-page-title">
-
     <input
         type="file"
         id="memberPhoto"
