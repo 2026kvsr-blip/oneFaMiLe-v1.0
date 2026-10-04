@@ -3421,3 +3421,19 @@ max-height: 28px !important;
 
     cursor:pointer;
 }
+/* =====================================
+   SHOW FAMILY TREE - NEAR BOTTOM
+   ===================================== */
+
+#showFamilyTreeBtn{
+    position:fixed !important;
+
+    left:50% !important;
+    bottom:68px !important;
+
+    transform:translateX(-50%) !important;
+
+    margin:0 !important;
+
+    z-index:9998 !important;
+}
