@@ -1,6 +1,5 @@
 
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3410,8 +3409,8 @@ max-height: 28px !important;
     border:2px solid #2A6EB0;
     border-radius:15px;
 
-    background:#2A6EB0;
-    color:#ffffff;
+    background:transparent;
+    color:#2A6EB0;
 
     font-size:16px;
     font-weight:600;
