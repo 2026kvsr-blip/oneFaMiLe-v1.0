@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -17678,67 +17679,150 @@ ${
 
 
     <div class="family-tree-selected-branch">
-        <div class="family-tree-selected-couple">
 
-    ${
-        showMemberPartner &&
-        partner &&
-        String(selectedMember.gender || "")
-            .trim()
-            .toLowerCase() === "female"
-        &&
-        String(partner.gender || "")
-            .trim()
-            .toLowerCase() !== "female"
+        <div class="
+            family-tree-selected-couple
+            ${twoPartnerMode ? "family-tree-two-partner-couple" : ""}
+        ">
 
-        ? `
-            <div class="family-tree-selected-partner-slot">
+        ${
+            twoPartnerMode &&
+            showMemberPartner
 
-                ${treeBox(
-                    partner,
-                    "tree-partner"
-                )}
+                ? `
 
-            </div>
+                    <!-- =========================
+                         LEFT PARTNER
+                         ========================= -->
 
-            <div class="family-tree-selected-member-slot">
+                    <div
+                        class="
+                            family-tree-selected-partner-slot
+                            family-tree-left-partner-slot
+                        ">
 
-                ${treeBox(
-                    selectedMember,
-                    "tree-selected"
-                )}
+                        ${treeBox(
+                            leftPartner,
+                            "tree-left-partner"
+                        )}
 
-            </div>
-          `
+                    </div>
 
-        : `
-            <div class="family-tree-selected-member-slot">
 
-                ${treeBox(
-                    selectedMember,
-                    "tree-selected"
-                )}
+                    <!-- =========================
+                         SELECTED MEMBER
+                         ========================= -->
 
-            </div>
+                    <div
+                        class="
+                            family-tree-selected-member-slot
+                            family-tree-two-partner-member-slot
+                        ">
 
-            ${
-                showMemberPartner && partner
-                    ? `
-                        <div class="family-tree-selected-partner-slot">
+                        ${treeBox(
+                            selectedMember,
+                            "tree-selected"
+                        )}
 
-                            ${treeBox(
-                                partner,
-                                "tree-partner"
-                            )}
+                    </div>
 
-                        </div>
-                      `
-                    : ""
-            }
-          `
-    }
 
-</div>
+                    <!-- =========================
+                         RIGHT PARTNER
+                         ========================= -->
+
+                    <div
+                        class="
+                            family-tree-selected-partner-slot
+                            family-tree-right-partner-slot
+                        ">
+
+                        ${treeBox(
+                            rightPartner,
+                            "tree-right-partner"
+                        )}
+
+                    </div>
+
+                  `
+
+                :
+
+                (
+                    showMemberPartner &&
+                    partner &&
+                    String(
+                        selectedMember.gender || ""
+                    )
+                    .trim()
+                    .toLowerCase() === "female"
+                    &&
+                    String(
+                        partner.gender || ""
+                    )
+                    .trim()
+                    .toLowerCase() !== "female"
+
+                        ? `
+
+                            <div class="family-tree-selected-partner-slot">
+
+                                ${treeBox(
+                                    partner,
+                                    "tree-partner"
+                                )}
+
+                            </div>
+
+
+                            <div class="family-tree-selected-member-slot">
+
+                                ${treeBox(
+                                    selectedMember,
+                                    "tree-selected"
+                                )}
+
+                            </div>
+
+                          `
+
+                        : `
+
+                            <div class="family-tree-selected-member-slot">
+
+                                ${treeBox(
+                                    selectedMember,
+                                    "tree-selected"
+                                )}
+
+                            </div>
+
+
+                            ${
+                                showMemberPartner &&
+                                partner
+
+                                    ? `
+
+                                        <div class="family-tree-selected-partner-slot">
+
+                                            ${treeBox(
+                                                partner,
+                                                "tree-partner"
+                                            )}
+
+                                        </div>
+
+                                      `
+
+                                    : ""
+                            }
+
+                          `
+                )
+        }
+
+        </div>
 
 
         ${
