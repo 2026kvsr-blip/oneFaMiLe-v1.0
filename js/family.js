@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -372,11 +371,18 @@ if(familyAboutBtn){
 
             showPage(`
 
-                ${pageTitle(
-                    "Family",
-                    "images/colorbtns/About1.png"
-                )}
+                <div
+    class="family-about-page-title">
 
+    <img
+        src="images/colorbtns/About1.png"
+        style="width:42px;height:42px;object-fit:contain;">
+
+    <h2>
+        Family
+    </h2>
+
+</div>
                 <div
                     class="family-about-content">
 
