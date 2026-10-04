@@ -22000,7 +22000,8 @@ childTargets.forEach(
    ===================================== */
 
 if(
-    twoPartnerMode &&
+    leftPartnerNode &&
+    rightPartnerNode &&
     leftCoupleCenter &&
     rightCoupleCenter
 ){
