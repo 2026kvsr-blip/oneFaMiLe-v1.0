@@ -15562,7 +15562,83 @@ const partnerMother =
             partner.motherId
           )
         : null;
-           /* =====================================
+
+         /* =====================================
+   TWO PARTNER PARENTS
+
+   LEFT PARTNER PARENTS
+   MEMBER PARENTS
+   RIGHT PARTNER PARENTS
+   ===================================== */
+
+const leftPartnerFather =
+    twoPartnerMode &&
+    leftPartner
+        ? getMemberById(
+            leftPartner.fatherId
+          )
+        : null;
+
+
+const leftPartnerMother =
+    twoPartnerMode &&
+    leftPartner
+        ? getMemberById(
+            leftPartner.motherId
+          )
+        : null;
+
+
+const rightPartnerFather =
+    twoPartnerMode &&
+    rightPartner
+        ? getMemberById(
+            rightPartner.fatherId
+          )
+        : null;
+
+
+const rightPartnerMother =
+    twoPartnerMode &&
+    rightPartner
+        ? getMemberById(
+            rightPartner.motherId
+          )
+        : null;
+
+
+/* =====================================
+   DEBUG - TWO PARTNER PARENTS
+   ===================================== */
+
+if(twoPartnerMode){
+
+    console.log(
+        "TREE LEFT PARTNER PARENTS:",
+        {
+            father: leftPartnerFather,
+            mother: leftPartnerMother
+        }
+    );
+
+    console.log(
+        "TREE MEMBER PARENTS:",
+        {
+            father,
+            mother
+        }
+    );
+
+    console.log(
+        "TREE RIGHT PARTNER PARENTS:",
+        {
+            father: rightPartnerFather,
+            mother: rightPartnerMother
+        }
+    );
+
+}  
+/* =====================================
    ANCESTRY LAYOUT CASE
    ===================================== */
 
