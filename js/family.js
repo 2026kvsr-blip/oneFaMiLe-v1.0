@@ -19993,7 +19993,219 @@ function connectDescendantsStandard(
 
         return;
     }
+/* =====================================
+   TWO PARTNER CHILDREN CONNECTOR
 
+   Couple midpoint
+         │
+         └──── BUS CENTER
+                 │
+        ─────────┼─────────
+        │        │        │
+      Child    Child    Child
+   ===================================== */
+
+function connectTwoPartnerChildren(
+    parentCenter,
+    children
+){
+
+    if(
+        !parentCenter ||
+        !children ||
+        !children.length
+    ){
+        return;
+    }
+
+
+    const childPoints =
+        children
+            .map(
+                child =>
+                    getPoint(
+                        child,
+                        "top"
+                    )
+            )
+            .filter(Boolean);
+
+
+    if(!childPoints.length){
+        return;
+    }
+
+
+    const childTopY =
+        Math.min(
+            ...childPoints.map(
+                point => point.y
+            )
+        );
+
+
+    const childBusY =
+        parentCenter.y +
+        (
+            childTopY -
+            parentCenter.y
+        ) * 0.60;
+
+
+    /* =================================
+       ONLY ONE CHILD
+       Keep current correct behaviour
+       ================================= */
+
+    if(childPoints.length === 1){
+
+        const childPoint =
+            childPoints[0];
+
+
+        addLine(
+            parentCenter.x,
+            parentCenter.y,
+            parentCenter.x,
+            childBusY
+        );
+
+
+        if(
+            parentCenter.x !==
+            childPoint.x
+        ){
+
+            addLine(
+                parentCenter.x,
+                childBusY,
+                childPoint.x,
+                childBusY
+            );
+
+        }
+
+
+        addLine(
+            childPoint.x,
+            childBusY,
+            childPoint.x,
+            childPoint.y
+        );
+
+
+        return;
+    }
+
+
+    /* =================================
+       TWO OR MORE CHILDREN
+       ================================= */
+
+    const minChildX =
+        Math.min(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    const maxChildX =
+        Math.max(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    /* EXACT CHILDREN BUS MIDDLE */
+
+    const busCenterX =
+        (
+            minChildX +
+            maxChildX
+        ) / 2;
+
+
+    /* =================================
+       PARENT → BUS CENTER
+       ================================= */
+
+    const approachY =
+        parentCenter.y +
+        (
+            childBusY -
+            parentCenter.y
+        ) * 0.50;
+
+
+    /* First vertical */
+
+    addLine(
+        parentCenter.x,
+        parentCenter.y,
+        parentCenter.x,
+        approachY
+    );
+
+
+    /* Move horizontally to bus center */
+
+    if(
+        parentCenter.x !==
+        busCenterX
+    ){
+
+        addLine(
+            parentCenter.x,
+            approachY,
+            busCenterX,
+            approachY
+        );
+
+    }
+
+
+    /* Then vertical into exact bus center */
+
+    addLine(
+        busCenterX,
+        approachY,
+        busCenterX,
+        childBusY
+    );
+
+
+    /* =================================
+       CHILDREN HORIZONTAL BUS
+       ================================= */
+
+    addLine(
+        minChildX,
+        childBusY,
+        maxChildX,
+        childBusY
+    );
+
+
+    /* =================================
+       BUS → EACH CHILD
+       ================================= */
+
+    childPoints.forEach(
+        childPoint => {
+
+            addLine(
+                childPoint.x,
+                childBusY,
+                childPoint.x,
+                childPoint.y
+            );
+
+        }
+    );
+
+}
 
     /* =================================
        TWO OR MORE CHILDREN
@@ -22028,11 +22240,10 @@ if(
 
     if(leftChildElements.length){
 
-        connectDescendantsStandard(
-            leftCoupleCenter,
-            leftChildElements
-        );
-
+        connectTwoPartnerChildren(
+    leftCoupleCenter,
+    leftChildElements
+);
     }
 
 
@@ -22058,11 +22269,10 @@ if(
 
     if(rightChildElements.length){
 
-        connectDescendantsStandard(
-            rightCoupleCenter,
-            rightChildElements
-        );
-
+       connectTwoPartnerChildren(
+    rightCoupleCenter,
+    rightChildElements
+);
     }
 
 }
