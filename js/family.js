@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -6434,8 +6435,6 @@ function bindAddMemberButton(){
         openMemberMode
     );
 
-
-    showPage(
 
        showPage(`
 
