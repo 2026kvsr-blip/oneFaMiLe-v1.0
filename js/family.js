@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -21777,6 +21776,8 @@ partnerSiblingBranches.forEach(
 
 let selectedCoupleCenter = null;
 
+let leftCoupleCenter = null;
+let rightCoupleCenter = null;
 
 /* =====================================
    TWO PARTNER MODE
@@ -21802,19 +21803,20 @@ if(
 
     /* LEFT PARTNER ↔ SELECTED MEMBER */
 
-    connectCouple(
-        leftPartnerNode,
-        selected
-    );
+       leftCoupleCenter =
+        connectCouple(
+            leftPartnerNode,
+            selected
+        );
 
 
     /* SELECTED MEMBER ↔ RIGHT PARTNER */
 
-    connectCouple(
-        selected,
-        rightPartnerNode
-    );
-
+    rightCoupleCenter =
+        connectCouple(
+            selected,
+            rightPartnerNode
+        );
 
     /*
        For the moment keep selected member
@@ -21997,6 +21999,79 @@ childTargets.forEach(
    ===================================== */
 
 if(
+    twoPartnerMode &&
+    leftCoupleCenter &&
+    rightCoupleCenter
+){
+
+    /* =================================
+       LEFT PARTNER + MEMBER
+       → LEFT PARTNER CHILDREN
+       ================================= */
+
+    const leftChildElements =
+        Array.from(
+            canvas.querySelectorAll(
+                ".family-tree-left-children-group .family-tree-child-branch"
+            )
+        )
+        .map(
+            branch =>
+                branch.querySelector(
+                    ".tree-child-node"
+                )
+        )
+        .filter(Boolean);
+
+
+    if(leftChildElements.length){
+
+        connectDescendantsStandard(
+            leftCoupleCenter,
+            leftChildElements
+        );
+
+    }
+
+
+    /* =================================
+       MEMBER + RIGHT PARTNER
+       → RIGHT PARTNER CHILDREN
+       ================================= */
+
+    const rightChildElements =
+        Array.from(
+            canvas.querySelectorAll(
+                ".family-tree-right-children-group .family-tree-child-branch"
+            )
+        )
+        .map(
+            branch =>
+                branch.querySelector(
+                    ".tree-child-node"
+                )
+        )
+        .filter(Boolean);
+
+
+    if(rightChildElements.length){
+
+        connectDescendantsStandard(
+            rightCoupleCenter,
+            rightChildElements
+        );
+
+    }
+
+}
+
+
+/* =====================================
+   NORMAL ONE PARTNER / NO PARTNER
+   Existing behaviour
+   ===================================== */
+
+else if(
     selectedCoupleCenter &&
     childCenters.length
 ){
@@ -22011,7 +22086,6 @@ if(
     );
 
 }
-
 
    
    /* =====================================
