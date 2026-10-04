@@ -16709,7 +16709,7 @@ function buildSelectedChildrenHTML(
 
         `;
 
-    }
+    
     }
 );
 
