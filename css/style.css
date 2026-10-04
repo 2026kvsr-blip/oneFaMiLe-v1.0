@@ -2790,7 +2790,7 @@ width:100%;
 
         max-width:100% !important;
 
-        height:44px !important;
+        height:33px !important;
 
         box-sizing:border-box !important;
 
@@ -3672,4 +3672,23 @@ width:100%;
     letter-spacing:0 !important;
 
     opacity:1 !important;
+}
+/* =====================================
+   EDIT PROFILE - COMPACT FIELD HEIGHT
+   ===================================== */
+
+.edit-profile-box .profile-row > input,
+.edit-profile-box .profile-row > select,
+.edit-profile-box #editProfileDateOfBirth,
+.edit-profile-box #editProfileGender{
+
+    height:36px !important;
+    min-height:36px !important;
+
+    margin:0 !important;
+
+    align-self:center !important;
+
+    padding-top:0 !important;
+    padding-bottom:0 !important;
 }
