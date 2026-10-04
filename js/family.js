@@ -15307,15 +15307,12 @@ if(twoPartnerMode){
             rightPartner?.memberId || ""
         ).trim();
 
-
     members.forEach(
         function(child){
 
             if(!child){
                 return;
             }
-
-
             const childId =
                 String(
                     child.memberId || ""
@@ -15331,10 +15328,8 @@ if(twoPartnerMode){
                     child.motherId || ""
                 ).trim();
 
-
             /* DO NOT TREAT SELECTED MEMBER
                OR PARTNERS AS CHILDREN */
-
             if(
                 !childId ||
                 childId === selectedMemberId ||
@@ -15343,8 +15338,6 @@ if(twoPartnerMode){
             ){
                 return;
             }
-
-
             /* =================================
                LEFT PARTNER + SELECTED MEMBER
                ================================= */
@@ -15360,11 +15353,9 @@ if(twoPartnerMode){
                     fatherId === leftPartnerId
                 );
 
-
             /* =================================
                RIGHT PARTNER + SELECTED MEMBER
                ================================= */
-
             const belongsToRightPartner =
                 (
                     fatherId === selectedMemberId &&
@@ -15375,8 +15366,6 @@ if(twoPartnerMode){
                     motherId === selectedMemberId &&
                     fatherId === rightPartnerId
                 );
-
-
             if(belongsToLeftPartner){
 
                 leftPartnerChildren.push(
@@ -15385,8 +15374,6 @@ if(twoPartnerMode){
 
                 return;
             }
-
-
             if(belongsToRightPartner){
 
                 rightPartnerChildren.push(
@@ -15395,18 +15382,14 @@ if(twoPartnerMode){
 
                 return;
             }
-
-
             /* =================================
                CHILD BELONGS TO SELECTED MEMBER
                BUT PARTNER COULD NOT BE MATCHED
                ================================= */
-
             if(
                 fatherId === selectedMemberId ||
                 motherId === selectedMemberId
             ){
-
                 unassignedPartnerChildren.push(
                     child
                 );
@@ -15417,7 +15400,6 @@ if(twoPartnerMode){
     );
 
 }
-
 
 /* =====================================
    DEBUG - TWO PARTNER CHILDREN
