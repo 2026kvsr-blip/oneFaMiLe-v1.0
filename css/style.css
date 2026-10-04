@@ -3692,3 +3692,17 @@ width:100%;
     padding-top:0 !important;
     padding-bottom:0 !important;
 }
+/* EDIT PROFILE - BOX VERTICAL CENTER FIX */
+
+.edit-profile-box .profile-row{
+    padding-top:0 !important;
+    padding-bottom:0 !important;
+    align-items:center !important;
+}
+
+.edit-profile-box .profile-row > input,
+.edit-profile-box .profile-row > select,
+.edit-profile-box #editProfileDateOfBirth,
+.edit-profile-box #editProfileGender{
+    transform:translateY(-2px) !important;
+}
