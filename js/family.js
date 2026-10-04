@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -15063,7 +15062,162 @@ console.log(
     rightPartner
 );
 
+/* =====================================
+   TWO PARTNER CHILDREN SPLIT
+   ===================================== */
 
+let leftPartnerChildren = [];
+let rightPartnerChildren = [];
+let unassignedPartnerChildren = [];
+
+
+if(twoPartnerMode){
+
+    const selectedMemberId =
+        String(
+            selectedMember.memberId || ""
+        ).trim();
+
+    const leftPartnerId =
+        String(
+            leftPartner?.memberId || ""
+        ).trim();
+
+    const rightPartnerId =
+        String(
+            rightPartner?.memberId || ""
+        ).trim();
+
+
+    members.forEach(
+        function(child){
+
+            if(!child){
+                return;
+            }
+
+
+            const childId =
+                String(
+                    child.memberId || ""
+                ).trim();
+
+            const fatherId =
+                String(
+                    child.fatherId || ""
+                ).trim();
+
+            const motherId =
+                String(
+                    child.motherId || ""
+                ).trim();
+
+
+            /* DO NOT TREAT SELECTED MEMBER
+               OR PARTNERS AS CHILDREN */
+
+            if(
+                !childId ||
+                childId === selectedMemberId ||
+                childId === leftPartnerId ||
+                childId === rightPartnerId
+            ){
+                return;
+            }
+
+
+            /* =================================
+               LEFT PARTNER + SELECTED MEMBER
+               ================================= */
+
+            const belongsToLeftPartner =
+                (
+                    fatherId === selectedMemberId &&
+                    motherId === leftPartnerId
+                )
+                ||
+                (
+                    motherId === selectedMemberId &&
+                    fatherId === leftPartnerId
+                );
+
+
+            /* =================================
+               RIGHT PARTNER + SELECTED MEMBER
+               ================================= */
+
+            const belongsToRightPartner =
+                (
+                    fatherId === selectedMemberId &&
+                    motherId === rightPartnerId
+                )
+                ||
+                (
+                    motherId === selectedMemberId &&
+                    fatherId === rightPartnerId
+                );
+
+
+            if(belongsToLeftPartner){
+
+                leftPartnerChildren.push(
+                    child
+                );
+
+                return;
+            }
+
+
+            if(belongsToRightPartner){
+
+                rightPartnerChildren.push(
+                    child
+                );
+
+                return;
+            }
+
+
+            /* =================================
+               CHILD BELONGS TO SELECTED MEMBER
+               BUT PARTNER COULD NOT BE MATCHED
+               ================================= */
+
+            if(
+                fatherId === selectedMemberId ||
+                motherId === selectedMemberId
+            ){
+
+                unassignedPartnerChildren.push(
+                    child
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================
+   DEBUG - TWO PARTNER CHILDREN
+   ===================================== */
+
+console.log(
+    "TREE LEFT PARTNER CHILDREN:",
+    leftPartnerChildren
+);
+
+console.log(
+    "TREE RIGHT PARTNER CHILDREN:",
+    rightPartnerChildren
+);
+
+console.log(
+    "TREE UNASSIGNED CHILDREN:",
+    unassignedPartnerChildren
+);
            
            const partner =
     members.find(
