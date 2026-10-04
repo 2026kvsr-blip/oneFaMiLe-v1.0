@@ -19899,10 +19899,6 @@ function connectDescendantsStandard(
     }
 
 
-    /* =================================
-       ACTUAL CHILD TOP-CENTER POINTS
-       ================================= */
-
     const childPoints =
         children
             .map(
@@ -19920,11 +19916,6 @@ function connectDescendantsStandard(
     }
 
 
-    /* =================================
-       SAME STYLE AS
-       KRISHNA CHAITANYA + SRAVANI
-       ================================= */
-
     const childTopY =
         Math.min(
             ...childPoints.map(
@@ -19933,21 +19924,16 @@ function connectDescendantsStandard(
         );
 
 
-    /*
-       Couple midpoint mariyu
-       children top madhyalo EXACT midpoint.
-    */
-
-  const childBusY =
-    parentCenter.y +
-    (
-        childTopY -
-        parentCenter.y
-    ) * 0.60;
+    const childBusY =
+        parentCenter.y +
+        (
+            childTopY -
+            parentCenter.y
+        ) * 0.60;
 
 
     /* =================================
-       COUPLE MIDPOINT ↓ CHILDREN BUS
+       PARENT / COUPLE → CHILDREN BUS
        ================================= */
 
     addLine(
@@ -19993,16 +19979,69 @@ function connectDescendantsStandard(
 
         return;
     }
+
+
+    /* =================================
+       TWO OR MORE CHILDREN
+       ================================= */
+
+    const minChildX =
+        Math.min(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    const maxChildX =
+        Math.max(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    const busStartX =
+        Math.min(
+            minChildX,
+            parentCenter.x
+        );
+
+
+    const busEndX =
+        Math.max(
+            maxChildX,
+            parentCenter.x
+        );
+
+
+    addLine(
+        busStartX,
+        childBusY,
+        busEndX,
+        childBusY
+    );
+
+
+    childPoints.forEach(
+        childPoint => {
+
+            addLine(
+                childPoint.x,
+                childBusY,
+                childPoint.x,
+                childPoint.y
+            );
+
+        }
+    );
+
+}
+
+
+
 /* =====================================
    TWO PARTNER CHILDREN CONNECTOR
-
-   Couple midpoint
-         │
-         └──── BUS CENTER
-                 │
-        ─────────┼─────────
-        │        │        │
-      Child    Child    Child
    ===================================== */
 
 function connectTwoPartnerChildren(
@@ -20053,8 +20092,7 @@ function connectTwoPartnerChildren(
 
 
     /* =================================
-       ONLY ONE CHILD
-       Keep current correct behaviour
+       ONE CHILD
        ================================= */
 
     if(childPoints.length === 1){
@@ -20118,7 +20156,10 @@ function connectTwoPartnerChildren(
         );
 
 
-    /* EXACT CHILDREN BUS MIDDLE */
+    /*
+       CHILDREN HORIZONTAL BUS
+       EXACT CENTER
+    */
 
     const busCenterX =
         (
@@ -20127,9 +20168,10 @@ function connectTwoPartnerChildren(
         ) / 2;
 
 
-    /* =================================
-       PARENT → BUS CENTER
-       ================================= */
+    /*
+       First come down from
+       partner-member midpoint.
+    */
 
     const approachY =
         parentCenter.y +
@@ -20139,8 +20181,6 @@ function connectTwoPartnerChildren(
         ) * 0.50;
 
 
-    /* First vertical */
-
     addLine(
         parentCenter.x,
         parentCenter.y,
@@ -20149,7 +20189,10 @@ function connectTwoPartnerChildren(
     );
 
 
-    /* Move horizontally to bus center */
+    /*
+       Then move horizontally
+       towards children bus center.
+    */
 
     if(
         parentCenter.x !==
@@ -20166,7 +20209,10 @@ function connectTwoPartnerChildren(
     }
 
 
-    /* Then vertical into exact bus center */
+    /*
+       Then come vertically down
+       into EXACT bus middle.
+    */
 
     addLine(
         busCenterX,
@@ -20176,9 +20222,7 @@ function connectTwoPartnerChildren(
     );
 
 
-    /* =================================
-       CHILDREN HORIZONTAL BUS
-       ================================= */
+    /* CHILDREN BUS */
 
     addLine(
         minChildX,
@@ -20188,80 +20232,7 @@ function connectTwoPartnerChildren(
     );
 
 
-    /* =================================
-       BUS → EACH CHILD
-       ================================= */
-
-    childPoints.forEach(
-        childPoint => {
-
-            addLine(
-                childPoint.x,
-                childBusY,
-                childPoint.x,
-                childPoint.y
-            );
-
-        }
-    );
-
-}
-
-    /* =================================
-       TWO OR MORE CHILDREN
-       ================================= */
-
-    const minChildX =
-        Math.min(
-            ...childPoints.map(
-                point => point.x
-            )
-        );
-
-
-    const maxChildX =
-        Math.max(
-            ...childPoints.map(
-                point => point.x
-            )
-        );
-
-
-    /*
-       Parent couple midpoint children
-       range bayata unna kuda
-       horizontal bus disconnect kakudadhu.
-    */
-
-    const busStartX =
-        Math.min(
-            minChildX,
-            parentCenter.x
-        );
-
-
-    const busEndX =
-        Math.max(
-            maxChildX,
-            parentCenter.x
-        );
-
-
-    /* =================================
-       HORIZONTAL CHILDREN BUS
-       ================================= */
-
-    addLine(
-        busStartX,
-        childBusY,
-        busEndX,
-        childBusY
-    );
-
-
-    /* =================================
-       BUS ↓ EACH CHILD TOP-CENTER
-       ================================= */
+    /* BUS → CHILDREN */
 
     childPoints.forEach(
         childPoint => {
