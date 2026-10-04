@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -15019,6 +15020,50 @@ console.log(
     "TREE SELECTED MEMBER PARTNERS:",
     selectedMemberPartners
 );
+/* =====================================
+   TWO PARTNER LAYOUT
+   LEFT PARTNER | MEMBER | RIGHT PARTNER
+   ===================================== */
+
+const twoPartnerMode =
+    selectedMemberPartners.length >= 2;
+
+
+let leftPartner = null;
+let rightPartner = null;
+
+
+if(twoPartnerMode){
+
+    leftPartner =
+        selectedMemberPartners[0];
+
+    rightPartner =
+        selectedMemberPartners[1];
+
+}
+
+
+/* =====================================
+   DEBUG - PARTNER SIDE ASSIGNMENT
+   ===================================== */
+
+console.log(
+    "TREE TWO PARTNER MODE:",
+    twoPartnerMode
+);
+
+console.log(
+    "TREE LEFT PARTNER:",
+    leftPartner
+);
+
+console.log(
+    "TREE RIGHT PARTNER:",
+    rightPartner
+);
+
+
            
            const partner =
     members.find(
