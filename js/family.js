@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -16563,8 +16564,19 @@ if(ancestryCase === 1){
 let childrenHTML = "";
 
 
-children.forEach(
-    child => {
+/* =====================================
+   CHILD BRANCH HTML GENERATOR
+   ===================================== */
+
+function buildSelectedChildrenHTML(
+    childList
+){
+
+    let html = "";
+
+
+    childList.forEach(
+        child => {
 
         const childPartner =
             members.find(
@@ -16584,8 +16596,7 @@ children.forEach(
             getChildren(child);
 
 
-        childrenHTML += `
-
+        html += `
             <div class="family-tree-child-branch">
 
                <div class="family-tree-child-couple">
@@ -16699,7 +16710,44 @@ children.forEach(
         `;
 
     }
+    }
 );
+
+
+    return html;
+
+}
+
+
+/* =====================================
+   NORMAL CHILDREN HTML
+   Existing one-partner behaviour
+   ===================================== */
+
+childrenHTML =
+    buildSelectedChildrenHTML(
+        children
+    );
+
+
+/* =====================================
+   TWO PARTNER CHILDREN HTML
+   ===================================== */
+
+const leftPartnerChildrenHTML =
+    twoPartnerMode
+        ? buildSelectedChildrenHTML(
+            leftPartnerChildren
+          )
+        : "";
+
+
+const rightPartnerChildrenHTML =
+    twoPartnerMode
+        ? buildSelectedChildrenHTML(
+            rightPartnerChildren
+          )
+        : "";
 
 /* =====================================
    PERMANENT FAMILY SIDE RULE
