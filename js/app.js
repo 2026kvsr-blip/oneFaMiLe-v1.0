@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6642,14 +6641,14 @@ function showProfilePage(){
     profilePage.innerHTML = `
 
        <div
-    class="my-profile-title"
-    style="
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        gap:10px;
-        margin:10px 0 16px;
-    "
+   class="my-profile-title"
+style="
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin:-35px 0 16px;
+"
 >
 
     <div
@@ -6870,13 +6869,13 @@ function showEditProfile(){
     profilePage.innerHTML = `
 
     <div
-    style="
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        gap:10px;
-        margin:10px 0 16px;
-    "
+style="
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin:-35px 0 16px;
+"
 >
 
     <input
