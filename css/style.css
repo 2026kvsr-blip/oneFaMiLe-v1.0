@@ -1,5 +1,4 @@
 
-
 *{
 margin:0;
 padding:0;
@@ -2468,7 +2467,7 @@ width:100%;
 
 .edit-profile-box #editProfileGender{
 
-    height:44px;
+    height:30px;
 }
 
 
@@ -2487,7 +2486,7 @@ width:100%;
 
     max-width:100% !important;
 
-    height:44px !important;
+    height:28px !important;
 
     box-sizing:border-box;
 
@@ -2790,7 +2789,7 @@ width:100%;
 
         max-width:100% !important;
 
-        height:28px !important;
+        height:25px !important;
 
         box-sizing:border-box !important;
 
@@ -3682,8 +3681,8 @@ width:100%;
 .edit-profile-box #editProfileDateOfBirth,
 .edit-profile-box #editProfileGender{
 
-    height:36px !important;
-    min-height:36px !important;
+    height:30px !important;
+    min-height:30px !important;
 
     margin:0 !important;
 
