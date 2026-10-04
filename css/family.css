@@ -3382,3 +3382,43 @@ max-height: 28px !important;
 
     color:#2A6EB0;
 }
+
+/* =====================================
+   FAMILY ABOUT - BACK + HOME
+   ===================================== */
+
+.family-about-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+
+    padding:8px 20px;
+    box-sizing:border-box;
+}
+
+
+/* BACK + HOME SAME FORMAT */
+
+.family-about-bottom .family-about-nav-btn{
+    width:45%;
+    height:52px;
+
+    margin:0;
+    padding:0;
+
+    border:2px solid #2A6EB0;
+    border-radius:15px;
+
+    background:#2A6EB0;
+    color:#ffffff;
+
+    font-size:16px;
+    font-weight:600;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+}
