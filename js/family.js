@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -18072,18 +18073,65 @@ ${
         </div>
 
 
-        ${
-            children.length
-                ? `
-                    <div class="family-tree-selected-children-row">
+               ${
+            twoPartnerMode
 
-                        ${childrenHTML}
+                ? `
+
+                    <div class="family-tree-two-partner-children-row">
+
+                        <!-- LEFT PARTNER CHILDREN -->
+
+                        <div class="family-tree-left-children-group">
+
+                            ${
+                                leftPartnerChildren.length
+                                    ? leftPartnerChildrenHTML
+                                    : ""
+                            }
+
+                        </div>
+
+
+                        <!-- IMAGINARY SELECTED MEMBER CENTER -->
+
+                        <div class="family-tree-children-center-space"></div>
+
+
+                        <!-- RIGHT PARTNER CHILDREN -->
+
+                        <div class="family-tree-right-children-group">
+
+                            ${
+                                rightPartnerChildren.length
+                                    ? rightPartnerChildrenHTML
+                                    : ""
+                            }
+
+                        </div>
 
                     </div>
-                  `
-                : ""
-        }
 
+                  `
+
+                :
+
+                (
+                    children.length
+
+                        ? `
+
+                            <div class="family-tree-selected-children-row">
+
+                                ${childrenHTML}
+
+                            </div>
+
+                          `
+
+                        : ""
+                )
+        }
     </div>
 
 
