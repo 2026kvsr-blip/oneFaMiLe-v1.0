@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -7205,9 +7204,7 @@ function bindAddMemberButton(){
 
     </div>
 
-    `
-
-);
+      `);
 
 /* =================================
    REFRESH RELATIONS WHEN GENDER CHANGES
