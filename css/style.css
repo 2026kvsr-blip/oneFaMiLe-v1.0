@@ -3705,3 +3705,31 @@ width:100%;
 .edit-profile-box #editProfileGender{
     transform:translateY(-2px) !important;
 }
+/* =====================================
+   EDIT PROFILE - 40px ROW / 25px BOX
+   EXACT VERTICAL CENTER
+   ===================================== */
+
+.edit-profile-box .profile-row{
+    height:40px !important;
+    min-height:40px !important;
+    padding-top:0 !important;
+    padding-bottom:0 !important;
+    align-items:center !important;
+}
+
+.edit-profile-box .profile-row > input,
+.edit-profile-box .profile-row > select,
+.edit-profile-box #editProfileDateOfBirth,
+.edit-profile-box #editProfileGender{
+    height:25px !important;
+    min-height:25px !important;
+    max-height:25px !important;
+
+    margin:0 !important;
+    padding-top:0 !important;
+    padding-bottom:0 !important;
+
+    align-self:center !important;
+    transform:none !important;
+}
