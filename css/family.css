@@ -3549,3 +3549,89 @@ max-height: 28px !important;
     flex: 0 0 auto;
 
 }
+/* =====================================
+   TWO PARTNER PARENTS ROW
+   SHOW + 3 COLUMN LAYOUT
+   ===================================== */
+
+.family-tree-top-row.family-tree-two-partner-parents-row{
+
+    display: grid !important;
+
+    grid-template-columns:
+        max-content
+        max-content
+        max-content;
+
+    justify-content: center;
+    align-items: start;
+
+    column-gap: 80px;
+
+    width: max-content;
+    min-width: 100%;
+
+    margin-bottom: 70px;
+
+    box-sizing: border-box;
+}
+
+
+/* LEFT PARTNER PARENTS */
+
+.family-tree-left-partner-parents{
+
+    grid-column: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    width: max-content;
+}
+
+
+/* SELECTED MEMBER PARENTS */
+
+.family-tree-member-parents{
+
+    grid-column: 2;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    width: max-content;
+}
+
+
+/* RIGHT PARTNER PARENTS */
+
+.family-tree-right-partner-parents{
+
+    grid-column: 3;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    width: max-content;
+}
+
+
+/* EACH FATHER + MOTHER COUPLE */
+
+.family-tree-two-partner-parents-row
+.family-tree-parent-group{
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 28px;
+
+    width: max-content;
+}
