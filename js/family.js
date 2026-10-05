@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -17470,10 +17469,17 @@ ${
                 </div>
 
 
-                <!-- IMAGINARY CENTER LINE -->
+               <!-- CENTER ANCESTRY - SELECTED MEMBER -->
 
-                <div class="family-tree-ancestor-center-space"></div>
+<div class="family-tree-ancestor-center-space">
 
+    ${
+        twoPartnerMode
+            ? centerAncestorHTML
+            : ""
+    }
+
+</div>
 
                 <!-- RIGHT ANCESTRY -->
 
