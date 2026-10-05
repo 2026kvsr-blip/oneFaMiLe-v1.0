@@ -1,6 +1,5 @@
 
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -20734,9 +20733,9 @@ function connectParentsToChildren(
     parentCenter,
     children,
     centerBusOnParent = false,
-    routeOffset = 0
+    routeOffset = 0,
+    useExactMiddle = false
 ){
-
     if(
         !parentCenter ||
         !children ||
@@ -20789,11 +20788,16 @@ function connectParentsToChildren(
 
 
         const routeY =
+    useExactMiddle
+        ? (
+            parentCenter.y +
+            childPoint.y
+          ) / 2
+        : (
             parentCenter.y +
             stemHeight +
-            routeOffset;
-
-
+            routeOffset
+          );
         /* 1. Parent ↓ short stem */
 
         addLine(
