@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -21767,56 +21766,6 @@ if(
     );
 
 
-    /* SELECTED MEMBER PARENTS */
-
-    const selectedFatherNode =
-        canvas.querySelector(
-            ".tree-father"
-        );
-
-    const selectedMotherNode =
-        canvas.querySelector(
-            ".tree-mother"
-        );
-
-    let selectedParentCenter = null;
-
-
-    if(
-        selectedFatherNode &&
-        selectedMotherNode
-    ){
-
-        selectedParentCenter =
-            connectCouple(
-                selectedFatherNode,
-                selectedMotherNode
-            );
-
-    }
-    else{
-
-        const singleSelectedParent =
-            selectedFatherNode ||
-            selectedMotherNode;
-
-        if(singleSelectedParent){
-
-            selectedParentCenter =
-                getPoint(
-                    singleSelectedParent,
-                    "bottom"
-                );
-
-        }
-
-    }
-
-
-    connectParentsToChildren(
-        selectedParentCenter,
-        [selected]
-    );
 
 
     /* RIGHT PARTNER PARENTS */
