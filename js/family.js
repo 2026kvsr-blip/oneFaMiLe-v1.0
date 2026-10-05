@@ -1,6 +1,5 @@
 
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -14676,11 +14675,41 @@ familyTreeSearchInput.addEventListener(
         selectedFamilyTreeMemberId =
             "";
 
+        /* RESET PARTNER VIEW */
+
+        const partnerViewRow =
+            document.getElementById(
+                "familyTreePartnerViewRow"
+            );
+
+        const partnerViewSelect =
+            document.getElementById(
+                "familyTreePartnerView"
+            );
+
+        if(partnerViewRow){
+
+            partnerViewRow.style.display =
+                "none";
+
+        }
+
+        if(partnerViewSelect){
+
+            partnerViewSelect.innerHTML =
+                `
+                <option value="all" selected>
+                    All Partners
+                </option>
+                `;
+
+        }
+
         showFamilyTreeMembers();
 
     }
 );
-/* =====================================
+   /* =====================================
    CLOSE FAMILY TREE MEMBER DROPDOWN
    WHEN CLICKING OUTSIDE
    ===================================== */
