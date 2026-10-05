@@ -3632,3 +3632,66 @@ max-height: 28px !important;
 
     width: max-content;
 }
+/* =====================================
+   TWO PARTNER MODE
+   THREE ANCESTRY COLUMNS
+   ===================================== */
+
+.family-tree-split-ancestor-zone:has(
+    .family-tree-ancestor-center-space
+    .family-tree-root-ancestor-branch
+){
+    display:grid !important;
+
+    grid-template-columns:
+        max-content
+        max-content
+        max-content !important;
+
+    justify-content:center !important;
+    align-items:end !important;
+
+    column-gap:80px !important;
+
+    width:max-content !important;
+    min-width:100% !important;
+}
+
+
+/* LEFT PARTNER ANCESTRY */
+
+.family-tree-split-ancestor-zone:has(
+    .family-tree-ancestor-center-space
+    .family-tree-root-ancestor-branch
+)
+.family-tree-member-ancestor-tree{
+    width:max-content !important;
+    min-width:0 !important;
+}
+
+
+/* SELECTED MEMBER ANCESTRY */
+
+.family-tree-split-ancestor-zone
+.family-tree-ancestor-center-space:has(
+    .family-tree-root-ancestor-branch
+){
+    width:max-content !important;
+    min-width:0 !important;
+
+    display:flex !important;
+    justify-content:center !important;
+    align-items:flex-end !important;
+}
+
+
+/* RIGHT PARTNER ANCESTRY */
+
+.family-tree-split-ancestor-zone:has(
+    .family-tree-ancestor-center-space
+    .family-tree-root-ancestor-branch
+)
+.family-tree-partner-ancestor-tree{
+    width:max-content !important;
+    min-width:0 !important;
+}
