@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -18532,12 +18533,132 @@ if(familyTreeSvg){
 
 }
 
-       alignSiblingChildrenToGrandChildren();
+      alignSiblingChildrenToGrandChildren();
+
+
+/* =====================================
+   TWO PARTNER PARENTS
+   ALIGN TO OWN MEMBER CENTERS
+   ===================================== */
+
+const twoPartnerParentsRow =
+    diagram.querySelector(
+        ".family-tree-two-partner-parents-row"
+    );
+
+const leftPartnerTreeNode =
+    diagram.querySelector(
+        ".tree-left-partner"
+    );
+
+const selectedTreeNode =
+    diagram.querySelector(
+        ".tree-selected"
+    );
+
+const rightPartnerTreeNode =
+    diagram.querySelector(
+        ".tree-right-partner"
+    );
+
+const leftParentsGroup =
+    diagram.querySelector(
+        ".family-tree-left-partner-parents"
+    );
+
+const memberParentsGroup =
+    diagram.querySelector(
+        ".family-tree-member-parents"
+    );
+
+const rightParentsGroup =
+    diagram.querySelector(
+        ".family-tree-right-partner-parents"
+    );
+
+
+if(
+    twoPartnerParentsRow &&
+    leftPartnerTreeNode &&
+    selectedTreeNode &&
+    rightPartnerTreeNode
+){
+
+    const rowRect =
+        twoPartnerParentsRow
+            .getBoundingClientRect();
+
+
+    function alignParentGroupToMember(
+        parentGroup,
+        memberNode
+    ){
+
+        if(
+            !parentGroup ||
+            !memberNode
+        ){
+            return;
+        }
+
+
+        const memberRect =
+            memberNode
+                .getBoundingClientRect();
+
+
+        const memberCenterX =
+            memberRect.left +
+            memberRect.width / 2;
+
+
+        const targetX =
+            memberCenterX -
+            rowRect.left;
+
+
+        parentGroup.style.position =
+            "absolute";
+
+        parentGroup.style.left =
+            targetX + "px";
+
+        parentGroup.style.transform =
+            "translateX(-50%)";
+
+        parentGroup.style.margin =
+            "0";
+
+    }
+
+
+    twoPartnerParentsRow.style.position =
+        "relative";
+
+
+    alignParentGroupToMember(
+        leftParentsGroup,
+        leftPartnerTreeNode
+    );
+
+
+    alignParentGroupToMember(
+        memberParentsGroup,
+        selectedTreeNode
+    );
+
+
+    alignParentGroupToMember(
+        rightParentsGroup,
+        rightPartnerTreeNode
+    );
+
+}
+
 
 drawFamilyTreeLines();
 
 fitFamilyTreeToScreen();
-
         const zoomInBtn =          
     document.getElementById(
         "familyTreeZoomIn"
