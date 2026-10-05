@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -15633,22 +15632,7 @@ if(twoPartnerMode){
    RIGHT PARTNER PARENTS
    ===================================== */
 
-const leftPartnerFather =
-    twoPartnerMode &&
-    leftPartner
-        ? getMemberById(
-            leftPartner.fatherId
-          )
-        : null;
 
-
-const leftPartnerMother =
-    twoPartnerMode &&
-    leftPartner
-        ? getMemberById(
-            leftPartner.motherId
-          )
-        : null;
 
 
 const rightPartnerFather =
