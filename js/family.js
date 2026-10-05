@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -19822,10 +19823,12 @@ function drawFamilyTreeLines(){
     }
 
 
-    const canvasRect =
+    const selected =
+        canvas.querySelector(
+            ".tree-selected"
+        );
+   const canvasRect =
         canvas.getBoundingClientRect();
-
-
     svg.setAttribute(
         "width",
         canvas.scrollWidth
@@ -21568,6 +21571,9 @@ connectParentsToChildren(
         ? [partnerMotherNode]
         : []
 );
+
+
+   
     /* ================================
        SELECTED MEMBER PARENTS
        ================================ */
@@ -21622,10 +21628,7 @@ connectParentsToChildren(
         );
 
 
-    const selected =
-        canvas.querySelector(
-            ".tree-selected"
-        );
+    
 const selectedIsFemaleForConnector =
     selected &&
     selected.classList.contains(
