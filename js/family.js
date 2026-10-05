@@ -1,5 +1,6 @@
 
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -14044,9 +14045,8 @@ const familyName =
 
 <div
     class="family-tree-control"
-    id="familyTreeOtherPartnersRow"
-    style="display:none;">
-
+    id="familyTreeOtherPartnersRow">
+    
     <label class="family-tree-label">
         Other Partners
     </label>
@@ -14339,10 +14339,9 @@ function showFamilyTreeMembers(){
            REFRESH DEPENDENT OPTIONS
            ===================================== */
 
-        updatePartnerSiblingsVisibility();
-
-        updateOtherPartnersVisibility();
-
+updatePartnerSiblingsVisibility();
+updatePartnerViewSiblingControls();
+updateOtherPartnersVisibility();
     };
 
             familyTreeDropdown.appendChild(
@@ -14510,6 +14509,133 @@ function updatePartnerSiblingsVisibility(){
 
 updateOtherPartnersVisibility();}
 
+
+   /* =====================================
+   PARTNER VIEW
+   → SIBLINGS SHOW / HIDE
+   ===================================== */
+
+function updatePartnerViewSiblingControls(){
+
+    const partnerViewRow =
+        document.getElementById(
+            "familyTreePartnerViewRow"
+        );
+
+    const partnerViewSelect =
+        document.getElementById(
+            "familyTreePartnerView"
+        );
+
+    const memberSiblingsControl =
+        document.getElementById(
+            "familyTreeShowSiblings"
+        );
+
+    const partnerSiblingsControl =
+        document.getElementById(
+            "familyTreeShowPartnerSiblings"
+        );
+
+
+    if(
+        !partnerViewRow ||
+        !partnerViewSelect ||
+        !memberSiblingsControl ||
+        !partnerSiblingsControl
+    ){
+        return;
+    }
+
+
+    const memberSiblingsRow =
+        memberSiblingsControl.closest(
+            ".family-tree-control"
+        );
+
+    const partnerSiblingsRow =
+        partnerSiblingsControl.closest(
+            ".family-tree-control"
+        );
+
+
+    const partnerViewVisible =
+        partnerViewRow.style.display !==
+        "none";
+
+
+    /* =================================
+       ALL PARTNERS
+       → HIDE BOTH SIBLING OPTIONS
+       ================================= */
+
+    if(
+        partnerViewVisible &&
+        partnerViewSelect.value === "all"
+    ){
+
+        memberSiblingsControl.value =
+            "no";
+
+        partnerSiblingsControl.value =
+            "no";
+
+
+        if(memberSiblingsRow){
+
+            memberSiblingsRow.style.display =
+                "none";
+
+        }
+
+
+        if(partnerSiblingsRow){
+
+            partnerSiblingsRow.style.display =
+                "none";
+
+        }
+
+        return;
+    }
+
+
+    /* =================================
+       ONE PARTNER / NORMAL MODE
+       → MEMBER SIBLINGS VISIBLE
+       ================================= */
+
+    if(memberSiblingsRow){
+
+        memberSiblingsRow.style.display =
+            "";
+
+    }
+
+
+    /*
+       Partner Siblings visibility
+       already depends on
+       Member Partner Yes / No.
+    */
+
+    updatePartnerSiblingsVisibility();
+
+}
+   const familyTreePartnerViewControl =
+    document.getElementById(
+        "familyTreePartnerView"
+    );
+
+
+familyTreePartnerViewControl?.addEventListener(
+    "change",
+    function(){
+
+        updatePartnerViewSiblingControls();
+
+    }
+);
 /* =====================================
    MEMBER / PARTNER SIBLINGS
    → OTHER PARTNERS VISIBILITY
