@@ -1,5 +1,6 @@
 
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -21881,9 +21882,9 @@ if(
     }
 
 
-    connectDirectParentsToMember(
+  connectParentsToChildren(
     leftPartnerParentCenter,
-    leftPartnerNodeForParents
+    [leftPartnerNodeForParents]
 );
 
 
@@ -21934,9 +21935,9 @@ if(
     }
 
 
-    connectDirectParentsToMember(
+    connectParentsToChildren(
     rightPartnerParentCenter,
-    rightPartnerNodeForParents
+    [rightPartnerNodeForParents]
 );
 }
     /* ================================
