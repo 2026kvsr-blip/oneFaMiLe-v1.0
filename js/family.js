@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -17890,84 +17889,200 @@ ${
      PARENTS ROW
      ===================== -->
 
-<div class="family-tree-top-row">
+${
+    twoPartnerMode &&
+    showMemberPartner
 
-    <!-- =========================
-         SELECTED MEMBER SIDE
-         ========================= -->
-    <div class="family-tree-ancestor-selected-side">
+        ? `
 
-        <!-- SELECTED MEMBER
-             FATHER + MOTHER -->
-        <div class="family-tree-parent-group">
-        
-        ${
-            father
-                ? treeBox(
-                    father,
-                    "tree-father"
-                  )
-                : ""
-        }
+            <!-- =====================================
+                 TWO PARTNER PARENTS ROW
+
+                 LEFT PARTNER PARENTS
+                 MEMBER PARENTS
+                 RIGHT PARTNER PARENTS
+                 ===================================== -->
+
+            <div class="family-tree-top-row family-tree-two-partner-parents-row">
 
 
-        ${
-            mother
-                ? treeBox(
-                    mother,
-                    "tree-mother"
-                  )
-                : ""
-        }
+                <!-- =========================
+                     LEFT PARTNER PARENTS
+                     ========================= -->
 
-    </div>
-    <!-- END SELECTED MEMBER SIDE -->
-    </div>
+                <div class="family-tree-two-partner-parent-side family-tree-left-partner-parents">
 
-    <!-- =====================
-         PARTNER
-         FATHER + MOTHER
-         ===================== -->
+                    <div class="family-tree-parent-group">
 
-   ${
-    partner
-    ? `
-        <!-- =========================
-             PARTNER SIDE
-             ========================= -->
-        <div class="family-tree-ancestor-partner-side">
+                        ${
+                            leftPartnerFather
+                                ? treeBox(
+                                    leftPartnerFather,
+                                    "tree-left-partner-father"
+                                  )
+                                : ""
+                        }
 
-            <div class="family-tree-parent-group">
-            
+                        ${
+                            leftPartnerMother
+                                ? treeBox(
+                                    leftPartnerMother,
+                                    "tree-left-partner-mother"
+                                  )
+                                : ""
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     SELECTED MEMBER PARENTS
+                     ========================= -->
+
+                <div class="family-tree-two-partner-parent-side family-tree-member-parents">
+
+                    <div class="family-tree-parent-group">
+
+                        ${
+                            father
+                                ? treeBox(
+                                    father,
+                                    "tree-father"
+                                  )
+                                : ""
+                        }
+
+                        ${
+                            mother
+                                ? treeBox(
+                                    mother,
+                                    "tree-mother"
+                                  )
+                                : ""
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     RIGHT PARTNER PARENTS
+                     ========================= -->
+
+                <div class="family-tree-two-partner-parent-side family-tree-right-partner-parents">
+
+                    <div class="family-tree-parent-group">
+
+                        ${
+                            rightPartnerFather
+                                ? treeBox(
+                                    rightPartnerFather,
+                                    "tree-right-partner-father"
+                                  )
+                                : ""
+                        }
+
+                        ${
+                            rightPartnerMother
+                                ? treeBox(
+                                    rightPartnerMother,
+                                    "tree-right-partner-mother"
+                                  )
+                                : ""
+                        }
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+          `
+
+        : `
+
+            <!-- =====================================
+                 EXISTING SINGLE PARTNER PARENTS ROW
+                 ===================================== -->
+
+            <div class="family-tree-top-row">
+
+                <!-- SELECTED MEMBER SIDE -->
+
+                <div class="family-tree-ancestor-selected-side">
+
+                    <div class="family-tree-parent-group">
+
+                        ${
+                            father
+                                ? treeBox(
+                                    father,
+                                    "tree-father"
+                                  )
+                                : ""
+                        }
+
+                        ${
+                            mother
+                                ? treeBox(
+                                    mother,
+                                    "tree-mother"
+                                  )
+                                : ""
+                        }
+
+                    </div>
+
+                </div>
+
+
                 ${
-                    partnerFather
-                        ? treeBox(
-                            partnerFather,
-                            "tree-partner-father"
-                          )
-                        : ""
-                }
+                    partner
 
+                        ? `
 
-                ${
-                    partnerMother
-                        ? treeBox(
-                            partnerMother,
-                            "tree-partner-mother"
-                          )
+                            <!-- PARTNER SIDE -->
+
+                            <div class="family-tree-ancestor-partner-side">
+
+                                <div class="family-tree-parent-group">
+
+                                    ${
+                                        partnerFather
+                                            ? treeBox(
+                                                partnerFather,
+                                                "tree-partner-father"
+                                              )
+                                            : ""
+                                    }
+
+                                    ${
+                                        partnerMother
+                                            ? treeBox(
+                                                partnerMother,
+                                                "tree-partner-mother"
+                                              )
+                                            : ""
+                                    }
+
+                                </div>
+
+                            </div>
+
+                          `
+
                         : ""
                 }
 
             </div>
-                    <!-- END PARTNER SIDE -->
-        </div>
 
           `
-        : ""
-    }
+}
 
-
-</div>
             <!-- =====================
                  MAIN GENERATION
                  ===================== -->
