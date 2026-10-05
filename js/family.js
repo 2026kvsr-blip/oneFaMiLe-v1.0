@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -22044,15 +22045,36 @@ if(selectedIsFemaleForConnector){
 }
 else{
 
-    connectParentsToChildren(
-        parentCenter,
-        memberChildrenOfParents,
-        false,
-        12
-    );
+    if(siblings.length === 0){
 
-}  
-   
+        /* SELECTED MEMBER ONLY
+           Parents → Member
+           horizontal route exact 50% */
+
+        connectParentsToChildren(
+            parentCenter,
+            [selected],
+            false,
+            0,
+            true
+        );
+
+    }
+    else{
+
+        /* SELECTED MEMBER + SIBLINGS
+           keep existing connector behavior */
+
+        connectParentsToChildren(
+            parentCenter,
+            memberChildrenOfParents,
+            false,
+            12
+        );
+
+    }
+
+}   
    /* =====================================
    SIBLING + PARTNER → THEIR CHILDREN
    STANDARD DESCENDANT CONNECTOR
