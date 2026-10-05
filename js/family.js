@@ -1,6 +1,5 @@
 
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -14633,7 +14632,17 @@ familyTreeSearchInput.addEventListener(
 
         selectedFamilyTreeMemberId =
             "";
+const familyTreeOptionsRow =
+    document.getElementById(
+        "familyTreeOptionsRow"
+    );
 
+if(familyTreeOptionsRow){
+
+    familyTreeOptionsRow.style.display =
+        "none";
+
+}
         /* RESET PARTNER VIEW */
 
         const partnerViewRow =
@@ -14675,7 +14684,17 @@ familyTreeSearchInput.addEventListener(
 
         selectedFamilyTreeMemberId =
             "";
+const familyTreeOptionsRow =
+    document.getElementById(
+        "familyTreeOptionsRow"
+    );
 
+if(familyTreeOptionsRow){
+
+    familyTreeOptionsRow.style.display =
+        "none";
+
+}
         /* RESET PARTNER VIEW */
 
         const partnerViewRow =
