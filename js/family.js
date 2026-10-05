@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -21573,7 +21572,184 @@ connectParentsToChildren(
 );
 
 
-   
+   /* =====================================
+   TWO PARTNER MODE
+   DIRECT PARENTS → OWN MEMBER
+   ===================================== */
+
+const leftPartnerNodeForParents =
+    canvas.querySelector(
+        ".tree-left-partner"
+    );
+
+const rightPartnerNodeForParents =
+    canvas.querySelector(
+        ".tree-right-partner"
+    );
+
+
+if(
+    selected &&
+    leftPartnerNodeForParents &&
+    rightPartnerNodeForParents
+){
+
+    /* LEFT PARTNER PARENTS */
+
+    const leftPartnerFatherNode =
+        canvas.querySelector(
+            ".tree-left-partner-father"
+        );
+
+    const leftPartnerMotherNode =
+        canvas.querySelector(
+".tree-left-partner-mother"
+        );
+
+    let leftPartnerParentCenter = null;
+
+
+    if(
+        leftPartnerFatherNode &&
+        leftPartnerMotherNode
+    ){
+
+        leftPartnerParentCenter =
+            connectCouple(
+                leftPartnerFatherNode,
+                leftPartnerMotherNode
+            );
+
+    }
+    else{
+
+        const singleLeftPartnerParent =
+            leftPartnerFatherNode ||
+            leftPartnerMotherNode;
+
+        if(singleLeftPartnerParent){
+
+            leftPartnerParentCenter =
+                getPoint(
+                    singleLeftPartnerParent,
+                    "bottom"
+                );
+
+        }
+
+    }
+
+
+    connectParentsToChildren(
+        leftPartnerParentCenter,
+        [leftPartnerNodeForParents]
+    );
+
+
+    /* SELECTED MEMBER PARENTS */
+
+    const selectedFatherNode =
+        canvas.querySelector(
+            ".tree-father"
+        );
+
+    const selectedMotherNode =
+        canvas.querySelector(
+            ".tree-mother"
+        );
+
+    let selectedParentCenter = null;
+
+
+    if(
+        selectedFatherNode &&
+        selectedMotherNode
+    ){
+
+        selectedParentCenter =
+            connectCouple(
+                selectedFatherNode,
+                selectedMotherNode
+            );
+
+    }
+    else{
+
+        const singleSelectedParent =
+            selectedFatherNode ||
+            selectedMotherNode;
+
+        if(singleSelectedParent){
+
+            selectedParentCenter =
+                getPoint(
+                    singleSelectedParent,
+                    "bottom"
+                );
+
+        }
+
+    }
+
+
+    connectParentsToChildren(
+        selectedParentCenter,
+        [selected]
+    );
+
+
+    /* RIGHT PARTNER PARENTS */
+
+    const rightPartnerFatherNode =
+        canvas.querySelector(
+            ".tree-right-partner-father"
+        );
+
+    const rightPartnerMotherNode =
+        canvas.querySelector(
+            ".tree-right-partner-mother"
+        );
+
+    let rightPartnerParentCenter = null;
+
+
+    if(
+        rightPartnerFatherNode &&
+        rightPartnerMotherNode
+    ){
+
+        rightPartnerParentCenter =
+            connectCouple(
+                rightPartnerFatherNode,
+                rightPartnerMotherNode
+            );
+
+    }
+    else{
+
+        const singleRightPartnerParent =
+            rightPartnerFatherNode ||
+            rightPartnerMotherNode;
+
+        if(singleRightPartnerParent){
+
+            rightPartnerParentCenter =
+                getPoint(
+                    singleRightPartnerParent,
+                    "bottom"
+                );
+
+        }
+
+    }
+
+
+    connectParentsToChildren(
+        rightPartnerParentCenter,
+        [rightPartnerNodeForParents]
+    );
+
+}
     /* ================================
        SELECTED MEMBER PARENTS
        ================================ */
