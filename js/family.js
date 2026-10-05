@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -15563,6 +15562,68 @@ const partnerMother =
           )
         : null;
 
+/* =====================================
+   TWO PARTNER PARENTS
+   ===================================== */
+
+const leftPartnerFather =
+    twoPartnerMode &&
+    leftPartner
+        ? getMemberById(
+            leftPartner.fatherId
+          )
+        : null;
+
+
+const leftPartnerMother =
+    twoPartnerMode &&
+    leftPartner
+        ? getMemberById(
+            leftPartner.motherId
+          )
+        : null;
+
+
+const rightPartnerFather =
+    twoPartnerMode &&
+    rightPartner
+        ? getMemberById(
+            rightPartner.fatherId
+          )
+        : null;
+
+
+const rightPartnerMother =
+    twoPartnerMode &&
+    rightPartner
+        ? getMemberById(
+            rightPartner.motherId
+          )
+        : null;
+
+
+if(twoPartnerMode){
+
+    console.log(
+        "TREE LEFT PARTNER PARENTS:",
+        leftPartnerFather,
+        leftPartnerMother
+    );
+
+    console.log(
+        "TREE MEMBER PARENTS:",
+        father,
+        mother
+    );
+
+    console.log(
+        "TREE RIGHT PARTNER PARENTS:",
+        rightPartnerFather,
+        rightPartnerMother
+    );
+
+}
+   
          /* =====================================
    TWO PARTNER PARENTS
 
