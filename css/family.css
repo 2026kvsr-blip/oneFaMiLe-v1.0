@@ -3559,23 +3559,22 @@ max-height: 28px !important;
     display: grid !important;
 
     grid-template-columns:
-        max-content
-        max-content
-        max-content;
+        minmax(260px, 1fr)
+        minmax(260px, 1fr)
+        minmax(260px, 1fr);
 
     justify-content: center;
     align-items: start;
 
-    column-gap: 80px;
+    column-gap: 22px;
 
-    width: max-content;
-    min-width: 100%;
+    width: 100%;
+    min-width: 900px;
 
     margin-bottom: 70px;
 
     box-sizing: border-box;
 }
-
 
 /* LEFT PARTNER PARENTS */
 
