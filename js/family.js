@@ -1,5 +1,6 @@
 
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -16512,8 +16513,33 @@ let leftAncestorHTML = "";
 let rightAncestorHTML = "";
 
 
-if(ancestryCase === 1){
+/* =====================================
+   TWO PARTNER MODE
+   THREE OWN ANCESTRY BRANCHES
 
+   LEFT   = Left Partner
+   CENTER = Selected Member
+   RIGHT  = Right Partner
+   ===================================== */
+
+if(twoPartnerMode){
+
+    leftAncestorHTML =
+        renderAncestorParents(
+            leftPartner,
+            beforeGen,
+            "left-partner"
+        );
+
+    rightAncestorHTML =
+        renderAncestorParents(
+            rightPartner,
+            beforeGen,
+            "right-partner"
+        );
+
+}
+else if(ancestryCase === 1){
     /* =====================================
        ANCESTRY SIDE RULE
 
