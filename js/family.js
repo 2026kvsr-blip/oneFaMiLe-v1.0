@@ -1,5 +1,6 @@
 
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -14967,78 +14968,20 @@ familyTreePartnerViewControl?.addEventListener(
 
 function updateOtherPartnersVisibility(){
 
-    const memberSiblingsControl =
-        document.getElementById(
-            "familyTreeShowSiblings"
-        );
-
-    const partnerSiblingsControl =
-        document.getElementById(
-            "familyTreeShowPartnerSiblings"
-        );
-
-    const otherPartnersControl =
-        document.getElementById(
-            "familyTreeShowPartner"
-        );
-
     const otherPartnersRow =
         document.getElementById(
             "familyTreeOtherPartnersRow"
         );
 
-    const otherPartnersHint =
-        document.getElementById(
-            "familyTreeOtherPartnersHint"
-        );
-
-
-    if(
-        !memberSiblingsControl ||
-        !partnerSiblingsControl ||
-        !otherPartnersControl ||
-        !otherPartnersRow
-    ){
-        return;
-    }
-
-
-    const memberSiblingsYes =
-        memberSiblingsControl.value ===
-        "yes";
-
-
-    const partnerSiblingsYes =
-        partnerSiblingsControl.value ===
-        "yes";
-
-
-    if(
-        memberSiblingsYes ||
-        partnerSiblingsYes
-    ){
+    if(otherPartnersRow){
 
         otherPartnersRow.style.display =
             "";
 
     }
-    else{
-
-        otherPartnersRow.style.display =
-            "none";
-
-        otherPartnersControl.value =
-            "no";
-
-        if(otherPartnersHint){
-            otherPartnersHint.style.display =
-                "none";
-        }
-
-    }
 
 }
-/* INITIAL STATE */
+   /* INITIAL STATE */
 
 updatePartnerSiblingsVisibility();
 
