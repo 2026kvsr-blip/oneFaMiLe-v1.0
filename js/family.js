@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -18632,26 +18633,31 @@ if(
 
 
     twoPartnerParentsRow.style.position =
-        "relative";
+    "relative";
+
+twoPartnerParentsRow.style.width =
+    diagram.scrollWidth + "px";
+
+twoPartnerParentsRow.style.minWidth =
+    diagram.scrollWidth + "px";
 
 
-    alignParentGroupToMember(
-        leftParentsGroup,
-        leftPartnerTreeNode
-    );
+alignParentGroupToMember(
+    leftParentsGroup,
+    leftPartnerTreeNode
+);
 
 
-    alignParentGroupToMember(
-        memberParentsGroup,
-        selectedTreeNode
-    );
+alignParentGroupToMember(
+    memberParentsGroup,
+    selectedTreeNode
+);
 
 
-    alignParentGroupToMember(
-        rightParentsGroup,
-        rightPartnerTreeNode
-    );
-
+alignParentGroupToMember(
+    rightParentsGroup,
+    rightPartnerTreeNode
+);
 }
 
 
