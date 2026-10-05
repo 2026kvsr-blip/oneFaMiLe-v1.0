@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -21888,7 +21887,10 @@ if(
 
   connectParentsToChildren(
     leftPartnerParentCenter,
-    [leftPartnerNodeForParents]
+    [leftPartnerNodeForParents],
+    false,
+    0,
+    true
 );
 
 
@@ -21941,8 +21943,12 @@ if(
 
     connectParentsToChildren(
     rightPartnerParentCenter,
-    [rightPartnerNodeForParents]
+    [rightPartnerNodeForParents],
+    false,
+    0,
+    true
 );
+   
 }
     /* ================================
        SELECTED MEMBER PARENTS
