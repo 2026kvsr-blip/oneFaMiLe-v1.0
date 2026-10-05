@@ -1,5 +1,6 @@
 
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -18442,11 +18443,27 @@ const oldAncestorRows =
 
 oldAncestorRows.forEach(
     row => {
+
+        /* =====================================
+           KEEP TWO-PARTNER DIRECT PARENTS ROW
+           VISIBLE
+           ===================================== */
+
+        if(
+            row.classList.contains(
+                "family-tree-two-partner-parents-row"
+            )
+        ){
+            return;
+        }
+
+
         row.style.setProperty(
             "display",
             "none",
             "important"
         );
+
     }
 );
        /* =====================================
