@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -13984,7 +13985,35 @@ const familyName =
     </select>
 
 </div>
+<!-- =================================
+     PARTNER VIEW
+     MULTIPLE PARTNERS ONLY
+     ================================= -->
 
+<div
+    class="family-tree-control"
+    id="familyTreePartnerViewRow"
+    style="display:none;">
+
+    <label class="family-tree-label">
+        Partner View
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreePartnerView"
+        class="common-form-input">
+
+        <option value="all" selected>
+            All Partners
+        </option>
+
+    </select>
+
+</div>
 <div class="family-tree-control">
 
     <label class="family-tree-label">
@@ -14333,14 +14362,252 @@ function showFamilyTreeMembers(){
         }
 
 
-        /* =====================================
-           REFRESH DEPENDENT OPTIONS
-           ===================================== */
+       /* =====================================
+   SELECTED MEMBER
+   → DETECT ALL PARTNERS
+   → BUILD PARTNER VIEW
+   ===================================== */
+
+const partnerViewRow =
+    document.getElementById(
+        "familyTreePartnerViewRow"
+    );
+
+const partnerViewSelect =
+    document.getElementById(
+        "familyTreePartnerView"
+    );
+
+
+if(
+    partnerViewRow &&
+    partnerViewSelect
+){
+
+    const selectedMemberId =
+        String(
+            member.memberId || ""
+        ).trim();
+
+
+    const partnerIds =
+        new Set();
+
+
+    /* DIRECT PARTNER */
+
+    if(member.partnerId){
+
+        partnerIds.add(
+            String(
+                member.partnerId
+            ).trim()
+        );
+
+    }
+
+
+    /* REVERSE PARTNER LINK */
+
+    members.forEach(
+        function(item){
+
+            if(!item){
+                return;
+            }
+
+            if(
+                String(
+                    item.partnerId || ""
+                ).trim() ===
+                selectedMemberId
+            ){
+
+                partnerIds.add(
+                    String(
+                        item.memberId || ""
+                    ).trim()
+                );
+
+            }
+
+        }
+    );
+
+
+    /* PARTNERS THROUGH CHILDREN */
+
+    members.forEach(
+        function(child){
+
+            if(!child){
+                return;
+            }
+
+
+            const fatherId =
+                String(
+                    child.fatherId || ""
+                ).trim();
+
+            const motherId =
+                String(
+                    child.motherId || ""
+                ).trim();
+
+
+            if(
+                fatherId === selectedMemberId &&
+                motherId &&
+                motherId !== selectedMemberId
+            ){
+
+                partnerIds.add(
+                    motherId
+                );
+
+            }
+
+
+            if(
+                motherId === selectedMemberId &&
+                fatherId &&
+                fatherId !== selectedMemberId
+            ){
+
+                partnerIds.add(
+                    fatherId
+                );
+
+            }
+
+        }
+    );
+
+
+    partnerIds.delete("");
+    partnerIds.delete(
+        selectedMemberId
+    );
+
+
+    const selectedPartners =
+        Array.from(
+            partnerIds
+        )
+        .map(
+            function(partnerId){
+
+                return members.find(
+                    function(item){
+
+                        return String(
+                            item.memberId || ""
+                        ).trim() ===
+                        partnerId;
+
+                    }
+                ) || null;
+
+            }
+        )
+        .filter(Boolean);
+
+
+    console.log(
+        "PARTNER VIEW PARTNERS:",
+        selectedPartners
+    );
+
+
+    /* CLEAR OLD OPTIONS */
+
+    partnerViewSelect.innerHTML =
+        "";
+
+
+    /* =================================
+       MULTIPLE PARTNERS
+       ================================= */
+
+    if(
+        selectedPartners.length > 1
+    ){
+
+        const allOption =
+            document.createElement(
+                "option"
+            );
+
+        allOption.value =
+            "all";
+
+        allOption.textContent =
+            "All Partners";
+
+        partnerViewSelect.appendChild(
+            allOption
+        );
+
+
+        selectedPartners.forEach(
+            function(partner){
+
+                const partnerOption =
+                    document.createElement(
+                        "option"
+                    );
+
+                partnerOption.value =
+                    String(
+                        partner.memberId
+                    );
+
+                partnerOption.textContent =
+                    partner.name ||
+                    partner.memberId;
+
+                partnerViewSelect.appendChild(
+                    partnerOption
+                );
+
+            }
+        );
+
+
+        /* DEFAULT */
+
+        partnerViewSelect.value =
+            "all";
+
+
+        partnerViewRow.style.display =
+            "";
+
+    }
+
+    /* =================================
+       ZERO / ONE PARTNER
+       → PARTNER VIEW NOT REQUIRED
+       ================================= */
+
+    else{
+
+        partnerViewRow.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =====================================
+   REFRESH DEPENDENT OPTIONS
+   ===================================== */
 
 updatePartnerSiblingsVisibility();
 updatePartnerViewSiblingControls();
-updateOtherPartnersVisibility();
-    };
+updateOtherPartnersVisibility();    };
 
             familyTreeDropdown.appendChild(
                 option
