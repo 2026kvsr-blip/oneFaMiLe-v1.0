@@ -14988,9 +14988,121 @@ updatePartnerSiblingsVisibility();
 
 familyTreeMemberPartnerControl?.addEventListener(
     "change",
-    updatePartnerSiblingsVisibility
-);
+    function(){
 
+        const partnerViewRow =
+            document.getElementById(
+                "familyTreePartnerViewRow"
+            );
+
+        const partnerViewSelect =
+            document.getElementById(
+                "familyTreePartnerView"
+            );
+
+        const memberSiblingsControl =
+            document.getElementById(
+                "familyTreeShowSiblings"
+            );
+
+        const memberSiblingsRow =
+            memberSiblingsControl
+                ?.closest(
+                    ".family-tree-control"
+                );
+
+
+        /* =================================
+           MEMBER PARTNER = NO
+           ================================= */
+
+        if(
+            familyTreeMemberPartnerControl.value ===
+            "no"
+        ){
+
+            /* HIDE PARTNER VIEW */
+
+            if(partnerViewRow){
+
+                partnerViewRow.style.display =
+                    "none";
+
+            }
+
+
+            /* MEMBER SIBLINGS VISIBLE */
+
+            if(memberSiblingsRow){
+
+                memberSiblingsRow.style.display =
+                    "";
+
+            }
+
+
+            /* PARTNER SIBLINGS
+               will be hidden by existing function */
+
+            updatePartnerSiblingsVisibility();
+
+
+            /* OTHER PARTNERS
+               ALWAYS VISIBLE */
+
+            const otherPartnersRow =
+                document.getElementById(
+                    "familyTreeOtherPartnersRow"
+                );
+
+            if(otherPartnersRow){
+
+                otherPartnersRow.style.display =
+                    "";
+
+            }
+
+
+            return;
+        }
+
+
+        /* =================================
+           MEMBER PARTNER = YES
+           ================================= */
+
+        if(
+            partnerViewRow &&
+            partnerViewSelect &&
+            partnerViewSelect.options.length > 1
+        ){
+
+            partnerViewRow.style.display =
+                "";
+
+        }
+
+
+        updatePartnerSiblingsVisibility();
+        updatePartnerViewSiblingControls();
+
+
+        /* OTHER PARTNERS ALWAYS VISIBLE */
+
+        const otherPartnersRow =
+            document.getElementById(
+                "familyTreeOtherPartnersRow"
+            );
+
+        if(otherPartnersRow){
+
+            otherPartnersRow.style.display =
+                "";
+
+        }
+
+    }
+);
 const familyTreeMemberSiblingsControl =
     document.getElementById(
         "familyTreeShowSiblings"
