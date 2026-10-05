@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3559,23 +3558,22 @@ max-height: 28px !important;
     display: grid !important;
 
     grid-template-columns:
-        minmax(260px, 1fr)
-        minmax(260px, 1fr)
-        minmax(260px, 1fr);
+        max-content
+        max-content
+        max-content;
 
     justify-content: center;
     align-items: start;
 
-    column-gap: 22px;
+    column-gap: 80px;
 
-    width: 100%;
-    min-width: 900px;
+    width: max-content;
+    min-width: 100%;
 
     margin-bottom: 70px;
 
     box-sizing: border-box;
 }
-
 /* LEFT PARTNER PARENTS */
 
 .family-tree-left-partner-parents{
