@@ -1,6 +1,4 @@
 
-
-
 /* =========
 ============================
    oneFaMiLe
@@ -16509,7 +16507,9 @@ function renderAncestorParentBranch(
    ANCESTRY LEFT / RIGHT HTML
    ===================================== */
 
-let leftAncestorHTML = "";
+
+      let leftAncestorHTML = "";
+let centerAncestorHTML = "";
 let rightAncestorHTML = "";
 
 
@@ -16531,6 +16531,15 @@ if(twoPartnerMode){
             "left-partner"
         );
 
+
+    centerAncestorHTML =
+        renderAncestorParents(
+            selectedMember,
+            beforeGen,
+            ""
+        );
+
+
     rightAncestorHTML =
         renderAncestorParents(
             rightPartner,
@@ -16539,8 +16548,8 @@ if(twoPartnerMode){
         );
 
 }
-else if(ancestryCase === 1){
-    /* =====================================
+else if(ancestryCase === 1){     
+           /* =====================================
        ANCESTRY SIDE RULE
 
        MALE PERSON   → ALWAYS LEFT
