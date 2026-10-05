@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -19968,6 +19969,78 @@ function alignSiblingChildrenToGrandChildren(){
     );
 
 }
+
+
+/* =====================================
+   DIRECT PARENTS → OWN MEMBER
+   HORIZONTAL ROUTE AT EXACT 50%
+   ===================================== */
+
+function connectDirectParentsToMember(
+    parentCenter,
+    memberNode
+){
+
+    if(
+        !parentCenter ||
+        !memberNode
+    ){
+        return;
+    }
+
+
+    const memberPoint =
+        getPoint(
+            memberNode,
+            "top"
+        );
+
+
+    const middleY =
+        parentCenter.y +
+        (
+            memberPoint.y -
+            parentCenter.y
+        ) / 2;
+
+
+    /* PARENTS ↓ 50% */
+
+    addLine(
+        parentCenter.x,
+        parentCenter.y,
+        parentCenter.x,
+        middleY
+    );
+
+
+    /* HORIZONTAL ROUTE AT EXACT CENTER */
+
+    if(
+        parentCenter.x !==
+        memberPoint.x
+    ){
+
+        addLine(
+            parentCenter.x,
+            middleY,
+            memberPoint.x,
+            middleY
+        );
+
+    }
+
+
+    /* CENTER ↓ MEMBER */
+
+    addLine(
+        memberPoint.x,
+        middleY,
+        memberPoint.x,
+        memberPoint.y
+    );
+
+}
 /* =====================================
    DRAW FAMILY TREE CONNECTING LINES
    ===================================== */
@@ -21808,11 +21881,10 @@ if(
     }
 
 
-    connectParentsToChildren(
-        leftPartnerParentCenter,
-        [leftPartnerNodeForParents]
-    );
-
+    connectDirectParentsToMember(
+    leftPartnerParentCenter,
+    leftPartnerNodeForParents
+);
 
 
 
@@ -21862,11 +21934,10 @@ if(
     }
 
 
-    connectParentsToChildren(
-        rightPartnerParentCenter,
-        [rightPartnerNodeForParents]
-    );
-
+    connectDirectParentsToMember(
+    rightPartnerParentCenter,
+    rightPartnerNodeForParents
+);
 }
     /* ================================
        SELECTED MEMBER PARENTS
