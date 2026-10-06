@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3770,5 +3771,6 @@ max-height: 28px !important;
    ===================================== */
 
 .family-tree-view-page{
-    margin-top:-50px !important;
+    position: relative;
+    top: -35px;
 }
