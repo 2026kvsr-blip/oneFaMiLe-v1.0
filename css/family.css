@@ -3765,27 +3765,3 @@ max-height: 28px !important;
     padding-bottom: 6px !important;
 }
 
-/* =====================================
-   FAMILY TREE PAGE
-   REDUCE SPACE BELOW TOP BAR
-   ===================================== */
-/* FAMILY TREE - TOP GAP */
-
-.family-tree-view-page{
-    margin-top: -35px !important;
-}
-/* =====================================
-   FAMILY TREE TITLE - REDUCE TOP GAP
-   ===================================== */
-
-.family-tree-view-page > .page-title{
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-}
-/* =====================================
-   FAMILY TREE - MOVE COMPLETE PAGE UP
-   ===================================== */
-
-.family-tree-view-page{
-    transform: translateY(-20px);
-}
