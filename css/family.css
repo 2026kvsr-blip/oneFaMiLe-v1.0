@@ -3770,7 +3770,8 @@ max-height: 28px !important;
    REDUCE SPACE BELOW TOP BAR
    ===================================== */
 
+/* FAMILY TREE - TOP GAP */
+
 .family-tree-view-page{
-    position: relative;
-    top: -20px;
+    margin-top: -35px !important;
 }
