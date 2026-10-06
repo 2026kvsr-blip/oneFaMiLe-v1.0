@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -23989,7 +23990,36 @@ grandChildBranches.forEach(
             grandChildCoupleCenter,
             greatGrandChildren
         );
+/* =====================================
+   GREAT-GRANDCHILD PARTNER LINES
+   ===================================== */
 
+greatGrandChildren.forEach(
+    function(greatGrandChild){
+
+        const greatGrandChildBranch =
+            greatGrandChild.parentElement;
+
+        if(!greatGrandChildBranch){
+            return;
+        }
+
+        const greatGrandChildPartner =
+            greatGrandChildBranch.querySelector(
+                ".tree-great-grandchild-partner"
+            );
+
+        if(greatGrandChildPartner){
+
+            connectCouple(
+                greatGrandChild,
+                greatGrandChildPartner
+            );
+
+        }
+
+    }
+);
     }
 );
 }
