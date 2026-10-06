@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -15194,6 +15195,27 @@ const showPartnerSiblings =
         "familyTreeShowPartnerSiblings"
     ).value === "yes";
 
+  /* =====================================
+   PARTNER VIEW SELECTION
+   ===================================== */
+
+const partnerViewControl =
+    document.getElementById(
+        "familyTreePartnerView"
+    );
+
+const selectedPartnerView =
+    partnerViewControl
+        ? String(
+            partnerViewControl.value || "all"
+          ).trim()
+        : "all";
+
+
+console.log(
+    "SELECTED PARTNER VIEW:",
+    selectedPartnerView
+);         
 console.log(
     "FAMILY TREE OPTIONS:",
     {
