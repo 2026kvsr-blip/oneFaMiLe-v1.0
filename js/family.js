@@ -1,5 +1,6 @@
 
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -15979,18 +15980,32 @@ console.log(
     unassignedPartnerChildren
 );
            
-           const partner =
-    members.find(
-        member =>
-            String(member.memberId) ===
-            String(selectedMember.partnerId || "")
-    )
-    ||
-    members.find(
-        member =>
-            String(member.partnerId || "") ===
-            String(selectedMember.memberId)
-    );
+         /* =====================================
+   SINGLE PARTNER FOR TREE
+
+   Partner View specific partner
+   → use filtered selectedMemberPartners[0]
+
+   All Partners with only one partner
+   → use that partner
+
+   Member Partner = No
+   → null
+   ===================================== */
+
+const partner =
+    showMemberPartner &&
+    selectedMemberPartners.length === 1
+
+        ? selectedMemberPartners[0]
+
+        : null;
+
+
+console.log(
+    "TREE ACTIVE SINGLE PARTNER:",
+    partner
+);
 
 
 let partnerHTML = "";
