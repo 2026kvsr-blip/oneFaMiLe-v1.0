@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -14629,55 +14630,15 @@ familyTreeSearchInput.addEventListener(
     "focus",
     function(){
 
-        selectedFamilyTreeMemberId =
-            "";
-const familyTreeOptionsRow =
-    document.getElementById(
-        "familyTreeOptionsRow"
-    );
-
-if(familyTreeOptionsRow){
-
-    familyTreeOptionsRow.style.display =
-        "none";
-
-}
-        /* RESET PARTNER VIEW */
-
-        const partnerViewRow =
-            document.getElementById(
-                "familyTreePartnerViewRow"
-            );
-
-        const partnerViewSelect =
-            document.getElementById(
-                "familyTreePartnerView"
-            );
-
-        if(partnerViewRow){
-
-            partnerViewRow.style.display =
-                "none";
-
-        }
-
-        if(partnerViewSelect){
-
-            partnerViewSelect.innerHTML =
-                `
-                <option value="all" selected>
-                    All Partners
-                </option>
-                `;
-
-        }
+        /* EXISTING SELECTED MEMBER
+           MUST REMAIN SELECTED */
 
         showFamilyTreeMembers();
 
     }
 );
 
-familyTreeSearchInput.addEventListener(
+   familyTreeSearchInput.addEventListener(
     "input",
     function(){
 
