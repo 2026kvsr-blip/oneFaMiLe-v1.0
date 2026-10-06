@@ -17371,15 +17371,36 @@ function buildSelectedChildrenHTML(
 
                                     ${
                                         greatGrandChildren
-                                            .map(
-                                                greatGrandChild =>
-                                                    treeBox(
-                                                        greatGrandChild,
-                                                        "tree-great-grandchild-node"
-                                                    )
-                                            )
-                                            .join("")
-                                    }
+    .map(
+        greatGrandChild => {
+
+            const greatGrandChildPartner =
+                members.find(
+                    member =>
+                        String(member.memberId) ===
+                        String(
+                            greatGrandChild.partnerId || ""
+                        )
+                )
+                ||
+                members.find(
+                    member =>
+                        String(member.partnerId || "") ===
+                        String(greatGrandChild.memberId)
+                );
+
+
+            return coupleBoxes(
+                greatGrandChild,
+                "tree-great-grandchild-node",
+                greatGrandChildPartner,
+                "tree-great-grandchild-partner",
+                showPartner
+            );
+
+        }
+    )
+    .join("")                                    }
 
                                 </div>
                               `
