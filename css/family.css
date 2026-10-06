@@ -1,5 +1,6 @@
 
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3765,3 +3766,11 @@ max-height: 28px !important;
     padding-bottom: 6px !important;
 }
 
+/* =====================================
+   FAMILY TREE PAGE
+   REDUCE SPACE BELOW TOP BAR
+   ===================================== */
+
+.family-tree-view-page{
+    margin-top:-40px !important;
+}
