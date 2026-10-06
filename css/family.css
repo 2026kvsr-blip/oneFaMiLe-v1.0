@@ -3712,3 +3712,43 @@ max-height: 28px !important;
 
     width:max-content;
 }
+/* =====================================
+   GENERATION 4
+   GREAT-GREAT-GRANDCHILDREN
+   ===================================== */
+
+.family-tree-great-grandchild-branch{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    flex-shrink:0;
+}
+
+
+.family-tree-great-great-grandchildren-row{
+    display:flex;
+    flex-direction:row;
+    align-items:flex-start;
+    justify-content:center;
+    flex-wrap:nowrap;
+
+    gap:32px;
+
+    margin-top:42px;
+
+    width:max-content;
+}
+
+
+.family-tree-great-great-grandchild-couple{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:nowrap;
+
+    gap:18px;
+
+    width:max-content;
+    flex-shrink:0;
+}
