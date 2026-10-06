@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -24217,26 +24216,13 @@ greatGrandChildBranches.forEach(
    → 4TH GEN COUPLE CENTERS
    ===================================== */
 
-const greatGreatGrandChildTargets =
-    greatGreatGrandChildren.map(
-        function(child){
-
-            const couple =
-                child.closest(
-                    ".family-tree-great-great-grandchild-couple"
-                );
-
-            return couple || child;
-
-        }
-    );
-
-
 connectParentsToChildren(
     greatGrandChildCoupleCenter,
-    greatGreatGrandChildTargets
+    greatGreatGrandChildren,
+    true,
+    0,
+    true
 );
-
         /* =================================
            4TH GENERATION
            MEMBER ↔ OWN PARTNER
