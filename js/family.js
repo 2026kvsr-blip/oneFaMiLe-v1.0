@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -17389,18 +17388,114 @@ function buildSelectedChildrenHTML(
                         String(member.partnerId || "") ===
                         String(greatGrandChild.memberId)
                 );
+/* =====================================
+   GENERATION 4
+   GREAT-GREAT-GRANDCHILDREN
+   ===================================== */
+
+const greatGreatGrandChildren =
+    members.filter(
+        member =>
+
+            String(member.fatherId || "") ===
+                String(greatGrandChild.memberId)
+
+            ||
+
+            String(member.motherId || "") ===
+                String(greatGrandChild.memberId)
+
+            ||
+
+            (
+                greatGrandChildPartner &&
+                (
+                    String(member.fatherId || "") ===
+                        String(greatGrandChildPartner.memberId)
+
+                    ||
+
+                    String(member.motherId || "") ===
+                        String(greatGrandChildPartner.memberId)
+                )
+            )
+    );
+
+    return `
+    <div class="family-tree-great-grandchild-branch">
+
+        <div class="family-tree-great-grandchild-couple">
+
+            ${coupleBoxes(
+                greatGrandChild,
+                "tree-great-grandchild-node",
+                greatGrandChildPartner,
+                "tree-great-grandchild-partner",
+                showPartner
+            )}
+
+        </div>
 
 
-           return `
-    <div class="family-tree-great-grandchild-couple">
+        ${
+            greatGreatGrandChildren.length
 
-        ${coupleBoxes(
-            greatGrandChild,
-            "tree-great-grandchild-node",
-            greatGrandChildPartner,
-            "tree-great-grandchild-partner",
-            showPartner
-        )}
+                ? `
+
+                    <div class="family-tree-great-great-grandchildren-row">
+
+                        ${
+                            greatGreatGrandChildren
+                                .map(
+                                    greatGreatGrandChild => {
+
+                                        const greatGreatGrandChildPartner =
+                                            members.find(
+                                                member =>
+                                                    String(
+                                                        member.memberId
+                                                    ) ===
+                                                    String(
+                                                        greatGreatGrandChild.partnerId || ""
+                                                    )
+                                            )
+                                            ||
+                                            members.find(
+                                                member =>
+                                                    String(
+                                                        member.partnerId || ""
+                                                    ) ===
+                                                    String(
+                                                        greatGreatGrandChild.memberId
+                                                    )
+                                            );
+
+
+                                        return `
+                                            <div class="family-tree-great-great-grandchild-couple">
+
+                                                ${coupleBoxes(
+                                                    greatGreatGrandChild,
+                                                    "tree-great-great-grandchild-node",
+                                                    greatGreatGrandChildPartner,
+                                                    "tree-great-great-grandchild-partner",
+                                                    showPartner
+                                                )}
+
+                                            </div>
+                                        `;
+
+                                    }
+                                )
+                                .join("")
+                        }
+
+                    </div>
+
+                  `
+
+                : ""
+        }
 
     </div>
 `;
@@ -19162,7 +19257,27 @@ generation3Rows.forEach(
     }
 );
 
-       
+   /* =====================================
+   AFTER GENERATION 4
+   GREAT-GREAT-GRANDCHILDREN LEVEL
+   ===================================== */
+
+const generation4Rows =
+    diagram.querySelectorAll(
+        ".family-tree-great-great-grandchildren-row"
+    );
+
+
+generation4Rows.forEach(
+    function(row){
+
+        row.style.display =
+            afterGen >= 4
+                ? "flex"
+                : "none";
+
+    }
+);    
 /* =====================================
    CLEAR OLD FAMILY TREE LINES
    ===================================== */
