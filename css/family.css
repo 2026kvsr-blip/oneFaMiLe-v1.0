@@ -3782,3 +3782,10 @@ max-height: 28px !important;
     margin-top: 0 !important;
     padding-top: 0 !important;
 }
+/* =====================================
+   FAMILY TREE - MOVE COMPLETE PAGE UP
+   ===================================== */
+
+.family-tree-view-page{
+    transform: translateY(-35px);
+}
