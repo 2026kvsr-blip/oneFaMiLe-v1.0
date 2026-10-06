@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3708,6 +3707,8 @@ max-height: 28px !important;
     align-items:center;
     justify-content:center;
     flex-wrap:nowrap;
-    gap:0;
+
+    gap:18px;
+
     width:max-content;
 }
