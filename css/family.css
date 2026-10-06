@@ -3768,7 +3768,11 @@ max-height: 28px !important;
    FAMILY TREE PAGE
    REDUCE SPACE BELOW TOP BAR
    ===================================== */
+/* FAMILY TREE - TOP GAP */
 
+.family-tree-view-page{
+    margin-top: -35px !important;
+}
 /* =====================================
    FAMILY TREE TITLE - REDUCE TOP GAP
    ===================================== */
