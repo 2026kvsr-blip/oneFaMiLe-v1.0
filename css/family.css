@@ -3696,3 +3696,18 @@ max-height: 28px !important;
     width:max-content !important;
     min-width:0 !important;
 }
+/* =====================================
+   GREAT GRANDCHILD COUPLE
+   MALE LEFT | FEMALE RIGHT
+   SAME ROW
+   ===================================== */
+
+.family-tree-great-grandchild-couple{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:nowrap;
+    gap:0;
+    width:max-content;
+}
