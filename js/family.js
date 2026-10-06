@@ -1,4 +1,5 @@
 
+
 /* =========
 ============================
    oneFaMiLe
@@ -15528,10 +15529,49 @@ function getAllTreePartners(person){
    ALL PARTNERS OF SELECTED MEMBER
    ===================================== */
 
-const selectedMemberPartners =
+let selectedMemberPartners =
     getAllTreePartners(
         selectedMember
     );
+
+
+/* =====================================
+   PARTNER VIEW
+   APPLY SELECTED PARTNER
+   ===================================== */
+
+if(
+    showMemberPartner &&
+    selectedPartnerView !== "all"
+){
+
+    selectedMemberPartners =
+        selectedMemberPartners.filter(
+            function(partner){
+
+                return String(
+                    partner.memberId || ""
+                ).trim() ===
+                String(
+                    selectedPartnerView
+                ).trim();
+
+            }
+        );
+
+}
+
+
+/* MEMBER PARTNER = NO
+   → NO SELECTED MEMBER PARTNER */
+
+if(!showMemberPartner){
+
+    selectedMemberPartners =
+        [];
+
+}
+
 
 
 console.log(
