@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2556,7 +2557,7 @@ if(siblingsTitle){
         siblings.filter(
             function(item){
 
-                return String(
+                          return String(
                     item.gender || ""
                 )
                 .trim()
@@ -13870,19 +13871,23 @@ const familyName =
     currentFamily.familyName ||
     currentFamily.name ||
     "";
-    showPage(
+   showPage(
 
-       pageTitle(
-    familyName
-        ? familyName + " - Family Tree"
-        : "Family Tree",
-    "images/colorbtns/Family1.png"
-)
-        +
+    `
+    <div class="family-tree-view-page">
+    `
+    +
 
-        `
-        <div class="family-tree-page">
+    pageTitle(
+        familyName
+            ? familyName + " - Family Tree"
+            : "Family Tree",
+        "images/colorbtns/Family1.png"
+    )
+    +
 
+    `
+    <div class="family-tree-page">
             <!-- MEMBER -->
 
             <div class="family-tree-control">
@@ -14148,9 +14153,12 @@ const familyName =
 
                 </button>
 
-            </div>
+                       </div>
 
         </div>
+
+        </div> <!-- family-tree-view-page -->
+
         `
     );
 
