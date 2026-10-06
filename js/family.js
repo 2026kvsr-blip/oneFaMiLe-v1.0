@@ -1,6 +1,4 @@
 
-
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -20492,27 +20490,83 @@ if(familyTreeBackBtn){
 
                 }
 
-              /* =====================================
-   SHOW FAMILY TREE CONTROLS AGAIN
+/* =====================================
+   BACK FROM TREE
+   INITIAL STATE
+   ONLY SELECT MEMBER VISIBLE
    ===================================== */
+
+/* HIDE ALL TREE OPTION CONTROLS */
 
 document.querySelectorAll(
     ".family-tree-control"
 ).forEach(
     function(control){
 
-        control.style.display = "";
+        control.style.display = "none";
 
     }
 );
 
 
-/* SHOW BUTTON AGAIN */
+/* SHOW ONLY SELECT MEMBER */
 
+if(memberControl){
+
+    memberControl.style.display = "";
+
+}
+
+
+/* HIDE GENERATION ROW */
+
+if(generationRow){
+
+    generationRow.style.display = "none";
+
+}
+
+
+/* HIDE PARTNER VIEW */
+
+const partnerViewRow =
+    document.getElementById(
+        "familyTreePartnerViewRow"
+    );
+
+if(partnerViewRow){
+
+    partnerViewRow.style.display =
+        "none";
+
+}
+
+
+/* RESET PARTNER VIEW */
+
+const partnerViewSelect =
+    document.getElementById(
+        "familyTreePartnerView"
+    );
+
+if(partnerViewSelect){
+
+    partnerViewSelect.innerHTML =
+        `
+        <option value="all" selected>
+            All Partners
+        </option>
+        `;
+
+}
+
+
+/* HIDE SHOW FAMILY TREE BUTTON */
 
 if(showTreeBtn){
 
-    showTreeBtn.style.display = "";
+    showTreeBtn.style.display =
+        "none";
 
 }
                 /* RESET ZOOM / PAN */
