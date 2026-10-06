@@ -3752,3 +3752,14 @@ max-height: 28px !important;
     width:max-content;
     flex-shrink:0;
 }
+/* =====================================
+   FAMILY TREE CONTROLS
+   COMPACT BOX HEIGHT
+   ===================================== */
+
+.family-tree-page .common-form-input{
+    min-height: 40px !important;
+    height: 40px !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+}
