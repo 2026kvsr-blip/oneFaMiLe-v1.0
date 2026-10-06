@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -14363,7 +14364,40 @@ function showFamilyTreeMembers(){
                 "";
 
         }
+/* =====================================
+   VALID MEMBER SELECTED
+   → RESTORE TREE OPTIONS
+   ===================================== */
 
+if(familyTreeOptionsRow){
+
+    familyTreeOptionsRow
+        .querySelectorAll(
+            ".family-tree-control"
+        )
+        .forEach(
+            function(control){
+
+                control.style.display = "";
+
+            }
+        );
+
+}
+
+
+/* SHOW FAMILY TREE BUTTON */
+
+const showTreeButton =
+    document.getElementById(
+        "showFamilyTreeBtn"
+    );
+
+if(showTreeButton){
+
+    showTreeButton.style.display = "";
+
+}
 
        /* =====================================
    SELECTED MEMBER
