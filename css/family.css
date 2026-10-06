@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3762,4 +3763,9 @@ max-height: 28px !important;
     height: 40px !important;
     padding-top: 6px !important;
     padding-bottom: 6px !important;
+}
+/* FAMILY TREE TITLE - MOVE UP */
+
+.family-tree-page{
+    margin-top: -30px !important;
 }
