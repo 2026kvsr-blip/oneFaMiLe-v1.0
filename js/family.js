@@ -1,5 +1,4 @@
 
-
 /* =========
 ============================
    oneFaMiLe
@@ -14682,20 +14681,30 @@ familyTreeSearchInput.addEventListener(
     "input",
     function(){
 
+        /* USER CHANGED THE MEMBER TEXT
+           → OLD MEMBER SELECTION INVALID */
+
         selectedFamilyTreeMemberId =
             "";
-const familyTreeOptionsRow =
-    document.getElementById(
-        "familyTreeOptionsRow"
-    );
 
-if(familyTreeOptionsRow){
 
-    familyTreeOptionsRow.style.display =
-        "none";
+        /* HIDE TREE OPTIONS UNTIL
+           A VALID MEMBER IS SELECTED */
 
-}
-        /* RESET PARTNER VIEW */
+        const familyTreeOptionsRow =
+            document.getElementById(
+                "familyTreeOptionsRow"
+            );
+
+        if(familyTreeOptionsRow){
+
+            familyTreeOptionsRow.style.display =
+                "none";
+
+        }
+
+
+        /* RESET / HIDE PARTNER VIEW */
 
         const partnerViewRow =
             document.getElementById(
@@ -14724,6 +14733,10 @@ if(familyTreeOptionsRow){
                 `;
 
         }
+
+
+        /* SHOW MATCHING MEMBERS /
+           NO MATCHING MEMBER */
 
         showFamilyTreeMembers();
 
