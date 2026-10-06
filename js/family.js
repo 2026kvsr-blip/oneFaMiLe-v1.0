@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -17390,14 +17391,19 @@ function buildSelectedChildrenHTML(
                 );
 
 
-            return coupleBoxes(
-                greatGrandChild,
-                "tree-great-grandchild-node",
-                greatGrandChildPartner,
-                "tree-great-grandchild-partner",
-                showPartner
-            );
+           return `
+    <div class="family-tree-great-grandchild-couple">
 
+        ${coupleBoxes(
+            greatGrandChild,
+            "tree-great-grandchild-node",
+            greatGrandChildPartner,
+            "tree-great-grandchild-partner",
+            showPartner
+        )}
+
+    </div>
+`;
         }
     )
     .join("")                                    }
@@ -23993,17 +23999,31 @@ grandChildBranches.forEach(
    GREAT-GRANDCHILD ↔ OWN PARTNER
    ===================================== */
 
-greatGrandChildren.forEach(
-    function(greatGrandChild){
+const greatGrandChildCouples =
+    Array.from(
+        branch.querySelectorAll(
+            ".family-tree-great-grandchild-couple"
+        )
+    );
+
+
+greatGrandChildCouples.forEach(
+    function(couple){
+
+        const greatGrandChild =
+            couple.querySelector(
+                ".tree-great-grandchild-node"
+            );
 
         const greatGrandChildPartner =
-            greatGrandChild.nextElementSibling;
+            couple.querySelector(
+                ".tree-great-grandchild-partner"
+            );
+
 
         if(
-            greatGrandChildPartner &&
-            greatGrandChildPartner.classList.contains(
-                "tree-great-grandchild-partner"
-            )
+            greatGrandChild &&
+            greatGrandChildPartner
         ){
 
             connectCouple(
@@ -24014,7 +24034,8 @@ greatGrandChildren.forEach(
         }
 
     }
-);        
+);
+        
     }
 );
 }
