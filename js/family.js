@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -24150,6 +24151,118 @@ greatGrandChildCouples.forEach(
 
     }
 );
+
+/* =====================================
+   GREAT-GRANDCHILD + PARTNER
+   → GREAT-GREAT-GRANDCHILDREN
+   ===================================== */
+
+const greatGrandChildBranches =
+    Array.from(
+        branch.querySelectorAll(
+            ".family-tree-great-grandchild-branch"
+        )
+    );
+
+
+greatGrandChildBranches.forEach(
+    function(greatGrandChildBranch){
+
+        const greatGrandChild =
+            greatGrandChildBranch.querySelector(
+                ".tree-great-grandchild-node"
+            );
+
+        const greatGrandChildPartner =
+            greatGrandChildBranch.querySelector(
+                ".tree-great-grandchild-partner"
+            );
+
+        const greatGreatGrandChildren =
+            Array.from(
+                greatGrandChildBranch.querySelectorAll(
+                    ".tree-great-great-grandchild-node"
+                )
+            );
+
+
+        let greatGrandChildCoupleCenter = null;
+
+
+        if(
+            greatGrandChild &&
+            greatGrandChildPartner
+        ){
+
+            greatGrandChildCoupleCenter =
+                connectCouple(
+                    greatGrandChild,
+                    greatGrandChildPartner
+                );
+
+        }
+        else if(greatGrandChild){
+
+            greatGrandChildCoupleCenter =
+                getPoint(
+                    greatGrandChild,
+                    "bottom"
+                );
+
+        }
+
+
+        connectParentsToChildren(
+            greatGrandChildCoupleCenter,
+            greatGreatGrandChildren
+        );
+
+
+        /* =================================
+           4TH GENERATION
+           MEMBER ↔ OWN PARTNER
+           ================================= */
+
+        const greatGreatGrandChildCouples =
+            Array.from(
+                greatGrandChildBranch.querySelectorAll(
+                    ".family-tree-great-great-grandchild-couple"
+                )
+            );
+
+
+        greatGreatGrandChildCouples.forEach(
+            function(couple){
+
+                const member =
+                    couple.querySelector(
+                        ".tree-great-great-grandchild-node"
+                    );
+
+                const partner =
+                    couple.querySelector(
+                        ".tree-great-great-grandchild-partner"
+                    );
+
+
+                if(
+                    member &&
+                    partner
+                ){
+
+                    connectCouple(
+                        member,
+                        partner
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
         
     }
 );
