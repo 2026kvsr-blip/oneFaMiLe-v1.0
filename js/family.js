@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -23991,25 +23990,21 @@ grandChildBranches.forEach(
             greatGrandChildren
         );
 /* =====================================
-   GREAT-GRANDCHILD PARTNER LINES
+   GREAT-GRANDCHILD ↔ OWN PARTNER
    ===================================== */
 
 greatGrandChildren.forEach(
     function(greatGrandChild){
 
-        const greatGrandChildBranch =
-            greatGrandChild.parentElement;
-
-        if(!greatGrandChildBranch){
-            return;
-        }
-
         const greatGrandChildPartner =
-            greatGrandChildBranch.querySelector(
-                ".tree-great-grandchild-partner"
-            );
+            greatGrandChild.nextElementSibling;
 
-        if(greatGrandChildPartner){
+        if(
+            greatGrandChildPartner &&
+            greatGrandChildPartner.classList.contains(
+                "tree-great-grandchild-partner"
+            )
+        ){
 
             connectCouple(
                 greatGrandChild,
@@ -24019,7 +24014,7 @@ greatGrandChildren.forEach(
         }
 
     }
-);
+);        
     }
 );
 }
