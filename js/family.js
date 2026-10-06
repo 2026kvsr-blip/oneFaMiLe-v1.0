@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -17535,7 +17536,67 @@ const greatGreatGrandChildren =
 
 }
 
+/* =====================================
+   PARTNER VIEW
+   SPECIFIC PARTNER CHILDREN ONLY
+   ===================================== */
 
+let displayChildren =
+    children;
+
+
+if(
+    showMemberPartner &&
+    selectedPartnerView !== "all" &&
+    partner
+){
+
+    const selectedMemberId =
+        String(
+            selectedMember.memberId || ""
+        ).trim();
+
+    const selectedPartnerId =
+        String(
+            partner.memberId || ""
+        ).trim();
+
+
+    displayChildren =
+        children.filter(
+            function(child){
+
+                const fatherId =
+                    String(
+                        child.fatherId || ""
+                    ).trim();
+
+                const motherId =
+                    String(
+                        child.motherId || ""
+                    ).trim();
+
+
+                return (
+                    fatherId === selectedMemberId &&
+                    motherId === selectedPartnerId
+                )
+                ||
+                (
+                    motherId === selectedMemberId &&
+                    fatherId === selectedPartnerId
+                );
+
+            }
+        );
+
+}
+
+
+console.log(
+    "TREE DISPLAY CHILDREN:",
+    displayChildren
+);
 /* =====================================
    NORMAL CHILDREN HTML
    Existing one-partner behaviour
@@ -17543,9 +17604,8 @@ const greatGreatGrandChildren =
 
 childrenHTML =
     buildSelectedChildrenHTML(
-        children
+        displayChildren
     );
-
 
 /* =====================================
    TWO PARTNER CHILDREN HTML
@@ -19074,10 +19134,10 @@ ${
 
                 :
 
-                (
-                    children.length
+               (
+    displayChildren.length
 
-                        ? `
+        ? `
 
                             <div class="family-tree-selected-children-row">
 
