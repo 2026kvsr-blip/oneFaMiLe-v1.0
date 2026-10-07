@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -9508,15 +9509,125 @@ console.log(
                 memberMarital === "yes";
 
 
-            /* =============================
-               EXISTING PARTNER
-               ============================= */
+          /* =============================
+   EXISTING PARTNERS COUNT
+   0 OR 1  → ALLOW
+   2+      → DO NOT ALLOW
+   ============================= */
 
-            const hasPartner =
+const partnerIds =
+    new Set();
+
+
+/* DIRECT PARTNER */
+
+if(member.partnerId){
+
+    partnerIds.add(
+        String(
+            member.partnerId
+        ).trim()
+    );
+
+}
+
+
+/* REVERSE PARTNER LINK */
+
+familyMembers.forEach(
+    function(item){
+
+        if(!item){
+            return;
+        }
+
+        if(
+            String(
+                item.partnerId || ""
+            ).trim() === memberId
+        ){
+
+            partnerIds.add(
                 String(
-                    member.partnerId || ""
-                ).trim() !== "";
+                    item.memberId || ""
+                ).trim()
+            );
 
+        }
+
+    }
+);
+
+
+/* PARTNERS THROUGH CHILDREN */
+
+familyMembers.forEach(
+    function(child){
+
+        if(!child){
+            return;
+        }
+
+        const fatherId =
+            String(
+                child.fatherId || ""
+            ).trim();
+
+        const motherId =
+            String(
+                child.motherId || ""
+            ).trim();
+
+
+        if(
+            fatherId === memberId &&
+            motherId &&
+            motherId !== memberId
+        ){
+
+            partnerIds.add(
+                motherId
+            );
+
+        }
+
+
+        if(
+            motherId === memberId &&
+            fatherId &&
+            fatherId !== memberId
+        ){
+
+            partnerIds.add(
+                fatherId
+            );
+
+        }
+
+    }
+);
+
+
+partnerIds.delete("");
+partnerIds.delete(memberId);
+
+
+const partnerCount =
+    partnerIds.size;
+
+
+const canAddPartner =
+    partnerCount < 2;
+
+
+console.log(
+    "MEMBER:",
+    member.name,
+    "PARTNER COUNT:",
+    partnerCount,
+    "CAN ADD PARTNER:",
+    canAddPartner
+);
 
             console.log(
                 "MEMBER:",
@@ -9588,19 +9699,18 @@ if(
                ============================= */
 
             if(
-                isMarried &&
-                currentGender &&
-                memberGender !== currentGender &&
-                !hasPartner
-            ){
+    isMarried &&
+    currentGender &&
+    memberGender !== currentGender &&
+    canAddPartner
+){
 
-                addMemberOption(
-                    partnerField,
-                    member
-                );
+    addMemberOption(
+        partnerField,
+        member
+    );
 
-            }
-
+}
         }
     );
 
