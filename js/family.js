@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -6758,7 +6759,7 @@ function bindAddMemberButton(){
     </option>
 
     <option value="__ADD_NEW__">
-        Add New Person
+    Add New Member
     </option>
 
     
@@ -6791,7 +6792,7 @@ function bindAddMemberButton(){
             Select Father
         </option>
         <option value="__ADD_NEW__">
-            Add New Person
+    Add New Member
             
         </option>
 
@@ -6826,7 +6827,7 @@ function bindAddMemberButton(){
         </option>
 
         <option value="__ADD_NEW__">
-            Add New Person
+    Add New Member
         </option>
 
        
@@ -9327,39 +9328,33 @@ console.log(
 
 
     /* =================================
-       ADD NEW PERSON
+    Add New Member
        ================================= */
 
-    function addNewPersonOption(
-        select
-    ){
+  function addNewPersonOption(
+    select
+){
 
-        if(!select){
-            return;
-        }
-
-
-        const option =
-            document.createElement(
-                "option"
-            );
-
-
-        option.value =
-            "__ADD_NEW__";
-
-
-        option.textContent =
-            "Add New Person";
-
-
-       select.insertBefore(
-    option,
-    select.children[1] || null
-);
-
+    if(!select){
+        return;
     }
 
+    const option =
+        document.createElement(
+            "option"
+        );
+
+    option.value =
+        "__ADD_NEW__";
+
+    option.textContent =
+        "Add New Member";
+
+    select.insertBefore(
+        option,
+        select.children[1] || null
+    );
+}
 
     addNewPersonOption(
         partnerField
@@ -9465,7 +9460,41 @@ console.log(
 
     }
 
+/* =================================
+   SORT MEMBERS BY ID NUMBER
+   ================================= */
 
+familyMembers.sort(
+    function(a, b){
+
+        const aId =
+            String(
+                a.memberId || ""
+            ).trim();
+
+        const bId =
+            String(
+                b.memberId || ""
+            ).trim();
+
+
+        const aNumber =
+            parseInt(
+                aId.split("-").pop(),
+                10
+            ) || 0;
+
+        const bNumber =
+            parseInt(
+                bId.split("-").pop(),
+                10
+            ) || 0;
+
+
+        return aNumber - bNumber;
+
+    }
+);
     /* =================================
        FILTER MEMBERS
        ================================= */
