@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -503,7 +504,7 @@ if(familyBackBtn){
             type="text"
             id="relationsMemberSearch"
             class="common-form-select"
-            placeholder="Select / Search Member"
+            placeholder="Select  /  Search"
             
             autocomplete="off">
 
@@ -6760,7 +6761,7 @@ function bindAddMemberButton(){
         type="text"
         id="memberPartnerSearch"
         class="common-form-select"
-        placeholder="Select / Search Partner"
+        placeholder="Select  /  Search"
         autocomplete="off">
 
     <div class="partner-sort-controls">
