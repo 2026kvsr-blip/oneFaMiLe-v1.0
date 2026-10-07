@@ -1,6 +1,5 @@
 
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -6755,6 +6754,8 @@ function bindAddMemberButton(){
     class="relations-member-search-wrap"
     id="memberPartnerSearchWrap">
 
+   <div class="partner-search-input-wrap">
+
     <input
         type="text"
         id="memberPartnerSearch"
@@ -6762,11 +6763,30 @@ function bindAddMemberButton(){
         placeholder="Select / Search Partner"
         autocomplete="off">
 
-    <div
-        id="memberPartnerDropdown"
-        class="relations-member-dropdown">
+    <div class="partner-sort-controls">
+
+        <span
+            id="partnerSortAZ"
+            class="partner-sort-arrow"
+            title="Alphabetical Order">
+            ↑
+        </span>
+
+        <span
+            id="partnerSortID"
+            class="partner-sort-arrow"
+            title="ID Order">
+            ↓
+        </span>
+
     </div>
 
+</div>
+
+<div
+    id="memberPartnerDropdown"
+    class="relations-member-dropdown">
+</div>
     <!-- Existing value holder.
          Save/Edit code continues to use this. -->
     <select
