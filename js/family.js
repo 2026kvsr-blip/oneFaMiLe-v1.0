@@ -10101,8 +10101,7 @@ const partnerSortID =
 
 if(partnerSortAZ){
 
-    partnerSortAZ.addEventListener(
-        "pointerdown",
+    partnerSortAZ.onclick =
         function(event){
 
             event.preventDefault();
@@ -10110,18 +10109,18 @@ if(partnerSortAZ){
 
             partnerSortMode = "name";
 
+            partnerSearch.focus();
+
             showPartnerDropdown();
 
-        }
-    );
+        };
 
 }
 
 
 if(partnerSortID){
 
-    partnerSortID.addEventListener(
-        "pointerdown",
+    partnerSortID.onclick =
         function(event){
 
             event.preventDefault();
@@ -10129,10 +10128,11 @@ if(partnerSortID){
 
             partnerSortMode = "id";
 
+            partnerSearch.focus();
+
             showPartnerDropdown();
 
-        }
-    );
+        };
 
 }
 
