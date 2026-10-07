@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -6750,19 +6749,39 @@ function bindAddMemberButton(){
                     :
                 </span>
 
-               <select
-    id="memberPartner"
-    class="common-form-select">
-<option value="">
-        Select Partner
-    </option>
+               <div
+    class="relations-member-search-wrap"
+    id="memberPartnerSearchWrap">
 
-    <option value="__ADD_NEW__">
-    Add New Member
-    </option>
+    <input
+        type="text"
+        id="memberPartnerSearch"
+        class="common-form-select"
+        placeholder="Select / Search Partner"
+        autocomplete="off">
 
-    
-</select>
+    <div
+        id="memberPartnerDropdown"
+        class="relations-member-dropdown">
+    </div>
+
+    <!-- Existing value holder.
+         Save/Edit code continues to use this. -->
+    <select
+        id="memberPartner"
+        style="display:none;">
+
+        <option value="">
+            Select Partner
+        </option>
+
+        <option value="__ADD_NEW__">
+            Add New Member
+        </option>
+
+    </select>
+
+</div>
             </div>
 
 
