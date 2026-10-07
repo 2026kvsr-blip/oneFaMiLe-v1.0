@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -10045,27 +10044,9 @@ matchingOptions.sort(
    2nd click = A-Z
    3rd click = ID order
    ============================= */
-let partnerBoxOpened = false;
-
 partnerSearch.addEventListener(
-    "pointerdown",
+    "focus",
     function(){
-
-        if(!partnerBoxOpened){
-
-            partnerSortMode = "id";
-
-            partnerBoxOpened = true;
-
-        }
-        else{
-
-            partnerSortMode =
-                partnerSortMode === "id"
-                    ? "name"
-                    : "id";
-
-        }
 
         if(partnerField.value){
 
@@ -10073,11 +10054,12 @@ partnerSearch.addEventListener(
 
         }
 
+        partnerSortMode = "id";
+
         showPartnerDropdown();
 
     }
-);       
-
+);
     
 
     /* =============================
@@ -10124,7 +10106,6 @@ partnerSearch.addEventListener(
 
                 partnerDropdown.style.display =
                     "none";
-            partnerBoxOpened = false;
 
 
             }
