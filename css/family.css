@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3764,4 +3763,34 @@ max-height: 28px !important;
     padding-top: 6px !important;
     padding-bottom: 6px !important;
 }
+.partner-search-input-wrap{
+    position: relative;
+    width: 100%;
+}
 
+.partner-search-input-wrap #memberPartnerSearch{
+    width: 100%;
+    padding-right: 58px;
+    box-sizing: border-box;
+}
+
+.partner-sort-controls{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    z-index: 5;
+}
+
+.partner-sort-arrow{
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    line-height: 1;
+}
