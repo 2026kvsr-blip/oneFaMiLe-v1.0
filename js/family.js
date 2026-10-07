@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -9793,6 +9792,10 @@ const partnerDropdown =
    ============================= */
 
 let partnerSortMode = "id";
+let partnerNameAscending = true;
+let partnerIdAscending = true;
+
+
     
 if(
     partnerSearch &&
@@ -9878,12 +9881,12 @@ if(
 /* =============================
    SORT PARTNER LIST
    ============================= */
-
 matchingOptions.sort(
     function(a, b){
 
         /* =========================
-           NAME A-Z ORDER
+           ALPHABETICAL SORT
+           A-Z / Z-A
            ========================= */
 
         if(partnerSortMode === "name"){
@@ -9898,19 +9901,24 @@ matchingOptions.sort(
                     b.textContent || ""
                 ).trim();
 
-            return aName.localeCompare(
-                bName,
-                undefined,
-                {
-                    sensitivity: "base"
-                }
-            );
+            const result =
+                aName.localeCompare(
+                    bName,
+                    undefined,
+                    {
+                        sensitivity: "base"
+                    }
+                );
 
+            return partnerNameAscending
+                ? result
+                : -result;
         }
 
 
         /* =========================
-           ID NUMBER ORDER
+           ID NUMBER SORT
+           1-9 / 9-1
            ========================= */
 
         const aId =
@@ -9922,7 +9930,6 @@ matchingOptions.sort(
             String(
                 b.value || ""
             ).trim();
-
 
         const aNumber =
             parseInt(
@@ -9936,8 +9943,12 @@ matchingOptions.sort(
                 10
             ) || 0;
 
+        const result =
+            aNumber - bNumber;
 
-        return aNumber - bNumber;
+        return partnerIdAscending
+            ? result
+            : -result;
 
     }
 );
