@@ -9658,17 +9658,7 @@ console.log(
     canAddPartner
 );
 
-            console.log(
-                "MEMBER:",
-                member.name,
-                "GENDER:",
-                memberGender,
-                "MARITAL:",
-                memberMarital,
-                "HAS PARTNER:",
-                hasPartner
-            );
-
+            
 
             /* =============================
                DO NOT SHOW CURRENT MEMBER
