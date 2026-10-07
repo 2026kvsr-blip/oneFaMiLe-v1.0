@@ -6765,18 +6765,18 @@ function bindAddMemberButton(){
     <div class="partner-sort-controls">
 
         <span
-            id="partnerSortAZ"
-            class="partner-sort-arrow"
-            title="Alphabetical Order">
-            ↑
-        </span>
+    id="partnerSortAZ"
+    class="partner-sort-arrow"
+    title="Alphabetical Order">
+    A↕Z
+</span>
 
-        <span
-            id="partnerSortID"
-            class="partner-sort-arrow"
-            title="ID Order">
-            ↓
-        </span>
+<span
+    id="partnerSortID"
+    class="partner-sort-arrow"
+    title="ID Number Order">
+    1↕9
+</span>
 
     </div>
 
