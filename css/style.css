@@ -1,5 +1,6 @@
 
 
+
 *{
 margin:0;
 padding:0;
@@ -3253,9 +3254,7 @@ width:100%;
     padding-top:0 !important;
 }
 
-#homeContent .welcome-box{
-    margin-top:0px !important;
-}
+
 /* =====================================
    SETTINGS PAGE TITLE
    ===================================== */
@@ -3745,14 +3744,22 @@ width:100%;
    HOME WELCOME BOX - FINAL POSITION
    ===================================== */
 
-#homeContent .welcome-box{
+/* =====================================
+   HOME WELCOME BOX - PHONE ONLY
+   ===================================== */
 
-    margin-top:10px !important;
+@media (max-width:600px){
 
-    height:calc(100vh - 305px) !important;
+    #homeContent .welcome-box{
 
-    padding-top:20px !important;
+        margin-top:10px !important;
 
-    padding-bottom:20px !important;
+        height:calc(100vh - 305px) !important;
+
+        padding-top:20px !important;
+
+        padding-bottom:20px !important;
+
+    }
 
 }
