@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -3203,8 +3204,29 @@ loginPage.classList.add("hidden");
 welcomePage.classList.add("hidden");
 
 dashboard.classList.remove("hidden");
- homeBtn.click();
 
+homeBtn.click();
+
+
+/* =====================================
+   SETTLE HOME POSITION AFTER OPEN
+   ===================================== */
+
+requestAnimationFrame(()=>{
+
+    requestAnimationFrame(()=>{
+
+        homeContent.scrollTop = 0;
+
+        document.documentElement.scrollTop = 0;
+
+        document.body.scrollTop = 0;
+
+        window.scrollTo(0,0);
+
+    });
+
+});
 };
 
 /* ======================
@@ -4405,6 +4427,26 @@ updateMenuIcon();
 
 homeBtn.click();
 
+
+/* =====================================
+   SETTLE HOME POSITION AFTER OPEN
+   ===================================== */
+
+requestAnimationFrame(()=>{
+
+    requestAnimationFrame(()=>{
+
+        homeContent.scrollTop = 0;
+
+        document.documentElement.scrollTop = 0;
+
+        document.body.scrollTop = 0;
+
+        window.scrollTo(0,0);
+
+    });
+
+});
 
 // =====================================
 // LOAD FAMILY DATA WITHOUT BLOCKING LOGIN
@@ -6480,7 +6522,28 @@ if(loggedUser){
 
     dashboard.classList.remove("hidden");
 
-    homeBtn.click();
+homeBtn.click();
+
+
+/* =====================================
+   SETTLE HOME POSITION AFTER OPEN
+   ===================================== */
+
+requestAnimationFrame(()=>{
+
+    requestAnimationFrame(()=>{
+
+        homeContent.scrollTop = 0;
+
+        document.documentElement.scrollTop = 0;
+
+        document.body.scrollTop = 0;
+
+        window.scrollTo(0,0);
+
+    });
+
+});
     updateSideMenuUser();
 updateMenuIcon();
 
