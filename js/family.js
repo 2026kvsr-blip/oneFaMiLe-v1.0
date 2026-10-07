@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -10081,7 +10082,59 @@ partnerSearch.addEventListener(
 
         }
     );
+/* =============================
+   PARTNER SORT ARROWS
+   ↑ = A-Z NAME ORDER
+   ↓ = ID NUMBER ORDER
+   ============================= */
 
+const partnerSortAZ =
+    document.getElementById(
+        "partnerSortAZ"
+    );
+
+const partnerSortID =
+    document.getElementById(
+        "partnerSortID"
+    );
+
+
+if(partnerSortAZ){
+
+    partnerSortAZ.addEventListener(
+        "pointerdown",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            partnerSortMode = "name";
+
+            showPartnerDropdown();
+
+        }
+    );
+
+}
+
+
+if(partnerSortID){
+
+    partnerSortID.addEventListener(
+        "pointerdown",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            partnerSortMode = "id";
+
+            showPartnerDropdown();
+
+        }
+    );
+
+}
 
     /* =============================
        OUTSIDE CLICK
