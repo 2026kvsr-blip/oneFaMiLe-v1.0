@@ -9765,7 +9765,13 @@ const partnerDropdown =
     document.getElementById(
         "memberPartnerDropdown"
     );
+/* =============================
+   PARTNER SORT MODE
+   FIRST OPEN = ID ORDER
+   ============================= */
 
+let partnerSortMode = "id";
+    
 if(
     partnerSearch &&
     partnerDropdown &&
@@ -9847,7 +9853,72 @@ if(
 
                 }
             );
+/* =============================
+   SORT PARTNER LIST
+   ============================= */
 
+matchingOptions.sort(
+    function(a, b){
+
+        /* =========================
+           NAME A-Z ORDER
+           ========================= */
+
+        if(partnerSortMode === "name"){
+
+            const aName =
+                String(
+                    a.textContent || ""
+                ).trim();
+
+            const bName =
+                String(
+                    b.textContent || ""
+                ).trim();
+
+            return aName.localeCompare(
+                bName,
+                undefined,
+                {
+                    sensitivity: "base"
+                }
+            );
+
+        }
+
+
+        /* =========================
+           ID NUMBER ORDER
+           ========================= */
+
+        const aId =
+            String(
+                a.value || ""
+            ).trim();
+
+        const bId =
+            String(
+                b.value || ""
+            ).trim();
+
+
+        const aNumber =
+            parseInt(
+                aId.split("-").pop(),
+                10
+            ) || 0;
+
+        const bNumber =
+            parseInt(
+                bId.split("-").pop(),
+                10
+            ) || 0;
+
+
+        return aNumber - bNumber;
+
+    }
+);
 
         /* =============================
            NO MATCH
