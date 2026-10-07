@@ -10056,23 +10056,8 @@ partnerSearch.addEventListener(
         showPartnerDropdown();
 
     }
-);        /* =========================
-           CLEAR OLD SELECTED TEXT
-           ONLY WHEN A PARTNER
-           WAS ALREADY SELECTED
-           ========================= */
+);       
 
-        if(partnerField.value){
-
-            partnerSearch.value = "";
-
-        }
-
-
-        showPartnerDropdown();
-
-    }
-);
     
 
     /* =============================
