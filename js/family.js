@@ -9792,8 +9792,8 @@ const partnerDropdown =
    ============================= */
 
 let partnerSortMode = "id";
-let partnerNameAscending = true;
-let partnerIdAscending = true;
+let partnerNameAscending = false;
+let partnerIdAscending = false;
 
 
     
