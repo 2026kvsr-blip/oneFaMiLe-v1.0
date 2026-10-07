@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -4748,14 +4747,65 @@ homeBtn.onclick = ()=>{
     // =====================================
     // RESET HOME PAGE POSITION
     // =====================================
+   /* =====================================
+   RESET HOME PAGE POSITION
+   IOS SAFARI SAFE
+   ===================================== */
+
+function resetHomePosition(){
+
     homeContent.scrollTop = 0;
+
     document.documentElement.scrollTop = 0;
 
     document.body.scrollTop = 0;
 
-    window.scrollTo(0,0);
-        updateMenuIcon();
+    window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "instant"
+    });
 
+}
+
+
+/* FIRST RESET */
+
+resetHomePosition();
+
+
+/* AFTER BROWSER LAYOUT */
+
+requestAnimationFrame(()=>{
+
+    resetHomePosition();
+
+    requestAnimationFrame(()=>{
+
+        resetHomePosition();
+
+    });
+
+});
+
+
+/* IOS SAFARI FINAL SETTLE */
+
+setTimeout(()=>{
+
+    resetHomePosition();
+
+},100);
+
+
+setTimeout(()=>{
+
+    resetHomePosition();
+
+},300);
+
+
+updateMenuIcon();
 
 };
 function showHome(){
