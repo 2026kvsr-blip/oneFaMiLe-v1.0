@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -10024,39 +10025,22 @@ matchingOptions.sort(
    2nd click = A-Z
    3rd click = ID order
    ============================= */
-
-let partnerBoxOpened = false;
-
-
 partnerSearch.addEventListener(
-    "pointerdown",
+    "focus",
     function(){
 
-        /* =========================
-           FIRST OPEN
-           ========================= */
+        if(partnerField.value){
 
-        if(!partnerBoxOpened){
-
-            partnerSortMode = "id";
-
-            partnerBoxOpened = true;
+            partnerSearch.value = "";
 
         }
 
-        /* =========================
-           NEXT CLICKS
-           ========================= */
+        partnerSortMode = "id";
 
-        else{
+        showPartnerDropdown();
 
-            partnerSortMode =
-                partnerSortMode === "id"
-                    ? "name"
-                    : "id";
-
-        }
-
+    }
+);
 
         /* =========================
            CLEAR OLD SELECTED TEXT
@@ -10121,7 +10105,6 @@ partnerSearch.addEventListener(
 
                 partnerDropdown.style.display =
                     "none";
-                            partnerBoxOpened = false;
 
 
             }
