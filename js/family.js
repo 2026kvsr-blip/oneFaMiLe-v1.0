@@ -10025,9 +10025,27 @@ matchingOptions.sort(
    2nd click = A-Z
    3rd click = ID order
    ============================= */
+let partnerBoxOpened = false;
+
 partnerSearch.addEventListener(
-    "focus",
+    "pointerdown",
     function(){
+
+        if(!partnerBoxOpened){
+
+            partnerSortMode = "id";
+
+            partnerBoxOpened = true;
+
+        }
+        else{
+
+            partnerSortMode =
+                partnerSortMode === "id"
+                    ? "name"
+                    : "id";
+
+        }
 
         if(partnerField.value){
 
@@ -10035,14 +10053,10 @@ partnerSearch.addEventListener(
 
         }
 
-        partnerSortMode = "id";
-
         showPartnerDropdown();
 
     }
-);
-
-        /* =========================
+);        /* =========================
            CLEAR OLD SELECTED TEXT
            ONLY WHEN A PARTNER
            WAS ALREADY SELECTED
@@ -10105,6 +10119,7 @@ partnerSearch.addEventListener(
 
                 partnerDropdown.style.display =
                     "none";
+            partnerBoxOpened = false;
 
 
             }
