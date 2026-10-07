@@ -3735,3 +3735,10 @@ width:100%;
     align-self:center !important;
     transform:none !important;
 }
+/* =====================================
+   HOME WELCOME BOX POSITION
+   ===================================== */
+
+#homeContent .welcome-box{
+    margin-top: 15px !important;
+}
