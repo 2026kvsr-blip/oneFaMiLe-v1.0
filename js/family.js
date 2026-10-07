@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -9751,6 +9752,276 @@ if(
         }
     );
 
+/* =================================
+   PARTNER SEARCH
+   ================================= */
+
+const partnerSearch =
+    document.getElementById(
+        "memberPartnerSearch"
+    );
+
+const partnerDropdown =
+    document.getElementById(
+        "memberPartnerDropdown"
+    );
+
+if(
+    partnerSearch &&
+    partnerDropdown &&
+    partnerField
+){
+
+    /* =============================
+       GET ELIGIBLE PARTNERS
+       FROM ALREADY FILTERED SELECT
+       ============================= */
+
+    function getEligiblePartnerOptions(){
+
+        return Array.from(
+            partnerField.options
+        ).filter(
+            function(option){
+
+                return (
+                    option.value &&
+                    option.value !== "__ADD_NEW__"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =============================
+       SHOW PARTNER LIST
+       ============================= */
+
+    function showPartnerDropdown(){
+
+        const searchText =
+            String(
+                partnerSearch.value || ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        partnerDropdown.innerHTML = "";
+
+
+        const eligibleOptions =
+            getEligiblePartnerOptions();
+
+
+        const matchingOptions =
+            eligibleOptions.filter(
+                function(option){
+
+                    const text =
+                        String(
+                            option.textContent || ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+                    const id =
+                        String(
+                            option.value || ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+
+                    if(searchText === ""){
+                        return true;
+                    }
+
+
+                    return (
+                        text.includes(searchText) ||
+                        id.includes(searchText)
+                    );
+
+                }
+            );
+
+
+        /* =============================
+           NO MATCH
+           ============================= */
+
+        if(
+            matchingOptions.length === 0
+        ){
+
+            partnerDropdown.innerHTML =
+                `<div class="relations-no-match">
+                    No matching partner
+                </div>`;
+
+            partnerDropdown.style.display =
+                "block";
+
+            return;
+
+        }
+
+
+        /* =============================
+           CREATE PARTNER ITEMS
+           ============================= */
+
+        matchingOptions.forEach(
+            function(selectOption){
+
+                const option =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                option.className =
+                    "relations-member-option";
+
+
+                option.textContent =
+                    selectOption.textContent;
+
+
+                option.dataset.memberId =
+                    selectOption.value;
+
+
+                option.onclick =
+                    function(){
+
+                        const selectedId =
+                            option.dataset.memberId;
+
+
+                        /* SAVE ORIGINAL ID */
+
+                        partnerField.value =
+                            selectedId;
+
+
+                        /* SHOW NAME IN SEARCH */
+
+                        partnerSearch.value =
+                            selectOption.textContent;
+
+
+                        partnerDropdown.innerHTML =
+                            "";
+
+                        partnerDropdown.style.display =
+                            "none";
+
+
+                        console.log(
+                            "PARTNER SELECTED:",
+                            selectedId
+                        );
+
+                    };
+
+
+                partnerDropdown.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        partnerDropdown.style.display =
+            "block";
+
+    }
+
+
+    /* =============================
+       CLICK / FOCUS
+       ============================= */
+
+    partnerSearch.addEventListener(
+        "focus",
+        function(){
+
+            /*
+             If an old selected name is showing,
+             don't use it as search text when
+             opening the list again.
+            */
+
+            if(partnerField.value){
+
+                partnerSearch.value = "";
+
+            }
+
+            showPartnerDropdown();
+
+        }
+    );
+
+
+    /* =============================
+       SEARCH WHILE TYPING
+       ============================= */
+
+    partnerSearch.addEventListener(
+        "input",
+        function(){
+
+            /*
+             User started a new search.
+             Clear previous selected ID.
+            */
+
+            partnerField.value = "";
+
+            showPartnerDropdown();
+
+        }
+    );
+
+
+    /* =============================
+       OUTSIDE CLICK
+       ============================= */
+
+    document.addEventListener(
+        "click",
+        function(event){
+
+            const wrap =
+                document.getElementById(
+                    "memberPartnerSearchWrap"
+                );
+
+
+            if(
+                wrap &&
+                !wrap.contains(
+                    event.target
+                )
+            ){
+
+                partnerDropdown.style.display =
+                    "none";
+
+            }
+
+        }
+    );
+
+}
+
+    
 /* =================================
    ADD NEW PERSON
    FATHER / MOTHER
