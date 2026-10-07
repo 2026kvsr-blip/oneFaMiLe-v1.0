@@ -9991,7 +9991,6 @@ matchingOptions.sort(
                         partnerDropdown.style.display =
                             "none";
 
-
                         console.log(
                             "PARTNER SELECTED:",
                             selectedId
@@ -10018,27 +10017,65 @@ matchingOptions.sort(
        CLICK / FOCUS
        ============================= */
 
-    partnerSearch.addEventListener(
-        "focus",
-        function(){
+    /* =============================
+   PARTNER OPEN / SORT TOGGLE
 
-            /*
-             If an old selected name is showing,
-             don't use it as search text when
-             opening the list again.
-            */
+   1st click = ID order
+   2nd click = A-Z
+   3rd click = ID order
+   ============================= */
 
-            if(partnerField.value){
+let partnerBoxOpened = false;
 
-                partnerSearch.value = "";
 
-            }
+partnerSearch.addEventListener(
+    "pointerdown",
+    function(){
 
-            showPartnerDropdown();
+        /* =========================
+           FIRST OPEN
+           ========================= */
+
+        if(!partnerBoxOpened){
+
+            partnerSortMode = "id";
+
+            partnerBoxOpened = true;
 
         }
-    );
 
+        /* =========================
+           NEXT CLICKS
+           ========================= */
+
+        else{
+
+            partnerSortMode =
+                partnerSortMode === "id"
+                    ? "name"
+                    : "id";
+
+        }
+
+
+        /* =========================
+           CLEAR OLD SELECTED TEXT
+           ONLY WHEN A PARTNER
+           WAS ALREADY SELECTED
+           ========================= */
+
+        if(partnerField.value){
+
+            partnerSearch.value = "";
+
+        }
+
+
+        showPartnerDropdown();
+
+    }
+);
+    
 
     /* =============================
        SEARCH WHILE TYPING
@@ -10084,6 +10121,8 @@ matchingOptions.sort(
 
                 partnerDropdown.style.display =
                     "none";
+                            partnerBoxOpened = false;
+
 
             }
 
