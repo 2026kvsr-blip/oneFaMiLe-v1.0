@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -9792,10 +9793,11 @@ const partnerDropdown =
    ============================= */
 
 let partnerSortMode = "id";
-let partnerNameAscending = false;
-let partnerIdAscending = false;
 
+let partnerNameAscending = true;
+let partnerIdAscending = true;
 
+let lastPartnerSortMode = "";
     
 if(
     partnerSearch &&
@@ -10110,43 +10112,70 @@ const partnerSortID =
     );
 
 
+/* =============================
+   A-Z / Z-A SORT
+   ============================= */
+
 if(partnerSortAZ){
 
-    partnerSortAZ.onclick =
-        function(event){
+    partnerSortAZ.onclick = function(event){
 
-            event.preventDefault();
-            event.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
 
-            partnerSortMode = "name";
+        if(lastPartnerSortMode === "name"){
 
-            partnerSearch.focus();
+            partnerNameAscending =
+                !partnerNameAscending;
 
-            showPartnerDropdown();
+        }
+        else{
 
-        };
+            partnerNameAscending = true;
+
+        }
+
+        partnerSortMode = "name";
+        lastPartnerSortMode = "name";
+
+        showPartnerDropdown();
+
+    };
 
 }
 
+
+/* =============================
+   1-9 / 9-1 SORT
+   ============================= */
 
 if(partnerSortID){
 
-    partnerSortID.onclick =
-        function(event){
+    partnerSortID.onclick = function(event){
 
-            event.preventDefault();
-            event.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
 
-            partnerSortMode = "id";
+        if(lastPartnerSortMode === "id"){
 
-            partnerSearch.focus();
+            partnerIdAscending =
+                !partnerIdAscending;
 
-            showPartnerDropdown();
+        }
+        else{
 
-        };
+            partnerIdAscending = true;
+
+        }
+
+        partnerSortMode = "id";
+        lastPartnerSortMode = "id";
+
+        showPartnerDropdown();
+
+    };
 
 }
-
     /* =============================
        OUTSIDE CLICK
        ============================= */
