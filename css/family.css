@@ -3795,3 +3795,17 @@ max-height: 28px !important;
     user-select: none;
     line-height: 1;
 }
+/* FATHER SEARCH - DISABLED COLOR */
+
+#memberFatherSearch:disabled{
+    background-color: #ffffff;
+    color: #000000;
+    opacity: 1;
+    -webkit-text-fill-color: #000000;
+    cursor: default;
+}
+
+#memberFatherSearch:disabled::placeholder{
+    color: #555555;
+    opacity: 1;
+}
