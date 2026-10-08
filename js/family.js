@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -9995,7 +9994,13 @@ if(
 
                         fatherField.value =
                             option.value;
+                     document.getElementById(
+    "fatherSortAZ"
+).style.display = "none";
 
+document.getElementById(
+    "fatherSortID"
+).style.display = "none";
                         fatherSearch.value =
                             option.value === "__ADD_NEW__"
                                 ? ""
@@ -10028,7 +10033,13 @@ if(
     fatherSearch.addEventListener(
         "focus",
         function(){
+document.getElementById(
+    "fatherSortAZ"
+).style.display = "";
 
+document.getElementById(
+    "fatherSortID"
+).style.display = "";
             if(fatherField.value){
                 fatherSearch.value = "";
             }
