@@ -6899,20 +6899,59 @@ function bindAddMemberButton(){
         :
     </span>
 
+   <div
+    class="relations-member-search-wrap"
+    id="memberMotherSearchWrap">
+
+    <div class="partner-search-input-wrap">
+
+        <input
+            type="text"
+            id="memberMotherSearch"
+            class="common-form-select"
+            placeholder="Select / Search Mother"
+            autocomplete="off"
+            disabled>
+
+        <div class="partner-sort-controls">
+
+            <span
+                id="motherSortAZ"
+                class="partner-sort-arrow">
+                A↕Z
+            </span>
+
+            <span
+                id="motherSortID"
+                class="partner-sort-arrow">
+                1↕9
+            </span>
+
+        </div>
+
+    </div>
+
+    <div
+        id="memberMotherDropdown"
+        class="relations-member-dropdown"
+        style="display:none;">
+    </div>
+
     <select
         id="memberMother"
-        class="common-form-select">
- <option value="">
+        style="display:none;">
+
+        <option value="">
             Select Mother
         </option>
 
         <option value="__ADD_NEW__">
-    Add New Member
+            Add New Member
         </option>
 
-       
     </select>
 
+</div>
 </div>
 
 <!-- =================================
