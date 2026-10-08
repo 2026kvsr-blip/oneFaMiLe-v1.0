@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -5857,10 +5858,17 @@ if(homeBtn){
         };
 
 }
+
+        
             /* =================================
                SHOW SEARCH MEMBERS
                ================================= */
 
+let searchEditSortMode = "id";
+let searchEditNameAscending = true;
+let searchEditIdAscending = true;
+let lastSearchEditSortMode = "";
+        
             function showSearchMembers(){
 
 
@@ -5990,7 +5998,41 @@ if(homeBtn){
 
                         }
                     );
+matchingMembers.sort(function(a, b){
 
+    if(searchEditSortMode === "name"){
+
+        const result =
+            String(a.name || "").localeCompare(
+                String(b.name || ""),
+                undefined,
+                {sensitivity:"base"}
+            );
+
+        return searchEditNameAscending
+            ? result
+            : -result;
+    }
+
+    const aId =
+        parseInt(
+            String(a.memberId || "").split("-").pop(),
+            10
+        ) || 0;
+
+    const bId =
+        parseInt(
+            String(b.memberId || "").split("-").pop(),
+            10
+        ) || 0;
+
+    const result = aId - bId;
+
+    return searchEditIdAscending
+        ? result
+        : -result;
+
+});
 
                 /* =============================
                    NO MATCH
@@ -6149,7 +6191,49 @@ if(homeBtn){
 
             }
 
+const searchEditAZ =
+    document.getElementById("searchEditSortAZ");
 
+const searchEditID =
+    document.getElementById("searchEditSortID");
+
+if(searchEditAZ){
+
+    searchEditAZ.onclick = function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        searchEditNameAscending =
+            lastSearchEditSortMode === "name"
+                ? !searchEditNameAscending
+                : true;
+
+        searchEditSortMode = "name";
+        lastSearchEditSortMode = "name";
+
+        showSearchMembers();
+    };
+}
+
+if(searchEditID){
+
+    searchEditID.onclick = function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        searchEditIdAscending =
+            lastSearchEditSortMode === "id"
+                ? !searchEditIdAscending
+                : true;
+
+        searchEditSortMode = "id";
+        lastSearchEditSortMode = "id";
+
+        showSearchMembers();
+    };
+}
             /* =================================
                SEARCH EVENTS
 
@@ -6177,34 +6261,46 @@ if(homeBtn){
             );
 
 
-            /* =================================
-               OUTSIDE CLICK
-               ================================= */
+          /* =================================
+   SEARCH EDIT MEMBER - OUTSIDE CLICK
+   ================================= */
 
-            document.addEventListener(
-                "click",
-                function(event){
+document.addEventListener(
+    "click",
+    function(event){
 
-                    if(
-                        !searchInput.contains(
-                            event.target
-                        )
-
-                        &&
-
-                        !dropdown.contains(
-                            event.target
-                        )
-                    ){
-
-                        dropdown.style.display =
-                            "none";
-
-                    }
-
-                }
+        const searchWrap =
+            searchInput.closest(
+                ".search-edit-member-wrapper"
             );
 
+        if(
+            searchWrap &&
+            !searchWrap.contains(event.target)
+        ){
+
+            /* CLOSE DROPDOWN */
+
+            dropdown.style.display = "none";
+
+            /* CLEAR SEARCH TEXT */
+
+            searchInput.value = "";
+
+            /* HIDE SORT ARROWS */
+
+            if(searchEditAZ){
+                searchEditAZ.style.display = "none";
+            }
+
+            if(searchEditID){
+                searchEditID.style.display = "none";
+            }
+
+        }
+
+    }
+);
 
             /* =================================
                GET MEMBERS FROM GOOGLE SHEET
