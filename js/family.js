@@ -504,7 +504,7 @@ if(familyBackBtn){
             type="text"
             id="relationsMemberSearch"
             class="common-form-select"
-            placeholder="Select  /  Search"
+            placeholder="Select / Search"
             
             autocomplete="off">
 
@@ -6930,7 +6930,7 @@ function bindAddMemberButton(){
         type="text"
         id="memberPartnerSearch"
         class="common-form-select"
-        placeholder="Select  /  Search"
+            placeholder="Select / Search"
         autocomplete="off">
 
     <div class="partner-sort-controls">
@@ -7031,7 +7031,7 @@ function bindAddMemberButton(){
     type="text"
     id="memberFatherSearch"
     class="common-form-select"
-    placeholder="Select  /  Search"
+            placeholder="Select / Search"
     autocomplete="off"
     disabled>
         <div class="partner-sort-controls">
@@ -7131,7 +7131,7 @@ function bindAddMemberButton(){
             type="text"
             id="memberMotherSearch"
             class="common-form-select"
-            placeholder="Select  /  Search"
+            placeholder="Select / Search"
             autocomplete="off"
             disabled>
 
