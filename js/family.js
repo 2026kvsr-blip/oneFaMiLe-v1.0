@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -10288,6 +10289,16 @@ if(fatherCount){
 document.getElementById(
     "fatherSortID"
 ).style.display = "none";
+                        /* HIDE FATHER COUNT AFTER SELECTION */
+
+const fatherCount =
+    document.getElementById(
+        "fatherMemberCount"
+    );
+
+if(fatherCount){
+    fatherCount.style.display = "none";
+}
                         fatherSearch.value =
                             option.value === "__ADD_NEW__"
                                 ? ""
@@ -10622,6 +10633,17 @@ if(motherCount){
                         if(id){
                             id.style.display = "none";
                         }
+
+                        /* HIDE MOTHER COUNT AFTER SELECTION */
+
+const motherCount =
+    document.getElementById(
+        "motherMemberCount"
+    );
+
+if(motherCount){
+    motherCount.style.display = "none";
+}
 
                         /* KEEP EXISTING CHANGE LOGIC */
 
@@ -11040,7 +11062,14 @@ if(partnerAZ){
 if(partnerID){
     partnerID.style.display = "none";
 }
+const partnerCount =
+    document.getElementById(
+        "partnerMemberCount"
+    );
 
+if(partnerCount){
+    partnerCount.style.display = "none";
+}
                         /* SHOW NAME IN SEARCH */
 
                         partnerSearch.value =
