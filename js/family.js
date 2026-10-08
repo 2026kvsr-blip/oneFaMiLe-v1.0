@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -11516,12 +11515,28 @@ if(
                     }
 
 
-                    if(sortID){
+                   if(sortID){
 
-                        sortID.style.display =
-                            "none";
+    sortID.style.display =
+        "none";
 
-                    }
+}
+
+/* =================================
+   HIDE MEMBER COUNT ON OUTSIDE CLICK
+   ================================= */
+
+const count =
+    document.getElementById(
+        config.countId
+    );
+
+if(count){
+
+    count.style.display =
+        "none";
+
+}
 
                 }
             );
