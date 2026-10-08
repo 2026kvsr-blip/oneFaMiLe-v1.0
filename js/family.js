@@ -1,6 +1,5 @@
 
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -6834,12 +6833,12 @@ function bindAddMemberButton(){
     <div class="partner-search-input-wrap">
 
         <input
-            type="text"
-            id="memberFatherSearch"
-            class="common-form-select"
-            placeholder="Select / Search Father"
-            autocomplete="off">
-
+    type="text"
+    id="memberFatherSearch"
+    class="common-form-select"
+    placeholder="Select  /  Search"
+    autocomplete="off"
+    disabled>
         <div class="partner-sort-controls">
 
             <span
@@ -8482,7 +8481,51 @@ function updateMemberFormState(){
         }
     );
 
+/* =============================
+   FATHER SEARCH ENABLE / DISABLE
+   ============================= */
 
+const fatherSearchInput =
+    document.getElementById(
+        "memberFatherSearch"
+    );
+
+const fatherSortAZ =
+    document.getElementById(
+        "fatherSortAZ"
+    );
+
+const fatherSortID =
+    document.getElementById(
+        "fatherSortID"
+    );
+
+if(fatherSearchInput){
+
+    fatherSearchInput.disabled =
+        !basicDetailsReady;
+
+}
+
+[fatherSortAZ, fatherSortID].forEach(
+    function(arrow){
+
+        if(arrow){
+
+            arrow.style.pointerEvents =
+                basicDetailsReady
+                    ? "auto"
+                    : "none";
+
+            arrow.style.opacity =
+                basicDetailsReady
+                    ? "1"
+                    : "0.4";
+
+        }
+
+    }
+);
     /* =============================
        PHOTO BUTTON
        ============================= */
