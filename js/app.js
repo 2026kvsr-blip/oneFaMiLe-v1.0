@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -4121,15 +4122,12 @@ async function loadCurrentLoginFamily(){
     }
 
 
-    /* REMOVE ANY OLD CACHE FIRST */
+  /* =====================================
+   PRESERVE FAMILY CACHE DURING LOGIN
+   ===================================== */
 
-    localStorage.removeItem(
-        "currentFamily"
-    );
-
-    localStorage.removeItem(
-        "familyMembers"
-    );
+// Do not clear currentFamily or familyMembers
+// before the server response is received.
 
 
     try{
