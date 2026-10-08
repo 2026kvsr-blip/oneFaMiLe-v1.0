@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -5712,13 +5713,30 @@ window.openSearchEditMemberPage =
                             <div
                                 class="search-edit-member-wrapper">
 
-                                <input
-                                    type="text"
-                                    id="searchEditMember"
-                                    class="common-form-input"
-                                    placeholder="Search Member"
-                                    autocomplete="off">
+                               <div class="partner-search-input-wrap">
 
+    <input
+        type="text"
+        id="searchEditMember"
+        class="common-form-input"
+        placeholder="Search Member"
+        autocomplete="off">
+
+    <div class="partner-sort-controls">
+
+        <span
+            id="searchEditSortAZ"
+            class="partner-sort-arrow"
+            title="Alphabetical Order">A↕Z</span>
+
+        <span
+            id="searchEditSortID"
+            class="partner-sort-arrow"
+            title="ID Number Order">1↕9</span>
+
+    </div>
+
+</div>
 
                                 <div
                                     id="searchEditMemberDropdown"
