@@ -1,6 +1,4 @@
 
-
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -10236,25 +10234,46 @@ document.getElementById(
 
     }
 
-    fatherSearch.addEventListener(
-        "focus",
-        function(){
-document.getElementById(
-    "fatherSortAZ"
-).style.display = "";
+    /* =================================
+   FATHER SEARCH - FOCUS
+   ================================= */
 
-document.getElementById(
-    "fatherSortID"
-).style.display = "";
-            if(fatherField.value){
-                fatherSearch.value = "";
-            }
+fatherSearch.addEventListener(
+    "focus",
+    function(){
 
-            showFatherDropdown();
+        /* SHOW FATHER SORT ARROWS */
 
+        const fatherAZ =
+            document.getElementById(
+                "fatherSortAZ"
+            );
+
+        const fatherID =
+            document.getElementById(
+                "fatherSortID"
+            );
+
+        if(fatherAZ){
+            fatherAZ.style.display = "inline-flex";
         }
-    );
 
+        if(fatherID){
+            fatherID.style.display = "inline-flex";
+        }
+
+        /* CLEAR DISPLAY FOR NEW SEARCH */
+
+        if(fatherField.value){
+            fatherSearch.value = "";
+        }
+
+        /* SHOW FATHER DROPDOWN */
+
+        showFatherDropdown();
+
+    }
+);
     fatherSearch.addEventListener(
         "input",
         function(){
@@ -10529,39 +10548,46 @@ if(
        FOCUS
        ================================= */
 
-    motherSearch.addEventListener(
-        "focus",
-        function(){
+   /* =================================
+   MOTHER SEARCH - FOCUS
+   ================================= */
 
-            const az =
-                document.getElementById(
-                    "motherSortAZ"
-                );
+motherSearch.addEventListener(
+    "focus",
+    function(){
 
-            const id =
-                document.getElementById(
-                    "motherSortID"
-                );
+        /* SHOW MOTHER SORT ARROWS */
 
-            if(az){
-                az.style.display = "";
-            }
+        const motherAZ =
+            document.getElementById(
+                "motherSortAZ"
+            );
 
-            if(id){
-                id.style.display = "";
-            }
+        const motherID =
+            document.getElementById(
+                "motherSortID"
+            );
 
-            if(motherField.value){
-
-                motherSearch.value = "";
-
-            }
-
-            showMotherDropdown();
-
+        if(motherAZ){
+            motherAZ.style.display = "inline-flex";
         }
-    );
 
+        if(motherID){
+            motherID.style.display = "inline-flex";
+        }
+
+        /* CLEAR DISPLAY FOR NEW SEARCH */
+
+        if(motherField.value){
+            motherSearch.value = "";
+        }
+
+        /* SHOW MOTHER DROPDOWN */
+
+        showMotherDropdown();
+
+    }
+);
     /* =================================
        SEARCH INPUT
        ================================= */
@@ -10953,11 +10979,11 @@ const partnerID =
     document.getElementById("partnerSortID");
 
 if(partnerAZ){
-    partnerAZ.style.display = "";
+    partnerAZ.style.display = "inline-flex";
 }
 
 if(partnerID){
-    partnerID.style.display = "";
+    partnerID.style.display = "inline-flex";
 }
 
         if(partnerField.value){
