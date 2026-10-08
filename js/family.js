@@ -6932,8 +6932,7 @@ function bindAddMemberButton(){
             placeholder="Select / Search"
         autocomplete="off">
 
-    <div class="partner-sort-controls">
-<div class="partner-sort-controls">
+  <div class="partner-sort-controls">
 
     <!-- PARTNER MEMBER COUNT -->
 
@@ -6960,24 +6959,8 @@ function bindAddMemberButton(){
     </span>
 
 </div>
-        <span
-    id="partnerSortAZ"
-    class="partner-sort-arrow"
-    title="Alphabetical Order">
-    A↕Z
-</span>
-
-<span
-    id="partnerSortID"
-    class="partner-sort-arrow"
-    title="ID Number Order">
-    1↕9
-</span>
-
-    </div>
 
 </div>
-
 <div
     id="memberPartnerDropdown"
     class="relations-member-dropdown">
@@ -7033,11 +7016,9 @@ function bindAddMemberButton(){
             placeholder="Select / Search"
     autocomplete="off"
     disabled>
-        <div class="partner-sort-controls">
-<div class="partner-sort-controls">
+       <div class="partner-sort-controls">
 
     <!-- FATHER MEMBER COUNT -->
-
     <span
         id="fatherMemberCount"
         class="relation-member-count"
@@ -7045,7 +7026,6 @@ function bindAddMemberButton(){
     </span>
 
     <!-- FATHER SORT ARROWS -->
-
     <span
         id="fatherSortAZ"
         class="partner-sort-arrow"
@@ -7061,24 +7041,8 @@ function bindAddMemberButton(){
     </span>
 
 </div>
-            <span
-                id="fatherSortAZ"
-                class="partner-sort-arrow"
-                title="Alphabetical Order">
-                A↕Z
-            </span>
 
-            <span
-                id="fatherSortID"
-                class="partner-sort-arrow"
-                title="ID Number Order">
-                1↕9
-            </span>
-
-        </div>
-
-    </div>
-
+</div>
     <div
         id="memberFatherDropdown"
         class="relations-member-dropdown">
@@ -7134,11 +7098,9 @@ function bindAddMemberButton(){
             autocomplete="off"
             disabled>
 
-        <div class="partner-sort-controls">
 <div class="partner-sort-controls">
 
     <!-- MOTHER MEMBER COUNT -->
-
     <span
         id="motherMemberCount"
         class="relation-member-count"
@@ -7146,7 +7108,6 @@ function bindAddMemberButton(){
     </span>
 
     <!-- MOTHER SORT ARROWS -->
-
     <span
         id="motherSortAZ"
         class="partner-sort-arrow"
@@ -7162,23 +7123,8 @@ function bindAddMemberButton(){
     </span>
 
 </div>
-            <span
-                id="motherSortAZ"
-                class="partner-sort-arrow">
-                A↕Z
-            </span>
 
-            <span
-                id="motherSortID"
-                class="partner-sort-arrow">
-                1↕9
-            </span>
-
-        </div>
-
-    </div>
-
-    <div
+</div>    <div
         id="memberMotherDropdown"
         class="relations-member-dropdown"
         style="display:none;">
