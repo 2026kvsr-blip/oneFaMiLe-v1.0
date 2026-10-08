@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -8519,6 +8520,42 @@ function updateMemberFormState(){
         }
     );
 
+    /* =================================
+   MOTHER SEARCH ENABLE / DISABLE
+   ================================= */
+
+const motherSearchInput =
+    document.getElementById("memberMotherSearch");
+
+const motherAZControl =
+    document.getElementById("motherSortAZ");
+
+const motherIDControl =
+    document.getElementById("motherSortID");
+
+if(motherSearchInput){
+
+    motherSearchInput.disabled =
+        !basicDetailsReady;
+
+}
+
+[motherAZControl, motherIDControl].forEach(
+    function(arrow){
+
+        if(arrow){
+
+            arrow.style.pointerEvents =
+                basicDetailsReady
+                    ? "auto"
+                    : "none";
+
+            arrow.style.opacity = "1";
+
+        }
+
+    }
+);
 /* =============================
    FATHER SEARCH ENABLE / DISABLE
    ============================= */
@@ -10159,6 +10196,322 @@ document.getElementById(
     }
 
 }
+    /* =========================================
+   MOTHER SEARCH + SORTING
+   ========================================= */
+
+const motherSearch =
+    document.getElementById(
+        "memberMotherSearch"
+    );
+
+const motherDropdown =
+    document.getElementById(
+        "memberMotherDropdown"
+    );
+
+let motherSortMode = "id";
+let motherNameAscending = true;
+let motherIdAscending = true;
+let lastMotherSortMode = "";
+
+if(
+    motherSearch &&
+    motherDropdown &&
+    motherField
+){
+
+    function showMotherDropdown(){
+
+        if(motherSearch.disabled){
+
+            motherDropdown.style.display = "none";
+            return;
+
+        }
+
+        const searchText =
+            motherSearch.value
+                .trim()
+                .toLowerCase();
+
+        let matchingOptions =
+            Array.from(
+                motherField.options
+            ).filter(function(option){
+
+                if(!option.value){
+                    return false;
+                }
+
+                if(option.value === "__ADD_NEW__"){
+                    return true;
+                }
+
+                return (
+                    option.textContent
+                        .toLowerCase()
+                        .includes(searchText) ||
+
+                    option.value
+                        .toLowerCase()
+                        .includes(searchText)
+                );
+
+            });
+
+        const addNewOption =
+            matchingOptions.find(
+                function(option){
+                    return option.value === "__ADD_NEW__";
+                }
+            );
+
+        matchingOptions =
+            matchingOptions.filter(
+                function(option){
+                    return option.value !== "__ADD_NEW__";
+                }
+            );
+
+        matchingOptions.sort(function(a,b){
+
+            if(motherSortMode === "name"){
+
+                const result =
+                    a.textContent.localeCompare(
+                        b.textContent,
+                        undefined,
+                        {sensitivity:"base"}
+                    );
+
+                return motherNameAscending
+                    ? result
+                    : -result;
+
+            }
+
+            const aNumber =
+                parseInt(
+                    a.value.split("-").pop(),
+                    10
+                ) || 0;
+
+            const bNumber =
+                parseInt(
+                    b.value.split("-").pop(),
+                    10
+                ) || 0;
+
+            const result =
+                aNumber - bNumber;
+
+            return motherIdAscending
+                ? result
+                : -result;
+
+        });
+
+        motherDropdown.innerHTML = "";
+
+        if(addNewOption){
+            matchingOptions.unshift(addNewOption);
+        }
+
+        if(matchingOptions.length === 0){
+
+            motherDropdown.innerHTML =
+                '<div class="relations-no-match">' +
+                'No matching mother' +
+                '</div>';
+
+        }else{
+
+            matchingOptions.forEach(
+                function(option){
+
+                    const item =
+                        document.createElement("div");
+
+                    item.className =
+                        "relations-member-option";
+
+                    item.textContent =
+                        option.textContent;
+
+                    item.onclick = function(){
+
+                        motherField.value =
+                            option.value;
+
+                        motherSearch.value =
+                            option.value === "__ADD_NEW__"
+                                ? ""
+                                : option.textContent;
+
+                        motherDropdown.style.display =
+                            "none";
+
+                        /* HIDE SORT ARROWS */
+
+                        const az =
+                            document.getElementById(
+                                "motherSortAZ"
+                            );
+
+                        const id =
+                            document.getElementById(
+                                "motherSortID"
+                            );
+
+                        if(az){
+                            az.style.display = "none";
+                        }
+
+                        if(id){
+                            id.style.display = "none";
+                        }
+
+                        /* KEEP EXISTING CHANGE LOGIC */
+
+                        motherField.dispatchEvent(
+                            new Event(
+                                "change",
+                                {bubbles:true}
+                            )
+                        );
+
+                    };
+
+                    motherDropdown.appendChild(item);
+
+                }
+            );
+
+        }
+
+        motherDropdown.style.display =
+            "block";
+
+    }
+
+    /* =================================
+       FOCUS
+       ================================= */
+
+    motherSearch.addEventListener(
+        "focus",
+        function(){
+
+            const az =
+                document.getElementById(
+                    "motherSortAZ"
+                );
+
+            const id =
+                document.getElementById(
+                    "motherSortID"
+                );
+
+            if(az){
+                az.style.display = "";
+            }
+
+            if(id){
+                id.style.display = "";
+            }
+
+            if(motherField.value){
+
+                motherSearch.value = "";
+
+            }
+
+            showMotherDropdown();
+
+        }
+    );
+
+    /* =================================
+       SEARCH INPUT
+       ================================= */
+
+    motherSearch.addEventListener(
+        "input",
+        function(){
+
+            motherField.value = "";
+
+            showMotherDropdown();
+
+        }
+    );
+
+    /* =================================
+       SORT ARROWS
+       ================================= */
+
+    const motherSortAZ =
+        document.getElementById(
+            "motherSortAZ"
+        );
+
+    const motherSortID =
+        document.getElementById(
+            "motherSortID"
+        );
+
+    if(motherSortAZ){
+
+        motherSortAZ.onclick = function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(motherSearch.disabled){
+                return;
+            }
+
+            motherNameAscending =
+                lastMotherSortMode === "name"
+                    ? !motherNameAscending
+                    : true;
+
+            motherSortMode = "name";
+            lastMotherSortMode = "name";
+
+            showMotherDropdown();
+
+        };
+
+    }
+
+    if(motherSortID){
+
+        motherSortID.onclick = function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(motherSearch.disabled){
+                return;
+            }
+
+            motherIdAscending =
+                lastMotherSortMode === "id"
+                    ? !motherIdAscending
+                    : true;
+
+            motherSortMode = "id";
+            lastMotherSortMode = "id";
+
+            showMotherDropdown();
+
+        };
+
+    }
+
+}
 /* =================================
    PARTNER SEARCH
    ================================= */
@@ -10680,6 +11033,15 @@ if(
                     sortID:
                         "fatherSortID"
                 }
+                ,
+{
+    searchId: "memberMotherSearch",
+    selectId: "memberMother",
+    dropdownId: "memberMotherDropdown",
+    wrapId: "memberMotherSearchWrap",
+    sortAZ: "motherSortAZ",
+    sortID: "motherSortID"
+}
 
             ];
 
