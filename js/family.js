@@ -10358,7 +10358,21 @@ matchingOptions.sort(
 
                         partnerField.value =
                             selectedId;
+                      /* HIDE PARTNER SORT ARROWS AFTER SELECTION */
 
+const partnerAZ =
+    document.getElementById("partnerSortAZ");
+
+const partnerID =
+    document.getElementById("partnerSortID");
+
+if(partnerAZ){
+    partnerAZ.style.display = "none";
+}
+
+if(partnerID){
+    partnerID.style.display = "none";
+}
 
                         /* SHOW NAME IN SEARCH */
 
