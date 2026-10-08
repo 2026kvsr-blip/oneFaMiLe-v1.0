@@ -3809,3 +3809,17 @@ max-height: 28px !important;
     color: #555555;
     opacity: 1;
 }
+/* FATHER BOX - SAME HEIGHT AS PARTNER */
+
+#memberFatherSearchWrap .partner-search-input-wrap {
+    height: 38px;
+    min-height: 38px;
+    box-sizing: border-box;
+}
+
+#memberFatherSearch {
+    height: 38px;
+    min-height: 38px;
+    box-sizing: border-box;
+    margin: 0;
+}
