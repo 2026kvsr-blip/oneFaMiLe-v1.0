@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -6826,21 +6827,61 @@ function bindAddMemberButton(){
         :
     </span>
 
+    <div
+    class="relations-member-search-wrap"
+    id="memberFatherSearchWrap">
+
+    <div class="partner-search-input-wrap">
+
+        <input
+            type="text"
+            id="memberFatherSearch"
+            class="common-form-select"
+            placeholder="Select / Search Father"
+            autocomplete="off">
+
+        <div class="partner-sort-controls">
+
+            <span
+                id="fatherSortAZ"
+                class="partner-sort-arrow"
+                title="Alphabetical Order">
+                A↕Z
+            </span>
+
+            <span
+                id="fatherSortID"
+                class="partner-sort-arrow"
+                title="ID Number Order">
+                1↕9
+            </span>
+
+        </div>
+
+    </div>
+
+    <div
+        id="memberFatherDropdown"
+        class="relations-member-dropdown">
+    </div>
+
     <select
         id="memberFather"
-        class="common-form-select">
-<option value="">
+        style="display:none;">
+
+        <option value="">
             Select Father
         </option>
-        <option value="__ADD_NEW__">
-    Add New Member
-            
-        </option>
 
-        
+        <option value="__ADD_NEW__">
+            Add New Member
+        </option>
 
     </select>
 
+</div>
+
+        
 </div>
 <!-- =================================
      MOTHER
