@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -10230,16 +10229,12 @@ if(
                     return true;
                 }
 
-                return (
-                    option.textContent
-                        .toLowerCase()
-                        .includes(searchText) ||
-
-                    option.value
-                        .toLowerCase()
-                        .includes(searchText)
-                );
-
+               return String(
+    option.textContent || ""
+)
+.trim()
+.toLowerCase()
+.includes(searchText);
             });
 
         const addNewOption =
@@ -10543,16 +10538,12 @@ if(
                     return true;
                 }
 
-                return (
-                    option.textContent
-                        .toLowerCase()
-                        .includes(searchText) ||
-
-                    option.value
-                        .toLowerCase()
-                        .includes(searchText)
-                );
-
+               return String(
+    option.textContent || ""
+)
+.trim()
+.toLowerCase()
+.includes(searchText);
             });
 
         const addNewOption =
@@ -10942,10 +10933,7 @@ if(
                     }
 
 
-                    return (
-                        text.includes(searchText) ||
-                        id.includes(searchText)
-                    );
+                   return text.includes(searchText);
 
                 }
             );
@@ -15130,6 +15118,7 @@ fetch(
 document
     .getElementById("newFamilyName")
     .addEventListener(
+        
         "keydown",
         function(event){
 
