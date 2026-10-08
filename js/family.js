@@ -1,6 +1,5 @@
 
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -6213,6 +6212,7 @@ if(searchEditAZ){
         lastSearchEditSortMode = "name";
 
         showSearchMembers();
+        dropdown.style.display = "block";
     };
 }
 
@@ -6232,6 +6232,7 @@ if(searchEditID){
         lastSearchEditSortMode = "id";
 
         showSearchMembers();
+        dropdown.style.display = "block";
     };
 }
             /* =================================
