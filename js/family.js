@@ -10422,6 +10422,21 @@ if(partnerID){
 partnerSearch.addEventListener(
     "focus",
     function(){
+        /* SHOW SORT ARROWS WHEN PARTNER SEARCH OPENS */
+
+const partnerAZ =
+    document.getElementById("partnerSortAZ");
+
+const partnerID =
+    document.getElementById("partnerSortID");
+
+if(partnerAZ){
+    partnerAZ.style.display = "";
+}
+
+if(partnerID){
+    partnerID.style.display = "";
+}
 
         if(partnerField.value){
 
