@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -6893,7 +6894,33 @@ function bindAddMemberButton(){
         autocomplete="off">
 
     <div class="partner-sort-controls">
+<div class="partner-sort-controls">
 
+    <!-- PARTNER MEMBER COUNT -->
+
+    <span
+        id="partnerMemberCount"
+        class="relation-member-count"
+        style="display:none;">
+    </span>
+
+    <!-- PARTNER SORT ARROWS -->
+
+    <span
+        id="partnerSortAZ"
+        class="partner-sort-arrow"
+        title="Alphabetical Order">
+        A↕Z
+    </span>
+
+    <span
+        id="partnerSortID"
+        class="partner-sort-arrow"
+        title="ID Number Order">
+        1↕9
+    </span>
+
+</div>
         <span
     id="partnerSortAZ"
     class="partner-sort-arrow"
@@ -6968,7 +6995,33 @@ function bindAddMemberButton(){
     autocomplete="off"
     disabled>
         <div class="partner-sort-controls">
+<div class="partner-sort-controls">
 
+    <!-- FATHER MEMBER COUNT -->
+
+    <span
+        id="fatherMemberCount"
+        class="relation-member-count"
+        style="display:none;">
+    </span>
+
+    <!-- FATHER SORT ARROWS -->
+
+    <span
+        id="fatherSortAZ"
+        class="partner-sort-arrow"
+        title="Alphabetical Order">
+        A↕Z
+    </span>
+
+    <span
+        id="fatherSortID"
+        class="partner-sort-arrow"
+        title="ID Number Order">
+        1↕9
+    </span>
+
+</div>
             <span
                 id="fatherSortAZ"
                 class="partner-sort-arrow"
@@ -7043,7 +7096,33 @@ function bindAddMemberButton(){
             disabled>
 
         <div class="partner-sort-controls">
+<div class="partner-sort-controls">
 
+    <!-- MOTHER MEMBER COUNT -->
+
+    <span
+        id="motherMemberCount"
+        class="relation-member-count"
+        style="display:none;">
+    </span>
+
+    <!-- MOTHER SORT ARROWS -->
+
+    <span
+        id="motherSortAZ"
+        class="partner-sort-arrow"
+        title="Alphabetical Order">
+        A↕Z
+    </span>
+
+    <span
+        id="motherSortID"
+        class="partner-sort-arrow"
+        title="ID Number Order">
+        1↕9
+    </span>
+
+</div>
             <span
                 id="motherSortAZ"
                 class="partner-sort-arrow">
