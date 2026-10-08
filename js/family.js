@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -8517,10 +8516,7 @@ if(fatherSearchInput){
                     ? "auto"
                     : "none";
 
-            arrow.style.opacity =
-                basicDetailsReady
-                    ? "1"
-                    : "0.4";
+           arrow.style.opacity = "1";
 
         }
 
