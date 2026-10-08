@@ -3929,3 +3929,17 @@ max-height: 28px !important;
 #searchEditMemberDropdown > .relations-member-option:hover {
     background-color: #eaf4ff;
 }
+/* =================================
+   SORT ARROWS - INITIAL HIDDEN
+   ================================= */
+
+#partnerSortAZ,
+#partnerSortID,
+#fatherSortAZ,
+#fatherSortID,
+#motherSortAZ,
+#motherSortID,
+#searchEditSortAZ,
+#searchEditSortID {
+    display: none;
+}
