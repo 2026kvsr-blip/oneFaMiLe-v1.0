@@ -3903,3 +3903,29 @@ max-height: 28px !important;
 #memberMotherDropdown > .relations-member-option:hover {
     background-color: #eaf4ff;
 }
+
+#searchEditMember {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 95px;
+}
+
+#searchEditMemberDropdown {
+    width: 100%;
+    max-height: 240px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+#searchEditMemberDropdown > .relations-member-option {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    line-height: 1.5;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+#searchEditMemberDropdown > .relations-member-option:hover {
+    background-color: #eaf4ff;
+}
