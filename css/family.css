@@ -3930,7 +3930,7 @@ max-height: 28px !important;
     background-color: #eaf4ff;
 }
 /* =================================
-   SORT ARROWS - INITIAL HIDDEN
+   SORT ARROWS - HIDDEN BY DEFAULT
    ================================= */
 
 #partnerSortAZ,
@@ -3942,4 +3942,10 @@ max-height: 28px !important;
 #searchEditSortAZ,
 #searchEditSortID {
     display: none;
+}
+
+/* SHOW ARROWS WHEN SEARCH IS ACTIVE */
+
+.partner-sort-arrow.sort-visible {
+    display: inline-flex;
 }
