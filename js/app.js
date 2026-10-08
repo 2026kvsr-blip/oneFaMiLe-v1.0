@@ -3634,6 +3634,7 @@ async function checkSignup(){
         );
 
         return false;
+        
 
     }
 
@@ -4542,13 +4543,17 @@ setTimeout(()=>{
 },3000);          
 }
     }catch(err){
-showMessage(
-    "Unable to connect to server.",
-    "error",
-    3000
-);
-       console.log(err);
 
+    console.error(
+        "LOGIN ACTUAL ERROR:",
+        err
+    );
+
+    showMessage(
+        "Login Error: " + err.message,
+        "error",
+        5000
+    );
     }
 finally{
 
