@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -10213,7 +10212,12 @@ if(
                 option =>
                     option.value !== "__ADD_NEW__"
             );
+const fatherCount =
+    document.getElementById("fatherMemberCount");
 
+if(fatherCount){
+    fatherCount.textContent = matchingOptions.length;
+}
         matchingOptions.sort(function(a,b){
 
             if(fatherSortMode === "name"){
@@ -10348,7 +10352,19 @@ fatherSearch.addEventListener(
         }
 
         /* SHOW FATHER DROPDOWN */
+/* SHOW FATHER MEMBER COUNT */
 
+const fatherCount =
+    document.getElementById(
+        "fatherMemberCount"
+    );
+
+if(fatherCount){
+
+    fatherCount.style.display =
+        "inline-flex";
+
+}
         showFatherDropdown();
 
     }
@@ -10502,6 +10518,13 @@ if(
                 }
             );
 
+const motherCount =
+    document.getElementById("motherMemberCount");
+
+if(motherCount){
+    motherCount.textContent = matchingOptions.length;
+}
+        
         matchingOptions.sort(function(a,b){
 
             if(motherSortMode === "name"){
@@ -10663,6 +10686,19 @@ motherSearch.addEventListener(
 
         /* SHOW MOTHER DROPDOWN */
 
+        /* SHOW MOTHER MEMBER COUNT */
+
+const motherCount =
+    document.getElementById(
+        "motherMemberCount"
+    );
+
+if(motherCount){
+
+    motherCount.style.display =
+        "inline-flex";
+
+}
         showMotherDropdown();
 
     }
@@ -10825,14 +10861,12 @@ if(
         const matchingOptions =
             eligibleOptions.filter(
                 function(option){
-
                     const text =
                         String(
                             option.textContent || ""
                         )
                         .trim()
                         .toLowerCase();
-
                     const id =
                         String(
                             option.value || ""
@@ -10853,6 +10887,12 @@ if(
 
                 }
             );
+        const partnerCount =
+    document.getElementById("partnerMemberCount");
+
+if(partnerCount){
+    partnerCount.textContent = matchingOptions.length;
+}
 /* =============================
    SORT PARTNER LIST
    ============================= */
@@ -11070,7 +11110,19 @@ if(partnerID){
             partnerSearch.value = "";
 
         }
+/* SHOW PARTNER MEMBER COUNT */
 
+const partnerCount =
+    document.getElementById(
+        "partnerMemberCount"
+    );
+
+if(partnerCount){
+
+    partnerCount.style.display =
+        "inline-flex";
+
+}
 
         showPartnerDropdown();
 
@@ -11229,56 +11281,88 @@ if(
 
             const relationBoxes = [
 
-                {
-                    searchId:
-                        "memberPartnerSearch",
+    /* =========================
+       PARTNER
+       ========================= */
 
-                    selectId:
-                        "memberPartner",
+    {
+        searchId:
+            "memberPartnerSearch",
 
-                    dropdownId:
-                        "memberPartnerDropdown",
+        selectId:
+            "memberPartner",
 
-                    wrapId:
-                        "memberPartnerSearchWrap",
+        dropdownId:
+            "memberPartnerDropdown",
 
-                    sortAZ:
-                        "partnerSortAZ",
+        wrapId:
+            "memberPartnerSearchWrap",
 
-                    sortID:
-                        "partnerSortID"
-                },
+        sortAZ:
+            "partnerSortAZ",
 
-                {
-                    searchId:
-                        "memberFatherSearch",
+        sortID:
+            "partnerSortID",
 
-                    selectId:
-                        "memberFather",
+        countId:
+            "partnerMemberCount"
+    },
 
-                    dropdownId:
-                        "memberFatherDropdown",
+    /* =========================
+       FATHER
+       ========================= */
 
-                    wrapId:
-                        "memberFatherSearchWrap",
+    {
+        searchId:
+            "memberFatherSearch",
 
-                    sortAZ:
-                        "fatherSortAZ",
+        selectId:
+            "memberFather",
 
-                    sortID:
-                        "fatherSortID"
-                }
-                ,
-{
-    searchId: "memberMotherSearch",
-    selectId: "memberMother",
-    dropdownId: "memberMotherDropdown",
-    wrapId: "memberMotherSearchWrap",
-    sortAZ: "motherSortAZ",
-    sortID: "motherSortID"
-}
+        dropdownId:
+            "memberFatherDropdown",
 
-            ];
+        wrapId:
+            "memberFatherSearchWrap",
+
+        sortAZ:
+            "fatherSortAZ",
+
+        sortID:
+            "fatherSortID",
+
+        countId:
+            "fatherMemberCount"
+    },
+
+    /* =========================
+       MOTHER
+       ========================= */
+
+    {
+        searchId:
+            "memberMotherSearch",
+
+        selectId:
+            "memberMother",
+
+        dropdownId:
+            "memberMotherDropdown",
+
+        wrapId:
+            "memberMotherSearchWrap",
+
+        sortAZ:
+            "motherSortAZ",
+
+        sortID:
+            "motherSortID",
+
+        countId:
+            "motherMemberCount"
+    }
+
+];
 
 
             relationBoxes.forEach(
