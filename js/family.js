@@ -14332,8 +14332,7 @@ if(createBtn){
     if(statusField){
 
         statusField.textContent =
-            "User already have family tree";
-
+"User already has a Family Tree.";
         statusField.className =
             "family-id-status available";
 
@@ -14346,8 +14345,10 @@ if(createBtn){
    ================================= */
 
            
-if(loggedUser){
-
+if(
+    loggedUser &&
+    !(savedFamily && savedFamily.familyId)
+){
     const params =
         new URLSearchParams();
 
@@ -14594,8 +14595,7 @@ if(familyNameInput){
             if(statusField){
 
                 statusField.textContent =
-                    "User already have a Family Tree.";
-
+"User already has a Family Tree.";
                 statusField.className =
                     "family-id-status available";
 
