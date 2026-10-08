@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -6910,7 +6909,7 @@ function bindAddMemberButton(){
             type="text"
             id="memberMotherSearch"
             class="common-form-select"
-            placeholder="Select / Search Mother"
+            placeholder="Select  /  Search"
             autocomplete="off"
             disabled>
 
