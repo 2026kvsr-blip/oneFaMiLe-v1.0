@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3822,4 +3821,29 @@ max-height: 28px !important;
     min-height: 38px;
     box-sizing: border-box;
     margin: 0;
+}
+/* =================================
+   FATHER DROPDOWN - PARTNER STYLE
+   ================================= */
+
+#memberFatherDropdown {
+    width: 100%;
+    box-sizing: border-box;
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+#memberFatherDropdown > div {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    cursor: pointer;
+    line-height: 1.5;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+#memberFatherDropdown > div:hover {
+    background-color: #eaf4ff;
 }
