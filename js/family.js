@@ -10582,7 +10582,205 @@ if(partnerSortID){
     );
 
 }
+/* =========================================
+   PARTNER + FATHER
+   CLEAR SEARCH TEXT ON OUTSIDE CLICK
+   ========================================= */
 
+if(
+    !document.documentElement.dataset
+        .relationSearchOutsideBound
+){
+
+    document.documentElement.dataset
+        .relationSearchOutsideBound = "1";
+
+
+    document.addEventListener(
+        "pointerdown",
+        function(event){
+
+            const relationBoxes = [
+
+                {
+                    searchId:
+                        "memberPartnerSearch",
+
+                    selectId:
+                        "memberPartner",
+
+                    dropdownId:
+                        "memberPartnerDropdown",
+
+                    wrapId:
+                        "memberPartnerSearchWrap",
+
+                    sortAZ:
+                        "partnerSortAZ",
+
+                    sortID:
+                        "partnerSortID"
+                },
+
+                {
+                    searchId:
+                        "memberFatherSearch",
+
+                    selectId:
+                        "memberFather",
+
+                    dropdownId:
+                        "memberFatherDropdown",
+
+                    wrapId:
+                        "memberFatherSearchWrap",
+
+                    sortAZ:
+                        "fatherSortAZ",
+
+                    sortID:
+                        "fatherSortID"
+                }
+
+            ];
+
+
+            relationBoxes.forEach(
+                function(config){
+
+                    const search =
+                        document.getElementById(
+                            config.searchId
+                        );
+
+                    const select =
+                        document.getElementById(
+                            config.selectId
+                        );
+
+                    const dropdown =
+                        document.getElementById(
+                            config.dropdownId
+                        );
+
+                    const wrap =
+                        document.getElementById(
+                            config.wrapId
+                        );
+
+
+                    if(
+                        !search ||
+                        !select ||
+                        !dropdown
+                    ){
+                        return;
+                    }
+
+
+                    /* =========================
+                       CLICK INSIDE BOX
+                       ========================= */
+
+                    if(
+                        (wrap &&
+                         wrap.contains(event.target)) ||
+
+                        search.contains(event.target) ||
+
+                        dropdown.contains(event.target)
+                    ){
+                        return;
+                    }
+
+
+                    /* =========================
+                       SELECTED MEMBER EXISTS
+                       ========================= */
+
+                    if(
+                        select.value &&
+                        select.value !== "__ADD_NEW__"
+                    ){
+
+                        const selectedOption =
+                            Array.from(
+                                select.options
+                            ).find(
+                                function(option){
+
+                                    return (
+                                        option.value ===
+                                        select.value
+                                    );
+
+                                }
+                            );
+
+
+                        search.value =
+                            selectedOption
+                                ? selectedOption.textContent.trim()
+                                : "";
+
+                    }
+
+                    /* =========================
+                       NO MEMBER SELECTED
+                       ========================= */
+
+                    else{
+
+                        search.value = "";
+
+                    }
+
+
+                    /* =========================
+                       CLOSE DROPDOWN
+                       ========================= */
+
+                    dropdown.style.display =
+                        "none";
+
+
+                    /* =========================
+                       HIDE SORT ARROWS
+                       ========================= */
+
+                    const sortAZ =
+                        document.getElementById(
+                            config.sortAZ
+                        );
+
+                    const sortID =
+                        document.getElementById(
+                            config.sortID
+                        );
+
+
+                    if(sortAZ){
+
+                        sortAZ.style.display =
+                            "none";
+
+                    }
+
+
+                    if(sortID){
+
+                        sortID.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
     
 /* =================================
    ADD NEW PERSON
