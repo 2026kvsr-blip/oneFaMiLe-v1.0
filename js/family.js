@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -6323,8 +6324,46 @@ document.addEventListener(
 
             async function loadSearchMembers(){
 
-                try{
+    try{
 
+        /* =====================================
+           LOAD MEMBERS FROM EXISTING CACHE
+           ===================================== */
+
+        const savedFamily = JSON.parse(
+            localStorage.getItem("currentFamily") || "null"
+        );
+
+        const cachedMembers = JSON.parse(
+            localStorage.getItem("familyMembers") || "[]"
+        );
+
+        if(
+            savedFamily &&
+            savedFamily.familyId === currentFamily.familyId &&
+            Array.isArray(cachedMembers) &&
+            cachedMembers.length > 0
+        ){
+
+            members = cachedMembers;
+
+            membersLoading = false;
+
+            membersLoaded = true;
+
+            console.log(
+                "SEARCH MEMBERS FROM CACHE:",
+                members.length
+            );
+
+            if(
+                document.activeElement === searchInput
+            ){
+                showSearchMembers();
+            }
+
+            return;
+        }
                     const params =
                         new URLSearchParams();
 
