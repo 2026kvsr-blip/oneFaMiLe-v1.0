@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -3845,5 +3846,60 @@ max-height: 28px !important;
 }
 
 #memberFatherDropdown > div:hover {
+    background-color: #eaf4ff;
+}
+/* =================================
+   MOTHER SEARCH BOX
+   ================================= */
+
+#memberMotherSearchWrap .partner-search-input-wrap {
+    height: 38px;
+    min-height: 38px;
+    box-sizing: border-box;
+}
+
+#memberMotherSearch {
+    height: 38px;
+    min-height: 38px;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* DISABLED - NO GREY */
+
+#memberMotherSearch:disabled {
+    background-color: #ffffff;
+    color: #000000;
+    opacity: 1;
+    -webkit-text-fill-color: #000000;
+    cursor: default;
+}
+
+#memberMotherSearch:disabled::placeholder {
+    color: #555555;
+    opacity: 1;
+}
+
+/* SPACIOUS DROPDOWN */
+
+#memberMotherDropdown {
+    width: 100%;
+    box-sizing: border-box;
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+#memberMotherDropdown > .relations-member-option {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    line-height: 1.5;
+    white-space: normal;
+    overflow-wrap: break-word;
+    cursor: pointer;
+}
+
+#memberMotherDropdown > .relations-member-option:hover {
     background-color: #eaf4ff;
 }
