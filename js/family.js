@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -6242,15 +6243,30 @@ if(searchEditID){
                THESE ARE ADDED BEFORE FETCH
                ================================= */
 
-            searchInput.addEventListener(
-                "focus",
-                function(){
+           /* =================================
+   SEARCH EDIT MEMBER - FOCUS
+   ================================= */
 
-                    showSearchMembers();
+searchInput.addEventListener(
+    "focus",
+    function(){
 
-                }
-            );
+        /* SHOW SORT ARROWS */
 
+        if(searchEditAZ){
+            searchEditAZ.style.display = "";
+        }
+
+        if(searchEditID){
+            searchEditID.style.display = "";
+        }
+
+        /* SHOW MEMBERS DROPDOWN */
+
+        showSearchMembers();
+
+    }
+);
 
             searchInput.addEventListener(
                 "input",
