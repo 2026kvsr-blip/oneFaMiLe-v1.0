@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -9481,7 +9482,9 @@ console.log(
         partnerField
     );
 
-
+addNewPersonOption(
+    fatherField
+);
    
     /* =================================
        ADD MEMBER OPTION
@@ -9854,6 +9857,258 @@ if(
         }
     );
 
+
+    /* =================================
+   FATHER SEARCH DROPDOWN
+   ================================= */
+
+const fatherSearch =
+    document.getElementById(
+        "memberFatherSearch"
+    );
+
+const fatherDropdown =
+    document.getElementById(
+        "memberFatherDropdown"
+    );
+
+let fatherSortMode = "id";
+let fatherNameAscending = true;
+let fatherIdAscending = true;
+let lastFatherSortMode = "";
+
+if(
+    fatherSearch &&
+    fatherDropdown &&
+    fatherField
+){
+
+    function showFatherDropdown(){
+
+        if(fatherSearch.disabled){
+            fatherDropdown.style.display = "none";
+            return;
+        }
+
+        const searchText =
+            fatherSearch.value
+                .trim()
+                .toLowerCase();
+
+        let matchingOptions =
+            Array.from(
+                fatherField.options
+            ).filter(function(option){
+
+                if(!option.value){
+                    return false;
+                }
+
+                if(option.value === "__ADD_NEW__"){
+                    return true;
+                }
+
+                return (
+                    option.textContent
+                        .toLowerCase()
+                        .includes(searchText) ||
+
+                    option.value
+                        .toLowerCase()
+                        .includes(searchText)
+                );
+
+            });
+
+        const addNewOption =
+            matchingOptions.find(
+                option =>
+                    option.value === "__ADD_NEW__"
+            );
+
+        matchingOptions =
+            matchingOptions.filter(
+                option =>
+                    option.value !== "__ADD_NEW__"
+            );
+
+        matchingOptions.sort(function(a,b){
+
+            if(fatherSortMode === "name"){
+
+                const result =
+                    a.textContent.localeCompare(
+                        b.textContent,
+                        undefined,
+                        {sensitivity:"base"}
+                    );
+
+                return fatherNameAscending
+                    ? result
+                    : -result;
+            }
+
+            const aNumber =
+                parseInt(
+                    a.value.split("-").pop(),
+                    10
+                ) || 0;
+
+            const bNumber =
+                parseInt(
+                    b.value.split("-").pop(),
+                    10
+                ) || 0;
+
+            const result =
+                aNumber - bNumber;
+
+            return fatherIdAscending
+                ? result
+                : -result;
+
+        });
+
+        fatherDropdown.innerHTML = "";
+
+        if(addNewOption){
+            matchingOptions.unshift(addNewOption);
+        }
+
+        if(matchingOptions.length === 0){
+
+            fatherDropdown.textContent =
+                "No matching father";
+
+        }else{
+
+            matchingOptions.forEach(
+                function(option){
+
+                    const item =
+                        document.createElement("div");
+
+                    item.textContent =
+                        option.textContent;
+
+                    item.onclick = function(){
+
+                        fatherField.value =
+                            option.value;
+
+                        fatherSearch.value =
+                            option.value === "__ADD_NEW__"
+                                ? ""
+                                : option.textContent;
+
+                        fatherDropdown.style.display =
+                            "none";
+
+                        fatherField.dispatchEvent(
+                            new Event(
+                                "change",
+                                {bubbles:true}
+                            )
+                        );
+
+                    };
+
+                    fatherDropdown.appendChild(item);
+
+                }
+            );
+
+        }
+
+        fatherDropdown.style.display =
+            "block";
+
+    }
+
+    fatherSearch.addEventListener(
+        "focus",
+        function(){
+
+            if(fatherField.value){
+                fatherSearch.value = "";
+            }
+
+            showFatherDropdown();
+
+        }
+    );
+
+    fatherSearch.addEventListener(
+        "input",
+        function(){
+
+            fatherField.value = "";
+            showFatherDropdown();
+
+        }
+    );
+
+    const fatherSortAZ =
+        document.getElementById(
+            "fatherSortAZ"
+        );
+
+    const fatherSortID =
+        document.getElementById(
+            "fatherSortID"
+        );
+
+    if(fatherSortAZ){
+
+        fatherSortAZ.onclick = function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(fatherSearch.disabled){
+                return;
+            }
+
+            fatherNameAscending =
+                lastFatherSortMode === "name"
+                    ? !fatherNameAscending
+                    : true;
+
+            fatherSortMode = "name";
+            lastFatherSortMode = "name";
+
+            showFatherDropdown();
+
+        };
+
+    }
+
+    if(fatherSortID){
+
+        fatherSortID.onclick = function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(fatherSearch.disabled){
+                return;
+            }
+
+            fatherIdAscending =
+                lastFatherSortMode === "id"
+                    ? !fatherIdAscending
+                    : true;
+
+            fatherSortMode = "id";
+            lastFatherSortMode = "id";
+
+            showFatherDropdown();
+
+        };
+
+    }
+
+}
 /* =================================
    PARTNER SEARCH
    ================================= */
