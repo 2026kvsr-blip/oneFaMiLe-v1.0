@@ -4405,7 +4405,7 @@ const formData = new FormData();
     "user",
     JSON.stringify(result)
 );
-
+restoreFamilyCache(result);
 
 // =====================================
 // OPEN DASHBOARD WITHOUT WAITING
