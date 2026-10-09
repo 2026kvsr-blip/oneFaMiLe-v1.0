@@ -6611,10 +6611,13 @@ document.addEventListener(
 
             dropdown.style.display = "none";
 
-            /* CLEAR SEARCH TEXT */
+           /* CLEAR SEARCH TEXT */
 
-            searchInput.value = "";
+searchInput.value = "";
 
+/* RESET INPUT FOCUS */
+
+searchInput.blur();
             /* HIDE SORT ARROWS AND MEMBER COUNT */
 
 if(searchEditAZ){
