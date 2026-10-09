@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -1666,7 +1667,11 @@ if(relationsSortID){
 relationsMemberSearch.addEventListener(
     "focus",
     function(){
-
+         relationsMemberSearch
+    .closest(".partner-search-input-wrap")
+    ?.classList.remove(
+        "relations-name-selected"
+    );
         const count =
             document.getElementById("relationsMemberCount");
 
