@@ -6616,7 +6616,7 @@ if(editInputWrap){
             );
 
 
-          /* =================================
+/* =================================
    SEARCH EDIT MEMBER - OUTSIDE CLICK
    ================================= */
 
@@ -6624,11 +6624,16 @@ document.addEventListener(
     "click",
     function(event){
 
+        /* IGNORE LISTENERS FROM OLD PAGES */
+
+        if(!searchInput.isConnected){
+            return;
+        }
+
         const searchWrap =
             searchInput.closest(
                 ".search-edit-member-wrapper"
             );
-
         if(
             searchWrap &&
             !searchWrap.contains(event.target)
