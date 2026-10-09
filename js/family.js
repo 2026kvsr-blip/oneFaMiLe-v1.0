@@ -345,7 +345,106 @@ if(treeViewBtn){
         };
 
 }
-bindAddMemberButton();
+
+    bindAddMemberButton();
+
+    /* =====================================
+       MY FAMILY / OTHER FAMILIES TABS
+       ===================================== */
+
+    const myFamilyTab =
+        document.getElementById("myFamilyTab");
+
+    const otherFamiliesTab =
+        document.getElementById("otherFamiliesTab");
+
+    const familyGrid =
+        document.querySelector(".grid-3x2");
+
+    let otherFamiliesContent =
+        document.getElementById("otherFamiliesContent");
+
+    if(familyGrid && !otherFamiliesContent){
+
+        otherFamiliesContent =
+            document.createElement("div");
+
+        otherFamiliesContent.id =
+            "otherFamiliesContent";
+
+        otherFamiliesContent.style.display =
+            "none";
+
+        otherFamiliesContent.style.textAlign =
+            "center";
+
+        otherFamiliesContent.style.padding =
+            "25px 10px";
+
+        otherFamiliesContent.textContent =
+            "Other Families will appear here.";
+
+        familyGrid.insertAdjacentElement(
+            "afterend",
+            otherFamiliesContent
+        );
+
+    }
+
+    function activateFamilyTab(tab){
+
+        const isMyFamily =
+            tab === "my";
+
+        if(familyGrid){
+            familyGrid.style.display =
+                isMyFamily ? "" : "none";
+        }
+
+        if(otherFamiliesContent){
+            otherFamiliesContent.style.display =
+                isMyFamily ? "none" : "block";
+        }
+
+        if(myFamilyTab){
+
+            myFamilyTab.style.background =
+                isMyFamily ? "#2A6EB0" : "transparent";
+
+            myFamilyTab.style.color =
+                isMyFamily ? "white" : "#2A6EB0";
+
+        }
+
+        if(otherFamiliesTab){
+
+            otherFamiliesTab.style.background =
+                isMyFamily ? "transparent" : "#2A6EB0";
+
+            otherFamiliesTab.style.color =
+                isMyFamily ? "#2A6EB0" : "white";
+
+        }
+
+    }
+
+    if(myFamilyTab){
+
+        myFamilyTab.onclick =
+            function(){
+                activateFamilyTab("my");
+            };
+
+    }
+
+    if(otherFamiliesTab){
+
+        otherFamiliesTab.onclick =
+            function(){
+                activateFamilyTab("other");
+            };
+
+    }
 /* =====================================
    FAMILY → ABOUT
    ===================================== */
