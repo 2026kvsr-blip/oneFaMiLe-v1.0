@@ -17333,12 +17333,12 @@ document.addEventListener(
     function(event){
 
         if(
-            !familyTreeSearchInput ||
-            !familyTreeDropdown
-        ){
-            return;
-        }
-
+    !familyTreeSearchInput ||
+    !familyTreeDropdown ||
+    !familyTreeSearchInput.isConnected
+){
+    return;
+}
         const clickedSearchInput =
             familyTreeSearchInput.contains(
                 event.target
@@ -17355,11 +17355,21 @@ document.addEventListener(
     !clickedDropdown
 ){
 
-    familyTreeDropdown.style.display =
-        "none";
+   familyTreeDropdown.style.display =
+    "none";
 
-    /* HIDE MEMBER COUNT */
+/* CLEAR TYPED TEXT ONLY
+   WHEN MEMBER IS NOT SELECTED */
 
+if(!selectedFamilyTreeMemberId){
+
+    familyTreeSearchInput.value = "";
+
+    familyTreeSearchInput.blur();
+
+}
+
+/* HIDE MEMBER COUNT */
     const treeCount =
         document.getElementById(
             "familyTreeMemberCount"
