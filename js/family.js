@@ -1817,22 +1817,34 @@ if(relationsSearchWrap){
     document.addEventListener(
         "click",
         function(event){
-
             if(
-                !event.target.closest(
-                    ".relations-member-search-wrap"
-                )
-            ){
+    !event.target.closest(
+        ".relations-member-search-wrap"
+    )
+){
 
-                relationsMemberDropdown.innerHTML =
-                    "";
+    relationsMemberDropdown.innerHTML = "";
 
-                relationsMemberDropdown.style.display =
-                    "none";
+    relationsMemberDropdown.style.display = "none";
 
-            }
+    const relationsCount =
+        document.getElementById(
+            "relationsMemberCount"
+        );
 
-        }
+    if(relationsCount){
+        relationsCount.style.display = "none";
+    }
+
+    if(relationsSortAZ){
+        relationsSortAZ.style.display = "none";
+    }
+
+    if(relationsSortID){
+        relationsSortID.style.display = "none";
+    }
+
+}        }
     );
 
 }
