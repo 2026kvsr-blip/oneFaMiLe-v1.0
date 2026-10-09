@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -6929,6 +6930,7 @@ function bindAddMemberButton(){
         type="text"
         id="memberPartnerSearch"
         class="common-form-select"
+        maxlength="12"
             placeholder="Select / Search"
         autocomplete="off">
 
@@ -7013,6 +7015,7 @@ function bindAddMemberButton(){
     type="text"
     id="memberFatherSearch"
     class="common-form-select"
+    maxlength="12"
             placeholder="Select / Search"
     autocomplete="off"
     disabled>
@@ -7094,6 +7097,7 @@ function bindAddMemberButton(){
             type="text"
             id="memberMotherSearch"
             class="common-form-select"
+            maxlength="12"
             placeholder="Select / Search"
             autocomplete="off"
             disabled>
