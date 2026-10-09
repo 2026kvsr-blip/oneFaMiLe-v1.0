@@ -1,6 +1,5 @@
 
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -388,9 +387,44 @@ if(treeViewBtn){
                     ) || "null"
                 );
 
+            
             if(!currentFamily){
 
                 alert("Family not found.");
+
+                return;
+            }
+
+            /* =================================
+               CHECK FAMILY OWNER
+               ================================= */
+
+            const loggedUser =
+                JSON.parse(
+                    sessionStorage.getItem("user") || "null"
+                );
+
+            const ownerLogin =
+                String(
+                    currentFamily.loginId ||
+                    currentFamily.loginUserName ||
+                    ""
+                ).trim().toLowerCase();
+
+            const currentLogin =
+                String(
+                    loggedUser?.loginUserName || ""
+                ).trim().toLowerCase();
+
+            if(
+                !ownerLogin ||
+                !currentLogin ||
+                ownerLogin !== currentLogin
+            ){
+
+                alert(
+                    "Only the family owner can change Family Settings."
+                );
 
                 return;
             }
