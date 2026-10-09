@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -4151,4 +4150,20 @@ max-height: 28px !important;
 .partner-search-input-wrap.family-tree-name-selected
 .partner-sort-controls {
     display: none !important;
+}
+/* SEARCH - EDIT MEMBER COUNT */
+
+#searchEditMemberCount {
+    min-width: 18px;
+    width: auto;
+    padding: 0 3px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2A6EB0;
+    flex-shrink: 0;
+}
+
+.search-edit-member-wrapper .partner-sort-controls {
+    align-items: center;
+    gap: 4px;
 }
