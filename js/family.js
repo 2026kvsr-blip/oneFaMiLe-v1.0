@@ -367,6 +367,164 @@ if(treeViewBtn){
 
 }
 
+    /* =====================================
+       FAMILY SETTINGS PAGE
+       ===================================== */
+
+    const familySettingsBtn =
+        document.getElementById(
+            "familySettingsBtn"
+        );
+
+    if(familySettingsBtn){
+
+        familySettingsBtn.onclick = function(){
+
+            const currentFamily =
+                JSON.parse(
+                    localStorage.getItem(
+                        "currentFamily"
+                    ) || "null"
+                );
+
+            if(!currentFamily){
+
+                alert("Family not found.");
+
+                return;
+            }
+
+            showPage(
+                pageTitle(
+                    "Family Settings",
+                    "images/colorbtns/Family1.png"
+                ) +
+
+                `
+                <div style="
+                    max-width:420px;
+                    margin:15px auto;
+                    padding:15px;
+                ">
+
+                    <h3>Privacy & Permissions</h3>
+
+                    <label>Family Visibility</label>
+
+                    <select
+                        id="familyVisibility"
+                        class="common-form-select">
+
+                        <option value="Private">
+                            Visible to Me Only
+                        </option>
+
+                        <option value="Public">
+                            Visible to All
+                        </option>
+
+                    </select>
+
+                    <p>Allow Other Users to Edit Members</p>
+
+                    <select
+                        id="familyAllowEdit"
+                        class="common-form-select">
+
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+
+                    </select>
+
+                    <p>Allow Other Users to Add Members</p>
+
+                    <select
+                        id="familyAllowAdd"
+                        class="common-form-select">
+
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+
+                    </select>
+
+                    <p>Show Search</p>
+
+                    <select
+                        id="familyShowSearch"
+                        class="common-form-select">
+
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+
+                    </select>
+
+                    <p>Show Relations</p>
+
+                    <select
+                        id="familyShowRelations"
+                        class="common-form-select">
+
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+
+                    </select>
+
+                    <p>Show Tree View</p>
+
+                    <select
+                        id="familyShowTree"
+                        class="common-form-select">
+
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+
+                    </select>
+
+                    <div style="
+                        text-align:center;
+                        margin-top:20px;
+                    ">
+
+                        <button
+                            id="saveFamilySettingsBtn"
+                            class="back-btn">
+                            Save Settings
+                        </button>
+
+                        <button
+                            id="familySettingsBackBtn"
+                            class="back-btn">
+                            ← Back
+                        </button>
+
+                    </div>
+
+                </div>
+                `
+            );
+
+            document.getElementById(
+                "familySettingsBackBtn"
+            ).onclick = function(){
+
+                familyBtn.click();
+
+            };
+
+            document.getElementById(
+                "saveFamilySettingsBtn"
+            ).onclick = function(){
+
+                alert(
+                    "Save functionality will be added next."
+                );
+
+            };
+
+        };
+
+    }
+
     bindAddMemberButton();
 
     /* =====================================
