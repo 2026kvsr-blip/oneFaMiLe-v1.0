@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -497,24 +496,54 @@ if(familyBackBtn){
         :
     </span>
 
-    <div
-        class="relations-member-search-wrap">
+   <div
+    class="relations-member-search-wrap">
+
+    <div class="partner-search-input-wrap">
 
         <input
             type="text"
             id="relationsMemberSearch"
             class="common-form-select"
             placeholder="Select / Search"
-            
             autocomplete="off">
 
-        <div
-            id="relationsMemberDropdown"
-            class="relations-member-dropdown">
+        <div class="partner-sort-controls">
+
+            <!-- RELATIONS MEMBER COUNT -->
+
+            <span
+                id="relationsMemberCount"
+                class="relation-member-count"
+                style="display:none;">
+            </span>
+
+            <!-- RELATIONS SORT ARROWS -->
+
+            <span
+                id="relationsSortAZ"
+                class="partner-sort-arrow"
+                title="Alphabetical Order">
+                A↕Z
+            </span>
+
+            <span
+                id="relationsSortID"
+                class="partner-sort-arrow"
+                title="ID Number Order">
+                1↕9
+            </span>
+
         </div>
 
     </div>
 
+    <div
+        id="relationsMemberDropdown"
+        class="relations-member-dropdown">
+    </div>
+
+</div>
 </div>
 <div class="relations-page">
 
@@ -1304,6 +1333,7 @@ if(familyBackBtn){
         id="relationsBackBtn"
         class="back-btn">
 
+
         ← Back
 
     </button>
@@ -1355,7 +1385,20 @@ if(
         familyMembers
     );
 
+/* =================================
+   RELATIONS MEMBER SORTING
+   ================================= */
 
+let relationsSortMode = "id";
+
+let relationsNameAscending = true;
+let relationsIdAscending = true;
+
+const relationsSortAZ =
+    document.getElementById("relationsSortAZ");
+
+const relationsSortID =
+    document.getElementById("relationsSortID");
     /* =================================
        SHOW MEMBER LIST
        ================================= */
@@ -1423,10 +1466,73 @@ if(
                         )
                     );
 
-                }
+                               }
             );
 
+/* =================================
+   RELATIONS MEMBER COUNT
+   ================================= */
 
+const relationsMemberCount =
+    document.getElementById(
+        "relationsMemberCount"
+    );
+
+if(relationsMemberCount){
+
+    relationsMemberCount.textContent =
+        matchingMembers.length;
+
+}
+
+        /* =================================
+   RELATIONS MEMBERS SORTING
+   ================================= */
+
+matchingMembers.sort(function(a, b){
+
+    if(relationsSortMode === "name"){
+
+        const nameA =
+            String(a.name || "").trim();
+
+        const nameB =
+            String(b.name || "").trim();
+
+        const result =
+            nameA.localeCompare(
+                nameB,
+                undefined,
+                { sensitivity: "base" }
+            );
+
+        return relationsNameAscending
+            ? result
+            : -result;
+    }
+
+    const getMemberNumber = function(member){
+
+        const id =
+            String(member.memberId || "");
+
+        const match =
+            id.match(/(\d+)$/);
+
+        return match
+            ? Number(match[1])
+            : 0;
+    };
+
+    const result =
+        getMemberNumber(a) -
+        getMemberNumber(b);
+
+    return relationsIdAscending
+        ? result
+        : -result;
+
+});
         console.log(
             "RELATIONS SEARCH:",
             searchText,
@@ -1494,7 +1600,65 @@ if(
 
     }
 
+/* =================================
+   RELATIONS SORT ARROW CLICK EVENTS
+   ================================= */
 
+if(relationsSortAZ){
+
+    relationsSortAZ.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(relationsSortMode === "name"){
+
+                relationsNameAscending =
+                    !relationsNameAscending;
+
+            }else{
+
+                relationsSortMode = "name";
+                relationsNameAscending = true;
+
+            }
+
+            showRelationsMemberDropdown();
+
+        }
+    );
+
+}
+
+if(relationsSortID){
+
+    relationsSortID.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(relationsSortMode === "id"){
+
+                relationsIdAscending =
+                    !relationsIdAscending;
+
+            }else{
+
+                relationsSortMode = "id";
+                relationsIdAscending = true;
+
+            }
+
+            showRelationsMemberDropdown();
+
+        }
+    );
+
+}
   /* =================================
    MEMBER SEARCH
    ================================= */
@@ -1502,6 +1666,27 @@ if(
 relationsMemberSearch.addEventListener(
     "focus",
     function(){
+
+        const count =
+            document.getElementById("relationsMemberCount");
+
+        const sortAZ =
+            document.getElementById("relationsSortAZ");
+
+        const sortID =
+            document.getElementById("relationsSortID");
+
+        if(count){
+            count.style.display = "inline-flex";
+        }
+
+        if(sortAZ){
+            sortAZ.style.display = "inline-flex";
+        }
+
+        if(sortID){
+            sortID.style.display = "inline-flex";
+        }
 
         showRelationsMemberDropdown();
 
@@ -1578,10 +1763,21 @@ relationsMemberSearch.addEventListener(
                IN SEARCH BOX
                ========================= */
 
-            relationsMemberSearch.value =
-                selectedMember.name ||
-                "";
+           relationsMemberSearch.value =
+    selectedMember.name || "";
 
+const relationsSearchWrap =
+    relationsMemberSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(relationsSearchWrap){
+
+    relationsSearchWrap.classList.add(
+        "relations-name-selected"
+    );
+
+}
 
             /* =========================
                HIDE LIST ONLY
