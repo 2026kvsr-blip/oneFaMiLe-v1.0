@@ -4046,5 +4046,21 @@ max-height: 28px !important;
 .partner-sort-controls {
     display: none !important;
 }
+/* FATHER / MOTHER SELECTED NAME - FULL WIDTH */
 
+.partner-search-input-wrap.father-name-selected
+#memberFatherSearch,
+
+.partner-search-input-wrap.mother-name-selected
+#memberMotherSearch {
+    padding-right: 10px !important;
+}
+
+.partner-search-input-wrap.father-name-selected
+.partner-sort-controls,
+
+.partner-search-input-wrap.mother-name-selected
+.partner-sort-controls {
+    display: none !important;
+}
 
