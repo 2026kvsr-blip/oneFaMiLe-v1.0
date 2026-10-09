@@ -181,7 +181,49 @@ familyBtn.onclick = () => {
             "Family",
             "images/colorbtns/Family1.png"
         )
+        
         +`
+        <!-- FAMILY TABS -->
+        <div
+            id="familyTabs"
+            style="
+                display:flex;
+                gap:8px;
+                margin:10px 0 18px;
+            ">
+
+            <button
+                id="myFamilyTab"
+                type="button"
+                style="
+                    flex:1;
+                    padding:11px 5px;
+                    border:1px solid #2A6EB0;
+                    border-radius:8px;
+                    background:#2A6EB0;
+                    color:white;
+                    font-weight:600;
+                ">
+                My Family
+            </button>
+
+            <button
+                id="otherFamiliesTab"
+                type="button"
+                style="
+                    flex:1;
+                    padding:11px 5px;
+                    border:1px solid #2A6EB0;
+                    border-radius:8px;
+                    background:transparent;
+                    color:#2A6EB0;
+                    font-weight:600;
+                ">
+                Other Families
+            </button>
+
+        </div>
+
         <div class="grid-3x2">
             <button
                 id="addMemberBtn"
