@@ -2405,7 +2405,13 @@ const daughtersField =
    HIDE CHILDREN IF NOT MARRIED
    ================================= */
 
-if(!isMarried){
+if(
+    !isMarried ||
+    (
+        !getName(partner) &&
+        children.length === 0
+    )
+){
 
     hideSection(
         "relationChildrenSection"
@@ -2416,11 +2422,10 @@ else{
 
     if(childrenSection){
 
-    childrenSection.style.display =
-        "block";
+        childrenSection.style.display =
+            "block";
 
-}
-
+    }
 
     /* ===============================
        CHILDREN TOTAL COUNT
