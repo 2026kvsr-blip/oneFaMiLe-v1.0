@@ -305,8 +305,29 @@ familyBtn.onclick = () => {
 
             </button>
 
+       
         </div>
 
+        <!-- FAMILY SETTINGS: MY FAMILY ONLY -->
+        <div
+            id="familySettingsContainer"
+            style="
+                text-align:center;
+                margin:15px 0;
+            ">
+
+            <button
+                id="familySettingsBtn"
+                type="button"
+                class="back-btn"
+                style="
+                    background:#2A6EB0;
+                    color:white;
+                ">
+                ⚙ Family Settings
+            </button>
+
+        </div>
 
         <div align="center">
 
@@ -397,9 +418,20 @@ if(treeViewBtn){
         const isMyFamily =
             tab === "my";
 
+       
         if(familyGrid){
             familyGrid.style.display =
                 isMyFamily ? "" : "none";
+        }
+
+        const familySettingsContainer =
+            document.getElementById(
+                "familySettingsContainer"
+            );
+
+        if(familySettingsContainer){
+            familySettingsContainer.style.display =
+                isMyFamily ? "block" : "none";
         }
 
         if(otherFamiliesContent){
