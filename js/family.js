@@ -6568,8 +6568,35 @@ if(searchEditID){
 
     }
 );
+/* SEARCH EDIT MEMBER - CLICK FIX */
 
-            searchInput.addEventListener(
+searchInput.addEventListener(
+    "click",
+    function(){
+
+        const memberCount =
+            document.getElementById(
+                "searchEditMemberCount"
+            );
+
+        if(memberCount){
+            memberCount.style.display = "inline-flex";
+        }
+
+        if(searchEditAZ){
+            searchEditAZ.style.display = "inline-flex";
+        }
+
+        if(searchEditID){
+            searchEditID.style.display = "inline-flex";
+        }
+
+        showSearchMembers();
+
+    }
+);
+           
+        searchInput.addEventListener(
                 "input",
                 function(){
                     const editInputWrap =
