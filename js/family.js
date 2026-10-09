@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -6255,8 +6256,16 @@ if(searchEditMemberCount){
     searchEditMemberCount.textContent =
         matchingMembers.length;
 
-}
+    if(
+        document.activeElement === searchInput
+    ){
 
+        searchEditMemberCount.style.display =
+            "inline-flex";
+
+    }
+
+}
 matchingMembers.sort(function(a, b){
     if(searchEditSortMode === "name"){
 
