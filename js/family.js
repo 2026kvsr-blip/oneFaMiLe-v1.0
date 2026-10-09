@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -17151,6 +17152,13 @@ if(familyTreeSortID){
 familyTreeSearchInput.addEventListener(
     "focus",
     function(){
+        /* RESTORE SEARCH CONTROLS */
+
+familyTreeSearchInput
+    .closest(".partner-search-input-wrap")
+    ?.classList.remove(
+        "family-tree-name-selected"
+    );
         /* =================================
    FAMILY TREE SEARCH CONTROLS
    ================================= */
@@ -17282,16 +17290,36 @@ document.addEventListener(
             );
 
 
-        if(
-            !clickedSearchInput &&
-            !clickedDropdown
-        ){
+       if(
+    !clickedSearchInput &&
+    !clickedDropdown
+){
 
-            familyTreeDropdown.style.display =
-                "none";
+    familyTreeDropdown.style.display =
+        "none";
 
-        }
+    /* HIDE MEMBER COUNT */
 
+    const treeCount =
+        document.getElementById(
+            "familyTreeMemberCount"
+        );
+
+    if(treeCount){
+        treeCount.style.display = "none";
+    }
+
+    /* HIDE SORT ARROWS */
+
+    if(familyTreeSortAZ){
+        familyTreeSortAZ.style.display = "none";
+    }
+
+    if(familyTreeSortID){
+        familyTreeSortID.style.display = "none";
+    }
+
+}
     }
 );
 
