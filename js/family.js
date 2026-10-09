@@ -10289,6 +10289,18 @@ if(fatherCount){
                                 ? ""
                                 : option.textContent;
 
+                        /* FATHER SELECTED NAME - FULL WIDTH */
+
+const fatherInputWrap =
+    fatherSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(fatherInputWrap){
+    fatherInputWrap.classList.add(
+        "father-name-selected"
+    );
+}
                         fatherDropdown.style.display =
                             "none";
 
@@ -10320,7 +10332,16 @@ if(fatherCount){
 fatherSearch.addEventListener(
     "focus",
     function(){
+                const fatherInputWrap =
+    fatherSearch.closest(
+        ".partner-search-input-wrap"
+    );
 
+if(fatherInputWrap){
+    fatherInputWrap.classList.remove(
+        "father-name-selected"
+    );
+}
         /* SHOW FATHER SORT ARROWS */
 
         const fatherAZ =
@@ -10368,6 +10389,16 @@ if(fatherCount){
     fatherSearch.addEventListener(
         "input",
         function(){
+            const fatherInputWrap =
+    fatherSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(fatherInputWrap){
+    fatherInputWrap.classList.remove(
+        "father-name-selected"
+    );
+}
 
             fatherField.value = "";
             showFatherDropdown();
@@ -10591,7 +10622,18 @@ if(motherCount){
                             option.value === "__ADD_NEW__"
                                 ? ""
                                 : option.textContent;
+                       /* MOTHER SELECTED NAME - FULL WIDTH */
 
+const motherInputWrap =
+    motherSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(motherInputWrap){
+    motherInputWrap.classList.add(
+        "mother-name-selected"
+    );
+}
                         motherDropdown.style.display =
                             "none";
 
@@ -10660,6 +10702,18 @@ if(motherCount){
 motherSearch.addEventListener(
     "focus",
     function(){
+        /* MOTHER SEARCH OPEN - NORMAL WIDTH */
+
+const motherInputWrap =
+    motherSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(motherInputWrap){
+    motherInputWrap.classList.remove(
+        "mother-name-selected"
+    );
+}
 
         /* SHOW MOTHER SORT ARROWS */
 
@@ -10713,6 +10767,18 @@ if(motherCount){
     motherSearch.addEventListener(
         "input",
         function(){
+            /* MOTHER TYPING - SHOW COUNT AND ARROWS */
+
+const motherInputWrap =
+    motherSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(motherInputWrap){
+    motherInputWrap.classList.remove(
+        "mother-name-selected"
+    );
+}
 
             motherField.value = "";
 
