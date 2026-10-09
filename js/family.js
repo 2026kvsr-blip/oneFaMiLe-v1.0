@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -16743,24 +16744,35 @@ if(familyTreeMemberCount){
                MEMBER SELECT
                ================================= */
 
-      option.onclick =
+     option.onclick =
     function(){
 
         selectedFamilyTreeMemberId =
             member.memberId;
 
-
         familyTreeSearchInput.value =
             member.name;
 
+        /* SELECTED NAME FULL WIDTH */
+
+        const treeSearchWrap =
+            familyTreeSearchInput.closest(
+                ".partner-search-input-wrap"
+            );
+
+        if(treeSearchWrap){
+
+            treeSearchWrap.classList.add(
+                "family-tree-name-selected"
+            );
+
+        }
 
         familyTreeDropdown.innerHTML =
             "";
 
-
         familyTreeDropdown.style.display =
             "none";
-
 
         /* =====================================
            MEMBER SELECTED
@@ -17073,7 +17085,65 @@ updateOtherPartnersVisibility();    };
         "block";
 
 }
+/* =====================================
+   FAMILY TREE SORT ARROW CLICK EVENTS
+   ===================================== */
 
+if(familyTreeSortAZ){
+
+    familyTreeSortAZ.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(familyTreeSortMode === "name"){
+
+                familyTreeNameAscending =
+                    !familyTreeNameAscending;
+
+            }else{
+
+                familyTreeSortMode = "name";
+                familyTreeNameAscending = true;
+
+            }
+
+            showFamilyTreeMembers();
+
+        }
+    );
+
+}
+
+if(familyTreeSortID){
+
+    familyTreeSortID.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(familyTreeSortMode === "id"){
+
+                familyTreeIdAscending =
+                    !familyTreeIdAscending;
+
+            }else{
+
+                familyTreeSortMode = "id";
+                familyTreeIdAscending = true;
+
+            }
+
+            showFamilyTreeMembers();
+
+        }
+    );
+
+}
 /* =====================================
    TREE VIEW SEARCH EVENTS
    ===================================== */
@@ -17131,7 +17201,8 @@ if(treeSortID){
 
 
         /* HIDE TREE OPTIONS UNTIL
-           A VALID MEMBER IS SELECTED */
+           A VALID MEMBER IS SELECTE
+           D */
 
         const familyTreeOptionsRow =
             document.getElementById(
