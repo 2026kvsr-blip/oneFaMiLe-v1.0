@@ -4075,3 +4075,14 @@ max-height: 28px !important;
 .partner-sort-controls {
     display: none !important;
 }
+/* RELATIONS SELECTED MEMBER */
+
+.partner-search-input-wrap.relations-name-selected
+#relationsMemberSearch {
+    padding-right: 10px !important;
+}
+
+.partner-search-input-wrap.relations-name-selected
+.partner-sort-controls {
+    display: none !important;
+}
