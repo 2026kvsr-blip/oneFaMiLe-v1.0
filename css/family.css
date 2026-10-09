@@ -4064,3 +4064,14 @@ max-height: 28px !important;
     display: none !important;
 }
 
+/* SEARCH EDIT MEMBER - SELECTED NAME FULL WIDTH */
+
+.partner-search-input-wrap.edit-member-selected
+#searchEditMember {
+    padding-right: 10px !important;
+}
+
+.partner-search-input-wrap.edit-member-selected
+.partner-sort-controls {
+    display: none !important;
+}
