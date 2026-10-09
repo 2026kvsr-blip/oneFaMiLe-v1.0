@@ -1,6 +1,5 @@
 
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -6314,14 +6313,15 @@ if(editInputWrap){
             memberCount.style.display = "inline-flex";
         }
 
-        /* SHOW SORT ARROWS */
-        if(searchEditAZ){
-            searchEditAZ.style.display = "";
-        }
+      /* SHOW SORT ARROWS */
 
-        if(searchEditID){
-            searchEditID.style.display = "";
-        }
+if(searchEditAZ){
+    searchEditAZ.style.display = "inline-flex";
+}
+
+if(searchEditID){
+    searchEditID.style.display = "inline-flex";
+}
 
         /* SHOW MEMBERS DROPDOWN */
 
