@@ -16214,14 +16214,42 @@ const familyName =
         :
     </span>
 
-   <div class="search-edit-member-wrapper">
+ <div class="search-edit-member-wrapper family-tree-search-wrapper">
 
-    <input
-        type="text"
-        id="familyTreeMemberSearch"
-        class="common-form-input"
-        placeholder="Search Member"
-        autocomplete="off">
+    <div class="partner-search-input-wrap">
+
+        <input
+            type="text"
+            id="familyTreeMemberSearch"
+            class="common-form-input"
+            placeholder="Search Member"
+            autocomplete="off">
+
+        <div class="partner-sort-controls">
+
+            <span
+                id="familyTreeMemberCount"
+                class="relation-member-count"
+                style="display:none;">
+            </span>
+
+            <span
+                id="familyTreeSortAZ"
+                class="partner-sort-arrow"
+                title="Alphabetical Order">
+                A↕Z
+            </span>
+
+            <span
+                id="familyTreeSortID"
+                class="partner-sort-arrow"
+                title="ID Number Order">
+                1↕9
+            </span>
+
+        </div>
+
+    </div>
 
     <div
         id="familyTreeMemberDropdown"
@@ -16229,8 +16257,7 @@ const familyName =
         style="display:none;">
     </div>
 
-</div>
-            </div>
+</div>           </div>
 
 
             <!-- GENERATIONS -->
