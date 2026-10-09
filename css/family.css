@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -4137,4 +4138,17 @@ max-height: 28px !important;
     width: 100%;
     min-width: 0;
     box-sizing: border-box;
+}
+/* =====================================
+   FAMILY TREE SELECTED MEMBER
+   ===================================== */
+
+.partner-search-input-wrap.family-tree-name-selected
+#familyTreeMemberSearch {
+    padding-right: 10px !important;
+}
+
+.partner-search-input-wrap.family-tree-name-selected
+.partner-sort-controls {
+    display: none !important;
 }
