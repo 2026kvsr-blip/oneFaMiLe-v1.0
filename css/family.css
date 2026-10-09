@@ -1,6 +1,4 @@
 
-
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -4035,4 +4033,16 @@ max-height: 28px !important;
 
 .partner-sort-controls .partner-sort-arrow {
     font-size: 13px;
+}
+/* =====================================
+   PARTNER SELECTED NAME FULL WIDTH
+   ===================================== */
+
+#memberPartnerSearch:not(:placeholder-shown) {
+    padding-right: 10px !important;
+}
+
+#memberPartnerSearch:not(:placeholder-shown)
+    + .partner-sort-controls {
+    display: none !important;
 }
