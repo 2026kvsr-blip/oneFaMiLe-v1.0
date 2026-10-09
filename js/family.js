@@ -16526,6 +16526,24 @@ const familyTreeDropdown =
 let selectedFamilyTreeMemberId =
     "";
 
+/* =====================================
+   FAMILY TREE MEMBER SORTING
+   ===================================== */
+
+let familyTreeSortMode = "name";
+
+let familyTreeNameAscending = true;
+let familyTreeIdAscending = true;
+
+const familyTreeSortAZ =
+    document.getElementById(
+        "familyTreeSortAZ"
+    );
+
+const familyTreeSortID =
+    document.getElementById(
+        "familyTreeSortID"
+    );
 
 /* =====================================
    SHOW / FILTER MEMBERS
@@ -16589,7 +16607,7 @@ function showFamilyTreeMembers(){
                     }
 
 
-                    /* NAME OR MEMBER ID SEARCH */
+                                     /* NAME OR MEMBER ID SEARCH */
 
                     return (
                         memberName.includes(
@@ -16604,19 +16622,68 @@ function showFamilyTreeMembers(){
                 }
             )
             .sort(
-                function(a,b){
+    function(a, b){
 
-                    return String(
-                        a.name || ""
-                    )
-                    .localeCompare(
-                        String(
-                            b.name || ""
-                        )
-                    );
+        /* ALPHABETICAL SORTING */
 
-                }
-            );
+        if(familyTreeSortMode === "name"){
+
+            const result =
+                String(a.name || "")
+                .localeCompare(
+                    String(b.name || ""),
+                    undefined,
+                    { sensitivity: "base" }
+                );
+
+            return familyTreeNameAscending
+                ? result
+                : -result;
+
+        }
+
+        /* MEMBER ID NUMBER SORTING */
+
+        const getMemberNumber = function(member){
+
+            const id =
+                String(member.memberId || "");
+
+            const match =
+                id.match(/(\d+)$/);
+
+            return match
+                ? Number(match[1])
+                : 0;
+
+        };
+
+        const result =
+            getMemberNumber(a) -
+            getMemberNumber(b);
+
+        return familyTreeIdAscending
+            ? result
+            : -result;
+
+    }
+);
+
+/* =====================================
+   FAMILY TREE MEMBER COUNT
+   ===================================== */
+
+const familyTreeMemberCount =
+    document.getElementById(
+        "familyTreeMemberCount"
+    );
+
+if(familyTreeMemberCount){
+
+    familyTreeMemberCount.textContent =
+        matchingMembers.length;
+
+}
 
 
     /* =====================================
@@ -17014,7 +17081,36 @@ updateOtherPartnersVisibility();    };
 familyTreeSearchInput.addEventListener(
     "focus",
     function(){
+        /* =================================
+   FAMILY TREE SEARCH CONTROLS
+   ================================= */
 
+const treeCount =
+    document.getElementById(
+        "familyTreeMemberCount"
+    );
+
+const treeSortAZ =
+    document.getElementById(
+        "familyTreeSortAZ"
+    );
+
+const treeSortID =
+    document.getElementById(
+        "familyTreeSortID"
+    );
+
+if(treeCount){
+    treeCount.style.display = "inline-flex";
+}
+
+if(treeSortAZ){
+    treeSortAZ.style.display = "inline-flex";
+}
+
+if(treeSortID){
+    treeSortID.style.display = "inline-flex";
+}
         /* EXISTING SELECTED MEMBER
            MUST REMAIN SELECTED */
 
