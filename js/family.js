@@ -11052,7 +11052,18 @@ if(partnerCount){
 
                         partnerSearch.value =
                             selectOption.textContent;
+                        /* SELECTED NAME - FULL WIDTH */
 
+const partnerInputWrap =
+    partnerSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(partnerInputWrap){
+    partnerInputWrap.classList.add(
+        "partner-name-selected"
+    );
+}
 
                         partnerDropdown.innerHTML =
                             "";
@@ -11096,6 +11107,18 @@ if(partnerCount){
 partnerSearch.addEventListener(
     "focus",
     function(){
+        /* SEARCH OPEN - SHOW COUNT AND ARROWS */
+
+const partnerInputWrap =
+    partnerSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(partnerInputWrap){
+    partnerInputWrap.classList.remove(
+        "partner-name-selected"
+    );
+}
         /* SHOW SORT ARROWS WHEN PARTNER SEARCH OPENS */
 
 const partnerAZ =
@@ -11145,6 +11168,16 @@ if(partnerCount){
         "input",
         function(){
 
+             const partnerInputWrap =
+    partnerSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(partnerInputWrap){
+    partnerInputWrap.classList.remove(
+        "partner-name-selected"
+    );
+}
             /*
              User started a new search.
              Clear previous selected ID.
@@ -11524,6 +11557,7 @@ if(count){
     );
 
 }
+
     
 /* =================================
    ADD NEW PERSON
