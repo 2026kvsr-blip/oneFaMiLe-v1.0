@@ -1,4 +1,5 @@
 
+
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -4084,4 +4085,26 @@ max-height: 28px !important;
 .partner-search-input-wrap.relations-name-selected
 .partner-sort-controls {
     display: none !important;
+}
+/* =================================
+   FAMILY TREE MEMBER SEARCH WIDTH
+   ================================= */
+
+.family-tree-search-wrapper {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    margin: 0;
+    flex: 1;
+}
+
+.family-tree-search-wrapper .partner-search-input-wrap {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+}
+
+#familyTreeMemberSearch {
+    width: 100%;
+    box-sizing: border-box;
 }
