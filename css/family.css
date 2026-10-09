@@ -1,5 +1,4 @@
 
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -4106,5 +4105,36 @@ max-height: 28px !important;
 
 #familyTreeMemberSearch {
     width: 100%;
+    box-sizing: border-box;
+}
+/* =====================================
+   FAMILY TREE SELECT MEMBER ALIGNMENT
+   ===================================== */
+
+.family-tree-page > .family-tree-control {
+    display: grid;
+    grid-template-columns: 105px 10px minmax(0, 1fr);
+    column-gap: 4px;
+    align-items: center;
+    width: 100%;
+}
+
+.family-tree-page > .family-tree-control
+.family-tree-search-wrapper {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+}
+
+.family-tree-page > .family-tree-control
+.partner-search-input-wrap {
+    width: 100%;
+    min-width: 0;
+}
+
+#familyTreeMemberSearch {
+    width: 100%;
+    min-width: 0;
     box-sizing: border-box;
 }
