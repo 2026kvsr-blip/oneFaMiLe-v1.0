@@ -5722,20 +5722,33 @@ window.openSearchEditMemberPage =
         placeholder="Search Member"
         autocomplete="off">
 
-    <div class="partner-sort-controls">
+   <div class="partner-sort-controls">
 
-        <span
-            id="searchEditSortAZ"
-            class="partner-sort-arrow"
-            title="Alphabetical Order">A↕Z</span>
+    <!-- SEARCH EDIT MEMBER COUNT -->
 
-        <span
-            id="searchEditSortID"
-            class="partner-sort-arrow"
-            title="ID Number Order">1↕9</span>
+    <span
+        id="searchEditMemberCount"
+        class="relation-member-count"
+        style="display:none;">
+    </span>
 
-    </div>
+    <!-- SEARCH EDIT SORT ARROWS -->
 
+    <span
+        id="searchEditSortAZ"
+        class="partner-sort-arrow"
+        title="Alphabetical Order">
+        A↕Z
+    </span>
+
+    <span
+        id="searchEditSortID"
+        class="partner-sort-arrow"
+        title="ID Number Order">
+        1↕9
+    </span>
+
+</div>
 </div>
 
                                 <div
@@ -5995,10 +6008,26 @@ let lastSearchEditSortMode = "";
 
                             );
 
-                        }
+                                               }
                     );
-matchingMembers.sort(function(a, b){
 
+/* =================================
+   SEARCH EDIT MEMBER COUNT
+   ================================= */
+
+const searchEditMemberCount =
+    document.getElementById(
+        "searchEditMemberCount"
+    );
+
+if(searchEditMemberCount){
+
+    searchEditMemberCount.textContent =
+        matchingMembers.length;
+
+}
+
+matchingMembers.sort(function(a, b){
     if(searchEditSortMode === "name"){
 
         const result =
@@ -6250,8 +6279,18 @@ searchInput.addEventListener(
     "focus",
     function(){
 
-        /* SHOW SORT ARROWS */
+        /* SHOW MEMBER COUNT */
 
+        const memberCount =
+            document.getElementById(
+                "searchEditMemberCount"
+            );
+
+        if(memberCount){
+            memberCount.style.display = "inline-flex";
+        }
+
+        /* SHOW SORT ARROWS */
         if(searchEditAZ){
             searchEditAZ.style.display = "";
         }
@@ -6303,16 +6342,24 @@ document.addEventListener(
 
             searchInput.value = "";
 
-            /* HIDE SORT ARROWS */
+            /* HIDE SORT ARROWS AND MEMBER COUNT */
 
-            if(searchEditAZ){
-                searchEditAZ.style.display = "none";
-            }
+if(searchEditAZ){
+    searchEditAZ.style.display = "none";
+}
 
-            if(searchEditID){
-                searchEditID.style.display = "none";
-            }
+if(searchEditID){
+    searchEditID.style.display = "none";
+}
 
+const memberCount =
+    document.getElementById(
+        "searchEditMemberCount"
+    );
+
+if(memberCount){
+    memberCount.style.display = "none";
+}
         }
 
     }
