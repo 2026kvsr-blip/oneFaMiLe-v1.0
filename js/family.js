@@ -1,6 +1,4 @@
 
-
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -1827,7 +1825,25 @@ if(relationsSearchWrap){
     relationsMemberDropdown.innerHTML = "";
 
     relationsMemberDropdown.style.display = "none";
+/* CLEAR TYPED TEXT ON OUTSIDE CLICK
+   ONLY WHEN MEMBER IS NOT SELECTED */
 
+const relationsMemberHeader =
+    document.querySelector(
+        ".relations-member-header"
+    );
+
+const relationsMemberSelected =
+    relationsMemberHeader &&
+    getComputedStyle(
+        relationsMemberHeader
+    ).display !== "none";
+
+if(!relationsMemberSelected){
+
+    relationsMemberSearch.value = "";
+
+}
     const relationsCount =
         document.getElementById(
             "relationsMemberCount"
