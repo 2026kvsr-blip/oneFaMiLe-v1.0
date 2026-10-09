@@ -4034,15 +4034,16 @@ max-height: 28px !important;
 .partner-sort-controls .partner-sort-arrow {
     font-size: 13px;
 }
-/* =====================================
-   PARTNER SELECTED NAME FULL WIDTH
-   ===================================== */
+/* PARTNER NAME SELECTED - FULL WIDTH */
 
-#memberPartnerSearch:not(:placeholder-shown) {
+.partner-search-input-wrap.partner-name-selected
+#memberPartnerSearch {
     padding-right: 10px !important;
 }
 
-#memberPartnerSearch:not(:placeholder-shown)
-    + .partner-sort-controls {
+.partner-search-input-wrap.partner-name-selected
+.partner-sort-controls {
     display: none !important;
 }
+
+
