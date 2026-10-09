@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -6136,7 +6137,20 @@ matchingMembers.sort(function(a, b){
 
 
         searchInput.value =
-            member.name || "";
+    member.name || "";
+
+/* SELECTED MEMBER - FULL WIDTH */
+
+const editInputWrap =
+    searchInput.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(editInputWrap){
+    editInputWrap.classList.add(
+        "edit-member-selected"
+    );
+}
 
 
         dropdown.innerHTML =
@@ -6278,6 +6292,16 @@ if(searchEditID){
 searchInput.addEventListener(
     "focus",
     function(){
+        const editInputWrap =
+    searchInput.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(editInputWrap){
+    editInputWrap.classList.remove(
+        "edit-member-selected"
+    );
+}
 
         /* SHOW MEMBER COUNT */
 
@@ -6309,6 +6333,16 @@ searchInput.addEventListener(
             searchInput.addEventListener(
                 "input",
                 function(){
+                    const editInputWrap =
+    searchInput.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(editInputWrap){
+    editInputWrap.classList.remove(
+        "edit-member-selected"
+    );
+}
 
                     showSearchMembers();
 
