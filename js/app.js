@@ -1,6 +1,5 @@
 
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -4400,13 +4399,42 @@ const formData = new FormData();
         });
 
         const result = await response.json();
+        
+       
         if(result.status=="success"){
+
+           if(!result.sessionToken){
+
+               showMessage(
+                   "Login session could not be created. Please try again.",
+                   "error",
+                   5000
+               );
+
+               return;
+           }
+
            loginAttempts = 0;
 
+           /* =====================================
+              STORE LOGIN USER
+              ===================================== */
+
            sessionStorage.setItem(
-    "user",
-    JSON.stringify(result)
-);
+               "user",
+               JSON.stringify(result)
+           );
+
+           /* =====================================
+              STORE SECURE SESSION TOKEN
+              ===================================== */
+
+           sessionStorage.setItem(
+               "sessionToken",
+               result.sessionToken
+           );
+
+            
 //restoreFamilyCache(result);
 
 // =====================================
