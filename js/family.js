@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -960,8 +959,138 @@ async function loadPublicFamilies(){
             id.textContent =
                 "Family ID: " + family.familyId;
 
+           
             card.appendChild(name);
             card.appendChild(id);
+
+            card.style.cursor = "pointer";
+
+            card.onclick = async function(){
+
+                const sessionToken =
+                    sessionStorage.getItem(
+                        "sessionToken"
+                    );
+
+                if(!sessionToken){
+
+                    alert(
+                        "Login session missing. Please login again."
+                    );
+
+                    return;
+                }
+
+                const formData = new FormData();
+
+                formData.append(
+                    "action",
+                    "getPublicFamilyDetails"
+                );
+
+                formData.append(
+                    "sessionToken",
+                    sessionToken
+                );
+
+                formData.append(
+                    "familyId",
+                    family.familyId
+                );
+
+                card.style.pointerEvents = "none";
+
+                try{
+
+                    const response = await fetch(
+                        API_URL,
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+                    const result =
+                        await response.json();
+
+                    if(
+                        result.status !== "success" ||
+                        !result.family
+                    ){
+
+                        alert(
+                            result.message ||
+                            "Unable to open family."
+                        );
+
+                        return;
+                    }
+
+                    const viewingFamily =
+                        result.family;
+
+                    container.innerHTML = "";
+
+                    const backBtn =
+                        document.createElement("button");
+
+                    backBtn.textContent =
+                        "← Back to Other Families";
+
+                    backBtn.style.cssText = `
+                        padding: 10px 15px;
+                        margin-bottom: 15px;
+                        border: 1px solid #2A6EB0;
+                        border-radius: 8px;
+                        background: transparent;
+                        color: #2A6EB0;
+                        cursor: pointer;
+                    `;
+
+                    backBtn.onclick = function(){
+
+                        loadPublicFamilies();
+
+                    };
+
+                    const heading =
+                        document.createElement("h3");
+
+                    heading.textContent =
+                        viewingFamily.familyName;
+
+                    heading.style.color =
+                        "#2A6EB0";
+
+                    const familyIdText =
+                        document.createElement("p");
+
+                    familyIdText.textContent =
+                        "Family ID: " +
+                        viewingFamily.familyId;
+
+                    container.appendChild(backBtn);
+                    container.appendChild(heading);
+                    container.appendChild(familyIdText);
+
+                }catch(error){
+
+                    console.error(
+                        "OPEN PUBLIC FAMILY ERROR:",
+                        error
+                    );
+
+                    alert(
+                        "Unable to open family."
+                    );
+
+                }finally{
+
+                    card.style.pointerEvents = "";
+
+                }
+
+            };
 
             container.appendChild(card);
 
