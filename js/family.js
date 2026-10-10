@@ -1,6 +1,4 @@
 
-
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -847,6 +845,140 @@ if(treeViewBtn){
         );
 
     }
+
+/* =====================================
+   LOAD PUBLIC FAMILIES
+   ===================================== */
+
+async function loadPublicFamilies(){
+
+    const container =
+        document.getElementById(
+            "otherFamiliesContent"
+        );
+
+    if(!container){
+        return;
+    }
+
+    container.textContent =
+        "Loading public families...";
+
+    const sessionToken =
+        sessionStorage.getItem("sessionToken");
+
+    if(!sessionToken){
+
+        container.textContent =
+            "Login session missing. Please login again.";
+
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append(
+        "action",
+        "getPublicFamilies"
+    );
+
+    formData.append(
+        "sessionToken",
+        sessionToken
+    );
+
+    try{
+
+        const response = await fetch(
+            API_URL,
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+        const result =
+            await response.json();
+
+        if(result.status !== "success"){
+
+            container.textContent =
+                result.message ||
+                "Unable to load public families.";
+
+            return;
+        }
+
+        const families =
+            result.families || [];
+
+        container.innerHTML = "";
+
+        if(families.length === 0){
+
+            container.textContent =
+                "No public families available.";
+
+            return;
+        }
+
+        families.forEach(function(family){
+
+            const card =
+                document.createElement("div");
+
+            card.style.cssText = `
+                padding: 14px;
+                margin: 10px 0;
+                border: 1px solid #4A9FE8;
+                border-radius: 10px;
+                background: #EAF8FF;
+                text-align: left;
+            `;
+
+            const name =
+                document.createElement("div");
+
+            name.style.cssText = `
+                font-weight: bold;
+                color: #2A6EB0;
+                margin-bottom: 6px;
+            `;
+
+            name.textContent =
+                family.familyName || "Unnamed Family";
+
+            const id =
+                document.createElement("div");
+
+            id.style.cssText = `
+                font-size: 13px;
+                color: #444;
+            `;
+
+            id.textContent =
+                "Family ID: " + family.familyId;
+
+            card.appendChild(name);
+            card.appendChild(id);
+
+            container.appendChild(card);
+
+        });
+
+    }catch(error){
+
+        console.error(
+            "PUBLIC FAMILIES LOAD ERROR:",
+            error
+        );
+
+        container.textContent =
+            "Unable to load public families.";
+
+    }
+
+}
 
     function activateFamilyTab(tab){
 
