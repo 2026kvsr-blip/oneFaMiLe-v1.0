@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -4242,11 +4243,18 @@ async function loadCurrentLoginFamily(){
         memberParams.append(
             "action",
             "getFamilyMembers"
+            
         );
 
+       
         memberParams.append(
             "familyId",
             currentFamily.familyId
+        );
+
+        memberParams.append(
+            "sessionToken",
+            sessionStorage.getItem("sessionToken") || ""
         );
 
 
