@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -1013,8 +1012,23 @@ async function loadPublicFamilies(){
             return;
         }
 
+       
+        const myFamily = JSON.parse(
+            localStorage.getItem("currentFamily") || "null"
+        );
+
         const families =
-            result.families || [];
+            (result.families || []).filter(
+                function(family){
+
+                    return (
+                        !myFamily ||
+                        String(family.familyId).trim() !==
+                        String(myFamily.familyId).trim()
+                    );
+
+                }
+            );
 
         container.innerHTML = "";
 
