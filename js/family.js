@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -1373,6 +1374,85 @@ button.onclick = async function(){
 
                 item.appendChild(name);
                 item.appendChild(id);
+                
+item.style.cursor = "pointer";
+
+item.onclick = function(){
+
+    const previousSearch =
+        searchInput.value;
+
+    results.innerHTML = "";
+    searchInput.style.display = "none";
+
+    const detailBack =
+        document.createElement("button");
+
+    detailBack.className = "back-btn";
+    detailBack.textContent =
+        "← Back to Search Members";
+
+    detailBack.onclick = function(){
+
+        searchInput.style.display = "";
+        searchInput.value = previousSearch;
+        showMembers();
+
+    };
+
+    results.appendChild(detailBack);
+
+    const detailHeading =
+        document.createElement("h3");
+
+    detailHeading.textContent =
+        member.name || "Unnamed Member";
+
+    results.appendChild(detailHeading);
+
+    const fields = [
+        ["Member ID", member.memberId],
+        ["Gender", member.gender],
+        ["Marital Status", member.maritalStatus],
+        ["Life Status", member.lifeStatus],
+        ["Father ID", member.fatherId],
+        ["Mother ID", member.motherId],
+        ["Partner ID", member.partnerId]
+    ];
+
+    fields.forEach(function(field){
+
+        const row =
+            document.createElement("div");
+
+        row.style.cssText = `
+            padding:12px;
+            margin:8px 0;
+            border:1px solid #2A6EB0;
+            border-radius:8px;
+            background:#EAF8FF;
+        `;
+
+        const label =
+            document.createElement("strong");
+
+        label.textContent =
+            field[0] + ": ";
+
+        const value =
+            document.createElement("span");
+
+        value.textContent =
+            field[1] || "—";
+
+        row.appendChild(label);
+        row.appendChild(value);
+
+        results.appendChild(row);
+
+    });
+
+};
 
                 results.appendChild(item);
 
