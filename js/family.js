@@ -848,6 +848,109 @@ if(treeViewBtn){
     }
 
 /* =====================================
+   LOAD SELECTED PUBLIC FAMILY MEMBERS
+   ===================================== */
+
+async function loadPublicFamilyMembers(
+    viewingFamily,
+    purpose
+){
+
+    const allowedPurposes = {
+        search: "showSearch",
+        relations: "showRelations",
+        tree: "showTree"
+    };
+
+    const permissionName =
+        allowedPurposes[purpose];
+
+    if(
+        !permissionName ||
+        viewingFamily[permissionName] !== "Yes"
+    ){
+
+        throw new Error(
+            "This family feature is not permitted."
+        );
+
+    }
+
+    const sessionToken =
+        sessionStorage.getItem(
+            "sessionToken"
+        );
+
+    if(!sessionToken){
+
+        throw new Error(
+            "Login session missing. Please login again."
+        );
+
+    }
+
+    const params =
+        new URLSearchParams();
+
+    params.append(
+        "action",
+        "getFamilyMembers"
+    );
+
+    params.append(
+        "familyId",
+        viewingFamily.familyId
+    );
+
+    params.append(
+        "sessionToken",
+        sessionToken
+    );
+
+    params.append(
+        "purpose",
+        purpose
+    );
+
+    const response = await fetch(
+        API_URL,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type":
+                    "application/x-www-form-urlencoded"
+            },
+            body: params.toString()
+        }
+    );
+
+    if(!response.ok){
+
+        throw new Error(
+            "Unable to connect to the server."
+        );
+
+    }
+
+    const result =
+        await response.json();
+
+    if(result.status !== "success"){
+
+        throw new Error(
+            result.message ||
+            "Unable to load public family members."
+        );
+
+    }
+
+    return Array.isArray(result.members)
+        ? result.members
+        : [];
+
+}
+
+/* =====================================
    LOAD PUBLIC FAMILIES
    ===================================== */
 
