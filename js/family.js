@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -1228,14 +1227,191 @@ async function loadPublicFamilies(){
                             cursor: pointer;
                         `;
 
-                        button.onclick = function(){
+                       
+button.onclick = async function(){
 
-                            alert(
-                                actionName +
-                                " functionality will be connected next."
-                            );
+    if(actionName !== "Search Members"){
 
-                        };
+        alert(
+            actionName +
+            " functionality will be connected next."
+        );
+
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Loading Members...";
+
+    try{
+
+        const members =
+            await loadPublicFamilyMembers(
+                viewingFamily,
+                "search"
+            );
+
+        container.innerHTML = "";
+
+        const backButton =
+            document.createElement("button");
+
+        backButton.className = "back-btn";
+        backButton.textContent =
+            "← Back to " + viewingFamily.familyName;
+
+        backButton.onclick = function(){
+            card.click();
+        };
+
+        const title =
+            document.createElement("h3");
+
+        title.textContent =
+            viewingFamily.familyName +
+            " - Search Members";
+
+        const searchInput =
+            document.createElement("input");
+
+        searchInput.type = "text";
+        searchInput.placeholder =
+            "Search Name / Member ID";
+
+        searchInput.className =
+            "common-form-input";
+
+        searchInput.style.width = "100%";
+        searchInput.style.margin = "15px 0";
+
+        const results =
+            document.createElement("div");
+
+        results.style.textAlign = "left";
+
+        function showMembers(){
+
+            const query =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
+
+            const filtered =
+                members.filter(function(member){
+
+                    const name =
+                        String(member.name || "")
+                            .toLowerCase();
+
+                    const id =
+                        String(member.memberId || "")
+                            .toLowerCase();
+
+                    return (
+                        name.includes(query) ||
+                        id.includes(query)
+                    );
+
+                }).sort(function(a, b){
+
+                    return String(a.name || "")
+                        .localeCompare(
+                            String(b.name || ""),
+                            undefined,
+                            {sensitivity:"base"}
+                        );
+
+                });
+
+            results.innerHTML = "";
+
+            const count =
+                document.createElement("p");
+
+            count.textContent =
+                "Members: " + filtered.length;
+
+            results.appendChild(count);
+
+            if(filtered.length === 0){
+
+                const empty =
+                    document.createElement("p");
+
+                empty.textContent =
+                    "No matching member";
+
+                results.appendChild(empty);
+                return;
+            }
+
+            filtered.forEach(function(member){
+
+                const item =
+                    document.createElement("div");
+
+                item.style.cssText = `
+                    padding:12px;
+                    margin:8px 0;
+                    border:1px solid #2A6EB0;
+                    border-radius:8px;
+                    background:#EAF8FF;
+                `;
+
+                const name =
+                    document.createElement("strong");
+
+                name.textContent =
+                    member.name || "Unnamed";
+
+                const id =
+                    document.createElement("div");
+
+                id.textContent =
+                    "Member ID: " +
+                    (member.memberId || "");
+
+                item.appendChild(name);
+                item.appendChild(id);
+
+                results.appendChild(item);
+
+            });
+
+        }
+
+        searchInput.addEventListener(
+            "input",
+            showMembers
+        );
+
+        container.appendChild(backButton);
+        container.appendChild(title);
+        container.appendChild(searchInput);
+        container.appendChild(results);
+
+        showMembers();
+
+    }catch(error){
+
+        console.error(
+            "PUBLIC MEMBER SEARCH ERROR:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Unable to load members."
+        );
+
+    }finally{
+
+        button.disabled = false;
+        button.textContent = label;
+
+    }
+
+};
 
                         publicActions.appendChild(button);
 
