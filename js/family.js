@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -16780,10 +16781,17 @@ document
         new URLSearchParams();
 
 
+    
     params.append(
         "action",
         "saveFamilyTree"
     );
+
+    params.append(
+        "sessionToken",
+        sessionStorage.getItem("sessionToken") || ""
+    );
+
 
 
     params.append(
