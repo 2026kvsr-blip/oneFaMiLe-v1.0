@@ -539,6 +539,128 @@ if(treeViewBtn){
                 `
             );
 
+           
+            /* =====================================
+               LOAD SAVED FAMILY SETTINGS
+               ===================================== */
+
+            async function loadFamilySettings(){
+
+                const sessionToken =
+                    sessionStorage.getItem(
+                        "sessionToken"
+                    );
+
+                if(!sessionToken){
+
+                    alert(
+                        "Login session missing. Please login again."
+                    );
+
+                    return;
+                }
+
+                const saveBtn =
+                    document.getElementById(
+                        "saveFamilySettingsBtn"
+                    );
+
+                saveBtn.disabled = true;
+
+                const formData = new FormData();
+
+                formData.append(
+                    "action",
+                    "getFamilySettings"
+                );
+
+                formData.append(
+                    "sessionToken",
+                    sessionToken
+                );
+
+                formData.append(
+                    "familyId",
+                    currentFamily.familyId
+                );
+
+                try{
+
+                    const response = await fetch(
+                        API_URL,
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+                    const result =
+                        await response.json();
+
+                    if(result.status !== "success"){
+
+                        alert(
+                            result.message ||
+                            "Unable to load Family Settings."
+                        );
+
+                        return;
+                    }
+
+                    const settings =
+                        result.settings || {};
+
+                    document.getElementById(
+                        "familyVisibility"
+                    ).value =
+                        settings.visibility || "Private";
+
+                    document.getElementById(
+                        "familyAllowEdit"
+                    ).value =
+                        settings.allowEdit || "No";
+
+                    document.getElementById(
+                        "familyAllowAdd"
+                    ).value =
+                        settings.allowAdd || "No";
+
+                    document.getElementById(
+                        "familyShowSearch"
+                    ).value =
+                        settings.showSearch || "Yes";
+
+                    document.getElementById(
+                        "familyShowRelations"
+                    ).value =
+                        settings.showRelations || "Yes";
+
+                    document.getElementById(
+                        "familyShowTree"
+                    ).value =
+                        settings.showTree || "Yes";
+
+                }catch(error){
+
+                    console.error(
+                        "FAMILY SETTINGS LOAD ERROR:",
+                        error
+                    );
+
+                    alert(
+                        "Unable to load Family Settings."
+                    );
+
+                }finally{
+
+                    saveBtn.disabled = false;
+
+                }
+
+            }
+
+            loadFamilySettings();
+
             document.getElementById(
                 "familySettingsBackBtn"
             ).onclick = function(){
@@ -747,9 +869,18 @@ if(treeViewBtn){
                 isMyFamily ? "block" : "none";
         }
 
+       
         if(otherFamiliesContent){
+
             otherFamiliesContent.style.display =
                 isMyFamily ? "none" : "block";
+
+            if(!isMyFamily){
+
+                loadPublicFamilies();
+
+            }
+
         }
 
         if(myFamilyTab){
