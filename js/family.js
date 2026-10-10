@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -7716,6 +7717,11 @@ if(memberCount){
                         "familyId",
                         currentFamily.familyId || ""
                     );
+
+params.append(
+    "sessionToken",
+    sessionStorage.getItem("sessionToken") || ""
+);
 
 
                     const response =
