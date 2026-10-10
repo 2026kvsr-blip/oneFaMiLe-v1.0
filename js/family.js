@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -1410,15 +1409,34 @@ item.onclick = function(){
 
     results.appendChild(detailHeading);
 
-    const fields = [
-        ["Member ID", member.memberId],
-        ["Gender", member.gender],
-        ["Marital Status", member.maritalStatus],
-        ["Life Status", member.lifeStatus],
-        ["Father ID", member.fatherId],
-        ["Mother ID", member.motherId],
-        ["Partner ID", member.partnerId]
-    ];
+   
+const getMemberName = function(memberId){
+
+    if(!memberId){
+        return "—";
+    }
+
+    const relatedMember = members.find(
+        function(m){
+            return String(m.memberId || "").trim() ===
+                   String(memberId).trim();
+        }
+    );
+
+    return relatedMember
+        ? relatedMember.name || "—"
+        : "—";
+};
+
+const fields = [
+    ["Member ID", member.memberId],
+    ["Gender", member.gender],
+    ["Marital Status", member.maritalStatus],
+    ["Life Status", member.lifeStatus],
+    ["Father", getMemberName(member.fatherId)],
+    ["Mother", getMemberName(member.motherId)],
+    ["Partner", getMemberName(member.partnerId)]
+];
 
     fields.forEach(function(field){
 
