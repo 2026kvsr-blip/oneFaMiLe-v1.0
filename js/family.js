@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -546,13 +547,133 @@ if(treeViewBtn){
 
             };
 
+            
             document.getElementById(
                 "saveFamilySettingsBtn"
-            ).onclick = function(){
+            ).onclick = async function(){
 
-                alert(
-                    "Save functionality will be added next."
+                const saveBtn = this;
+
+                const sessionToken =
+                    sessionStorage.getItem(
+                        "sessionToken"
+                    );
+
+                if(!sessionToken){
+
+                    alert(
+                        "Login session missing. Please login again."
+                    );
+
+                    return;
+                }
+
+                const formData = new FormData();
+
+                formData.append(
+                    "action",
+                    "updateFamilySettings"
                 );
+
+                formData.append(
+                    "sessionToken",
+                    sessionToken
+                );
+
+                formData.append(
+                    "familyId",
+                    currentFamily.familyId
+                );
+
+                formData.append(
+                    "visibility",
+                    document.getElementById(
+                        "familyVisibility"
+                    ).value
+                );
+
+                formData.append(
+                    "allowEdit",
+                    document.getElementById(
+                        "familyAllowEdit"
+                    ).value
+                );
+
+                formData.append(
+                    "allowAdd",
+                    document.getElementById(
+                        "familyAllowAdd"
+                    ).value
+                );
+
+                formData.append(
+                    "showSearch",
+                    document.getElementById(
+                        "familyShowSearch"
+                    ).value
+                );
+
+                formData.append(
+                    "showRelations",
+                    document.getElementById(
+                        "familyShowRelations"
+                    ).value
+                );
+
+                formData.append(
+                    "showTree",
+                    document.getElementById(
+                        "familyShowTree"
+                    ).value
+                );
+
+                saveBtn.disabled = true;
+
+                try{
+
+                    const response = await fetch(
+                        API_URL,
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+                    const result =
+                        await response.json();
+
+                    if(result.status !== "success"){
+
+                        alert(
+                            result.message ||
+                            "Unable to save Family Settings."
+                        );
+
+                        return;
+                    }
+
+                    alert(
+                        "Family Settings saved successfully."
+                    );
+
+                    familyBtn.click();
+
+                }catch(error){
+
+                    console.error(
+                        "FAMILY SETTINGS SAVE ERROR:",
+                        error
+                    );
+
+                    alert(
+                        "Unable to save Family Settings."
+                    );
+
+                }finally{
+
+                    saveBtn.disabled = false;
+
+                }
 
             };
 
