@@ -1069,9 +1069,105 @@ async function loadPublicFamilies(){
                         "Family ID: " +
                         viewingFamily.familyId;
 
+                   
                     container.appendChild(backBtn);
                     container.appendChild(heading);
                     container.appendChild(familyIdText);
+
+                    /* =====================================
+                       PUBLIC FAMILY PERMISSION BUTTONS
+                       ===================================== */
+
+                    const publicActions =
+                        document.createElement("div");
+
+                    publicActions.style.cssText = `
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 12px;
+                        margin-top: 20px;
+                        text-align: center;
+                    `;
+
+                    function addPublicAction(
+                        label,
+                        actionName
+                    ){
+
+                        const button =
+                            document.createElement("button");
+
+                        button.textContent = label;
+
+                        button.style.cssText = `
+                            padding: 14px 8px;
+                            border: 1px solid #2A6EB0;
+                            border-radius: 10px;
+                            background: #EAF8FF;
+                            color: #2A6EB0;
+                            font-weight: bold;
+                            cursor: pointer;
+                        `;
+
+                        button.onclick = function(){
+
+                            alert(
+                                actionName +
+                                " functionality will be connected next."
+                            );
+
+                        };
+
+                        publicActions.appendChild(button);
+
+                    }
+
+                    if(viewingFamily.showSearch === "Yes"){
+
+                        addPublicAction(
+                            "Search Members",
+                            "Search Members"
+                        );
+
+                    }
+
+                    if(viewingFamily.showRelations === "Yes"){
+
+                        addPublicAction(
+                            "Relations",
+                            "Relations"
+                        );
+
+                    }
+
+                    if(viewingFamily.showTree === "Yes"){
+
+                        addPublicAction(
+                            "Tree View",
+                            "Tree View"
+                        );
+
+                    }
+
+                    if(viewingFamily.allowAdd === "Yes"){
+
+                        addPublicAction(
+                            "Add Member",
+                            "Add Member"
+                        );
+
+                    }
+
+                    if(viewingFamily.allowEdit === "Yes"){
+
+                        addPublicAction(
+                            "Search – Edit Member",
+                            "Search – Edit Member"
+                        );
+
+                    }
+
+                    container.appendChild(publicActions);
 
                 }catch(error){
 
