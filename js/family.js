@@ -845,8 +845,15 @@ document.getElementById(
     "familyTrustedAllowEdit"
 ).value =
     settings.trustedAllowEdit || "No";
-                }catch(error){
 
+/* AUTO ADD MEMBERS - COLUMN R */
+
+document.getElementById(
+    "familyAutoAddMembers"
+).value =
+    settings.autoAddMembers || "Yes";
+
+                }catch(error){
                     console.error(
                         "FAMILY SETTINGS LOAD ERROR:",
                         error
