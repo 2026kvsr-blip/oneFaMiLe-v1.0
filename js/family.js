@@ -581,7 +581,20 @@ if(treeViewBtn){
 <div class="family-trusted-heading">
     Trusted Members
 </div>
+<div class="family-settings-row">
 
+    <label for="familyAutoAddMembers">
+        Auto Add Members
+    </label>
+
+    <span>:</span>
+
+    <select id="familyAutoAddMembers">
+        <option value="Yes" selected>Yes</option>
+        <option value="No">No</option>
+    </select>
+
+</div>
 <div style="
     display:flex;
     justify-content:center;
