@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -854,18 +853,27 @@ document.getElementById(
 ).value =
     settings.autoAddMembers || "Yes";
 
-                }catch(error){
-                    console.error(
-                        "FAMILY SETTINGS LOAD ERROR:",
-                        error
-                    );
+               }catch(error){
 
-                    alert(
-                        "Unable to load Family Settings."
-                    );
+    console.error(
+        "FAMILY SETTINGS LOAD ERROR:",
+        error
+    );
 
-                }finally{
+    const familySettingsPageOpen =
+        document.getElementById(
+            "saveFamilySettingsBtn"
+        ) !== null;
 
+    if(familySettingsPageOpen){
+
+        alert(
+            "Unable to load Family Settings."
+        );
+
+    }
+
+}finally{
                     saveBtn.disabled = false;
 
                 }
