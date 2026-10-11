@@ -444,14 +444,14 @@ if(treeViewBtn){
 
                     <h3>Privacy & Permissions</h3>
 
-         <style>
+     <style>
     .family-settings-row {
         display: grid;
         grid-template-columns:
             minmax(0, 1fr) 12px 100px;
         align-items: center;
-        gap: 8px;
-        margin: 12px 0;
+        gap: 6px;
+        margin: 5px 0;
         text-align: left;
     }
 
@@ -463,10 +463,13 @@ if(treeViewBtn){
     .family-settings-row select {
         width: 100%;
         min-width: 0;
+        height: 34px;
+        min-height: 34px;
+        padding: 3px 8px;
         margin: 0;
         font-size: 14px;
+        box-sizing: border-box;
     }
-
     .family-trusted-heading {
         text-align: center;
         color: #2A6EB0;
