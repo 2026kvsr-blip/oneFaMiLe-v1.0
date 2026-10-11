@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -180,49 +181,7 @@ familyBtn.onclick = () => {
             "Family",
             "images/colorbtns/Family1.png"
         )
-        
         +`
-        <!-- FAMILY TABS -->
-        <div
-            id="familyTabs"
-            style="
-                display:flex;
-                gap:8px;
-                margin:10px 0 18px;
-            ">
-
-            <button
-                id="myFamilyTab"
-                type="button"
-                style="
-                    flex:1;
-                    padding:11px 5px;
-                    border:1px solid #2A6EB0;
-                    border-radius:8px;
-                    background:#2A6EB0;
-                    color:white;
-                    font-weight:600;
-                ">
-                My Family
-            </button>
-
-            <button
-                id="otherFamiliesTab"
-                type="button"
-                style="
-                    flex:1;
-                    padding:11px 5px;
-                    border:1px solid #2A6EB0;
-                    border-radius:8px;
-                    background:transparent;
-                    color:#2A6EB0;
-                    font-weight:600;
-                ">
-                Other Families
-            </button>
-
-        </div>
-
         <div class="grid-3x2">
             <button
                 id="addMemberBtn"
@@ -303,29 +262,8 @@ familyBtn.onclick = () => {
 
             </button>
 
-       
         </div>
 
-        <!-- FAMILY SETTINGS: MY FAMILY ONLY -->
-        <div
-            id="familySettingsContainer"
-            style="
-                text-align:center;
-                margin:15px 0;
-            ">
-
-            <button
-                id="familySettingsBtn"
-                type="button"
-                class="back-btn"
-                style="
-                    background:#2A6EB0;
-                    color:white;
-                ">
-                ⚙ Family Settings
-            </button>
-
-        </div>
 
         <div align="center">
 
@@ -365,2027 +303,7 @@ if(treeViewBtn){
         };
 
 }
-
-    /* =====================================
-       FAMILY SETTINGS PAGE
-       ===================================== */
-
-    const familySettingsBtn =
-        document.getElementById(
-            "familySettingsBtn"
-        );
-
-    if(familySettingsBtn){
-
-        familySettingsBtn.onclick = function(){
-
-            const currentFamily =
-                JSON.parse(
-                    localStorage.getItem(
-                        "currentFamily"
-                    ) || "null"
-                );
-
-            
-            if(!currentFamily){
-
-                alert("Family not found.");
-
-                return;
-            }
-
-            /* =================================
-               CHECK FAMILY OWNER
-               ================================= */
-
-            const loggedUser =
-                JSON.parse(
-                    sessionStorage.getItem("user") || "null"
-                );
-
-            const ownerLogin =
-                String(
-                    currentFamily.loginId ||
-                    currentFamily.loginUserName ||
-                    ""
-                ).trim().toLowerCase();
-
-            const currentLogin =
-                String(
-                    loggedUser?.loginUserName || ""
-                ).trim().toLowerCase();
-
-            if(
-                !ownerLogin ||
-                !currentLogin ||
-                ownerLogin !== currentLogin
-            ){
-
-                alert(
-                    "Only the family owner can change Family Settings."
-                );
-
-                return;
-            }
-
-            showPage(
-                pageTitle(
-                    "Family Settings",
-                    "images/colorbtns/Family1.png"
-                ) +
-
-                `
-                <div style="
-                    max-width:420px;
-                    margin:15px auto;
-                    padding:15px;
-                ">
-
-                    <h3>Privacy & Permissions</h3>
-
-     <style>
-    .family-settings-row {
-        display: grid;
-        grid-template-columns:
-            minmax(0, 1fr) 12px 100px;
-        align-items: center;
-        gap: 6px;
-        margin: 5px 0;
-        text-align: left;
-    }
-
-    .family-settings-row span {
-        font-size: 14px;
-        color: #2A6EB0;
-    }
-
-    .family-settings-row select {
-        width: 100%;
-        min-width: 0;
-        height: 34px;
-        min-height: 34px;
-        padding: 3px 8px;
-        margin: 0;
-        font-size: 14px;
-        box-sizing: border-box;
-    }
-    .family-trusted-heading {
-        text-align: center;
-        color: #2A6EB0;
-        font-size: 17px;
-        font-weight: bold;
-        margin: 22px 0 14px;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #2A6EB0;
-    }
-</style>
-
-
-<!-- FAMILY VISIBILITY -->
-
-<div class="family-settings-row">
-    <span>Visibility</span>
-    <span>:</span>
-
-    <select
-        id="familyVisibility"
-        class="common-form-select">
-
-        <option value="Private">Private</option>
-        <option value="Public">Public</option>
-
-    </select>
-</div>
-
-
-<!-- OLD COLUMNS G AND H: PRESERVE FOR COMPATIBILITY -->
-
-<select id="familyAllowEdit" style="display:none">
-    <option value="No">No</option>
-    <option value="Yes">Yes</option>
-</select>
-
-<select id="familyAllowAdd" style="display:none">
-    <option value="No">No</option>
-    <option value="Yes">Yes</option>
-</select>
-
-
-<!-- SHOW SEARCH -->
-
-<div class="family-settings-row">
-    <span>Show Search</span>
-    <span>:</span>
-
-    <select
-        id="familyShowSearch"
-        class="common-form-select">
-
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-
-    </select>
-</div>
-
-
-<!-- SHOW RELATIONS -->
-
-<div class="family-settings-row">
-    <span>Show Relations</span>
-    <span>:</span>
-
-    <select
-        id="familyShowRelations"
-        class="common-form-select">
-
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-
-    </select>
-</div>
-
-
-<!-- SHOW TREE -->
-
-<div class="family-settings-row">
-    <span>Show Tree</span>
-    <span>:</span>
-
-    <select
-        id="familyShowTree"
-        class="common-form-select">
-
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-
-    </select>
-</div>
-
-
-<!-- PERSONAL DETAILS -->
-
-<div class="family-settings-row">
-    <span>Personal Details</span>
-    <span>:</span>
-
-    <select
-        id="familyShowPersonalDetails"
-        class="common-form-select">
-
-        <option value="No">No</option>
-        <option value="Yes">Yes</option>
-
-    </select>
-</div>
-
-<!-- TRUSTED MEMBERS HEADING -->
-
-<div class="family-trusted-heading">
-    Trusted Members
-</div>
-
-
-
-
-<div style="
-    display:flex;
-    justify-content:center;
-    margin:12px 0 18px;
-">
-
-    <button
-        type="button"
-        id="manageTrustedMembersBtn"
-        class="back-btn"
-        style="
-    width:100%;
-    margin:0;
-    border:2px solid #28A745;
-    color:#28A745;
-    background:transparent;
-">
-        Manage Members
-    </button>
-
-</div>
-
-<div class="family-settings-row">
-
-    <label for="familyAutoAddMembers">
-        Auto Add Members
-    </label>
-
-    <span>:</span>
-
-    <select
-        id="familyAutoAddMembers"
-        class="common-form-select">
-
-        <option value="Yes" selected>Yes</option>
-        <option value="No">No</option>
-
-    </select>
-
-</div>
-<!-- TRUSTED FULL VIEW -->
-<div class="family-settings-row">
-    <span>Trusted Full View</span>
-    <span>:</span>
-
-    <select
-        id="familyTrustedContactsFullView"
-        class="common-form-select">
-
-        <option value="No">No</option>
-        <option value="Yes">Yes</option>
-
-    </select>
-</div>
-
-
-<!-- TRUSTED ADD -->
-
-<div class="family-settings-row">
-    <span>Trusted Add</span>
-    <span>:</span>
-
-    <select
-        id="familyTrustedAllowAdd"
-        class="common-form-select">
-
-        <option value="No">No</option>
-        <option value="Yes">Yes</option>
-
-    </select>
-</div>
-
-
-<!-- TRUSTED EDIT -->
-
-<div class="family-settings-row">
-    <span>Trusted Edit</span>
-    <span>:</span>
-
-    <select
-        id="familyTrustedAllowEdit"
-        class="common-form-select">
-
-        <option value="No">No</option>
-        <option value="Yes">Yes</option>
-
-    </select>
-</div>
-
-
-<div style="
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:12px;
-    margin-top:20px;
-    width:100%;
-">
-
-    <button
-    id="saveFamilySettingsBtn"
-    class="back-btn"
-    style="
-        flex:1;
-        min-width:0;
-        margin:0;
-        white-space:nowrap;
-        border:2px solid #28A745;
-        color:#28A745;
-        background:transparent;
-    ">
-    Save Settings
-</button>
-    <button
-        id="familySettingsBackBtn"
-        class="back-btn"
-        style="
-            flex:1;
-            min-width:0;
-            margin:0;
-            white-space:nowrap;
-        ">
-        ← Back
-    </button>
-
-</div>
-                </div>
-                `
-            );
-
-           
-            /* =====================================
-               LOAD SAVED FAMILY SETTINGS
-               ===================================== */
-
-            async function loadFamilySettings(){
-
-                const sessionToken =
-                    sessionStorage.getItem(
-                        "sessionToken"
-                    );
-
-                if(!sessionToken){
-
-                    alert(
-                        "Login session missing. Please login again."
-                    );
-
-                    return;
-                }
-
-                const saveBtn =
-                    document.getElementById(
-                        "saveFamilySettingsBtn"
-                    );
-
-                saveBtn.disabled = true;
-
-                const formData = new FormData();
-
-                formData.append(
-                    "action",
-                    "getFamilySettings"
-                );
-
-                formData.append(
-                    "sessionToken",
-                    sessionToken
-                );
-
-                formData.append(
-                    "familyId",
-                    currentFamily.familyId
-                );
-
-                try{
-
-                    const response = await fetch(
-                        API_URL,
-                        {
-                            method: "POST",
-                            body: formData
-                        }
-                    );
-
-                    const result =
-                        await response.json();
-
-                    if(result.status !== "success"){
-
-                        alert(
-                            result.message ||
-                            "Unable to load Family Settings."
-                        );
-
-                        return;
-                    }
-
-                    const settings =
-                        result.settings || {};
-
-                    document.getElementById(
-                        "familyVisibility"
-                    ).value =
-                        settings.visibility || "Private";
-
-                    document.getElementById(
-                        "familyAllowEdit"
-                    ).value =
-                        settings.allowEdit || "No";
-
-                    document.getElementById(
-                        "familyAllowAdd"
-                    ).value =
-                        settings.allowAdd || "No";
-
-                    document.getElementById(
-                        "familyShowSearch"
-                    ).value =
-                        settings.showSearch || "Yes";
-
-                    document.getElementById(
-                        "familyShowRelations"
-                    ).value =
-                        settings.showRelations || "Yes";
-
-                   document.getElementById(
-    "familyShowTree"
-).value =
-    settings.showTree || "Yes";
-
-
-/* =====================================
-   LOAD NEW FAMILY SETTINGS: M TO Q
-   ===================================== */
-
-document.getElementById(
-    "familyShowPersonalDetails"
-).value =
-    settings.showPersonalDetails || "No";
-
-
-document.getElementById(
-    "familyTrustedContactsFullView"
-).value =
-    settings.trustedContactsFullView || "No";
-
-
-document.getElementById(
-    "familyTrustedAllowAdd"
-).value =
-    settings.trustedAllowAdd || "No";
-
-
-document.getElementById(
-    "familyTrustedAllowEdit"
-).value =
-    settings.trustedAllowEdit || "No";
-
-/* AUTO ADD MEMBERS - COLUMN R */
-
-document.getElementById(
-    "familyAutoAddMembers"
-).value =
-    settings.autoAddMembers || "Yes";
-
-                }catch(error){
-                    console.error(
-                        "FAMILY SETTINGS LOAD ERROR:",
-                        error
-                    );
-
-                    alert(
-                        "Unable to load Family Settings."
-                    );
-
-                }finally{
-
-                    saveBtn.disabled = false;
-
-                }
-
-            }
-
-            loadFamilySettings();
-            /* =====================================
-   MANAGE TRUSTED MEMBERS PAGE
-   ===================================== */
-
-const manageTrustedMembersBtn =
-    document.getElementById(
-        "manageTrustedMembersBtn"
-    );
-
-if(manageTrustedMembersBtn){
-
-    manageTrustedMembersBtn.onclick =
-        function(){
-
-            showPage(
-                pageTitle(
-                    "Trusted Members",
-                    "images/colorbtns/Family1.png"
-                ) +
-
-                `
-                <div style="
-                    padding:20px;
-                    max-width:450px;
-                    margin:auto;
-                ">
-
-                    <p style="
-                        text-align:center;
-                        color:#2A6EB0;
-                    ">
-                        Add or remove trusted mobile numbers
-                    </p>
-
-                    <!-- TRUSTED MEMBER NAME -->
-
-<label for="trustedMemberName">
-    Name
-</label>
-
-<input
-    type="text"
-    id="trustedMemberName"
-    class="common-form-input"
-    placeholder="Enter member name"
-    maxlength="100"
-    autocomplete="name"
-    style="
-        width:100%;
-        box-sizing:border-box;
-        margin:6px 0 12px;
-    "
->
-
-
-<!-- TRUSTED MEMBER MOBILE -->
-
-<label for="trustedMobileInput">
-    Mobile Number
-</label>
-
-<input
-    type="tel"
-    id="trustedMobileInput"
-    class="common-form-input"
-    placeholder="Enter 10-digit mobile number"
-    maxlength="10"
-    inputmode="numeric"
-    autocomplete="tel"
-    style="
-        width:100%;
-        box-sizing:border-box;
-        margin:6px 0 12px;
-    "
->
-
-
-<!-- TRUSTED MEMBER EMAIL - OPTIONAL -->
-
-<label for="trustedMemberEmail">
-    Email (Optional)
-</label>
-
-<input
-    type="email"
-    id="trustedMemberEmail"
-    class="common-form-input"
-    placeholder="Enter email address (optional)"
-    maxlength="254"
-    autocomplete="email"
-    style="
-        width:100%;
-        box-sizing:border-box;
-        margin:6px 0 12px;
-    "
->
-                    <div style="
-                        display:flex;
-                        gap:12px;
-                        margin-top:15px;
-                    ">
-
-                        <button
-                            type="button"
-                            id="addTrustedMobileBtn"
-                            class="back-btn"
-                            style="
-                                flex:1;
-                                min-width:0;
-                                margin:0;
-                                border:2px solid #28A745;
-                                color:#28A745;
-                                background:transparent;
-                            ">
-                            + Add
-                        </button>
-
-                        <button
-                            type="button"
-                            id="trustedMembersBackBtn"
-                            class="back-btn"
-                            style="
-                                flex:1;
-                                min-width:0;
-                                margin:0;
-                            ">
-                            ← Back
-                        </button>
-
-                    </div>
-
-                    <h3 style="
-                        color:#2A6EB0;
-                        margin-top:25px;
-                        text-align:center;
-                    ">
-                        Trusted Members List
-                    </h3>
-
-                    <div
-                        id="trustedMembersList"
-                        style="
-                            margin-top:15px;
-                            text-align:center;
-                        ">
-                        No trusted members added.
-                    </div>
-
-                </div>
-                `
-            );
-/* =====================================
-   ADD TRUSTED MEMBER
-   ===================================== */
-
-const addTrustedMobileBtn =
-    document.getElementById(
-        "addTrustedMobileBtn"
-    );
-
-if(addTrustedMobileBtn){
-
-    addTrustedMobileBtn.onclick =
-        async function(){
-
-            const addBtn = this;
-
-            const name =
-                document.getElementById(
-                    "trustedMemberName"
-                ).value.trim();
-
-            const mobile =
-                document.getElementById(
-                    "trustedMobileInput"
-                ).value.trim();
-
-            const email =
-                document.getElementById(
-                    "trustedMemberEmail"
-                ).value.trim();
-
-            if(!name){
-                alert("Enter member name.");
-                return;
-            }
-
-            if(!/^[6-9][0-9]{9}$/.test(mobile)){
-                alert("Enter a valid 10-digit mobile number.");
-                return;
-            }
-
-            if(
-                email &&
-                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-            ){
-                alert("Enter a valid email address.");
-                return;
-            }
-
-            const sessionToken =
-                sessionStorage.getItem(
-                    "sessionToken"
-                );
-
-            if(!sessionToken){
-                alert("Please login again.");
-                return;
-            }
-
-            const formData = new FormData();
-
-            formData.append(
-                "action",
-                "addTrustedMember"
-            );
-
-            formData.append(
-                "sessionToken",
-                sessionToken
-            );
-
-            formData.append(
-                "familyId",
-                currentFamily.familyId
-            );
-
-            formData.append("name", name);
-            formData.append("mobile", mobile);
-            formData.append("email", email);
-
-            addBtn.disabled = true;
-
-            try{
-
-                const response = await fetch(
-                    API_URL,
-                    {
-                        method: "POST",
-                        body: formData
-                    }
-                );
-
-                const result =
-                    await response.json();
-
-                if(result.status !== "success"){
-                    alert(
-                        result.message ||
-                        "Unable to add Trusted Member."
-                    );
-                    return;
-                }
-
-                alert(
-                    "Trusted Member added successfully."
-                );
-await loadTrustedMembers();
-                document.getElementById(
-                    "trustedMemberName"
-                ).value = "";
-
-                document.getElementById(
-                    "trustedMobileInput"
-                ).value = "";
-
-                document.getElementById(
-                    "trustedMemberEmail"
-                ).value = "";
-
-            }catch(error){
-
-                console.error(
-                    "ADD TRUSTED MEMBER ERROR:",
-                    error
-                );
-
-                alert(
-                    "Unable to add Trusted Member."
-                );
-
-            }finally{
-
-                addBtn.disabled = false;
-
-            }
-
-        };
-
-}
-            /* =====================================
-   LOAD TRUSTED MEMBERS LIST
-   ===================================== */
-
-async function loadTrustedMembers(){
-
-    const list =
-        document.getElementById(
-            "trustedMembersList"
-        );
-
-    if(!list) return;
-
-    list.textContent =
-        "Loading Trusted Members...";
-
-    const sessionToken =
-        sessionStorage.getItem(
-            "sessionToken"
-        );
-
-    if(!sessionToken){
-
-        list.textContent =
-            "Please login again.";
-
-        return;
-    }
-
-    const formData = new FormData();
-
-    formData.append(
-        "action",
-        "getTrustedMembers"
-    );
-
-    formData.append(
-        "sessionToken",
-        sessionToken
-    );
-
-    formData.append(
-        "familyId",
-        currentFamily.familyId
-    );
-
-    try{
-
-        const response = await fetch(
-            API_URL,
-            {
-                method: "POST",
-                body: formData
-            }
-        );
-
-        const result =
-            await response.json();
-
-        if(result.status !== "success"){
-
-            list.textContent =
-                result.message ||
-                "Unable to load Trusted Members.";
-
-            return;
-        }
-
-        const members =
-            Array.isArray(result.trustedMembers)
-                ? result.trustedMembers
-                : [];
-
-        list.replaceChildren();
-
-        if(members.length === 0){
-
-            list.textContent =
-                "No trusted members added.";
-
-            return;
-        }
-
-        members.forEach(function(item){
-
-            const member =
-                typeof item === "string"
-                    ? {
-                        name: "",
-                        mobile: item,
-                        email: ""
-                    }
-                    : item;
-
-            const card =
-                document.createElement("div");
-
-            card.style.cssText = `
-                padding:10px;
-                margin-bottom:8px;
-                border:1px solid #B8C9D6;
-                border-radius:8px;
-                text-align:left;
-                background:#FFFFFF;
-            `;
-
-            const name =
-                document.createElement("div");
-
-            name.style.cssText = `
-                color:#2A6EB0;
-                font-weight:bold;
-                margin-bottom:4px;
-            `;
-
-            name.textContent =
-                member.name || "Trusted Member";
-
-            const mobile =
-                document.createElement("div");
-
-            mobile.textContent =
-                "Mobile: " + (member.mobile || "");
-
-            card.appendChild(name);
-            card.appendChild(mobile);
-
-            if(member.email){
-
-                const email =
-                    document.createElement("div");
-
-                email.textContent =
-                    "Email: " + member.email;
-
-                card.appendChild(email);
-            }
-
-            list.appendChild(card);
-
-        });
-
-    }catch(error){
-
-        console.error(
-            "LOAD TRUSTED MEMBERS ERROR:",
-            error
-        );
-
-        list.textContent =
-            "Unable to load Trusted Members.";
-
-    }
-
-}
-
-/* LOAD WHEN PAGE OPENS */
-
-loadTrustedMembers();
-            /* BACK TO FAMILY SETTINGS */
-
-            document.getElementById(
-                "trustedMembersBackBtn"
-            ).onclick = function(){
-
-               familyBtn.click();
-            };
-
-        };
-
-}
-            document.getElementById(
-                "familySettingsBackBtn"
-            ).onclick = function(){
-
-                familyBtn.click();
-
-            };
-
-            
-            document.getElementById(
-                "saveFamilySettingsBtn"
-            ).onclick = async function(){
-
-                const saveBtn = this;
-
-                const sessionToken =
-                    sessionStorage.getItem(
-                        "sessionToken"
-                    );
-
-                if(!sessionToken){
-
-                    alert(
-                        "Login session missing. Please login again."
-                    );
-
-                    return;
-                }
-
-                const formData = new FormData();
-
-                formData.append(
-                    "action",
-                    "updateFamilySettings"
-                );
-
-                formData.append(
-                    "sessionToken",
-                    sessionToken
-                );
-
-                formData.append(
-                    "familyId",
-                    currentFamily.familyId
-                );
-
-                formData.append(
-                    "visibility",
-                    document.getElementById(
-                        "familyVisibility"
-                    ).value
-                );
-
-                formData.append(
-                    "allowEdit",
-                    document.getElementById(
-                        "familyAllowEdit"
-                    ).value
-                );
-
-                formData.append(
-                    "allowAdd",
-                    document.getElementById(
-                        "familyAllowAdd"
-                    ).value
-                );
-
-                formData.append(
-                    "showSearch",
-                    document.getElementById(
-                        "familyShowSearch"
-                    ).value
-                );
-
-                formData.append(
-                    "showRelations",
-                    document.getElementById(
-                        "familyShowRelations"
-                    ).value
-                );
-
-                formData.append(
-                    "showTree",
-                    document.getElementById(
-                        "familyShowTree"
-                    ).value
-                );
-               /* =====================================
-   NEW FAMILY SETTINGS
-   ===================================== */
-
-formData.append(
-    "showPersonalDetails",
-    document.getElementById(
-        "familyShowPersonalDetails"
-    ).value
-);
-
-formData.append(
-    "trustedContactsFullView",
-    document.getElementById(
-        "familyTrustedContactsFullView"
-    ).value
-);
-
-formData.append(
-    "trustedAllowAdd",
-    document.getElementById(
-        "familyTrustedAllowAdd"
-    ).value
-);
-
-formData.append(
-    "trustedAllowEdit",
-    document.getElementById(
-        "familyTrustedAllowEdit"
-    ).value
-);
-
-/* AUTO ADD MEMBERS - COLUMN R */
-
-formData.append(
-    "autoAddMembers",
-    document.getElementById(
-        "familyAutoAddMembers"
-    ).value
-);
-
-saveBtn.disabled = true;
-                try{
-
-                    const response = await fetch(
-                        API_URL,
-                        {
-                            method: "POST",
-                            body: formData
-                        }
-                    );
-
-                    const result =
-                        await response.json();
-
-                    if(result.status !== "success"){
-
-                        alert(
-                            result.message ||
-                            "Unable to save Family Settings."
-                        );
-
-                        return;
-                    }
-
-                    alert(
-                        "Family Settings saved successfully."
-                    );
-
-                    familyBtn.click();
-
-                }catch(error){
-
-                    console.error(
-                        "FAMILY SETTINGS SAVE ERROR:",
-                        error
-                    );
-
-                    alert(
-                        "Unable to save Family Settings."
-                    );
-
-                }finally{
-
-                    saveBtn.disabled = false;
-
-                }
-
-            };
-
-        };
-
-    }
-
-    bindAddMemberButton();
-
-    /* =====================================
-       MY FAMILY / OTHER FAMILIES TABS
-       ===================================== */
-
-    const myFamilyTab =
-        document.getElementById("myFamilyTab");
-
-    const otherFamiliesTab =
-        document.getElementById("otherFamiliesTab");
-
-    const familyGrid =
-        document.querySelector(".grid-3x2");
-
-    let otherFamiliesContent =
-        document.getElementById("otherFamiliesContent");
-
-    if(familyGrid && !otherFamiliesContent){
-
-        otherFamiliesContent =
-            document.createElement("div");
-
-        otherFamiliesContent.id =
-            "otherFamiliesContent";
-
-        otherFamiliesContent.style.display =
-            "none";
-
-        otherFamiliesContent.style.textAlign =
-            "center";
-
-        otherFamiliesContent.style.padding =
-            "25px 10px";
-
-        otherFamiliesContent.textContent =
-            "Other Families will appear here.";
-
-        familyGrid.insertAdjacentElement(
-            "afterend",
-            otherFamiliesContent
-        );
-
-    }
-
-/* =====================================
-   LOAD SELECTED PUBLIC FAMILY MEMBERS
-   ===================================== */
-
-async function loadPublicFamilyMembers(
-    viewingFamily,
-    purpose
-){
-
-    const allowedPurposes = {
-        search: "showSearch",
-        relations: "showRelations",
-        tree: "showTree"
-    };
-
-    const permissionName =
-        allowedPurposes[purpose];
-
-    if(
-        !permissionName ||
-        viewingFamily[permissionName] !== "Yes"
-    ){
-
-        throw new Error(
-            "This family feature is not permitted."
-        );
-
-    }
-
-    const sessionToken =
-        sessionStorage.getItem(
-            "sessionToken"
-        );
-
-    if(!sessionToken){
-
-        throw new Error(
-            "Login session missing. Please login again."
-        );
-
-    }
-
-    const params =
-        new URLSearchParams();
-
-    params.append(
-        "action",
-        "getFamilyMembers"
-    );
-
-    params.append(
-        "familyId",
-        viewingFamily.familyId
-    );
-
-    params.append(
-        "sessionToken",
-        sessionToken
-    );
-
-    params.append(
-        "purpose",
-        purpose
-    );
-
-    const response = await fetch(
-        API_URL,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type":
-                    "application/x-www-form-urlencoded"
-            },
-            body: params.toString()
-        }
-    );
-
-    if(!response.ok){
-
-        throw new Error(
-            "Unable to connect to the server."
-        );
-
-    }
-
-    const result =
-        await response.json();
-
-    if(result.status !== "success"){
-
-        throw new Error(
-            result.message ||
-            "Unable to load public family members."
-        );
-
-    }
-
-    return Array.isArray(result.members)
-        ? result.members
-        : [];
-
-}
-
-/* =====================================
-   LOAD PUBLIC FAMILIES
-   ===================================== */
-
-async function loadPublicFamilies(){
-
-    const container =
-        document.getElementById(
-            "otherFamiliesContent"
-        );
-
-    if(!container){
-        return;
-    }
-
-    container.textContent =
-        "Loading public families...";
-
-    const sessionToken =
-        sessionStorage.getItem("sessionToken");
-
-    if(!sessionToken){
-
-        container.textContent =
-            "Login session missing. Please login again.";
-
-        return;
-    }
-
-    const formData = new FormData();
-
-    formData.append(
-        "action",
-        "getPublicFamilies"
-    );
-
-    formData.append(
-        "sessionToken",
-        sessionToken
-    );
-
-    try{
-
-        const response = await fetch(
-            API_URL,
-            {
-                method: "POST",
-                body: formData
-            }
-        );
-
-        const result =
-            await response.json();
-
-        if(result.status !== "success"){
-
-            container.textContent =
-                result.message ||
-                "Unable to load public families.";
-
-            return;
-        }
-
-       
-        const myFamily = JSON.parse(
-            localStorage.getItem("currentFamily") || "null"
-        );
-
-        const families =
-            (result.families || []).filter(
-                function(family){
-
-                    return (
-                        !myFamily ||
-                        String(family.familyId).trim() !==
-                        String(myFamily.familyId).trim()
-                    );
-
-                }
-            );
-
-        container.innerHTML = "";
-
-        if(families.length === 0){
-
-            container.textContent =
-                "No public families available.";
-
-            return;
-        }
-
-        families.forEach(function(family){
-
-            const card =
-                document.createElement("div");
-
-            card.style.cssText = `
-                padding: 14px;
-                margin: 10px 0;
-                border: 1px solid #4A9FE8;
-                border-radius: 10px;
-                background: #EAF8FF;
-                text-align: left;
-            `;
-
-            const name =
-                document.createElement("div");
-
-            name.style.cssText = `
-                font-weight: bold;
-                color: #2A6EB0;
-                margin-bottom: 6px;
-            `;
-
-            name.textContent =
-                family.familyName || "Unnamed Family";
-
-            const id =
-                document.createElement("div");
-
-            id.style.cssText = `
-                font-size: 13px;
-                color: #444;
-            `;
-
-            id.textContent =
-                "Family ID: " + family.familyId;
-
-           
-            card.appendChild(name);
-            card.appendChild(id);
-
-            card.style.cursor = "pointer";
-
-            card.onclick = async function(){
-
-                const sessionToken =
-                    sessionStorage.getItem(
-                        "sessionToken"
-                    );
-
-                if(!sessionToken){
-
-                    alert(
-                        "Login session missing. Please login again."
-                    );
-
-                    return;
-                }
-
-                const formData = new FormData();
-
-                formData.append(
-                    "action",
-                    "getPublicFamilyDetails"
-                );
-
-                formData.append(
-                    "sessionToken",
-                    sessionToken
-                );
-
-                formData.append(
-                    "familyId",
-                    family.familyId
-                );
-
-                card.style.pointerEvents = "none";
-
-                try{
-
-                    const response = await fetch(
-                        API_URL,
-                        {
-                            method: "POST",
-                            body: formData
-                        }
-                    );
-
-                    const result =
-                        await response.json();
-
-                    if(
-                        result.status !== "success" ||
-                        !result.family
-                    ){
-
-                        alert(
-                            result.message ||
-                            "Unable to open family."
-                        );
-
-                        return;
-                    }
-
-                    const viewingFamily =
-                        result.family;
-
-                    container.innerHTML = "";
-
-                    const backBtn =
-                        document.createElement("button");
-
-                    backBtn.textContent =
-                        "← Back to Other Families";
-
-                    backBtn.style.cssText = `
-                        padding: 10px 15px;
-                        margin-bottom: 15px;
-                        border: 1px solid #2A6EB0;
-                        border-radius: 8px;
-                        background: transparent;
-                        color: #2A6EB0;
-                        cursor: pointer;
-                    `;
-
-                    backBtn.onclick = function(){
-
-                        loadPublicFamilies();
-
-                    };
-
-                    const heading =
-                        document.createElement("h3");
-
-                    heading.textContent =
-                        viewingFamily.familyName;
-
-                    heading.style.color =
-                        "#2A6EB0";
-
-                    const familyIdText =
-                        document.createElement("p");
-
-                    familyIdText.textContent =
-                        "Family ID: " +
-                        viewingFamily.familyId;
-
-                   
-                    container.appendChild(backBtn);
-                    container.appendChild(heading);
-                    container.appendChild(familyIdText);
-
-                    /* =====================================
-                       PUBLIC FAMILY PERMISSION BUTTONS
-                       ===================================== */
-
-                    const publicActions =
-                        document.createElement("div");
-
-                    publicActions.style.cssText = `
-                        display: grid;
-                        grid-template-columns: repeat(2, 1fr);
-                        gap: 12px;
-                        margin-top: 20px;
-                        text-align: center;
-                    `;
-
-                    function addPublicAction(
-                        label,
-                        actionName
-                    ){
-
-                        const button =
-                            document.createElement("button");
-
-                        button.textContent = label;
-
-                        button.style.cssText = `
-                            padding: 14px 8px;
-                            border: 1px solid #2A6EB0;
-                            border-radius: 10px;
-                            background: #EAF8FF;
-                            color: #2A6EB0;
-                            font-weight: bold;
-                            cursor: pointer;
-                        `;
-
-                       
-button.onclick = async function(){
-
-    if(actionName !== "Search Members"){
-
-        alert(
-            actionName +
-            " functionality will be connected next."
-        );
-
-        return;
-    }
-
-    button.disabled = true;
-    button.textContent = "Loading Members...";
-
-    try{
-
-        const members =
-            await loadPublicFamilyMembers(
-                viewingFamily,
-                "search"
-            );
-
-        container.innerHTML = "";
-
-        const backButton =
-            document.createElement("button");
-
-        backButton.className = "back-btn";
-        backButton.textContent =
-            "← Back to " + viewingFamily.familyName;
-
-        backButton.onclick = function(){
-            card.click();
-        };
-
-        const title =
-            document.createElement("h3");
-
-        title.textContent =
-            viewingFamily.familyName +
-            " - Search Members";
-
-        const searchInput =
-            document.createElement("input");
-
-        searchInput.type = "text";
-        searchInput.placeholder =
-            "Search Name / Member ID";
-
-        searchInput.className =
-            "common-form-input";
-
-        searchInput.style.width = "100%";
-        searchInput.style.margin = "15px 0";
-
-        const results =
-            document.createElement("div");
-
-        results.style.textAlign = "left";
-
-        function showMembers(){
-
-            const query =
-                searchInput.value
-                    .trim()
-                    .toLowerCase();
-
-            const filtered =
-                members.filter(function(member){
-
-                    const name =
-                        String(member.name || "")
-                            .toLowerCase();
-
-                    const id =
-                        String(member.memberId || "")
-                            .toLowerCase();
-
-                    return (
-                        name.includes(query) ||
-                        id.includes(query)
-                    );
-
-                }).sort(function(a, b){
-
-                    return String(a.name || "")
-                        .localeCompare(
-                            String(b.name || ""),
-                            undefined,
-                            {sensitivity:"base"}
-                        );
-
-                });
-
-            results.innerHTML = "";
-
-            const count =
-                document.createElement("p");
-
-            count.textContent =
-                "Members: " + filtered.length;
-
-            results.appendChild(count);
-
-            if(filtered.length === 0){
-
-                const empty =
-                    document.createElement("p");
-
-                empty.textContent =
-                    "No matching member";
-
-                results.appendChild(empty);
-                return;
-            }
-
-            filtered.forEach(function(member){
-
-                const item =
-                    document.createElement("div");
-
-                item.style.cssText = `
-                    padding:12px;
-                    margin:8px 0;
-                    border:1px solid #2A6EB0;
-                    border-radius:8px;
-                    background:#EAF8FF;
-                `;
-
-                const name =
-                    document.createElement("strong");
-
-                name.textContent =
-                    member.name || "Unnamed";
-
-                const id =
-                    document.createElement("div");
-
-                id.textContent =
-                    "Member ID: " +
-                    (member.memberId || "");
-
-                item.appendChild(name);
-                item.appendChild(id);
-                
-item.style.cursor = "pointer";
-
-item.onclick = function(){
-
-    const previousSearch =
-        searchInput.value;
-
-    results.innerHTML = "";
-    searchInput.style.display = "none";
-
-    const detailBack =
-        document.createElement("button");
-
-    detailBack.className = "back-btn";
-    detailBack.textContent =
-        "← Back to Search Members";
-
-    detailBack.onclick = function(){
-
-        searchInput.style.display = "";
-        searchInput.value = previousSearch;
-        showMembers();
-
-    };
-
-    results.appendChild(detailBack);
-
-    const detailHeading =
-        document.createElement("h3");
-
-    detailHeading.textContent =
-        member.name || "Unnamed Member";
-
-    results.appendChild(detailHeading);
-
-   
-const getMemberName = function(memberId){
-
-    if(!memberId){
-        return "—";
-    }
-
-    const relatedMember = members.find(
-        function(m){
-            return String(m.memberId || "").trim() ===
-                   String(memberId).trim();
-        }
-    );
-
-    return relatedMember
-        ? relatedMember.name || "—"
-        : "—";
-};
-
-const fields = [
-    ["Member ID", member.memberId],
-    ["Gender", member.gender],
-    ["Marital Status", member.maritalStatus],
-    ["Life Status", member.lifeStatus],
-    ["Father", getMemberName(member.fatherId)],
-    ["Mother", getMemberName(member.motherId)],
-    ["Partner", getMemberName(member.partnerId)]
-];
-
-    fields.forEach(function(field){
-
-        const row =
-            document.createElement("div");
-
-        row.style.cssText = `
-            padding:12px;
-            margin:8px 0;
-            border:1px solid #2A6EB0;
-            border-radius:8px;
-            background:#EAF8FF;
-        `;
-
-        const label =
-            document.createElement("strong");
-
-        label.textContent =
-            field[0] + ": ";
-
-        const value =
-            document.createElement("span");
-
-        value.textContent =
-            field[1] || "—";
-
-        row.appendChild(label);
-        row.appendChild(value);
-
-        results.appendChild(row);
-
-    });
-
-};
-
-                results.appendChild(item);
-
-            });
-
-        }
-
-        searchInput.addEventListener(
-            "input",
-            showMembers
-        );
-
-        container.appendChild(backButton);
-        container.appendChild(title);
-        container.appendChild(searchInput);
-        container.appendChild(results);
-
-        showMembers();
-
-    }catch(error){
-
-        console.error(
-            "PUBLIC MEMBER SEARCH ERROR:",
-            error
-        );
-
-        alert(
-            error.message ||
-            "Unable to load members."
-        );
-
-    }finally{
-
-        button.disabled = false;
-        button.textContent = label;
-
-    }
-
-};
-
-                        publicActions.appendChild(button);
-
-                    }
-
-                    if(viewingFamily.showSearch === "Yes"){
-
-                        addPublicAction(
-                            "Search Members",
-                            "Search Members"
-                        );
-
-                    }
-
-                    if(viewingFamily.showRelations === "Yes"){
-
-                        addPublicAction(
-                            "Relations",
-                            "Relations"
-                        );
-
-                    }
-
-                    if(viewingFamily.showTree === "Yes"){
-
-                        addPublicAction(
-                            "Tree View",
-                            "Tree View"
-                        );
-
-                    }
-
-                    if(viewingFamily.allowAdd === "Yes"){
-
-                        addPublicAction(
-                            "Add Member",
-                            "Add Member"
-                        );
-
-                    }
-
-                    if(viewingFamily.allowEdit === "Yes"){
-
-                        addPublicAction(
-                            "Search – Edit Member",
-                            "Search – Edit Member"
-                        );
-
-                    }
-
-                    container.appendChild(publicActions);
-
-                }catch(error){
-
-                    console.error(
-                        "OPEN PUBLIC FAMILY ERROR:",
-                        error
-                    );
-
-                    alert(
-                        "Unable to open family."
-                    );
-
-                }finally{
-
-                    card.style.pointerEvents = "";
-
-                }
-
-            };
-
-            container.appendChild(card);
-
-        });
-
-    }catch(error){
-
-        console.error(
-            "PUBLIC FAMILIES LOAD ERROR:",
-            error
-        );
-
-        container.textContent =
-            "Unable to load public families.";
-
-    }
-
-}
-
-    function activateFamilyTab(tab){
-
-        const isMyFamily =
-            tab === "my";
-
-       
-        if(familyGrid){
-            familyGrid.style.display =
-                isMyFamily ? "" : "none";
-        }
-
-        const familySettingsContainer =
-            document.getElementById(
-                "familySettingsContainer"
-            );
-
-        if(familySettingsContainer){
-            familySettingsContainer.style.display =
-                isMyFamily ? "block" : "none";
-        }
-
-       
-        if(otherFamiliesContent){
-
-            otherFamiliesContent.style.display =
-                isMyFamily ? "none" : "block";
-
-            if(!isMyFamily){
-
-                loadPublicFamilies();
-
-            }
-
-        }
-
-        if(myFamilyTab){
-
-            myFamilyTab.style.background =
-                isMyFamily ? "#2A6EB0" : "transparent";
-
-            myFamilyTab.style.color =
-                isMyFamily ? "white" : "#2A6EB0";
-
-        }
-
-        if(otherFamiliesTab){
-
-            otherFamiliesTab.style.background =
-                isMyFamily ? "transparent" : "#2A6EB0";
-
-            otherFamiliesTab.style.color =
-                isMyFamily ? "#2A6EB0" : "white";
-
-        }
-
-    }
-
-    if(myFamilyTab){
-
-        myFamilyTab.onclick =
-            function(){
-                activateFamilyTab("my");
-            };
-
-    }
-
-    if(otherFamiliesTab){
-
-        otherFamiliesTab.onclick =
-            function(){
-                activateFamilyTab("other");
-            };
-
-    }
+bindAddMemberButton();
 /* =====================================
    FAMILY → ABOUT
    ===================================== */
@@ -2579,54 +497,24 @@ if(familyBackBtn){
         :
     </span>
 
-   <div
-    class="relations-member-search-wrap">
-
-    <div class="partner-search-input-wrap">
+    <div
+        class="relations-member-search-wrap">
 
         <input
             type="text"
             id="relationsMemberSearch"
             class="common-form-select"
-            placeholder="Select / Search"
+            placeholder="Select  /  Search"
+            
             autocomplete="off">
 
-        <div class="partner-sort-controls">
-
-            <!-- RELATIONS MEMBER COUNT -->
-
-            <span
-                id="relationsMemberCount"
-                class="relation-member-count"
-                style="display:none;">
-            </span>
-
-            <!-- RELATIONS SORT ARROWS -->
-
-            <span
-                id="relationsSortAZ"
-                class="partner-sort-arrow"
-                title="Alphabetical Order">
-                A↕Z
-            </span>
-
-            <span
-                id="relationsSortID"
-                class="partner-sort-arrow"
-                title="ID Number Order">
-                1↕9
-            </span>
-
+        <div
+            id="relationsMemberDropdown"
+            class="relations-member-dropdown">
         </div>
 
     </div>
 
-    <div
-        id="relationsMemberDropdown"
-        class="relations-member-dropdown">
-    </div>
-
-</div>
 </div>
 <div class="relations-page">
 
@@ -3416,7 +1304,6 @@ if(familyBackBtn){
         id="relationsBackBtn"
         class="back-btn">
 
-
         ← Back
 
     </button>
@@ -3468,20 +1355,7 @@ if(
         familyMembers
     );
 
-/* =================================
-   RELATIONS MEMBER SORTING
-   ================================= */
 
-let relationsSortMode = "id";
-
-let relationsNameAscending = true;
-let relationsIdAscending = true;
-
-const relationsSortAZ =
-    document.getElementById("relationsSortAZ");
-
-const relationsSortID =
-    document.getElementById("relationsSortID");
     /* =================================
        SHOW MEMBER LIST
        ================================= */
@@ -3549,73 +1423,10 @@ const relationsSortID =
                         )
                     );
 
-                               }
+                }
             );
 
-/* =================================
-   RELATIONS MEMBER COUNT
-   ================================= */
 
-const relationsMemberCount =
-    document.getElementById(
-        "relationsMemberCount"
-    );
-
-if(relationsMemberCount){
-
-    relationsMemberCount.textContent =
-        matchingMembers.length;
-
-}
-
-        /* =================================
-   RELATIONS MEMBERS SORTING
-   ================================= */
-
-matchingMembers.sort(function(a, b){
-
-    if(relationsSortMode === "name"){
-
-        const nameA =
-            String(a.name || "").trim();
-
-        const nameB =
-            String(b.name || "").trim();
-
-        const result =
-            nameA.localeCompare(
-                nameB,
-                undefined,
-                { sensitivity: "base" }
-            );
-
-        return relationsNameAscending
-            ? result
-            : -result;
-    }
-
-    const getMemberNumber = function(member){
-
-        const id =
-            String(member.memberId || "");
-
-        const match =
-            id.match(/(\d+)$/);
-
-        return match
-            ? Number(match[1])
-            : 0;
-    };
-
-    const result =
-        getMemberNumber(a) -
-        getMemberNumber(b);
-
-    return relationsIdAscending
-        ? result
-        : -result;
-
-});
         console.log(
             "RELATIONS SEARCH:",
             searchText,
@@ -3683,65 +1494,7 @@ matchingMembers.sort(function(a, b){
 
     }
 
-/* =================================
-   RELATIONS SORT ARROW CLICK EVENTS
-   ================================= */
 
-if(relationsSortAZ){
-
-    relationsSortAZ.addEventListener(
-        "click",
-        function(event){
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            if(relationsSortMode === "name"){
-
-                relationsNameAscending =
-                    !relationsNameAscending;
-
-            }else{
-
-                relationsSortMode = "name";
-                relationsNameAscending = true;
-
-            }
-
-            showRelationsMemberDropdown();
-
-        }
-    );
-
-}
-
-if(relationsSortID){
-
-    relationsSortID.addEventListener(
-        "click",
-        function(event){
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            if(relationsSortMode === "id"){
-
-                relationsIdAscending =
-                    !relationsIdAscending;
-
-            }else{
-
-                relationsSortMode = "id";
-                relationsIdAscending = true;
-
-            }
-
-            showRelationsMemberDropdown();
-
-        }
-    );
-
-}
   /* =================================
    MEMBER SEARCH
    ================================= */
@@ -3749,31 +1502,6 @@ if(relationsSortID){
 relationsMemberSearch.addEventListener(
     "focus",
     function(){
-         relationsMemberSearch
-    .closest(".partner-search-input-wrap")
-    ?.classList.remove(
-        "relations-name-selected"
-    );
-        const count =
-            document.getElementById("relationsMemberCount");
-
-        const sortAZ =
-            document.getElementById("relationsSortAZ");
-
-        const sortID =
-            document.getElementById("relationsSortID");
-
-        if(count){
-            count.style.display = "inline-flex";
-        }
-
-        if(sortAZ){
-            sortAZ.style.display = "inline-flex";
-        }
-
-        if(sortID){
-            sortID.style.display = "inline-flex";
-        }
 
         showRelationsMemberDropdown();
 
@@ -3850,21 +1578,10 @@ relationsMemberSearch.addEventListener(
                IN SEARCH BOX
                ========================= */
 
-           relationsMemberSearch.value =
-    selectedMember.name || "";
+            relationsMemberSearch.value =
+                selectedMember.name ||
+                "";
 
-const relationsSearchWrap =
-    relationsMemberSearch.closest(
-        ".partner-search-input-wrap"
-    );
-
-if(relationsSearchWrap){
-
-    relationsSearchWrap.classList.add(
-        "relations-name-selected"
-    );
-
-}
 
             /* =========================
                HIDE LIST ONLY
@@ -3899,52 +1616,22 @@ if(relationsSearchWrap){
     document.addEventListener(
         "click",
         function(event){
+
             if(
-    !event.target.closest(
-        ".relations-member-search-wrap"
-    )
-){
+                !event.target.closest(
+                    ".relations-member-search-wrap"
+                )
+            ){
 
-    relationsMemberDropdown.innerHTML = "";
+                relationsMemberDropdown.innerHTML =
+                    "";
 
-    relationsMemberDropdown.style.display = "none";
-/* CLEAR TYPED TEXT ON OUTSIDE CLICK
-   ONLY WHEN MEMBER IS NOT SELECTED */
+                relationsMemberDropdown.style.display =
+                    "none";
 
-const relationsMemberHeader =
-    document.querySelector(
-        ".relations-member-header"
-    );
+            }
 
-const relationsMemberSelected =
-    relationsMemberHeader &&
-    getComputedStyle(
-        relationsMemberHeader
-    ).display !== "none";
-
-if(!relationsMemberSelected){
-
-    relationsMemberSearch.value = "";
-
-}
-    const relationsCount =
-        document.getElementById(
-            "relationsMemberCount"
-        );
-
-    if(relationsCount){
-        relationsCount.style.display = "none";
-    }
-
-    if(relationsSortAZ){
-        relationsSortAZ.style.display = "none";
-    }
-
-    if(relationsSortID){
-        relationsSortID.style.display = "none";
-    }
-
-}        }
+        }
     );
 
 }
@@ -4487,13 +2174,7 @@ const daughtersField =
    HIDE CHILDREN IF NOT MARRIED
    ================================= */
 
-if(
-    !isMarried ||
-    (
-        !getName(partner) &&
-        children.length === 0
-    )
-){
+if(!isMarried){
 
     hideSection(
         "relationChildrenSection"
@@ -4504,10 +2185,11 @@ else{
 
     if(childrenSection){
 
-        childrenSection.style.display =
-            "block";
+    childrenSection.style.display =
+        "block";
 
-    }
+}
+
 
     /* ===============================
        CHILDREN TOTAL COUNT
@@ -8040,33 +5722,20 @@ window.openSearchEditMemberPage =
         placeholder="Search Member"
         autocomplete="off">
 
-   <div class="partner-sort-controls">
+    <div class="partner-sort-controls">
 
-    <!-- SEARCH EDIT MEMBER COUNT -->
+        <span
+            id="searchEditSortAZ"
+            class="partner-sort-arrow"
+            title="Alphabetical Order">A↕Z</span>
 
-    <span
-        id="searchEditMemberCount"
-        class="relation-member-count"
-        style="display:none;">
-    </span>
+        <span
+            id="searchEditSortID"
+            class="partner-sort-arrow"
+            title="ID Number Order">1↕9</span>
 
-    <!-- SEARCH EDIT SORT ARROWS -->
+    </div>
 
-    <span
-        id="searchEditSortAZ"
-        class="partner-sort-arrow"
-        title="Alphabetical Order">
-        A↕Z
-    </span>
-
-    <span
-        id="searchEditSortID"
-        class="partner-sort-arrow"
-        title="ID Number Order">
-        1↕9
-    </span>
-
-</div>
 </div>
 
                                 <div
@@ -8326,34 +5995,10 @@ let lastSearchEditSortMode = "";
 
                             );
 
-                                               }
+                        }
                     );
-
-/* =================================
-   SEARCH EDIT MEMBER COUNT
-   ================================= */
-
-const searchEditMemberCount =
-    document.getElementById(
-        "searchEditMemberCount"
-    );
-
-if(searchEditMemberCount){
-
-    searchEditMemberCount.textContent =
-        matchingMembers.length;
-
-    if(
-        document.activeElement === searchInput
-    ){
-
-        searchEditMemberCount.style.display =
-            "inline-flex";
-
-    }
-
-}
 matchingMembers.sort(function(a, b){
+
     if(searchEditSortMode === "name"){
 
         const result =
@@ -8462,20 +6107,7 @@ matchingMembers.sort(function(a, b){
 
 
         searchInput.value =
-    member.name || "";
-
-/* SELECTED MEMBER - FULL WIDTH */
-
-const editInputWrap =
-    searchInput.closest(
-        ".partner-search-input-wrap"
-    );
-
-if(editInputWrap){
-    editInputWrap.classList.add(
-        "edit-member-selected"
-    );
-}
+            member.name || "";
 
 
         dropdown.innerHTML =
@@ -8617,37 +6249,16 @@ if(searchEditID){
 searchInput.addEventListener(
     "focus",
     function(){
-        const editInputWrap =
-    searchInput.closest(
-        ".partner-search-input-wrap"
-    );
 
-if(editInputWrap){
-    editInputWrap.classList.remove(
-        "edit-member-selected"
-    );
-}
+        /* SHOW SORT ARROWS */
 
-        /* SHOW MEMBER COUNT */
-
-        const memberCount =
-            document.getElementById(
-                "searchEditMemberCount"
-            );
-
-        if(memberCount){
-            memberCount.style.display = "inline-flex";
+        if(searchEditAZ){
+            searchEditAZ.style.display = "";
         }
 
-      /* SHOW SORT ARROWS */
-
-if(searchEditAZ){
-    searchEditAZ.style.display = "inline-flex";
-}
-
-if(searchEditID){
-    searchEditID.style.display = "inline-flex";
-}
+        if(searchEditID){
+            searchEditID.style.display = "";
+        }
 
         /* SHOW MEMBERS DROPDOWN */
 
@@ -8655,47 +6266,10 @@ if(searchEditID){
 
     }
 );
-/* SEARCH EDIT MEMBER - CLICK FIX */
 
-searchInput.addEventListener(
-    "click",
-    function(){
-
-        const memberCount =
-            document.getElementById(
-                "searchEditMemberCount"
-            );
-
-        if(memberCount){
-            memberCount.style.display = "inline-flex";
-        }
-
-        if(searchEditAZ){
-            searchEditAZ.style.display = "inline-flex";
-        }
-
-        if(searchEditID){
-            searchEditID.style.display = "inline-flex";
-        }
-
-        showSearchMembers();
-
-    }
-);
-           
-        searchInput.addEventListener(
+            searchInput.addEventListener(
                 "input",
                 function(){
-                    const editInputWrap =
-    searchInput.closest(
-        ".partner-search-input-wrap"
-    );
-
-if(editInputWrap){
-    editInputWrap.classList.remove(
-        "edit-member-selected"
-    );
-}
 
                     showSearchMembers();
 
@@ -8703,7 +6277,7 @@ if(editInputWrap){
             );
 
 
-/* =================================
+          /* =================================
    SEARCH EDIT MEMBER - OUTSIDE CLICK
    ================================= */
 
@@ -8711,16 +6285,11 @@ document.addEventListener(
     "click",
     function(event){
 
-        /* IGNORE LISTENERS FROM OLD PAGES */
-
-        if(!searchInput.isConnected){
-            return;
-        }
-
         const searchWrap =
             searchInput.closest(
                 ".search-edit-member-wrapper"
             );
+
         if(
             searchWrap &&
             !searchWrap.contains(event.target)
@@ -8730,31 +6299,20 @@ document.addEventListener(
 
             dropdown.style.display = "none";
 
-           /* CLEAR SEARCH TEXT */
+            /* CLEAR SEARCH TEXT */
 
-searchInput.value = "";
+            searchInput.value = "";
 
-/* RESET INPUT FOCUS */
+            /* HIDE SORT ARROWS */
 
-searchInput.blur();
-            /* HIDE SORT ARROWS AND MEMBER COUNT */
+            if(searchEditAZ){
+                searchEditAZ.style.display = "none";
+            }
 
-if(searchEditAZ){
-    searchEditAZ.style.display = "none";
-}
+            if(searchEditID){
+                searchEditID.style.display = "none";
+            }
 
-if(searchEditID){
-    searchEditID.style.display = "none";
-}
-
-const memberCount =
-    document.getElementById(
-        "searchEditMemberCount"
-    );
-
-if(memberCount){
-    memberCount.style.display = "none";
-}
         }
 
     }
@@ -8822,11 +6380,6 @@ if(memberCount){
                         "familyId",
                         currentFamily.familyId || ""
                     );
-
-params.append(
-    "sessionToken",
-    sessionStorage.getItem("sessionToken") || ""
-);
 
 
                     const response =
@@ -9377,11 +6930,11 @@ function bindAddMemberButton(){
         type="text"
         id="memberPartnerSearch"
         class="common-form-select"
-        maxlength="12"
-            placeholder="Select / Search"
+        placeholder="Select  /  Search"
         autocomplete="off">
 
-  <div class="partner-sort-controls">
+    <div class="partner-sort-controls">
+<div class="partner-sort-controls">
 
     <!-- PARTNER MEMBER COUNT -->
 
@@ -9408,8 +6961,24 @@ function bindAddMemberButton(){
     </span>
 
 </div>
+        <span
+    id="partnerSortAZ"
+    class="partner-sort-arrow"
+    title="Alphabetical Order">
+    A↕Z
+</span>
+
+<span
+    id="partnerSortID"
+    class="partner-sort-arrow"
+    title="ID Number Order">
+    1↕9
+</span>
+
+    </div>
 
 </div>
+
 <div
     id="memberPartnerDropdown"
     class="relations-member-dropdown">
@@ -9462,13 +7031,14 @@ function bindAddMemberButton(){
     type="text"
     id="memberFatherSearch"
     class="common-form-select"
-    maxlength="12"
-            placeholder="Select / Search"
+    placeholder="Select  /  Search"
     autocomplete="off"
     disabled>
-       <div class="partner-sort-controls">
+        <div class="partner-sort-controls">
+<div class="partner-sort-controls">
 
     <!-- FATHER MEMBER COUNT -->
+
     <span
         id="fatherMemberCount"
         class="relation-member-count"
@@ -9476,6 +7046,7 @@ function bindAddMemberButton(){
     </span>
 
     <!-- FATHER SORT ARROWS -->
+
     <span
         id="fatherSortAZ"
         class="partner-sort-arrow"
@@ -9491,8 +7062,24 @@ function bindAddMemberButton(){
     </span>
 
 </div>
+            <span
+                id="fatherSortAZ"
+                class="partner-sort-arrow"
+                title="Alphabetical Order">
+                A↕Z
+            </span>
 
-</div>
+            <span
+                id="fatherSortID"
+                class="partner-sort-arrow"
+                title="ID Number Order">
+                1↕9
+            </span>
+
+        </div>
+
+    </div>
+
     <div
         id="memberFatherDropdown"
         class="relations-member-dropdown">
@@ -9544,14 +7131,15 @@ function bindAddMemberButton(){
             type="text"
             id="memberMotherSearch"
             class="common-form-select"
-            maxlength="12"
-            placeholder="Select / Search"
+            placeholder="Select  /  Search"
             autocomplete="off"
             disabled>
 
+        <div class="partner-sort-controls">
 <div class="partner-sort-controls">
 
     <!-- MOTHER MEMBER COUNT -->
+
     <span
         id="motherMemberCount"
         class="relation-member-count"
@@ -9559,6 +7147,7 @@ function bindAddMemberButton(){
     </span>
 
     <!-- MOTHER SORT ARROWS -->
+
     <span
         id="motherSortAZ"
         class="partner-sort-arrow"
@@ -9574,8 +7163,23 @@ function bindAddMemberButton(){
     </span>
 
 </div>
+            <span
+                id="motherSortAZ"
+                class="partner-sort-arrow">
+                A↕Z
+            </span>
 
-</div>    <div
+            <span
+                id="motherSortID"
+                class="partner-sort-arrow">
+                1↕9
+            </span>
+
+        </div>
+
+    </div>
+
+    <div
         id="memberMotherDropdown"
         class="relations-member-dropdown"
         style="display:none;">
@@ -12626,12 +10230,16 @@ if(
                     return true;
                 }
 
-               return String(
-    option.textContent || ""
-)
-.trim()
-.toLowerCase()
-.includes(searchText);
+                return (
+                    option.textContent
+                        .toLowerCase()
+                        .includes(searchText) ||
+
+                    option.value
+                        .toLowerCase()
+                        .includes(searchText)
+                );
+
             });
 
         const addNewOption =
@@ -12736,18 +10344,6 @@ if(fatherCount){
                                 ? ""
                                 : option.textContent;
 
-                        /* FATHER SELECTED NAME - FULL WIDTH */
-
-const fatherInputWrap =
-    fatherSearch.closest(
-        ".partner-search-input-wrap"
-    );
-
-if(fatherInputWrap){
-    fatherInputWrap.classList.add(
-        "father-name-selected"
-    );
-}
                         fatherDropdown.style.display =
                             "none";
 
@@ -12779,16 +10375,7 @@ if(fatherInputWrap){
 fatherSearch.addEventListener(
     "focus",
     function(){
-                const fatherInputWrap =
-    fatherSearch.closest(
-        ".partner-search-input-wrap"
-    );
 
-if(fatherInputWrap){
-    fatherInputWrap.classList.remove(
-        "father-name-selected"
-    );
-}
         /* SHOW FATHER SORT ARROWS */
 
         const fatherAZ =
@@ -12836,16 +10423,6 @@ if(fatherCount){
     fatherSearch.addEventListener(
         "input",
         function(){
-            const fatherInputWrap =
-    fatherSearch.closest(
-        ".partner-search-input-wrap"
-    );
-
-if(fatherInputWrap){
-    fatherInputWrap.classList.remove(
-        "father-name-selected"
-    );
-}
 
             fatherField.value = "";
             showFatherDropdown();
@@ -12966,12 +10543,16 @@ if(
                     return true;
                 }
 
-               return String(
-    option.textContent || ""
-)
-.trim()
-.toLowerCase()
-.includes(searchText);
+                return (
+                    option.textContent
+                        .toLowerCase()
+                        .includes(searchText) ||
+
+                    option.value
+                        .toLowerCase()
+                        .includes(searchText)
+                );
+
             });
 
         const addNewOption =
@@ -13069,18 +10650,7 @@ if(motherCount){
                             option.value === "__ADD_NEW__"
                                 ? ""
                                 : option.textContent;
-                       /* MOTHER SELECTED NAME - FULL WIDTH */
 
-const motherInputWrap =
-    motherSearch.closest(
-        ".partner-search-input-wrap"
-    );
-
-if(motherInputWrap){
-    motherInputWrap.classList.add(
-        "mother-name-selected"
-    );
-}
                         motherDropdown.style.display =
                             "none";
 
@@ -13149,18 +10719,6 @@ if(motherCount){
 motherSearch.addEventListener(
     "focus",
     function(){
-        /* MOTHER SEARCH OPEN - NORMAL WIDTH */
-
-const motherInputWrap =
-    motherSearch.closest(
-        ".partner-search-input-wrap"
-    );
-
-if(motherInputWrap){
-    motherInputWrap.classList.remove(
-        "mother-name-selected"
-    );
-}
 
         /* SHOW MOTHER SORT ARROWS */
 
@@ -13214,18 +10772,6 @@ if(motherCount){
     motherSearch.addEventListener(
         "input",
         function(){
-            /* MOTHER TYPING - SHOW COUNT AND ARROWS */
-
-const motherInputWrap =
-    motherSearch.closest(
-        ".partner-search-input-wrap"
-    );
-
-if(motherInputWrap){
-    motherInputWrap.classList.remove(
-        "mother-name-selected"
-    );
-}
 
             motherField.value = "";
 
@@ -13396,7 +10942,10 @@ if(
                     }
 
 
-                   return text.includes(searchText);
+                    return (
+                        text.includes(searchText) ||
+                        id.includes(searchText)
+                    );
 
                 }
             );
@@ -13565,18 +11114,7 @@ if(partnerCount){
 
                         partnerSearch.value =
                             selectOption.textContent;
-                        /* SELECTED NAME - FULL WIDTH */
 
-const partnerInputWrap =
-    partnerSearch.closest(
-        ".partner-search-input-wrap"
-    );
-
-if(partnerInputWrap){
-    partnerInputWrap.classList.add(
-        "partner-name-selected"
-    );
-}
 
                         partnerDropdown.innerHTML =
                             "";
@@ -13620,18 +11158,6 @@ if(partnerInputWrap){
 partnerSearch.addEventListener(
     "focus",
     function(){
-        /* SEARCH OPEN - SHOW COUNT AND ARROWS */
-
-const partnerInputWrap =
-    partnerSearch.closest(
-        ".partner-search-input-wrap"
-    );
-
-if(partnerInputWrap){
-    partnerInputWrap.classList.remove(
-        "partner-name-selected"
-    );
-}
         /* SHOW SORT ARROWS WHEN PARTNER SEARCH OPENS */
 
 const partnerAZ =
@@ -13681,16 +11207,6 @@ if(partnerCount){
         "input",
         function(){
 
-             const partnerInputWrap =
-    partnerSearch.closest(
-        ".partner-search-input-wrap"
-    );
-
-if(partnerInputWrap){
-    partnerInputWrap.classList.remove(
-        "partner-name-selected"
-    );
-}
             /*
              User started a new search.
              Clear previous selected ID.
@@ -14070,7 +11586,6 @@ if(count){
     );
 
 }
-
     
 /* =================================
    ADD NEW PERSON
@@ -17615,7 +15130,6 @@ fetch(
 document
     .getElementById("newFamilyName")
     .addEventListener(
-        
         "keydown",
         function(event){
 
@@ -17768,17 +15282,10 @@ document
         new URLSearchParams();
 
 
-    
     params.append(
         "action",
         "saveFamilyTree"
     );
-
-    params.append(
-        "sessionToken",
-        sessionStorage.getItem("sessionToken") || ""
-    );
-
 
 
     params.append(
@@ -18374,42 +15881,14 @@ const familyName =
         :
     </span>
 
- <div class="search-edit-member-wrapper family-tree-search-wrapper">
+   <div class="search-edit-member-wrapper">
 
-    <div class="partner-search-input-wrap">
-
-        <input
-            type="text"
-            id="familyTreeMemberSearch"
-            class="common-form-input"
-            placeholder="Search Member"
-            autocomplete="off">
-
-        <div class="partner-sort-controls">
-
-            <span
-                id="familyTreeMemberCount"
-                class="relation-member-count"
-                style="display:none;">
-            </span>
-
-            <span
-                id="familyTreeSortAZ"
-                class="partner-sort-arrow"
-                title="Alphabetical Order">
-                A↕Z
-            </span>
-
-            <span
-                id="familyTreeSortID"
-                class="partner-sort-arrow"
-                title="ID Number Order">
-                1↕9
-            </span>
-
-        </div>
-
-    </div>
+    <input
+        type="text"
+        id="familyTreeMemberSearch"
+        class="common-form-input"
+        placeholder="Search Member"
+        autocomplete="off">
 
     <div
         id="familyTreeMemberDropdown"
@@ -18417,7 +15896,8 @@ const familyName =
         style="display:none;">
     </div>
 
-</div>           </div>
+</div>
+            </div>
 
 
             <!-- GENERATIONS -->
@@ -18687,24 +16167,6 @@ const familyTreeDropdown =
 let selectedFamilyTreeMemberId =
     "";
 
-/* =====================================
-   FAMILY TREE MEMBER SORTING
-   ===================================== */
-
-let familyTreeSortMode = "name";
-
-let familyTreeNameAscending = true;
-let familyTreeIdAscending = true;
-
-const familyTreeSortAZ =
-    document.getElementById(
-        "familyTreeSortAZ"
-    );
-
-const familyTreeSortID =
-    document.getElementById(
-        "familyTreeSortID"
-    );
 
 /* =====================================
    SHOW / FILTER MEMBERS
@@ -18768,7 +16230,7 @@ function showFamilyTreeMembers(){
                     }
 
 
-                                     /* NAME OR MEMBER ID SEARCH */
+                    /* NAME OR MEMBER ID SEARCH */
 
                     return (
                         memberName.includes(
@@ -18783,68 +16245,19 @@ function showFamilyTreeMembers(){
                 }
             )
             .sort(
-    function(a, b){
+                function(a,b){
 
-        /* ALPHABETICAL SORTING */
+                    return String(
+                        a.name || ""
+                    )
+                    .localeCompare(
+                        String(
+                            b.name || ""
+                        )
+                    );
 
-        if(familyTreeSortMode === "name"){
-
-            const result =
-                String(a.name || "")
-                .localeCompare(
-                    String(b.name || ""),
-                    undefined,
-                    { sensitivity: "base" }
-                );
-
-            return familyTreeNameAscending
-                ? result
-                : -result;
-
-        }
-
-        /* MEMBER ID NUMBER SORTING */
-
-        const getMemberNumber = function(member){
-
-            const id =
-                String(member.memberId || "");
-
-            const match =
-                id.match(/(\d+)$/);
-
-            return match
-                ? Number(match[1])
-                : 0;
-
-        };
-
-        const result =
-            getMemberNumber(a) -
-            getMemberNumber(b);
-
-        return familyTreeIdAscending
-            ? result
-            : -result;
-
-    }
-);
-
-/* =====================================
-   FAMILY TREE MEMBER COUNT
-   ===================================== */
-
-const familyTreeMemberCount =
-    document.getElementById(
-        "familyTreeMemberCount"
-    );
-
-if(familyTreeMemberCount){
-
-    familyTreeMemberCount.textContent =
-        matchingMembers.length;
-
-}
+                }
+            );
 
 
     /* =====================================
@@ -18904,35 +16317,24 @@ if(familyTreeMemberCount){
                MEMBER SELECT
                ================================= */
 
-     option.onclick =
+      option.onclick =
     function(){
 
         selectedFamilyTreeMemberId =
             member.memberId;
 
+
         familyTreeSearchInput.value =
             member.name;
 
-        /* SELECTED NAME FULL WIDTH */
-
-        const treeSearchWrap =
-            familyTreeSearchInput.closest(
-                ".partner-search-input-wrap"
-            );
-
-        if(treeSearchWrap){
-
-            treeSearchWrap.classList.add(
-                "family-tree-name-selected"
-            );
-
-        }
 
         familyTreeDropdown.innerHTML =
             "";
 
+
         familyTreeDropdown.style.display =
             "none";
+
 
         /* =====================================
            MEMBER SELECTED
@@ -19245,65 +16647,7 @@ updateOtherPartnersVisibility();    };
         "block";
 
 }
-/* =====================================
-   FAMILY TREE SORT ARROW CLICK EVENTS
-   ===================================== */
 
-if(familyTreeSortAZ){
-
-    familyTreeSortAZ.addEventListener(
-        "click",
-        function(event){
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            if(familyTreeSortMode === "name"){
-
-                familyTreeNameAscending =
-                    !familyTreeNameAscending;
-
-            }else{
-
-                familyTreeSortMode = "name";
-                familyTreeNameAscending = true;
-
-            }
-
-            showFamilyTreeMembers();
-
-        }
-    );
-
-}
-
-if(familyTreeSortID){
-
-    familyTreeSortID.addEventListener(
-        "click",
-        function(event){
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            if(familyTreeSortMode === "id"){
-
-                familyTreeIdAscending =
-                    !familyTreeIdAscending;
-
-            }else{
-
-                familyTreeSortMode = "id";
-                familyTreeIdAscending = true;
-
-            }
-
-            showFamilyTreeMembers();
-
-        }
-    );
-
-}
 /* =====================================
    TREE VIEW SEARCH EVENTS
    ===================================== */
@@ -19311,43 +16655,7 @@ if(familyTreeSortID){
 familyTreeSearchInput.addEventListener(
     "focus",
     function(){
-        /* RESTORE SEARCH CONTROLS */
 
-familyTreeSearchInput
-    .closest(".partner-search-input-wrap")
-    ?.classList.remove(
-        "family-tree-name-selected"
-    );
-        /* =================================
-   FAMILY TREE SEARCH CONTROLS
-   ================================= */
-
-const treeCount =
-    document.getElementById(
-        "familyTreeMemberCount"
-    );
-
-const treeSortAZ =
-    document.getElementById(
-        "familyTreeSortAZ"
-    );
-
-const treeSortID =
-    document.getElementById(
-        "familyTreeSortID"
-    );
-
-if(treeCount){
-    treeCount.style.display = "inline-flex";
-}
-
-if(treeSortAZ){
-    treeSortAZ.style.display = "inline-flex";
-}
-
-if(treeSortID){
-    treeSortID.style.display = "inline-flex";
-}
         /* EXISTING SELECTED MEMBER
            MUST REMAIN SELECTED */
 
@@ -19368,8 +16676,7 @@ if(treeSortID){
 
 
         /* HIDE TREE OPTIONS UNTIL
-           A VALID MEMBER IS SELECTE
-           D */
+           A VALID MEMBER IS SELECTED */
 
         const familyTreeOptionsRow =
             document.getElementById(
@@ -19432,12 +16739,12 @@ document.addEventListener(
     function(event){
 
         if(
-    !familyTreeSearchInput ||
-    !familyTreeDropdown ||
-    !familyTreeSearchInput.isConnected
-){
-    return;
-}
+            !familyTreeSearchInput ||
+            !familyTreeDropdown
+        ){
+            return;
+        }
+
         const clickedSearchInput =
             familyTreeSearchInput.contains(
                 event.target
@@ -19449,46 +16756,16 @@ document.addEventListener(
             );
 
 
-       if(
-    !clickedSearchInput &&
-    !clickedDropdown
-){
+        if(
+            !clickedSearchInput &&
+            !clickedDropdown
+        ){
 
-   familyTreeDropdown.style.display =
-    "none";
+            familyTreeDropdown.style.display =
+                "none";
 
-/* CLEAR TYPED TEXT ONLY
-   WHEN MEMBER IS NOT SELECTED */
+        }
 
-if(!selectedFamilyTreeMemberId){
-
-    familyTreeSearchInput.value = "";
-
-    familyTreeSearchInput.blur();
-
-}
-
-/* HIDE MEMBER COUNT */
-    const treeCount =
-        document.getElementById(
-            "familyTreeMemberCount"
-        );
-
-    if(treeCount){
-        treeCount.style.display = "none";
-    }
-
-    /* HIDE SORT ARROWS */
-
-    if(familyTreeSortAZ){
-        familyTreeSortAZ.style.display = "none";
-    }
-
-    if(familyTreeSortID){
-        familyTreeSortID.style.display = "none";
-    }
-
-}
     }
 );
 
