@@ -575,7 +575,6 @@ if(treeViewBtn){
     </select>
 </div>
 
-
 <!-- TRUSTED MEMBERS HEADING -->
 
 <div class="family-trusted-heading">
