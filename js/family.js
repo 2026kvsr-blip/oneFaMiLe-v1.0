@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -444,132 +443,195 @@ if(treeViewBtn){
 
                     <h3>Privacy & Permissions</h3>
 
-                    <label>Family Visibility</label>
+         <style>
+    .family-settings-row {
+        display: grid;
+        grid-template-columns:
+            minmax(0, 1fr) 12px 100px;
+        align-items: center;
+        gap: 8px;
+        margin: 12px 0;
+        text-align: left;
+    }
 
-                    <select
-                        id="familyVisibility"
-                        class="common-form-select">
+    .family-settings-row span {
+        font-size: 14px;
+        color: #2A6EB0;
+    }
 
-                        <option value="Private">
-                            Visible to Me Only
-                        </option>
+    .family-settings-row select {
+        width: 100%;
+        min-width: 0;
+        margin: 0;
+        font-size: 14px;
+    }
 
-                        <option value="Public">
-                            Visible to All
-                        </option>
+    .family-trusted-heading {
+        text-align: center;
+        color: #2A6EB0;
+        font-size: 17px;
+        font-weight: bold;
+        margin: 22px 0 14px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #2A6EB0;
+    }
+</style>
 
-                    </select>
 
-                    <p>Allow Other Users to Edit Members</p>
+<!-- FAMILY VISIBILITY -->
 
-                    <select
-                        id="familyAllowEdit"
-                        class="common-form-select">
+<div class="family-settings-row">
+    <span>Visibility</span>
+    <span>:</span>
 
-                        <option value="No">No</option>
-                        <option value="Yes">Yes</option>
+    <select
+        id="familyVisibility"
+        class="common-form-select">
 
-                    </select>
+        <option value="Private">Private</option>
+        <option value="Public">Public</option>
 
-                    <p>Allow Other Users to Add Members</p>
+    </select>
+</div>
 
-                    <select
-                        id="familyAllowAdd"
-                        class="common-form-select">
 
-                        <option value="No">No</option>
-                        <option value="Yes">Yes</option>
+<!-- OLD COLUMNS G AND H: PRESERVE FOR COMPATIBILITY -->
 
-                    </select>
-
-                    <p>Show Search</p>
-
-                    <select
-                        id="familyShowSearch"
-                        class="common-form-select">
-
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-
-                    </select>
-
-                    <p>Show Relations</p>
-
-                    <select
-                        id="familyShowRelations"
-                        class="common-form-select">
-
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-
-                    </select>
-
-                   <p>Show Tree View</p>
-
-<select
-    id="familyShowTree"
-    class="common-form-select">
-
-    <option value="Yes">Yes</option>
+<select id="familyAllowEdit" style="display:none">
     <option value="No">No</option>
+    <option value="Yes">Yes</option>
+</select>
 
+<select id="familyAllowAdd" style="display:none">
+    <option value="No">No</option>
+    <option value="Yes">Yes</option>
 </select>
 
 
-<!-- NEW: PERSONAL DETAILS -->
+<!-- SHOW SEARCH -->
 
-<p>Show Personal Details</p>
+<div class="family-settings-row">
+    <span>Show Search</span>
+    <span>:</span>
 
-<select
-    id="familyShowPersonalDetails"
-    class="common-form-select">
+    <select
+        id="familyShowSearch"
+        class="common-form-select">
 
-    <option value="No">No</option>
-    <option value="Yes">Yes</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
 
-</select>
-
-
-<!-- NEW: TRUSTED CONTACTS FULL VIEW -->
-
-<p>Trusted Contacts Full View</p>
-
-<select
-    id="familyTrustedContactsFullView"
-    class="common-form-select">
-
-    <option value="No">No</option>
-    <option value="Yes">Yes</option>
-
-</select>
+    </select>
+</div>
 
 
-<!-- NEW: TRUSTED CONTACTS ADD PERMISSION -->
+<!-- SHOW RELATIONS -->
 
-<p>Trusted Contacts Allow Add Member</p>
+<div class="family-settings-row">
+    <span>Show Relations</span>
+    <span>:</span>
 
-<select
-    id="familyTrustedAllowAdd"
-    class="common-form-select">
+    <select
+        id="familyShowRelations"
+        class="common-form-select">
 
-    <option value="No">No</option>
-    <option value="Yes">Yes</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
 
-</select>
+    </select>
+</div>
 
 
-<!-- NEW: TRUSTED CONTACTS EDIT PERMISSION -->
+<!-- SHOW TREE -->
 
-<p>Trusted Contacts Allow Edit Member</p>
+<div class="family-settings-row">
+    <span>Show Tree</span>
+    <span>:</span>
 
-<select
-    id="familyTrustedAllowEdit"
-    class="common-form-select">
+    <select
+        id="familyShowTree"
+        class="common-form-select">
 
-    <option value="No">No</option>
-    <option value="Yes">Yes</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
 
-</select>
+    </select>
+</div>
+
+
+<!-- PERSONAL DETAILS -->
+
+<div class="family-settings-row">
+    <span>Personal Details</span>
+    <span>:</span>
+
+    <select
+        id="familyShowPersonalDetails"
+        class="common-form-select">
+
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+
+    </select>
+</div>
+
+
+<!-- TRUSTED MEMBERS HEADING -->
+
+<div class="family-trusted-heading">
+    Trusted Members
+</div>
+
+
+<!-- TRUSTED FULL VIEW -->
+
+<div class="family-settings-row">
+    <span>Trusted Full View</span>
+    <span>:</span>
+
+    <select
+        id="familyTrustedContactsFullView"
+        class="common-form-select">
+
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+
+    </select>
+</div>
+
+
+<!-- TRUSTED ADD -->
+
+<div class="family-settings-row">
+    <span>Trusted Add</span>
+    <span>:</span>
+
+    <select
+        id="familyTrustedAllowAdd"
+        class="common-form-select">
+
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+
+    </select>
+</div>
+
+
+<!-- TRUSTED EDIT -->
+
+<div class="family-settings-row">
+    <span>Trusted Edit</span>
+    <span>:</span>
+
+    <select
+        id="familyTrustedAllowEdit"
+        class="common-form-select">
+
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+
+    </select>
+</div>
 
 
 <div style="
@@ -830,7 +892,37 @@ document.getElementById(
                         "familyShowTree"
                     ).value
                 );
+               /* =====================================
+   NEW FAMILY SETTINGS
+   ===================================== */
 
+formData.append(
+    "showPersonalDetails",
+    document.getElementById(
+        "familyShowPersonalDetails"
+    ).value
+);
+
+formData.append(
+    "trustedContactsFullView",
+    document.getElementById(
+        "familyTrustedContactsFullView"
+    ).value
+);
+
+formData.append(
+    "trustedAllowAdd",
+    document.getElementById(
+        "familyTrustedAllowAdd"
+    ).value
+);
+
+formData.append(
+    "trustedAllowEdit",
+    document.getElementById(
+        "familyTrustedAllowEdit"
+    ).value
+);
                 saveBtn.disabled = true;
 
                 try{
