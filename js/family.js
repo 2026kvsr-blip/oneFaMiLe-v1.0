@@ -635,23 +635,39 @@ if(treeViewBtn){
 
 
 <div style="
-    text-align:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
     margin-top:20px;
+    width:100%;
 ">
-                        <button
-                            id="saveFamilySettingsBtn"
-                            class="back-btn">
-                            Save Settings
-                        </button>
 
-                        <button
-                            id="familySettingsBackBtn"
-                            class="back-btn">
-                            ← Back
-                        </button>
+    <button
+        id="saveFamilySettingsBtn"
+        class="back-btn"
+        style="
+            flex:1;
+            min-width:0;
+            margin:0;
+            white-space:nowrap;
+        ">
+        Save Settings
+    </button>
 
-                    </div>
+    <button
+        id="familySettingsBackBtn"
+        class="back-btn"
+        style="
+            flex:1;
+            min-width:0;
+            margin:0;
+            white-space:nowrap;
+        ">
+        ← Back
+    </button>
 
+</div>
                 </div>
                 `
             );
