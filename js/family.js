@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -1129,7 +1130,7 @@ if(addTrustedMobileBtn){
                 alert(
                     "Trusted Member added successfully."
                 );
-
+await loadTrustedMembers();
                 document.getElementById(
                     "trustedMemberName"
                 ).value = "";
@@ -1162,6 +1163,165 @@ if(addTrustedMobileBtn){
         };
 
 }
+            /* =====================================
+   LOAD TRUSTED MEMBERS LIST
+   ===================================== */
+
+async function loadTrustedMembers(){
+
+    const list =
+        document.getElementById(
+            "trustedMembersList"
+        );
+
+    if(!list) return;
+
+    list.textContent =
+        "Loading Trusted Members...";
+
+    const sessionToken =
+        sessionStorage.getItem(
+            "sessionToken"
+        );
+
+    if(!sessionToken){
+
+        list.textContent =
+            "Please login again.";
+
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append(
+        "action",
+        "getTrustedMembers"
+    );
+
+    formData.append(
+        "sessionToken",
+        sessionToken
+    );
+
+    formData.append(
+        "familyId",
+        currentFamily.familyId
+    );
+
+    try{
+
+        const response = await fetch(
+            API_URL,
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+        const result =
+            await response.json();
+
+        if(result.status !== "success"){
+
+            list.textContent =
+                result.message ||
+                "Unable to load Trusted Members.";
+
+            return;
+        }
+
+        const members =
+            Array.isArray(result.trustedMembers)
+                ? result.trustedMembers
+                : [];
+
+        list.replaceChildren();
+
+        if(members.length === 0){
+
+            list.textContent =
+                "No trusted members added.";
+
+            return;
+        }
+
+        members.forEach(function(item){
+
+            const member =
+                typeof item === "string"
+                    ? {
+                        name: "",
+                        mobile: item,
+                        email: ""
+                    }
+                    : item;
+
+            const card =
+                document.createElement("div");
+
+            card.style.cssText = `
+                padding:10px;
+                margin-bottom:8px;
+                border:1px solid #B8C9D6;
+                border-radius:8px;
+                text-align:left;
+                background:#FFFFFF;
+            `;
+
+            const name =
+                document.createElement("div");
+
+            name.style.cssText = `
+                color:#2A6EB0;
+                font-weight:bold;
+                margin-bottom:4px;
+            `;
+
+            name.textContent =
+                member.name || "Trusted Member";
+
+            const mobile =
+                document.createElement("div");
+
+            mobile.textContent =
+                "Mobile: " + (member.mobile || "");
+
+            card.appendChild(name);
+            card.appendChild(mobile);
+
+            if(member.email){
+
+                const email =
+                    document.createElement("div");
+
+                email.textContent =
+                    "Email: " + member.email;
+
+                card.appendChild(email);
+            }
+
+            list.appendChild(card);
+
+        });
+
+    }catch(error){
+
+        console.error(
+            "LOAD TRUSTED MEMBERS ERROR:",
+            error
+        );
+
+        list.textContent =
+            "Unable to load Trusted Members.";
+
+    }
+
+}
+
+/* LOAD WHEN PAGE OPENS */
+
+loadTrustedMembers();
             /* BACK TO FAMILY SETTINGS */
 
             document.getElementById(
