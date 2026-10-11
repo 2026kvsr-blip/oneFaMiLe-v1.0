@@ -1322,6 +1322,7 @@ async function loadTrustedMembers(){
 /* LOAD WHEN PAGE OPENS */
 
 loadTrustedMembers();
+            
             /* BACK TO FAMILY SETTINGS */
 
             document.getElementById(
