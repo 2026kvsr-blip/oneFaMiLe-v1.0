@@ -583,9 +583,27 @@ if(treeViewBtn){
     Trusted Members
 </div>
 
+<div style="
+    display:flex;
+    justify-content:center;
+    margin:12px 0 18px;
+">
+
+    <button
+        type="button"
+        id="manageTrustedMembersBtn"
+        class="back-btn"
+        style="
+            width:100%;
+            margin:0;
+        ">
+        Manage Members
+    </button>
+
+</div>
+
 
 <!-- TRUSTED FULL VIEW -->
-
 <div class="family-settings-row">
     <span>Trusted Full View</span>
     <span>:</span>
