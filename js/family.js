@@ -666,17 +666,19 @@ if(treeViewBtn){
 ">
 
     <button
-        id="saveFamilySettingsBtn"
-        class="back-btn"
-        style="
-            flex:1;
-            min-width:0;
-            margin:0;
-            white-space:nowrap;
-        ">
-        Save Settings
-    </button>
-
+    id="saveFamilySettingsBtn"
+    class="back-btn"
+    style="
+        flex:1;
+        min-width:0;
+        margin:0;
+        white-space:nowrap;
+        border:2px solid #28A745;
+        color:#28A745;
+        background:transparent;
+    ">
+    Save Settings
+</button>
     <button
         id="familySettingsBackBtn"
         class="back-btn"
