@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -1103,8 +1102,17 @@ formData.append(
         "familyTrustedAllowEdit"
     ).value
 );
-                saveBtn.disabled = true;
 
+/* AUTO ADD MEMBERS - COLUMN R */
+
+formData.append(
+    "autoAddMembers",
+    document.getElementById(
+        "familyAutoAddMembers"
+    ).value
+);
+
+saveBtn.disabled = true;
                 try{
 
                     const response = await fetch(
