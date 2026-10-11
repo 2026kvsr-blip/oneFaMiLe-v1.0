@@ -917,67 +917,72 @@ if(manageTrustedMembersBtn){
 
                     <!-- TRUSTED MEMBER NAME -->
 
-<label for="trustedMemberName">
-    Name
-</label>
+<!-- TRUSTED MEMBER INPUT FIELDS -->
 
-<input
-    type="text"
-    id="trustedMemberName"
-    class="common-form-input"
-    placeholder="Enter member name"
-    maxlength="100"
-    autocomplete="name"
-    style="
-        width:100%;
-        box-sizing:border-box;
-        margin:6px 0 12px;
-    "
->
+<style>
+    .trusted-member-row {
+        display: grid;
+        grid-template-columns: 68px 10px minmax(0, 1fr);
+        align-items: center;
+        gap: 6px;
+        margin: 8px 0;
+    }
 
+    .trusted-member-row label,
+    .trusted-member-row span {
+        color: #2A6EB0;
+        font-size: 14px;
+    }
 
-<!-- TRUSTED MEMBER MOBILE -->
+    .trusted-member-row input {
+        width: 100%;
+        min-width: 0;
+        height: 36px;
+        min-height: 36px;
+        padding: 5px 8px;
+        margin: 0;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+</style>
 
-<label for="trustedMobileInput">
-    Mobile Number
-</label>
+<div class="trusted-member-row">
+    <label for="trustedMemberName">Name</label>
+    <span>:</span>
+    <input
+        type="text"
+        id="trustedMemberName"
+        class="common-form-input"
+        placeholder="Enter member name"
+        maxlength="100"
+    >
+</div>
 
-<input
-    type="tel"
-    id="trustedMobileInput"
-    class="common-form-input"
-    placeholder="Enter 10-digit mobile number"
-    maxlength="10"
-    inputmode="numeric"
-    autocomplete="tel"
-    style="
-        width:100%;
-        box-sizing:border-box;
-        margin:6px 0 12px;
-    "
->
+<div class="trusted-member-row">
+    <label for="trustedMobileInput">Mobile</label>
+    <span>:</span>
+    <input
+        type="tel"
+        id="trustedMobileInput"
+        class="common-form-input"
+        placeholder="10-digit mobile number"
+        maxlength="10"
+        inputmode="numeric"
+    >
+</div>
 
-
-<!-- TRUSTED MEMBER EMAIL - OPTIONAL -->
-
-<label for="trustedMemberEmail">
-    Email (Optional)
-</label>
-
-<input
-    type="email"
-    id="trustedMemberEmail"
-    class="common-form-input"
-    placeholder="Enter email address (optional)"
-    maxlength="254"
-    autocomplete="email"
-    style="
-        width:100%;
-        box-sizing:border-box;
-        margin:6px 0 12px;
-    "
->
-                    <div style="
+<div class="trusted-member-row">
+    <label for="trustedMemberEmail">Email</label>
+    <span>:</span>
+    <input
+        type="email"
+        id="trustedMemberEmail"
+        class="common-form-input"
+        placeholder="Optional"
+        maxlength="254"
+    >
+</div>
+<div style="
                         display:flex;
                         gap:12px;
                         margin-top:15px;
