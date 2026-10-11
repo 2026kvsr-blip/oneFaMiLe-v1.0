@@ -1,6 +1,4 @@
 
-
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -1482,7 +1480,240 @@ memberDetails.appendChild(email);            }
     }
 
 }
+/* =====================================
+   IMPORT EXISTING MEMBERS - POPUP
+   ===================================== */
 
+const importExistingMembersBtn =
+    document.getElementById(
+        "importExistingMembersBtn"
+    );
+
+if(importExistingMembersBtn){
+
+    importExistingMembersBtn.onclick = function(){
+
+        const oldDialog =
+            document.getElementById(
+                "trustedImportDialog"
+            );
+
+        if(oldDialog){
+            oldDialog.remove();
+        }
+
+        const dialog =
+            document.createElement("div");
+
+        dialog.id = "trustedImportDialog";
+
+        dialog.style.cssText = `
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.45);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            z-index:99999;
+            padding:15px;
+        `;
+
+        dialog.innerHTML = `
+            <div style="
+                width:100%;
+                max-width:360px;
+                padding:22px;
+                background:#FFFFFF;
+                border-radius:12px;
+                box-sizing:border-box;
+            ">
+
+                <h3 style="
+                    color:#2A6EB0;
+                    text-align:center;
+                    margin-top:0;
+                ">
+                    Import Existing Members
+                </h3>
+
+                <p style="font-size:14px;">
+                    Select Import Mode:
+                </p>
+
+                <label style="
+                    display:block;
+                    margin-bottom:14px;
+                ">
+                    <input
+                        type="radio"
+                        name="trustedImportMode"
+                        value="skip"
+                        checked
+                    >
+                    <b>SKIP</b> — Keep existing Trusted Members unchanged
+                </label>
+
+                <label style="
+                    display:block;
+                    margin-bottom:20px;
+                ">
+                    <input
+                        type="radio"
+                        name="trustedImportMode"
+                        value="override"
+                    >
+                    <b>OVERRIDE</b> — Replace existing details with Family Tree data
+                </label>
+
+                <div style="
+                    display:flex;
+                    gap:10px;
+                ">
+
+                    <button
+                        type="button"
+                        id="confirmTrustedImportBtn"
+                        style="
+                            flex:1;
+                            padding:10px;
+                            background:#2A6EB0;
+                            color:white;
+                            border:none;
+                            border-radius:7px;
+                        ">
+                        Confirm Import
+                    </button>
+
+                    <button
+                        type="button"
+                        id="cancelTrustedImportBtn"
+                        style="
+                            flex:1;
+                            padding:10px;
+                            background:white;
+                            color:#2A6EB0;
+                            border:1px solid #2A6EB0;
+                            border-radius:7px;
+                        ">
+                        Cancel
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        document.body.appendChild(dialog);
+
+        document.getElementById(
+            "cancelTrustedImportBtn"
+        ).onclick = function(){
+            dialog.remove();
+        };
+
+        document.getElementById(
+            "confirmTrustedImportBtn"
+        ).onclick = async function(){
+
+            const mode =
+                dialog.querySelector(
+                    'input[name="trustedImportMode"]:checked'
+                ).value;
+
+            const confirmBtn = this;
+
+            const token =
+                sessionStorage.getItem("sessionToken");
+
+            if(!token){
+                alert("Please login again.");
+                return;
+            }
+
+            const formData = new FormData();
+
+            formData.append(
+                "action",
+                "importExistingTrustedMembers"
+            );
+
+            formData.append(
+                "sessionToken",
+                token
+            );
+
+            formData.append(
+                "familyId",
+                currentFamily.familyId
+            );
+
+            formData.append(
+                "mode",
+                mode
+            );
+
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = "Importing...";
+
+            try{
+
+                const response = await fetch(
+                    API_URL,
+                    {
+                        method:"POST",
+                        body:formData
+                    }
+                );
+
+                const result =
+                    await response.json();
+
+                if(result.status !== "success"){
+
+                    alert(
+                        result.message ||
+                        "Unable to import members."
+                    );
+
+                    return;
+                }
+
+                dialog.remove();
+
+                await loadTrustedMembers();
+
+                alert(
+                    "Import Completed!\n\n" +
+                    "Mode: " + mode.toUpperCase() + "\n" +
+                    "Added: " + result.added + "\n" +
+                    "Updated: " + result.updated + "\n" +
+                    "Skipped: " + result.skipped
+                );
+
+            }catch(error){
+
+                console.error(
+                    "TRUSTED IMPORT ERROR:",
+                    error
+                );
+
+                alert(
+                    "Unable to import members."
+                );
+
+            }finally{
+
+                confirmBtn.disabled = false;
+                confirmBtn.textContent =
+                    "Confirm Import";
+
+            }
+
+        };
+
+    };
+
+}
 /* LOAD WHEN PAGE OPENS */
 
 loadTrustedMembers();
