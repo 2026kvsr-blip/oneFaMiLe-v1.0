@@ -608,19 +608,33 @@ if(treeViewBtn){
 
 <div class="family-settings-row">
 
-    <label for="familyAutoAddMembers">
+    <label
+        for="familyAutoAddMembers"
+        style="color:#2A6EB0;"
+    >
         Auto Add Members
     </label>
 
-    <span>:</span>
+    <span style="color:#2A6EB0;">:</span>
 
-    <select id="familyAutoAddMembers">
+    <select
+        id="familyAutoAddMembers"
+        style="
+            width:100%;
+            box-sizing:border-box;
+            background:#FFFFFF;
+            color:#000000;
+            border:1px solid #B8C9D6;
+            border-radius:10px;
+            padding:10px;
+            font-size:16px;
+        "
+    >
         <option value="Yes" selected>Yes</option>
         <option value="No">No</option>
     </select>
 
 </div>
-
 
 <!-- TRUSTED FULL VIEW -->
 <div class="family-settings-row">
