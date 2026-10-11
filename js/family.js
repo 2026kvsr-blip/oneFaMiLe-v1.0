@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -1015,8 +1016,39 @@ if(manageTrustedMembersBtn){
                             ← Back
                         </button>
 
+
+
                     </div>
 
+
+
+<!-- IMPORT EXISTING FAMILY MEMBERS -->
+
+<div style="
+    margin-top:14px;
+    margin-bottom:12px;
+    text-align:center;
+">
+
+    <button
+        type="button"
+        id="importExistingMembersBtn"
+        style="
+            width:100%;
+            padding:11px;
+            border:1px solid #2A6EB0;
+            border-radius:8px;
+            background:#FFFFFF;
+            color:#2A6EB0;
+            font-size:14px;
+            font-weight:bold;
+            cursor:pointer;
+        "
+    >
+        Import Existing Members
+    </button>
+
+</div>
                     <h3 style="
                         color:#2A6EB0;
                         margin-top:25px;
