@@ -690,11 +690,38 @@ if(treeViewBtn){
                     ).value =
                         settings.showRelations || "Yes";
 
-                    document.getElementById(
-                        "familyShowTree"
-                    ).value =
-                        settings.showTree || "Yes";
+                   document.getElementById(
+    "familyShowTree"
+).value =
+    settings.showTree || "Yes";
 
+
+/* =====================================
+   LOAD NEW FAMILY SETTINGS: M TO Q
+   ===================================== */
+
+document.getElementById(
+    "familyShowPersonalDetails"
+).value =
+    settings.showPersonalDetails || "No";
+
+
+document.getElementById(
+    "familyTrustedContactsFullView"
+).value =
+    settings.trustedContactsFullView || "No";
+
+
+document.getElementById(
+    "familyTrustedAllowAdd"
+).value =
+    settings.trustedAllowAdd || "No";
+
+
+document.getElementById(
+    "familyTrustedAllowEdit"
+).value =
+    settings.trustedAllowEdit || "No";
                 }catch(error){
 
                     console.error(
