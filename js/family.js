@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -844,7 +843,125 @@ document.getElementById(
             }
 
             loadFamilySettings();
+            /* =====================================
+   MANAGE TRUSTED MEMBERS PAGE
+   ===================================== */
 
+const manageTrustedMembersBtn =
+    document.getElementById(
+        "manageTrustedMembersBtn"
+    );
+
+if(manageTrustedMembersBtn){
+
+    manageTrustedMembersBtn.onclick =
+        function(){
+
+            showPage(
+                pageTitle(
+                    "Trusted Members",
+                    "images/colorbtns/Family1.png"
+                ) +
+
+                `
+                <div style="
+                    padding:20px;
+                    max-width:450px;
+                    margin:auto;
+                ">
+
+                    <p style="
+                        text-align:center;
+                        color:#2A6EB0;
+                    ">
+                        Add or remove trusted mobile numbers
+                    </p>
+
+                    <label for="trustedMobileInput">
+                        Mobile Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="trustedMobileInput"
+                        class="common-form-input"
+                        placeholder="Enter 10-digit mobile number"
+                        maxlength="10"
+                        inputmode="numeric"
+                        style="
+                            width:100%;
+                            margin:12px 0;
+                        "
+                    >
+
+                    <div style="
+                        display:flex;
+                        gap:12px;
+                        margin-top:15px;
+                    ">
+
+                        <button
+                            type="button"
+                            id="addTrustedMobileBtn"
+                            class="back-btn"
+                            style="
+                                flex:1;
+                                min-width:0;
+                                margin:0;
+                                border:2px solid #28A745;
+                                color:#28A745;
+                                background:transparent;
+                            ">
+                            + Add
+                        </button>
+
+                        <button
+                            type="button"
+                            id="trustedMembersBackBtn"
+                            class="back-btn"
+                            style="
+                                flex:1;
+                                min-width:0;
+                                margin:0;
+                            ">
+                            ← Back
+                        </button>
+
+                    </div>
+
+                    <h3 style="
+                        color:#2A6EB0;
+                        margin-top:25px;
+                        text-align:center;
+                    ">
+                        Trusted Members List
+                    </h3>
+
+                    <div
+                        id="trustedMembersList"
+                        style="
+                            margin-top:15px;
+                            text-align:center;
+                        ">
+                        No trusted members added.
+                    </div>
+
+                </div>
+                `
+            );
+
+            /* BACK TO FAMILY SETTINGS */
+
+            document.getElementById(
+                "trustedMembersBackBtn"
+            ).onclick = function(){
+
+               familyBtn.click();
+            };
+
+        };
+
+}
             document.getElementById(
                 "familySettingsBackBtn"
             ).onclick = function(){
