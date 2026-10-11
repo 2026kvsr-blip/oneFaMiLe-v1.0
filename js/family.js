@@ -906,23 +906,68 @@ if(manageTrustedMembersBtn){
                         Add or remove trusted mobile numbers
                     </p>
 
-                    <label for="trustedMobileInput">
-                        Mobile Number
-                    </label>
+                    <!-- TRUSTED MEMBER NAME -->
 
-                    <input
-                        type="tel"
-                        id="trustedMobileInput"
-                        class="common-form-input"
-                        placeholder="Enter 10-digit mobile number"
-                        maxlength="10"
-                        inputmode="numeric"
-                        style="
-                            width:100%;
-                            margin:12px 0;
-                        "
-                    >
+<label for="trustedMemberName">
+    Name
+</label>
 
+<input
+    type="text"
+    id="trustedMemberName"
+    class="common-form-input"
+    placeholder="Enter member name"
+    maxlength="100"
+    autocomplete="name"
+    style="
+        width:100%;
+        box-sizing:border-box;
+        margin:6px 0 12px;
+    "
+>
+
+
+<!-- TRUSTED MEMBER MOBILE -->
+
+<label for="trustedMobileInput">
+    Mobile Number
+</label>
+
+<input
+    type="tel"
+    id="trustedMobileInput"
+    class="common-form-input"
+    placeholder="Enter 10-digit mobile number"
+    maxlength="10"
+    inputmode="numeric"
+    autocomplete="tel"
+    style="
+        width:100%;
+        box-sizing:border-box;
+        margin:6px 0 12px;
+    "
+>
+
+
+<!-- TRUSTED MEMBER EMAIL - OPTIONAL -->
+
+<label for="trustedMemberEmail">
+    Email (Optional)
+</label>
+
+<input
+    type="email"
+    id="trustedMemberEmail"
+    class="common-form-input"
+    placeholder="Enter email address (optional)"
+    maxlength="254"
+    autocomplete="email"
+    style="
+        width:100%;
+        box-sizing:border-box;
+        margin:6px 0 12px;
+    "
+>
                     <div style="
                         display:flex;
                         gap:12px;
@@ -978,7 +1023,145 @@ if(manageTrustedMembersBtn){
                 </div>
                 `
             );
+/* =====================================
+   ADD TRUSTED MEMBER
+   ===================================== */
 
+const addTrustedMobileBtn =
+    document.getElementById(
+        "addTrustedMobileBtn"
+    );
+
+if(addTrustedMobileBtn){
+
+    addTrustedMobileBtn.onclick =
+        async function(){
+
+            const addBtn = this;
+
+            const name =
+                document.getElementById(
+                    "trustedMemberName"
+                ).value.trim();
+
+            const mobile =
+                document.getElementById(
+                    "trustedMobileInput"
+                ).value.trim();
+
+            const email =
+                document.getElementById(
+                    "trustedMemberEmail"
+                ).value.trim();
+
+            if(!name){
+                alert("Enter member name.");
+                return;
+            }
+
+            if(!/^[6-9][0-9]{9}$/.test(mobile)){
+                alert("Enter a valid 10-digit mobile number.");
+                return;
+            }
+
+            if(
+                email &&
+                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+            ){
+                alert("Enter a valid email address.");
+                return;
+            }
+
+            const sessionToken =
+                sessionStorage.getItem(
+                    "sessionToken"
+                );
+
+            if(!sessionToken){
+                alert("Please login again.");
+                return;
+            }
+
+            const formData = new FormData();
+
+            formData.append(
+                "action",
+                "addTrustedMember"
+            );
+
+            formData.append(
+                "sessionToken",
+                sessionToken
+            );
+
+            formData.append(
+                "familyId",
+                currentFamily.familyId
+            );
+
+            formData.append("name", name);
+            formData.append("mobile", mobile);
+            formData.append("email", email);
+
+            addBtn.disabled = true;
+
+            try{
+
+                const response = await fetch(
+                    API_URL,
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+                const result =
+                    await response.json();
+
+                if(result.status !== "success"){
+                    alert(
+                        result.message ||
+                        "Unable to add Trusted Member."
+                    );
+                    return;
+                }
+
+                alert(
+                    "Trusted Member added successfully."
+                );
+
+                document.getElementById(
+                    "trustedMemberName"
+                ).value = "";
+
+                document.getElementById(
+                    "trustedMobileInput"
+                ).value = "";
+
+                document.getElementById(
+                    "trustedMemberEmail"
+                ).value = "";
+
+            }catch(error){
+
+                console.error(
+                    "ADD TRUSTED MEMBER ERROR:",
+                    error
+                );
+
+                alert(
+                    "Unable to add Trusted Member."
+                );
+
+            }finally{
+
+                addBtn.disabled = false;
+
+            }
+
+        };
+
+}
             /* BACK TO FAMILY SETTINGS */
 
             document.getElementById(
