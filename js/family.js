@@ -594,9 +594,12 @@ if(treeViewBtn){
         id="manageTrustedMembersBtn"
         class="back-btn"
         style="
-            width:100%;
-            margin:0;
-        ">
+    width:100%;
+    margin:0;
+    border:2px solid #28A745;
+    color:#28A745;
+    background:transparent;
+">
         Manage Members
     </button>
 
