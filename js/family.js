@@ -504,22 +504,78 @@ if(treeViewBtn){
 
                     </select>
 
-                    <p>Show Tree View</p>
+                   <p>Show Tree View</p>
 
-                    <select
-                        id="familyShowTree"
-                        class="common-form-select">
+<select
+    id="familyShowTree"
+    class="common-form-select">
 
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
 
-                    </select>
+</select>
 
-                    <div style="
-                        text-align:center;
-                        margin-top:20px;
-                    ">
 
+<!-- NEW: PERSONAL DETAILS -->
+
+<p>Show Personal Details</p>
+
+<select
+    id="familyShowPersonalDetails"
+    class="common-form-select">
+
+    <option value="No">No</option>
+    <option value="Yes">Yes</option>
+
+</select>
+
+
+<!-- NEW: TRUSTED CONTACTS FULL VIEW -->
+
+<p>Trusted Contacts Full View</p>
+
+<select
+    id="familyTrustedContactsFullView"
+    class="common-form-select">
+
+    <option value="No">No</option>
+    <option value="Yes">Yes</option>
+
+</select>
+
+
+<!-- NEW: TRUSTED CONTACTS ADD PERMISSION -->
+
+<p>Trusted Contacts Allow Add Member</p>
+
+<select
+    id="familyTrustedAllowAdd"
+    class="common-form-select">
+
+    <option value="No">No</option>
+    <option value="Yes">Yes</option>
+
+</select>
+
+
+<!-- NEW: TRUSTED CONTACTS EDIT PERMISSION -->
+
+<p>Trusted Contacts Allow Edit Member</p>
+
+<select
+    id="familyTrustedAllowEdit"
+    class="common-form-select">
+
+    <option value="No">No</option>
+    <option value="Yes">Yes</option>
+
+</select>
+
+
+<div style="
+    text-align:center;
+    margin-top:20px;
+">
                         <button
                             id="saveFamilySettingsBtn"
                             class="back-btn">
