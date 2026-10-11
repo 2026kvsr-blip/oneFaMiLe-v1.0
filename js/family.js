@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -1300,10 +1301,129 @@ async function loadTrustedMembers(){
             mobile.textContent =
                 "Mobile: " + (member.mobile || "");
 
-            card.appendChild(name);
-            card.appendChild(mobile);
+            /* MEMBER DETAILS AND DELETE BUTTON */
 
-            if(member.email){
+const memberRow =
+    document.createElement("div");
+
+memberRow.style.cssText = `
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+`;
+
+const memberDetails =
+    document.createElement("div");
+
+memberDetails.style.cssText = `
+    flex:1;
+    min-width:0;
+    overflow-wrap:anywhere;
+`;
+
+memberDetails.appendChild(name);
+memberDetails.appendChild(mobile);
+
+const deleteBtn =
+    document.createElement("button");
+
+deleteBtn.type = "button";
+deleteBtn.textContent = "Delete";
+
+deleteBtn.style.cssText = `
+    border:none;
+    background:transparent;
+    color:#FF0000;
+    font-weight:bold;
+    font-size:15px;
+    cursor:pointer;
+    padding:8px 2px;
+    flex-shrink:0;
+`;
+/* DELETE TRUSTED MEMBER */
+
+deleteBtn.onclick = async function(){
+
+    const memberMobile =
+        String(member.mobile || "").trim();
+
+    if(!memberMobile){
+        alert("Mobile number missing.");
+        return;
+    }
+
+    const confirmed = confirm(
+        "Are you sure you want to delete " +
+        (member.name || memberMobile) +
+        " from Trusted Members?"
+    );
+
+    if(!confirmed){
+        return;
+    }
+
+    const token =
+        sessionStorage.getItem("sessionToken");
+
+    if(!token){
+        alert("Please login again.");
+        return;
+    }
+
+    const data = new FormData();
+
+    data.append("action", "removeTrustedMember");
+    data.append("sessionToken", token);
+    data.append("familyId", currentFamily.familyId);
+    data.append("mobile", memberMobile);
+
+    deleteBtn.disabled = true;
+
+    try{
+
+        const response = await fetch(
+            API_URL,
+            {
+                method: "POST",
+                body: data
+            }
+        );
+
+        const result = await response.json();
+
+        if(result.status !== "success"){
+            alert(
+                result.message ||
+                "Unable to delete Trusted Member."
+            );
+            return;
+        }
+
+        await loadTrustedMembers();
+
+    }catch(error){
+
+        console.error(
+            "DELETE TRUSTED MEMBER ERROR:",
+            error
+        );
+
+        alert("Unable to delete Trusted Member.");
+
+    }finally{
+
+        deleteBtn.disabled = false;
+
+    }
+
+};
+memberRow.appendChild(memberDetails);
+memberRow.appendChild(deleteBtn);
+
+card.appendChild(memberRow);
+
+if(member.email){
 
                 const email =
                     document.createElement("div");
@@ -1311,8 +1431,7 @@ async function loadTrustedMembers(){
                 email.textContent =
                     "Email: " + member.email;
 
-                card.appendChild(email);
-            }
+memberDetails.appendChild(email);            }
 
             list.appendChild(card);
 
