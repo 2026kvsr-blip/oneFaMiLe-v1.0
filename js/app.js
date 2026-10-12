@@ -1,4 +1,37 @@
 
+/* International phone numbers: preserve legacy Indian 10-digit records. */
+function ofCountryPhone(local, code, otherCode){
+    let digits = String(local || "").replace(/[^0-9]/g, "");
+    const prefix = String(code === "other" ? otherCode : code || "91").replace(/[^0-9]/g, "");
+    if (!prefix || !digits) return "";
+    // An Indian number may be entered with its prefix already included.
+    if (digits.startsWith(prefix) && digits.length > 10 && String(local).trim().startsWith("+")) return "+" + digits;
+    if (prefix === "44" && digits.startsWith("0")) digits = digits.slice(1);
+    if (prefix === "91" && digits.length === 10 && !/^[6-9]/.test(digits)) return "";
+    const result = "+" + prefix + digits;
+    return /^\+[1-9][0-9]{7,14}$/.test(result) ? result : "";
+}
+function ofMobileValid(value){
+    return /^[6-9][0-9]{9}$/.test(value) || /^\+[1-9][0-9]{7,14}$/.test(value);
+}
+function ofWireMobile(inputId, codeId, otherId){
+    const number = document.getElementById(inputId);
+    const code = document.getElementById(codeId);
+    const other = document.getElementById(otherId);
+    if (!number || !code) return "";
+    return ofCountryPhone(number.value, code.value, other && other.value);
+}
+function ofBindCountrySelect(codeId, otherId){
+    const code = document.getElementById(codeId);
+    const other = document.getElementById(otherId);
+    if(!code || !other || code.dataset.boundIntl) return;
+    code.dataset.boundIntl = "1";
+    const update = () => { other.style.display = code.value === "other" ? "block" : "none"; };
+    code.addEventListener("change", update);
+    update();
+}
+
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -813,9 +846,7 @@ return /^[A-Za-z .'-]+$/.test(value);
 }
 
 function isValidMobile(value){
-
-    return /^[6-9][0-9]{9}$/.test(value);
-
+    return ofMobileValid(value);
 }
 
 function isValidEmail(value){
@@ -2963,7 +2994,7 @@ formData.append(
 
 formData.append(
     "mobile",
-    mobileNo.value.trim()
+    ofWireMobile("mobileNo", "signupCountryCode", "signupOtherCode")
 );
     formData.append(
     "email",
@@ -2978,7 +3009,7 @@ formData.append(
             action: "sendSignupOTP",
 
             mobile:
-                mobileNo.value.trim(),
+                ofWireMobile("mobileNo", "signupCountryCode", "signupOtherCode"),
 
             email:
                 emailId.value.trim()
@@ -3357,14 +3388,14 @@ validationMessage(
 
 return false;
 }
-    if(mobileNo.value.trim()==""){
+    if(ofWireMobile("mobileNo", "signupCountryCode", "signupOtherCode")==""){
 validationMessage(
     "Mobile Number is required.",
     mobileNo
 );
 
 return false;    }
-if(!isValidMobile(mobileNo.value.trim())){
+if(!isValidMobile(ofWireMobile("mobileNo", "signupCountryCode", "signupOtherCode"))){
 
     validationMessage(
         "Enter a valid Mobile Number.",
@@ -3596,7 +3627,7 @@ async function checkSignup(){
                     loginUserName.value.trim(),
 
                 mobile:
-                    mobileNo.value.trim()
+                    ofWireMobile("mobileNo", "signupCountryCode", "signupOtherCode")
 
             });
 
@@ -3965,7 +3996,7 @@ async function verifySignupOTP(){
 
     formData.append(
         "mobile",
-        mobileNo.value.trim()
+        ofWireMobile("mobileNo", "signupCountryCode", "signupOtherCode")
     );
 
     formData.append(
@@ -11845,3 +11876,4 @@ updateMenuIcon();
 updateSideMenuUser();
 closeSideMenu();   // <-- Add this
 updateCurrentLanguage();
+try { ofBindCountrySelect("signupCountryCode", "signupOtherCode"); } catch(e) { console.warn(e); }
