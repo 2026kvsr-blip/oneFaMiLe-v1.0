@@ -1,6 +1,4 @@
 
-
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -1064,14 +1062,85 @@ if(manageTrustedMembersBtn){
         autocomplete="off"
         style="width:100%;box-sizing:border-box;">
 
-    <div id="trustedSearchDropdown" style="display:none;margin-top:8px;border:1px solid #B8C9D6;border-radius:8px;padding:10px;background:#FFFFFF;">
-        <div style="display:flex;position:static;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;width:100%;">
-            <span id="trustedMembersCount" class="relation-member-count" style="color:#2A6EB0;font-weight:bold;text-align:left;">Total Members: 0</span>
-            <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
-                <span id="trustedSortAZ" title="Alphabetical Order (ascending / descending)" role="button" tabindex="0" style="display:inline-flex;position:static;align-items:center;justify-content:center;cursor:pointer;color:#2A6EB0;font-weight:bold;font-size:15px;min-width:34px;">A↕Z</span>
-                <span id="trustedSortMobile" title="Mobile Number Order (ascending / descending)" role="button" tabindex="0" style="display:inline-flex;position:static;align-items:center;justify-content:center;cursor:pointer;color:#2A6EB0;font-weight:bold;font-size:15px;min-width:34px;">1↕9</span>
-            </div>
-        </div>
+    <div id="trustedSearchDropdown" style="display:none;margin-top:8px;border:1px solid #B8C9D6;border-radius:8px;padding:10px;background:#FFFFFF;"><div style="
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:nowrap;
+    width:100%;
+    gap:8px;
+    margin-bottom:10px;
+    box-sizing:border-box;
+">
+
+    <span
+        id="trustedMembersCount"
+        style="
+            display:inline-block;
+            position:static;
+            margin:0;
+            padding:0;
+            flex:1;
+            min-width:0;
+            text-align:left;
+            white-space:nowrap;
+            color:#2A6EB0;
+            font-size:13px;
+            font-weight:bold;
+        ">
+        Total Members: 0
+    </span>
+
+    <div style="
+        display:flex;
+        position:static;
+        align-items:center;
+        justify-content:flex-end;
+        flex-shrink:0;
+        gap:14px;
+        margin:0;
+        padding:0;
+    ">
+
+        <span
+            id="trustedSortAZ"
+            title="Alphabetical Order"
+            role="button"
+            tabindex="0"
+            style="
+                display:inline-flex;
+                position:static;
+                align-items:center;
+                cursor:pointer;
+                color:#2A6EB0;
+                font-weight:bold;
+                font-size:15px;
+                white-space:nowrap;
+            ">
+            A↕Z
+        </span>
+
+        <span
+            id="trustedSortMobile"
+            title="Mobile Number Order"
+            role="button"
+            tabindex="0"
+            style="
+                display:inline-flex;
+                position:static;
+                align-items:center;
+                cursor:pointer;
+                color:#2A6EB0;
+                font-weight:bold;
+                font-size:15px;
+                white-space:nowrap;
+            ">
+            1↕9
+        </span>
+
+    </div>
+
+</div>
         <div id="trustedMembersMatchCount" style="text-align:center;color:#2A6EB0;margin-bottom:8px;">Matching Members: 0</div>
         <div id="trustedMembersList" style="max-height:320px;overflow-y:auto;text-align:left;">No trusted members added.</div>
     </div>
