@@ -1749,20 +1749,12 @@ memberRow.appendChild(deleteBtn);
 
 card.appendChild(memberRow);
 
-if(member.email){
+// Email will appear only when a member is selected.
+// List displays Name and Mobile Number only.
 
-                const email =
-                    document.createElement("div");
+list.appendChild(card);
 
-                email.textContent =
-                    "Email: " + member.email;
-
-memberDetails.appendChild(email);            }
-
-            list.appendChild(card);
-
-        });
-
+});
     }catch(error){
 
         console.error(
