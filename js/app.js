@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -2931,9 +2930,7 @@ async function sendSignupOTP(){
     // ================================
     // VALIDATE SIGNUP
     // ================================
-
     if(!validateSignupBasic()){
-
         hideLoader();
 
         return;
@@ -2973,19 +2970,12 @@ formData.append(
 
    try{
 
-    const result =
-        await postToAPI({
+    const response = await fetch(API_URL, {
+    method: "POST",
+    body: formData
+});
 
-            action: "sendSignupOTP",
-
-            mobile:
-                mobileNo.value.trim(),
-
-            email:
-                emailId.value.trim()
-
-        });
-
+const result = await response.json();
 
     console.log(
         "Signup OTP Result:",
