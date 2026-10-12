@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -3587,44 +3588,48 @@ async function checkSignup(){
 
     try{
 
-        const result =
-            await postToAPI({
+        const formData = new FormData();
 
-                action: "checkSignup",
+        formData.append(
+            "action",
+            "checkSignup"
+        );
 
-                loginUserName:
-                    loginUserName.value.trim(),
+        formData.append(
+            "loginUserName",
+            loginUserName.value.trim()
+        );
 
-                mobile:
-                    mobileNo.value.trim()
+        formData.append(
+            "mobile",
+            mobileNo.value.trim()
+        );
 
-            });
+        const response = await fetch(API_URL, {
+            method: "POST",
+            body: formData
+        });
 
+        const result = await response.json();
+
+        console.log("checkSignup Result:", result);
 
         if(result.status !== "success"){
 
             showMessage(
-                result.message,
-                result.status === "success"
-                    ? "success"
-                    : "warning",
+                result.message || "Signup validation failed.",
+                "warning",
                 3000
             );
 
             return false;
-
         }
-
 
         return true;
 
-    }
-    catch(error){
+    }catch(error){
 
-        console.log(
-            "checkSignup Error:",
-            error
-        );
+        console.error("checkSignup Error:", error);
 
         showMessage(
             "Unable to connect to server.",
@@ -3633,12 +3638,9 @@ async function checkSignup(){
         );
 
         return false;
-        
-
     }
 
 }
-
 /* ======================
 
 REGISTER USER
