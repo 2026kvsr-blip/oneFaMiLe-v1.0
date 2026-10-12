@@ -1580,9 +1580,80 @@ memberDetails.style.cssText = `
 memberDetails.appendChild(name);
 memberDetails.appendChild(mobile);
 
+/* MEMBER SELECTION */
+
+const memberEmail =
+    String(member.email || "").trim();
+
+card.onclick = function(event){
+
+    if(event.target.closest("button")){
+        return;
+    }
+
+    const selected =
+        card.dataset.selected === "yes";
+
+    list.querySelectorAll(
+        "[data-trusted-mobile]"
+    ).forEach(function(otherCard){
+
+        otherCard.dataset.selected = "no";
+
+        const details =
+            otherCard.querySelector(
+                ".trusted-selected-details"
+            );
+
+        if(details){
+            details.style.display = "none";
+        }
+
+    });
+
+    if(selected){
+        return;
+    }
+
+    card.dataset.selected = "yes";
+
+    let details =
+        card.querySelector(
+            ".trusted-selected-details"
+        );
+
+    if(!details){
+
+        details =
+            document.createElement("div");
+
+        details.className =
+            "trusted-selected-details";
+
+        details.style.cssText = `
+            margin-top:10px;
+            padding-top:10px;
+            border-top:1px solid #B8C9D6;
+            color:#2A6EB0;
+            font-size:14px;
+        `;
+
+        const emailText =
+            document.createElement("div");
+
+        emailText.textContent =
+            "Email: " + (memberEmail || "Not provided");
+
+        details.appendChild(emailText);
+
+        card.appendChild(details);
+    }
+
+    details.style.display = "block";
+};
+
 const deleteBtn =
     document.createElement("button");
-
 deleteBtn.type = "button";
 deleteBtn.textContent = "Delete";
 
