@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -1529,11 +1530,30 @@ filtered.forEach(function(member){
 
 }
 
-if(searchInput){
-    searchInput.oninput =
-        renderTrustedSearchResults;
-}
+if (searchInput) {
 
+    searchInput.oninput = function () {
+
+        const selectedDetailsBox =
+            document.getElementById("trustedSelectedMemberDetails");
+
+        if (selectedDetailsBox) {
+            selectedDetailsBox.style.display = "none";
+            selectedDetailsBox.replaceChildren();
+        }
+
+        const trustedSearchDropdown =
+            document.getElementById("trustedSearchDropdown");
+
+        if (trustedSearchDropdown) {
+            trustedSearchDropdown.style.display = "block";
+        }
+
+        renderTrustedSearchResults();
+
+    };
+
+}
 if(sortSelect){
     sortSelect.onchange =
         renderTrustedSearchResults;
@@ -1638,7 +1658,33 @@ if (trustedSearchInput) {
         String(member.name || "");
 }
 
-const selected = card.dataset.selected === "yes";
+const selectedDetailsBox =
+    document.getElementById("trustedSelectedMemberDetails");
+
+if (selectedDetailsBox) {
+
+    selectedDetailsBox.replaceChildren();
+
+    const nameLine = document.createElement("div");
+    nameLine.textContent =
+        "Name: " + String(member.name || "");
+
+    const mobileLine = document.createElement("div");
+    mobileLine.textContent =
+        "Mobile: " + String(member.mobile || "");
+
+    const emailLine = document.createElement("div");
+    emailLine.textContent =
+        "Email: " + String(member.email || "Not provided");
+
+    selectedDetailsBox.appendChild(nameLine);
+    selectedDetailsBox.appendChild(mobileLine);
+    selectedDetailsBox.appendChild(emailLine);
+
+    selectedDetailsBox.style.display = "block";
+}
+
+const selected = card.dataset.selected === "yes";    
     list.querySelectorAll(
         "[data-trusted-mobile]"
     ).forEach(function(otherCard){
@@ -1800,6 +1846,8 @@ card.appendChild(memberRow);
 list.appendChild(card);
 
 });
+
+renderTrustedSearchResults();
     }catch(error){
 
         console.error(
