@@ -1152,6 +1152,8 @@ const addTrustedMobileBtn =
         "addTrustedMobileBtn"
     );
 
+ofBindCountrySelect("trustedCountryCode", "trustedOtherCode");
+
 if(addTrustedMobileBtn){
 
     addTrustedMobileBtn.onclick =
