@@ -1608,13 +1608,24 @@ const memberEmail =
 
 card.onclick = function(event){
 
-    if(event.target.closest("button")){
-        return;
-    }
+   if(event.target.closest("button")) return;
 
-    const selected =
-        card.dataset.selected === "yes";
+const trustedSearchDropdown =
+    document.getElementById("trustedSearchDropdown");
 
+const trustedSearchInput =
+    document.getElementById("trustedMembersSearch");
+
+if (trustedSearchDropdown) {
+    trustedSearchDropdown.style.display = "none";
+}
+
+if (trustedSearchInput) {
+    trustedSearchInput.value =
+        String(member.name || "");
+}
+
+const selected = card.dataset.selected === "yes";
     list.querySelectorAll(
         "[data-trusted-mobile]"
     ).forEach(function(otherCard){
