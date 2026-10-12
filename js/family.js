@@ -1057,7 +1057,7 @@ if(manageTrustedMembersBtn){
 </h3>
 
 <div style="margin:12px 0;">
-
+<div id="trustedSearchDropdown" style="display:none;">
     <div
         id="trustedMembersCount"
         style="
@@ -1073,8 +1073,8 @@ if(manageTrustedMembersBtn){
         type="text"
         id="trustedMembersSearch"
         class="common-form-input"
-        placeholder="Search Name / Mobile Number"
-        autocomplete="off"
+placeholder="Search Trusted Members"
+autocomplete="off"
         style="
             width:100%;
             box-sizing:border-box;
@@ -1101,9 +1101,9 @@ if(manageTrustedMembersBtn){
             margin-bottom:8px;
         ">
         Matching Members: 0
-    </div>
-
+        </div>
 </div>
+
                     <div
                         id="trustedMembersList"
                         style="
@@ -1113,6 +1113,7 @@ if(manageTrustedMembersBtn){
                         No trusted members added.
                     </div>
 
+</div>
                 </div>
                 `
             );
@@ -1255,7 +1256,27 @@ await loadTrustedMembers();
         };
 
 }
+
             /* =====================================
+   TRUSTED MEMBERS SEARCH DROPDOWN
+   ===================================== */
+
+const trustedSearchInput =
+    document.getElementById("trustedMembersSearch");
+
+const trustedSearchDropdown =
+    document.getElementById("trustedSearchDropdown");
+
+if (trustedSearchInput && trustedSearchDropdown) {
+
+    trustedSearchInput.addEventListener("focus", function () {
+
+        trustedSearchDropdown.style.display = "block";
+
+    });
+
+}
+/* =====================================
    LOAD TRUSTED MEMBERS LIST
    ===================================== */
 
