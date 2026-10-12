@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -6589,6 +6590,7 @@ const user = JSON.parse(sessionStorage.getItem("user"));
 
 }
 updateWelcomePage();
+
 /* ======================
 
 AUTO LOGIN
@@ -6986,18 +6988,9 @@ if(newProfileBackBtn){
     // PROFILE BACK BUTTON
     // =====================================
 
-    document
-        .getElementById("profileBackBtn")
-        .onclick = ()=>{
-
-        homeBtn.click();
-
-    };
-
-
-    window.scrollTo(0,0);
-
+       window.scrollTo(0,0);
 }
+
 function showEditProfile(){
 
     const user =
@@ -7006,6 +6999,7 @@ function showEditProfile(){
     if(!user){
         return;
     }
+    closeSideMenu();
 
     hideAllPages();
 
@@ -11837,11 +11831,15 @@ backResetPassCodeBtn.onclick = ()=>{
 /* ======================
 APP START
 ====================== */
-sessionStorage.removeItem("user");
-sessionStorage.removeItem("passCode");
-showScreen(welcomePage);
+
+if (!sessionStorage.getItem("user")) {
+
+    showScreen(welcomePage);
+
+}
+
 updateWelcomePage();
 updateMenuIcon();
 updateSideMenuUser();
-closeSideMenu();   // <-- Add this
+closeSideMenu();
 updateCurrentLanguage();
