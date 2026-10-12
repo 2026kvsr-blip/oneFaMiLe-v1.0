@@ -3694,7 +3694,7 @@ async function registerUser(){
 
         email: document.getElementById("emailId").value.trim(),
 
-        mobile: document.getElementById("mobileNo").value.trim(),
+        mobile: ofWireMobile("mobileNo", "signupCountryCode", "signupOtherCode"),
 
         gender: document.getElementById("gender").value,
 
