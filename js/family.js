@@ -1065,11 +1065,13 @@ if(manageTrustedMembersBtn){
         style="width:100%;box-sizing:border-box;">
 
     <div id="trustedSearchDropdown" style="display:none;margin-top:8px;border:1px solid #B8C9D6;border-radius:8px;padding:10px;background:#FFFFFF;">
-        <div id="trustedMembersCount" style="text-align:center;color:#2A6EB0;font-weight:bold;margin-bottom:8px;">Total Members: 0</div>
-        <select id="trustedMembersSort" class="common-form-select" style="width:100%;margin-bottom:8px;">
-            <option value="name">Alphabetical Order (A–Z)</option>
-            <option value="mobile">Mobile Number Order</option>
-        </select>
+        <div class="partner-sort-controls" style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;">
+            <span id="trustedMembersCount" class="relation-member-count" style="color:#2A6EB0;font-weight:bold;text-align:left;">Total Members: 0</span>
+            <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
+                <span id="trustedSortAZ" class="partner-sort-arrow" title="Alphabetical Order (ascending / descending)" role="button" tabindex="0" style="cursor:pointer;">A↕Z</span>
+                <span id="trustedSortMobile" class="partner-sort-arrow" title="Mobile Number Order (ascending / descending)" role="button" tabindex="0" style="cursor:pointer;">1↕9</span>
+            </div>
+        </div>
         <div id="trustedMembersMatchCount" style="text-align:center;color:#2A6EB0;margin-bottom:8px;">Matching Members: 0</div>
         <div id="trustedMembersList" style="max-height:320px;overflow-y:auto;text-align:left;">No trusted members added.</div>
     </div>
@@ -1346,8 +1348,12 @@ list.replaceChildren();
 const searchInput =
     document.getElementById("trustedMembersSearch");
 
-const sortSelect =
-    document.getElementById("trustedMembersSort");
+let trustedSortMode = "name";
+let trustedLastSortMode = "name";
+let trustedNameAscending = true;
+let trustedMobileAscending = true;
+const trustedSortAZ = document.getElementById("trustedSortAZ");
+const trustedSortMobile = document.getElementById("trustedSortMobile");
 
 const matchCount =
     document.getElementById("trustedMembersMatchCount");
@@ -1358,8 +1364,7 @@ function getFilteredTrustedMembers(){
         searchInput ? searchInput.value : ""
     ).trim().toLowerCase();
 
-    const sortBy =
-        sortSelect ? sortSelect.value : "name";
+    const sortBy = trustedSortMode;
 
     const filtered = trustedMembersData.filter(function(member){
 
@@ -1373,18 +1378,15 @@ function getFilteredTrustedMembers(){
     filtered.sort(function(a, b){
 
         if(sortBy === "mobile"){
-            return a.mobile.localeCompare(
-                b.mobile,
-                undefined,
-                {numeric:true}
+            const comparison = a.mobile.localeCompare(
+                b.mobile, undefined, {numeric:true}
             );
+            return trustedMobileAscending ? comparison : -comparison;
         }
-
-        return a.name.localeCompare(
-            b.name,
-            undefined,
-            {sensitivity:"base"}
+        const comparison = a.name.localeCompare(
+            b.name, undefined, {sensitivity:"base"}
         );
+        return trustedNameAscending ? comparison : -comparison;
 
     });
 
@@ -1508,9 +1510,43 @@ if (searchInput) {
     };
 
 }
-if(sortSelect){
-    sortSelect.onchange =
-        renderTrustedSearchResults;
+function activateTrustedSort(mode){
+    if(mode === "name"){
+        trustedNameAscending = trustedLastSortMode === "name"
+            ? !trustedNameAscending : true;
+    }else{
+        trustedMobileAscending = trustedLastSortMode === "mobile"
+            ? !trustedMobileAscending : true;
+    }
+    trustedSortMode = mode;
+    trustedLastSortMode = mode;
+    renderTrustedSearchResults();
+}
+if(trustedSortAZ){
+    trustedSortAZ.onclick = function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        activateTrustedSort("name");
+    };
+    trustedSortAZ.onkeydown = function(event){
+        if(event.key === "Enter" || event.key === " "){
+            event.preventDefault();
+            activateTrustedSort("name");
+        }
+    };
+}
+if(trustedSortMobile){
+    trustedSortMobile.onclick = function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        activateTrustedSort("mobile");
+    };
+    trustedSortMobile.onkeydown = function(event){
+        if(event.key === "Enter" || event.key === " "){
+            event.preventDefault();
+            activateTrustedSort("mobile");
+        }
+    };
 }
 
 if(members.length === 0){
