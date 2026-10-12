@@ -1049,13 +1049,61 @@ if(manageTrustedMembersBtn){
 
 </div>
                     <h3 style="
-                        color:#2A6EB0;
-                        margin-top:25px;
-                        text-align:center;
-                    ">
-                        Trusted Members List
-                    </h3>
+    color:#2A6EB0;
+    margin-top:25px;
+    text-align:center;
+">
+    Trusted Members List
+</h3>
 
+<div style="margin:12px 0;">
+
+    <div
+        id="trustedMembersCount"
+        style="
+            text-align:center;
+            color:#2A6EB0;
+            font-weight:bold;
+            margin-bottom:10px;
+        ">
+        Total Members: 0
+    </div>
+
+    <input
+        type="text"
+        id="trustedMembersSearch"
+        class="common-form-input"
+        placeholder="Search Name / Mobile Number"
+        autocomplete="off"
+        style="
+            width:100%;
+            box-sizing:border-box;
+            margin-bottom:10px;
+        "
+    >
+
+    <select
+        id="trustedMembersSort"
+        class="common-form-select"
+        style="
+            width:100%;
+            margin-bottom:10px;
+        ">
+        <option value="name">Alphabetical Order (A–Z)</option>
+        <option value="mobile">Mobile Number Order</option>
+    </select>
+
+    <div
+        id="trustedMembersMatchCount"
+        style="
+            text-align:center;
+            color:#2A6EB0;
+            margin-bottom:8px;
+        ">
+        Matching Members: 0
+    </div>
+
+</div>
                     <div
                         id="trustedMembersList"
                         style="
@@ -1275,15 +1323,189 @@ async function loadTrustedMembers(){
             return;
         }
 
-        const members =
-            Array.isArray(result.trustedMembers)
-                ? result.trustedMembers
-                : [];
+       const members =
+    Array.isArray(result.trustedMembers)
+        ? result.trustedMembers
+        : [];
 
-        list.replaceChildren();
+const trustedMembersData = members.map(function(item) {
+    return typeof item === "string"
+        ? {
+            name: "",
+            mobile: item,
+            email: ""
+        }
+        : {
+            name: String(item.name || ""),
+            mobile: String(item.mobile || ""),
+            email: String(item.email || "")
+        };
+});
 
-        if(members.length === 0){
+const countElement =
+    document.getElementById("trustedMembersCount");
 
+if (countElement) {
+    countElement.textContent =
+        "Total Members: " + trustedMembersData.length;
+}
+
+list.replaceChildren();
+
+/* TRUSTED MEMBERS SEARCH AND SORT */
+
+const searchInput =
+    document.getElementById("trustedMembersSearch");
+
+const sortSelect =
+    document.getElementById("trustedMembersSort");
+
+const matchCount =
+    document.getElementById("trustedMembersMatchCount");
+
+function getFilteredTrustedMembers(){
+
+    const query = String(
+        searchInput ? searchInput.value : ""
+    ).trim().toLowerCase();
+
+    const sortBy =
+        sortSelect ? sortSelect.value : "name";
+
+    const filtered = trustedMembersData.filter(function(member){
+
+        return (
+            member.name.toLowerCase().includes(query) ||
+            member.mobile.includes(query)
+        );
+
+    });
+
+    filtered.sort(function(a, b){
+
+        if(sortBy === "mobile"){
+            return a.mobile.localeCompare(
+                b.mobile,
+                undefined,
+                {numeric:true}
+            );
+        }
+
+        return a.name.localeCompare(
+            b.name,
+            undefined,
+            {sensitivity:"base"}
+        );
+
+    });
+
+    return filtered;
+}
+
+function updateTrustedSearchCount(){
+
+    const filtered = getFilteredTrustedMembers();
+
+    if(matchCount){
+        matchCount.textContent =
+            "Matching Members: " + filtered.length;
+    }
+
+    return filtered;
+}
+
+updateTrustedSearchCount();
+
+/* SEARCH AND SORT EVENT HANDLERS */
+
+function renderTrustedSearchResults(){
+
+    const filtered =
+        updateTrustedSearchCount();
+
+    const visibleMobiles = new Set(
+        filtered.map(function(member){
+            return member.mobile;
+        })
+    );
+
+   const cards = Array.from(
+    list.querySelectorAll(
+        "[data-trusted-mobile]"
+    )
+);
+
+const cardMap = new Map();
+
+cards.forEach(function(card){
+
+    cardMap.set(
+        card.dataset.trustedMobile,
+        card
+    );
+
+    card.style.display = "none";
+
+});
+
+filtered.forEach(function(member){
+
+    const card = cardMap.get(
+        member.mobile
+    );
+
+    if(card){
+
+        card.style.display = "";
+
+        list.appendChild(card);
+
+    }
+
+});
+    const oldMessage =
+        document.getElementById(
+            "trustedNoMatchingMembers"
+        );
+
+    if(oldMessage){
+        oldMessage.remove();
+    }
+
+    if(filtered.length === 0 &&
+       trustedMembersData.length > 0){
+
+        const message =
+            document.createElement("div");
+
+        message.id =
+            "trustedNoMatchingMembers";
+
+        message.textContent =
+            "No matching member";
+
+        message.style.cssText = `
+            padding:12px;
+            text-align:center;
+            color:#2A6EB0;
+        `;
+
+        list.appendChild(message);
+    }
+
+}
+
+if(searchInput){
+    searchInput.oninput =
+        renderTrustedSearchResults;
+}
+
+if(sortSelect){
+    sortSelect.onchange =
+        renderTrustedSearchResults;
+}
+
+if(members.length === 0){
             list.textContent =
                 "No trusted members added.";
 
@@ -1301,18 +1523,21 @@ async function loadTrustedMembers(){
                     }
                     : item;
 
-            const card =
-                document.createElement("div");
+     const card =
+    document.createElement("div");
 
-            card.style.cssText = `
-                padding:10px;
-                margin-bottom:8px;
-                border:1px solid #B8C9D6;
-                border-radius:8px;
-                text-align:left;
-                background:#FFFFFF;
-            `;
+card.dataset.trustedMobile =
+    String(member.mobile || "").trim();
 
+card.style.cssText = `
+    padding:10px;
+    margin-bottom:4px;
+    border:1px solid #B8C9D6;
+    border-radius:6px;
+    text-align:left;
+    background:#FFFFFF;
+    cursor:pointer;
+`;
             const name =
                 document.createElement("div");
 
