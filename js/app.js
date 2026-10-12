@@ -1,41 +1,6 @@
 
 
 
-/* International phone numbers: preserve legacy Indian 10-digit records. */
-function ofCountryPhone(local, code, otherCode){
-    let digits = String(local || "").replace(/[^0-9]/g, "");
-    const prefix = String(code === "other" ? otherCode : code || "91").replace(/[^0-9]/g, "");
-    if (!prefix || !digits) return "";
-    // An Indian number may be entered with its prefix already included.
-    if (String(local).trim().startsWith("+")) {
-        return /^\+[1-9][0-9]{7,14}$/.test(String(local).trim()) ? String(local).trim() : "";
-    }
-    if (prefix === "44" && digits.startsWith("0")) digits = digits.slice(1);
-    if (prefix === "91" && digits.length === 10 && !/^[6-9]/.test(digits)) return "";
-    const result = "+" + prefix + digits;
-    return /^\+[1-9][0-9]{7,14}$/.test(result) ? result : "";
-}
-function ofMobileValid(value){
-    return /^[6-9][0-9]{9}$/.test(value) || /^\+[1-9][0-9]{7,14}$/.test(value);
-}
-function ofWireMobile(inputId, codeId, otherId){
-    const number = document.getElementById(inputId);
-    const code = document.getElementById(codeId);
-    const other = document.getElementById(otherId);
-    if (!number || !code) return "";
-    return ofCountryPhone(number.value, code.value, other && other.value);
-}
-function ofBindCountrySelect(codeId, otherId){
-    const code = document.getElementById(codeId);
-    const other = document.getElementById(otherId);
-    if(!code || !other || code.dataset.boundIntl) return;
-    code.dataset.boundIntl = "1";
-    const update = () => { other.style.display = code.value === "other" ? "block" : "none"; };
-    code.addEventListener("change", update);
-    update();
-}
-
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -46,35 +11,6 @@ const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlS
 // ============================================
 // CORS-SAFE API REQUEST USING HIDDEN IFRAME
 // ============================================
-// Used only by checkSignup and sendSignupOTP.
-// Backend must support transport=iframe and iframeResponse().
-let ofSignupApiQueue = Promise.resolve();
-
-async function postToAPI(payload) {
-
-    const formData = new FormData();
-
-    Object.entries(payload).forEach(([key, value]) => {
-        formData.append(
-            key,
-            value == null ? "" : String(value)
-        );
-    });
-
-    const response = await fetch(API_URL, {
-        method: "POST",
-        body: formData
-    });
-
-    if (!response.ok) {
-        throw new Error(
-            "Server HTTP Error: " + response.status
-        );
-    }
-
-    return await response.json();
-}
-
 
 let otpMode = "signup";
 const loginSubmitBtn =
@@ -879,7 +815,9 @@ return /^[A-Za-z .'-]+$/.test(value);
 }
 
 function isValidMobile(value){
-    return ofMobileValid(value);
+
+    return /^[6-9][0-9]{9}$/.test(value);
+
 }
 
 function isValidEmail(value){
@@ -3017,6 +2955,23 @@ async function sendSignupOTP(){
     // SEND OTP
     // ================================
 
+    const formData = new FormData();
+
+formData.append(
+    "action",
+    "sendSignupOTP"
+);
+
+
+formData.append(
+    "mobile",
+    mobileNo.value.trim()
+);
+    formData.append(
+    "email",
+    emailId.value.trim()
+);
+
    try{
 
     const result =
@@ -3025,7 +2980,7 @@ async function sendSignupOTP(){
             action: "sendSignupOTP",
 
             mobile:
-                ofWireMobile("mobileNo", "signupCountryCode", "signupOtherCode"),
+                mobileNo.value.trim(),
 
             email:
                 emailId.value.trim()
@@ -3404,14 +3359,14 @@ validationMessage(
 
 return false;
 }
-    if(ofWireMobile("mobileNo", "signupCountryCode", "signupOtherCode")==""){
+    if(mobileNo.value.trim()==""){
 validationMessage(
     "Mobile Number is required.",
     mobileNo
 );
 
 return false;    }
-if(!isValidMobile(ofWireMobile("mobileNo", "signupCountryCode", "signupOtherCode"))){
+if(!isValidMobile(mobileNo.value.trim())){
 
     validationMessage(
         "Enter a valid Mobile Number.",
@@ -3624,9 +3579,6 @@ showMessage("Pass Code is required.","warning",3000);
 
 }
 
-
-
-
 /* ======================
 
 CHECK SIGHUP
@@ -3646,7 +3598,7 @@ async function checkSignup(){
                     loginUserName.value.trim(),
 
                 mobile:
-                    ofWireMobile("mobileNo", "signupCountryCode", "signupOtherCode")
+                    mobileNo.value.trim()
 
             });
 
@@ -3711,7 +3663,7 @@ async function registerUser(){
 
         email: document.getElementById("emailId").value.trim(),
 
-        mobile: ofWireMobile("mobileNo", "signupCountryCode", "signupOtherCode"),
+        mobile: document.getElementById("mobileNo").value.trim(),
 
         gender: document.getElementById("gender").value,
 
@@ -4015,7 +3967,7 @@ async function verifySignupOTP(){
 
     formData.append(
         "mobile",
-        ofWireMobile("mobileNo", "signupCountryCode", "signupOtherCode")
+        mobileNo.value.trim()
     );
 
     formData.append(
@@ -4292,18 +4244,11 @@ async function loadCurrentLoginFamily(){
         memberParams.append(
             "action",
             "getFamilyMembers"
-            
         );
 
-       
         memberParams.append(
             "familyId",
             currentFamily.familyId
-        );
-
-        memberParams.append(
-            "sessionToken",
-            sessionStorage.getItem("sessionToken") || ""
         );
 
 
@@ -4455,42 +4400,13 @@ const formData = new FormData();
         });
 
         const result = await response.json();
-        
-       
         if(result.status=="success"){
-
-           if(!result.sessionToken){
-
-               showMessage(
-                   "Login session could not be created. Please try again.",
-                   "error",
-                   5000
-               );
-
-               return;
-           }
-
            loginAttempts = 0;
 
-           /* =====================================
-              STORE LOGIN USER
-              ===================================== */
-
            sessionStorage.setItem(
-               "user",
-               JSON.stringify(result)
-           );
-
-           /* =====================================
-              STORE SECURE SESSION TOKEN
-              ===================================== */
-
-           sessionStorage.setItem(
-               "sessionToken",
-               result.sessionToken
-           );
-
-            
+    "user",
+    JSON.stringify(result)
+);
 //restoreFamilyCache(result);
 
 // =====================================
@@ -11895,4 +11811,3 @@ updateMenuIcon();
 updateSideMenuUser();
 closeSideMenu();   // <-- Add this
 updateCurrentLanguage();
-try { ofBindCountrySelect("signupCountryCode", "signupOtherCode"); } catch(e) { console.warn(e); }
