@@ -962,14 +962,7 @@ if(manageTrustedMembersBtn){
 <div class="trusted-member-row">
     <label for="trustedMobileInput">Mobile</label>
     <span>:</span>
-    <input
-        type="tel"
-        id="trustedMobileInput"
-        class="common-form-input"
-        placeholder="10-digit mobile number"
-        maxlength="10"
-        inputmode="numeric"
-    >
+<div class="trusted-country-code" style="display:flex;gap:5px;flex:1;min-width:0;align-items:center;"><select id="trustedCountryCode" aria-label="Country code" style="max-width:130px;min-width:100px;height:36px;border:1px solid #b8c9d9;border-radius:8px;background:white;"><option value="91">🇮🇳 India +91</option><option value="1">🇺🇸 USA / Canada +1</option><option value="65">🇸🇬 Singapore +65</option><option value="44">🇬🇧 UK +44</option><option value="61">🇦🇺 Australia +61</option><option value="971">🇦🇪 UAE +971</option><option value="966">🇸🇦 Saudi Arabia +966</option><option value="49">🇩🇪 Germany +49</option><option value="33">🇫🇷 France +33</option><option value="81">🇯🇵 Japan +81</option><option value="other">Other country (enter +code)</option></select><input id="trustedOtherCode" type="tel" placeholder="+Code" style="display:none;width:70px;min-width:0;height:36px;border:1px solid #b8c9d9;border-radius:8px;"><input type="tel" id="trustedMobileInput" class="common-form-input" placeholder="Mobile number" maxlength="15" inputmode="tel"></div>
 </div>
 
 <div class="trusted-member-row">
@@ -1172,9 +1165,7 @@ if(addTrustedMobileBtn){
                 ).value.trim();
 
             const mobile =
-                document.getElementById(
-                    "trustedMobileInput"
-                ).value.trim();
+                ofWireMobile("trustedMobileInput", "trustedCountryCode", "trustedOtherCode");
 
             const email =
                 document.getElementById(
@@ -1186,8 +1177,8 @@ if(addTrustedMobileBtn){
                 return;
             }
 
-            if(!/^[6-9][0-9]{9}$/.test(mobile)){
-                alert("Enter a valid 10-digit mobile number.");
+            if(!ofMobileValid(mobile)){
+                alert("Enter a valid international mobile number.");
                 return;
             }
 
@@ -29886,3 +29877,10 @@ connectParentsToChildren(
     }
 );
 }
+// Trusted Members is rendered dynamically; delegate country-code changes.
+document.addEventListener("change", function(e){
+    if(e.target && e.target.id === "trustedCountryCode"){
+        const other = document.getElementById("trustedOtherCode");
+        if(other) other.style.display = e.target.value === "other" ? "block" : "none";
+    }
+});
