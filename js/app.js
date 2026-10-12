@@ -1,5 +1,6 @@
 
 
+
 /* International phone numbers: preserve legacy Indian 10-digit records. */
 function ofCountryPhone(local, code, otherCode){
     let digits = String(local || "").replace(/[^0-9]/g, "");
@@ -49,72 +50,29 @@ const API_URL ="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlS
 // Backend must support transport=iframe and iframeResponse().
 let ofSignupApiQueue = Promise.resolve();
 
-function postToAPI(payload) {
-    const task = () => new Promise((resolve, reject) => {
-        const frameName = "of_signup_" + Date.now() + "_" + Math.random().toString(36).slice(2);
-        const requestId = crypto.randomUUID();
-        const iframe = document.createElement("iframe");
-        iframe.name = frameName;
-        iframe.style.display = "none";
-        iframe.setAttribute("aria-hidden", "true");
+async function postToAPI(payload) {
 
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = API_URL;
-        form.target = frameName;
-        form.style.display = "none";
+    const formData = new FormData();
 
-        const values = { ...payload, transport: "iframe", requestId };
-        Object.entries(values).forEach(([key, value]) => {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = key;
-            input.value = value == null ? "" : String(value);
-            form.appendChild(input);
-        });
-
-        let settled = false;
-        const cleanup = () => {
-            window.removeEventListener("message", onMessage);
-            clearTimeout(timeout);
-            form.remove();
-            iframe.remove();
-        };
-        const onMessage = (event) => {
-            // Apps Script HtmlService uses a nested sandbox window.
-            // Match a unique per-request token instead of event.source.
-            const data = event.data;
-            if (!data || typeof data !== "object" ||
-                data.requestId !== requestId ||
-                typeof data.status !== "string") return;
-            if (settled) return;
-            settled = true;
-            cleanup();
-            resolve(data);
-        };
-        const timeout = setTimeout(() => {
-            if (settled) return;
-            settled = true;
-            cleanup();
-            reject(new Error("Signup API iframe response timeout"));
-        }, 45000);
-
-        window.addEventListener("message", onMessage);
-        document.body.appendChild(iframe);
-        document.body.appendChild(form);
-        try {
-            form.submit();
-        } catch (error) {
-            if (!settled) {
-                settled = true;
-                cleanup();
-                reject(error);
-            }
-        }
+    Object.entries(payload).forEach(([key, value]) => {
+        formData.append(
+            key,
+            value == null ? "" : String(value)
+        );
     });
-    const result = ofSignupApiQueue.then(task, task);
-    ofSignupApiQueue = result.catch(() => {});
-    return result;
+
+    const response = await fetch(API_URL, {
+        method: "POST",
+        body: formData
+    });
+
+    if (!response.ok) {
+        throw new Error(
+            "Server HTTP Error: " + response.status
+        );
+    }
+
+    return await response.json();
 }
 
 
