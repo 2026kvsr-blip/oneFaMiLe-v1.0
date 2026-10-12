@@ -1059,75 +1059,21 @@ if(manageTrustedMembersBtn){
 </h3>
 
 <div style="margin:12px 0;">
-<div id="trustedSearchDropdown" style="display:none;">
-    <div
-        id="trustedMembersCount"
-        style="
-            text-align:center;
-            color:#2A6EB0;
-            font-weight:bold;
-            margin-bottom:10px;
-        ">
-        Total Members: 0
+    <input type="text" id="trustedMembersSearch"
+        class="common-form-input" placeholder="Search Trusted Members"
+        autocomplete="off"
+        style="width:100%;box-sizing:border-box;">
+
+    <div id="trustedSearchDropdown" style="display:none;margin-top:8px;border:1px solid #B8C9D6;border-radius:8px;padding:10px;background:#FFFFFF;">
+        <div id="trustedMembersCount" style="text-align:center;color:#2A6EB0;font-weight:bold;margin-bottom:8px;">Total Members: 0</div>
+        <select id="trustedMembersSort" class="common-form-select" style="width:100%;margin-bottom:8px;">
+            <option value="name">Alphabetical Order (A–Z)</option>
+            <option value="mobile">Mobile Number Order</option>
+        </select>
+        <div id="trustedMembersMatchCount" style="text-align:center;color:#2A6EB0;margin-bottom:8px;">Matching Members: 0</div>
+        <div id="trustedMembersList" style="max-height:320px;overflow-y:auto;text-align:left;">No trusted members added.</div>
     </div>
-
-    <input
-        type="text"
-        id="trustedMembersSearch"
-        class="common-form-input"
-placeholder="Search Trusted Members"
-autocomplete="off"
-        style="
-            width:100%;
-            box-sizing:border-box;
-            margin-bottom:10px;
-        "
-    >
-
-    <select
-        id="trustedMembersSort"
-        class="common-form-select"
-        style="
-            width:100%;
-            margin-bottom:10px;
-        ">
-        <option value="name">Alphabetical Order (A–Z)</option>
-        <option value="mobile">Mobile Number Order</option>
-    </select>
-
-    <div
-        id="trustedMembersMatchCount"
-        style="
-            text-align:center;
-            color:#2A6EB0;
-            margin-bottom:8px;
-        ">
-        Matching Members: 0
-        </div>
-</div>
-
-                    <div
-                        id="trustedMembersList"
-                        style="
-                            margin-top:15px;
-                            text-align:center;
-                        ">
-                                                No trusted members added.
-                    </div>
-
-</div>
-
-<div
-    id="trustedSelectedMemberDetails"
-    style="
-        display:none;
-        margin-top:12px;
-        padding:12px;
-        border:1px solid #2A6EB0;
-        border-radius:8px;
-        background:#F0F8FF;
-        color:#2A6EB0;
-    ">
+    <div id="trustedSelectedMemberDetails" style="display:none;margin-top:12px;padding:12px;border:1px solid #2A6EB0;border-radius:8px;background:#F0F8FF;color:#2A6EB0;"></div>
 </div>
                 </div>
                 `
@@ -1285,9 +1231,10 @@ const trustedSearchDropdown =
 if (trustedSearchInput && trustedSearchDropdown) {
 
     trustedSearchInput.addEventListener("focus", function () {
-
         trustedSearchDropdown.style.display = "block";
-
+    });
+    trustedSearchInput.addEventListener("click", function () {
+        trustedSearchDropdown.style.display = "block";
     });
 
 }
@@ -1303,6 +1250,12 @@ async function loadTrustedMembers(){
         );
 
     if(!list) return;
+
+    const selectedDetails = document.getElementById("trustedSelectedMemberDetails");
+    if(selectedDetails){
+        selectedDetails.style.display = "none";
+        selectedDetails.replaceChildren();
+    }
 
     list.textContent =
         "Loading Trusted Members...";
@@ -1635,113 +1588,27 @@ memberDetails.style.cssText = `
 memberDetails.appendChild(name);
 memberDetails.appendChild(mobile);
 
-/* MEMBER SELECTION */
-
-const memberEmail =
-    String(member.email || "").trim();
-
+/* MEMBER SELECTION: ONE DETAILS BOX OUTSIDE DROPDOWN */
 card.onclick = function(event){
-
-   if(event.target.closest("button")) return;
-
-const trustedSearchDropdown =
-    document.getElementById("trustedSearchDropdown");
-
-const trustedSearchInput =
-    document.getElementById("trustedMembersSearch");
-
-if (trustedSearchDropdown) {
-    trustedSearchDropdown.style.display = "none";
-}
-
-if (trustedSearchInput) {
-    trustedSearchInput.value =
-        String(member.name || "");
-}
-
-const selectedDetailsBox =
-    document.getElementById("trustedSelectedMemberDetails");
-
-if (selectedDetailsBox) {
-
-    selectedDetailsBox.replaceChildren();
-
-    const nameLine = document.createElement("div");
-    nameLine.textContent =
-        "Name: " + String(member.name || "");
-
-    const mobileLine = document.createElement("div");
-    mobileLine.textContent =
-        "Mobile: " + String(member.mobile || "");
-
-    const emailLine = document.createElement("div");
-    emailLine.textContent =
-        "Email: " + String(member.email || "Not provided");
-
-    selectedDetailsBox.appendChild(nameLine);
-    selectedDetailsBox.appendChild(mobileLine);
-    selectedDetailsBox.appendChild(emailLine);
-
-    selectedDetailsBox.style.display = "block";
-}
-
-const selected = card.dataset.selected === "yes";    
-    list.querySelectorAll(
-        "[data-trusted-mobile]"
-    ).forEach(function(otherCard){
-
-        otherCard.dataset.selected = "no";
-
-        const details =
-            otherCard.querySelector(
-                ".trusted-selected-details"
-            );
-
-        if(details){
-            details.style.display = "none";
-        }
-
-    });
-
-    if(selected){
-        return;
+    if(event.target.closest("button")) return;
+    const dropdown = document.getElementById("trustedSearchDropdown");
+    const input = document.getElementById("trustedMembersSearch");
+    const detailsBox = document.getElementById("trustedSelectedMemberDetails");
+    if(input) input.value = String(member.name || member.mobile || "");
+    if(dropdown) dropdown.style.display = "none";
+    if(detailsBox){
+        detailsBox.replaceChildren();
+        [
+            "Name: " + String(member.name || "Trusted Member"),
+            "Mobile: " + String(member.mobile || ""),
+            "Email: " + String(member.email || "Not provided")
+        ].forEach(function(value){
+            const line = document.createElement("div");
+            line.textContent = value;
+            detailsBox.appendChild(line);
+        });
+        detailsBox.style.display = "block";
     }
-
-    card.dataset.selected = "yes";
-
-    let details =
-        card.querySelector(
-            ".trusted-selected-details"
-        );
-
-    if(!details){
-
-        details =
-            document.createElement("div");
-
-        details.className =
-            "trusted-selected-details";
-
-        details.style.cssText = `
-            margin-top:10px;
-            padding-top:10px;
-            border-top:1px solid #B8C9D6;
-            color:#2A6EB0;
-            font-size:14px;
-        `;
-
-        const emailText =
-            document.createElement("div");
-
-        emailText.textContent =
-            "Email: " + (memberEmail || "Not provided");
-
-        details.appendChild(emailText);
-
-        card.appendChild(details);
-    }
-
-    details.style.display = "block";
 };
 
 const deleteBtn =
