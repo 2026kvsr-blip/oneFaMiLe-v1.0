@@ -52,6 +52,7 @@ let ofSignupApiQueue = Promise.resolve();
 function postToAPI(payload) {
     const task = () => new Promise((resolve, reject) => {
         const frameName = "of_signup_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+        const requestId = crypto.randomUUID();
         const iframe = document.createElement("iframe");
         iframe.name = frameName;
         iframe.style.display = "none";
@@ -63,7 +64,7 @@ function postToAPI(payload) {
         form.target = frameName;
         form.style.display = "none";
 
-        const values = { ...payload, transport: "iframe" };
+        const values = { ...payload, transport: "iframe", requestId };
         Object.entries(values).forEach(([key, value]) => {
             const input = document.createElement("input");
             input.type = "hidden";
@@ -80,10 +81,12 @@ function postToAPI(payload) {
             iframe.remove();
         };
         const onMessage = (event) => {
-            if (event.source !== iframe.contentWindow) return;
-            if (!/^https:\/\/(script\.google\.com|([a-z0-9-]+\.)?googleusercontent\.com)$/.test(event.origin)) return;
+            // Apps Script HtmlService uses a nested sandbox window.
+            // Match a unique per-request token instead of event.source.
             const data = event.data;
-            if (!data || typeof data !== "object" || typeof data.status !== "string") return;
+            if (!data || typeof data !== "object" ||
+                data.requestId !== requestId ||
+                typeof data.status !== "string") return;
             if (settled) return;
             settled = true;
             cleanup();
