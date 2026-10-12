@@ -3761,3 +3761,9 @@ width:100%;
     }
 
 }
+
+/* International phone controls (signup) */
+.intl-phone-row {display:flex;gap:8px;width:100%;align-items:center;}
+.intl-phone-row select, .intl-phone-row input {height:42px;min-width:0;max-width:100%;border:1px solid #b8c9d9;border-radius:9px;background:white;padding:0 8px;font-size:15px;}
+.intl-phone-row select {flex:1;}
+@media(max-width:420px){.intl-phone-row select{font-size:14px;}}
