@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -11540,8 +11539,7 @@ mobileOTPCountdownTimer = null;
                 // SHOW SUCCESS MESSAGE
                 // =========================
 
-                status.textContent =
-                    "✓ You can enter a new Mobile Number now.";
+                
 if(status){
 
     status.textContent =
