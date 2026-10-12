@@ -854,27 +854,18 @@ document.getElementById(
 ).value =
     settings.autoAddMembers || "Yes";
 
-               }catch(error){
+                }catch(error){
+                    console.error(
+                        "FAMILY SETTINGS LOAD ERROR:",
+                        error
+                    );
 
-    console.error(
-        "FAMILY SETTINGS LOAD ERROR:",
-        error
-    );
+                    alert(
+                        "Unable to load Family Settings."
+                    );
 
-    const familySettingsPageOpen =
-        document.getElementById(
-            "saveFamilySettingsBtn"
-        ) !== null;
+                }finally{
 
-    if(familySettingsPageOpen){
-
-        alert(
-            "Unable to load Family Settings."
-        );
-
-    }
-
-}finally{
                     saveBtn.disabled = false;
 
                 }
@@ -918,65 +909,67 @@ if(manageTrustedMembersBtn){
 
                     <!-- TRUSTED MEMBER NAME -->
 
-<!-- TRUSTED MEMBER INPUT FIELDS -->
+<label for="trustedMemberName">
+    Name
+</label>
 
-<style>
-    .trusted-member-row {
-        display: grid;
-        grid-template-columns: 68px 10px minmax(0, 1fr);
-        align-items: center;
-        gap: 6px;
-        margin: 8px 0;
-    }
+<input
+    type="text"
+    id="trustedMemberName"
+    class="common-form-input"
+    placeholder="Enter member name"
+    maxlength="100"
+    autocomplete="name"
+    style="
+        width:100%;
+        box-sizing:border-box;
+        margin:6px 0 12px;
+    "
+>
 
-    .trusted-member-row label,
-    .trusted-member-row span {
-        color: #2A6EB0;
-        font-size: 14px;
-    }
 
-    .trusted-member-row input {
-        width: 100%;
-        min-width: 0;
-        height: 36px;
-        min-height: 36px;
-        padding: 5px 8px;
-        margin: 0;
-        box-sizing: border-box;
-        font-size: 14px;
-    }
-</style>
+<!-- TRUSTED MEMBER MOBILE -->
 
-<div class="trusted-member-row">
-    <label for="trustedMemberName">Name</label>
-    <span>:</span>
-    <input
-        type="text"
-        id="trustedMemberName"
-        class="common-form-input"
-        placeholder="Enter member name"
-        maxlength="100"
-    >
-</div>
+<label for="trustedMobileInput">
+    Mobile Number
+</label>
 
-<div class="trusted-member-row">
-    <label for="trustedMobileInput">Mobile</label>
-    <span>:</span>
-<div class="trusted-country-code" style="display:flex;gap:5px;flex:1;min-width:0;align-items:center;"><select id="trustedCountryCode" aria-label="Country code" style="max-width:130px;min-width:100px;height:36px;border:1px solid #b8c9d9;border-radius:8px;background:white;"><option value="91">🇮🇳 India +91</option><option value="1">🇺🇸 USA / Canada +1</option><option value="65">🇸🇬 Singapore +65</option><option value="44">🇬🇧 UK +44</option><option value="61">🇦🇺 Australia +61</option><option value="971">🇦🇪 UAE +971</option><option value="966">🇸🇦 Saudi Arabia +966</option><option value="49">🇩🇪 Germany +49</option><option value="33">🇫🇷 France +33</option><option value="81">🇯🇵 Japan +81</option><option value="other">Other country (enter +code)</option></select><input id="trustedOtherCode" type="tel" placeholder="+Code" style="display:none;width:70px;min-width:0;height:36px;border:1px solid #b8c9d9;border-radius:8px;"><input type="tel" id="trustedMobileInput" class="common-form-input" placeholder="Mobile number" maxlength="15" inputmode="tel"></div>
-</div>
+<input
+    type="tel"
+    id="trustedMobileInput"
+    class="common-form-input"
+    placeholder="Enter 10-digit mobile number"
+    maxlength="10"
+    inputmode="numeric"
+    autocomplete="tel"
+    style="
+        width:100%;
+        box-sizing:border-box;
+        margin:6px 0 12px;
+    "
+>
 
-<div class="trusted-member-row">
-    <label for="trustedMemberEmail">Email</label>
-    <span>:</span>
-    <input
-        type="email"
-        id="trustedMemberEmail"
-        class="common-form-input"
-        placeholder="Optional"
-        maxlength="254"
-    >
-</div>
-<div style="
+
+<!-- TRUSTED MEMBER EMAIL - OPTIONAL -->
+
+<label for="trustedMemberEmail">
+    Email (Optional)
+</label>
+
+<input
+    type="email"
+    id="trustedMemberEmail"
+    class="common-form-input"
+    placeholder="Enter email address (optional)"
+    maxlength="254"
+    autocomplete="email"
+    style="
+        width:100%;
+        box-sizing:border-box;
+        margin:6px 0 12px;
+    "
+>
+                    <div style="
                         display:flex;
                         gap:12px;
                         margin-top:15px;
@@ -1009,137 +1002,25 @@ if(manageTrustedMembersBtn){
                             ← Back
                         </button>
 
-
-
                     </div>
 
-
-
-<!-- IMPORT EXISTING FAMILY MEMBERS -->
-
-<div style="
-    margin-top:14px;
-    margin-bottom:12px;
-    text-align:center;
-">
-
-    <button
-        type="button"
-        id="importExistingMembersBtn"
-        style="
-            width:100%;
-            padding:11px;
-            border:1px solid #2A6EB0;
-            border-radius:8px;
-            background:#FFFFFF;
-            color:#2A6EB0;
-            font-size:14px;
-            font-weight:bold;
-            cursor:pointer;
-        "
-    >
-        Import Existing Members
-    </button>
-
-</div>
                     <h3 style="
-    color:#2A6EB0;
-    margin-top:25px;
-    text-align:center;
-">
-    Trusted Members List
-</h3>
+                        color:#2A6EB0;
+                        margin-top:25px;
+                        text-align:center;
+                    ">
+                        Trusted Members List
+                    </h3>
 
-<div style="margin:12px 0;">
-    <input type="text" id="trustedMembersSearch"
-        class="common-form-input" placeholder="Search Trusted Members"
-        autocomplete="off"
-        style="width:100%;box-sizing:border-box;">
+                    <div
+                        id="trustedMembersList"
+                        style="
+                            margin-top:15px;
+                            text-align:center;
+                        ">
+                        No trusted members added.
+                    </div>
 
-    <div id="trustedSearchDropdown" style="display:none;margin-top:8px;border:1px solid #B8C9D6;border-radius:8px;padding:10px;background:#FFFFFF;"><div style="
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    flex-wrap:nowrap;
-    width:100%;
-    gap:8px;
-    margin-bottom:10px;
-    box-sizing:border-box;
-">
-
-    <span
-        id="trustedMembersCount"
-        style="
-            display:inline-block;
-            position:static;
-            margin:0;
-            padding:0;
-            flex:1;
-            min-width:0;
-            text-align:left;
-            white-space:nowrap;
-            color:#2A6EB0;
-            font-size:13px;
-            font-weight:bold;
-        ">
-        Total Members: 0
-    </span>
-
-    <div style="
-        display:flex;
-        position:static;
-        align-items:center;
-        justify-content:flex-end;
-        flex-shrink:0;
-        gap:14px;
-        margin:0;
-        padding:0;
-    ">
-
-        <span
-            id="trustedSortAZ"
-            title="Alphabetical Order"
-            role="button"
-            tabindex="0"
-            style="
-                display:inline-flex;
-                position:static;
-                align-items:center;
-                cursor:pointer;
-                color:#2A6EB0;
-                font-weight:bold;
-                font-size:15px;
-                white-space:nowrap;
-            ">
-            A↕Z
-        </span>
-
-        <span
-            id="trustedSortMobile"
-            title="Mobile Number Order"
-            role="button"
-            tabindex="0"
-            style="
-                display:inline-flex;
-                position:static;
-                align-items:center;
-                cursor:pointer;
-                color:#2A6EB0;
-                font-weight:bold;
-                font-size:15px;
-                white-space:nowrap;
-            ">
-            1↕9
-        </span>
-
-    </div>
-
-</div>
-        <div id="trustedMembersMatchCount" style="text-align:center;color:#2A6EB0;margin-bottom:8px;">Matching Members: 0</div>
-        <div id="trustedMembersList" style="max-height:320px;overflow-y:auto;text-align:left;">No trusted members added.</div>
-    </div>
-    <div id="trustedSelectedMemberDetails" style="display:none;margin-top:12px;padding:12px;border:1px solid #2A6EB0;border-radius:8px;background:#F0F8FF;color:#2A6EB0;"></div>
-</div>
                 </div>
                 `
             );
@@ -1151,8 +1032,6 @@ const addTrustedMobileBtn =
     document.getElementById(
         "addTrustedMobileBtn"
     );
-
-ofBindCountrySelect("trustedCountryCode", "trustedOtherCode");
 
 if(addTrustedMobileBtn){
 
@@ -1167,7 +1046,9 @@ if(addTrustedMobileBtn){
                 ).value.trim();
 
             const mobile =
-                ofWireMobile("trustedMobileInput", "trustedCountryCode", "trustedOtherCode");
+                document.getElementById(
+                    "trustedMobileInput"
+                ).value.trim();
 
             const email =
                 document.getElementById(
@@ -1179,8 +1060,8 @@ if(addTrustedMobileBtn){
                 return;
             }
 
-            if(!ofMobileValid(mobile)){
-                alert("Enter a valid international mobile number.");
+            if(!/^[6-9][0-9]{9}$/.test(mobile)){
+                alert("Enter a valid 10-digit mobile number.");
                 return;
             }
 
@@ -1282,28 +1163,7 @@ await loadTrustedMembers();
         };
 
 }
-
             /* =====================================
-   TRUSTED MEMBERS SEARCH DROPDOWN
-   ===================================== */
-
-const trustedSearchInput =
-    document.getElementById("trustedMembersSearch");
-
-const trustedSearchDropdown =
-    document.getElementById("trustedSearchDropdown");
-
-if (trustedSearchInput && trustedSearchDropdown) {
-
-    trustedSearchInput.addEventListener("focus", function () {
-        trustedSearchDropdown.style.display = "block";
-    });
-    trustedSearchInput.addEventListener("click", function () {
-        trustedSearchDropdown.style.display = "block";
-    });
-
-}
-/* =====================================
    LOAD TRUSTED MEMBERS LIST
    ===================================== */
 
@@ -1315,12 +1175,6 @@ async function loadTrustedMembers(){
         );
 
     if(!list) return;
-
-    const selectedDetails = document.getElementById("trustedSelectedMemberDetails");
-    if(selectedDetails){
-        selectedDetails.style.display = "none";
-        selectedDetails.replaceChildren();
-    }
 
     list.textContent =
         "Loading Trusted Members...";
@@ -1377,242 +1231,15 @@ async function loadTrustedMembers(){
             return;
         }
 
-       const members =
-    Array.isArray(result.trustedMembers)
-        ? result.trustedMembers
-        : [];
+        const members =
+            Array.isArray(result.trustedMembers)
+                ? result.trustedMembers
+                : [];
 
-const trustedMembersData = members.map(function(item) {
-    return typeof item === "string"
-        ? {
-            name: "",
-            mobile: item,
-            email: ""
-        }
-        : {
-            name: String(item.name || ""),
-            mobile: String(item.mobile || ""),
-            email: String(item.email || "")
-        };
-});
+        list.replaceChildren();
 
-const countElement =
-    document.getElementById("trustedMembersCount");
+        if(members.length === 0){
 
-if (countElement) {
-    countElement.textContent =
-        "Total Members: " + trustedMembersData.length;
-}
-
-list.replaceChildren();
-
-/* TRUSTED MEMBERS SEARCH AND SORT */
-
-const searchInput =
-    document.getElementById("trustedMembersSearch");
-
-let trustedSortMode = "name";
-let trustedLastSortMode = "name";
-let trustedNameAscending = true;
-let trustedMobileAscending = true;
-const trustedSortAZ = document.getElementById("trustedSortAZ");
-const trustedSortMobile = document.getElementById("trustedSortMobile");
-
-const matchCount =
-    document.getElementById("trustedMembersMatchCount");
-
-function getFilteredTrustedMembers(){
-
-    const query = String(
-        searchInput ? searchInput.value : ""
-    ).trim().toLowerCase();
-
-    const sortBy = trustedSortMode;
-
-    const filtered = trustedMembersData.filter(function(member){
-
-        return (
-            member.name.toLowerCase().includes(query) ||
-            member.mobile.includes(query)
-        );
-
-    });
-
-    filtered.sort(function(a, b){
-
-        if(sortBy === "mobile"){
-            const comparison = a.mobile.localeCompare(
-                b.mobile, undefined, {numeric:true}
-            );
-            return trustedMobileAscending ? comparison : -comparison;
-        }
-        const comparison = a.name.localeCompare(
-            b.name, undefined, {sensitivity:"base"}
-        );
-        return trustedNameAscending ? comparison : -comparison;
-
-    });
-
-    return filtered;
-}
-
-function updateTrustedSearchCount(){
-
-    const filtered = getFilteredTrustedMembers();
-
-    if(matchCount){
-        matchCount.textContent =
-            "Matching Members: " + filtered.length;
-    }
-
-    return filtered;
-}
-
-updateTrustedSearchCount();
-
-/* SEARCH AND SORT EVENT HANDLERS */
-
-function renderTrustedSearchResults(){
-
-    const filtered =
-        updateTrustedSearchCount();
-
-    const visibleMobiles = new Set(
-        filtered.map(function(member){
-            return member.mobile;
-        })
-    );
-
-   const cards = Array.from(
-    list.querySelectorAll(
-        "[data-trusted-mobile]"
-    )
-);
-
-const cardMap = new Map();
-
-cards.forEach(function(card){
-
-    cardMap.set(
-        card.dataset.trustedMobile,
-        card
-    );
-
-    card.style.display = "none";
-
-});
-
-filtered.forEach(function(member){
-
-    const card = cardMap.get(
-        member.mobile
-    );
-
-    if(card){
-
-        card.style.display = "";
-
-        list.appendChild(card);
-
-    }
-
-});
-    const oldMessage =
-        document.getElementById(
-            "trustedNoMatchingMembers"
-        );
-
-    if(oldMessage){
-        oldMessage.remove();
-    }
-
-    if(filtered.length === 0 &&
-       trustedMembersData.length > 0){
-
-        const message =
-            document.createElement("div");
-
-        message.id =
-            "trustedNoMatchingMembers";
-
-        message.textContent =
-            "No matching member";
-
-        message.style.cssText = `
-            padding:12px;
-            text-align:center;
-            color:#2A6EB0;
-        `;
-
-        list.appendChild(message);
-    }
-
-}
-
-if (searchInput) {
-
-    searchInput.oninput = function () {
-
-        const selectedDetailsBox =
-            document.getElementById("trustedSelectedMemberDetails");
-
-        if (selectedDetailsBox) {
-            selectedDetailsBox.style.display = "none";
-            selectedDetailsBox.replaceChildren();
-        }
-
-        const trustedSearchDropdown =
-            document.getElementById("trustedSearchDropdown");
-
-        if (trustedSearchDropdown) {
-            trustedSearchDropdown.style.display = "block";
-        }
-
-        renderTrustedSearchResults();
-
-    };
-
-}
-function activateTrustedSort(mode){
-    if(mode === "name"){
-        trustedNameAscending = trustedLastSortMode === "name"
-            ? !trustedNameAscending : true;
-    }else{
-        trustedMobileAscending = trustedLastSortMode === "mobile"
-            ? !trustedMobileAscending : true;
-    }
-    trustedSortMode = mode;
-    trustedLastSortMode = mode;
-    renderTrustedSearchResults();
-}
-if(trustedSortAZ){
-    trustedSortAZ.onclick = function(event){
-        event.preventDefault();
-        event.stopPropagation();
-        activateTrustedSort("name");
-    };
-    trustedSortAZ.onkeydown = function(event){
-        if(event.key === "Enter" || event.key === " "){
-            event.preventDefault();
-            activateTrustedSort("name");
-        }
-    };
-}
-if(trustedSortMobile){
-    trustedSortMobile.onclick = function(event){
-        event.preventDefault();
-        event.stopPropagation();
-        activateTrustedSort("mobile");
-    };
-    trustedSortMobile.onkeydown = function(event){
-        if(event.key === "Enter" || event.key === " "){
-            event.preventDefault();
-            activateTrustedSort("mobile");
-        }
-    };
-}
-
-if(members.length === 0){
             list.textContent =
                 "No trusted members added.";
 
@@ -1630,21 +1257,18 @@ if(members.length === 0){
                     }
                     : item;
 
-     const card =
-    document.createElement("div");
+            const card =
+                document.createElement("div");
 
-card.dataset.trustedMobile =
-    String(member.mobile || "").trim();
+            card.style.cssText = `
+                padding:10px;
+                margin-bottom:8px;
+                border:1px solid #B8C9D6;
+                border-radius:8px;
+                text-align:left;
+                background:#FFFFFF;
+            `;
 
-card.style.cssText = `
-    padding:10px;
-    margin-bottom:4px;
-    border:1px solid #B8C9D6;
-    border-radius:6px;
-    text-align:left;
-    background:#FFFFFF;
-    cursor:pointer;
-`;
             const name =
                 document.createElement("div");
 
@@ -1663,158 +1287,24 @@ card.style.cssText = `
             mobile.textContent =
                 "Mobile: " + (member.mobile || "");
 
-            /* MEMBER DETAILS AND DELETE BUTTON */
+            card.appendChild(name);
+            card.appendChild(mobile);
 
-const memberRow =
-    document.createElement("div");
+            if(member.email){
 
-memberRow.style.cssText = `
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-`;
+                const email =
+                    document.createElement("div");
 
-const memberDetails =
-    document.createElement("div");
+                email.textContent =
+                    "Email: " + member.email;
 
-memberDetails.style.cssText = `
-    flex:1;
-    min-width:0;
-    overflow-wrap:anywhere;
-`;
-
-memberDetails.appendChild(name);
-memberDetails.appendChild(mobile);
-
-/* MEMBER SELECTION: ONE DETAILS BOX OUTSIDE DROPDOWN */
-card.onclick = function(event){
-    if(event.target.closest("button")) return;
-    const dropdown = document.getElementById("trustedSearchDropdown");
-    const input = document.getElementById("trustedMembersSearch");
-    const detailsBox = document.getElementById("trustedSelectedMemberDetails");
-    if(input) input.value = String(member.name || member.mobile || "");
-    if(dropdown) dropdown.style.display = "none";
-    if(detailsBox){
-        detailsBox.replaceChildren();
-        [
-            "Name: " + String(member.name || "Trusted Member"),
-            "Mobile: " + String(member.mobile || ""),
-            "Email: " + String(member.email || "Not provided")
-        ].forEach(function(value){
-            const line = document.createElement("div");
-            line.textContent = value;
-            detailsBox.appendChild(line);
-        });
-        detailsBox.style.display = "block";
-    }
-};
-
-const deleteBtn =
-    document.createElement("button");
-deleteBtn.type = "button";
-deleteBtn.textContent = "Delete";
-
-deleteBtn.style.cssText = `
-    border:none;
-    background:transparent;
-    color:#FF0000;
-    font-weight:bold;
-    font-size:15px;
-    cursor:pointer;
-    padding:8px 2px;
-    flex-shrink:0;
-`;
-/* DELETE TRUSTED MEMBER */
-
-deleteBtn.onclick = async function(){
-
-    const memberMobile =
-        String(member.mobile || "").trim();
-
-    if(!memberMobile){
-        alert("Mobile number missing.");
-        return;
-    }
-
-    const confirmed = confirm(
-        "Are you sure you want to delete " +
-        (member.name || memberMobile) +
-        " from Trusted Members?"
-    );
-
-    if(!confirmed){
-        return;
-    }
-
-    const token =
-        sessionStorage.getItem("sessionToken");
-
-    if(!token){
-        alert("Please login again.");
-        return;
-    }
-
-    const data = new FormData();
-
-    data.append("action", "removeTrustedMember");
-    data.append("sessionToken", token);
-    data.append("familyId", currentFamily.familyId);
-    data.append("mobile", memberMobile);
-
-    deleteBtn.disabled = true;
-
-    try{
-
-        const response = await fetch(
-            API_URL,
-            {
-                method: "POST",
-                body: data
+                card.appendChild(email);
             }
-        );
 
-        const result = await response.json();
+            list.appendChild(card);
 
-        if(result.status !== "success"){
-            alert(
-                result.message ||
-                "Unable to delete Trusted Member."
-            );
-            return;
-        }
+        });
 
-        await loadTrustedMembers();
-
-    }catch(error){
-
-        console.error(
-            "DELETE TRUSTED MEMBER ERROR:",
-            error
-        );
-
-        alert("Unable to delete Trusted Member.");
-
-    }finally{
-
-        deleteBtn.disabled = false;
-
-    }
-
-};
-memberRow.appendChild(memberDetails);
-memberRow.appendChild(deleteBtn);
-
-card.appendChild(memberRow);
-
-// Email will appear only when a member is selected.
-// List displays Name and Mobile Number only.
-
-list.appendChild(card);
-
-});
-
-renderTrustedSearchResults();
     }catch(error){
 
         console.error(
@@ -1828,244 +1318,10 @@ renderTrustedSearchResults();
     }
 
 }
-/* =====================================
-   IMPORT EXISTING MEMBERS - POPUP
-   ===================================== */
 
-const importExistingMembersBtn =
-    document.getElementById(
-        "importExistingMembersBtn"
-    );
-
-if(importExistingMembersBtn){
-
-    importExistingMembersBtn.onclick = function(){
-
-        const oldDialog =
-            document.getElementById(
-                "trustedImportDialog"
-            );
-
-        if(oldDialog){
-            oldDialog.remove();
-        }
-
-        const dialog =
-            document.createElement("div");
-
-        dialog.id = "trustedImportDialog";
-
-        dialog.style.cssText = `
-            position:fixed;
-            inset:0;
-            background:rgba(0,0,0,0.45);
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            z-index:99999;
-            padding:15px;
-        `;
-
-        dialog.innerHTML = `
-            <div style="
-                width:100%;
-                max-width:360px;
-                padding:22px;
-                background:#FFFFFF;
-                border-radius:12px;
-                box-sizing:border-box;
-            ">
-
-                <h3 style="
-                    color:#2A6EB0;
-                    text-align:center;
-                    margin-top:0;
-                ">
-                    Import Existing Members
-                </h3>
-
-                <p style="font-size:14px;">
-                    Select Import Mode:
-                </p>
-
-                <label style="
-                    display:block;
-                    margin-bottom:14px;
-                ">
-                    <input
-                        type="radio"
-                        name="trustedImportMode"
-                        value="skip"
-                        checked
-                    >
-                    <b>SKIP</b> — Keep existing Trusted Members unchanged
-                </label>
-
-                <label style="
-                    display:block;
-                    margin-bottom:20px;
-                ">
-                    <input
-                        type="radio"
-                        name="trustedImportMode"
-                        value="override"
-                    >
-                    <b>OVERRIDE</b> — Replace existing details with Family Tree data
-                </label>
-
-                <div style="
-                    display:flex;
-                    gap:10px;
-                ">
-
-                    <button
-                        type="button"
-                        id="confirmTrustedImportBtn"
-                        style="
-                            flex:1;
-                            padding:10px;
-                            background:#2A6EB0;
-                            color:white;
-                            border:none;
-                            border-radius:7px;
-                        ">
-                        Confirm Import
-                    </button>
-
-                    <button
-                        type="button"
-                        id="cancelTrustedImportBtn"
-                        style="
-                            flex:1;
-                            padding:10px;
-                            background:white;
-                            color:#2A6EB0;
-                            border:1px solid #2A6EB0;
-                            border-radius:7px;
-                        ">
-                        Cancel
-                    </button>
-
-                </div>
-
-            </div>
-        `;
-
-        document.body.appendChild(dialog);
-
-        document.getElementById(
-            "cancelTrustedImportBtn"
-        ).onclick = function(){
-            dialog.remove();
-        };
-
-        document.getElementById(
-            "confirmTrustedImportBtn"
-        ).onclick = async function(){
-
-            const mode =
-                dialog.querySelector(
-                    'input[name="trustedImportMode"]:checked'
-                ).value;
-
-            const confirmBtn = this;
-
-            const token =
-                sessionStorage.getItem("sessionToken");
-
-            if(!token){
-                alert("Please login again.");
-                return;
-            }
-
-            const formData = new FormData();
-
-            formData.append(
-                "action",
-                "importExistingTrustedMembers"
-            );
-
-            formData.append(
-                "sessionToken",
-                token
-            );
-
-            formData.append(
-                "familyId",
-                currentFamily.familyId
-            );
-
-            formData.append(
-                "mode",
-                mode
-            );
-
-            confirmBtn.disabled = true;
-            confirmBtn.textContent = "Importing...";
-
-            try{
-
-                const response = await fetch(
-                    API_URL,
-                    {
-                        method:"POST",
-                        body:formData
-                    }
-                );
-
-                const result =
-                    await response.json();
-
-                if(result.status !== "success"){
-
-                    alert(
-                        result.message ||
-                        "Unable to import members."
-                    );
-
-                    return;
-                }
-
-                dialog.remove();
-
-                await loadTrustedMembers();
-
-                alert(
-                    "Import Completed!\n\n" +
-                    "Mode: " + mode.toUpperCase() + "\n" +
-                    "Added: " + result.added + "\n" +
-                    "Updated: " + result.updated + "\n" +
-                    "Skipped: " + result.skipped
-                );
-
-            }catch(error){
-
-                console.error(
-                    "TRUSTED IMPORT ERROR:",
-                    error
-                );
-
-                alert(
-                    "Unable to import members."
-                );
-
-            }finally{
-
-                confirmBtn.disabled = false;
-                confirmBtn.textContent =
-                    "Confirm Import";
-
-            }
-
-        };
-
-    };
-
-}
 /* LOAD WHEN PAGE OPENS */
 
 loadTrustedMembers();
-            
             /* BACK TO FAMILY SETTINGS */
 
             document.getElementById(
@@ -29879,10 +29135,3 @@ connectParentsToChildren(
     }
 );
 }
-// Trusted Members is rendered dynamically; delegate country-code changes.
-document.addEventListener("change", function(e){
-    if(e.target && e.target.id === "trustedCountryCode"){
-        const other = document.getElementById("trustedOtherCode");
-        if(other) other.style.display = e.target.value === "other" ? "block" : "none";
-    }
-});
