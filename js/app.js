@@ -1,4 +1,5 @@
 
+
 /* International phone numbers: preserve legacy Indian 10-digit records. */
 function ofCountryPhone(local, code, otherCode){
     let digits = String(local || "").replace(/[^0-9]/g, "");
@@ -3611,38 +3612,7 @@ showMessage("Pass Code is required.","warning",3000);
 }
 
 
-/* =====================================
-   COMMON API POST HELPER
-   USED BY SIGNUP / SEND OTP
-   ===================================== */
 
-async function postToAPI(data) {
-
-    const formData = new FormData();
-
-    Object.entries(data).forEach(
-        ([key, value]) => {
-            formData.append(
-                key,
-                value == null ? "" : String(value)
-            );
-        }
-    );
-
-    const response = await fetch(API_URL, {
-        method: "POST",
-        body: formData,
-        redirect: "follow"
-    });
-
-    if (!response.ok) {
-        throw new Error(
-            "Server HTTP Error: " + response.status
-        );
-    }
-
-    return await response.json();
-}
 
 /* ======================
 
