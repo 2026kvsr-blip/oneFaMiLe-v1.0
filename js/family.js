@@ -1110,9 +1110,22 @@ autocomplete="off"
                             margin-top:15px;
                             text-align:center;
                         ">
-                        No trusted members added.
+                                                No trusted members added.
                     </div>
 
+</div>
+
+<div
+    id="trustedSelectedMemberDetails"
+    style="
+        display:none;
+        margin-top:12px;
+        padding:12px;
+        border:1px solid #2A6EB0;
+        border-radius:8px;
+        background:#F0F8FF;
+        color:#2A6EB0;
+    ">
 </div>
                 </div>
                 `
