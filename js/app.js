@@ -5,7 +5,9 @@ function ofCountryPhone(local, code, otherCode){
     const prefix = String(code === "other" ? otherCode : code || "91").replace(/[^0-9]/g, "");
     if (!prefix || !digits) return "";
     // An Indian number may be entered with its prefix already included.
-    if (digits.startsWith(prefix) && digits.length > 10 && String(local).trim().startsWith("+")) return "+" + digits;
+    if (String(local).trim().startsWith("+")) {
+        return /^\+[1-9][0-9]{7,14}$/.test(String(local).trim()) ? String(local).trim() : "";
+    }
     if (prefix === "44" && digits.startsWith("0")) digits = digits.slice(1);
     if (prefix === "91" && digits.length === 10 && !/^[6-9]/.test(digits)) return "";
     const result = "+" + prefix + digits;
