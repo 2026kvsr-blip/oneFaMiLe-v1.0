@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -2924,115 +2925,63 @@ backSignupBtn.onclick = ()=>{
     showScreen(welcomePage);
 
 };
-function sendSignupOTPViaIframe(formData){
+function sendSignupOTPViaIframe(formData) {
 
     return new Promise((resolve, reject) => {
 
-        const iframe = document.createElement("iframe");
+        try {
 
-        const frameName =
-            "signupOtpFrame_" + Date.now();
+            const iframe = document.createElement("iframe");
 
-        iframe.name = frameName;
+            iframe.name = "signupOtpFrame_" + Date.now();
+            iframe.style.display = "none";
 
-        iframe.style.display = "none";
+            const form = document.createElement("form");
 
-        const form = document.createElement("form");
+            form.method = "POST";
+            form.action = API_URL;
+            form.target = iframe.name;
+            form.style.display = "none";
 
-        form.method = "POST";
-        form.action = API_URL;
-        form.target = frameName;
-        form.style.display = "none";
+            for (const [key, value] of formData.entries()) {
 
-        // Existing formData fields
-        for(const [key, value] of formData.entries()){
+                const input = document.createElement("input");
 
-            const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = key;
+                input.value = value;
 
-            input.type = "hidden";
-            input.name = key;
-            input.value = value;
+                form.appendChild(input);
+            }
 
-            form.appendChild(input);
-        }
+            const transport = document.createElement("input");
 
-        // Tell Apps Script to return iframe response
-        const transport = document.createElement("input");
+            transport.type = "hidden";
+            transport.name = "transport";
+            transport.value = "iframe";
 
-        transport.type = "hidden";
-        transport.name = "transport";
-        transport.value = "iframe";
+            form.appendChild(transport);
 
-        form.appendChild(transport);
+            document.body.appendChild(iframe);
+            document.body.appendChild(form);
 
-        let completed = false;
-
-        function cleanup(){
-
-            window.removeEventListener(
-                "message",
-                receiveResponse
-            );
-
-            clearTimeout(timeoutId);
+            form.submit();
 
             form.remove();
-            iframe.remove();
+
+            // Submission initiated, NOT server success confirmation
+            resolve({
+                status: "submitted"
+            });
+
+            setTimeout(() => {
+                iframe.remove();
+            }, 60000);
+
+        } catch (error) {
+
+            reject(error);
         }
-
-        function receiveResponse(event){
-
-            // Accept only messages from this iframe
-            if(event.source !== iframe.contentWindow){
-                return;
-            }
-
-            const result = event.data;
-
-            if(
-                !result ||
-                typeof result !== "object" ||
-                typeof result.status !== "string"
-            ){
-                return;
-            }
-
-            if(completed){
-                return;
-            }
-
-            completed = true;
-
-            cleanup();
-
-            resolve(result);
-        }
-
-        window.addEventListener(
-            "message",
-            receiveResponse
-        );
-
-        const timeoutId = setTimeout(() => {
-
-            if(completed){
-                return;
-            }
-
-            completed = true;
-
-            cleanup();
-
-            reject(
-                new Error("Signup OTP request timed out.")
-            );
-
-        }, 30000);
-
-        document.body.appendChild(iframe);
-        document.body.appendChild(form);
-
-        form.submit();
 
     });
 }
@@ -3091,8 +3040,10 @@ formData.append(
         // OTP FAILED
         // ================================
 
-        if(result.status !== "success"){
-
+if(
+    result.status !== "success" &&
+    result.status !== "submitted"
+){
             hideLoader();
 
             showMessage(
