@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -2924,7 +2925,118 @@ backSignupBtn.onclick = ()=>{
     showScreen(welcomePage);
 
 };
+function sendSignupOTPViaIframe(formData){
 
+    return new Promise((resolve, reject) => {
+
+        const iframe = document.createElement("iframe");
+
+        const frameName =
+            "signupOtpFrame_" + Date.now();
+
+        iframe.name = frameName;
+
+        iframe.style.display = "none";
+
+        const form = document.createElement("form");
+
+        form.method = "POST";
+        form.action = API_URL;
+        form.target = frameName;
+        form.style.display = "none";
+
+        // Existing formData fields
+        for(const [key, value] of formData.entries()){
+
+            const input = document.createElement("input");
+
+            input.type = "hidden";
+            input.name = key;
+            input.value = value;
+
+            form.appendChild(input);
+        }
+
+        // Tell Apps Script to return iframe response
+        const transport = document.createElement("input");
+
+        transport.type = "hidden";
+        transport.name = "transport";
+        transport.value = "iframe";
+
+        form.appendChild(transport);
+
+        let completed = false;
+
+        function cleanup(){
+
+            window.removeEventListener(
+                "message",
+                receiveResponse
+            );
+
+            clearTimeout(timeoutId);
+
+            form.remove();
+            iframe.remove();
+        }
+
+        function receiveResponse(event){
+
+            // Accept only messages from this iframe
+            if(event.source !== iframe.contentWindow){
+                return;
+            }
+
+            const result = event.data;
+
+            if(
+                !result ||
+                typeof result !== "object" ||
+                typeof result.status !== "string"
+            ){
+                return;
+            }
+
+            if(completed){
+                return;
+            }
+
+            completed = true;
+
+            cleanup();
+
+            resolve(result);
+        }
+
+        window.addEventListener(
+            "message",
+            receiveResponse
+        );
+
+        const timeoutId = setTimeout(() => {
+
+            if(completed){
+                return;
+            }
+
+            completed = true;
+
+            cleanup();
+
+            reject(
+                new Error("Signup OTP request timed out.")
+            );
+
+        }, 30000);
+
+        document.body.appendChild(iframe);
+        document.body.appendChild(form);
+
+        form.submit();
+
+    });
+}
 async function sendSignupOTP(){
 
     // ================================
@@ -2970,13 +3082,8 @@ formData.append(
 
    try{
 
-    const response = await fetch(API_URL, {
-    method: "POST",
-    body: formData
-});
-
-const result = await response.json();
-
+    const result =
+    await sendSignupOTPViaIframe(formData);
     console.log(
         "Signup OTP Result:",
         result
