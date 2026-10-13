@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -3726,7 +3725,8 @@ async function registerUser(){
 
     };
 
-
+const newLoginId = data.loginUserName;
+const newPassCode = data.passCode;
     const formData = new FormData();
 
     formData.append("action","register");
@@ -3792,8 +3792,32 @@ async function registerUser(){
 
     clearOTP();
 
-    showScreen(welcomePage);
+// Registration successful.
+// Use existing Login flow to create the session.
 
+const loginIdInput =
+    document.getElementById("loginId");
+
+const loginPassInput =
+    document.getElementById("loginPassCode");
+
+if(loginIdInput && loginPassInput){
+
+    loginIdInput.value = newLoginId;
+    loginPassInput.value = newPassCode;
+
+    showScreen(loginPage);
+
+    loginSubmitBtn.click();
+
+}else{
+
+    console.error(
+        "Auto Login: Login input fields not found."
+    );
+
+    showScreen(loginPage);
+}
 }else{
 
     showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
