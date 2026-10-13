@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2748,7 +2747,59 @@ button.onclick = async function(){
 
         searchInput.style.width = "100%";
         searchInput.style.margin = "15px 0";
+        const sortBar = document.createElement("div");
 
+sortBar.style.cssText = `
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+`;
+
+const sortAZ = document.createElement("button");
+sortAZ.textContent = "A↕Z";
+
+const sortID = document.createElement("button");
+sortID.textContent = "1↕9";
+
+[sortAZ, sortID].forEach(btn => {
+    btn.type = "button";
+    btn.style.cssText = `
+        padding:6px 12px;
+        border:1px solid #2A6EB0;
+        border-radius:8px;
+        background:#EAF8FF;
+        color:#2A6EB0;
+        font-weight:bold;
+        cursor:pointer;
+    `;
+    sortBar.appendChild(btn);
+});
+
+let sortMode = "id";
+let nameAscending = false;
+let idAscending = false;
+
+sortAZ.onclick = function(){
+    if(sortMode !== "name"){
+        nameAscending = true;
+    }else{
+        nameAscending = !nameAscending;
+    }
+    sortMode = "name";
+    showMembers();
+};
+
+sortID.onclick = function(){
+    if(sortMode !== "id"){
+        idAscending = true;
+    }else{
+        idAscending = !idAscending;
+    }
+    sortMode = "id";
+    showMembers();
+};
         const results =
             document.createElement("div");
 
@@ -2779,27 +2830,39 @@ button.onclick = async function(){
 
                 }).sort(function(a, b){
 
-                    return String(a.name || "")
-                        .localeCompare(
-                            String(b.name || ""),
-                            undefined,
-                            {sensitivity:"base"}
-                        );
+    if(sortMode === "name"){
 
-                });
+        const comparison =
+            String(a.name || "").localeCompare(
+                String(b.name || ""),
+                undefined,
+                {sensitivity:"base"}
+            );
 
+        return nameAscending
+            ? comparison
+            : -comparison;
+    }
+
+    const comparison =
+        String(a.memberId || "").localeCompare(
+            String(b.memberId || ""),
+            undefined,
+            {numeric:true, sensitivity:"base"}
+        );
+
+    return idAscending
+        ? comparison
+        : -comparison;
+
+});            
             results.innerHTML = "";
-
             const count =
                 document.createElement("p");
-
             count.textContent =
                 "Members: " + filtered.length;
-
             results.appendChild(count);
-
             if(filtered.length === 0){
-
                 const empty =
                     document.createElement("p");
 
@@ -2848,7 +2911,7 @@ item.onclick = function(){
 
     results.innerHTML = "";
     searchInput.style.display = "none";
-
+sortBar.style.display = "none";
     const detailBack =
         document.createElement("button");
 
@@ -2859,6 +2922,7 @@ item.onclick = function(){
     detailBack.onclick = function(){
 
         searchInput.style.display = "";
+        sortBar.style.display = "flex";
         searchInput.value = previousSearch;
         showMembers();
 
@@ -2951,8 +3015,8 @@ const fields = [
         container.appendChild(backButton);
         container.appendChild(title);
         container.appendChild(searchInput);
-        container.appendChild(results);
-
+container.appendChild(sortBar);
+container.appendChild(results);
         showMembers();
 
     }catch(error){
