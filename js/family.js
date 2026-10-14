@@ -3342,9 +3342,7 @@ if(existingBackBtn && otherNav){
         otherNav.style.display = "flex";
     }
 }
-       const otherNav =
-    document.getElementById("otherFamilyNavigation");
-
+   
 if(otherNav){
     otherNav.style.display =
         isMyFamily ? "none" : "flex";
