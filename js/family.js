@@ -2311,11 +2311,6 @@ otherFamilyNavigation.style.cssText = `
     box-sizing:border-box;
 `;
 
-const otherBackBtn =
-    document.createElement("button");
-
-otherBackBtn.className = "back-btn";
-otherBackBtn.textContent = "← Back";
 
 const otherHomeBtn =
     document.createElement("button");
@@ -2323,23 +2318,16 @@ const otherHomeBtn =
 otherHomeBtn.className = "back-btn";
 otherHomeBtn.textContent = "⌂ Home";
 
-[otherBackBtn, otherHomeBtn].forEach(function(btn){
-    btn.style.cssText = `
-        flex:1;
-        max-width:160px;
-        margin:0;
-    `;
-});
-
-otherBackBtn.onclick = function(){
-    activateFamilyTab("my");
-};
+otherHomeBtn.style.cssText = `
+    flex:1;
+    max-width:160px;
+    margin:0;
+`;
 
 otherHomeBtn.onclick = function(){
     showHome();
 };
 
-otherFamilyNavigation.appendChild(otherBackBtn);
 otherFamilyNavigation.appendChild(otherHomeBtn);
 
 document.body.appendChild(otherFamilyNavigation);
