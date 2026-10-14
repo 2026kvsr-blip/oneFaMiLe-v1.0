@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -19304,18 +19303,16 @@ const familyName =
     currentFamily.name ||
     "";
    showPage(
-
+    `<div class="family-tree-view-page">
+        <div style="margin-top:-20px;">
     `
-    <div class="family-tree-view-page">
-    `
-    +
-
-    pageTitle(
-        familyName
-            ? familyName + " - Family Tree"
-            : "Family Tree",
+    + pageTitle(
+        familyName ? familyName + " - Family Tree" : "Family Tree",
         "images/colorbtns/Family1.png"
     )
+    + `
+        </div>
+    `
     +
 
     `
