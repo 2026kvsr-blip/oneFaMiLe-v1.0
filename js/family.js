@@ -1,6 +1,5 @@
 
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2747,7 +2746,61 @@ openRelationsPage(members);
 
         return;
     }
+/* =====================================
+   OTHER FAMILIES → TREE VIEW
+   ===================================== */
 
+if(actionName === "Tree View"){
+
+    button.disabled = true;
+    button.textContent = "Loading Tree View...";
+
+    try{
+
+        const members =
+            await loadPublicFamilyMembers(
+                viewingFamily,
+                "tree"
+            );
+
+        console.log(
+            "OTHER FAMILY TREE:",
+            viewingFamily.familyName,
+            "MEMBERS:",
+            members.length
+        );
+
+        if(members.length === 0){
+
+            alert("No members found.");
+
+            return;
+        }
+
+        // Next step: Open Tree View
+        // using selected Other Family data
+
+    }catch(error){
+
+        console.error(
+            "OTHER FAMILY TREE ERROR:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Unable to load Family Tree."
+        );
+
+    }finally{
+
+        button.disabled = false;
+        button.textContent = label;
+
+    }
+
+    return;
+}
     if(actionName !== "Search Members"){
 
         alert(
