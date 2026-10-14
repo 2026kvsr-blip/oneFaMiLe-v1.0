@@ -2482,13 +2482,15 @@ async function loadPublicFamilies(){
             "otherFamiliesContent"
         );
 
-    if(!container){
-        return;
-    }
+   if(!container){
+    return;
+}
 
-    container.textContent =
-        "Loading public families...";
+/* MARK OTHER FAMILIES LIST PAGE */
+delete container.dataset.publicFamilyDetail;
 
+container.textContent =
+    "Loading public families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
@@ -2666,33 +2668,15 @@ async function loadPublicFamilies(){
                         return;
                     }
 
-                    const viewingFamily =
-                        result.family;
+                   const viewingFamily =
+    result.family;
 
-                    container.innerHTML = "";
+container.innerHTML = "";
 
-                    const backBtn =
-                        document.createElement("button");
+/* MARK PUBLIC FAMILY DETAIL PAGE */
+container.dataset.publicFamilyDetail = "true";
 
-                    backBtn.textContent =
-                        "← Back to Other Families";
-
-                    backBtn.style.cssText = `
-                        padding: 10px 15px;
-                        margin-bottom: 15px;
-                        border: 1px solid #2A6EB0;
-                        border-radius: 8px;
-                        background: transparent;
-                        color: #2A6EB0;
-                        cursor: pointer;
-                    `;
-
-                    backBtn.onclick = function(){
-
-                        loadPublicFamilies();
-
-                    };
-
+                    
                     const heading =
                         document.createElement("h3");
 
@@ -2710,7 +2694,6 @@ async function loadPublicFamilies(){
                         viewingFamily.familyId;
 
                    
-                    container.appendChild(backBtn);
                     container.appendChild(heading);
                     container.appendChild(familyIdText);
 
@@ -3572,17 +3555,46 @@ const familyBackBtn =
 
 if(familyBackBtn){
 
-    familyBackBtn.onclick =
-        function(){
+   familyBackBtn.onclick = function(){
 
-            console.log(
-                "FAMILY → BACK"
-            );
+    const familyGrid =
+        document.querySelector(".grid-3x2");
 
-        showHome();
+    const otherFamiliesContent =
+        document.getElementById("otherFamiliesContent");
 
-        };
+    // Other Families detail page nundi list ki
+    if(
+        otherFamiliesContent &&
+        otherFamiliesContent.dataset.publicFamilyDetail === "true"
+    ){
+        document.getElementById(
+            "otherFamiliesTab"
+        )?.click();
 
+        return;
+    }
+
+    // Other Families list nundi My Family ki
+    if(
+        familyGrid &&
+        familyGrid.style.display === "none"
+    ){
+        document.getElementById(
+            "myFamilyTab"
+        )?.click();
+
+        return;
+    }
+
+    // My Family nundi Home ki
+    document.getElementById(
+        "otherFamilyNavigation"
+    )?.remove();
+
+    showHome();
+
+};
 }
 function openRelationsPage(publicMembers = null){
     console.log(
