@@ -1345,6 +1345,9 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
+
+    margin-top: 45px;
+    margin-bottom: 25px;
 }
 /* =================================
    ADD MEMBER - COMPACT FORM
@@ -4118,8 +4121,9 @@ max-height: 28px !important;
     column-gap: 4px;
     align-items: center;
     width: 100%;
-}
 
+    margin-top: 30px;
+}
 .family-tree-page > .family-tree-control
 .family-tree-search-wrapper {
     width: 100%;
