@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2724,8 +2725,7 @@ button.onclick = async function(){
                 return;
             }
 
-            // Next step: Relations page display
-
+openRelationsPage(members);
         }catch(error){
 
             console.error(
@@ -3432,8 +3432,7 @@ if(familyBackBtn){
         };
 
 }
-   function openRelationsPage(){
-
+function openRelationsPage(publicMembers = null){
     console.log(
         "OPENING RELATIONS PAGE"
     );
@@ -4338,13 +4337,14 @@ if(
     relationsMemberDropdown
 ){
 
-    const familyMembers =
-        JSON.parse(
+   const familyMembers =
+    Array.isArray(publicMembers)
+        ? publicMembers
+        : JSON.parse(
             localStorage.getItem(
                 "familyMembers"
             ) || "[]"
         );
-
 
     console.log(
         "RELATIONS FAMILY MEMBERS:",
