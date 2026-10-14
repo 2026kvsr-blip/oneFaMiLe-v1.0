@@ -2695,6 +2695,59 @@ async function loadPublicFamilies(){
                        
 button.onclick = async function(){
 
+    // OTHER FAMILIES → RELATIONS
+
+    if(actionName === "Relations"){
+
+        button.disabled = true;
+        button.textContent = "Loading Relations...";
+
+        try{
+
+            const members =
+                await loadPublicFamilyMembers(
+                    viewingFamily,
+                    "relations"
+                );
+
+            console.log(
+                "OTHER FAMILY RELATIONS:",
+                viewingFamily.familyName,
+                "MEMBERS:",
+                members.length
+            );
+
+            if(members.length === 0){
+
+                alert("No members found.");
+
+                return;
+            }
+
+            // Next step: Relations page display
+
+        }catch(error){
+
+            console.error(
+                "OTHER FAMILY RELATIONS ERROR:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "Unable to load relations."
+            );
+
+        }finally{
+
+            button.disabled = false;
+            button.textContent = label;
+
+        }
+
+        return;
+    }
+
     if(actionName !== "Search Members"){
 
         alert(
@@ -2704,7 +2757,6 @@ button.onclick = async function(){
 
         return;
     }
-
     button.disabled = true;
     button.textContent = "Loading Members...";
 
