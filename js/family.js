@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -3303,7 +3304,44 @@ container.appendChild(results);
 
         const isMyFamily =
             tab === "my";
+/* OTHER FAMILIES - MOVE EXISTING BACK TO BOTTOM */
 
+const existingBackBtn =
+    document.getElementById("familyBack");
+
+const otherNav =
+    document.getElementById("otherFamilyNavigation");
+
+if(existingBackBtn && otherNav){
+
+    if(isMyFamily){
+
+        const originalContainer =
+            document.getElementById("familySettingsContainer");
+
+        if(originalContainer){
+            originalContainer.insertAdjacentElement(
+                "afterend",
+                existingBackBtn
+            );
+        }
+
+        otherNav.style.display = "none";
+
+    }else{
+
+        otherNav.insertBefore(
+            existingBackBtn,
+            otherNav.firstChild
+        );
+
+        existingBackBtn.style.margin = "0";
+        existingBackBtn.style.flex = "1";
+        existingBackBtn.style.maxWidth = "160px";
+
+        otherNav.style.display = "flex";
+    }
+}
        const otherNav =
     document.getElementById("otherFamilyNavigation");
 
