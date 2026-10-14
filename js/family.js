@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -178,8 +177,7 @@ familyBtn.onclick = () => {
     setActiveButton(familyBtn);
  showPage(
     `
-    <div style="margin-top:-20px;">
-    `
+<div style="margin-top:-40px;">    `
     +
     pageTitle(
         "Family",
