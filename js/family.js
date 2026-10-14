@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2777,9 +2776,10 @@ if(actionName === "Tree View"){
             return;
         }
 
-        // Next step: Open Tree View
-        // using selected Other Family data
-
+        await openFamilyTreePage(
+    viewingFamily,
+    members
+);
     }catch(error){
 
         console.error(
