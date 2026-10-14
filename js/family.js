@@ -339,7 +339,7 @@ Update Member
 </button>
         </div>
 
-        <div align="center">
+        <div align="center" id="familyBackContainer">
 
             <button
                 id="familyBack"
@@ -371,6 +371,10 @@ if(treeViewBtn){
             console.log(
                 "TREE VIEW CLICKED"
             );
+
+            window.familyTreeReturnAction = function(){
+                familyBtn.click();
+            };
 
             openFamilyTreePage();
 
@@ -2291,13 +2295,10 @@ saveBtn.disabled = true;
 
     const familyGrid =
         document.querySelector(".grid-3x2");
-/* OTHER FAMILIES BOTTOM NAVIGATION */
+/* OTHER FAMILIES NAVIGATION: ONE SHARED BACK/HOME BAR */
 
-const otherFamilyNavigation =
-    document.createElement("div");
-
+const otherFamilyNavigation = document.createElement("div");
 otherFamilyNavigation.id = "otherFamilyNavigation";
-
 otherFamilyNavigation.style.cssText = `
     position:fixed;
     bottom:75px;
@@ -2313,33 +2314,62 @@ otherFamilyNavigation.style.cssText = `
     box-sizing:border-box;
 `;
 
+const otherBackBtn = document.createElement("button");
+otherBackBtn.type = "button";
+otherBackBtn.className = "back-btn";
+otherBackBtn.textContent = "← Back";
+otherBackBtn.style.cssText = "flex:1;max-width:160px;margin:0;";
 
-const otherHomeBtn =
-    document.createElement("button");
-
+const otherHomeBtn = document.createElement("button");
+otherHomeBtn.type = "button";
 otherHomeBtn.className = "back-btn";
 otherHomeBtn.textContent = "⌂ Home";
+otherHomeBtn.style.cssText = "flex:1;max-width:160px;margin:0;";
 
-otherHomeBtn.style.cssText = `
-    flex:1;
-    max-width:160px;
-    margin:0;
-`;
+otherFamilyNavigation.appendChild(otherBackBtn);
+otherFamilyNavigation.appendChild(otherHomeBtn);
+document.body.appendChild(otherFamilyNavigation);
+
+function setOtherFamilyNavigation(page){
+    window.otherFamilyNavigationPage = page;
+    const nav = document.getElementById("otherFamilyNavigation");
+    const back = nav?.querySelector("button:first-child");
+    const home = nav?.querySelector("button:last-child");
+    if(!nav || !back || !home) return;
+
+    const showNav = ["list", "detail", "search"].includes(page);
+    nav.style.display = showNav ? "flex" : "none";
+    back.style.display = showNav ? "inline-flex" : "none";
+    home.style.display = ["detail", "search"].includes(page) ? "inline-flex" : "none";
+}
+window.setOtherFamilyNavigation = setOtherFamilyNavigation;
+
+otherBackBtn.onclick = async function(){
+    const page = window.otherFamilyNavigationPage;
+
+    if(page === "list"){
+        document.getElementById("myFamilyTab")?.click();
+        return;
+    }
+
+    if(page === "detail"){
+        await loadPublicFamilies();
+        setOtherFamilyNavigation("list");
+        return;
+    }
+
+    if(page === "search"){
+        setOtherFamilyNavigation("detail");
+        if(typeof window.otherFamilyReturnToDetail === "function"){
+            window.otherFamilyReturnToDetail();
+        }
+    }
+};
 
 otherHomeBtn.onclick = function(){
-
-    /* REMOVE OTHER FAMILIES BUTTONS */
-    document.getElementById(
-        "otherFamilyNavigation"
-    )?.remove();
-
-    /* OPEN HOME PAGE */
+    setOtherFamilyNavigation("hidden");
     showHome();
-
 };
-otherFamilyNavigation.appendChild(otherHomeBtn);
-
-document.body.appendChild(otherFamilyNavigation);
     let otherFamiliesContent =
         document.getElementById("otherFamiliesContent");
 
@@ -2571,6 +2601,8 @@ container.textContent =
             const card =
                 document.createElement("div");
 
+            card.dataset.familyId = String(family.familyId || "");
+
             card.style.cssText = `
                 padding: 14px;
                 margin: 10px 0;
@@ -2677,6 +2709,11 @@ container.innerHTML = "";
 
 /* MARK PUBLIC FAMILY DETAIL PAGE */
 container.dataset.publicFamilyDetail = "true";
+setOtherFamilyNavigation("detail");
+window.otherFamilyReturnToDetail = function(){
+    card.click();
+};
+window.currentPublicFamilyId = String(viewingFamily.familyId || "");
 
                     
                     const heading =
@@ -2766,6 +2803,15 @@ button.onclick = async function(){
                 return;
             }
 
+window.relationsReturnAction = async function(){
+    if(typeof window.restorePublicFamilyDetail === "function"){
+        await window.restorePublicFamilyDetail(viewingFamily.familyId);
+    }else{
+        familyBtn.click();
+    }
+};
+
+setOtherFamilyNavigation("hidden");
 openRelationsPage(members);
         }catch(error){
 
@@ -2819,10 +2865,20 @@ if(actionName === "Tree View"){
             return;
         }
 
+        window.familyTreeReturnAction = async function(){
+            if(typeof window.restorePublicFamilyDetail === "function"){
+                await window.restorePublicFamilyDetail(viewingFamily.familyId);
+            }else{
+                familyBtn.click();
+            }
+        };
+
+        setOtherFamilyNavigation("hidden");
+
         await openFamilyTreePage(
-    viewingFamily,
-    members
-);
+            viewingFamily,
+            members
+        );
     }catch(error){
 
         console.error(
@@ -2866,16 +2922,8 @@ if(actionName === "Tree View"){
 
         container.innerHTML = "";
 
-        const backButton =
-            document.createElement("button");
-
-        backButton.className = "back-btn";
-        backButton.textContent =
-            "← Back to " + viewingFamily.familyName;
-
-        backButton.onclick = function(){
-            card.click();
-        };
+        /* Shared navigation bar handles Back/Home on Search Members. */
+        setOtherFamilyNavigation("search");
 
         const title =
             document.createElement("h3");
@@ -3175,7 +3223,6 @@ const fields = [
             showMembers
         );
 
-        container.appendChild(backButton);
         container.appendChild(title);
         container.appendChild(searchInput);
 container.appendChild(sortBar);
@@ -3291,53 +3338,18 @@ container.appendChild(results);
 
 }
 
-    function activateFamilyTab(tab){
+    async function activateFamilyTab(tab){
 
-        const isMyFamily =
-            tab === "my";
-/* OTHER FAMILIES - MOVE EXISTING BACK TO BOTTOM */
+        const isMyFamily = tab === "my";
 
-const existingBackBtn =
-    document.getElementById("familyBack");
-
-const otherNav =
-    document.getElementById("otherFamilyNavigation");
-
-if(existingBackBtn && otherNav){
-
-    if(isMyFamily){
-
-        const originalContainer =
-            document.getElementById("familySettingsContainer");
-
-        if(originalContainer){
-            originalContainer.insertAdjacentElement(
-                "afterend",
-                existingBackBtn
-            );
+        /* Keep the original centered My Family Back button in place. */
+        const familyBackContainer = document.getElementById("familyBackContainer");
+        if(familyBackContainer){
+            familyBackContainer.style.display = isMyFamily ? "block" : "none";
         }
 
-        otherNav.style.display = "none";
+        setOtherFamilyNavigation(isMyFamily ? "hidden" : "list");
 
-    }else{
-
-        otherNav.insertBefore(
-            existingBackBtn,
-            otherNav.firstChild
-        );
-
-        existingBackBtn.style.margin = "0";
-        existingBackBtn.style.flex = "1";
-        existingBackBtn.style.maxWidth = "160px";
-
-        otherNav.style.display = "flex";
-    }
-}
-   
-if(otherNav){
-    otherNav.style.display =
-        isMyFamily ? "none" : "flex";
-}
         if(familyGrid){
             familyGrid.style.display =
                 isMyFamily ? "" : "none";
@@ -3361,7 +3373,7 @@ if(otherNav){
 
             if(!isMyFamily){
 
-                loadPublicFamilies();
+                await loadPublicFamilies();
 
             }
 
@@ -3389,21 +3401,37 @@ if(otherNav){
 
     }
 
+    window.activateFamilyTab = activateFamilyTab;
+
+    window.restorePublicFamilyDetail = async function(familyId){
+        familyBtn.click();
+        if(typeof window.activateFamilyTab === "function"){
+            await window.activateFamilyTab("other");
+        }
+        const listContainer = document.getElementById("otherFamiliesContent");
+        const targetCard = listContainer
+            ? Array.from(listContainer.children).find(
+                element => String(element.dataset.familyId || "") === String(familyId)
+            )
+            : null;
+        if(targetCard){
+            targetCard.click();
+        }
+    };
+
     if(myFamilyTab){
 
-        myFamilyTab.onclick =
-            function(){
-                activateFamilyTab("my");
-            };
+        myFamilyTab.onclick = function(){
+            activateFamilyTab("my");
+        };
 
     }
 
     if(otherFamiliesTab){
 
-        otherFamiliesTab.onclick =
-            function(){
-                activateFamilyTab("other");
-            };
+        otherFamiliesTab.onclick = function(){
+            activateFamilyTab("other");
+        };
 
     }
 /* =====================================
@@ -3549,54 +3577,14 @@ if(relationsBtn){
    FAMILY → BACK
    ===================================== */
 
-const familyBackBtn =
-    document.getElementById(
-        "familyBack"
-    );
-
+const familyBackBtn = document.getElementById("familyBack");
 
 if(familyBackBtn){
-
-   familyBackBtn.onclick = function(){
-
-    const familyGrid =
-        document.querySelector(".grid-3x2");
-
-    const otherFamiliesContent =
-        document.getElementById("otherFamiliesContent");
-
-    // Other Families detail page nundi list ki
-    if(
-        otherFamiliesContent &&
-        otherFamiliesContent.dataset.publicFamilyDetail === "true"
-    ){
-        document.getElementById(
-            "otherFamiliesTab"
-        )?.click();
-
-        return;
-    }
-
-    // Other Families list nundi My Family ki
-    if(
-        familyGrid &&
-        familyGrid.style.display === "none"
-    ){
-        document.getElementById(
-            "myFamilyTab"
-        )?.click();
-
-        return;
-    }
-
-    // My Family nundi Home ki
-    document.getElementById(
-        "otherFamilyNavigation"
-    )?.remove();
-
-    showHome();
-
-};
+    /* My Family Back remains centered and returns to Home. */
+    familyBackBtn.onclick = function(){
+        setOtherFamilyNavigation("hidden");
+        showHome();
+    };
 }
 function openRelationsPage(publicMembers = null){
     console.log(
@@ -5095,7 +5083,14 @@ if(relationsBackBtn){
 
             else{
 
-                familyBtn.click();
+                const returnAction = window.relationsReturnAction;
+                window.relationsReturnAction = null;
+
+                if(typeof returnAction === "function"){
+                    returnAction();
+                }else{
+                    familyBtn.click();
+                }
 
             }
 
@@ -19078,14 +19073,6 @@ const existingFamilies =
 
 
    
-    /* =====================================
-       FAMILY → BACK
-       ===================================== */
-
-    document
-        .getElementById("familyBack")
-        .onclick = showHome;
-
 };
 
 
@@ -19352,6 +19339,11 @@ async function openFamilyTreePage(
     publicFamily = null,
     publicMembers = null
 ){
+
+    /* Tree View uses only its own Back/Home pair. */
+    if(typeof window.setOtherFamilyNavigation === "function"){
+        window.setOtherFamilyNavigation("hidden");
+    }
 
     /* =====================================
        USE FAMILY DATA LOADED AT LOGIN
@@ -26167,247 +26159,26 @@ if(treeWrapper){
 
 /* =====================================
    FAMILY TREE → BACK
+   Return directly to the page that opened Tree View.
    ===================================== */
 
 const familyTreeBackBtn =
-    document.getElementById(
-        "familyTreeBackBtn"
-    );
-
+    document.getElementById("familyTreeBackBtn");
 
 if(familyTreeBackBtn){
+    familyTreeBackBtn.onclick = async function(){
+        const returnAction = window.familyTreeReturnAction;
+        window.familyTreeReturnAction = null;
 
-    familyTreeBackBtn.onclick =
-        function(){
-
-            const diagram =
-                document.getElementById(
-                    "familyTreeDiagram"
-                );
-
-            const treeCanvas =
-                document.getElementById(
-                    "familyTreeCanvas"
-                );
-
-
-            /* =====================================
-               TREE OPEN UNTE
-               → TREE CLEAR
-               → SELECTION PAGE READY
-               ===================================== */
-
-            if(treeCanvas){
-
-                if(diagram){
-
-                    diagram.innerHTML =
-                        "";
-
-                }
-
-
-                /* MEMBER CONTROL */
-
-                const memberControl =
-                    document.getElementById(
-                        "familyTreeMemberSearch"
-                    )?.closest(
-                        ".family-tree-control"
-                    );
-
-
-                if(memberControl){
-
-                    memberControl.style.display =
-                        "";
-
-                }
-
-
-                /* GENERATION ROW */
-
-                const generationRow =
-                    document.querySelector(
-                        ".family-tree-generation-row"
-                    );
-
-
-                if(generationRow){
-
-                    generationRow.style.display =
-                        "";
-
-                }
-
-
-                /* SHOW BUTTON */
-
-                const showTreeBtn =
-                    document.getElementById(
-                        "showFamilyTreeBtn"
-                    );
-
-
-                if(showTreeBtn){
-
-                    showTreeBtn.style.display =
-                        "";
-
-                }
-
-
-                /* RESET MEMBER SEARCH */
-
-                const searchInput =
-                    document.getElementById(
-                        "familyTreeMemberSearch"
-                    );
-
-
-                if(searchInput){
-
-                    searchInput.value =
-                        "";
-
-                }
-
-
-                selectedFamilyTreeMemberId =
-                    "";
-
-
-                /* CLOSE DROPDOWN */
-
-                const dropdown =
-                    document.getElementById(
-                        "familyTreeMemberDropdown"
-                    );
-
-
-                if(dropdown){
-
-                    dropdown.innerHTML =
-                        "";
-
-                    dropdown.style.display =
-                        "none";
-
-                }
-
-/* =====================================
-   BACK FROM TREE
-   INITIAL STATE
-   ONLY SELECT MEMBER VISIBLE
-   ===================================== */
-
-/* HIDE ALL TREE OPTION CONTROLS */
-
-document.querySelectorAll(
-    ".family-tree-control"
-).forEach(
-    function(control){
-
-        control.style.display = "none";
-
-    }
-);
-
-
-/* SHOW ONLY SELECT MEMBER */
-
-if(memberControl){
-
-    memberControl.style.display = "";
-
+        if(typeof returnAction === "function"){
+            await returnAction();
+        }else{
+            const mainFamilyBtn = document.getElementById("familyBtn");
+            if(mainFamilyBtn) mainFamilyBtn.click();
+        }
+    };
 }
 
-
-/* HIDE GENERATION ROW */
-
-if(generationRow){
-
-    generationRow.style.display = "none";
-
-}
-
-
-/* HIDE PARTNER VIEW */
-
-const partnerViewRow =
-    document.getElementById(
-        "familyTreePartnerViewRow"
-    );
-
-if(partnerViewRow){
-
-    partnerViewRow.style.display =
-        "none";
-
-}
-
-
-/* RESET PARTNER VIEW */
-
-const partnerViewSelect =
-    document.getElementById(
-        "familyTreePartnerView"
-    );
-
-if(partnerViewSelect){
-
-    partnerViewSelect.innerHTML =
-        `
-        <option value="all" selected>
-            All Partners
-        </option>
-        `;
-
-}
-
-
-/* HIDE SHOW FAMILY TREE BUTTON */
-
-if(showTreeBtn){
-
-    showTreeBtn.style.display =
-        "none";
-
-}
-                /* RESET ZOOM / PAN */
-
-                familyTreeZoomFactor = 1;
-
-                familyTreePanX = 0;
-
-                familyTreePanY = 0;
-
-
-                return;
-
-            }
-
-
-            /* =====================================
-               TREE LEKAPOTHE
-               → ONE STEP BACK TO FAMILY PAGE
-               ===================================== */
-
-            const mainFamilyBtn =
-                document.getElementById(
-                    "familyBtn"
-                );
-
-
-            if(mainFamilyBtn){
-
-                mainFamilyBtn.click();
-
-            }
-
-        };
-
-}
 /* =====================================
    FAMILY TREE → HOME
    ===================================== */
