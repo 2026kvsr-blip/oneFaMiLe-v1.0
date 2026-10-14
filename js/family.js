@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -175,6 +176,7 @@ familyBtn.onclick = () => {
     clearOldFamilyCacheForCurrentUser();
 
     setActiveButton(familyBtn);
+    document.getElementById("otherFamilyNavigation")?.remove();
  showPage(
     `
 <div style="margin-top:-40px;">    `
@@ -2288,7 +2290,60 @@ saveBtn.disabled = true;
 
     const familyGrid =
         document.querySelector(".grid-3x2");
+/* OTHER FAMILIES BOTTOM NAVIGATION */
 
+const otherFamilyNavigation =
+    document.createElement("div");
+
+otherFamilyNavigation.id = "otherFamilyNavigation";
+
+otherFamilyNavigation.style.cssText = `
+    position:fixed;
+    bottom:75px;
+    left:0;
+    right:0;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    padding:10px 15px;
+    background:#EAF8FF;
+    z-index:999;
+    box-sizing:border-box;
+`;
+
+const otherBackBtn =
+    document.createElement("button");
+
+otherBackBtn.className = "back-btn";
+otherBackBtn.textContent = "← Back";
+
+const otherHomeBtn =
+    document.createElement("button");
+
+otherHomeBtn.className = "back-btn";
+otherHomeBtn.textContent = "⌂ Home";
+
+[otherBackBtn, otherHomeBtn].forEach(function(btn){
+    btn.style.cssText = `
+        flex:1;
+        max-width:160px;
+        margin:0;
+    `;
+});
+
+otherBackBtn.onclick = function(){
+    activateFamilyTab("my");
+};
+
+otherHomeBtn.onclick = function(){
+    showHome();
+};
+
+otherFamilyNavigation.appendChild(otherBackBtn);
+otherFamilyNavigation.appendChild(otherHomeBtn);
+
+document.body.appendChild(otherFamilyNavigation);
     let otherFamiliesContent =
         document.getElementById("otherFamiliesContent");
 
@@ -3262,7 +3317,13 @@ container.appendChild(results);
         const isMyFamily =
             tab === "my";
 
-       
+       const otherNav =
+    document.getElementById("otherFamilyNavigation");
+
+if(otherNav){
+    otherNav.style.display =
+        isMyFamily ? "none" : "flex";
+}
         if(familyGrid){
             familyGrid.style.display =
                 isMyFamily ? "" : "none";
