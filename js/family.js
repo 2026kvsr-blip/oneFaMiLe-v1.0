@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2751,18 +2752,33 @@ button.onclick = async function(){
 
 sortBar.style.cssText = `
     display:flex;
-    justify-content:flex-end;
+    justify-content:space-between;
     align-items:center;
     gap:10px;
-    margin-bottom:10px;
+    margin:10px 0;
+    width:100%;
+`;
+        const memberCount = document.createElement("span");
+
+memberCount.style.cssText = `
+    font-size:16px;
+    color:black;
+    white-space:nowrap;
 `;
 
+sortBar.appendChild(memberCount);
 const sortAZ = document.createElement("button");
 sortAZ.textContent = "A↕Z";
 
 const sortID = document.createElement("button");
 sortID.textContent = "1↕9";
+const sortButtons = document.createElement("div");
 
+sortButtons.style.cssText = `
+    display:flex;
+    align-items:center;
+    gap:10px;
+`;
 [sortAZ, sortID].forEach(btn => {
     btn.type = "button";
     btn.style.cssText = `
@@ -2774,8 +2790,8 @@ sortID.textContent = "1↕9";
         font-weight:bold;
         cursor:pointer;
     `;
-    sortBar.appendChild(btn);
-});
+sortButtons.appendChild(btn);});
+        sortBar.appendChild(sortButtons);
 
 let sortMode = "id";
 let nameAscending = false;
@@ -2856,14 +2872,13 @@ sortID.onclick = function(){
         : -comparison;
 
 });            
-            results.innerHTML = "";
-            const count =
-                document.createElement("p");
-            count.textContent =
-                "Members: " + filtered.length;
-            results.appendChild(count);
-            if(filtered.length === 0){
-                const empty =
+           results.innerHTML = "";
+
+memberCount.textContent =
+    "Members: " + filtered.length;
+
+if(filtered.length === 0){
+    const empty =
                     document.createElement("p");
 
                 empty.textContent =
