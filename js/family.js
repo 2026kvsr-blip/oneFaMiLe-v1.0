@@ -1,6 +1,5 @@
 
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -19228,19 +19227,22 @@ function applyFamilyTreeZoom(){
 /* =====================================
    OPEN FAMILY TREE PAGE
    ===================================== */
-async function openFamilyTreePage(){
+
+async function openFamilyTreePage(
+    publicFamily = null,
+    publicMembers = null
+){
 
     /* =====================================
        USE FAMILY DATA LOADED AT LOGIN
        ===================================== */
-
     const loggedUser =
         JSON.parse(
             sessionStorage.getItem("user") ||
             "null"
         );
 
-    if(!loggedUser){
+      if(!loggedUser){
 
         console.error(
             "Family Tree: Login user not found"
@@ -19251,6 +19253,7 @@ async function openFamilyTreePage(){
 
 
     const currentFamily =
+        publicFamily ||
         JSON.parse(
             localStorage.getItem(
                 "currentFamily"
@@ -19259,15 +19262,16 @@ async function openFamilyTreePage(){
 
 
     const members =
-        JSON.parse(
-            localStorage.getItem(
-                "familyMembers"
-            ) || "[]"
-        );
+        Array.isArray(publicMembers)
+            ? publicMembers
+            : JSON.parse(
+                localStorage.getItem(
+                    "familyMembers"
+                ) || "[]"
+            );
 
 
     if(!currentFamily){
-
         showMessage(
             "Family information not available.",
             "warning",
