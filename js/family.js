@@ -188,13 +188,14 @@ familyBtn.onclick = () => {
     </div>
 
     <!-- FAMILY TABS -->
-    <div
-            id="familyTabs"
-            style="
-                display:flex;
-                gap:8px;
-margin:10px 15px 18px;
-">
+    <!-- FAMILY TABS -->
+<div
+    id="familyTabs"
+    style="
+        display:flex;
+        gap:8px;
+        margin:40px 15px 18px;
+    ">
 
             <button
                 id="myFamilyTab"
