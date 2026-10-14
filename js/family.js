@@ -1,4 +1,5 @@
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -175,21 +176,27 @@ familyBtn.onclick = () => {
     clearOldFamilyCacheForCurrentUser();
 
     setActiveButton(familyBtn);
-   showPage(
-        pageTitle(
-            "Family",
-            "images/colorbtns/Family1.png"
-        )
-        
-        +`
-        <!-- FAMILY TABS -->
-        <div
+ showPage(
+    `
+    <div style="margin-top:-20px;">
+    `
+    +
+    pageTitle(
+        "Family",
+        "images/colorbtns/Family1.png"
+    )
+    +
+    `
+    </div>
+
+    <!-- FAMILY TABS -->
+    <div
             id="familyTabs"
             style="
                 display:flex;
                 gap:8px;
-                margin:10px 0 18px;
-            ">
+margin:10px 15px 18px;
+">
 
             <button
                 id="myFamilyTab"
@@ -254,8 +261,8 @@ familyBtn.onclick = () => {
                     class="btn-icon">
 
                 <span>
-                    Search - edit
-                </span>
+Update Member
+</span>
 
             </button>
 
@@ -314,17 +321,20 @@ familyBtn.onclick = () => {
                 margin:15px 0;
             ">
 
-            <button
-                id="familySettingsBtn"
-                type="button"
-                class="back-btn"
-                style="
-                    background:#2A6EB0;
-                    color:white;
-                ">
-                ⚙ Family Settings
-            </button>
-
+           <button
+    id="familySettingsBtn"
+    type="button"
+    class="back-btn"
+    style="
+        background:#2A6EB0;
+        color:white;
+        width:210px;
+        max-width:95%;
+        white-space:nowrap;
+        box-sizing:border-box;
+    ">
+    ⚙ Family Settings
+</button>
         </div>
 
         <div align="center">
@@ -8939,7 +8949,7 @@ window.openSearchEditMemberPage =
             showPage(
 
                 pageTitle(
-                    "Search - Edit Member",
+"Update Member",
                     "images/colorbtns/CustomSearch1.png"
                 )
 
