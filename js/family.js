@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2326,9 +2325,16 @@ otherHomeBtn.style.cssText = `
 `;
 
 otherHomeBtn.onclick = function(){
-    showHome();
-};
 
+    /* REMOVE OTHER FAMILIES BUTTONS */
+    document.getElementById(
+        "otherFamilyNavigation"
+    )?.remove();
+
+    /* OPEN HOME PAGE */
+    showHome();
+
+};
 otherFamilyNavigation.appendChild(otherHomeBtn);
 
 document.body.appendChild(otherFamilyNavigation);
