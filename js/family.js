@@ -1,5 +1,4 @@
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -3500,14 +3499,22 @@ function openRelationsPage(publicMembers = null){
         "OPENING RELATIONS PAGE"
     );
 
-    showPage(
+   showPage(
 
-        pageTitle(
-            "Relations",
-            "images/colorbtns/Relations1.png"
-        )
+    `
+    <div style="margin-top:-20px;">
+    `
+    +
+    pageTitle(
+        "Relations",
+        "images/colorbtns/Relations1.png"
+    )
+    +
+    `
+    </div>
 
-        + `
+    <div style="height:30px;"></div>
+
 <!-- =================================
      SELECT / SEARCH MEMBER
      ================================= -->
@@ -3515,7 +3522,6 @@ function openRelationsPage(publicMembers = null){
 <div
     id="relationsMemberGroup"
     class="common-form-group">
-
     <label class="common-form-label">
         Member
     </label>
