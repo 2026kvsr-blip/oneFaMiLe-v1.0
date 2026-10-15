@@ -2330,31 +2330,6 @@ otherFamilyNavigation.appendChild(otherBackBtn);
 otherFamilyNavigation.appendChild(otherHomeBtn);
 document.body.appendChild(otherFamilyNavigation);
 
-function setPublicFamilyTitle(titleText){
-    const title = document.querySelector("h2.page-title");
-    if(!title) return;
-
-    /* Keep the existing family icon, but replace the old "Family" label
-       instead of appending a second title beside it. */
-    let iconNode = null;
-    for(const child of Array.from(title.children)){
-        const hasIcon = child.matches("svg, img, i, [class*=icon], [class*=Icon]") ||
-            child.querySelector("svg, img, i, [class*=icon], [class*=Icon]");
-        if(!iconNode && hasIcon){
-            iconNode = child;
-        }
-    }
-
-    title.replaceChildren();
-    if(iconNode) title.appendChild(iconNode);
-
-    const label = document.createElement("span");
-    label.className = "public-family-title-text";
-    label.textContent = titleText;
-    label.style.marginLeft = "8px";
-    title.appendChild(label);
-}
-
 function setOtherFamilyNavigation(page){
     window.otherFamilyNavigationPage = page;
     const nav = document.getElementById("otherFamilyNavigation");
@@ -2378,7 +2353,6 @@ otherBackBtn.onclick = async function(){
     }
 
     if(page === "detail"){
-        setPublicFamilyTitle("Family");
         if(myFamilyTab) myFamilyTab.style.display = "";
         if(otherFamiliesTab) otherFamiliesTab.style.display = "";
         await loadPublicFamilies();
@@ -2756,10 +2730,15 @@ window.otherFamilyReturnToDetail = function(){
 window.currentPublicFamilyId = String(viewingFamily.familyId || "");
 
                     
+                    const heading = document.createElement("h3");
                     const publicFamilyName = String(
                         family.familyName || viewingFamily.familyName || "Unnamed"
                     ).trim().replace(/\s+Family$/i, "");
-                    setPublicFamilyTitle(publicFamilyName + " Family");
+                    heading.textContent = publicFamilyName + " Family";
+                    heading.style.color = "#2A6EB0";
+                    heading.style.textAlign = "center";
+                    /* Keep the family ID close beneath the title. */
+                    heading.style.marginBottom = "4px";
 
                     const familyIdText =
                         document.createElement("p");
@@ -2767,8 +2746,12 @@ window.currentPublicFamilyId = String(viewingFamily.familyId || "");
                     familyIdText.textContent =
                         "Family ID: " +
                         viewingFamily.familyId;
+                    familyIdText.style.marginTop = "0";
+                    familyIdText.style.marginBottom = "0";
+                    familyIdText.style.textAlign = "center";
 
                    
+                    container.appendChild(heading);
                     container.appendChild(familyIdText);
 
                     /* =====================================
