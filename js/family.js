@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2777,6 +2778,10 @@ button.onclick = async function(){
 
     if(actionName === "Relations"){
 
+        window.cachedPublicFamilyDetails = {
+            familyId: viewingFamily.familyId,
+            html: container.innerHTML
+        };
         button.disabled = true;
         button.textContent = "Loading Relations...";
 
@@ -2839,6 +2844,10 @@ openRelationsPage(members);
 
 if(actionName === "Tree View"){
 
+    window.cachedPublicFamilyDetails = {
+        familyId: viewingFamily.familyId,
+        html: container.innerHTML
+    };
     button.disabled = true;
     button.textContent = "Loading Tree View...";
 
@@ -3403,19 +3412,30 @@ container.appendChild(results);
     window.activateFamilyTab = activateFamilyTab;
 
     window.restorePublicFamilyDetail = async function(familyId){
-        familyBtn.click();
-        if(typeof window.activateFamilyTab === "function"){
-            await window.activateFamilyTab("other");
-        }
+        // Restore the already-rendered family detail immediately. Do not reload
+        // the Other Families list or fetch the same family details again.
+        const familyPage = document.getElementById("familyPage");
         const listContainer = document.getElementById("otherFamiliesContent");
-        const targetCard = listContainer
-            ? Array.from(listContainer.children).find(
-                element => String(element.dataset.familyId || "") === String(familyId)
-            )
-            : null;
-        if(targetCard){
-            targetCard.click();
+        const familyGridElement = document.getElementById("familyGrid");
+        const cached = window.cachedPublicFamilyDetails;
+
+        familyBtn.click();
+
+        if(familyGridElement) familyGridElement.style.display = "none";
+        const settings = document.getElementById("familySettingsContainer");
+        if(settings) settings.style.display = "none";
+        if(listContainer){
+            listContainer.style.display = "block";
+            if(cached && String(cached.familyId) === String(familyId)){
+                listContainer.innerHTML = cached.html;
+                listContainer.dataset.publicFamilyDetail = "true";
+            }
         }
+        const familyBackContainer = document.getElementById("familyBackContainer");
+        if(familyBackContainer) familyBackContainer.style.display = "none";
+        if(myFamilyTab){ myFamilyTab.style.background = "transparent"; myFamilyTab.style.color = "#2A6EB0"; }
+        if(otherFamiliesTab){ otherFamiliesTab.style.background = "#2A6EB0"; otherFamiliesTab.style.color = "white"; }
+        setOtherFamilyNavigation("detail");
     };
 
     if(myFamilyTab){
