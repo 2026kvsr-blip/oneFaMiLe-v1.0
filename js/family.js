@@ -2334,17 +2334,25 @@ function setPublicFamilyTitle(titleText){
     const title = document.querySelector("h2.page-title");
     if(!title) return;
 
-    /* Keep the existing Family icon and replace only its title text. */
-    const textNodes = Array.from(title.childNodes).filter(
-        node => node.nodeType === Node.TEXT_NODE
-    );
-    if(textNodes.length){
-        textNodes[textNodes.length - 1].textContent = " " + titleText;
-    }else{
-        const span = document.createElement("span");
-        span.textContent = titleText;
-        title.appendChild(span);
+    /* Keep the existing family icon, but replace the old "Family" label
+       instead of appending a second title beside it. */
+    let iconNode = null;
+    for(const child of Array.from(title.children)){
+        const hasIcon = child.matches("svg, img, i, [class*=icon], [class*=Icon]") ||
+            child.querySelector("svg, img, i, [class*=icon], [class*=Icon]");
+        if(!iconNode && hasIcon){
+            iconNode = child;
+        }
     }
+
+    title.replaceChildren();
+    if(iconNode) title.appendChild(iconNode);
+
+    const label = document.createElement("span");
+    label.className = "public-family-title-text";
+    label.textContent = titleText;
+    label.style.marginLeft = "8px";
+    title.appendChild(label);
 }
 
 function setOtherFamilyNavigation(page){
