@@ -2641,7 +2641,34 @@ container.textContent =
 
             card.style.cursor = "pointer";
 
+            // Keep the currently selected public family visibly highlighted.
+            // The selection is applied before any network request starts.
+            function setPublicFamilyCardSelected(selected){
+                card.style.background = selected ? "#2A6EB0" : "#EAF8FF";
+                card.style.borderColor = selected ? "#1D568D" : "#4A9FE8";
+                name.style.color = selected ? "#FFFFFF" : "#2A6EB0";
+                id.style.color = selected ? "#FFFFFF" : "#444444";
+                card.setAttribute("aria-selected", selected ? "true" : "false");
+            }
+
+            setPublicFamilyCardSelected(
+                String(window.selectedPublicFamilyCardId || "") === String(family.familyId || "")
+            );
+
             card.onclick = async function(){
+
+                // Highlight this family immediately, and clear the previous selection.
+                window.selectedPublicFamilyCardId = String(family.familyId || "");
+                Array.from(container.querySelectorAll("[data-family-id]")).forEach(function(otherCard){
+                    const isSelected = String(otherCard.dataset.familyId || "") === window.selectedPublicFamilyCardId;
+                    otherCard.style.background = isSelected ? "#2A6EB0" : "#EAF8FF";
+                    otherCard.style.borderColor = isSelected ? "#1D568D" : "#4A9FE8";
+                    const cardName = otherCard.querySelector("div:first-child");
+                    const cardId = otherCard.querySelector("div:nth-child(2)");
+                    if(cardName) cardName.style.color = isSelected ? "#FFFFFF" : "#2A6EB0";
+                    if(cardId) cardId.style.color = isSelected ? "#FFFFFF" : "#444444";
+                    otherCard.setAttribute("aria-selected", isSelected ? "true" : "false");
+                });
 
                 const sessionToken =
                     sessionStorage.getItem(
