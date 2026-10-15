@@ -3801,7 +3801,9 @@ const newPassCode = data.passCode;
     clearOTP();
 
 // Registration successful.
-// Use existing Login flow to create the session.
+// Open Login page for manual login.
+// Do not auto-submit login here, so the Signing In loader
+// cannot remain active after the registration success message.
 
 const loginIdInput =
     document.getElementById("loginId");
@@ -3809,22 +3811,15 @@ const loginIdInput =
 const loginPassInput =
     document.getElementById("loginPassCode");
 
-if(loginIdInput && loginPassInput){
+showScreen(loginPage);
 
+if(loginIdInput){
     loginIdInput.value = newLoginId;
-    loginPassInput.value = newPassCode;
+}
 
-    showScreen(loginPage);
-
-    loginSubmitBtn.click();
-
-}else{
-
-    console.error(
-        "Auto Login: Login input fields not found."
-    );
-
-    showScreen(loginPage);
+if(loginPassInput){
+    loginPassInput.value = "";
+    loginPassInput.focus();
 }
 }else{
 
