@@ -1,4 +1,6 @@
 
+
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -17566,13 +17568,32 @@ const storedFamily =
 
 
 /* =================================
-   VERIFY FAMILY BELONGS TO USER
+   PUBLIC FAMILY ADD TARGET
+   When Add Member was opened from Other Families,
+   display/use that selected family's details instead
+   of the logged-in user's My Family.
    ================================= */
 
-let currentFamily = null;
+const publicFamilyAddTargetForFamilyInfo =
+    JSON.parse(
+        sessionStorage.getItem("publicFamilyAddTarget") || "null"
+    );
+
+
+/* =================================
+   VERIFY / SET CURRENT FAMILY
+   ================================= */
+
+let currentFamily = publicFamilyAddTargetForFamilyInfo
+    ? {
+        familyId: publicFamilyAddTargetForFamilyInfo.familyId || "",
+        familyName: publicFamilyAddTargetForFamilyInfo.familyName || ""
+      }
+    : null;
 
 
 if(
+    !publicFamilyAddTargetForFamilyInfo &&
     storedFamily &&
     loggedUser
 ){
