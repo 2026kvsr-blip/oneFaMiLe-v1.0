@@ -1,4 +1,6 @@
 
+
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -10269,11 +10271,11 @@ function bindAddMemberButton(){
 
             <!-- =================================
                  FAMILY NAME
+                 Display selected family's name as read-only text
                  ================================= -->
 
 <div
-    class="common-form-group"
-    style="display:none;">
+    class="common-form-group">
                 <label class="common-form-label">
                     Family Name
                 </label>
