@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2966,19 +2967,17 @@ if(actionName === "Tree View"){
             })
         );
 
-        // Open the normal Add Member form without changing the
-        // logged-in user's own family record.
+        // Rebuild the Family page controls, then open Add Member
+        // immediately so the Family page does not remain visible first.
         familyBtn.click();
 
-        setTimeout(function(){
-            const addMemberBtn = document.getElementById("addMemberBtn");
-            if(addMemberBtn){
-                addMemberBtn.click();
-            }else{
-                sessionStorage.removeItem("publicFamilyAddTarget");
-                alert("Add Member page could not be opened. Please try again.");
-            }
-        }, 500);
+        const addMemberBtn = document.getElementById("addMemberBtn");
+        if(addMemberBtn){
+            addMemberBtn.click();
+        }else{
+            sessionStorage.removeItem("publicFamilyAddTarget");
+            alert("Add Member page could not be opened. Please try again.");
+        }
 
         return;
     }
