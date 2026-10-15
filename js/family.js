@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2729,29 +2730,46 @@ window.otherFamilyReturnToDetail = function(){
 window.currentPublicFamilyId = String(viewingFamily.familyId || "");
 
                     
-                    const heading = document.createElement("h3");
                     const publicFamilyName = String(
                         family.familyName || viewingFamily.familyName || "Unnamed"
-                    ).trim().replace(/\s+Family$/i, "");
-                    heading.textContent = publicFamilyName + " Family";
-                    heading.style.color = "#2A6EB0";
-                    heading.style.textAlign = "center";
-                    /* Keep the family ID close beneath the title. */
-                    heading.style.marginBottom = "4px";
+                    ).trim().replace(/\s+Family$/i, "") + " Family";
 
-                    const familyIdText =
-                        document.createElement("p");
+                    /* Update the existing Family icon/title instead of adding a duplicate heading. */
+                    const titleImage = Array.from(document.querySelectorAll("img"))
+                        .find(img => /Family1\.png/i.test(img.getAttribute("src") || ""));
+                    const titleContainer = titleImage ? titleImage.parentElement : null;
 
-                    familyIdText.textContent =
-                        "Family ID: " +
-                        viewingFamily.familyId;
-                    familyIdText.style.marginTop = "0";
-                    familyIdText.style.marginBottom = "0";
-                    familyIdText.style.textAlign = "center";
+                    if (titleContainer) {
+                        const titleTextNode = Array.from(titleContainer.childNodes)
+                            .find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+                        if (titleTextNode) {
+                            titleTextNode.textContent = " " + publicFamilyName;
+                        } else {
+                            const titleText = titleContainer.querySelector("h1,h2,h3,h4,span,div");
+                            if (titleText && titleText !== titleImage) {
+                                titleText.textContent = publicFamilyName;
+                            } else {
+                                titleContainer.appendChild(document.createTextNode(" " + publicFamilyName));
+                            }
+                        }
+                    }
 
-                   
-                    container.appendChild(heading);
-                    container.appendChild(familyIdText);
+                    const familyIdText = document.createElement("p");
+                    familyIdText.textContent = "Family ID: " + viewingFamily.familyId;
+                    familyIdText.style.cssText = `
+                        margin: 4px 0 0;
+                        padding: 0;
+                        text-align: center;
+                        font-size: 16px;
+                        line-height: 1.3;
+                    `;
+
+                    /* Keep the ID directly below the existing icon/title row. */
+                    if (titleContainer && titleContainer.parentElement) {
+                        titleContainer.insertAdjacentElement("afterend", familyIdText);
+                    } else {
+                        container.appendChild(familyIdText);
+                    }
 
                     /* =====================================
                        PUBLIC FAMILY PERMISSION BUTTONS
