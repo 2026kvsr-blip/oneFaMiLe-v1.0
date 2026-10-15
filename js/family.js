@@ -11121,6 +11121,85 @@ function bindAddMemberButton(){
 
       `);
 
+/* =========================================
+   OTHER FAMILY → ADD MEMBER
+   HIDE FATHER / MOTHER PICKER BOXES
+   SHOW RELATION NAME, OR DASHES IF EMPTY
+   ========================================= */
+
+try{
+    const publicFamilyAddTargetForUI = JSON.parse(
+        sessionStorage.getItem("publicFamilyAddTarget") || "null"
+    );
+
+    if(publicFamilyAddTargetForUI){
+        [
+            { wrapId: "memberFatherSearchWrap", selectId: "memberFather", groupId: "memberFatherGroup", placeholderId: "publicAddFatherPlaceholder", defaultText: "Select Father" },
+            { wrapId: "memberMotherSearchWrap", selectId: "memberMother", groupId: "memberMotherGroup", placeholderId: "publicAddMotherPlaceholder", defaultText: "Select Mother" }
+        ].forEach(function(item){
+            const wrap = document.getElementById(item.wrapId);
+            const group = document.getElementById(item.groupId);
+            const select = document.getElementById(item.selectId);
+            if(!wrap || !group) return;
+
+            // Hide the search box and dropdown, but keep the hidden select
+            // available to the existing save/edit logic.
+            wrap.style.display = "none";
+
+            let placeholder = document.getElementById(item.placeholderId);
+            if(!placeholder){
+                placeholder = document.createElement("span");
+                placeholder.id = item.placeholderId;
+                placeholder.style.display = "inline-block";
+                placeholder.style.background = "transparent";
+                placeholder.style.border = "none";
+                placeholder.style.boxShadow = "none";
+                placeholder.style.padding = "8px 0";
+                placeholder.style.minHeight = "0";
+                placeholder.style.width = "100%";
+                placeholder.style.boxSizing = "border-box";
+                placeholder.style.font = "inherit";
+                placeholder.style.color = "inherit";
+                wrap.insertAdjacentElement("afterend", placeholder);
+            }
+
+            function updatePublicParentText(){
+                if(!select || !select.value || select.value === "__ADD_NEW__"){
+                    placeholder.textContent = "--------";
+                    return;
+                }
+
+                const option = select.options[select.selectedIndex];
+                const selectedName = option ? String(option.textContent || "").trim() : "";
+                placeholder.textContent = (
+                    !selectedName ||
+                    selectedName === item.defaultText ||
+                    selectedName === "Add New Member"
+                ) ? "--------" : selectedName;
+            }
+
+            if(select){
+                select.addEventListener("change", updatePublicParentText);
+            }
+
+            updatePublicParentText();
+
+            // Existing relation-loading code may populate the hidden select
+            // asynchronously. Refresh briefly so any selected names are shown.
+            let refreshCount = 0;
+            const refreshTimer = setInterval(function(){
+                updatePublicParentText();
+                refreshCount++;
+                if(refreshCount >= 20){
+                    clearInterval(refreshTimer);
+                }
+            }, 250);
+        });
+    }
+}catch(publicAddRelationUiError){
+    console.warn("PUBLIC FAMILY ADD: could not adjust parent fields", publicAddRelationUiError);
+}
+
 /* =================================
    REFRESH RELATIONS WHEN GENDER CHANGES
    ================================= */
@@ -17272,6 +17351,59 @@ if(
 
     }
 );
+
+
+/* =================================
+   FATHER / MOTHER → TEXT ONLY
+   Hide search boxes and show selected
+   names like the other saved fields.
+   ================================= */
+
+[
+    {
+        groupId: "memberFatherGroup",
+        searchWrapId: "memberFatherSearchWrap",
+        dropdownId: "memberFatherDropdown"
+    },
+    {
+        groupId: "memberMotherGroup",
+        searchWrapId: "memberMotherSearchWrap",
+        dropdownId: "memberMotherDropdown"
+    }
+].forEach(function(config){
+
+    const group = document.getElementById(config.groupId);
+    const searchWrap = document.getElementById(config.searchWrapId);
+    const dropdown = document.getElementById(config.dropdownId);
+
+    if(searchWrap){
+        searchWrap.style.display = "none";
+    }
+
+    if(dropdown){
+        dropdown.style.display = "none";
+    }
+
+    if(!group){
+        return;
+    }
+
+    let valueText = group.querySelector(".common-form-value");
+
+    if(!valueText){
+        valueText = document.createElement("span");
+        valueText.className = "common-form-value";
+        group.appendChild(valueText);
+    }
+
+    const value = String(valueText.textContent || "").trim();
+
+    valueText.textContent = value && value !== "Select Father" && value !== "Select Mother"
+        ? value
+        : "--------";
+
+    valueText.style.display = "inline";
+});
 
 
 /* ================================
