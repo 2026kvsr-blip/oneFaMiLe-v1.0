@@ -2520,6 +2520,9 @@ async function loadPublicFamilies(){
 
 /* MARK OTHER FAMILIES LIST PAGE */
 delete container.dataset.publicFamilyDetail;
+// A family is highlighted only while its details are loading.
+// Returning to Other Families must always show cards unselected.
+window.selectedPublicFamilyCardId = "";
 
 container.textContent =
     "Loading public families...";
@@ -2732,6 +2735,8 @@ container.textContent =
                    const viewingFamily =
     result.family;
 
+// The detail page has opened successfully; clear the temporary list selection.
+window.selectedPublicFamilyCardId = "";
 container.innerHTML = "";
 
 /* MARK PUBLIC FAMILY DETAIL PAGE */
