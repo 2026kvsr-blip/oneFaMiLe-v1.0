@@ -1,4 +1,6 @@
 
+
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2351,9 +2353,17 @@ otherBackBtn.onclick = async function(){
     }
 
     if(page === "detail"){
-        if(myFamilyTab) myFamilyTab.style.display = "";
-        if(otherFamiliesTab) otherFamiliesTab.style.display = "";
-        await loadPublicFamilies();
+        // Back from a selected public family must return to the
+        // Other Families list, never switch to My Family.
+        if(typeof window.activateFamilyTab === "function"){
+            await window.activateFamilyTab("other");
+        }else{
+            if(myFamilyTab) myFamilyTab.style.display = "";
+            if(otherFamiliesTab) otherFamiliesTab.style.display = "";
+            if(familyGrid) familyGrid.style.display = "none";
+            if(otherFamiliesContent) otherFamiliesContent.style.display = "block";
+            await loadPublicFamilies();
+        }
         setOtherFamilyNavigation("list");
         return;
     }
@@ -2522,7 +2532,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading other families...";
+    "Loading public families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
