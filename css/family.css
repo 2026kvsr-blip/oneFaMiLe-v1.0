@@ -1344,8 +1344,7 @@
     position: fixed !important;
     left: 0 !important;
     right: 0 !important;
-    bottom: 75px !important;
-
+bottom: 0 !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
