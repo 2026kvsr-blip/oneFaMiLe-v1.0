@@ -11121,85 +11121,6 @@ function bindAddMemberButton(){
 
       `);
 
-/* =========================================
-   OTHER FAMILY → ADD MEMBER
-   HIDE FATHER / MOTHER PICKER BOXES
-   SHOW RELATION NAME, OR DASHES IF EMPTY
-   ========================================= */
-
-try{
-    const publicFamilyAddTargetForUI = JSON.parse(
-        sessionStorage.getItem("publicFamilyAddTarget") || "null"
-    );
-
-    if(publicFamilyAddTargetForUI){
-        [
-            { wrapId: "memberFatherSearchWrap", selectId: "memberFather", groupId: "memberFatherGroup", placeholderId: "publicAddFatherPlaceholder", defaultText: "Select Father" },
-            { wrapId: "memberMotherSearchWrap", selectId: "memberMother", groupId: "memberMotherGroup", placeholderId: "publicAddMotherPlaceholder", defaultText: "Select Mother" }
-        ].forEach(function(item){
-            const wrap = document.getElementById(item.wrapId);
-            const group = document.getElementById(item.groupId);
-            const select = document.getElementById(item.selectId);
-            if(!wrap || !group) return;
-
-            // Hide the search box and dropdown, but keep the hidden select
-            // available to the existing save/edit logic.
-            wrap.style.display = "none";
-
-            let placeholder = document.getElementById(item.placeholderId);
-            if(!placeholder){
-                placeholder = document.createElement("span");
-                placeholder.id = item.placeholderId;
-                placeholder.style.display = "inline-block";
-                placeholder.style.background = "transparent";
-                placeholder.style.border = "none";
-                placeholder.style.boxShadow = "none";
-                placeholder.style.padding = "8px 0";
-                placeholder.style.minHeight = "0";
-                placeholder.style.width = "100%";
-                placeholder.style.boxSizing = "border-box";
-                placeholder.style.font = "inherit";
-                placeholder.style.color = "inherit";
-                wrap.insertAdjacentElement("afterend", placeholder);
-            }
-
-            function updatePublicParentText(){
-                if(!select || !select.value || select.value === "__ADD_NEW__"){
-                    placeholder.textContent = "--------";
-                    return;
-                }
-
-                const option = select.options[select.selectedIndex];
-                const selectedName = option ? String(option.textContent || "").trim() : "";
-                placeholder.textContent = (
-                    !selectedName ||
-                    selectedName === item.defaultText ||
-                    selectedName === "Add New Member"
-                ) ? "--------" : selectedName;
-            }
-
-            if(select){
-                select.addEventListener("change", updatePublicParentText);
-            }
-
-            updatePublicParentText();
-
-            // Existing relation-loading code may populate the hidden select
-            // asynchronously. Refresh briefly so any selected names are shown.
-            let refreshCount = 0;
-            const refreshTimer = setInterval(function(){
-                updatePublicParentText();
-                refreshCount++;
-                if(refreshCount >= 20){
-                    clearInterval(refreshTimer);
-                }
-            }, 250);
-        });
-    }
-}catch(publicAddRelationUiError){
-    console.warn("PUBLIC FAMILY ADD: could not adjust parent fields", publicAddRelationUiError);
-}
-
 /* =================================
    REFRESH RELATIONS WHEN GENDER CHANGES
    ================================= */
@@ -17354,67 +17275,71 @@ if(
 
 
 /* =================================
-   FATHER / MOTHER → TEXT ONLY
-   ONLY ON "NEW MEMBER ADDED" PAGE
-   Keep Add Member search boxes unchanged.
+   NEW MEMBER ADDED → FATHER / MOTHER TEXT ONLY
+   Keep pickers on Add Member page.
+   After Save, show one selected name or one dash line.
    ================================= */
 
 [
     {
         groupId: "memberFatherGroup",
-        searchId: "memberFatherSearch",
-        wrapId: "memberFatherSearchWrap",
+        searchWrapId: "memberFatherSearchWrap",
         dropdownId: "memberFatherDropdown",
-        selectId: "memberFather"
+        selectId: "memberFather",
+        placeholderId: "publicAddFatherPlaceholder",
+        defaultText: "Select Father"
     },
     {
         groupId: "memberMotherGroup",
-        searchId: "memberMotherSearch",
-        wrapId: "memberMotherSearchWrap",
+        searchWrapId: "memberMotherSearchWrap",
         dropdownId: "memberMotherDropdown",
-        selectId: "memberMother"
+        selectId: "memberMother",
+        placeholderId: "publicAddMotherPlaceholder",
+        defaultText: "Select Mother"
     }
 ].forEach(function(config){
 
     const group = document.getElementById(config.groupId);
     if(!group) return;
 
-    const search = document.getElementById(config.searchId);
-    const wrap = document.getElementById(config.wrapId);
-    const dropdown = document.getElementById(config.dropdownId);
     const select = document.getElementById(config.selectId);
+    const searchWrap = document.getElementById(config.searchWrapId);
+    const dropdown = document.getElementById(config.dropdownId);
 
-    // Prefer the selected member name shown in the search input.
-    let displayValue = String(search?.value || "").trim();
-
-    // If the search input is empty, try to resolve the selected ID
-    // from the current family members list.
-    if(!displayValue && select?.value){
-        const selectedId = String(select.value).trim();
-        const members = Array.isArray(familyMembers) ? familyMembers : [];
-        const selectedMember = members.find(function(member){
-            return String(member.memberId || member.id || "").trim() === selectedId;
-        });
-        displayValue = String(selectedMember?.name || selectedMember?.memberName || "").trim();
+    // Read selected parent name before hiding the controls.
+    let displayValue = "";
+    if(select && select.value && select.value !== "__ADD_NEW__"){
+        const option = select.options[select.selectedIndex];
+        const optionText = String(option?.textContent || "").trim();
+        if(optionText && optionText !== config.defaultText && optionText !== "Add New Member"){
+            displayValue = optionText;
+        }
     }
 
-    if(dropdown){
-        dropdown.style.display = "none";
-        dropdown.replaceChildren();
-    }
+    if(searchWrap) searchWrap.style.display = "none";
+    if(dropdown) dropdown.style.display = "none";
 
-    const text = document.createElement("span");
-    text.className = "common-form-value saved-parent-value";
-    text.textContent = displayValue || "--------";
+    // Remove any earlier placeholder/value so dashes cannot appear twice.
+    const oldPlaceholder = document.getElementById(config.placeholderId);
+    if(oldPlaceholder) oldPlaceholder.remove();
 
-    if(wrap){
-        wrap.replaceWith(text);
+    group.querySelectorAll(".common-form-value").forEach(function(oldValue){
+        oldValue.remove();
+    });
+
+    const valueText = document.createElement("span");
+    valueText.className = "common-form-value";
+    valueText.textContent = displayValue || "--------";
+    valueText.style.display = "inline";
+
+    const colon = group.querySelector(".common-form-colon");
+    if(colon){
+        colon.insertAdjacentElement("afterend", valueText);
     }else{
-        const oldValue = group.querySelector(".saved-parent-value");
-        if(oldValue) oldValue.replaceWith(text);
-        else group.appendChild(text);
+        group.appendChild(valueText);
     }
 });
+
 
 /* ================================
    SAVED MEMBER PHOTO
