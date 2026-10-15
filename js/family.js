@@ -17355,56 +17355,66 @@ if(
 
 /* =================================
    FATHER / MOTHER → TEXT ONLY
-   Hide search boxes and show selected
-   names like the other saved fields.
+   ONLY ON "NEW MEMBER ADDED" PAGE
+   Keep Add Member search boxes unchanged.
    ================================= */
 
 [
     {
         groupId: "memberFatherGroup",
-        searchWrapId: "memberFatherSearchWrap",
-        dropdownId: "memberFatherDropdown"
+        searchId: "memberFatherSearch",
+        wrapId: "memberFatherSearchWrap",
+        dropdownId: "memberFatherDropdown",
+        selectId: "memberFather"
     },
     {
         groupId: "memberMotherGroup",
-        searchWrapId: "memberMotherSearchWrap",
-        dropdownId: "memberMotherDropdown"
+        searchId: "memberMotherSearch",
+        wrapId: "memberMotherSearchWrap",
+        dropdownId: "memberMotherDropdown",
+        selectId: "memberMother"
     }
 ].forEach(function(config){
 
     const group = document.getElementById(config.groupId);
-    const searchWrap = document.getElementById(config.searchWrapId);
-    const dropdown = document.getElementById(config.dropdownId);
+    if(!group) return;
 
-    if(searchWrap){
-        searchWrap.style.display = "none";
+    const search = document.getElementById(config.searchId);
+    const wrap = document.getElementById(config.wrapId);
+    const dropdown = document.getElementById(config.dropdownId);
+    const select = document.getElementById(config.selectId);
+
+    // Prefer the selected member name shown in the search input.
+    let displayValue = String(search?.value || "").trim();
+
+    // If the search input is empty, try to resolve the selected ID
+    // from the current family members list.
+    if(!displayValue && select?.value){
+        const selectedId = String(select.value).trim();
+        const members = Array.isArray(familyMembers) ? familyMembers : [];
+        const selectedMember = members.find(function(member){
+            return String(member.memberId || member.id || "").trim() === selectedId;
+        });
+        displayValue = String(selectedMember?.name || selectedMember?.memberName || "").trim();
     }
 
     if(dropdown){
         dropdown.style.display = "none";
+        dropdown.replaceChildren();
     }
 
-    if(!group){
-        return;
+    const text = document.createElement("span");
+    text.className = "common-form-value saved-parent-value";
+    text.textContent = displayValue || "--------";
+
+    if(wrap){
+        wrap.replaceWith(text);
+    }else{
+        const oldValue = group.querySelector(".saved-parent-value");
+        if(oldValue) oldValue.replaceWith(text);
+        else group.appendChild(text);
     }
-
-    let valueText = group.querySelector(".common-form-value");
-
-    if(!valueText){
-        valueText = document.createElement("span");
-        valueText.className = "common-form-value";
-        group.appendChild(valueText);
-    }
-
-    const value = String(valueText.textContent || "").trim();
-
-    valueText.textContent = value && value !== "Select Father" && value !== "Select Mother"
-        ? value
-        : "--------";
-
-    valueText.style.display = "inline";
 });
-
 
 /* ================================
    SAVED MEMBER PHOTO
