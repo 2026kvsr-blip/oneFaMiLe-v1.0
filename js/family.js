@@ -2520,9 +2520,6 @@ async function loadPublicFamilies(){
 
 /* MARK OTHER FAMILIES LIST PAGE */
 delete container.dataset.publicFamilyDetail;
-// A family is highlighted only while its details are loading.
-// Returning to Other Families must always show cards unselected.
-window.selectedPublicFamilyCardId = "";
 
 container.textContent =
     "Loading public families...";
@@ -2644,34 +2641,7 @@ container.textContent =
 
             card.style.cursor = "pointer";
 
-            // Keep the currently selected public family visibly highlighted.
-            // The selection is applied before any network request starts.
-            function setPublicFamilyCardSelected(selected){
-                card.style.background = selected ? "#2A6EB0" : "#EAF8FF";
-                card.style.borderColor = selected ? "#1D568D" : "#4A9FE8";
-                name.style.color = selected ? "#FFFFFF" : "#2A6EB0";
-                id.style.color = selected ? "#FFFFFF" : "#444444";
-                card.setAttribute("aria-selected", selected ? "true" : "false");
-            }
-
-            setPublicFamilyCardSelected(
-                String(window.selectedPublicFamilyCardId || "") === String(family.familyId || "")
-            );
-
             card.onclick = async function(){
-
-                // Highlight this family immediately, and clear the previous selection.
-                window.selectedPublicFamilyCardId = String(family.familyId || "");
-                Array.from(container.querySelectorAll("[data-family-id]")).forEach(function(otherCard){
-                    const isSelected = String(otherCard.dataset.familyId || "") === window.selectedPublicFamilyCardId;
-                    otherCard.style.background = isSelected ? "#2A6EB0" : "#EAF8FF";
-                    otherCard.style.borderColor = isSelected ? "#1D568D" : "#4A9FE8";
-                    const cardName = otherCard.querySelector("div:first-child");
-                    const cardId = otherCard.querySelector("div:nth-child(2)");
-                    if(cardName) cardName.style.color = isSelected ? "#FFFFFF" : "#2A6EB0";
-                    if(cardId) cardId.style.color = isSelected ? "#FFFFFF" : "#444444";
-                    otherCard.setAttribute("aria-selected", isSelected ? "true" : "false");
-                });
 
                 const sessionToken =
                     sessionStorage.getItem(
@@ -2735,8 +2705,6 @@ container.textContent =
                    const viewingFamily =
     result.family;
 
-// The detail page has opened successfully; clear the temporary list selection.
-window.selectedPublicFamilyCardId = "";
 container.innerHTML = "";
 
 /* MARK PUBLIC FAMILY DETAIL PAGE */
@@ -2746,6 +2714,28 @@ window.otherFamilyReturnToDetail = function(){
     card.click();
 };
 window.currentPublicFamilyId = String(viewingFamily.familyId || "");
+
+/* On a public-family detail page, hide the My Family / Other Families tabs.
+   Update the existing Family page title without replacing its icon. */
+const familyTabsElement = document.getElementById("familyTabs");
+if(familyTabsElement) familyTabsElement.style.display = "none";
+const familyTitleIcon = document.querySelector('img[src*="Family1.png"]');
+if(familyTitleIcon){
+    let titleNode = familyTitleIcon.parentElement;
+    let titleTextNode = null;
+    for(let level = 0; titleNode && level < 4 && !titleTextNode; level++, titleNode = titleNode.parentElement){
+        for(const child of Array.from(titleNode.childNodes || [])){
+            if(child.nodeType === Node.TEXT_NODE && child.nodeValue.trim() === "Family"){
+                titleTextNode = child;
+                break;
+            }
+        }
+    }
+    if(titleTextNode){
+        titleTextNode.nodeValue = " " + (viewingFamily.familyName || "") + " Family";
+        window.publicFamilyTitleTextNode = titleTextNode;
+    }
+}
 
                     
                     const heading =
@@ -2765,8 +2755,28 @@ window.currentPublicFamilyId = String(viewingFamily.familyId || "");
                         viewingFamily.familyId;
 
                    
+                    /* The family name is now part of the page title; keep only
+                       the ID immediately below that title, not a second name. */
+                    heading.style.display = "none";
+                    familyIdText.style.textAlign = "center";
+                    familyIdText.style.color = "#444";
+                    const titleIconForId = document.querySelector('img[src*="Family1.png"]');
+                    let titleContainerForId = titleIconForId?.parentElement;
+                    for(let level = 0; titleContainerForId && level < 4; level++, titleContainerForId = titleContainerForId.parentElement){
+                        if(titleContainerForId.parentElement && titleContainerForId.parentElement.contains(titleIconForId)){
+                            const parentText = (titleContainerForId.parentElement.textContent || "").trim();
+                            if(parentText.includes("Family")){
+                                titleContainerForId = titleContainerForId.parentElement;
+                                break;
+                            }
+                        }
+                    }
+                    if(titleContainerForId && titleContainerForId.parentNode){
+                        titleContainerForId.insertAdjacentElement("afterend", familyIdText);
+                    }else{
+                        container.appendChild(familyIdText);
+                    }
                     container.appendChild(heading);
-                    container.appendChild(familyIdText);
 
                     /* =====================================
                        PUBLIC FAMILY PERMISSION BUTTONS
