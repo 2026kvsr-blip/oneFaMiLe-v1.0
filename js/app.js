@@ -3779,7 +3779,8 @@ const newPassCode = data.passCode;
         if(result.status=="success"){
            clearTimeout(loginAttemptTimer);
            loginAttempts = 0;
-           hideLoader();
+           // Keep the same loader visible; loginSubmitBtn will update its text.
+           showLoader("Signing In...");
 
     // Keep the registration message until automatic login completes.
     sessionStorage.setItem(
@@ -3830,6 +3831,7 @@ if(loginIdInput && loginPassInput){
 }
 }else{
 
+    hideLoader();
     showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
 
 }
@@ -4097,9 +4099,10 @@ async function verifySignupOTP(){
 
         // ================================
         // 5. OTP CORRECT
+        // Keep the loader visible through registration and automatic login.
         // ================================
 
-        hideLoader();
+        showLoader("Registering User...");
 
         await registerUser();
 
