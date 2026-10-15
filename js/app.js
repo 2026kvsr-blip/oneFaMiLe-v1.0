@@ -1,5 +1,6 @@
 
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -3641,25 +3642,36 @@ async function checkSignup(){
 
     try{
 
-        const result = await postToAPI({
+        const formData = new FormData();
 
-            action: "checkSignup",
+        formData.append("action", "checkSignup");
 
-            loginUserName:
-                loginUserName.value.trim(),
+        formData.append(
+            "loginUserName",
+            loginUserName.value.trim()
+        );
 
-            email:
-                emailId.value.trim(),
+        formData.append(
+            "email",
+            emailId.value.trim()
+        );
 
-            mobile:
-                mobileNo.value.trim()
+        formData.append(
+            "mobile",
+            mobileNo.value.trim()
+        );
 
+        const response = await fetch(API_URL, {
+            method: "POST",
+            body: formData
         });
+
+        const result = await response.json();
 
         if(result.status !== "success"){
 
             showMessage(
-                result.message,
+                result.message || "Signup details already exist.",
                 "warning",
                 3000
             );
@@ -3682,6 +3694,7 @@ async function checkSignup(){
         return false;
     }
 }
+
 
 /* ======================
 
