@@ -2330,6 +2330,23 @@ otherFamilyNavigation.appendChild(otherBackBtn);
 otherFamilyNavigation.appendChild(otherHomeBtn);
 document.body.appendChild(otherFamilyNavigation);
 
+function setPublicFamilyTitle(titleText){
+    const title = document.querySelector("h2.page-title");
+    if(!title) return;
+
+    /* Keep the existing Family icon and replace only its title text. */
+    const textNodes = Array.from(title.childNodes).filter(
+        node => node.nodeType === Node.TEXT_NODE
+    );
+    if(textNodes.length){
+        textNodes[textNodes.length - 1].textContent = " " + titleText;
+    }else{
+        const span = document.createElement("span");
+        span.textContent = titleText;
+        title.appendChild(span);
+    }
+}
+
 function setOtherFamilyNavigation(page){
     window.otherFamilyNavigationPage = page;
     const nav = document.getElementById("otherFamilyNavigation");
@@ -2353,6 +2370,7 @@ otherBackBtn.onclick = async function(){
     }
 
     if(page === "detail"){
+        setPublicFamilyTitle("Family");
         if(myFamilyTab) myFamilyTab.style.display = "";
         if(otherFamiliesTab) otherFamiliesTab.style.display = "";
         await loadPublicFamilies();
@@ -2730,13 +2748,10 @@ window.otherFamilyReturnToDetail = function(){
 window.currentPublicFamilyId = String(viewingFamily.familyId || "");
 
                     
-                    const heading = document.createElement("h3");
                     const publicFamilyName = String(
                         family.familyName || viewingFamily.familyName || "Unnamed"
                     ).trim().replace(/\s+Family$/i, "");
-                    heading.textContent = publicFamilyName + " Family";
-                    heading.style.color = "#2A6EB0";
-                    heading.style.textAlign = "center";
+                    setPublicFamilyTitle(publicFamilyName + " Family");
 
                     const familyIdText =
                         document.createElement("p");
@@ -2746,7 +2761,6 @@ window.currentPublicFamilyId = String(viewingFamily.familyId || "");
                         viewingFamily.familyId;
 
                    
-                    container.appendChild(heading);
                     container.appendChild(familyIdText);
 
                     /* =====================================
