@@ -1,4 +1,6 @@
 
+
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2943,58 +2945,42 @@ if(actionName === "Tree View"){
 }
     /* =====================================
        OTHER FAMILIES → ADD MEMBER
+       Preserve the selected public family as
+       the destination for the Add Member form.
        ===================================== */
-
     if(actionName === "Add Member"){
 
-        if(String(viewingFamily.allowAdd || "No") !== "Yes"){
+        if(
+            String(viewingFamily.allowAdd || "")
+                .trim().toLowerCase() !== "yes"
+        ){
             alert("Adding members is not permitted for this family.");
             return;
         }
 
-        const sessionToken = sessionStorage.getItem("sessionToken") || "";
-        if(!sessionToken){
-            alert("Login session missing. Please login again.");
-            return;
-        }
+        sessionStorage.setItem(
+            "publicFamilyAddTarget",
+            JSON.stringify({
+                familyId: String(viewingFamily.familyId || "").trim(),
+                familyName: String(viewingFamily.familyName || "").trim(),
+                allowAdd: String(viewingFamily.allowAdd || "No").trim()
+            })
+        );
 
-        // Preserve the logged-in user's own family before temporarily
-        // using the selected public family in the existing Add Member form.
-        if(!sessionStorage.getItem("publicAddPreviousFamily")){
-            sessionStorage.setItem(
-                "publicAddPreviousFamily",
-                localStorage.getItem("currentFamily") || ""
-            );
-        }
+        // Open the normal Add Member form without changing the
+        // logged-in user's own family record.
+        familyBtn.click();
 
-        const targetFamily = {
-            familyId: String(viewingFamily.familyId || "").trim(),
-            familyName: String(viewingFamily.familyName || "").trim(),
-            publicFamilyAdd: true
-        };
+        setTimeout(function(){
+            const addMemberBtn = document.getElementById("addMemberBtn");
+            if(addMemberBtn){
+                addMemberBtn.click();
+            }else{
+                sessionStorage.removeItem("publicFamilyAddTarget");
+                alert("Add Member page could not be opened. Please try again.");
+            }
+        }, 500);
 
-        if(!targetFamily.familyId){
-            alert("Selected Family ID is missing.");
-            return;
-        }
-
-        sessionStorage.setItem("publicFamilyAddMode", "Yes");
-        sessionStorage.setItem("publicAddTargetFamilyId", targetFamily.familyId);
-        currentFamily = targetFamily;
-        localStorage.setItem("currentFamily", JSON.stringify(targetFamily));
-        localStorage.removeItem("editMember");
-        sessionStorage.setItem("openMemberMode", "add");
-
-        setOtherFamilyNavigation("hidden");
-        if(typeof bindAddMemberButton === "function"){
-            bindAddMemberButton();
-        }
-        const addMemberBtn = document.getElementById("addMemberBtn");
-        if(addMemberBtn){
-            addMemberBtn.click();
-        }else{
-            alert("Add Member page button is not available.");
-        }
         return;
     }
 
@@ -15675,25 +15661,6 @@ memberBackBtn.onclick =
             "ADD MEMBER → BACK"
         );
 
-        if(sessionStorage.getItem("publicFamilyAddMode") === "Yes"){
-            const previousFamily = sessionStorage.getItem("publicAddPreviousFamily") || "";
-            if(previousFamily){
-                localStorage.setItem("currentFamily", previousFamily);
-                try { currentFamily = JSON.parse(previousFamily); } catch(error) { currentFamily = null; }
-            }else{
-                localStorage.removeItem("currentFamily");
-                currentFamily = null;
-            }
-            const targetFamilyId = sessionStorage.getItem("publicAddTargetFamilyId") || "";
-            sessionStorage.removeItem("publicAddPreviousFamily");
-            sessionStorage.removeItem("publicFamilyAddMode");
-            sessionStorage.removeItem("publicAddTargetFamilyId");
-            sessionStorage.removeItem("openMemberMode");
-            if(typeof window.restorePublicFamilyDetail === "function"){
-                window.restorePublicFamilyDetail(targetFamilyId);
-            }
-        }
-
         familyBtn.click();
 
     };
@@ -15709,8 +15676,17 @@ saveMemberBtn.onclick = async function(){
        CURRENT FAMILY
        ================================ */
 
- let currentFamily =
+ const publicFamilyAddTarget =
     JSON.parse(
+        sessionStorage.getItem("publicFamilyAddTarget") || "null"
+    );
+
+ let currentFamily = publicFamilyAddTarget
+    ? {
+        familyId: publicFamilyAddTarget.familyId || "",
+        familyName: publicFamilyAddTarget.familyName || ""
+      }
+    : JSON.parse(
         localStorage.getItem(
             "currentFamily"
         ) || "null"
@@ -16462,15 +16438,6 @@ saveMemberBtn.textContent =
         "saveMember"
     );
 
-    params.append(
-        "sessionToken",
-        sessionStorage.getItem("sessionToken") || ""
-    );
-
-    params.append(
-        "publicFamilyAdd",
-        sessionStorage.getItem("publicFamilyAddMode") === "Yes" ? "Yes" : "No"
-    );
 
     params.append(
         "familyId",
@@ -16482,6 +16449,14 @@ saveMemberBtn.textContent =
         "familyName",
         currentFamily.familyName || ""
     );
+
+    if(publicFamilyAddTarget){
+        params.append("publicFamilyAdd", "Yes");
+        params.append(
+            "sessionToken",
+            sessionStorage.getItem("sessionToken") || ""
+        );
+    }
 
 
     params.append(
@@ -16745,20 +16720,6 @@ showMessage(
            SUCCESS
            ================================ */
 
-        if(sessionStorage.getItem("publicFamilyAddMode") === "Yes"){
-            const previousFamily = sessionStorage.getItem("publicAddPreviousFamily") || "";
-            if(previousFamily){
-                localStorage.setItem("currentFamily", previousFamily);
-                try { currentFamily = JSON.parse(previousFamily); } catch(error) { currentFamily = null; }
-            }else{
-                localStorage.removeItem("currentFamily");
-                currentFamily = null;
-            }
-            sessionStorage.removeItem("publicAddPreviousFamily");
-            sessionStorage.removeItem("publicFamilyAddMode");
-            sessionStorage.removeItem("publicAddTargetFamilyId");
-        }
-
         showMessage(
     editMember
         ? "Member updated successfully."
@@ -16766,6 +16727,10 @@ showMessage(
     "success",
     3000
 );
+
+if(publicFamilyAddTarget){
+    sessionStorage.removeItem("publicFamilyAddTarget");
+}
 
 /* ================================
    DISPLAY GENERATED MEMBER ID
