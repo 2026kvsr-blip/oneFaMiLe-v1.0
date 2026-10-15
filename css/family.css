@@ -1,6 +1,3 @@
-
-
-
 ========================
    FAMILY → CREATE TREE
    FINAL CLEAN FORM
@@ -95,3 +92,4098 @@
     line-height: 42px;
 
     box-sizing: border-box;
+}
+
+
+/* =====================================
+   FAMILY ID
+   ===================================== */
+
+#newFamilyId{
+
+    display: block;
+
+    width: 100%;
+
+    min-width: 0;
+
+    height: 42px;
+
+    margin: 0;
+
+    padding: 0 10px;
+
+    box-sizing: border-box;
+
+    font-size: 16px;
+
+    font-weight: 500;
+
+    line-height: 42px;
+
+    text-align: left;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+}
+.family-id-status.saving{
+    color: #2E8B57;
+}
+
+/* =====================================
+   FAMILY NAME INPUT
+   ===================================== */
+
+#newFamilyName{
+
+    display: block;
+
+    width: 100% !important;
+
+    min-width: 0;
+
+    height: 42px !important;
+
+    margin: 0 !important;
+
+    padding: 8px 12px !important;
+
+    box-sizing: border-box;
+
+    border: 1px solid #c4d4ff !important;
+
+    border-radius: 10px !important;
+
+    background: #ffffff !important;
+
+    font-size: 16px !important;
+
+    outline: none;
+
+}
+/* =====================================
+   FAMILY NAME STATUS
+   ===================================== */
+
+/* =====================================
+   FAMILY NAME FIELD
+   FIXED WIDTH
+   ===================================== */
+
+.family-name-field{
+
+    width: 100%;
+
+    min-width: 0;
+
+    max-width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================
+   FAMILY NAME INPUT
+   FIXED WIDTH
+   ===================================== */
+
+.family-name-field #newFamilyName{
+
+    display: block;
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+
+    height: 42px !important;
+
+    box-sizing: border-box;
+
+    margin: 0 !important;
+}
+
+
+/* =====================================
+   STATUS MESSAGE
+   ===================================== */
+
+.family-name-field #familyIdStatus{
+
+    display: block;
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+
+    margin-top: 3px !important;
+
+    margin-left: 0 !important;
+
+    margin-right: 0 !important;
+
+    padding: 0 !important;
+
+    box-sizing: border-box;
+
+    text-align: left !important;
+
+    align-self: flex-start;
+
+    font-size: 15px;
+
+    line-height: 20px;
+}
+
+
+#familyIdStatus{
+
+    width: 100%;
+
+    margin-top: 3px;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    text-align: left;
+
+    font-size: 15px;
+
+    line-height: 20px;
+
+}
+
+/* =====================================
+   INPUT FOCUS
+   ===================================== */
+
+#newFamilyName:focus{
+
+    border-color: #4A9FE8 !important;
+
+    box-shadow:
+        0 0 0 2px rgba(74,159,232,0.15);
+
+}
+
+
+/* =====================================
+   CREATE BUTTON AREA
+   ===================================== */
+
+.family-create-action{
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    margin: 35px 0 0 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    text-align: center;
+}
+
+
+/* =====================================
+   CREATE FAMILY TREE BUTTON
+   ===================================== */
+
+#createFamilyTreeBtn{
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    width: 220px !important;
+
+    min-width: 220px !important;
+
+    max-width: 220px !important;
+
+    height: 44px !important;
+
+    margin: 0 !important;
+
+    padding: 0 15px !important;
+
+    box-sizing: border-box !important;
+
+    white-space: nowrap !important;
+
+    overflow: visible !important;
+
+    flex: 0 0 220px !important;
+}
+
+
+/* =====================================
+   BACK BUTTON AREA
+   ===================================== */
+
+.family-back-action{
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    margin: 14px 0 0 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    text-align: center;
+}
+
+
+/* =====================================
+   BACK BUTTON
+   ===================================== */
+
+#createFamilyBackBtn{
+
+    margin: 0 !important;
+}
+/* =====================================
+   FAMILY ID - AUTO GENERATION
+   
+===================================== */
+
+#newFamilyId{
+
+    color: #aeb4bc !important;
+
+    font-weight: 400 !important;
+
+    font-size: 16px !important;
+
+    padding-left: 10px !important;
+
+}
+
+
+/* =====================================
+   GENERATED FAMILY ID
+   ===================================== */
+
+#newFamilyId.generated{
+
+    color: #333333 !important;
+
+    font-weight: 500 !important;
+
+}
+
+
+/* =====================================
+   CREATE FAMILY TREE - TEXT BUTTON
+   ===================================== */
+
+#createFamilyTreeBtn{
+
+    background: transparent !important;
+
+    border: none !important;
+
+    box-shadow: none !important;
+
+    border-radius: 0 !important;
+
+    color: #2A6EB0 !important;
+
+    font-size: 18px !important;
+
+    font-weight: 600 !important;
+
+    width: auto !important;
+
+    min-width: auto !important;
+
+    max-width: none !important;
+
+    height: auto !important;
+
+    padding: 6px 10px !important;
+
+    margin: 0 !important;
+
+    white-space: nowrap !important;
+
+}
+
+
+/* HOVER / ACTIVE */
+
+#createFamilyTreeBtn:hover{
+
+    background: transparent !important;
+
+    box-shadow: none !important;
+
+}
+
+
+#createFamilyTreeBtn:active{
+
+    background: transparent !important;
+
+    box-shadow: none !important;
+
+}
+/* =====================================
+   FAMILY ID AUTO GENERATION
+   ===================================== */
+
+#newFamilyId.auto-generation{
+
+    color:#a8a8a8;
+
+    font-weight:400;
+
+}
+
+
+/* =====================================
+   GENERATED FAMILY ID
+   ===================================== */
+
+#newFamilyId.generated{
+
+    color:#333333;
+
+    font-weight:500;
+
+}
+
+
+/* =====================================
+   FAMILY ID STATUS
+   ===================================== */
+
+/* =====================================
+   VERIFYING
+   ===================================== */
+
+.family-id-status.verifying{
+
+    color:#777777;
+
+}
+
+
+/* =====================================
+   AVAILABLE
+   ===================================== */
+
+
+/* =====================================
+   NOT AVAILABLE
+   ===================================== */
+
+
+
+/* =====================================
+   VERIFY SPINNER
+   ===================================== */
+
+.verify-spinner{
+
+    display:inline-block;
+
+    width:12px;
+
+    height:12px;
+
+    margin-right:6px;
+
+    border:2px solid #cfd8dc;
+
+    border-top:2px solid #4A9FE8;
+
+    border-radius:50%;
+
+    vertical-align:-2px;
+
+    animation:
+        familyVerifySpin
+        0.7s linear infinite;
+
+}
+
+
+@keyframes familyVerifySpin{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+
+/* =====================================
+   CREATE BUTTON DISABLED
+   ===================================== */
+
+#createFamilyTreeBtn:disabled{
+
+    opacity:0.45;
+
+    cursor:not-allowed;
+
+    pointer-events:none;
+
+}
+
+
+.family-id-status.verifying{
+    color: #777;
+}
+
+
+#createFamilyTreeBtn:disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+/* =====================================
+   FAMILY ID CHECKING ANIMATION
+   ===================================== */
+
+
+
+/* Small rotating circle */
+
+.checking-spinner{
+
+    width: 12px;
+    height: 12px;
+
+    border: 2px solid #d0d0d0;
+    border-top-color: #4A9FE8;
+
+    border-radius: 50%;
+
+    display: inline-block;
+
+    animation:
+        familyIdSpin 0.8s linear infinite;
+}
+
+
+/* Animation */
+
+@keyframes familyIdSpin{
+
+    from{
+        transform: rotate(0deg);
+    }
+
+    to{
+        transform: rotate(360deg);
+    }
+
+}
+
+
+
+/* =====================================
+   CHECKING availability
+   ===================================== */
+
+.family-id-status.checking{
+
+    color: orange;
+
+}
+
+/* 1, 2, 3 letters */
+.family-id-status.min-length{
+    color: #4A9FE8;
+}
+/* =====================================
+   AVAILABLE
+   ===================================== */
+
+.family-id-status.available{
+
+    color: #268a57;
+
+}
+
+
+/* =====================================
+   NOT AVAILABLE
+   ===================================== */
+
+.family-id-status.not-available{
+
+    color: red;
+
+}
+
+
+/* =====================================
+   MINIMUM 4 CHARACTERS
+   ===================================== */
+
+.family-id-status.minimum{
+
+    color: orange;
+
+}
+.relations-member-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+}
+.relations-member-row .common-form-select{
+    flex:1;
+    min-width:0;
+}
+
+#relationsMemberSearch{
+    width:30%;
+    box-sizing:border-box;
+}
+#relationsMemberSelect{
+    flex:1;
+    min-width:0;
+}
+
+#relationsMemberSearch{
+    width:30%;
+    box-sizing:border-box;
+}
+.relation-row{
+    display:flex;
+    align-items:flex-start;
+    width:100%;
+    line-height:1.8;
+}
+
+.relation-label{
+    width:70px;
+    flex-shrink:0;
+}
+
+.relation-colon{
+    width:20px;
+    flex-shrink:0;
+    text-align:center;
+}
+
+/* =====================================
+   RELATIONS - SELECTED MEMBER HEADER
+   PHOTO LEFT → NAME RIGHT
+   ===================================== */
+
+.relations-member-header{
+    display:none;
+
+    width:100%;
+    box-sizing:border-box;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:12px;
+
+    padding:10px 5px 15px;
+}
+
+
+/* MEMBER PHOTO */
+
+#relationMemberPhoto{
+    width:60px;
+    height:60px;
+    min-width:60px;
+    flex:0 0 60px;
+
+    border-radius:50%;
+    overflow:hidden;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+
+/* PHOTO IMAGE */
+
+#relationMemberPhoto img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+    object-position:center;
+
+    display:block;
+
+    border-radius:50%;
+}
+
+
+/* MEMBER NAME */
+
+#relationMemberName{
+    font-size:20px;
+    font-weight:600;
+    line-height:22px;
+}
+/* =====================================
+   RELATIONS SECTIONS
+   ===================================== */
+
+
+/* SECTION HEADING */
+
+.relations-section h3{
+    margin:0 0 8px 0;
+    padding-bottom:6px;
+    border-bottom:1px solid currentColor;
+}
+
+
+/* =====================================
+   PARENTS
+   ===================================== */
+
+.relations-parents{
+    background:#fff4e6;
+    border-color:#d99a4a;
+}
+
+
+/* =====================================
+   PARTNER
+   ===================================== */
+
+.relations-partner{
+    background:#fdeaf1;
+    border-color:#d65a86;
+}
+
+
+/* =====================================
+   CHILDREN
+   ===================================== */
+
+.relations-children{
+    background:#eef9e8;
+    border-color:#4d9b45;
+}
+
+
+/* =====================================
+   SIBLINGS
+   ===================================== */
+
+.relations-siblings{
+    background:#f3e8ff;
+    border-color:#9b6bd3;
+}
+
+/* =====================================
+   IN-LAWS
+   ===================================== */
+
+
+/* =====================================
+   GRAND PARENTS
+   ===================================== */
+
+.relations-grandparents{
+    background:#e9f7ef;
+    border-color:#58a878;
+}
+.relations-section{
+    display:none;
+    width:calc(100% - 20px);
+    margin-left:10px;
+    margin-right:10px;
+    box-sizing:border-box;
+    padding:10px 12px;
+    border:1px solid;
+    border-radius:10px;
+}
+
+
+/* =====================================
+   RELATION TITLES
+   ===================================== */
+
+.relations-section h3,
+.relation-subgroup-title,
+.relation-subgroup-title span:first-child{
+    color:#2A6EB0;
+    font-weight:600;
+}
+
+
+/* =====================================
+   MEMBER NAMES - NORMAL FONT
+   ===================================== */
+
+.relation-row span[id],
+.relation-subrow span[id]{
+    font-weight:400;
+    color:inherit;
+}
+.relation-title{
+    display:block;
+    color:#2A6EB0;
+    font-weight:600;
+    margin:6px 0 3px 0;
+}
+.relation-separator{
+    border:0;
+    border-top:1px solid #2A6EB0;
+    margin:10px 0;
+}
+
+.relation-subgroup{
+    width:100%;
+    margin:10px 0;
+}
+
+.relation-subgroup-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#2A6EB0;
+    font-weight:600;
+    margin-bottom:4px;
+}
+
+.relation-subrow{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding-left:15px;
+    line-height:1.8;
+    font-weight:400;
+}
+/* =====================================
+   RELATIONS MEMBER SEARCH
+   ===================================== */
+
+.relations-member-search-wrap{
+
+    position:relative;
+
+    width:100%;
+
+}
+
+
+#relationsMemberSearch{
+
+    width:100%;
+
+    box-sizing:border-box;
+
+}
+
+
+.relations-member-dropdown{
+
+    display:none;
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    top:100%;
+
+    z-index:9999;
+
+    background:#ffffff;
+
+    border:1px solid #c4d4ff;
+
+    border-radius:10px;
+
+    max-height:220px;
+
+    overflow-y:auto;
+
+    box-shadow:
+        0 4px 12px rgba(
+            0,
+            0,
+            0,
+            0.15
+        );
+
+}
+
+
+.relations-member-option{
+
+    padding:12px 14px;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+    background:#ffffff;
+
+    border-bottom:
+        1px solid #eeeeee;
+
+}
+
+
+.relations-member-option:last-child{
+
+    border-bottom:none;
+
+}
+
+
+.relations-member-option:active{
+
+    background:#eaf8ff;
+
+}
+
+
+.relations-no-match{
+
+    padding:12px 14px;
+
+    font-size:16px;
+
+}
+
+/* =====================================
+   RELATIONS MEMBER SEARCH
+   ===================================== */
+
+.relations-member-search-wrap{
+
+    position:relative;
+
+    width:100%;
+
+}
+
+
+#relationsMemberSearch{
+
+    width:100%;
+
+    box-sizing:border-box;
+
+}
+
+
+.relations-member-dropdown{
+
+    display:none;
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    top:100%;
+
+    z-index:9999;
+
+    background:#ffffff;
+
+    border:1px solid #c4d4ff;
+
+    border-radius:10px;
+
+    max-height:220px;
+
+    overflow-y:auto;
+
+    box-shadow:
+        0 4px 12px rgba(
+            0,
+            0,
+            0,
+            0.15
+        );
+
+}
+
+
+.relations-member-option{
+
+    padding:12px 14px;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+    background:#ffffff;
+
+    border-bottom:
+        1px solid #eeeeee;
+
+}
+
+
+.relations-member-option:last-child{
+
+    border-bottom:none;
+
+}
+
+
+.relations-member-option:active{
+
+    background:#eaf8ff;
+
+}
+.relations-member-search-wrap{
+    position:relative;
+    margin-right:10px;
+}
+
+#relationsMemberGroup{
+    margin-left:8px;
+}
+
+#relationsMemberGroup .common-form-label{
+    margin-left:4px;
+}
+
+#relationsMemberGroup .common-form-colon{
+    margin-left:3px;
+    margin-right:5px;
+}
+
+.relations-no-match{
+
+    padding:12px 14px;
+
+    font-size:16px;
+
+}
+.relation-member-name{
+    display: inline-block;
+    font-weight: 600;
+}
+
+.relation-member-gender{
+    display: inline-block;
+    font-weight: 500;
+}
+.relation-member-details{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+.relations-member-search-wrap{
+    position:relative;
+    flex:1;
+}
+
+#relationsMemberSearch{
+    width:100%;
+    box-sizing:border-box;
+}
+
+.relations-member-dropdown{
+    position:absolute;
+    left:0;
+    right:0;
+    top:100%;
+    z-index:9999;
+
+    display:none;
+
+    max-height:320px;
+    overflow-y:auto;
+
+    background:#ffffff;
+    border:1px solid #c4d4ff;
+    border-radius:8px;
+}
+
+.relations-member-option{
+    padding:10px 12px;
+    cursor:pointer;
+    background:#ffffff;
+}
+
+.relations-member-option:hover{
+    background:#eef6ff;
+}
+
+.relations-no-match{
+    padding:10px 12px;
+    color:#777;
+}
+
+#relationMemberName{
+    display:flex;
+    align-items:center;
+}
+
+#relationMemberGender{
+    display:flex;
+    align-items:flex-end;
+}
+
+
+#relationMemberName{
+    font-weight:600;
+    line-height:22px;
+}
+
+#relationMemberGender{
+    margin-top:0;
+    font-size:14px;
+    line-height:22px;
+}
+
+#relationMemberName{
+    font-weight:600;
+    line-height:22px;
+}
+
+#relationMemberGender{
+    margin-top:0;
+    font-size:14px;
+    line-height:22px;
+}
+#relationMemberPhoto{
+    width:60px;
+    height:60px;
+    flex:0 0 60px;
+    border-radius:50%;
+    overflow:hidden;
+}
+
+.partner-label{
+    font-weight: bold;
+    color: #2A6EB0;
+    font-size:16px;
+
+}
+.relation-direct-row{
+    font-size:inherit;
+}
+.relation-father-siblings{
+    background:#fff8e1;
+    border-color:#d6a72c;
+}
+
+.relation-mother-siblings{
+    background:#fcebf3;
+    border-color:#d88aa8;
+}
+.relations-inlaws{
+    background:#fff0df;
+    border-color:#d9954d;
+}
+.relation-father-inlaw-siblings{
+        background:#fff0f5;          // background:#ffe8e8;
+        border-color:#c9829a;       //  border-color:#d66b6b;
+}
+.relation-mother-inlaw-siblings{
+    background:#f5eafb;
+    border-color:#a77bc5;
+}
+.relation-grand-grandparents{
+    background:#fff0df;
+    border-color:#d9954d;
+}
+.relation-child-title {
+    font-weight: 700;
+    font-size: 16px;
+}
+.relation-siblings-title{
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.relation-siblings-subtitle{
+    font-weight: 700;
+    font-size: 16px;
+}
+/* =================================
+   IN-LAWS LABELS
+   ================================= */
+
+/* =================================
+   IN-LAWS
+   ================================= */
+
+.relations-inlaws .relation-row{
+    display: flex;
+    align-items: flex-start;
+}
+
+.relations-inlaws .relation-label{
+    width: 95px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.relations-inlaws .relation-colon{
+    margin-left: 8px;
+    margin-right: 8px;
+    white-space: nowrap;
+}
+/* =================================
+   GRAND PARENTS
+   ================================= */
+
+.relation-grandparents .grandparent-row{
+    display: flex;
+    align-items: flex-start;
+}
+
+
+.relation-grandparents .grandparent-label{
+    width: 115px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+
+.relation-grandparents .grandparent-colon{
+    width: 20px;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+
+.relation-grandparents .grandparent-value{
+    flex: 1;
+}
+
+
+.relation-grandparents > strong{
+    display: block;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+/* =================================
+   GRAND GRAND PARENTS ALIGNMENT
+   ================================= */
+
+
+.relation-grand-grandparents
+.grand-grandparent-row{
+    display: grid;
+    grid-template-columns: 130px 20px minmax(0, 1fr);
+    align-items: start;
+}
+
+
+.relation-grand-grandparents
+.grand-grandparent-label{
+    width: auto;
+    white-space: nowrap;
+}
+
+
+.relation-grand-grandparents
+.grand-grandparent-colon{
+    width: auto;
+    text-align: center;
+}
+
+
+.relation-grand-grandparents
+.grand-grandparent-value{
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+.relation-grandparents{
+    background-color: #D9F2D9;
+}
+.relations-navigation{
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 75px !important;
+
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 12px !important;
+
+    width: 100% !important;
+    padding: 8px 15px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+
+    background: #EAF8FF;
+    z-index: 999 !important;
+}
+
+.relations-navigation .back-btn{
+    flex: 1 1 0 !important;
+    max-width: 160px !important;
+    margin: 0 !important;
+}
+/* =================================
+   ADD MEMBER - COMPACT FORM
+   ================================= */
+
+#memberName,
+#memberGender,
+#memberDob,
+#memberMarriageDate,
+#memberPartner,
+#memberFather,
+#memberMother,
+#memberLifeStatus,
+#memberNativePlace,
+#memberOccupation,
+#memberQualification,
+#memberBloodGroup,
+#memberMobileNumber,
+#memberCurrentPlace,
+#memberDeceasedDate{
+
+    height: 28px;
+    min-height: 28px;
+    padding: 4px 8px;
+    box-sizing: border-box;
+
+}
+#memberNativePlace,
+#memberOccupation,
+#memberQualification{
+
+    background: white !important;
+    color: #000 !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+
+}
+/* =================================
+   ADD MEMBER - REMOVE GREY BOX
+   ================================= */
+#memberAboutMe,
+#memberFather,
+#memberMother,
+#memberLifeStatus,
+#memberNativePlace,
+#memberOccupation,
+#memberQualification{
+
+    background: white !important;
+    color: #000 !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+
+}
+/* =================================
+   REDUCE ROW HEIGHT
+   ================================= */
+
+.common-form-group{
+
+    min-height: 32px;
+    margin-bottom: 6px;
+
+}
+
+
+/* =================================
+   MEMBER ID - NO BOX
+   ================================= */
+
+#memberId{
+
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+
+}
+/* =================================
+   ADD MEMBER - DISABLED FIELDS
+   KEEP NORMAL WHITE LOOK
+   ================================= */
+#memberAboutMe:disabled,
+#memberFather:disabled,
+#memberMother:disabled,
+#memberLifeStatus:disabled,
+#memberNativePlace:disabled,
+#memberOccupation:disabled,
+#memberQualification:disabled{
+
+    background-color: white !important;
+    color: #666 !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: #666 !important;
+
+}
+/* =================================
+   QUALIFICATION DROPDOWN
+   ================================= */
+
+.qualification-dropdown{
+
+    position: relative;
+    width: 100%;
+
+}
+
+
+.qualification-list{
+
+    display: none;
+
+    position: absolute;
+
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    background: white;
+
+    border: 1px solid #ccc;
+
+    max-height: 180px;
+
+    overflow-y: auto;
+
+    z-index: 1000;
+
+}
+
+
+.qualification-option{
+
+    padding: 7px 10px;
+
+    cursor: pointer;
+
+    background: white;
+
+}
+
+
+.qualification-option:hover{
+
+    background: #f0f0f0;
+
+}
+/* =================================
+   OCCUPATION DROPDOWN
+   ================================= */
+
+.occupation-dropdown{
+
+    position: relative;
+    width: 100%;
+
+}
+
+.occupation-list{
+
+    display: none;
+
+    position: absolute;
+
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    background: white;
+
+    border: 1px solid #ccc;
+
+    max-height: 180px;
+
+    overflow-y: auto;
+
+    z-index: 1000;
+
+}
+
+.occupation-option{
+
+    padding: 7px 10px;
+
+    cursor: pointer;
+
+    background: white;
+
+}
+
+.occupation-option:hover{
+
+    background: #f0f0f0;
+
+}
+#memberAboutMe{
+
+    height: 28px !important;
+    min-height: 28px !important;
+
+    overflow-y: auto;
+
+    resize: none;
+
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+
+}
+/* =================================
+   NEW MEMBER - TEXT ONLY
+   ================================= */
+
+.common-form-value{
+    display: block;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
+    padding: 4px 0;
+
+    background: transparent;
+    border: none;
+    box-shadow: none;
+
+    color: #000;
+
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+
+/* =================================
+   ABOUT ME - FULL TEXT WRAP
+   ================================= */
+
+.member-about-me-value{
+
+    white-space: pre-wrap;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
+
+    line-height: 1.4;
+
+    min-height: 28px;
+
+}
+.search-edit-bottom-actions{
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 80px !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+    gap: 12px !important;
+    width: 100% !important;
+    padding: 10px 20px !important;
+    box-sizing: border-box !important;
+
+    z-index: 1000 !important;
+}
+
+.search-edit-bottom-actions .back-btn{
+    display: inline-flex !important;
+    flex: 1 1 0 !important;
+    width: auto !important;
+    max-width: 160px !important;
+    margin: 0 !important;
+
+    justify-content: center !important;
+    align-items: center !important;
+}
+/* =====================================
+   FAMILY TREE CONTROLS
+   ===================================== */
+
+.family-tree-control{
+    display: grid;
+    grid-template-columns: 140px 15px 1fr;
+    align-items: center;
+    gap: 6px;
+
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.family-tree-label{
+    font-weight: 400;
+}
+
+.family-tree-colon{
+    text-align: center;
+    font-weight: 600;
+}
+
+.family-tree-control .common-form-input{
+    width: 100%;
+    height: 44px;
+    box-sizing: border-box;
+}
+/* =====================================
+   FAMILY TREE PAGE
+   ===================================== */
+
+.family-tree-page{
+    width: 100%;
+    max-width: 460px;
+
+    margin: 0 auto;
+
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 120px;
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================
+   FAMILY TREE CONTROLS
+   ===================================== */
+
+.family-tree-control{
+    display: grid;
+    grid-template-columns: 140px 15px 1fr;
+
+    align-items: center;
+    gap: 6px;
+
+    width: 100%;
+
+    margin-bottom: 12px;
+
+    box-sizing: border-box;
+}
+
+
+.family-tree-label{
+    font-weight: 400;
+}
+
+
+.family-tree-colon{
+    text-align: center;
+    font-weight: 600;
+}
+
+
+.family-tree-control .common-form-input{
+    width: 100%;
+   
+    height: 44px;
+
+    box-sizing: border-box;
+}
+
+
+.family-tree-generation-row{
+    display: block;
+    width: 100%;
+}
+
+
+/* =====================================
+   SHOW FAMILY TREE BUTTON
+   ===================================== */
+
+.family-create-btn{
+    display: block;
+
+    width: fit-content;
+    min-width: 180px;
+
+    margin: 20px auto 10px auto;
+
+    text-align: center;
+}
+
+
+/* =====================================
+   FAMILY TREE BOTTOM BUTTONS
+   ===================================== */
+
+/* =====================================
+   FAMILY TREE BACK + HOME
+   FIXED AT PAGE BOTTOM
+   ===================================== */
+
+.family-tree-bottom-actions{
+    position: fixed !important;
+
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+
+    width: 100% !important;
+
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+    gap: 12px !important;
+
+    padding:
+        6px
+        12px
+        calc(6px + env(safe-area-inset-bottom))
+        12px !important;
+
+    box-sizing: border-box !important;
+
+    background: #EAF8FF;
+
+    z-index: 9999 !important;
+}
+.family-tree-bottom-actions .back-btn{
+    flex: 1;
+
+    max-width: 180px;
+
+    height: 40px !important;
+
+    margin: 0 !important;
+
+    padding: 4px 10px !important;
+}
+.family-tree-page{
+    padding-bottom:
+        calc(60px + env(safe-area-inset-bottom)) !important;
+}
+
+.family-tree-bottom-actions .back-btn{
+    flex: 1 1 0 !important;
+
+    width: auto !important;
+    max-width: 160px !important;
+
+    margin: 0 !important;
+
+    display: inline-flex !important;
+
+    justify-content: center !important;
+    align-items: center !important;
+}
+/* =====================================
+   FAMILY TREE MEMBER BOX
+   ===================================== */
+
+.family-tree-test-node{
+    position: relative;
+
+    width: 110px !important;
+    min-width: 110px !important;
+    max-width: 110px !important;
+
+    height: 28px !important;
+min-height: 28px !important;
+max-height: 28px !important;
+    padding: 1px 2px !important;
+    margin: 0 !important;
+
+    border: 1px solid #2A6EB0;
+    border-radius: 5px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    box-sizing: border-box;
+
+    flex-shrink: 0;
+
+    z-index: 2;
+}
+/* FULL MEMBER NAME */
+
+.family-tree-test-node strong{
+    width: 100%;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 8px !important;
+    font-weight: 400 !important;
+    line-height: 8.5px !important;
+
+    color: #2A6EB0;
+
+    text-align: center;
+
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+}
+/* GENDER */
+
+.family-tree-couple-row{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: max-content;
+    min-width: 100%;
+
+    margin-top: 30px;
+}
+
+
+.family-tree-couple-row .family-tree-test-node{
+    margin: 0;
+}
+
+
+.family-tree-spouse-line{
+    width: 35px;
+    height: 2px;
+
+    background: #2A6EB0;
+
+    flex-shrink: 0;
+}
+/* =====================================
+   FAMILY TREE PARENTS
+   ===================================== */
+
+.family-tree-parent-row{
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    width: max-content;
+    min-width: 100%;
+
+    margin-top: 25px;
+}
+
+
+.family-tree-parent-row .family-tree-test-node{
+    margin: 0;
+}
+
+
+/* PARENTS TO SELECTED MEMBER */
+
+.family-tree-parent-child-line{
+    width: 100%;
+    height: 30px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: stretch;
+}
+
+
+.family-tree-vertical-line{
+    width: 2px;
+    height: 30px;
+
+    background: #2A6EB0;
+}
+
+/* =====================================
+   FAMILY TREE DIAGRAM AREA
+   ===================================== */
+
+.family-tree-diagram{
+    width: 100%;
+
+    box-sizing: border-box;
+}
+/* =====================================
+   FAMILY TREE FULL DIAGRAM
+   ===================================== */
+
+.family-tree-scroll{
+    width: 100%;
+
+    height: calc(
+        100dvh - 330px - env(safe-area-inset-bottom)
+    );
+
+    min-height: 300px;
+
+    overflow: hidden !important;
+
+    margin-top: 8px;
+
+    padding: 0 !important;
+
+    box-sizing: border-box;
+
+    cursor: grab;
+
+    touch-action: none;
+
+    position: relative;
+}
+.family-tree-scroll.dragging{
+    cursor: grabbing;
+}
+.family-tree-canvas{
+    position: relative;
+
+    display: inline-block;
+
+    width: max-content;
+    min-width: 0 !important;
+
+    padding: 4px !important;
+
+    box-sizing: border-box;
+
+    transform-origin: top center;
+}
+
+/* SVG LINES */
+
+.family-tree-lines{
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+
+    overflow: visible;
+
+    z-index: 1;
+}
+
+
+.family-tree-svg-line{
+    stroke: #2A6EB0;
+    stroke-width: 1.5;
+}
+
+
+/* ALL BOXES ABOVE LINES */
+
+
+/* =====================================
+   TOP PARENTS
+   ===================================== */
+
+
+.family-tree-top-row{
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+
+    align-items: flex-start;
+
+    gap: 22px;
+
+    width: max-content;
+
+    min-width: 100%;
+
+    margin-bottom: 70px;
+
+    box-sizing: border-box;
+}
+.family-tree-parent-group{
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 28px;
+}
+
+/* =====================================
+   SELECTED GENERATION
+   ===================================== */
+
+.family-tree-main-row{
+
+    display: grid;
+
+    /*
+       LEFT  = Member siblings
+       CENTER = Selected + Partner
+       RIGHT = Partner siblings
+
+       Left / Right columns equal width.
+       Kabatti center couple exact tree center lo untundi.
+    */
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        max-content
+        minmax(0, 1fr);
+
+    align-items: start;
+
+    column-gap: 34px;
+
+    width: 100%;
+
+    min-width: max-content;
+
+    margin-bottom: 75px;
+}
+
+
+/* MEMBER SIBLINGS — LEFT */
+
+.family-tree-main-row
+> .family-tree-siblings-row{
+
+    grid-column: 1;
+
+    justify-self: end;
+}
+
+
+/* SELECTED MEMBER + PARTNER — EXACT CENTER */
+
+.family-tree-main-row
+> .family-tree-selected-branch{
+
+    grid-column: 2;
+
+    justify-self: center;
+}
+
+
+/* PARTNER SIBLINGS — RIGHT */
+
+.family-tree-main-row
+> .family-tree-partner-siblings-row{
+
+    grid-column: 3;
+
+    justify-self: start;
+}
+.family-tree-siblings-row{
+    display: flex;
+
+    /* sibling couples same generation line */
+    align-items: flex-start;
+
+    gap: 28px;
+}
+/* selected box */
+
+.tree-selected{
+    border-width: 2px !important;
+}
+
+
+/* =====================================
+   CHILDREN
+   ===================================== */
+
+.family-tree-children-row{
+    display: flex;
+
+    justify-content: center;
+    align-items: flex-start;
+
+    gap: 80px;
+
+   /* min-width: 700px;  */
+}
+
+
+.family-tree-child-branch{
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 55px;
+}
+
+
+/* =====================================
+   GRAND CHILDREN
+   ===================================== */
+
+.family-tree-grandchildren-row{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start !important;
+    gap: 28px;
+}
+
+.family-tree-test-node.tree-male{
+    background: #E4F6E4;
+}
+
+.family-tree-test-node.tree-female{
+    background: #FFE4EE;
+}
+.tree-selected.tree-male{
+    border: 2.5px solid #4A9B4A !important;
+}
+
+.tree-selected.tree-female{
+    border: 2.5px solid #D96B8A !important;
+}
+/* =====================================
+   SELECTED MEMBER NAME
+   ===================================== */
+
+.tree-selected strong{
+    font-weight: 700 !important;
+    color: #228B22 !important;
+}
+
+
+/* =====================================
+   FAMILY TREE GENDER LEGEND
+   ===================================== */
+
+.family-tree-legend{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 0 !important;
+
+    font-size: 10px;
+    color: #2A6EB0;
+
+    white-space: nowrap;
+}
+
+.family-tree-legend-item{
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+}
+
+
+.legend-box{
+    width: 12px;
+    height: 12px;
+
+    display: inline-block;
+
+    border: 1px solid #2A6EB0;
+
+    border-radius: 2px;
+}
+
+
+.legend-male{
+    background: #E4F6E4;
+}
+
+
+.legend-female{
+    background: #FFE4EE;
+}
+.family-tree-child-couple{
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 22px;
+}
+
+.family-tree-partner-siblings-row{
+    display: flex;
+    align-items: flex-start;
+    gap: 28px;
+}
+
+.family-tree-zoom-controls{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 6px;
+
+    margin: 0 !important;
+
+    width: auto !important;
+
+    white-space: nowrap;
+}
+.family-tree-zoom-btn{
+    width: 26px;
+    height: 26px;
+
+    padding: 0;
+
+    border: 1px solid #2A6EB0;
+    border-radius: 5px;
+
+    background: white;
+    color: #2A6EB0;
+
+    font-size: 18px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+#familyTreeZoomValue{
+    min-width: 36px;
+
+    text-align: center;
+
+    font-size: 10px;
+    color: #2A6EB0;
+}
+
+.family-tree-zoom-reset{
+    height: 26px;
+    padding: 0 6px;
+
+    border: 1px solid #2A6EB0;
+    border-radius: 5px;
+
+    background: white;
+    color: #2A6EB0;
+
+    font-size: 9px;
+    cursor: pointer;
+}
+.family-tree-toolbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+
+    gap: 10px;
+
+    margin: 4px 0 8px 0;
+
+    box-sizing: border-box;
+}
+
+/* =====================================
+   FAMILY TREE SIBLING FAMILIES
+   ===================================== */
+
+.family-tree-sibling-branch{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 45px;
+}
+
+.family-tree-sibling-couple{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+}
+
+.family-tree-sibling-children-row{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start !important;
+    align-content: flex-start !important;
+    gap: 28px;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+.family-tree-sibling-child-branch{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: flex-start !important;
+    gap: 45px;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    position: relative;
+    top: 0 !important;
+}
+.family-tree-sibling-child-couple{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    align-self: flex-start;
+    gap: 22px;
+    margin-top: 0 !important;
+}
+
+/* =====================================
+   SELECTED MEMBER FAMILY BRANCH
+   ===================================== */
+
+.family-tree-selected-branch{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 45px;
+
+    flex-shrink: 0;
+}
+
+.family-tree-selected-couple{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 22px;
+}
+
+.family-tree-selected-children-row{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    gap: 80px;
+}
+/* =====================================
+   PARTNER SIBLING FAMILY BRANCH
+   ===================================== */
+
+.family-tree-partner-sibling-branch{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 45px;
+}
+
+.family-tree-partner-sibling-couple{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+}
+
+.family-tree-partner-sibling-children-row{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 28px;
+}
+/* =====================================
+   GRAND PARENTS ROW
+   ===================================== */
+
+.family-tree-grandparents-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 70px;
+
+    margin-bottom: 65px;
+
+    width: max-content;
+    min-width: 100%;
+}
+
+.family-tree-grandparent-couple{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 22px;
+
+    flex-shrink: 0;
+}
+
+.family-tree-sibling-child-couple{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+}
+
+.family-tree-sibling-grandchildren-row{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 28px;
+}
+.family-tree-partner-sibling-child-branch{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 45px;
+}
+
+.family-tree-partner-sibling-child-couple{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+}
+
+.family-tree-partner-sibling-grandchildren-row{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 28px;
+}
+.family-tree-grandchild-branch{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: flex-start !important;
+    gap: 45px;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.family-tree-grandchild-couple{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start !important;
+    gap: 22px;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.family-tree-great-grandchildren-row{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 28px;
+}
+.family-tree-great-grandparents-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 70px;
+    margin-bottom: 65px;
+    width: max-content;
+    min-width: 100%;
+}
+
+.family-tree-great-grandparent-couple{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 22px;
+    flex-shrink: 0;
+}
+/* =====================================
+   FAMILY TREE
+   FINAL GENERATION LAYOUT
+   ===================================== */
+
+
+/* =====================================
+   MAIN GENERATION
+   siblings + selected + partner siblings
+   ===================================== */
+
+.family-tree-main-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 50px;
+    width: max-content;
+    min-width: 100%;
+    margin-bottom: 0;
+}
+
+
+/* =====================================
+   SAME GENERATION ROWS
+   ===================================== */
+
+.family-tree-siblings-row,
+.family-tree-partner-siblings-row,
+
+.family-tree-selected-children-row,
+.family-tree-sibling-children-row,
+.family-tree-partner-sibling-children-row,
+
+.family-tree-grandchildren-row,
+.family-tree-sibling-grandchildren-row,
+.family-tree-partner-sibling-grandchildren-row,
+
+.family-tree-great-grandchildren-row,
+.family-tree-sibling-great-grandchildren-row,
+.family-tree-partner-sibling-great-grandchildren-row {
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+
+    align-items: flex-start;
+
+    flex-wrap: nowrap;
+
+    gap: 28px;
+
+    width: max-content;
+}
+
+
+/* =====================================
+   FAMILY BRANCHES
+   parent generation → child generation
+   ===================================== */
+
+.family-tree-selected-branch,
+
+.family-tree-child-branch,
+.family-tree-grandchild-branch,
+
+.family-tree-sibling-branch,
+.family-tree-sibling-child-branch,
+.family-tree-sibling-grandchild-branch,
+
+.family-tree-partner-sibling-branch,
+.family-tree-partner-sibling-child-branch,
+.family-tree-partner-sibling-grandchild-branch {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    flex: 0 0 auto;
+
+    gap: 90px;
+
+    margin: 0;
+
+    padding: 0;
+}
+
+/* =====================================
+   ALL COUPLES
+   MEMBER + PARTNER SIDE BY SIDE
+   ===================================== */
+
+.family-tree-selected-couple,
+
+.family-tree-child-couple,
+.family-tree-grandchild-couple,
+
+.family-tree-sibling-couple,
+.family-tree-sibling-child-couple,
+.family-tree-sibling-grandchild-couple,
+
+.family-tree-partner-sibling-couple,
+.family-tree-partner-sibling-child-couple,
+.family-tree-partner-sibling-grandchild-couple {
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+
+    align-items: center;
+
+    flex-wrap: nowrap;
+
+    gap: 22px;
+
+    width: max-content;
+
+    margin: 0;
+
+    padding: 0;
+}
+
+
+/* =====================================
+   DIRECT CHILD GENERATION
+   MORE SPACE BETWEEN FAMILY BRANCHES
+   ===================================== */
+
+.family-tree-selected-children-row{
+    gap: 50px;
+}
+
+
+/* =====================================
+   DESCENDANT ROW SPACING
+   ===================================== */
+
+.family-tree-grandchildren-row,
+.family-tree-sibling-grandchildren-row,
+.family-tree-partner-sibling-grandchildren-row{
+    gap: 28px;
+}
+
+
+.family-tree-great-grandchildren-row,
+.family-tree-sibling-great-grandchildren-row,
+.family-tree-partner-sibling-great-grandchildren-row{
+    gap: 28px;
+}
+
+
+/* =====================================
+   GRANDCHILD BRANCH
+   ===================================== */
+
+.family-tree-grandchild-branch,
+.family-tree-sibling-grandchild-branch,
+.family-tree-partner-sibling-grandchild-branch{
+    align-self: flex-start;
+}
+
+
+/* =====================================
+   KEEP EVERY MEMBER BOX SAME SIZE
+   ===================================== */
+
+.family-tree-test-node{
+    flex: 0 0 110px !important;
+}
+
+
+/* =====================================
+   ANCESTOR GENERATIONS
+   ===================================== */
+
+.family-tree-great-great-grandparents-row,
+.family-tree-great-grandparents-row,
+.family-tree-grandparents-row,
+.family-tree-top-row{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+
+    width: max-content;
+    min-width: 100%;
+
+    gap: 60px;
+}
+
+
+/* =====================================
+   ANCESTOR LEFT / RIGHT SIDES
+   ===================================== */
+
+.family-tree-ancestor-selected-side,
+.family-tree-ancestor-partner-side{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+
+    flex-wrap: nowrap;
+
+    width: max-content;
+    flex: 0 0 auto;
+
+    gap: 28px;
+}
+
+/* =====================================
+   GENERATION 4
+   GREAT-GREAT-GRANDPARENTS
+   ===================================== */
+
+.family-tree-great-great-grandparents-row{
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+
+    align-items: flex-start;
+
+    flex-wrap: nowrap;
+
+    gap: 28px;
+
+    width: max-content;
+
+    min-width: 100%;
+       margin-bottom: 45px;
+
+}
+
+.family-tree-great-great-grandparent-couple{
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+
+    align-items: center;
+
+    flex-wrap: nowrap;
+
+    gap: 22px;
+
+    width: max-content;
+
+    flex: 0 0 auto;
+}
+/* =====================================
+   FAMILY TREE
+   PARTNER PRESENT → ANCESTOR SPLIT
+   ===================================== */
+
+.family-tree-has-partner
+.family-tree-great-great-grandparents-row,
+
+.family-tree-has-partner
+.family-tree-great-grandparents-row,
+
+.family-tree-has-partner
+.family-tree-grandparents-row,
+
+.family-tree-has-partner
+.family-tree-top-row{
+
+    display: grid;
+
+    grid-template-columns:
+        max-content
+        max-content;
+
+    justify-content: center;
+
+    align-items: start;
+
+    column-gap: 80px;
+}
+
+
+/* MEMBER ANCESTORS = LEFT */
+
+.family-tree-has-partner
+.family-tree-ancestor-selected-side{
+
+    grid-column: 1;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: flex-start;
+
+    flex-wrap: nowrap;
+}
+
+
+/* PARTNER ANCESTORS = RIGHT */
+
+.family-tree-has-partner
+.family-tree-ancestor-partner-side{
+
+    grid-column: 2;
+
+    display: flex;
+
+    justify-content: flex-start;
+
+    align-items: flex-start;
+
+    flex-wrap: nowrap;
+}
+/* =====================================
+   HIDE OLD FLAT ANCESTOR ROWS
+   NEW CASE 1-4 ANCESTRY IS USED
+   ===================================== */
+
+.family-tree-great-great-grandparents-row,
+.family-tree-great-grandparents-row,
+.family-tree-grandparents-row,
+.family-tree-top-row{
+
+    display: none !important;
+}
+
+/* =====================================
+   NEW SPLIT ANCESTOR ZONE
+   MEMBER LEFT | PARTNER RIGHT
+   ===================================== */
+
+.family-tree-split-ancestor-zone{
+
+    display: grid;
+
+    grid-template-columns:
+        max-content
+        80px
+        max-content;
+
+    justify-content: center;
+    align-items: end;
+
+    width: max-content;
+    min-width: 100%;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 90px;
+}
+
+/* =====================================
+   MEMBER ANCESTORS — LEFT SIDE ONLY
+   ===================================== */
+
+.family-tree-member-ancestor-tree{
+
+    grid-column: 1;
+
+    display: flex;
+
+    justify-content: flex-end;
+    align-items: flex-end;
+
+    width: max-content;
+
+    justify-self: end;
+}
+
+
+/* =====================================
+   IMAGINARY VERTICAL CENTER
+   BETWEEN MEMBER + PARTNER
+   ===================================== */
+
+.family-tree-ancestor-center-space{
+
+    grid-column: 2;
+
+    width: 80px;
+    min-width: 80px;
+}
+
+/* =====================================
+   PARTNER ANCESTORS — RIGHT SIDE ONLY
+   ===================================== */
+
+.family-tree-partner-ancestor-tree{
+
+    grid-column: 3;
+
+    display: flex;
+
+    justify-content: flex-start;
+    align-items: flex-end;
+
+    width: max-content;
+
+    justify-self: start;
+}
+/* =====================================
+   RECURSIVE ANCESTOR BRANCH
+   ===================================== */
+
+.family-tree-ancestor-generation-branch{
+
+    display: grid;
+
+    grid-template-columns:
+        max-content
+        max-content;
+
+    justify-content: center;
+    align-items: end;
+
+    column-gap: 28px;
+
+    width: max-content;
+
+    position: relative;
+}
+
+.family-tree-ancestor-parent-branch{
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 45px;
+
+    width: max-content;
+
+    position: relative;
+}
+
+/* =====================================
+   BEFORE GENERATIONS
+   MORE VERTICAL GAP
+   ===================================== */
+
+.family-tree-split-ancestor-zone
+.family-tree-ancestor-parent-branch{
+
+    gap: 90px !important;
+}
+.family-tree-download-menu{
+    position:fixed;
+    left:50%;
+    top:50%;
+    transform:translate(-50%, -50%);
+    z-index:10000;
+
+    width:220px;
+    padding:18px;
+
+    background:#ffffff;
+    border:2px solid #4A9FE8;
+    border-radius:14px;
+
+    box-shadow:
+        0 6px 25px rgba(0,0,0,0.25);
+
+    text-align:center;
+}
+
+.family-tree-download-title{
+    margin-bottom:12px;
+    font-size:17px;
+    font-weight:bold;
+}
+
+.family-tree-download-menu button{
+    display:block;
+    width:100%;
+
+    margin:8px 0;
+    padding:10px;
+
+    border:1px solid #4A9FE8;
+    border-radius:8px;
+
+    background:#ffffff;
+    color:#2A6EB0;
+
+    font-size:15px;
+    cursor:pointer;
+}
+
+.family-tree-download-menu button:hover{
+    background:#EAF8FF;
+}
+/* =====================================
+   FAMILY TREE DOWNLOAD BUTTON
+   ===================================== */
+
+.family-tree-download-btn{
+    min-width: 105px;
+
+    padding: 8px 15px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: linear-gradient(
+        135deg,
+        #2A6EB0,
+        #4A9FE8
+    );
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 3px 8px rgba(0,0,0,0.20);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.family-tree-download-btn:hover{
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 12px rgba(0,0,0,0.25);
+}
+
+.family-tree-download-btn:active{
+    transform: translateY(1px);
+
+    box-shadow:
+        0 2px 5px rgba(0,0,0,0.18);
+}
+/* =====================================
+   MARRIAGE DATE
+   SAME SIZE AS OTHER INPUT BOXES
+   ===================================== */
+
+/* =================================
+   MARRIAGE DATE
+   SAME AS OTHER MEMBER INPUTS
+   ================================= */
+
+#memberMarriageDate{
+    width:100% !important;
+
+    height:28px !important;
+    min-height:28px !important;
+    max-height:28px !important;
+
+    padding:4px 8px !important;
+
+    box-sizing:border-box !important;
+
+    background:#ffffff !important;
+    color:#000000 !important;
+
+    border:1px solid #ccc !important;
+
+    text-align:left !important;
+}
+
+
+/* iPhone / Safari date text */
+
+#memberMarriageDate::-webkit-date-and-time-value{
+    text-align:left !important;
+    margin:0 !important;
+    padding:0 !important;
+}
+
+
+/* Calendar icon right side */
+
+#memberMarriageDate::-webkit-calendar-picker-indicator{
+    margin-left:auto !important;
+}
+
+/* iPhone / Safari date text left align */
+
+#memberMarriageDate::-webkit-date-and-time-value{
+    text-align:left;
+    margin:0;
+    padding:0;
+}
+
+
+/* Keep calendar icon on right */
+
+#memberMarriageDate::-webkit-calendar-picker-indicator{
+    margin-left:auto;
+}
+/* =====================================
+   FAMILY ABOUT
+   Same reading style as Home Welcome
+   ===================================== */
+
+.family-about-content{
+    width:calc(100% - 24px);
+    box-sizing:border-box;
+
+    margin:12px auto 20px auto;
+    padding:20px 20px 28px 20px;
+
+    background:#ffffff;
+
+    border-radius:25px;
+
+    overflow:hidden;
+}
+/* SECTION HEADINGS */
+
+.family-about-content h3{
+    color:#2A6EB0;
+    font-weight:600;
+    margin-top:24px;
+    margin-bottom:10px;
+    line-height:1.4;
+}
+
+/* FIRST HEADING */
+
+.family-about-content h3:first-child{
+    margin-top:5px;
+}
+
+/* PARAGRAPHS */
+
+.family-about-content p{
+    font-size:15px;
+    font-weight:400;
+    line-height:1.7;
+    color:#444;
+    text-align:justify;
+
+    margin-top:0;
+    margin-bottom:16px;
+}
+/* =====================================
+   FAMILY ABOUT PAGE TITLE
+   ===================================== */
+
+.family-about-page-title{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    margin-top:-55px;
+    margin-bottom:12px;
+}
+.family-about-page-title img{
+    display:block;
+    margin:0;
+}
+
+.family-about-page-title h2,
+.family-about-page-title h3{
+    margin:0;
+    line-height:1;
+}
+/* =====================================
+   FAMILY ABOUT PAGE - FIXED LAYOUT
+   ===================================== */
+
+.family-about-page{
+    position:fixed;
+    top:110px;
+    left:0;
+    right:0;
+    bottom:0;
+
+    display:flex;
+    flex-direction:column;
+
+    padding:0 12px;
+    box-sizing:border-box;
+    overflow:hidden;
+}
+
+
+/* TITLE */
+
+.family-about-page-title{
+    flex:0 0 auto;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    margin:0 0 10px 0;
+}
+.family-about-title-icon{
+    width:42px;
+    height:42px;
+    object-fit:contain;
+}
+
+.family-about-page-title h2{
+    margin:0;
+    color:#2A6EB0;
+}
+
+
+/* MIDDLE WHITE BOX */
+
+.family-about-scroll-box{
+    flex:1 1 auto;
+    min-height:0;
+
+    background:#ffffff;
+    border-radius:25px;
+
+    overflow-y:auto;
+    overflow-x:hidden;
+
+    -webkit-overflow-scrolling:touch;
+}
+
+
+/* ABOUT MATTER */
+
+.family-about-content{
+    width:100%;
+    margin:0;
+    padding:18px 20px 25px 20px;
+
+    box-sizing:border-box;
+    background:transparent;
+
+    border-radius:0;
+}
+
+
+/* FIXED BOTTOM BACK AREA */
+
+.family-about-bottom{
+    flex:0 0 70px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#EAF8FF;
+}
+
+.family-about-bottom .back-btn{
+    margin:0;
+}
+/* =====================================
+   FAMILY ABOUT - COMPACT TOP SPACE
+   ===================================== */
+
+.family-about-page{
+    top:70px !important;
+}
+
+.family-about-page-title{
+    height:85px !important;
+    min-height:85px !important;
+    flex:0 0 85px !important;
+
+    margin:0 !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    transform:none !important;
+}
+
+.family-about-scroll-box{
+    flex:1 1 auto !important;
+    min-height:0 !important;
+}
+/* =====================================
+   ADD MEMBER - TITLE + PHOTO
+   ===================================== */
+
+.member-page-title{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+
+    margin-top:-35px;
+    margin-bottom:12px;
+}
+
+
+/* ROUND PHOTO BUTTON */
+
+.member-title-photo-btn{
+    width:58px;
+    height:58px;
+    min-width:58px;
+
+    padding:0;
+    margin:0;
+
+    border:2px solid #2A6EB0;
+    border-radius:50%;
+
+    background:#ffffff;
+
+    overflow:hidden;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+}
+
+
+/* SELECT PHOTO TEXT */
+
+.member-title-photo-btn #memberPhotoPlaceholder{
+    font-size:10px;
+    line-height:12px;
+    text-align:center;
+    color:#2A6EB0;
+}
+
+
+/* SELECTED PHOTO */
+
+.member-title-photo-btn #memberPhotoPreview{
+    display:none;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+    object-position:center;
+
+    border-radius:50%;
+}
+
+
+/* ADD MEMBER TITLE */
+
+.member-page-title .page-title{
+    margin:0;
+    padding:0;
+
+    color:#2A6EB0;
+}
+
+/* =====================================
+   FAMILY ABOUT - BACK + HOME
+   ===================================== */
+
+.family-about-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+
+    padding:8px 20px;
+    box-sizing:border-box;
+}
+
+
+/* BACK + HOME SAME FORMAT */
+
+.family-about-bottom .family-about-nav-btn{
+    width:45%;
+    height:52px;
+
+    margin:0;
+    padding:0;
+
+    border:2px solid #2A6EB0;
+    border-radius:15px;
+
+    background:transparent;
+    color:#2A6EB0;
+
+    font-size:16px;
+    font-weight:600;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+}
+/* =====================================
+   SHOW FAMILY TREE - NEAR BOTTOM
+   ===================================== */
+
+#showFamilyTreeBtn{
+    position:fixed !important;
+
+    left:50% !important;
+    bottom:68px !important;
+
+    transform:translateX(-50%) !important;
+
+    margin:0 !important;
+
+    z-index:9998 !important;
+}
+/* =====================================
+   TWO PARTNER CHILDREN LAYOUT
+
+   LEFT CHILDREN | CENTER | RIGHT CHILDREN
+   ===================================== */
+
+.family-tree-two-partner-children-row{
+
+    display: grid;
+
+    grid-template-columns:
+        max-content
+        110px
+        max-content;
+
+    align-items: start;
+
+    justify-content: center;
+
+    column-gap: 50px;
+
+    width: max-content;
+
+    min-width: 100%;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+
+/* =====================================
+   LEFT PARTNER CHILDREN
+   ===================================== */
+
+.family-tree-left-children-group{
+
+    grid-column: 1;
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: flex-end;
+
+    align-items: flex-start;
+
+    gap: 50px;
+
+    width: max-content;
+
+    justify-self: end;
+
+}
+
+
+/* =====================================
+   SELECTED MEMBER IMAGINARY CENTER
+   ===================================== */
+
+.family-tree-children-center-space{
+
+    grid-column: 2;
+
+    width: 110px;
+
+    min-width: 110px;
+
+    height: 1px;
+
+}
+
+
+/* =====================================
+   RIGHT PARTNER CHILDREN
+   ===================================== */
+
+.family-tree-right-children-group{
+
+    grid-column: 3;
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: flex-start;
+
+    align-items: flex-start;
+
+    gap: 50px;
+
+    width: max-content;
+
+    justify-self: start;
+
+}
+
+
+/* =====================================
+   KEEP CHILD BRANCHES NORMAL
+   ===================================== */
+
+.family-tree-left-children-group
+.family-tree-child-branch,
+
+.family-tree-right-children-group
+.family-tree-child-branch{
+
+    flex: 0 0 auto;
+
+}
+/* =====================================
+   TWO PARTNER PARENTS ROW
+   SHOW + 3 COLUMN LAYOUT
+   ===================================== */
+
+.family-tree-top-row.family-tree-two-partner-parents-row{
+
+    display: grid !important;
+
+    grid-template-columns:
+        max-content
+        max-content
+        max-content;
+
+    justify-content: center;
+    align-items: start;
+
+    column-gap: 80px;
+
+    width: max-content;
+    min-width: 100%;
+
+    margin-bottom: 70px;
+
+    box-sizing: border-box;
+}
+/* LEFT PARTNER PARENTS */
+
+.family-tree-left-partner-parents{
+
+    grid-column: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    width: max-content;
+}
+
+
+/* SELECTED MEMBER PARENTS */
+
+.family-tree-member-parents{
+
+    grid-column: 2;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    width: max-content;
+}
+
+
+/* RIGHT PARTNER PARENTS */
+
+.family-tree-right-partner-parents{
+
+    grid-column: 3;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    width: max-content;
+}
+
+
+/* EACH FATHER + MOTHER COUPLE */
+
+.family-tree-two-partner-parents-row
+.family-tree-parent-group{
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 28px;
+
+    width: max-content;
+}
+/* =====================================
+   TWO PARTNER MODE
+   THREE ANCESTRY COLUMNS
+   ===================================== */
+
+.family-tree-split-ancestor-zone:has(
+    .family-tree-ancestor-center-space
+    .family-tree-root-ancestor-branch
+){
+    display:grid !important;
+
+    grid-template-columns:
+        max-content
+        max-content
+        max-content !important;
+
+    justify-content:center !important;
+    align-items:end !important;
+
+    column-gap:80px !important;
+
+    width:max-content !important;
+    min-width:100% !important;
+}
+
+
+/* LEFT PARTNER ANCESTRY */
+
+.family-tree-split-ancestor-zone:has(
+    .family-tree-ancestor-center-space
+    .family-tree-root-ancestor-branch
+)
+.family-tree-member-ancestor-tree{
+    width:max-content !important;
+    min-width:0 !important;
+}
+
+
+/* SELECTED MEMBER ANCESTRY */
+
+.family-tree-split-ancestor-zone
+.family-tree-ancestor-center-space:has(
+    .family-tree-root-ancestor-branch
+){
+    width:max-content !important;
+    min-width:0 !important;
+
+    display:flex !important;
+    justify-content:center !important;
+    align-items:flex-end !important;
+}
+
+
+/* RIGHT PARTNER ANCESTRY */
+
+.family-tree-split-ancestor-zone:has(
+    .family-tree-ancestor-center-space
+    .family-tree-root-ancestor-branch
+)
+.family-tree-partner-ancestor-tree{
+    width:max-content !important;
+    min-width:0 !important;
+}
+/* =====================================
+   GREAT GRANDCHILD COUPLE
+   MALE LEFT | FEMALE RIGHT
+   SAME ROW
+   ===================================== */
+
+.family-tree-great-grandchild-couple{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:nowrap;
+
+    gap:18px;
+
+    width:max-content;
+}
+/* =====================================
+   GENERATION 4
+   GREAT-GREAT-GRANDCHILDREN
+   ===================================== */
+
+.family-tree-great-grandchild-branch{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    flex-shrink:0;
+}
+
+
+.family-tree-great-great-grandchildren-row{
+    display:flex;
+    flex-direction:row;
+    align-items:flex-start;
+    justify-content:center;
+    flex-wrap:nowrap;
+
+    gap:32px;
+
+    margin-top:42px;
+
+    width:max-content;
+}
+
+
+.family-tree-great-great-grandchild-couple{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:nowrap;
+
+    gap:18px;
+
+    width:max-content;
+    flex-shrink:0;
+}
+/* =====================================
+   FAMILY TREE CONTROLS
+   COMPACT BOX HEIGHT
+   ===================================== */
+
+.family-tree-page .common-form-input{
+    min-height: 40px !important;
+    height: 40px !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+}
+.partner-search-input-wrap{
+    position: relative;
+    width: 100%;
+}
+
+.partner-search-input-wrap #memberPartnerSearch{
+    width: 100%;
+    padding-right: 58px;
+    box-sizing: border-box;
+}
+
+.partner-sort-controls{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    z-index: 5;
+}
+
+.partner-sort-arrow{
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    line-height: 1;
+}
+/* FATHER SEARCH - DISABLED COLOR */
+
+#memberFatherSearch:disabled{
+    background-color: #ffffff;
+    color: #000000;
+    opacity: 1;
+    -webkit-text-fill-color: #000000;
+    cursor: default;
+}
+
+#memberFatherSearch:disabled::placeholder{
+    color: #555555;
+    opacity: 1;
+}
+/* FATHER BOX - SAME HEIGHT AS PARTNER */
+
+#memberFatherSearchWrap .partner-search-input-wrap {
+    height: 38px;
+    min-height: 38px;
+    box-sizing: border-box;
+}
+
+#memberFatherSearch {
+    height: 38px;
+    min-height: 38px;
+    box-sizing: border-box;
+    margin: 0;
+}
+/* =================================
+   FATHER DROPDOWN - PARTNER STYLE
+   ================================= */
+
+#memberFatherDropdown {
+    width: 100%;
+    box-sizing: border-box;
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+#memberFatherDropdown > div {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    cursor: pointer;
+    line-height: 1.5;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+#memberFatherDropdown > div:hover {
+    background-color: #eaf4ff;
+}
+/* =================================
+   MOTHER SEARCH BOX
+   ================================= */
+
+#memberMotherSearchWrap .partner-search-input-wrap {
+    height: 38px;
+    min-height: 38px;
+    box-sizing: border-box;
+}
+
+#memberMotherSearch {
+    height: 38px;
+    min-height: 38px;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* DISABLED - NO GREY */
+
+#memberMotherSearch:disabled {
+    background-color: #ffffff;
+    color: #000000;
+    opacity: 1;
+    -webkit-text-fill-color: #000000;
+    cursor: default;
+}
+
+#memberMotherSearch:disabled::placeholder {
+    color: #555555;
+    opacity: 1;
+}
+
+/* SPACIOUS DROPDOWN */
+
+#memberMotherDropdown {
+    width: 100%;
+    box-sizing: border-box;
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+#memberMotherDropdown > .relations-member-option {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    line-height: 1.5;
+    white-space: normal;
+    overflow-wrap: break-word;
+    cursor: pointer;
+}
+
+#memberMotherDropdown > .relations-member-option:hover {
+    background-color: #eaf4ff;
+}
+
+#searchEditMember {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 95px;
+}
+
+#searchEditMemberDropdown {
+    width: 100%;
+    max-height: 240px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+#searchEditMemberDropdown > .relations-member-option {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    line-height: 1.5;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+#searchEditMemberDropdown > .relations-member-option:hover {
+    background-color: #eaf4ff;
+}
+/* =================================
+   SORT ARROWS - HIDDEN BY DEFAULT
+   ================================= */
+
+#partnerSortAZ,
+#partnerSortID,
+#fatherSortAZ,
+#fatherSortID,
+#motherSortAZ,
+#motherSortID,
+#searchEditSortAZ,
+#searchEditSortID {
+    display: none;
+}
+
+/* SHOW ARROWS WHEN SEARCH IS ACTIVE */
+
+.partner-sort-arrow.sort-visible {
+    display: inline-flex;
+}
+/* MEMBER COUNT - LEFT OF SORT ARROWS */
+
+.relation-member-count {
+    display: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2a6eb0;
+    white-space: nowrap;
+    margin-right: 6px;
+}
+/* =====================================
+   PARTNER / FATHER / MOTHER
+   COUNT + SORT ARROWS RIGHT ALIGN
+   ===================================== */
+
+.partner-search-input-wrap {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+.partner-search-input-wrap > input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 112px !important;
+}
+
+.partner-sort-controls {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+
+    width: auto;
+    margin: 0;
+    white-space: nowrap;
+    z-index: 2;
+}
+
+.partner-sort-arrow,
+.relation-member-count {
+    flex-shrink: 0;
+}
+/* =====================================
+   MEMBER SEARCH BOX ALIGNMENT
+   ===================================== */
+
+.partner-search-input-wrap {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+.partner-search-input-wrap > input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 10px !important;
+    padding-right: 100px !important;
+    font-size: 14px !important;
+}
+
+.partner-sort-controls {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    width: auto;
+    z-index: 2;
+}
+
+.partner-sort-controls .relation-member-count {
+    font-size: 12px;
+}
+
+.partner-sort-controls .partner-sort-arrow {
+    font-size: 13px;
+}
+/* PARTNER NAME SELECTED - FULL WIDTH */
+
+.partner-search-input-wrap.partner-name-selected
+#memberPartnerSearch {
+    padding-right: 10px !important;
+}
+
+.partner-search-input-wrap.partner-name-selected
+.partner-sort-controls {
+    display: none !important;
+}
+/* FATHER / MOTHER SELECTED NAME - FULL WIDTH */
+
+.partner-search-input-wrap.father-name-selected
+#memberFatherSearch,
+
+.partner-search-input-wrap.mother-name-selected
+#memberMotherSearch {
+    padding-right: 10px !important;
+}
+
+.partner-search-input-wrap.father-name-selected
+.partner-sort-controls,
+
+.partner-search-input-wrap.mother-name-selected
+.partner-sort-controls {
+    display: none !important;
+}
+
+/* SEARCH EDIT MEMBER - SELECTED NAME FULL WIDTH */
+
+.partner-search-input-wrap.edit-member-selected
+#searchEditMember {
+    padding-right: 10px !important;
+}
+
+.partner-search-input-wrap.edit-member-selected
+.partner-sort-controls {
+    display: none !important;
+}
+/* RELATIONS SELECTED MEMBER */
+
+.partner-search-input-wrap.relations-name-selected
+#relationsMemberSearch {
+    padding-right: 10px !important;
+}
+
+.partner-search-input-wrap.relations-name-selected
+.partner-sort-controls {
+    display: none !important;
+}
+/* =================================
+   FAMILY TREE MEMBER SEARCH WIDTH
+   ================================= */
+
+.family-tree-search-wrapper {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    margin: 0;
+    flex: 1;
+}
+
+.family-tree-search-wrapper .partner-search-input-wrap {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+}
+
+#familyTreeMemberSearch {
+    width: 100%;
+    box-sizing: border-box;
+}
+/* =====================================
+   FAMILY TREE SELECT MEMBER ALIGNMENT
+   ===================================== */
+
+.family-tree-page > .family-tree-control {
+    display: grid;
+    grid-template-columns: 105px 10px minmax(0, 1fr);
+    column-gap: 4px;
+    align-items: center;
+    width: 100%;
+
+    margin-top: 30px;
+}
+.family-tree-page > .family-tree-control
+.family-tree-search-wrapper {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+}
+
+.family-tree-page > .family-tree-control
+.partner-search-input-wrap {
+    width: 100%;
+    min-width: 0;
+}
+
+#familyTreeMemberSearch {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+/* =====================================
+   FAMILY TREE SELECTED MEMBER
+   ===================================== */
+
+.partner-search-input-wrap.family-tree-name-selected
+#familyTreeMemberSearch {
+    padding-right: 10px !important;
+}
+
+.partner-search-input-wrap.family-tree-name-selected
+.partner-sort-controls {
+    display: none !important;
+}
+/* SEARCH - EDIT MEMBER COUNT */
+
+#searchEditMemberCount {
+    min-width: 18px;
+    width: auto;
+    padding: 0 3px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2A6EB0;
+    flex-shrink: 0;
+}
+
+.search-edit-member-wrapper .partner-sort-controls {
+    align-items: center;
+    gap: 4px;
+}
