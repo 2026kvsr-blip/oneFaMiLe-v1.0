@@ -1401,6 +1401,42 @@ bottom: 0 !important;
     box-shadow: none !important;
 
 }
+
+
+/* =====================================
+   UPDATE MEMBER - SAME SIZE INPUT BOXES
+   LONG TEXT CAN SCROLL HORIZONTALLY
+   ===================================== */
+
+#memberName,
+#memberGender,
+#memberDob,
+#memberMarriageDate,
+#memberPartner,
+#memberFather,
+#memberMother,
+#memberLifeStatus,
+#memberNativePlace,
+#memberOccupation,
+#memberQualification,
+#memberBloodGroup,
+#memberMobileNumber,
+#memberCurrentPlace,
+#memberDeceasedDate {
+
+    width: 100% !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    max-height: 42px !important;
+
+    box-sizing: border-box !important;
+    padding: 6px 10px !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
+}
+
 /* =================================
    ADD MEMBER - REMOVE GREY BOX
    ================================= */
