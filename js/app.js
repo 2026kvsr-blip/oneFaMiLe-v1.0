@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -3780,7 +3781,12 @@ const newPassCode = data.passCode;
            clearTimeout(loginAttemptTimer);
            loginAttempts = 0;
            hideLoader();
-    showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
+
+    // Keep the registration message until automatic login completes.
+    sessionStorage.setItem(
+        "oneFaMiLeRegistrationSuccessMessage",
+        result.message || "User Registered Successfully"
+    );
 
     // Clear Signup Form
     document.getElementById("loginUserName").value = "";
@@ -3800,9 +3806,8 @@ const newPassCode = data.passCode;
     clearOTP();
 
 // Registration successful.
-// Open Login page for manual login.
-// Do not auto-submit login here, so the Signing In loader
-// cannot remain active after the registration success message.
+// Automatically sign in with the credentials just registered.
+// Login success will hide the Login page and show the success message.
 
 const loginIdInput =
     document.getElementById("loginId");
@@ -3812,13 +3817,17 @@ const loginPassInput =
 
 showScreen(loginPage);
 
-if(loginIdInput){
+if(loginIdInput && loginPassInput){
     loginIdInput.value = newLoginId;
-}
-
-if(loginPassInput){
-    loginPassInput.value = "";
-    loginPassInput.focus();
+    loginPassInput.value = newPassCode;
+    loginSubmitBtn.click();
+}else{
+    showMessage(
+        "User Registered Successfully. Please log in.",
+        "success",
+        5000
+    );
+    showScreen(loginPage);
 }
 }else{
 
@@ -4534,6 +4543,22 @@ updateMenuIcon();
             dashboard.classList.remove("hidden");
 
 homeBtn.click();
+
+// Show registration success only after Login page has closed.
+const registrationSuccessMessage = sessionStorage.getItem(
+    "oneFaMiLeRegistrationSuccessMessage"
+);
+
+if(registrationSuccessMessage){
+    sessionStorage.removeItem(
+        "oneFaMiLeRegistrationSuccessMessage"
+    );
+    showMessage(
+        registrationSuccessMessage,
+        "success",
+        5000
+    );
+}
 
 
 /* =====================================
