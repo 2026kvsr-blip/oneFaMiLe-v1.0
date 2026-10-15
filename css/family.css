@@ -1424,9 +1424,9 @@ bottom: 0 !important;
 #memberDeceasedDate {
 
     width: 100% !important;
-    height: 42px !important;
-    min-height: 42px !important;
-    max-height: 42px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    max-height: 32px !important;
 
     box-sizing: border-box !important;
     padding: 6px 10px !important;
