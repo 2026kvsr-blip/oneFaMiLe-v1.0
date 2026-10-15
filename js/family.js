@@ -2121,11 +2121,11 @@ loadTrustedMembers();
                     );
 
                 if(!sessionToken){
-
-                    alert(
-                        "Login session missing. Please login again."
-                    );
-
+                    card.style.background = "#EAF8FF";
+                    card.style.borderColor = "#4A9FE8";
+                    name.style.color = "#2A6EB0";
+                    id.style.color = "#444";
+                    alert("Login session missing. Please login again.");
                     return;
                 }
 
@@ -2318,13 +2318,13 @@ const otherBackBtn = document.createElement("button");
 otherBackBtn.type = "button";
 otherBackBtn.className = "back-btn";
 otherBackBtn.textContent = "← Back";
-otherBackBtn.style.cssText = "flex:1;max-width:160px;margin:0;";
+otherBackBtn.style.cssText = "flex:1;max-width:160px;margin:0;display:inline-flex;align-items:center;justify-content:center;text-align:center;";
 
 const otherHomeBtn = document.createElement("button");
 otherHomeBtn.type = "button";
 otherHomeBtn.className = "back-btn";
 otherHomeBtn.textContent = "⌂ Home";
-otherHomeBtn.style.cssText = "flex:1;max-width:160px;margin:0;";
+otherHomeBtn.style.cssText = "flex:1;max-width:160px;margin:0;display:inline-flex;align-items:center;justify-content:center;text-align:center;";
 
 otherFamilyNavigation.appendChild(otherBackBtn);
 otherFamilyNavigation.appendChild(otherHomeBtn);
@@ -2353,6 +2353,8 @@ otherBackBtn.onclick = async function(){
     }
 
     if(page === "detail"){
+        if(myFamilyTab) myFamilyTab.style.display = "";
+        if(otherFamiliesTab) otherFamiliesTab.style.display = "";
         await loadPublicFamilies();
         setOtherFamilyNavigation("list");
         return;
@@ -2640,8 +2642,13 @@ container.textContent =
             card.appendChild(id);
 
             card.style.cursor = "pointer";
+            card.style.transition = "background-color 120ms ease, color 120ms ease";
 
             card.onclick = async function(){
+                card.style.background = "#2A6EB0";
+                card.style.borderColor = "#2A6EB0";
+                name.style.color = "#FFFFFF";
+                id.style.color = "#FFFFFF";
 
                 const sessionToken =
                     sessionStorage.getItem(
@@ -2693,59 +2700,43 @@ container.textContent =
                         result.status !== "success" ||
                         !result.family
                     ){
-
-                        alert(
-                            result.message ||
-                            "Unable to open family."
-                        );
-
+                        card.style.background = "#EAF8FF";
+                        card.style.borderColor = "#4A9FE8";
+                        name.style.color = "#2A6EB0";
+                        id.style.color = "#444";
+                        card.style.pointerEvents = "auto";
+                        alert(result.message || "Unable to open family.");
                         return;
                     }
 
-                   const viewingFamily =
-    result.family;
+                   const viewingFamily = result.family;
+
+/* Clear temporary selection as the details page opens. */
+card.style.background = "#EAF8FF";
+card.style.borderColor = "#4A9FE8";
+name.style.color = "#2A6EB0";
+id.style.color = "#444";
 
 container.innerHTML = "";
 
 /* MARK PUBLIC FAMILY DETAIL PAGE */
 container.dataset.publicFamilyDetail = "true";
 setOtherFamilyNavigation("detail");
+if(myFamilyTab) myFamilyTab.style.display = "none";
+if(otherFamiliesTab) otherFamiliesTab.style.display = "none";
 window.otherFamilyReturnToDetail = function(){
     card.click();
 };
 window.currentPublicFamilyId = String(viewingFamily.familyId || "");
 
-/* On a public-family detail page, hide the My Family / Other Families tabs.
-   Update the existing Family page title without replacing its icon. */
-const familyTabsElement = document.getElementById("familyTabs");
-if(familyTabsElement) familyTabsElement.style.display = "none";
-const familyTitleIcon = document.querySelector('img[src*="Family1.png"]');
-if(familyTitleIcon){
-    let titleNode = familyTitleIcon.parentElement;
-    let titleTextNode = null;
-    for(let level = 0; titleNode && level < 4 && !titleTextNode; level++, titleNode = titleNode.parentElement){
-        for(const child of Array.from(titleNode.childNodes || [])){
-            if(child.nodeType === Node.TEXT_NODE && child.nodeValue.trim() === "Family"){
-                titleTextNode = child;
-                break;
-            }
-        }
-    }
-    if(titleTextNode){
-        titleTextNode.nodeValue = " " + (viewingFamily.familyName || "") + " Family";
-        window.publicFamilyTitleTextNode = titleTextNode;
-    }
-}
-
                     
-                    const heading =
-                        document.createElement("h3");
-
-                    heading.textContent =
-                        viewingFamily.familyName;
-
-                    heading.style.color =
-                        "#2A6EB0";
+                    const heading = document.createElement("h3");
+                    const publicFamilyName = String(
+                        family.familyName || viewingFamily.familyName || "Unnamed"
+                    ).trim().replace(/\s+Family$/i, "");
+                    heading.textContent = publicFamilyName + " Family";
+                    heading.style.color = "#2A6EB0";
+                    heading.style.textAlign = "center";
 
                     const familyIdText =
                         document.createElement("p");
@@ -2755,28 +2746,8 @@ if(familyTitleIcon){
                         viewingFamily.familyId;
 
                    
-                    /* The family name is now part of the page title; keep only
-                       the ID immediately below that title, not a second name. */
-                    heading.style.display = "none";
-                    familyIdText.style.textAlign = "center";
-                    familyIdText.style.color = "#444";
-                    const titleIconForId = document.querySelector('img[src*="Family1.png"]');
-                    let titleContainerForId = titleIconForId?.parentElement;
-                    for(let level = 0; titleContainerForId && level < 4; level++, titleContainerForId = titleContainerForId.parentElement){
-                        if(titleContainerForId.parentElement && titleContainerForId.parentElement.contains(titleIconForId)){
-                            const parentText = (titleContainerForId.parentElement.textContent || "").trim();
-                            if(parentText.includes("Family")){
-                                titleContainerForId = titleContainerForId.parentElement;
-                                break;
-                            }
-                        }
-                    }
-                    if(titleContainerForId && titleContainerForId.parentNode){
-                        titleContainerForId.insertAdjacentElement("afterend", familyIdText);
-                    }else{
-                        container.appendChild(familyIdText);
-                    }
                     container.appendChild(heading);
+                    container.appendChild(familyIdText);
 
                     /* =====================================
                        PUBLIC FAMILY PERMISSION BUTTONS
@@ -3391,6 +3362,8 @@ container.appendChild(results);
     async function activateFamilyTab(tab){
 
         const isMyFamily = tab === "my";
+        if(myFamilyTab) myFamilyTab.style.display = "";
+        if(otherFamiliesTab) otherFamiliesTab.style.display = "";
 
         /* Keep the original centered My Family Back button in place. */
         const familyBackContainer = document.getElementById("familyBackContainer");
