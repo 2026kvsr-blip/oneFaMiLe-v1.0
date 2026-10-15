@@ -3011,19 +3011,25 @@ async function sendSignupOTP(){
     // SEND OTP
     // ================================
 
-    const formData = new FormData();
+
+const formData = new FormData();
 
 formData.append(
     "action",
     "sendSignupOTP"
 );
 
+formData.append(
+    "loginUserName",
+    loginUserName.value.trim()
+);
 
 formData.append(
     "mobile",
     mobileNo.value.trim()
 );
-    formData.append(
+
+formData.append(
     "email",
     emailId.value.trim()
 );
@@ -3635,36 +3641,25 @@ async function checkSignup(){
 
     try{
 
-        const formData = new FormData();
+        const result = await postToAPI({
 
-        formData.append(
-            "action",
-            "checkSignup"
-        );
+            action: "checkSignup",
 
-        formData.append(
-            "loginUserName",
-            loginUserName.value.trim()
-        );
+            loginUserName:
+                loginUserName.value.trim(),
 
-        formData.append(
-            "mobile",
-            mobileNo.value.trim()
-        );
+            email:
+                emailId.value.trim(),
 
-        const response = await fetch(API_URL, {
-            method: "POST",
-            body: formData
+            mobile:
+                mobileNo.value.trim()
+
         });
-
-        const result = await response.json();
-
-        console.log("checkSignup Result:", result);
 
         if(result.status !== "success"){
 
             showMessage(
-                result.message || "Signup validation failed.",
+                result.message,
                 "warning",
                 3000
             );
@@ -3676,7 +3671,7 @@ async function checkSignup(){
 
     }catch(error){
 
-        console.error("checkSignup Error:", error);
+        console.log("checkSignup Error:", error);
 
         showMessage(
             "Unable to connect to server.",
@@ -3686,8 +3681,8 @@ async function checkSignup(){
 
         return false;
     }
-
 }
+
 /* ======================
 
 REGISTER USER
