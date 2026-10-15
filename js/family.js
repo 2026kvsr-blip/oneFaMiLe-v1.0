@@ -2943,6 +2943,63 @@ if(actionName === "Tree View"){
 
     return;
 }
+    /* =====================================
+       OTHER FAMILIES → ADD MEMBER
+       ===================================== */
+
+    if(actionName === "Add Member"){
+
+        if(String(viewingFamily.allowAdd || "No") !== "Yes"){
+            alert("Adding members is not permitted for this family.");
+            return;
+        }
+
+        const sessionToken = sessionStorage.getItem("sessionToken") || "";
+        if(!sessionToken){
+            alert("Login session missing. Please login again.");
+            return;
+        }
+
+        // Preserve the logged-in user's own family before temporarily
+        // using the selected public family in the existing Add Member form.
+        if(!sessionStorage.getItem("publicAddPreviousFamily")){
+            sessionStorage.setItem(
+                "publicAddPreviousFamily",
+                localStorage.getItem("currentFamily") || ""
+            );
+        }
+
+        const targetFamily = {
+            familyId: String(viewingFamily.familyId || "").trim(),
+            familyName: String(viewingFamily.familyName || "").trim(),
+            publicFamilyAdd: true
+        };
+
+        if(!targetFamily.familyId){
+            alert("Selected Family ID is missing.");
+            return;
+        }
+
+        sessionStorage.setItem("publicFamilyAddMode", "Yes");
+        sessionStorage.setItem("publicAddTargetFamilyId", targetFamily.familyId);
+        currentFamily = targetFamily;
+        localStorage.setItem("currentFamily", JSON.stringify(targetFamily));
+        localStorage.removeItem("editMember");
+        sessionStorage.setItem("openMemberMode", "add");
+
+        setOtherFamilyNavigation("hidden");
+        if(typeof bindAddMemberButton === "function"){
+            bindAddMemberButton();
+        }
+        const addMemberBtn = document.getElementById("addMemberBtn");
+        if(addMemberBtn){
+            addMemberBtn.click();
+        }else{
+            alert("Add Member page button is not available.");
+        }
+        return;
+    }
+
     if(actionName !== "Search Members"){
 
         alert(
@@ -3324,22 +3381,34 @@ container.appendChild(results);
 
                     }
 
-                    if(viewingFamily.allowAdd === "Yes"){
+                    /*
+                     * PUBLIC FAMILY PERMISSIONS
+                     * Show each action only when the family owner has
+                     * explicitly enabled the corresponding permission.
+                     * Missing/blank values are treated as No.
+                     */
+                    const allowPublicAdd =
+                        String(viewingFamily.allowAdd || "")
+                            .trim()
+                            .toLowerCase() === "yes";
 
+                    const allowPublicEdit =
+                        String(viewingFamily.allowEdit || "")
+                            .trim()
+                            .toLowerCase() === "yes";
+
+                    if(allowPublicAdd){
                         addPublicAction(
                             "Add Member",
                             "Add Member"
                         );
-
                     }
 
-                    if(viewingFamily.allowEdit === "Yes"){
-
+                    if(allowPublicEdit){
                         addPublicAction(
-                            "Search – Edit Member",
+                            "Edit Member",
                             "Search – Edit Member"
                         );
-
                     }
 
                     container.appendChild(publicActions);
@@ -15608,6 +15677,25 @@ memberBackBtn.onclick =
             "ADD MEMBER → BACK"
         );
 
+        if(sessionStorage.getItem("publicFamilyAddMode") === "Yes"){
+            const previousFamily = sessionStorage.getItem("publicAddPreviousFamily") || "";
+            if(previousFamily){
+                localStorage.setItem("currentFamily", previousFamily);
+                try { currentFamily = JSON.parse(previousFamily); } catch(error) { currentFamily = null; }
+            }else{
+                localStorage.removeItem("currentFamily");
+                currentFamily = null;
+            }
+            const targetFamilyId = sessionStorage.getItem("publicAddTargetFamilyId") || "";
+            sessionStorage.removeItem("publicAddPreviousFamily");
+            sessionStorage.removeItem("publicFamilyAddMode");
+            sessionStorage.removeItem("publicAddTargetFamilyId");
+            sessionStorage.removeItem("openMemberMode");
+            if(typeof window.restorePublicFamilyDetail === "function"){
+                window.restorePublicFamilyDetail(targetFamilyId);
+            }
+        }
+
         familyBtn.click();
 
     };
@@ -16376,6 +16464,15 @@ saveMemberBtn.textContent =
         "saveMember"
     );
 
+    params.append(
+        "sessionToken",
+        sessionStorage.getItem("sessionToken") || ""
+    );
+
+    params.append(
+        "publicFamilyAdd",
+        sessionStorage.getItem("publicFamilyAddMode") === "Yes" ? "Yes" : "No"
+    );
 
     params.append(
         "familyId",
@@ -16649,6 +16746,20 @@ showMessage(
         /* ================================
            SUCCESS
            ================================ */
+
+        if(sessionStorage.getItem("publicFamilyAddMode") === "Yes"){
+            const previousFamily = sessionStorage.getItem("publicAddPreviousFamily") || "";
+            if(previousFamily){
+                localStorage.setItem("currentFamily", previousFamily);
+                try { currentFamily = JSON.parse(previousFamily); } catch(error) { currentFamily = null; }
+            }else{
+                localStorage.removeItem("currentFamily");
+                currentFamily = null;
+            }
+            sessionStorage.removeItem("publicAddPreviousFamily");
+            sessionStorage.removeItem("publicFamilyAddMode");
+            sessionStorage.removeItem("publicAddTargetFamilyId");
+        }
 
         showMessage(
     editMember
