@@ -3412,17 +3412,21 @@ container.appendChild(results);
     window.activateFamilyTab = activateFamilyTab;
 
     window.restorePublicFamilyDetail = async function(familyId){
-        // Restore the already-rendered family detail immediately. Do not reload
-        // the Other Families list or fetch the same family details again.
-        const familyPage = document.getElementById("familyPage");
-        const listContainer = document.getElementById("otherFamiliesContent");
-        const familyGridElement = document.getElementById("familyGrid");
+        // Rebuild the Family page first, then reacquire its NEW DOM elements.
+        // The previous implementation kept references to elements that were
+        // removed by familyBtn.click(), so the cached detail was written into
+        // a detached node and the newly built page loaded the list again.
         const cached = window.cachedPublicFamilyDetails;
-
         familyBtn.click();
 
-        if(familyGridElement) familyGridElement.style.display = "none";
+        const listContainer = document.getElementById("otherFamiliesContent");
+        const familyGridElement = document.getElementById("familyGrid");
         const settings = document.getElementById("familySettingsContainer");
+        const familyBackContainer = document.getElementById("familyBackContainer");
+        const myTab = document.getElementById("myFamilyTab");
+        const otherTab = document.getElementById("otherFamiliesTab");
+
+        if(familyGridElement) familyGridElement.style.display = "none";
         if(settings) settings.style.display = "none";
         if(listContainer){
             listContainer.style.display = "block";
@@ -3431,10 +3435,9 @@ container.appendChild(results);
                 listContainer.dataset.publicFamilyDetail = "true";
             }
         }
-        const familyBackContainer = document.getElementById("familyBackContainer");
         if(familyBackContainer) familyBackContainer.style.display = "none";
-        if(myFamilyTab){ myFamilyTab.style.background = "transparent"; myFamilyTab.style.color = "#2A6EB0"; }
-        if(otherFamiliesTab){ otherFamiliesTab.style.background = "#2A6EB0"; otherFamiliesTab.style.color = "white"; }
+        if(myTab){ myTab.style.background = "transparent"; myTab.style.color = "#2A6EB0"; }
+        if(otherTab){ otherTab.style.background = "#2A6EB0"; otherTab.style.color = "white"; }
         setOtherFamilyNavigation("detail");
     };
 
