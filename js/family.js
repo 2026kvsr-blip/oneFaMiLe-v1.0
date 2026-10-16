@@ -2562,7 +2562,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading public families...";
+    "Loading Oth families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
@@ -2762,8 +2762,12 @@ container.dataset.publicFamilyDetail = "true";
 setOtherFamilyNavigation("detail");
 if(myFamilyTab) myFamilyTab.style.display = "none";
 if(otherFamiliesTab) otherFamiliesTab.style.display = "none";
-window.otherFamilyReturnToDetail = function(){
-    card.click();
+window.otherFamilyReturnToDetail = async function(){
+    /* Invoke the selected card's existing detail loader directly and wait for it.
+       This avoids the intermediate Family page and Other Families list reload. */
+    if(typeof card.onclick === "function"){
+        await card.onclick();
+    }
 };
 window.currentPublicFamilyId = String(viewingFamily.familyId || "");
 
@@ -2900,6 +2904,15 @@ button.onclick = async function(){
 
 window.relationsReturnAction = async function(){
     window.currentPublicFamilyName = publicFamilyName;
+
+    /* Return directly to this family's detail using its existing card handler.
+       Do not rebuild the generic Family page or reload the Other Families list. */
+    if(typeof window.otherFamilyReturnToDetail === "function"){
+        await window.otherFamilyReturnToDetail();
+        return;
+    }
+
+    /* Fallback for cases where the original card handler is no longer available. */
     if(typeof window.restorePublicFamilyDetail === "function"){
         await window.restorePublicFamilyDetail(viewingFamily.familyId);
     }else{
