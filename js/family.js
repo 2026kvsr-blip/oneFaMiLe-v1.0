@@ -1,4 +1,6 @@
 
+
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2374,17 +2376,12 @@ if(page === "detail"){
     /* Remove the public Family ID shown under the title */
     document.getElementById("publicFamilyIdText")?.remove();
 
-    /* Restore the Family page title.
-       pageTitle() creates the title as: h2.page-title > img + span.
-       Therefore restore the span, not a direct text node. */
-    const titleImage = findFamilyPageTitleImage();
-    const titleContainer = titleImage ? titleImage.parentElement : null;
-    const titleLabel = titleContainer
-        ? titleContainer.querySelector(':scope > span')
-        : null;
-
-    if(titleLabel){
-        titleLabel.textContent = 'Family';
+    /* Restore only the Family page title, not other Family icons/labels. */
+    const familyPageTitle = document.querySelector(
+        "#homeContent h2.page-title > span"
+    );
+    if(familyPageTitle){
+        familyPageTitle.textContent = "Family";
     }
 
     if(typeof window.activateFamilyTab === "function"){
@@ -2543,7 +2540,6 @@ async function loadPublicFamilyMembers(
 
 }
 
-    
 /* =====================================
    LOAD PUBLIC FAMILIES
    ===================================== */
@@ -2563,7 +2559,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading Othe families...";
+    "Loading public families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
@@ -2774,42 +2770,20 @@ const publicFamilyName = String(
     viewingFamily.familyName || "Unnamed Family"
 ).trim().replace(/\s+Family$/i, "") + " Family";
 
-/* Find the existing Family title row */
-const titleImage = findFamilyPageTitleImage();
-
-const titleContainer = titleImage
-    ? titleImage.parentElement
+/* Update only the title span inside the Family page content.
+   Do not search by icon/text across the whole document: that can select
+   a different Family icon or leave the visible title unchanged. */
+const familyPageTitle = document.querySelector(
+    "#homeContent h2.page-title > span"
+);
+const titleContainer = familyPageTitle
+    ? familyPageTitle.parentElement
     : null;
 
-/* Remember the original page-title text once, then update only that title row. */
-const titleTextNode = titleContainer
-    ? Array.from(titleContainer.childNodes).find(node =>
-        node.nodeType === Node.TEXT_NODE && node.textContent.trim()
-      )
-    : null;
-
-if (titleTextNode && !window.originalFamilyTitleText) {
-    window.originalFamilyTitleText = titleTextNode.textContent;
-}
-
-if (titleTextNode) {
-    titleTextNode.textContent = " " + publicFamilyName;
-} else if (titleContainer) {
-    const titleLabel = Array.from(
-        titleContainer.querySelectorAll("h1,h2,h3,h4,span,div")
-    ).find(el =>
-        el !== titleImage &&
-        el.children.length === 0 &&
-        /\bFamily\b/i.test(el.textContent.trim())
-    );
-    if (titleLabel) {
-        if (!window.originalFamilyTitleText) {
-            window.originalFamilyTitleText = titleLabel.textContent;
-        }
-        titleLabel.textContent = publicFamilyName;
-    } else {
-        console.warn("Other family page title was not found.");
-    }
+if (familyPageTitle) {
+    familyPageTitle.textContent = publicFamilyName;
+} else {
+    console.warn("Other family page title span was not found.");
 }
 
 /* Remove previously added Family ID rows */
