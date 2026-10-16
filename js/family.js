@@ -1,6 +1,5 @@
 
 
-
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2621,7 +2620,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading public families...";
+    "Loading Other families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
