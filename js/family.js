@@ -2397,25 +2397,54 @@ if(page === "detail"){
     /* Remove the public Family ID shown under the title */
     document.getElementById("publicFamilyIdText")?.remove();
 
-    /* Restore the original Family title */
+    /* Restore the generic Family title when returning to Other Families list.
+       Search the icon's nearby title row because the title may be nested
+       inside a heading/span rather than a direct text node. */
     const titleImage = findFamilyPageTitleImage();
+    const titleContainer = titleImage ? titleImage.parentElement : null;
 
-    const titleContainer = titleImage
-        ? titleImage.parentElement
-        : null;
+    if(titleContainer){
+        let restored = false;
+        const roots = [
+            titleContainer,
+            titleContainer.parentElement,
+            titleContainer.parentElement
+                ? titleContainer.parentElement.parentElement
+                : null
+        ].filter(Boolean);
 
-    if(titleContainer && window.originalFamilyTitleText){
-        const titleNode = Array.from(titleContainer.childNodes)
-            .find(node =>
+        for(const root of roots){
+            const directText = Array.from(root.childNodes).find(node =>
                 node.nodeType === Node.TEXT_NODE &&
-                node.textContent.trim()
+                /\\bFamily\\b/i.test(String(node.textContent || "").trim())
             );
 
-        if(titleNode){
-            titleNode.textContent =
-                window.originalFamilyTitleText;
+            if(directText){
+                directText.textContent = " Family";
+                restored = true;
+                break;
+            }
+
+            const titleLabel = [root, ...root.querySelectorAll("h1,h2,h3,h4,span,div,strong,b")]
+                .find(el =>
+                    el !== titleImage &&
+                    el.children.length === 0 &&
+                    /\\bFamily$/i.test(String(el.textContent || "").trim())
+                );
+
+            if(titleLabel){
+                titleLabel.textContent = "Family";
+                restored = true;
+                break;
+            }
+        }
+
+        if(!restored){
+            console.warn("Could not restore generic Family title on Back.");
         }
     }
+
+    window.originalFamilyTitleText = "Family";
 
     if(typeof window.activateFamilyTab === "function"){
         await window.activateFamilyTab("other");
@@ -2592,7 +2621,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading Other families...";
+    "Loading public families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
