@@ -1,4 +1,6 @@
 
+
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2385,12 +2387,22 @@ if(page === "detail"){
         const titleNode = Array.from(titleContainer.childNodes)
             .find(node =>
                 node.nodeType === Node.TEXT_NODE &&
-                node.textContent.trim()
+                / Family$/i.test(String(node.textContent || "").trim())
             );
 
         if(titleNode){
-            titleNode.textContent =
-                window.originalFamilyTitleText;
+            titleNode.textContent = " " + window.originalFamilyTitleText.trim();
+        }else{
+            const titleElement = [titleContainer, ...titleContainer.querySelectorAll("*")]
+                .find(el =>
+                    el !== titleImage &&
+                    el.children.length === 0 &&
+                    / Family$/i.test(String(el.textContent || "").trim())
+                );
+
+            if(titleElement){
+                titleElement.textContent = window.originalFamilyTitleText.trim();
+            }
         }
     }
 
@@ -2780,42 +2792,51 @@ const publicFamilyName = String(
     viewingFamily.familyName || "Unnamed Family"
 ).trim().replace(/\s+Family$/i, "") + " Family";
 
-/* Find the existing Family title row */
+/* Find the existing Family title row.
+   The icon can be inside a wrapper while the visible title is nested. */
 const titleImage = findFamilyPageTitleImage();
 
 const titleContainer = titleImage
     ? titleImage.parentElement
     : null;
 
-/* Remember the original page-title text once, then update only that title row. */
+function findFamilyTitleTextElement(root){
+    if(!root) return null;
+    const all = [root, ...root.querySelectorAll("*")];
+    return all.find(el =>
+        el !== titleImage &&
+        el.children.length === 0 &&
+        String(el.textContent || "").trim() === "Family"
+    ) || null;
+}
+
 const titleTextNode = titleContainer
     ? Array.from(titleContainer.childNodes).find(node =>
-        node.nodeType === Node.TEXT_NODE && node.textContent.trim()
+        node.nodeType === Node.TEXT_NODE &&
+        String(node.textContent || "").trim() === "Family"
       )
     : null;
 
-if (titleTextNode && !window.originalFamilyTitleText) {
-    window.originalFamilyTitleText = titleTextNode.textContent;
+const titleTextElement = !titleTextNode
+    ? findFamilyTitleTextElement(titleContainer)
+    : null;
+
+if(!window.originalFamilyTitleText){
+    if(titleTextNode){
+        window.originalFamilyTitleText = titleTextNode.textContent;
+    }else if(titleTextElement){
+        window.originalFamilyTitleText = titleTextElement.textContent;
+    }else{
+        window.originalFamilyTitleText = "Family";
+    }
 }
 
-if (titleTextNode) {
+if(titleTextNode){
     titleTextNode.textContent = " " + publicFamilyName;
-} else if (titleContainer) {
-    const titleLabel = Array.from(
-        titleContainer.querySelectorAll("h1,h2,h3,h4,span,div")
-    ).find(el =>
-        el !== titleImage &&
-        el.children.length === 0 &&
-        /\bFamily\b/i.test(el.textContent.trim())
-    );
-    if (titleLabel) {
-        if (!window.originalFamilyTitleText) {
-            window.originalFamilyTitleText = titleLabel.textContent;
-        }
-        titleLabel.textContent = publicFamilyName;
-    } else {
-        console.warn("Other family page title was not found.");
-    }
+}else if(titleTextElement){
+    titleTextElement.textContent = publicFamilyName;
+}else{
+    console.warn("Other family page title text 'Family' was not found.");
 }
 
 /* Remove previously added Family ID rows */
