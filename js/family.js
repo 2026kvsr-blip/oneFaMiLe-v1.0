@@ -1,4 +1,6 @@
 
+
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2374,38 +2376,17 @@ if(page === "detail"){
     /* Remove the public Family ID shown under the title */
     document.getElementById("publicFamilyIdText")?.remove();
 
-    /* Restore only the Family page heading; do not touch bottom navigation. */
+    /* Restore the Family page title.
+       pageTitle() creates the title as: h2.page-title > img + span.
+       Therefore restore the span, not a direct text node. */
     const titleImage = findFamilyPageTitleImage();
     const titleContainer = titleImage ? titleImage.parentElement : null;
+    const titleLabel = titleContainer
+        ? titleContainer.querySelector(':scope > span')
+        : null;
 
-    if(titleContainer){
-        const searchRoot = titleContainer.parentElement || titleContainer;
-
-        // Restore a direct text node if the heading uses one.
-        Array.from(titleContainer.childNodes).forEach(node => {
-            if(
-                node.nodeType === Node.TEXT_NODE &&
-                /\b.+\s+Family\b/i.test(String(node.textContent || "").trim())
-            ){
-                node.textContent = " Family";
-            }
-        });
-
-        // Restore nested title text (the title is often inside a span/div).
-        const titleCandidates = [
-            ...titleContainer.querySelectorAll("h1,h2,h3,h4,span,div,strong,b"),
-            ...searchRoot.querySelectorAll("h1,h2,h3,h4,span,div,strong,b")
-        ];
-
-        titleCandidates.forEach(el => {
-            if(
-                el !== titleImage &&
-                el.children.length === 0 &&
-                /\b.+\s+Family\b/i.test(String(el.textContent || "").trim())
-            ){
-                el.textContent = "Family";
-            }
-        });
+    if(titleLabel){
+        titleLabel.textContent = 'Family';
     }
 
     if(typeof window.activateFamilyTab === "function"){
