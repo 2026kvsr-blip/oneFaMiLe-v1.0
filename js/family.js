@@ -2559,7 +2559,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading public families...";
+    "Loading other families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
