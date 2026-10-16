@@ -2300,7 +2300,7 @@ const otherFamilyNavigation = document.createElement("div");
 otherFamilyNavigation.id = "otherFamilyNavigation";
 otherFamilyNavigation.style.cssText = `
     position:fixed;
-    bottom:75px;
+    bottom:0px;
     left:0;
     right:0;
     display:none;
@@ -2351,21 +2351,46 @@ otherBackBtn.onclick = async function(){
         return;
     }
 
-    if(page === "detail"){
-        // Back from a selected public family must return to the
-        // Other Families list, never switch to My Family.
-        if(typeof window.activateFamilyTab === "function"){
-            await window.activateFamilyTab("other");
-        }else{
-            if(myFamilyTab) myFamilyTab.style.display = "";
-            if(otherFamiliesTab) otherFamiliesTab.style.display = "";
-            if(familyGrid) familyGrid.style.display = "none";
-            if(otherFamiliesContent) otherFamiliesContent.style.display = "block";
-            await loadPublicFamilies();
+   
+if(page === "detail"){
+
+    /* Remove the public Family ID shown under the title */
+    document.getElementById("publicFamilyIdText")?.remove();
+
+    /* Restore the original Family title */
+    const titleImage = Array.from(
+        document.querySelectorAll("img")
+    ).find(img =>
+        /Family1\.png/i.test(img.getAttribute("src") || "")
+    );
+
+    const titleContainer = titleImage
+        ? titleImage.parentElement
+        : null;
+
+    if(titleContainer && window.originalFamilyTitleText){
+        const titleNode = Array.from(titleContainer.childNodes)
+            .find(node =>
+                node.nodeType === Node.TEXT_NODE &&
+                node.textContent.trim()
+            );
+
+        if(titleNode){
+            titleNode.textContent =
+                window.originalFamilyTitleText;
         }
-        setOtherFamilyNavigation("list");
-        return;
     }
+
+    if(typeof window.activateFamilyTab === "function"){
+        await window.activateFamilyTab("other");
+    } else {
+        await loadPublicFamilies();
+    }
+
+    setOtherFamilyNavigation("list");
+    return;
+}
+
 
     if(page === "search"){
         setOtherFamilyNavigation("detail");
@@ -2737,29 +2762,81 @@ window.otherFamilyReturnToDetail = function(){
 window.currentPublicFamilyId = String(viewingFamily.familyId || "");
 
                     
-                    const publicFamilyName = String(
-                        family.familyName || viewingFamily.familyName || "Unnamed"
-                    ).trim().replace(/\s+Family$/i, "") + " Family";
+                 
+const publicFamilyName = String(
+    viewingFamily.familyName || "Unnamed Family"
+).trim().replace(/\s+Family$/i, "") + " Family";
 
-                    /* Update the existing Family icon/title instead of adding a duplicate heading. */
-                    const titleImage = Array.from(document.querySelectorAll("img"))
-                        .find(img => /Family1\.png/i.test(img.getAttribute("src") || ""));
-                    const titleContainer = titleImage ? titleImage.parentElement : null;
+/* Find the existing Family title row */
+const titleImage = Array.from(
+    document.querySelectorAll("img")
+).find(img =>
+    /Family1\.png/i.test(img.getAttribute("src") || "")
+);
 
-                    if (titleContainer) {
-                        const titleTextNode = Array.from(titleContainer.childNodes)
-                            .find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
-                        if (titleTextNode) {
-                            titleTextNode.textContent = " " + publicFamilyName;
-                        } else {
-                            const titleText = titleContainer.querySelector("h1,h2,h3,h4,span,div");
-                            if (titleText && titleText !== titleImage) {
-                                titleText.textContent = publicFamilyName;
-                            } else {
-                                titleContainer.appendChild(document.createTextNode(" " + publicFamilyName));
-                            }
-                        }
-                    }
+const titleContainer = titleImage
+    ? titleImage.parentElement
+    : null;
+
+/* Remember the original title only once */
+if (titleContainer && !window.originalFamilyTitleText) {
+    const originalNode = Array.from(titleContainer.childNodes)
+        .find(node =>
+            node.nodeType === Node.TEXT_NODE &&
+            node.textContent.trim()
+        );
+
+    window.originalFamilyTitleText = originalNode
+        ? originalNode.textContent
+        : " Family";
+}
+
+/* Update the title */
+if (titleContainer) {
+    const titleNode = Array.from(titleContainer.childNodes)
+        .find(node =>
+            node.nodeType === Node.TEXT_NODE &&
+            node.textContent.trim()
+        );
+
+    if (titleNode) {
+        titleNode.textContent = " " + publicFamilyName;
+    }
+}
+
+/* Remove previously added Family ID rows */
+const titleParent = titleContainer
+    ? titleContainer.parentElement
+    : null;
+
+if (titleParent) {
+    Array.from(titleParent.querySelectorAll("p"))
+        .filter(p =>
+            p.textContent.trim().startsWith("Family ID:")
+        )
+        .forEach(p => p.remove());
+}
+
+/* Display Family ID exactly once */
+const familyIdText = document.createElement("p");
+familyIdText.id = "publicFamilyIdText";
+familyIdText.textContent =
+    "Family ID: " + viewingFamily.familyId;
+
+familyIdText.style.cssText = `
+    margin: 4px 0 0;
+    padding: 0;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.3;
+`;
+
+if (titleContainer && titleContainer.parentElement) {
+    titleContainer.insertAdjacentElement(
+        "afterend",
+        familyIdText
+    );
+}
 
                     const familyIdText = document.createElement("p");
                     familyIdText.textContent = "Family ID: " + viewingFamily.familyId;
