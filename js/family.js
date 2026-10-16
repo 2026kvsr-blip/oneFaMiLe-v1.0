@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2561,7 +2562,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading Other families...";
+    "Loading public families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
@@ -3022,13 +3023,19 @@ if(actionName === "Tree View"){
             return;
         }
 
+        const publicAddReturnTarget = {
+            familyId: String(viewingFamily.familyId || "").trim(),
+            familyName: String(viewingFamily.familyName || "").trim().replace(/\s+Family$/i, "") + " Family",
+            allowAdd: String(viewingFamily.allowAdd || "No").trim()
+        };
+        /* Keep the selected public family in memory as well as session storage.
+           The Add Member save flow may clear session storage before Back is pressed. */
+        window.currentPublicFamilyAddTarget = publicAddReturnTarget;
+        window.currentPublicFamilyId = publicAddReturnTarget.familyId;
+        window.currentPublicFamilyName = publicAddReturnTarget.familyName;
         sessionStorage.setItem(
             "publicFamilyAddTarget",
-            JSON.stringify({
-                familyId: String(viewingFamily.familyId || "").trim(),
-                familyName: String(viewingFamily.familyName || "").trim(),
-                allowAdd: String(viewingFamily.allowAdd || "No").trim()
-            })
+            JSON.stringify(publicAddReturnTarget)
         );
 
         // Rebuild the Family page controls, then open Add Member
@@ -15765,14 +15772,19 @@ async function compressMemberPhotoForSheet(file){
    ============================= */
 
 memberBackBtn.onclick =
-    function(){
+    async function(e){
 
-        console.log(
-            "ADD MEMBER → BACK"
-        );
+        e?.preventDefault?.();
+        console.log("ADD MEMBER → BACK");
 
+        const publicTarget = window.currentPublicFamilyAddTarget ||
+            JSON.parse(sessionStorage.getItem("publicFamilyAddTarget") || "null");
+        if(publicTarget?.familyId && typeof window.restorePublicFamilyDetail === "function"){
+            await window.restorePublicFamilyDetail(publicTarget.familyId);
+            window.currentPublicFamilyAddTarget = null;
+            return;
+        }
         familyBtn.click();
-
     };
 
    
@@ -17638,11 +17650,12 @@ memberBackBtn.onclick =
             "MEMBER BACK CLICKED"
         );
 
-        const publicTarget = JSON.parse(
+        const publicTarget = window.currentPublicFamilyAddTarget || JSON.parse(
             sessionStorage.getItem("publicFamilyAddTarget") || "null"
         );
-        if(publicTarget && typeof window.restorePublicFamilyDetail === "function"){
+        if(publicTarget?.familyId && typeof window.restorePublicFamilyDetail === "function"){
             await window.restorePublicFamilyDetail(publicTarget.familyId);
+            window.currentPublicFamilyAddTarget = null;
             return;
         }
 
