@@ -2396,10 +2396,13 @@ if(page === "detail"){
 
 
     if(page === "search"){
-        setOtherFamilyNavigation("detail");
-        if(typeof window.otherFamilyReturnToDetail === "function"){
-            window.otherFamilyReturnToDetail();
+        const familyId = window.currentPublicFamilyId || (window.cachedPublicFamilyDetails && window.cachedPublicFamilyDetails.familyId);
+        if(typeof window.restorePublicFamilyDetail === "function" && familyId){
+            await window.restorePublicFamilyDetail(familyId);
+        }else{
+            setOtherFamilyNavigation("detail");
         }
+        return;
     }
 };
 
@@ -2559,7 +2562,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading other families...";
+    "Loading public families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
@@ -2769,6 +2772,7 @@ window.currentPublicFamilyId = String(viewingFamily.familyId || "");
 const publicFamilyName = String(
     viewingFamily.familyName || "Unnamed Family"
 ).trim().replace(/\s+Family$/i, "") + " Family";
+window.currentPublicFamilyName = publicFamilyName;
 
 /* Update only the title span inside the Family page content.
    Do not search by icon/text across the whole document: that can select
@@ -2866,6 +2870,7 @@ button.onclick = async function(){
 
         window.cachedPublicFamilyDetails = {
             familyId: viewingFamily.familyId,
+            familyName: publicFamilyName,
             html: container.innerHTML
         };
         button.disabled = true;
@@ -2894,6 +2899,7 @@ button.onclick = async function(){
             }
 
 window.relationsReturnAction = async function(){
+    window.currentPublicFamilyName = publicFamilyName;
     if(typeof window.restorePublicFamilyDetail === "function"){
         await window.restorePublicFamilyDetail(viewingFamily.familyId);
     }else{
@@ -2902,7 +2908,7 @@ window.relationsReturnAction = async function(){
 };
 
 setOtherFamilyNavigation("hidden");
-openRelationsPage(members);
+openRelationsPage(members, publicFamilyName);
         }catch(error){
 
             console.error(
@@ -2932,6 +2938,7 @@ if(actionName === "Tree View"){
 
     window.cachedPublicFamilyDetails = {
         familyId: viewingFamily.familyId,
+        familyName: publicFamilyName,
         html: container.innerHTML
     };
     button.disabled = true;
@@ -2960,6 +2967,7 @@ if(actionName === "Tree View"){
         }
 
         window.familyTreeReturnAction = async function(){
+            window.currentPublicFamilyName = publicFamilyName;
             if(typeof window.restorePublicFamilyDetail === "function"){
                 await window.restorePublicFamilyDetail(viewingFamily.familyId);
             }else{
@@ -3000,6 +3008,12 @@ if(actionName === "Tree View"){
        the destination for the Add Member form.
        ===================================== */
     if(actionName === "Add Member"){
+
+        window.cachedPublicFamilyDetails = {
+            familyId: viewingFamily.familyId,
+            familyName: publicFamilyName,
+            html: container.innerHTML
+        };
 
         if(
             String(viewingFamily.allowAdd || "")
@@ -3042,6 +3056,12 @@ if(actionName === "Tree View"){
 
         return;
     }
+    window.cachedPublicFamilyDetails = {
+        familyId: viewingFamily.familyId,
+        familyName: publicFamilyName,
+        html: container.innerHTML
+    };
+
     button.disabled = true;
     button.textContent = "Loading Members...";
 
@@ -3055,15 +3075,16 @@ if(actionName === "Tree View"){
 
         container.innerHTML = "";
 
+        /* Show the Search Member name in the existing main title only. */
+        const searchTitleImage = findFamilyPageTitleImage();
+        const searchTitleContainer = searchTitleImage ? searchTitleImage.parentElement : null;
+        const searchTitleSpan = searchTitleContainer ? searchTitleContainer.querySelector("span") : null;
+        if(searchTitleSpan){
+            searchTitleSpan.textContent = publicFamilyName + " - Search Member";
+        }
+
         /* Shared navigation bar handles Back/Home on Search Members. */
         setOtherFamilyNavigation("search");
-
-        const title =
-            document.createElement("h3");
-
-        title.textContent =
-            viewingFamily.familyName +
-            " - Search Members";
 
         const searchInput =
             document.createElement("input");
@@ -3356,7 +3377,6 @@ const fields = [
             showMembers
         );
 
-        container.appendChild(title);
         container.appendChild(searchInput);
 container.appendChild(sortBar);
 container.appendChild(results);
@@ -3551,30 +3571,62 @@ container.appendChild(results);
     window.activateFamilyTab = activateFamilyTab;
 
     window.restorePublicFamilyDetail = async function(familyId){
-        // Restore the already-rendered family detail immediately. Do not reload
-        // the Other Families list or fetch the same family details again.
-        const familyPage = document.getElementById("familyPage");
-        const listContainer = document.getElementById("otherFamiliesContent");
-        const familyGridElement = document.getElementById("familyGrid");
+        // Rebuild the Family page, then restore the selected public-family detail
+        // into the NEW DOM. Never use DOM elements captured before familyBtn.click().
         const cached = window.cachedPublicFamilyDetails;
+        const targetId = String(familyId || "");
 
         familyBtn.click();
 
-        if(familyGridElement) familyGridElement.style.display = "none";
+        const freshGrid = document.querySelector("#homeContent .grid-3x2");
+        if(freshGrid) freshGrid.style.display = "none";
+
         const settings = document.getElementById("familySettingsContainer");
         if(settings) settings.style.display = "none";
+
+        const listContainer = document.getElementById("otherFamiliesContent");
         if(listContainer){
             listContainer.style.display = "block";
-            if(cached && String(cached.familyId) === String(familyId)){
-                listContainer.innerHTML = cached.html;
+            if(cached && String(cached.familyId || "") === targetId){
+                listContainer.innerHTML = cached.html || "";
                 listContainer.dataset.publicFamilyDetail = "true";
             }
         }
+
+        const myTab = document.getElementById("myFamilyTab");
+        const otherTab = document.getElementById("otherFamiliesTab");
+        if(myTab) myTab.style.display = "none";
+        if(otherTab) otherTab.style.display = "none";
+
+        const familyName = String(
+            (cached && cached.familyName) || window.currentPublicFamilyName || "Family"
+        ).trim();
+
+        // Update only the title span next to the Family page-title icon.
+        const titleImage = findFamilyPageTitleImage();
+        const titleContainer = titleImage ? titleImage.parentElement : null;
+        const titleSpan = titleContainer ? titleContainer.querySelector("span") : null;
+        if(titleSpan) titleSpan.textContent = familyName;
+
+        // Restore one Family ID row on the selected-family detail page.
+        document.getElementById("publicFamilyIdText")?.remove();
+        if(titleContainer && targetId){
+            const idRow = document.createElement("p");
+            idRow.id = "publicFamilyIdText";
+            idRow.textContent = "Family ID: " + targetId;
+            idRow.style.cssText = "margin:4px 0 0;padding:0;text-align:center;font-size:16px;line-height:1.3;";
+            titleContainer.insertAdjacentElement("afterend", idRow);
+        }
+
         const familyBackContainer = document.getElementById("familyBackContainer");
         if(familyBackContainer) familyBackContainer.style.display = "none";
-        if(myFamilyTab){ myFamilyTab.style.background = "transparent"; myFamilyTab.style.color = "#2A6EB0"; }
-        if(otherFamiliesTab){ otherFamiliesTab.style.background = "#2A6EB0"; otherFamiliesTab.style.color = "white"; }
-        setOtherFamilyNavigation("detail");
+        if(myTab){ myTab.style.background = "transparent"; myTab.style.color = "#2A6EB0"; }
+        if(otherTab){ otherTab.style.background = "#2A6EB0"; otherTab.style.color = "white"; }
+
+        window.currentPublicFamilyId = targetId;
+        window.currentPublicFamilyName = familyName;
+        window.setOtherFamilyNavigation?.("detail");
+        sessionStorage.removeItem("publicFamilyAddTarget");
     };
 
     if(myFamilyTab){
@@ -3744,7 +3796,7 @@ if(familyBackBtn){
         showHome();
     };
 }
-function openRelationsPage(publicMembers = null){
+function openRelationsPage(publicMembers = null, publicFamilyTitle = ""){
     console.log(
         "OPENING RELATIONS PAGE"
     );
@@ -3756,7 +3808,7 @@ function openRelationsPage(publicMembers = null){
     `
     +
     pageTitle(
-        "Relations",
+        publicFamilyTitle ? `${publicFamilyTitle} - Relations` : "Relations",
         "images/colorbtns/Relations1.png"
     )
     +
@@ -5158,7 +5210,15 @@ if(!relationsMemberSelected){
 if(relationsBackBtn){
 
     relationsBackBtn.onclick =
-        function(){
+        async function(){
+
+            // Public Other Families Relations has one-step Back to its family detail.
+            const publicReturnAction = window.relationsReturnAction;
+            if(typeof publicReturnAction === "function"){
+                window.relationsReturnAction = null;
+                await publicReturnAction();
+                return;
+            }
 
             /* =================================
                MEMBER SELECTED
@@ -17569,13 +17629,21 @@ if(memberBackBtn){
    ============================= */
 
 memberBackBtn.onclick =
-    function(e){
+    async function(e){
 
         e.preventDefault();
 
         console.log(
             "MEMBER BACK CLICKED"
         );
+
+        const publicTarget = JSON.parse(
+            sessionStorage.getItem("publicFamilyAddTarget") || "null"
+        );
+        if(publicTarget && typeof window.restorePublicFamilyDetail === "function"){
+            await window.restorePublicFamilyDetail(publicTarget.familyId);
+            return;
+        }
 
         familyBtn.click();
 
