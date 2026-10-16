@@ -2838,16 +2838,7 @@ if (titleContainer && titleContainer.parentElement) {
     );
 }
 
-                    const familyIdText = document.createElement("p");
-                    familyIdText.textContent = "Family ID: " + viewingFamily.familyId;
-                    familyIdText.style.cssText = `
-                        margin: 4px 0 0;
-                        padding: 0;
-                        text-align: center;
-                        font-size: 16px;
-                        line-height: 1.3;
-                    `;
-
+                   
                     /* Keep the ID directly below the existing icon/title row. */
                     if (titleContainer && titleContainer.parentElement) {
                         titleContainer.insertAdjacentElement("afterend", familyIdText);
