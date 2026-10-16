@@ -2562,7 +2562,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading Oth families...";
+    "Loading Other families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
@@ -2762,8 +2762,12 @@ container.dataset.publicFamilyDetail = "true";
 setOtherFamilyNavigation("detail");
 if(myFamilyTab) myFamilyTab.style.display = "none";
 if(otherFamiliesTab) otherFamiliesTab.style.display = "none";
-window.otherFamilyReturnToDetail = function(){
-    card.click();
+window.otherFamilyReturnToDetail = async function(){
+    /* Reopen this selected family's detail directly from its existing handler.
+       Do not navigate through Family or reload the Other Families list. */
+    if(typeof card.onclick === "function"){
+        await card.onclick();
+    }
 };
 window.currentPublicFamilyId = String(viewingFamily.familyId || "");
 
@@ -3581,70 +3585,36 @@ container.appendChild(results);
 
     window.restorePublicFamilyDetail = async function(familyId){
         /*
-         * Rebuild the selected public-family detail using its real card handler,
-         * so the restored action buttons receive fresh event handlers. Keep the
-         * content area invisible during the internal rebuild so users do not see
-         * the intermediate generic Family page and Other Families list.
+         * Return directly to the selected public-family detail by invoking
+         * that family's original card handler. This avoids rebuilding the
+         * generic Family page and reloading the entire Other Families list.
          */
         const targetId = String(familyId || window.currentPublicFamilyId || "").trim();
         if(!targetId) return;
 
-        const homeContentElement = document.getElementById("homeContent");
-        const previousVisibility = homeContentElement
-            ? homeContentElement.style.visibility
-            : "";
+        const currentId = String(window.currentPublicFamilyId || "").trim();
+        const directReturn = window.otherFamilyReturnToDetail;
 
-        if(homeContentElement){
-            homeContentElement.style.visibility = "hidden";
-        }
-
-        try{
-            familyBtn.click();
-
-            /* Recreate the Other Families list with fresh cards and handlers. */
-            if(typeof window.activateFamilyTab === "function"){
-                await window.activateFamilyTab("other");
-            } else {
-                await loadPublicFamilies();
-            }
-
+        if(currentId === targetId && typeof directReturn === "function"){
+            await directReturn();
+        } else {
+            /* Safe fallback only when the selected family's handler is unavailable. */
             const listContainer = document.getElementById("otherFamiliesContent");
-            if(!listContainer){
-                console.error("Other Families container is missing while restoring:", targetId);
-                return;
-            }
-
-            const targetCard = Array.from(
+            const targetCard = listContainer && Array.from(
                 listContainer.querySelectorAll("[data-family-id]")
             ).find(card => String(card.dataset.familyId || "").trim() === targetId);
 
-            if(!targetCard || typeof targetCard.onclick !== "function"){
-                console.error("Unable to restore selected public family:", targetId);
-                setOtherFamilyNavigation("list");
+            if(targetCard && typeof targetCard.onclick === "function"){
+                await targetCard.onclick();
+            } else {
+                console.error("Selected public-family detail handler is unavailable:", targetId);
                 return;
             }
-
-            /* Run the original card handler to rebuild detail and bind its buttons. */
-            await targetCard.onclick();
-
-            const titleSpan = document.querySelector("#homeContent h2.page-title > span");
-            const familyName = String(
-                window.currentPublicFamilyName ||
-                (window.cachedPublicFamilyDetails && window.cachedPublicFamilyDetails.familyName) ||
-                "Family"
-            ).trim();
-            if(titleSpan) titleSpan.textContent = familyName;
-
-            window.currentPublicFamilyId = targetId;
-            window.setOtherFamilyNavigation?.("detail");
-            sessionStorage.removeItem("publicFamilyAddTarget");
-        } finally {
-            /* Always reveal the final page, including when restoration fails. */
-            const currentHomeContent = document.getElementById("homeContent");
-            if(currentHomeContent){
-                currentHomeContent.style.visibility = previousVisibility;
-            }
         }
+
+        window.currentPublicFamilyId = targetId;
+        window.setOtherFamilyNavigation?.("detail");
+        sessionStorage.removeItem("publicFamilyAddTarget");
     };
 
     if(myFamilyTab){
