@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2792,15 +2793,35 @@ if (titleContainer && !window.originalFamilyTitleText) {
 }
 
 /* Update the title */
+
 if (titleContainer) {
-    const titleNode = Array.from(titleContainer.childNodes)
-        .find(node =>
-            node.nodeType === Node.TEXT_NODE &&
-            node.textContent.trim()
+    let parent = titleContainer;
+    let updated = false;
+
+    for (let level = 0; level < 4 && parent && !updated; level++) {
+        const candidates = parent.querySelectorAll(
+            "h1, h2, h3, h4, span, div"
         );
 
-    if (titleNode) {
-        titleNode.textContent = " " + publicFamilyName;
+        for (const el of candidates) {
+            if (
+                el !== titleImage &&
+                el.children.length === 0 &&
+                el.textContent.trim() === "Family"
+            ) {
+                el.textContent = publicFamilyName;
+                updated = true;
+                break;
+            }
+        }
+
+        parent = parent.parentElement;
+    }
+
+    if (!updated) {
+        console.warn(
+            "Public family title element was not found."
+        );
     }
 }
 
