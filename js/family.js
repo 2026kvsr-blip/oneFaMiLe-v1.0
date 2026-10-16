@@ -2820,7 +2820,7 @@ if (titleContainer) {
 
     if (!updated) {
         console.warn(
-            "Public family title element was not found."
+            "Other family title element was not found."
         );
     }
 }
