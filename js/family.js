@@ -169,6 +169,24 @@ function clearOldFamilyCacheForCurrentUser(){
 }
 
 /* =====================================
+   FIND THE FAMILY PAGE TITLE ICON ONLY
+   Excludes bottom navigation buttons so their labels never change.
+   ===================================== */
+function findFamilyPageTitleImage(){
+    return Array.from(document.querySelectorAll('img[src*="Family1.png"]'))
+        .find(img => {
+            if (img.closest('button, a, nav, #bottomNav, .bottom-nav, .bottom-navigation')) return false;
+            const parent = img.parentElement;
+            if (!parent) return false;
+            const directText = Array.from(parent.childNodes)
+                .filter(node => node.nodeType === Node.TEXT_NODE)
+                .map(node => node.textContent.trim())
+                .join(' ');
+            return /\bFamily\b/i.test((directText || parent.textContent || '').trim());
+        }) || null;
+}
+
+/* =====================================
    FAMILY MAIN PAGE
    ===================================== */
 
@@ -2359,11 +2377,7 @@ if(page === "detail"){
     document.getElementById("publicFamilyIdText")?.remove();
 
     /* Restore the original Family title */
-    const titleImage = Array.from(
-        document.querySelectorAll("img")
-    ).find(img =>
-        /Family1\.png/i.test(img.getAttribute("src") || "")
-    );
+    const titleImage = findFamilyPageTitleImage();
 
     const titleContainer = titleImage
         ? titleImage.parentElement
@@ -2769,59 +2783,40 @@ const publicFamilyName = String(
 ).trim().replace(/\s+Family$/i, "") + " Family";
 
 /* Find the existing Family title row */
-const titleImage = Array.from(
-    document.querySelectorAll("img")
-).find(img =>
-    /Family1\.png/i.test(img.getAttribute("src") || "")
-);
+const titleImage = findFamilyPageTitleImage();
 
 const titleContainer = titleImage
     ? titleImage.parentElement
     : null;
 
-/* Remember the original title only once */
-if (titleContainer && !window.originalFamilyTitleText) {
-    const originalNode = Array.from(titleContainer.childNodes)
-        .find(node =>
-            node.nodeType === Node.TEXT_NODE &&
-            node.textContent.trim()
-        );
+/* Remember the original page-title text once, then update only that title row. */
+const titleTextNode = titleContainer
+    ? Array.from(titleContainer.childNodes).find(node =>
+        node.nodeType === Node.TEXT_NODE && node.textContent.trim()
+      )
+    : null;
 
-    window.originalFamilyTitleText = originalNode
-        ? originalNode.textContent
-        : " Family";
+if (titleTextNode && !window.originalFamilyTitleText) {
+    window.originalFamilyTitleText = titleTextNode.textContent;
 }
 
-/* Update the title */
-
-if (titleContainer) {
-    let parent = titleContainer;
-    let updated = false;
-
-    for (let level = 0; level < 4 && parent && !updated; level++) {
-        const candidates = parent.querySelectorAll(
-            "h1, h2, h3, h4, span, div"
-        );
-
-        for (const el of candidates) {
-            if (
-                el !== titleImage &&
-                el.children.length === 0 &&
-                el.textContent.trim() === "Family"
-            ) {
-                el.textContent = publicFamilyName;
-                updated = true;
-                break;
-            }
+if (titleTextNode) {
+    titleTextNode.textContent = " " + publicFamilyName;
+} else if (titleContainer) {
+    const titleLabel = Array.from(
+        titleContainer.querySelectorAll("h1,h2,h3,h4,span,div")
+    ).find(el =>
+        el !== titleImage &&
+        el.children.length === 0 &&
+        /\bFamily\b/i.test(el.textContent.trim())
+    );
+    if (titleLabel) {
+        if (!window.originalFamilyTitleText) {
+            window.originalFamilyTitleText = titleLabel.textContent;
         }
-
-        parent = parent.parentElement;
-    }
-
-    if (!updated) {
-        console.warn(
-            "Other family title element was not found."
-        );
+        titleLabel.textContent = publicFamilyName;
+    } else {
+        console.warn("Other family page title was not found.");
     }
 }
 
@@ -2859,13 +2854,7 @@ if (titleContainer && titleContainer.parentElement) {
     );
 }
 
-                   
-                    /* Keep the ID directly below the existing icon/title row. */
-                    if (titleContainer && titleContainer.parentElement) {
-                        titleContainer.insertAdjacentElement("afterend", familyIdText);
-                    } else {
-                        container.appendChild(familyIdText);
-                    }
+
 
                     /* =====================================
                        PUBLIC FAMILY PERMISSION BUTTONS
