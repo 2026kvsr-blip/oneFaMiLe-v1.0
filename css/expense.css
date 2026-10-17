@@ -2,14 +2,16 @@
 .expense-page{max-width:760px;margin:0 auto;padding:8px 10px 28px;box-sizing:border-box;color:#17324d}
 .expense-page .expense-title{text-align:center;color:#2A6EB0;margin:8px 0 18px;font-size:22px}
 .expense-page .expense-form,.expense-page .expense-panel{background:#f0f7ff;border:1px solid #c4d4ff;border-radius:18px;padding:14px 12px;box-sizing:border-box}
-.expense-page .expense-field{display:grid;grid-template-columns:minmax(145px, 42%) 1fr;align-items:center;gap:5px;margin:0 0 12px}
-.expense-page .expense-label{display:grid;grid-template-columns:1fr 8px;gap:1px;align-items:center;font-size:14px;font-weight:600;min-width:0}
+.expense-page .expense-field{display:grid;grid-template-columns:minmax(0, 39%) minmax(0, 1fr);align-items:center;gap:4px;margin:0 0 12px}
+.expense-page .expense-label{display:grid;grid-template-columns:minmax(0, 1fr) 8px;gap:0;align-items:center;font-size:14px;font-weight:600;min-width:0}
 .expense-page .expense-label-text{overflow-wrap:anywhere}
 .expense-page .expense-colon{justify-self:start}
-.expense-page input,.expense-page select,.expense-page textarea{width:100%;min-width:0;box-sizing:border-box;border:1px solid #a8bfd8;border-radius:8px;background:#fff;color:#20364b;padding:10px;font:inherit;font-size:14px;outline-color:#4a9fe8}
+.expense-page input,.expense-page select,.expense-page textarea{display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box;border:1px solid #a8bfd8;border-radius:8px;background:#fff;color:#20364b;padding:10px;font:inherit;font-size:14px;outline-color:#4a9fe8}
+.expense-page input[type="date"]{-webkit-appearance:none;appearance:none;text-align:left;text-align-last:left;padding-left:10px}
 .expense-page textarea{min-height:72px;resize:vertical}
 .expense-page .expense-help{font-size:12px;color:#61778b;margin:-4px 0 12px 42%;}
-.expense-page .expense-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.expense-page .expense-actions{display:flex;gap:8px;justify-content:center;flex-wrap:nowrap;margin-top:16px}
+.expense-page .expense-actions button{flex:0 1 auto;min-width:0;padding:10px 13px;white-space:nowrap}
 .expense-page .expense-primary,.expense-page .expense-secondary,.expense-page .expense-small{border:0;border-radius:10px;padding:11px 18px;font-weight:600;cursor:pointer}
 .expense-page .expense-primary{background:#4A9FE8;color:#fff}
 .expense-page .expense-secondary{background:#e4edf8;color:#214e79;border:1px solid #b8cce2}
@@ -33,9 +35,12 @@
 @media(max-width:480px){
  .expense-page{padding:6px 7px 22px}
  .expense-page .expense-form,.expense-page .expense-panel{padding:11px 8px;border-radius:14px}
- .expense-page .expense-field{grid-template-columns:minmax(126px,42%) 1fr;gap:4px;margin-bottom:10px}
- .expense-page .expense-label{font-size:12px;grid-template-columns:1fr 7px}
+ .expense-page .expense-field{grid-template-columns:minmax(0,39%) minmax(0,1fr);gap:3px;margin-bottom:10px}
+ .expense-page .expense-label{font-size:12px;grid-template-columns:minmax(0,1fr) 7px}
  .expense-page input,.expense-page select,.expense-page textarea{padding:9px 7px;font-size:13px}
+ .expense-page input[type="date"]{padding-left:7px}
+ .expense-page .expense-actions{gap:6px}
+ .expense-page .expense-actions button{padding:10px 9px;font-size:12px}
  .expense-page .expense-filter-grid{grid-template-columns:1fr}
  .expense-page .expense-help{margin-left:42%}
 }
