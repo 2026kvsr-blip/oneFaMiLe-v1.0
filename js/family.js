@@ -1,4 +1,6 @@
 
+
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2562,7 +2564,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading pub families...";
+    "Loading public families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
@@ -3129,6 +3131,10 @@ if(actionName === "Tree View"){
                 sessionStorage.setItem("publicFamilyEditPreviousMembers", localStorage.getItem("familyMembers") || "");
             }
             sessionStorage.setItem("publicFamilyEditTarget", JSON.stringify(target));
+            // Keep the selected public family's identity and member list separately.
+            // The Family button may reload the logged-in user's own family (e.g. KaniS),
+            // so restore this target immediately before opening the edit form.
+            sessionStorage.setItem("publicFamilyEditMembers", JSON.stringify(members));
             localStorage.setItem("currentFamily", JSON.stringify({familyId: target.familyId, familyName: target.familyName}));
             localStorage.setItem("familyMembers", JSON.stringify(members));
             setOtherFamilyNavigation("hidden");
@@ -9606,6 +9612,7 @@ let membersLoaded =
                         if(publicEditTarget){
                             if(window.restoreCachedPublicFamilyDetailDirectly?.()){
                                 sessionStorage.removeItem("publicFamilyEditTarget");
+                                sessionStorage.removeItem("publicFamilyEditMembers");
                                 const oldFamily = sessionStorage.getItem("publicFamilyEditPreviousCurrentFamily");
                                 const oldMembers = sessionStorage.getItem("publicFamilyEditPreviousMembers");
                                 if(oldFamily) localStorage.setItem("currentFamily", oldFamily); else localStorage.removeItem("currentFamily");
@@ -9979,6 +9986,18 @@ if(editInputWrap){
 
 
                if(addMemberBtn){
+
+    const publicEditTarget = JSON.parse(sessionStorage.getItem("publicFamilyEditTarget") || "null");
+    const publicEditMembers = JSON.parse(sessionStorage.getItem("publicFamilyEditMembers") || "[]");
+    if(publicEditTarget){
+        // familyBtn.click() can restore the logged-in user's family. Reapply the
+        // selected public family's data immediately before the edit form is built.
+        localStorage.setItem("currentFamily", JSON.stringify({
+            familyId: publicEditTarget.familyId || "",
+            familyName: publicEditTarget.familyName || ""
+        }));
+        localStorage.setItem("familyMembers", JSON.stringify(publicEditMembers));
+    }
 
     sessionStorage.setItem(
         "openMemberMode",
