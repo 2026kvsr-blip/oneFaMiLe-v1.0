@@ -38,7 +38,7 @@
   function status(message,type=''){const el=$('expenseStatus');if(el){el.className='expense-status '+type;el.textContent=message||'';}}
   function field(label, control, id){return `<div class="expense-field"><label class="expense-label" for="${id||''}"><span class="expense-label-text">${label}</span><span class="expense-colon">:</span></label>${control}</div>`}
   function selectOptions(items,placeholder='Select') {return `<option value="">${placeholder}</option>`+items.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
-  function shell(title,inner){return `<div class="expense-page"><h2 class="expense-title">${esc(title)}</h2>${inner}<div class="expense-actions"><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div></div>`}
+  function shell(title,inner,backInside=false){return `<div class="expense-page"><h2 class="expense-title">${esc(title)}</h2>${inner}${backInside?'':`<div class="expense-actions"><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>`}</div>`}
   function goBack(){const b=$('expensesBtn');if(b)b.click();else if(typeof showHome==='function')showHome()}
   function openMenu(){
     const btn=$('expensesBtn'); if(!btn)return;
@@ -85,9 +85,9 @@
       ${field('Sensitive',`<select id="exSensitive" name="sensitive" required><option value="No" selected>No</option><option value="Yes">Yes</option></select>`,'exSensitive')}
       ${field('Description',`<textarea id="exDescription" name="description" maxlength="1000" placeholder="Enter expense details"></textarea>`,'exDescription')}
       <div id="expenseStatus" class="expense-status" role="status"></div>
-      <div class="expense-actions"><button class="expense-primary" type="submit" id="expenseSaveBtn">Save Expense</button><button class="expense-secondary" type="reset" id="expenseResetBtn">Reset</button></div>
+      <div class="expense-actions"><button class="expense-primary" type="submit" id="expenseSaveBtn">Save</button><button class="expense-secondary" type="reset" id="expenseResetBtn">Reset</button><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>
     </form>`;
-    showPage(shell('Add Expense',inner));
+    showPage(shell('Add Expense',inner,true));
     $('expenseModuleBack').onclick=goBack;
     const cat=$('exCategory'),sub=$('exSubCategory'),vehicleFields=$('exVehicleFields');
     cat.onchange=()=>{
@@ -112,7 +112,7 @@
         status('Expense saved successfully.','success');
         $('expenseForm').reset();$('exDate').value=dateToday();$('exSpentBySearch').value=defaultName;vehicleFields.classList.add('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');
       }catch(err){status(err.message||'Unable to save expense. Please try again.','error')}
-      finally{btn.disabled=false;btn.textContent='Save Expense'}
+      finally{btn.disabled=false;btn.textContent='Save'}
     };
     $('expenseResetBtn').onclick=()=>setTimeout(()=>{ $('exDate').value=dateToday();$('exSpentBySearch').value=defaultName;vehicleFields.classList.add('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');status('');},0);
   }
