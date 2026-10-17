@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2452,7 +2453,8 @@ async function loadPublicFamilyMembers(
     const allowedPurposes = {
         search: "showSearch",
         relations: "showRelations",
-        tree: "showTree"
+        tree: "showTree",
+        edit: "allowEdit"
     };
 
     const permissionName =
@@ -3090,6 +3092,61 @@ if(actionName === "Tree View"){
             alert("Add Member page could not be opened. Please try again.");
         }
 
+        return;
+    }
+
+    /* =====================================
+       OTHER FAMILIES → EDIT MEMBER
+       ===================================== */
+    if(actionName === "Search – Edit Member" || actionName === "Edit Member"){
+        if(String(viewingFamily.allowEdit || "").trim().toLowerCase() !== "yes"){
+            alert("Editing members is not permitted for this family.");
+            return;
+        }
+
+        button.disabled = true;
+        button.textContent = "Loading Members...";
+        try{
+            const members = await loadPublicFamilyMembers(viewingFamily, "edit");
+            if(!members.length){
+                alert("No members found in this family.");
+                return;
+            }
+
+            // Preserve the currently open public-family detail page for an instant Back.
+            window.cachePublicFamilyDetailForDirectReturn?.();
+            window.currentPublicFamilyId = String(viewingFamily.familyId || "");
+            window.currentPublicFamilyName = String(publicFamilyName || viewingFamily.familyName || "");
+
+            const target = {
+                familyId: String(viewingFamily.familyId || "").trim(),
+                familyName: String(viewingFamily.familyName || publicFamilyName || "").trim(),
+                allowEdit: String(viewingFamily.allowEdit || "No").trim()
+            };
+            if(!/\sFamily$/i.test(target.familyName)) target.familyName += " Family";
+
+            // Preserve the user's own family/member cache before temporarily using this public family.
+            if(!sessionStorage.getItem("publicFamilyEditPreviousCurrentFamily")){
+                sessionStorage.setItem("publicFamilyEditPreviousCurrentFamily", localStorage.getItem("currentFamily") || "");
+                sessionStorage.setItem("publicFamilyEditPreviousMembers", localStorage.getItem("familyMembers") || "");
+            }
+            sessionStorage.setItem("publicFamilyEditTarget", JSON.stringify(target));
+            localStorage.setItem("currentFamily", JSON.stringify({familyId: target.familyId, familyName: target.familyName}));
+            localStorage.setItem("familyMembers", JSON.stringify(members));
+            setOtherFamilyNavigation("hidden");
+
+            if(typeof window.openSearchEditMemberPage === "function"){
+                window.openSearchEditMemberPage();
+            }else{
+                throw new Error("Edit Member page could not be opened.");
+            }
+        }catch(error){
+            console.error("OTHER FAMILY EDIT MEMBER ERROR:", error);
+            alert(error.message || "Unable to load members for editing.");
+        }finally{
+            button.disabled = false;
+            button.textContent = label;
+        }
         return;
     }
 
@@ -9391,7 +9448,9 @@ window.openSearchEditMemberPage =
             showPage(
 
                 pageTitle(
-"Update Member",
+                    (JSON.parse(sessionStorage.getItem("publicFamilyEditTarget") || "null")?.familyName || "")
+                        ? (JSON.parse(sessionStorage.getItem("publicFamilyEditTarget") || "null").familyName + " - Edit Member")
+                        : "Update Member",
                     "images/colorbtns/CustomSearch1.png"
                 )
 
@@ -9545,11 +9604,21 @@ let membersLoaded =
                             );
 
 
-                        if(familyBtn){
-
-                            familyBtn.click();
-
+                        const publicEditTarget = JSON.parse(sessionStorage.getItem("publicFamilyEditTarget") || "null");
+                        if(publicEditTarget){
+                            if(window.restoreCachedPublicFamilyDetailDirectly?.()){
+                                sessionStorage.removeItem("publicFamilyEditTarget");
+                                const oldFamily = sessionStorage.getItem("publicFamilyEditPreviousCurrentFamily");
+                                const oldMembers = sessionStorage.getItem("publicFamilyEditPreviousMembers");
+                                if(oldFamily) localStorage.setItem("currentFamily", oldFamily); else localStorage.removeItem("currentFamily");
+                                if(oldMembers) localStorage.setItem("familyMembers", oldMembers); else localStorage.removeItem("familyMembers");
+                                sessionStorage.removeItem("publicFamilyEditPreviousCurrentFamily");
+                                sessionStorage.removeItem("publicFamilyEditPreviousMembers");
+                                setOtherFamilyNavigation?.("detail");
+                                return;
+                            }
                         }
+                        if(familyBtn){ familyBtn.click(); }
 
                     };
 
@@ -10434,13 +10503,18 @@ function bindAddMemberButton(){
     const publicAddTargetForTitle = JSON.parse(
         sessionStorage.getItem("publicFamilyAddTarget") || "null"
     );
+    const publicEditTargetForTitle = JSON.parse(
+        sessionStorage.getItem("publicFamilyEditTarget") || "null"
+    );
     const publicAddFamilyNameForTitle = publicAddTargetForTitle
-        ? String(publicAddTargetForTitle.familyName || "Unnamed Family")
-            .trim().replace(/\s+Family$/i, "") + " Family"
+        ? String(publicAddTargetForTitle.familyName || "Unnamed Family").trim().replace(/\s+Family$/i, "") + " Family"
         : "";
-    const addMemberPageTitle = publicAddFamilyNameForTitle
-        ? publicAddFamilyNameForTitle + " - Add Member"
-        : "Add Member";
+    const publicEditFamilyNameForTitle = publicEditTargetForTitle
+        ? String(publicEditTargetForTitle.familyName || "Unnamed Family").trim().replace(/\s+Family$/i, "") + " Family"
+        : "";
+    const addMemberPageTitle = publicEditFamilyNameForTitle
+        ? publicEditFamilyNameForTitle + " - Edit Member"
+        : (publicAddFamilyNameForTitle ? publicAddFamilyNameForTitle + " - Add Member" : "Add Member");
 
        showPage(`
 
@@ -11856,8 +11930,10 @@ if(existingPhoto){
 
     if(pageHeading){
 
-        pageHeading.textContent =
-    "Update Member";
+        const publicEditTargetForHeading = JSON.parse(sessionStorage.getItem("publicFamilyEditTarget") || "null");
+        pageHeading.textContent = publicEditTargetForHeading
+            ? (String(publicEditTargetForHeading.familyName || "Unnamed Family").trim().replace(/\s+Family$/i, "") + " Family - Edit Member")
+            : "Update Member";
 
     }
 
@@ -15929,21 +16005,13 @@ saveMemberBtn.onclick = async function(){
        CURRENT FAMILY
        ================================ */
 
- const publicFamilyAddTarget =
-    JSON.parse(
-        sessionStorage.getItem("publicFamilyAddTarget") || "null"
-    );
+ const publicFamilyAddTarget = JSON.parse(sessionStorage.getItem("publicFamilyAddTarget") || "null");
+ const publicFamilyEditTarget = JSON.parse(sessionStorage.getItem("publicFamilyEditTarget") || "null");
+ const publicFamilySaveTarget = publicFamilyEditTarget || publicFamilyAddTarget;
 
- let currentFamily = publicFamilyAddTarget
-    ? {
-        familyId: publicFamilyAddTarget.familyId || "",
-        familyName: publicFamilyAddTarget.familyName || ""
-      }
-    : JSON.parse(
-        localStorage.getItem(
-            "currentFamily"
-        ) || "null"
-    );
+ let currentFamily = publicFamilySaveTarget
+    ? { familyId: publicFamilySaveTarget.familyId || "", familyName: publicFamilySaveTarget.familyName || "" }
+    : JSON.parse(localStorage.getItem("currentFamily") || "null");
 /* =================================
    LOAD CURRENT USER FAMILY
    IF NOT ALREADY AVAILABLE
@@ -16705,10 +16773,11 @@ saveMemberBtn.textContent =
 
     if(publicFamilyAddTarget){
         params.append("publicFamilyAdd", "Yes");
-        params.append(
-            "sessionToken",
-            sessionStorage.getItem("sessionToken") || ""
-        );
+        params.append("sessionToken", sessionStorage.getItem("sessionToken") || "");
+    }
+    if(publicFamilyEditTarget){
+        params.append("publicFamilyEdit", "Yes");
+        params.append("sessionToken", sessionStorage.getItem("sessionToken") || "");
     }
 
 
@@ -16984,6 +17053,12 @@ showMessage(
 if(publicFamilyAddTarget){
     sessionStorage.removeItem("publicFamilyAddTarget");
 }
+if(publicFamilyEditTarget){
+    // Keep the public target until Back returns to that family's detail page.
+    sessionStorage.setItem("publicFamilyEditSaved", "Yes");
+    const oldFamily = sessionStorage.getItem("publicFamilyEditPreviousCurrentFamily");
+    if(oldFamily) localStorage.setItem("currentFamily", oldFamily); else localStorage.removeItem("currentFamily");
+}
 
 /* ================================
    DISPLAY GENERATED MEMBER ID
@@ -17207,6 +17282,12 @@ localStorage.setItem(
     )
 );
 
+if(publicFamilyEditTarget){
+    const oldMembers = sessionStorage.getItem("publicFamilyEditPreviousMembers");
+    if(oldMembers) localStorage.setItem("familyMembers", oldMembers); else localStorage.removeItem("familyMembers");
+    sessionStorage.removeItem("publicFamilyEditPreviousCurrentFamily");
+    sessionStorage.removeItem("publicFamilyEditPreviousMembers");
+}
 
 /* =================================
    CLEAR EDIT MEMBER AFTER UPDATE
@@ -17656,6 +17737,19 @@ if(memberBackBtn){
 
     memberBackBtn.onclick =
         function(){
+
+            /* =====================================
+               PUBLIC FAMILY EDIT AFTER SAVE
+               Return directly to the selected public-family detail page.
+               ===================================== */
+            if(sessionStorage.getItem("publicFamilyEditSaved") === "Yes"){
+                sessionStorage.removeItem("publicFamilyEditSaved");
+                sessionStorage.removeItem("publicFamilyEditTarget");
+                if(window.restoreCachedPublicFamilyDetailDirectly?.()){
+                    if(typeof window.setOtherFamilyNavigation === "function") window.setOtherFamilyNavigation("detail");
+                    return;
+                }
+            }
 
             /* ================================
                UPDATED MEMBER
