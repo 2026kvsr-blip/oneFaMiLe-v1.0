@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2563,7 +2564,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading other families...";
+    "Loading public families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
@@ -9948,74 +9949,60 @@ if(editInputWrap){
 
 
         /* =================================
-           FIRST OPEN FAMILY PAGE
+           OPEN THE EXISTING EDIT FORM
            ================================= */
 
-        const familyBtn =
-            document.getElementById(
-                "familyBtn"
-            );
+        const publicEditTarget = JSON.parse(
+            sessionStorage.getItem("publicFamilyEditTarget") || "null"
+        );
+        const publicEditMembers = JSON.parse(
+            sessionStorage.getItem("publicFamilyEditMembers") || "[]"
+        );
 
+        /*
+         * For Other Families, do NOT click familyBtn first.
+         * familyBtn.onclick clears public-family cache when it detects that the
+         * selected family differs from the logged-in user's own family. That
+         * also clears editMember and makes the form fall back to KaniS.
+         * The existing addMemberBtn is a persistent navigation control, so open
+         * its existing form directly after restoring the selected public family.
+         */
+        if(publicEditTarget){
+            localStorage.setItem("currentFamily", JSON.stringify({
+                familyId: publicEditTarget.familyId || "",
+                familyName: publicEditTarget.familyName || ""
+            }));
+            localStorage.setItem("familyMembers", JSON.stringify(publicEditMembers));
+            localStorage.setItem("editMember", JSON.stringify(member));
 
-        if(!familyBtn){
-
-            console.error(
-                "Family button not found"
-            );
-
+            const publicEditAddMemberBtn = document.getElementById("addMemberBtn");
+            if(!publicEditAddMemberBtn){
+                console.error("Add Member button not found for public-family edit");
+                alert("Edit Member page could not be opened. Please try again.");
+                return;
+            }
+            sessionStorage.setItem("openMemberMode", "edit");
+            publicEditAddMemberBtn.click();
             return;
-
         }
 
-
+        /* Normal My Family edit flow remains unchanged. */
+        const familyBtn = document.getElementById("familyBtn");
+        if(!familyBtn){
+            console.error("Family button not found");
+            return;
+        }
         familyBtn.click();
 
-
-        /* =================================
-           THEN OPEN ADD MEMBER PAGE
-           ================================= */
-
-        setTimeout(
-            function(){
-
-                const addMemberBtn =
-                    document.getElementById(
-                        "addMemberBtn"
-                    );
-
-
-               if(addMemberBtn){
-
-    const publicEditTarget = JSON.parse(sessionStorage.getItem("publicFamilyEditTarget") || "null");
-    const publicEditMembers = JSON.parse(sessionStorage.getItem("publicFamilyEditMembers") || "[]");
-    if(publicEditTarget){
-        // familyBtn.click() can restore the logged-in user's family. Reapply the
-        // selected public family's data immediately before the edit form is built.
-        localStorage.setItem("currentFamily", JSON.stringify({
-            familyId: publicEditTarget.familyId || "",
-            familyName: publicEditTarget.familyName || ""
-        }));
-        localStorage.setItem("familyMembers", JSON.stringify(publicEditMembers));
-    }
-
-    sessionStorage.setItem(
-        "openMemberMode",
-        "edit"
-    );
-
-    addMemberBtn.click();
-
-}                else{
-
-                    console.error(
-                        "Add Member button not found"
-                    );
-
-                }
-
-            },
-            50
-        );
+        setTimeout(function(){
+            const addMemberBtn = document.getElementById("addMemberBtn");
+            if(addMemberBtn){
+                sessionStorage.setItem("openMemberMode", "edit");
+                addMemberBtn.click();
+            }else{
+                console.error("Add Member button not found");
+            }
+        }, 50);
 
     };
                         dropdown.appendChild(
