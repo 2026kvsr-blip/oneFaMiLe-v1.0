@@ -1,4 +1,6 @@
 
+
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2394,6 +2396,7 @@ if(page === "detail"){
 
 
     if(page === "search"){
+        if(window.restoreCachedPublicFamilySearchDirectly?.()) return;
         const familyId = window.currentPublicFamilyId || (window.cachedPublicFamilyDetails && window.cachedPublicFamilyDetails.familyId);
         if(typeof window.restorePublicFamilyDetail === "function" && familyId){
             await window.restorePublicFamilyDetail(familyId);
@@ -2560,7 +2563,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading Other families...";
+    "Loading public families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
@@ -2997,7 +3000,11 @@ if(actionName === "Tree View"){
             return;
         }
 
+        /* Save the visible public-family detail nodes before Tree View replaces them. */
+        window.cachePublicFamilyDetailForDirectReturn?.();
+
         window.familyTreeReturnAction = async function(){
+            if(window.restoreCachedPublicFamilyDetailDirectly?.()) return;
             window.currentPublicFamilyName = publicFamilyName;
             if(typeof window.restorePublicFamilyDetail === "function"){
                 await window.restorePublicFamilyDetail(viewingFamily.familyId);
@@ -3069,6 +3076,9 @@ if(actionName === "Tree View"){
             JSON.stringify(publicAddReturnTarget)
         );
 
+        // Preserve the selected Family detail DOM so Back can restore it immediately.
+        window.cachePublicFamilyDetailForDirectReturn?.();
+
         // Rebuild the Family page controls, then open Add Member
         // immediately so the Family page does not remain visible first.
         familyBtn.click();
@@ -3110,6 +3120,8 @@ if(actionName === "Tree View"){
                 "search"
             );
 
+        /* Preserve exact Family detail nodes before Search Member replaces them. */
+        window.cachePublicFamilySearchReturn?.(container);
         container.innerHTML = "";
 
         /* Show the Search Member name in the existing main title only. */
@@ -3609,6 +3621,65 @@ container.appendChild(results);
     }
 
     window.activateFamilyTab = activateFamilyTab;
+
+    /* =====================================================
+       PUBLIC FAMILY DETAIL: INSTANT DOM RETURN HELPERS
+       Used by Add Member and Tree View Back buttons.
+       Keep the actual nodes so existing click handlers survive.
+       ===================================================== */
+    window.cachePublicFamilyDetailForDirectReturn = function(){
+        const home = document.getElementById("homeContent");
+        if(!home) return false;
+        const fragment = document.createDocumentFragment();
+        while(home.firstChild){ fragment.appendChild(home.firstChild); }
+        window.cachedPublicFamilyDirectReturn = {
+            home, fragment,
+            familyId: String(window.currentPublicFamilyId || ""),
+            familyName: String(window.currentPublicFamilyName || "Family")
+        };
+        return true;
+    };
+
+    window.restoreCachedPublicFamilyDetailDirectly = function(){
+        const saved = window.cachedPublicFamilyDirectReturn;
+        if(!saved || !saved.home || !saved.fragment) return false;
+        while(saved.home.firstChild){ saved.home.removeChild(saved.home.firstChild); }
+        saved.home.appendChild(saved.fragment);
+        window.currentPublicFamilyId = saved.familyId;
+        window.currentPublicFamilyName = saved.familyName;
+        window.cachedPublicFamilyDirectReturn = null;
+        window.setOtherFamilyNavigation?.("detail");
+        return true;
+    };
+
+    /* Search Member replaces only the selected-family container contents. */
+    window.cachePublicFamilySearchReturn = function(container){
+        if(!container) return false;
+        const fragment = document.createDocumentFragment();
+        while(container.firstChild){ fragment.appendChild(container.firstChild); }
+        const titleSpan = document.querySelector("#homeContent h2.page-title > span");
+        window.cachedPublicFamilySearchReturn = {
+            container, fragment,
+            title: titleSpan ? titleSpan.textContent : "",
+            familyId: String(window.currentPublicFamilyId || ""),
+            familyName: String(window.currentPublicFamilyName || "Family")
+        };
+        return true;
+    };
+
+    window.restoreCachedPublicFamilySearchDirectly = function(){
+        const saved = window.cachedPublicFamilySearchReturn;
+        if(!saved || !saved.container || !saved.fragment) return false;
+        while(saved.container.firstChild){ saved.container.removeChild(saved.container.firstChild); }
+        saved.container.appendChild(saved.fragment);
+        const titleSpan = document.querySelector("#homeContent h2.page-title > span");
+        if(titleSpan) titleSpan.textContent = saved.title;
+        window.currentPublicFamilyId = saved.familyId;
+        window.currentPublicFamilyName = saved.familyName;
+        window.cachedPublicFamilySearchReturn = null;
+        window.setOtherFamilyNavigation?.("detail");
+        return true;
+    };
 
     window.restorePublicFamilyDetail = async function(familyId){
         /*
@@ -15830,6 +15901,11 @@ memberBackBtn.onclick =
 
         const publicTarget = window.currentPublicFamilyAddTarget ||
             JSON.parse(sessionStorage.getItem("publicFamilyAddTarget") || "null");
+        if(publicTarget?.familyId && window.restoreCachedPublicFamilyDetailDirectly?.()){
+            window.currentPublicFamilyAddTarget = null;
+            sessionStorage.removeItem("publicFamilyAddTarget");
+            return;
+        }
         if(publicTarget?.familyId && typeof window.restorePublicFamilyDetail === "function"){
             await window.restorePublicFamilyDetail(publicTarget.familyId);
             window.currentPublicFamilyAddTarget = null;
@@ -26568,6 +26644,10 @@ const familyTreeBackBtn =
 
 if(familyTreeBackBtn){
     familyTreeBackBtn.onclick = async function(){
+        if(window.restoreCachedPublicFamilyDetailDirectly?.()){
+            window.familyTreeReturnAction = null;
+            return;
+        }
         const returnAction = window.familyTreeReturnAction;
         window.familyTreeReturnAction = null;
 
