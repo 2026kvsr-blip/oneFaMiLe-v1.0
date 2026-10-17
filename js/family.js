@@ -2563,7 +2563,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading Other families...";
+    "Loading public families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
@@ -17785,9 +17785,21 @@ memberBackBtn.onclick =
         const publicTarget = window.currentPublicFamilyAddTarget || JSON.parse(
             sessionStorage.getItem("publicFamilyAddTarget") || "null"
         );
+
+        // This is the active Add Member Back handler (the earlier handler
+        // is overwritten later in this file). Prefer restoring the exact
+        // cached Family detail page before rebuilding or fetching it again.
+        if(window.cachedPublicFamilyDirectReturn &&
+           window.restoreCachedPublicFamilyDetailDirectly?.()){
+            window.currentPublicFamilyAddTarget = null;
+            sessionStorage.removeItem("publicFamilyAddTarget");
+            return;
+        }
+
         if(publicTarget?.familyId && typeof window.restorePublicFamilyDetail === "function"){
             await window.restorePublicFamilyDetail(publicTarget.familyId);
             window.currentPublicFamilyAddTarget = null;
+            sessionStorage.removeItem("publicFamilyAddTarget");
             return;
         }
 
