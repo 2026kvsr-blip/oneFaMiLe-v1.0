@@ -1,5 +1,6 @@
 
 
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -763,11 +764,12 @@ if(treeViewBtn){
                     );
 
                 if(!sessionToken){
-
-                    alert(
-                        "Login session missing. Please login again."
-                    );
-
+                    /* Logout may clear the token while this card is still visible. */
+                    card.style.background = "#EAF8FF";
+                    card.style.borderColor = "#4A9FE8";
+                    name.style.color = "#2A6EB0";
+                    id.style.color = "#444";
+                    card.style.pointerEvents = "auto";
                     return;
                 }
 
@@ -2440,6 +2442,22 @@ otherHomeBtn.onclick = function(){
 
     }
 
+/* Clear short-lived Other Families caches after a member is changed. */
+window.clearOtherFamilyMemberCache = function(familyId){
+    try {
+        const prefix = "oneFaMiLe_publicMembers_";
+        const target = String(familyId || "");
+        for (let i = sessionStorage.length - 1; i >= 0; i--) {
+            const key = sessionStorage.key(i);
+            if (key && key.startsWith(prefix) && (!target || key.includes("_" + target + "_"))) {
+                sessionStorage.removeItem(key);
+            }
+        }
+    } catch (cacheClearError) {
+        console.warn("Public member cache clear skipped:", cacheClearError);
+    }
+};
+
 /* =====================================
    LOAD SELECTED PUBLIC FAMILY MEMBERS
    ===================================== */
@@ -2481,6 +2499,22 @@ async function loadPublicFamilyMembers(
             "Login session missing. Please login again."
         );
 
+    }
+
+    /* Reuse recently loaded public-family members while navigating between
+       Search / Relations / Tree / Edit. The cache is session-token scoped so
+       another login cannot reuse this data. */
+    const memberCacheKey = "oneFaMiLe_publicMembers_" +
+        String(sessionToken).slice(-12) + "_" +
+        String(viewingFamily.familyId || "") + "_" + purpose;
+    try {
+        const cached = JSON.parse(sessionStorage.getItem(memberCacheKey) || "null");
+        if (cached && Array.isArray(cached.members) &&
+            Date.now() - Number(cached.savedAt || 0) < 45000) {
+            return cached.members;
+        }
+    } catch (cacheReadError) {
+        console.warn("Public member cache read skipped:", cacheReadError);
     }
 
     const params =
@@ -2538,9 +2572,18 @@ async function loadPublicFamilyMembers(
 
     }
 
-    return Array.isArray(result.members)
+    const loadedMembers = Array.isArray(result.members)
         ? result.members
         : [];
+    try {
+        sessionStorage.setItem(memberCacheKey, JSON.stringify({
+            savedAt: Date.now(),
+            members: loadedMembers
+        }));
+    } catch (cacheWriteError) {
+        console.warn("Public member cache write skipped:", cacheWriteError);
+    }
+    return loadedMembers;
 
 }
 
@@ -2563,7 +2606,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading pub families...";
+    "Loading public families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
@@ -2575,30 +2618,43 @@ container.textContent =
         return;
     }
 
-    const formData = new FormData();
-
-    formData.append(
-        "action",
-        "getPublicFamilies"
-    );
-
-    formData.append(
-        "sessionToken",
-        sessionToken
-    );
+    const publicFamiliesCacheKey =
+        "oneFaMiLe_publicFamilies_" + String(sessionToken).slice(-12);
+    let result = null;
+    try {
+        const cached = JSON.parse(sessionStorage.getItem(publicFamiliesCacheKey) || "null");
+        if (cached && cached.result &&
+            Date.now() - Number(cached.savedAt || 0) < 45000) {
+            result = cached.result;
+        }
+    } catch (cacheReadError) {
+        console.warn("Public families cache read skipped:", cacheReadError);
+    }
 
     try{
 
-        const response = await fetch(
-            API_URL,
-            {
+        if (!result) {
+            const formData = new FormData();
+            formData.append("action", "getPublicFamilies");
+            formData.append("sessionToken", sessionToken);
+
+            const response = await fetch(API_URL, {
                 method: "POST",
                 body: formData
-            }
-        );
+            });
+            result = await response.json();
 
-        const result =
-            await response.json();
+            if (result && result.status === "success") {
+                try {
+                    sessionStorage.setItem(publicFamiliesCacheKey, JSON.stringify({
+                        savedAt: Date.now(),
+                        result: result
+                    }));
+                } catch (cacheWriteError) {
+                    console.warn("Public families cache write skipped:", cacheWriteError);
+                }
+            }
+        }
 
         if(result.status !== "success"){
 
@@ -2703,37 +2759,43 @@ container.textContent =
                     return;
                 }
 
-                const formData = new FormData();
-
-                formData.append(
-                    "action",
-                    "getPublicFamilyDetails"
-                );
-
-                formData.append(
-                    "sessionToken",
-                    sessionToken
-                );
-
-                formData.append(
-                    "familyId",
-                    family.familyId
-                );
+                const publicDetailCacheKey =
+                    "oneFaMiLe_publicDetail_" + String(sessionToken).slice(-12) + "_" + String(family.familyId || "");
+                let result = null;
+                try {
+                    const cached = JSON.parse(sessionStorage.getItem(publicDetailCacheKey) || "null");
+                    if (cached && cached.family && Date.now() - Number(cached.savedAt || 0) < 45000) {
+                        result = { status: "success", family: cached.family };
+                    }
+                } catch (cacheReadError) {
+                    console.warn("Public family detail cache read skipped:", cacheReadError);
+                }
 
                 card.style.pointerEvents = "none";
 
                 try{
 
-                    const response = await fetch(
-                        API_URL,
-                        {
+                    if (!result) {
+                        const formData = new FormData();
+                        formData.append("action", "getPublicFamilyDetails");
+                        formData.append("sessionToken", sessionToken);
+                        formData.append("familyId", family.familyId);
+                        const response = await fetch(API_URL, {
                             method: "POST",
                             body: formData
+                        });
+                        result = await response.json();
+                        if (result && result.status === "success" && result.family) {
+                            try {
+                                sessionStorage.setItem(publicDetailCacheKey, JSON.stringify({
+                                    savedAt: Date.now(),
+                                    family: result.family
+                                }));
+                            } catch (cacheWriteError) {
+                                console.warn("Public family detail cache write skipped:", cacheWriteError);
+                            }
                         }
-                    );
-
-                    const result =
-                        await response.json();
+                    }
 
                     if(
                         result.status !== "success" ||
@@ -17061,9 +17123,11 @@ showMessage(
 );
 
 if(publicFamilyAddTarget){
+    window.clearOtherFamilyMemberCache?.(publicFamilyAddTarget.familyId);
     sessionStorage.removeItem("publicFamilyAddTarget");
 }
 if(publicFamilyEditTarget){
+    window.clearOtherFamilyMemberCache?.(publicFamilyEditTarget.familyId);
     // Keep the public target until Back returns to that family's detail page.
     sessionStorage.setItem("publicFamilyEditSaved", "Yes");
     const oldFamily = sessionStorage.getItem("publicFamilyEditPreviousCurrentFamily");
