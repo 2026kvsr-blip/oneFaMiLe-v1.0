@@ -1,4 +1,6 @@
 
+
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -2604,7 +2606,7 @@ async function loadPublicFamilies(){
 delete container.dataset.publicFamilyDetail;
 
 container.textContent =
-    "Loading other families...";
+    "Loading public families...";
     const sessionToken =
         sessionStorage.getItem("sessionToken");
 
@@ -3448,24 +3450,6 @@ item.onclick = function(){
     results.innerHTML = "";
     searchInput.style.display = "none";
 sortBar.style.display = "none";
-    const detailBack =
-        document.createElement("button");
-
-    detailBack.className = "back-btn";
-    detailBack.textContent =
-        "← Back to Search Members";
-
-    detailBack.onclick = function(){
-
-        searchInput.style.display = "";
-        sortBar.style.display = "flex";
-        searchInput.value = previousSearch;
-        showMembers();
-
-    };
-
-    results.appendChild(detailBack);
-
     const detailHeading =
         document.createElement("h3");
 
