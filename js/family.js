@@ -1,5 +1,30353 @@
 
 
+
+console.log(
+    "FAMILY JS VERSION:",
+    "06-10-2026-TEST-1"
+);
+/* =========
+============================
+   oneFaMiLe
+   FAMILY MODULE
+   ===================================== */
+
+/* =====================================
+   GENERATE UNIQUE FAMILY ID
+   FORMAT:	
+   F-NAME-RANDOM4
+   ===================================== */
+function generateFamilyId(familyName){
+    const cleanName =
+        familyName
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, "");
+    const namePart =
+        cleanName
+            .substring(0,4)
+            .padEnd(4,"X");
+
+       /* =================================
+       GET EXISTING FAMILY IDs
+       ================================= */
+    const existingFamilies =
+        JSON.parse(
+            localStorage.getItem(
+                "familyTrees"
+            ) || "[]"
+        );
+
+
+    const existingIds =
+        existingFamilies.map(
+            family =>
+                family.familyId
+        );
+
+    let familyId;
+    let uniquePart;
+    /* =================================
+       GENERATE UNIQUE RANDOM 4
+       ================================= */
+    do{
+        uniquePart =
+            Math.random()
+                .toString(36)
+                .substring(2,6)
+                .toUpperCase();
+        familyId =
+            `F-${namePart}-${uniquePart}`;
+    }
+    while(
+        existingIds.includes(
+            familyId
+        )
+    );
+
+
+    return familyId;
+}
+
+/* =====================================
+   CHECK FAMILY ID AVAILABILITY
+   ===================================== */
+function isFamilyIdAvailable(familyId){
+    const existingFamilies =
+        JSON.parse(
+            localStorage.getItem("familyTrees") || "[]"
+        );
+    return !existingFamilies.some(
+        family =>
+            family.familyId === familyId
+    );
+}
+/* =====================================
+   PRELOAD FAMILY PAGE IMAGES
+   ===================================== */
+function preloadFamilyPageImages(){
+    const familyImages = [
+        "images/colorbtns/Family1.png",
+        "images/colorbtns/AddMember1.png",
+        "images/colorbtns/AddFamily1.png",
+        "images/colorbtns/CustomSearch1.png",
+        "images/colorbtns/Relations1.png",
+        "images/colorbtns/TreeView1.png",
+        "images/colorbtns/About1.png"
+    ];
+
+    familyImages.forEach(
+        function(src){
+            const img =
+                new Image();
+            img.src = src;
+        }
+    );
+}
+
+
+/* =====================================
+   CLEAR FAMILY CACHE IF LOGIN USER CHANGED
+   ===================================== */
+function clearOldFamilyCacheForCurrentUser(){
+    const loggedUser =
+        JSON.parse(
+            sessionStorage.getItem("user") || "null"
+        );
+    const storedFamily =
+        JSON.parse(
+            localStorage.getItem("currentFamily") || "null"
+        );
+    if(!loggedUser){
+        return;
+    }
+
+    if(!storedFamily){
+        localStorage.removeItem("familyMembers");
+        return;
+    }
+    const loginMatch =
+        storedFamily.loginId &&
+        loggedUser.loginUserName &&
+        String(storedFamily.loginId)
+            .trim()
+            .toLowerCase() ===
+        String(loggedUser.loginUserName)
+            .trim()
+            .toLowerCase();
+    const emailMatch =
+        storedFamily.userMail &&
+        loggedUser.email &&
+        String(storedFamily.userMail)
+            .trim()
+            .toLowerCase() ===
+        String(loggedUser.email)
+            .trim()
+            .toLowerCase();
+    const mobileMatch =
+        storedFamily.mobile &&
+        loggedUser.mobile &&
+        String(storedFamily.mobile)
+            .trim() ===
+        String(loggedUser.mobile)
+            .trim();
+
+
+    if(
+        !loginMatch &&
+        !emailMatch &&
+        !mobileMatch
+    ){
+
+        console.log(
+            "LOGIN USER CHANGED → CLEAR OLD FAMILY CACHE"
+        );
+
+        localStorage.removeItem("currentFamily");
+        localStorage.removeItem("familyMembers");
+        localStorage.removeItem("editMember");
+
+    }
+}
+
+/* =====================================
+   FIND THE FAMILY PAGE TITLE ICON ONLY
+   Excludes bottom navigation buttons so their labels never change.
+   ===================================== */
+function findFamilyPageTitleImage(){
+    return Array.from(document.querySelectorAll('img[src*="Family1.png"]'))
+        .find(img => {
+            if (img.closest('button, a, nav, #bottomNav, .bottom-nav, .bottom-navigation')) return false;
+            const parent = img.parentElement;
+            if (!parent) return false;
+            const directText = Array.from(parent.childNodes)
+                .filter(node => node.nodeType === Node.TEXT_NODE)
+                .map(node => node.textContent.trim())
+                .join(' ');
+            return /\bFamily\b/i.test((directText || parent.textContent || '').trim());
+        }) || null;
+}
+
+/* =====================================
+   FAMILY MAIN PAGE
+   ===================================== */
+
+familyBtn.onclick = () => {
+
+    clearOldFamilyCacheForCurrentUser();
+
+    setActiveButton(familyBtn);
+    document.getElementById("otherFamilyNavigation")?.remove();
+ showPage(
+    `
+<div style="margin-top:-40px;">    `
+    +
+    pageTitle(
+        "Family",
+        "images/colorbtns/Family1.png"
+    )
+    +
+    `
+    </div>
+
+    <!-- FAMILY TABS -->
+    <!-- FAMILY TABS -->
+<div
+    id="familyTabs"
+    style="
+        display:flex;
+        gap:8px;
+        margin:40px 15px 18px;
+    ">
+
+            <button
+                id="myFamilyTab"
+                type="button"
+                style="
+                    flex:1;
+                    padding:11px 5px;
+                    border:1px solid #2A6EB0;
+                    border-radius:8px;
+                    background:#2A6EB0;
+                    color:white;
+                    font-weight:600;
+                ">
+                My Family
+            </button>
+
+            <button
+                id="otherFamiliesTab"
+                type="button"
+                style="
+                    flex:1;
+                    padding:11px 5px;
+                    border:1px solid #2A6EB0;
+                    border-radius:8px;
+                    background:transparent;
+                    color:#2A6EB0;
+                    font-weight:600;
+                ">
+                Other Families
+            </button>
+
+        </div>
+
+        <div class="grid-3x2">
+            <button
+                id="addMemberBtn"
+                class="grid-btn">
+                <img
+                    src="images/colorbtns/AddMember1.png"
+                    class="btn-icon">
+                <span>
+                    Add Member
+                </span>
+            </button>
+            <button
+                id="addFamilyBtn"
+                class="grid-btn">
+                <img
+                    src="images/colorbtns/AddFamily1.png"
+                    class="btn-icon">
+                <span>
+                    Create Family
+                </span>
+            </button>
+
+            <button
+                id="searchMemberBtn"
+                class="grid-btn">
+
+                <img
+                    src="images/colorbtns/CustomSearch1.png"
+                    class="btn-icon">
+
+                <span>
+Update Member
+</span>
+
+            </button>
+
+            <button
+                id="relationsBtn"
+                class="grid-btn">
+
+                <img
+                    src="images/colorbtns/Relations1.png"
+                    class="btn-icon">
+
+                <span>
+                    Relations
+                </span>
+
+            </button>
+
+            <button
+                id="treeViewBtn"
+                class="grid-btn">
+
+                <img
+                    src="images/colorbtns/TreeView1.png"
+                    class="btn-icon">
+
+                <span>
+                    Tree View
+                </span>
+
+            </button>
+
+
+            <button
+                id="familyAboutBtn"
+                
+                class="grid-btn">
+
+                <img
+                    src="images/colorbtns/About1.png"
+                    class="btn-icon">
+
+                <span>
+                    About
+                </span>
+
+            </button>
+
+       
+        </div>
+
+        <!-- FAMILY SETTINGS: MY FAMILY ONLY -->
+        <div
+            id="familySettingsContainer"
+            style="
+                text-align:center;
+                margin:15px 0;
+            ">
+
+           <button
+    id="familySettingsBtn"
+    type="button"
+    class="back-btn"
+    style="
+        background:#2A6EB0;
+        color:white;
+        width:210px;
+        max-width:95%;
+        white-space:nowrap;
+        box-sizing:border-box;
+    ">
+    ⚙ Family Settings
+</button>
+        </div>
+
+        <div align="center" id="familyBackContainer">
+
+            <button
+                id="familyBack"
+                class="back-btn">
+
+                ← Back
+
+            </button>
+
+        </div>
+
+        `
+
+    );
+   /* =====================================
+   FAMILY → TREE VIEW
+   ===================================== */
+
+const treeViewBtn =
+    document.getElementById(
+        "treeViewBtn"
+    );
+
+if(treeViewBtn){
+
+    treeViewBtn.onclick =
+        function(){
+
+            console.log(
+                "TREE VIEW CLICKED"
+            );
+
+            window.familyTreeReturnAction = function(){
+                familyBtn.click();
+            };
+
+            openFamilyTreePage();
+
+        };
+
+}
+
+    /* =====================================
+       FAMILY SETTINGS PAGE
+       ===================================== */
+
+    const familySettingsBtn =
+        document.getElementById(
+            "familySettingsBtn"
+        );
+
+    if(familySettingsBtn){
+
+        familySettingsBtn.onclick = function(){
+
+            const currentFamily =
+                JSON.parse(
+                    localStorage.getItem(
+                        "currentFamily"
+                    ) || "null"
+                );
+
+            
+            if(!currentFamily){
+
+                alert("Family not found.");
+
+                return;
+            }
+
+            /* =================================
+               CHECK FAMILY OWNER
+               ================================= */
+
+            const loggedUser =
+                JSON.parse(
+                    sessionStorage.getItem("user") || "null"
+                );
+
+            const ownerLogin =
+                String(
+                    currentFamily.loginId ||
+                    currentFamily.loginUserName ||
+                    ""
+                ).trim().toLowerCase();
+
+            const currentLogin =
+                String(
+                    loggedUser?.loginUserName || ""
+                ).trim().toLowerCase();
+
+            if(
+                !ownerLogin ||
+                !currentLogin ||
+                ownerLogin !== currentLogin
+            ){
+
+                alert(
+                    "Only the family owner can change Family Settings."
+                );
+
+                return;
+            }
+
+            showPage(
+                pageTitle(
+                    "Family Settings",
+                    "images/colorbtns/Family1.png"
+                ) +
+
+                `
+                <div style="
+                    max-width:420px;
+                    margin:15px auto;
+                    padding:15px;
+                ">
+
+                    <h3>Privacy & Permissions</h3>
+
+     <style>
+    .family-settings-row {
+        display: grid;
+        grid-template-columns:
+            minmax(0, 1fr) 12px 100px;
+        align-items: center;
+        gap: 6px;
+        margin: 5px 0;
+        text-align: left;
+    }
+
+    .family-settings-row span {
+        font-size: 14px;
+        color: #2A6EB0;
+    }
+
+    .family-settings-row select {
+        width: 100%;
+        min-width: 0;
+        height: 34px;
+        min-height: 34px;
+        padding: 3px 8px;
+        margin: 0;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+    .family-trusted-heading {
+        text-align: center;
+        color: #2A6EB0;
+        font-size: 17px;
+        font-weight: bold;
+        margin: 22px 0 14px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #2A6EB0;
+    }
+</style>
+
+
+<!-- FAMILY VISIBILITY -->
+
+<div class="family-settings-row">
+    <span>Visibility</span>
+    <span>:</span>
+
+    <select
+        id="familyVisibility"
+        class="common-form-select">
+
+        <option value="Private">Private</option>
+        <option value="Public">Public</option>
+
+    </select>
+</div>
+
+
+<!-- OLD COLUMNS G AND H: PRESERVE FOR COMPATIBILITY -->
+
+<select id="familyAllowEdit" style="display:none">
+    <option value="No">No</option>
+    <option value="Yes">Yes</option>
+</select>
+
+<select id="familyAllowAdd" style="display:none">
+    <option value="No">No</option>
+    <option value="Yes">Yes</option>
+</select>
+
+
+<!-- SHOW SEARCH -->
+
+<div class="family-settings-row">
+    <span>Show Search</span>
+    <span>:</span>
+
+    <select
+        id="familyShowSearch"
+        class="common-form-select">
+
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+
+    </select>
+</div>
+
+
+<!-- SHOW RELATIONS -->
+
+<div class="family-settings-row">
+    <span>Show Relations</span>
+    <span>:</span>
+
+    <select
+        id="familyShowRelations"
+        class="common-form-select">
+
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+
+    </select>
+</div>
+
+
+<!-- SHOW TREE -->
+
+<div class="family-settings-row">
+    <span>Show Tree</span>
+    <span>:</span>
+
+    <select
+        id="familyShowTree"
+        class="common-form-select">
+
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+
+    </select>
+</div>
+
+
+<!-- PERSONAL DETAILS -->
+
+<div class="family-settings-row">
+    <span>Personal Details</span>
+    <span>:</span>
+
+    <select
+        id="familyShowPersonalDetails"
+        class="common-form-select">
+
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+
+    </select>
+</div>
+
+<!-- TRUSTED MEMBERS HEADING -->
+
+<div class="family-trusted-heading">
+    Trusted Members
+</div>
+
+
+
+
+<div style="
+    display:flex;
+    justify-content:center;
+    margin:12px 0 18px;
+">
+
+    <button
+        type="button"
+        id="manageTrustedMembersBtn"
+        class="back-btn"
+        style="
+    width:100%;
+    margin:0;
+    border:2px solid #28A745;
+    color:#28A745;
+    background:transparent;
+">
+        Manage Members
+    </button>
+
+</div>
+
+<div class="family-settings-row">
+
+    <label for="familyAutoAddMembers">
+        Auto Add Members
+    </label>
+
+    <span>:</span>
+
+    <select
+        id="familyAutoAddMembers"
+        class="common-form-select">
+
+        <option value="Yes" selected>Yes</option>
+        <option value="No">No</option>
+
+    </select>
+
+</div>
+<!-- TRUSTED FULL VIEW -->
+<div class="family-settings-row">
+    <span>Trusted Full View</span>
+    <span>:</span>
+
+    <select
+        id="familyTrustedContactsFullView"
+        class="common-form-select">
+
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+
+    </select>
+</div>
+
+
+<!-- TRUSTED ADD -->
+
+<div class="family-settings-row">
+    <span>Trusted Add</span>
+    <span>:</span>
+
+    <select
+        id="familyTrustedAllowAdd"
+        class="common-form-select">
+
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+
+    </select>
+</div>
+
+
+<!-- TRUSTED EDIT -->
+
+<div class="family-settings-row">
+    <span>Trusted Edit</span>
+    <span>:</span>
+
+    <select
+        id="familyTrustedAllowEdit"
+        class="common-form-select">
+
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+
+    </select>
+</div>
+
+
+<div style="
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    margin-top:20px;
+    width:100%;
+">
+
+    <button
+    id="saveFamilySettingsBtn"
+    class="back-btn"
+    style="
+        flex:1;
+        min-width:0;
+        margin:0;
+        white-space:nowrap;
+        border:2px solid #28A745;
+        color:#28A745;
+        background:transparent;
+    ">
+    Save Settings
+</button>
+    <button
+        id="familySettingsBackBtn"
+        class="back-btn"
+        style="
+            flex:1;
+            min-width:0;
+            margin:0;
+            white-space:nowrap;
+        ">
+        ← Back
+    </button>
+
+</div>
+                </div>
+                `
+            );
+
+           
+            /* =====================================
+               LOAD SAVED FAMILY SETTINGS
+               ===================================== */
+
+            async function loadFamilySettings(){
+
+                const sessionToken =
+                    sessionStorage.getItem(
+                        "sessionToken"
+                    );
+
+                if(!sessionToken){
+
+                    alert(
+                        "Login session missing. Please login again."
+                    );
+
+                    return;
+                }
+
+                const saveBtn =
+                    document.getElementById(
+                        "saveFamilySettingsBtn"
+                    );
+
+                saveBtn.disabled = true;
+
+                const formData = new FormData();
+
+                formData.append(
+                    "action",
+                    "getFamilySettings"
+                );
+
+                formData.append(
+                    "sessionToken",
+                    sessionToken
+                );
+
+                formData.append(
+                    "familyId",
+                    currentFamily.familyId
+                );
+
+                try{
+
+                    const response = await fetch(
+                        API_URL,
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+                    const result =
+                        await response.json();
+
+                    if(result.status !== "success"){
+
+                        alert(
+                            result.message ||
+                            "Unable to load Family Settings."
+                        );
+
+                        return;
+                    }
+
+                    const settings =
+                        result.settings || {};
+
+                    document.getElementById(
+                        "familyVisibility"
+                    ).value =
+                        settings.visibility || "Private";
+
+                    document.getElementById(
+                        "familyAllowEdit"
+                    ).value =
+                        settings.allowEdit || "No";
+
+                    document.getElementById(
+                        "familyAllowAdd"
+                    ).value =
+                        settings.allowAdd || "No";
+
+                    document.getElementById(
+                        "familyShowSearch"
+                    ).value =
+                        settings.showSearch || "Yes";
+
+                    document.getElementById(
+                        "familyShowRelations"
+                    ).value =
+                        settings.showRelations || "Yes";
+
+                   document.getElementById(
+    "familyShowTree"
+).value =
+    settings.showTree || "Yes";
+
+
+/* =====================================
+   LOAD NEW FAMILY SETTINGS: M TO Q
+   ===================================== */
+
+document.getElementById(
+    "familyShowPersonalDetails"
+).value =
+    settings.showPersonalDetails || "No";
+
+
+document.getElementById(
+    "familyTrustedContactsFullView"
+).value =
+    settings.trustedContactsFullView || "No";
+
+
+document.getElementById(
+    "familyTrustedAllowAdd"
+).value =
+    settings.trustedAllowAdd || "No";
+
+
+document.getElementById(
+    "familyTrustedAllowEdit"
+).value =
+    settings.trustedAllowEdit || "No";
+
+/* AUTO ADD MEMBERS - COLUMN R */
+
+document.getElementById(
+    "familyAutoAddMembers"
+).value =
+    settings.autoAddMembers || "Yes";
+
+               }catch(error){
+
+    console.error(
+        "FAMILY SETTINGS LOAD ERROR:",
+        error
+    );
+
+    const familySettingsPageOpen =
+        document.getElementById(
+            "saveFamilySettingsBtn"
+        ) !== null;
+
+    if(familySettingsPageOpen){
+
+        alert(
+            "Unable to load Family Settings."
+        );
+
+    }
+
+}finally{
+                    saveBtn.disabled = false;
+
+                }
+
+            }
+
+            loadFamilySettings();
+            /* =====================================
+   MANAGE TRUSTED MEMBERS PAGE
+   ===================================== */
+
+const manageTrustedMembersBtn =
+    document.getElementById(
+        "manageTrustedMembersBtn"
+    );
+
+if(manageTrustedMembersBtn){
+
+    manageTrustedMembersBtn.onclick =
+        function(){
+
+            showPage(
+                pageTitle(
+                    "Trusted Members",
+                    "images/colorbtns/Family1.png"
+                ) +
+
+                `
+                <div style="
+                    padding:20px;
+                    max-width:450px;
+                    margin:auto;
+                ">
+
+                    <p style="
+                        text-align:center;
+                        color:#2A6EB0;
+                    ">
+                        Add or remove trusted mobile numbers
+                    </p>
+
+                    <!-- TRUSTED MEMBER NAME -->
+
+<!-- TRUSTED MEMBER INPUT FIELDS -->
+
+<style>
+    .trusted-member-row {
+        display: grid;
+        grid-template-columns: 68px 10px minmax(0, 1fr);
+        align-items: center;
+        gap: 6px;
+        margin: 8px 0;
+    }
+
+    .trusted-member-row label,
+    .trusted-member-row span {
+        color: #2A6EB0;
+        font-size: 14px;
+    }
+
+    .trusted-member-row input {
+        width: 100%;
+        min-width: 0;
+        height: 36px;
+        min-height: 36px;
+        padding: 5px 8px;
+        margin: 0;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+</style>
+
+<div class="trusted-member-row">
+    <label for="trustedMemberName">Name</label>
+    <span>:</span>
+    <input
+        type="text"
+        id="trustedMemberName"
+        class="common-form-input"
+        placeholder="Enter member name"
+        maxlength="100"
+    >
+</div>
+
+<div class="trusted-member-row">
+    <label for="trustedMobileInput">Mobile</label>
+    <span>:</span>
+    <input
+        type="tel"
+        id="trustedMobileInput"
+        class="common-form-input"
+        placeholder="10-digit mobile number"
+        maxlength="10"
+        inputmode="numeric"
+    >
+</div>
+
+<div class="trusted-member-row">
+    <label for="trustedMemberEmail">Email</label>
+    <span>:</span>
+    <input
+        type="email"
+        id="trustedMemberEmail"
+        class="common-form-input"
+        placeholder="Optional"
+        maxlength="254"
+    >
+</div>
+<div style="
+                        display:flex;
+                        gap:12px;
+                        margin-top:15px;
+                    ">
+
+                        <button
+                            type="button"
+                            id="addTrustedMobileBtn"
+                            class="back-btn"
+                            style="
+                                flex:1;
+                                min-width:0;
+                                margin:0;
+                                border:2px solid #28A745;
+                                color:#28A745;
+                                background:transparent;
+                            ">
+                            + Add
+                        </button>
+
+                        <button
+                            type="button"
+                            id="trustedMembersBackBtn"
+                            class="back-btn"
+                            style="
+                                flex:1;
+                                min-width:0;
+                                margin:0;
+                            ">
+                            ← Back
+                        </button>
+
+
+
+                    </div>
+
+
+
+<!-- IMPORT EXISTING FAMILY MEMBERS -->
+
+<div style="
+    margin-top:14px;
+    margin-bottom:12px;
+    text-align:center;
+">
+
+    <button
+        type="button"
+        id="importExistingMembersBtn"
+        style="
+            width:100%;
+            padding:11px;
+            border:1px solid #2A6EB0;
+            border-radius:8px;
+            background:#FFFFFF;
+            color:#2A6EB0;
+            font-size:14px;
+            font-weight:bold;
+            cursor:pointer;
+        "
+    >
+        Import Existing Members
+    </button>
+
+</div>
+                    <h3 style="
+    color:#2A6EB0;
+    margin-top:25px;
+    text-align:center;
+">
+    Trusted Members List
+</h3>
+
+<div style="margin:12px 0;">
+    <input type="text" id="trustedMembersSearch"
+        class="common-form-input" placeholder="Search Trusted Members"
+        autocomplete="off"
+        style="width:100%;box-sizing:border-box;">
+
+    <div id="trustedSearchDropdown" style="display:none;margin-top:8px;border:1px solid #B8C9D6;border-radius:8px;padding:10px;background:#FFFFFF;"><div style="
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:nowrap;
+    width:100%;
+    gap:8px;
+    margin-bottom:10px;
+    box-sizing:border-box;
+">
+
+    <span
+        id="trustedMembersCount"
+        style="
+            display:inline-block;
+            position:static;
+            margin:0;
+            padding:0;
+            flex:1;
+            min-width:0;
+            text-align:left;
+            white-space:nowrap;
+            color:#2A6EB0;
+            font-size:13px;
+            font-weight:bold;
+        ">
+        Total Members: 0
+    </span>
+
+    <div style="
+        display:flex;
+        position:static;
+        align-items:center;
+        justify-content:flex-end;
+        flex-shrink:0;
+        gap:14px;
+        margin:0;
+        padding:0;
+    ">
+
+        <span
+            id="trustedSortAZ"
+            title="Alphabetical Order"
+            role="button"
+            tabindex="0"
+            style="
+                display:inline-flex;
+                position:static;
+                align-items:center;
+                cursor:pointer;
+                color:#2A6EB0;
+                font-weight:bold;
+                font-size:15px;
+                white-space:nowrap;
+            ">
+            A↕Z
+        </span>
+
+        <span
+            id="trustedSortMobile"
+            title="Mobile Number Order"
+            role="button"
+            tabindex="0"
+            style="
+                display:inline-flex;
+                position:static;
+                align-items:center;
+                cursor:pointer;
+                color:#2A6EB0;
+                font-weight:bold;
+                font-size:15px;
+                white-space:nowrap;
+            ">
+            1↕9
+        </span>
+
+    </div>
+
+</div>
+        <div id="trustedMembersMatchCount" style="text-align:center;color:#2A6EB0;margin-bottom:8px;">Matching Members: 0</div>
+        <div id="trustedMembersList" style="max-height:320px;overflow-y:auto;text-align:left;">No trusted members added.</div>
+    </div>
+    <div id="trustedSelectedMemberDetails" style="display:none;margin-top:12px;padding:12px;border:1px solid #2A6EB0;border-radius:8px;background:#F0F8FF;color:#2A6EB0;"></div>
+</div>
+                </div>
+                `
+            );
+/* =====================================
+   ADD TRUSTED MEMBER
+   ===================================== */
+
+const addTrustedMobileBtn =
+    document.getElementById(
+        "addTrustedMobileBtn"
+    );
+
+if(addTrustedMobileBtn){
+
+    addTrustedMobileBtn.onclick =
+        async function(){
+
+            const addBtn = this;
+
+            const name =
+                document.getElementById(
+                    "trustedMemberName"
+                ).value.trim();
+
+            const mobile =
+                document.getElementById(
+                    "trustedMobileInput"
+                ).value.trim();
+
+            const email =
+                document.getElementById(
+                    "trustedMemberEmail"
+                ).value.trim();
+
+            if(!name){
+                alert("Enter member name.");
+                return;
+            }
+
+            if(!/^[6-9][0-9]{9}$/.test(mobile)){
+                alert("Enter a valid 10-digit mobile number.");
+                return;
+            }
+
+            if(
+                email &&
+                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+            ){
+                alert("Enter a valid email address.");
+                return;
+            }
+
+            const sessionToken =
+                sessionStorage.getItem(
+                    "sessionToken"
+                );
+
+            if(!sessionToken){
+                alert("Please login again.");
+                return;
+            }
+
+            const formData = new FormData();
+
+            formData.append(
+                "action",
+                "addTrustedMember"
+            );
+
+            formData.append(
+                "sessionToken",
+                sessionToken
+            );
+
+            formData.append(
+                "familyId",
+                currentFamily.familyId
+            );
+
+            formData.append("name", name);
+            formData.append("mobile", mobile);
+            formData.append("email", email);
+
+            addBtn.disabled = true;
+
+            try{
+
+                const response = await fetch(
+                    API_URL,
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+                const result =
+                    await response.json();
+
+                if(result.status !== "success"){
+                    alert(
+                        result.message ||
+                        "Unable to add Trusted Member."
+                    );
+                    return;
+                }
+
+                alert(
+                    "Trusted Member added successfully."
+                );
+await loadTrustedMembers();
+                document.getElementById(
+                    "trustedMemberName"
+                ).value = "";
+
+                document.getElementById(
+                    "trustedMobileInput"
+                ).value = "";
+
+                document.getElementById(
+                    "trustedMemberEmail"
+                ).value = "";
+
+            }catch(error){
+
+                console.error(
+                    "ADD TRUSTED MEMBER ERROR:",
+                    error
+                );
+
+                alert(
+                    "Unable to add Trusted Member."
+                );
+
+            }finally{
+
+                addBtn.disabled = false;
+
+            }
+
+        };
+
+}
+
+            /* =====================================
+   TRUSTED MEMBERS SEARCH DROPDOWN
+   ===================================== */
+
+const trustedSearchInput =
+    document.getElementById("trustedMembersSearch");
+
+const trustedSearchDropdown =
+    document.getElementById("trustedSearchDropdown");
+
+if (trustedSearchInput && trustedSearchDropdown) {
+
+    trustedSearchInput.addEventListener("focus", function () {
+        trustedSearchDropdown.style.display = "block";
+    });
+    trustedSearchInput.addEventListener("click", function () {
+        trustedSearchDropdown.style.display = "block";
+    });
+
+}
+/* =====================================
+   LOAD TRUSTED MEMBERS LIST
+   ===================================== */
+
+async function loadTrustedMembers(){
+
+    const list =
+        document.getElementById(
+            "trustedMembersList"
+        );
+
+    if(!list) return;
+
+    const selectedDetails = document.getElementById("trustedSelectedMemberDetails");
+    if(selectedDetails){
+        selectedDetails.style.display = "none";
+        selectedDetails.replaceChildren();
+    }
+
+    list.textContent =
+        "Loading Trusted Members...";
+
+    const sessionToken =
+        sessionStorage.getItem(
+            "sessionToken"
+        );
+
+    if(!sessionToken){
+
+        list.textContent =
+            "Please login again.";
+
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append(
+        "action",
+        "getTrustedMembers"
+    );
+
+    formData.append(
+        "sessionToken",
+        sessionToken
+    );
+
+    formData.append(
+        "familyId",
+        currentFamily.familyId
+    );
+
+    try{
+
+        const response = await fetch(
+            API_URL,
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+        const result =
+            await response.json();
+
+        if(result.status !== "success"){
+
+            list.textContent =
+                result.message ||
+                "Unable to load Trusted Members.";
+
+            return;
+        }
+
+       const members =
+    Array.isArray(result.trustedMembers)
+        ? result.trustedMembers
+        : [];
+
+const trustedMembersData = members.map(function(item) {
+    return typeof item === "string"
+        ? {
+            name: "",
+            mobile: item,
+            email: ""
+        }
+        : {
+            name: String(item.name || ""),
+            mobile: String(item.mobile || ""),
+            email: String(item.email || "")
+        };
+});
+
+const countElement =
+    document.getElementById("trustedMembersCount");
+
+if (countElement) {
+    countElement.textContent =
+        "Total Members: " + trustedMembersData.length;
+}
+
+list.replaceChildren();
+
+/* TRUSTED MEMBERS SEARCH AND SORT */
+
+const searchInput =
+    document.getElementById("trustedMembersSearch");
+
+let trustedSortMode = "name";
+let trustedLastSortMode = "name";
+let trustedNameAscending = true;
+let trustedMobileAscending = true;
+const trustedSortAZ = document.getElementById("trustedSortAZ");
+const trustedSortMobile = document.getElementById("trustedSortMobile");
+
+const matchCount =
+    document.getElementById("trustedMembersMatchCount");
+
+function getFilteredTrustedMembers(){
+
+    const query = String(
+        searchInput ? searchInput.value : ""
+    ).trim().toLowerCase();
+
+    const sortBy = trustedSortMode;
+
+    const filtered = trustedMembersData.filter(function(member){
+
+        return (
+            member.name.toLowerCase().includes(query) ||
+            member.mobile.includes(query)
+        );
+
+    });
+
+    filtered.sort(function(a, b){
+
+        if(sortBy === "mobile"){
+            const comparison = a.mobile.localeCompare(
+                b.mobile, undefined, {numeric:true}
+            );
+            return trustedMobileAscending ? comparison : -comparison;
+        }
+        const comparison = a.name.localeCompare(
+            b.name, undefined, {sensitivity:"base"}
+        );
+        return trustedNameAscending ? comparison : -comparison;
+
+    });
+
+    return filtered;
+}
+
+function updateTrustedSearchCount(){
+
+    const filtered = getFilteredTrustedMembers();
+
+    if(matchCount){
+        matchCount.textContent =
+            "Matching Members: " + filtered.length;
+    }
+
+    return filtered;
+}
+
+updateTrustedSearchCount();
+
+/* SEARCH AND SORT EVENT HANDLERS */
+
+function renderTrustedSearchResults(){
+
+    const filtered =
+        updateTrustedSearchCount();
+
+    const visibleMobiles = new Set(
+        filtered.map(function(member){
+            return member.mobile;
+        })
+    );
+
+   const cards = Array.from(
+    list.querySelectorAll(
+        "[data-trusted-mobile]"
+    )
+);
+
+const cardMap = new Map();
+
+cards.forEach(function(card){
+
+    cardMap.set(
+        card.dataset.trustedMobile,
+        card
+    );
+
+    card.style.display = "none";
+
+});
+
+filtered.forEach(function(member){
+
+    const card = cardMap.get(
+        member.mobile
+    );
+
+    if(card){
+
+        card.style.display = "";
+
+        list.appendChild(card);
+
+    }
+
+});
+    const oldMessage =
+        document.getElementById(
+            "trustedNoMatchingMembers"
+        );
+
+    if(oldMessage){
+        oldMessage.remove();
+    }
+
+    if(filtered.length === 0 &&
+       trustedMembersData.length > 0){
+
+        const message =
+            document.createElement("div");
+
+        message.id =
+            "trustedNoMatchingMembers";
+
+        message.textContent =
+            "No matching member";
+
+        message.style.cssText = `
+            padding:12px;
+            text-align:center;
+            color:#2A6EB0;
+        `;
+
+        list.appendChild(message);
+    }
+
+}
+
+if (searchInput) {
+
+    searchInput.oninput = function () {
+
+        const selectedDetailsBox =
+            document.getElementById("trustedSelectedMemberDetails");
+
+        if (selectedDetailsBox) {
+            selectedDetailsBox.style.display = "none";
+            selectedDetailsBox.replaceChildren();
+        }
+
+        const trustedSearchDropdown =
+            document.getElementById("trustedSearchDropdown");
+
+        if (trustedSearchDropdown) {
+            trustedSearchDropdown.style.display = "block";
+        }
+
+        renderTrustedSearchResults();
+
+    };
+
+}
+function activateTrustedSort(mode){
+    if(mode === "name"){
+        trustedNameAscending = trustedLastSortMode === "name"
+            ? !trustedNameAscending : true;
+    }else{
+        trustedMobileAscending = trustedLastSortMode === "mobile"
+            ? !trustedMobileAscending : true;
+    }
+    trustedSortMode = mode;
+    trustedLastSortMode = mode;
+    renderTrustedSearchResults();
+}
+if(trustedSortAZ){
+    trustedSortAZ.onclick = function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        activateTrustedSort("name");
+    };
+    trustedSortAZ.onkeydown = function(event){
+        if(event.key === "Enter" || event.key === " "){
+            event.preventDefault();
+            activateTrustedSort("name");
+        }
+    };
+}
+if(trustedSortMobile){
+    trustedSortMobile.onclick = function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        activateTrustedSort("mobile");
+    };
+    trustedSortMobile.onkeydown = function(event){
+        if(event.key === "Enter" || event.key === " "){
+            event.preventDefault();
+            activateTrustedSort("mobile");
+        }
+    };
+}
+
+if(members.length === 0){
+            list.textContent =
+                "No trusted members added.";
+
+            return;
+        }
+
+        members.forEach(function(item){
+
+            const member =
+                typeof item === "string"
+                    ? {
+                        name: "",
+                        mobile: item,
+                        email: ""
+                    }
+                    : item;
+
+     const card =
+    document.createElement("div");
+
+card.dataset.trustedMobile =
+    String(member.mobile || "").trim();
+
+card.style.cssText = `
+    padding:10px;
+    margin-bottom:4px;
+    border:1px solid #B8C9D6;
+    border-radius:6px;
+    text-align:left;
+    background:#FFFFFF;
+    cursor:pointer;
+`;
+            const name =
+                document.createElement("div");
+
+            name.style.cssText = `
+                color:#2A6EB0;
+                font-weight:bold;
+                margin-bottom:4px;
+            `;
+
+            name.textContent =
+                member.name || "Trusted Member";
+
+            const mobile =
+                document.createElement("div");
+
+            mobile.textContent =
+                "Mobile: " + (member.mobile || "");
+
+            /* MEMBER DETAILS AND DELETE BUTTON */
+
+const memberRow =
+    document.createElement("div");
+
+memberRow.style.cssText = `
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+`;
+
+const memberDetails =
+    document.createElement("div");
+
+memberDetails.style.cssText = `
+    flex:1;
+    min-width:0;
+    overflow-wrap:anywhere;
+`;
+
+memberDetails.appendChild(name);
+memberDetails.appendChild(mobile);
+
+/* MEMBER SELECTION: ONE DETAILS BOX OUTSIDE DROPDOWN */
+card.onclick = function(event){
+    if(event.target.closest("button")) return;
+    const dropdown = document.getElementById("trustedSearchDropdown");
+    const input = document.getElementById("trustedMembersSearch");
+    const detailsBox = document.getElementById("trustedSelectedMemberDetails");
+    if(input) input.value = String(member.name || member.mobile || "");
+    if(dropdown) dropdown.style.display = "none";
+    if(detailsBox){
+        detailsBox.replaceChildren();
+        [
+            "Name: " + String(member.name || "Trusted Member"),
+            "Mobile: " + String(member.mobile || ""),
+            "Email: " + String(member.email || "Not provided")
+        ].forEach(function(value){
+            const line = document.createElement("div");
+            line.textContent = value;
+            detailsBox.appendChild(line);
+        });
+        detailsBox.style.display = "block";
+    }
+};
+
+const deleteBtn =
+    document.createElement("button");
+deleteBtn.type = "button";
+deleteBtn.textContent = "Delete";
+
+deleteBtn.style.cssText = `
+    border:none;
+    background:transparent;
+    color:#FF0000;
+    font-weight:bold;
+    font-size:15px;
+    cursor:pointer;
+    padding:8px 2px;
+    flex-shrink:0;
+`;
+/* DELETE TRUSTED MEMBER */
+
+deleteBtn.onclick = async function(){
+
+    const memberMobile =
+        String(member.mobile || "").trim();
+
+    if(!memberMobile){
+        alert("Mobile number missing.");
+        return;
+    }
+
+    const confirmed = confirm(
+        "Are you sure you want to delete " +
+        (member.name || memberMobile) +
+        " from Trusted Members?"
+    );
+
+    if(!confirmed){
+        return;
+    }
+
+    const token =
+        sessionStorage.getItem("sessionToken");
+
+    if(!token){
+        alert("Please login again.");
+        return;
+    }
+
+    const data = new FormData();
+
+    data.append("action", "removeTrustedMember");
+    data.append("sessionToken", token);
+    data.append("familyId", currentFamily.familyId);
+    data.append("mobile", memberMobile);
+
+    deleteBtn.disabled = true;
+
+    try{
+
+        const response = await fetch(
+            API_URL,
+            {
+                method: "POST",
+                body: data
+            }
+        );
+
+        const result = await response.json();
+
+        if(result.status !== "success"){
+            alert(
+                result.message ||
+                "Unable to delete Trusted Member."
+            );
+            return;
+        }
+
+        await loadTrustedMembers();
+
+    }catch(error){
+
+        console.error(
+            "DELETE TRUSTED MEMBER ERROR:",
+            error
+        );
+
+        alert("Unable to delete Trusted Member.");
+
+    }finally{
+
+        deleteBtn.disabled = false;
+
+    }
+
+};
+memberRow.appendChild(memberDetails);
+memberRow.appendChild(deleteBtn);
+
+card.appendChild(memberRow);
+
+// Email will appear only when a member is selected.
+// List displays Name and Mobile Number only.
+
+list.appendChild(card);
+
+});
+
+renderTrustedSearchResults();
+    }catch(error){
+
+        console.error(
+            "LOAD TRUSTED MEMBERS ERROR:",
+            error
+        );
+
+        list.textContent =
+            "Unable to load Trusted Members.";
+
+    }
+
+}
+/* =====================================
+   IMPORT EXISTING MEMBERS - POPUP
+   ===================================== */
+
+const importExistingMembersBtn =
+    document.getElementById(
+        "importExistingMembersBtn"
+    );
+
+if(importExistingMembersBtn){
+
+    importExistingMembersBtn.onclick = function(){
+
+        const oldDialog =
+            document.getElementById(
+                "trustedImportDialog"
+            );
+
+        if(oldDialog){
+            oldDialog.remove();
+        }
+
+        const dialog =
+            document.createElement("div");
+
+        dialog.id = "trustedImportDialog";
+
+        dialog.style.cssText = `
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.45);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            z-index:99999;
+            padding:15px;
+        `;
+
+        dialog.innerHTML = `
+            <div style="
+                width:100%;
+                max-width:360px;
+                padding:22px;
+                background:#FFFFFF;
+                border-radius:12px;
+                box-sizing:border-box;
+            ">
+
+                <h3 style="
+                    color:#2A6EB0;
+                    text-align:center;
+                    margin-top:0;
+                ">
+                    Import Existing Members
+                </h3>
+
+                <p style="font-size:14px;">
+                    Select Import Mode:
+                </p>
+
+                <label style="
+                    display:block;
+                    margin-bottom:14px;
+                ">
+                    <input
+                        type="radio"
+                        name="trustedImportMode"
+                        value="skip"
+                        checked
+                    >
+                    <b>SKIP</b> — Keep existing Trusted Members unchanged
+                </label>
+
+                <label style="
+                    display:block;
+                    margin-bottom:20px;
+                ">
+                    <input
+                        type="radio"
+                        name="trustedImportMode"
+                        value="override"
+                    >
+                    <b>OVERRIDE</b> — Replace existing details with Family Tree data
+                </label>
+
+                <div style="
+                    display:flex;
+                    gap:10px;
+                ">
+
+                    <button
+                        type="button"
+                        id="confirmTrustedImportBtn"
+                        style="
+                            flex:1;
+                            padding:10px;
+                            background:#2A6EB0;
+                            color:white;
+                            border:none;
+                            border-radius:7px;
+                        ">
+                        Confirm Import
+                    </button>
+
+                    <button
+                        type="button"
+                        id="cancelTrustedImportBtn"
+                        style="
+                            flex:1;
+                            padding:10px;
+                            background:white;
+                            color:#2A6EB0;
+                            border:1px solid #2A6EB0;
+                            border-radius:7px;
+                        ">
+                        Cancel
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        document.body.appendChild(dialog);
+
+        document.getElementById(
+            "cancelTrustedImportBtn"
+        ).onclick = function(){
+            dialog.remove();
+        };
+
+        document.getElementById(
+            "confirmTrustedImportBtn"
+        ).onclick = async function(){
+
+            const mode =
+                dialog.querySelector(
+                    'input[name="trustedImportMode"]:checked'
+                ).value;
+
+            const confirmBtn = this;
+
+            const token =
+                sessionStorage.getItem("sessionToken");
+
+            if(!token){
+                alert("Please login again.");
+                return;
+            }
+
+            const formData = new FormData();
+
+            formData.append(
+                "action",
+                "importExistingTrustedMembers"
+            );
+
+            formData.append(
+                "sessionToken",
+                token
+            );
+
+            formData.append(
+                "familyId",
+                currentFamily.familyId
+            );
+
+            formData.append(
+                "mode",
+                mode
+            );
+
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = "Importing...";
+
+            try{
+
+                const response = await fetch(
+                    API_URL,
+                    {
+                        method:"POST",
+                        body:formData
+                    }
+                );
+
+                const result =
+                    await response.json();
+
+                if(result.status !== "success"){
+
+                    alert(
+                        result.message ||
+                        "Unable to import members."
+                    );
+
+                    return;
+                }
+
+                dialog.remove();
+
+                await loadTrustedMembers();
+
+                alert(
+                    "Import Completed!\n\n" +
+                    "Mode: " + mode.toUpperCase() + "\n" +
+                    "Added: " + result.added + "\n" +
+                    "Updated: " + result.updated + "\n" +
+                    "Skipped: " + result.skipped
+                );
+
+            }catch(error){
+
+                console.error(
+                    "TRUSTED IMPORT ERROR:",
+                    error
+                );
+
+                alert(
+                    "Unable to import members."
+                );
+
+            }finally{
+
+                confirmBtn.disabled = false;
+                confirmBtn.textContent =
+                    "Confirm Import";
+
+            }
+
+        };
+
+    };
+
+}
+/* LOAD WHEN PAGE OPENS */
+
+loadTrustedMembers();
+            
+            /* BACK TO FAMILY SETTINGS */
+
+            document.getElementById(
+                "trustedMembersBackBtn"
+            ).onclick = function(){
+
+               familyBtn.click();
+            };
+
+        };
+
+}
+            document.getElementById(
+                "familySettingsBackBtn"
+            ).onclick = function(){
+
+                familyBtn.click();
+
+            };
+
+            
+            document.getElementById(
+                "saveFamilySettingsBtn"
+            ).onclick = async function(){
+
+                const saveBtn = this;
+
+                const sessionToken =
+                    sessionStorage.getItem(
+                        "sessionToken"
+                    );
+
+                if(!sessionToken){
+                    card.style.background = "#EAF8FF";
+                    card.style.borderColor = "#4A9FE8";
+                    name.style.color = "#2A6EB0";
+                    id.style.color = "#444";
+                    alert("Login session missing. Please login again.");
+                    return;
+                }
+
+                const formData = new FormData();
+
+                formData.append(
+                    "action",
+                    "updateFamilySettings"
+                );
+
+                formData.append(
+                    "sessionToken",
+                    sessionToken
+                );
+
+                formData.append(
+                    "familyId",
+                    currentFamily.familyId
+                );
+
+                formData.append(
+                    "visibility",
+                    document.getElementById(
+                        "familyVisibility"
+                    ).value
+                );
+
+                formData.append(
+                    "allowEdit",
+                    document.getElementById(
+                        "familyAllowEdit"
+                    ).value
+                );
+
+                formData.append(
+                    "allowAdd",
+                    document.getElementById(
+                        "familyAllowAdd"
+                    ).value
+                );
+
+                formData.append(
+                    "showSearch",
+                    document.getElementById(
+                        "familyShowSearch"
+                    ).value
+                );
+
+                formData.append(
+                    "showRelations",
+                    document.getElementById(
+                        "familyShowRelations"
+                    ).value
+                );
+
+                formData.append(
+                    "showTree",
+                    document.getElementById(
+                        "familyShowTree"
+                    ).value
+                );
+               /* =====================================
+   NEW FAMILY SETTINGS
+   ===================================== */
+
+formData.append(
+    "showPersonalDetails",
+    document.getElementById(
+        "familyShowPersonalDetails"
+    ).value
+);
+
+formData.append(
+    "trustedContactsFullView",
+    document.getElementById(
+        "familyTrustedContactsFullView"
+    ).value
+);
+
+formData.append(
+    "trustedAllowAdd",
+    document.getElementById(
+        "familyTrustedAllowAdd"
+    ).value
+);
+
+formData.append(
+    "trustedAllowEdit",
+    document.getElementById(
+        "familyTrustedAllowEdit"
+    ).value
+);
+
+/* AUTO ADD MEMBERS - COLUMN R */
+
+formData.append(
+    "autoAddMembers",
+    document.getElementById(
+        "familyAutoAddMembers"
+    ).value
+);
+
+saveBtn.disabled = true;
+                try{
+
+                    const response = await fetch(
+                        API_URL,
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+                    const result =
+                        await response.json();
+
+                    if(result.status !== "success"){
+
+                        alert(
+                            result.message ||
+                            "Unable to save Family Settings."
+                        );
+
+                        return;
+                    }
+
+                    alert(
+                        "Family Settings saved successfully."
+                    );
+
+                    familyBtn.click();
+
+                }catch(error){
+
+                    console.error(
+                        "FAMILY SETTINGS SAVE ERROR:",
+                        error
+                    );
+
+                    alert(
+                        "Unable to save Family Settings."
+                    );
+
+                }finally{
+
+                    saveBtn.disabled = false;
+
+                }
+
+            };
+
+        };
+
+    }
+
+    bindAddMemberButton();
+
+    /* =====================================
+       MY FAMILY / OTHER FAMILIES TABS
+       ===================================== */
+
+    const myFamilyTab =
+        document.getElementById("myFamilyTab");
+
+    const otherFamiliesTab =
+        document.getElementById("otherFamiliesTab");
+
+    const familyGrid =
+        document.querySelector(".grid-3x2");
+/* OTHER FAMILIES NAVIGATION: ONE SHARED BACK/HOME BAR */
+
+const otherFamilyNavigation = document.createElement("div");
+otherFamilyNavigation.id = "otherFamilyNavigation";
+otherFamilyNavigation.style.cssText = `
+    position:fixed;
+    bottom:0px;
+    left:0;
+    right:0;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    padding:10px 15px;
+    background:#EAF8FF;
+    z-index:999;
+    box-sizing:border-box;
+`;
+
+const otherBackBtn = document.createElement("button");
+otherBackBtn.type = "button";
+otherBackBtn.className = "back-btn";
+otherBackBtn.textContent = "← Back";
+otherBackBtn.style.cssText = "flex:1;max-width:160px;margin:0;display:inline-flex;align-items:center;justify-content:center;text-align:center;";
+
+const otherHomeBtn = document.createElement("button");
+otherHomeBtn.type = "button";
+otherHomeBtn.className = "back-btn";
+otherHomeBtn.textContent = "⌂ Home";
+otherHomeBtn.style.cssText = "flex:1;max-width:160px;margin:0;display:inline-flex;align-items:center;justify-content:center;text-align:center;";
+
+otherFamilyNavigation.appendChild(otherBackBtn);
+otherFamilyNavigation.appendChild(otherHomeBtn);
+document.body.appendChild(otherFamilyNavigation);
+
+function setOtherFamilyNavigation(page){
+    window.otherFamilyNavigationPage = page;
+    const nav = document.getElementById("otherFamilyNavigation");
+    const back = nav?.querySelector("button:first-child");
+    const home = nav?.querySelector("button:last-child");
+    if(!nav || !back || !home) return;
+
+    const showNav = ["list", "detail", "search"].includes(page);
+    nav.style.display = showNav ? "flex" : "none";
+    back.style.display = showNav ? "inline-flex" : "none";
+    home.style.display = ["detail", "search"].includes(page) ? "inline-flex" : "none";
+}
+window.setOtherFamilyNavigation = setOtherFamilyNavigation;
+
+otherBackBtn.onclick = async function(){
+    const page = window.otherFamilyNavigationPage;
+
+    if(page === "list"){
+        document.getElementById("myFamilyTab")?.click();
+        return;
+    }
+
+   
+if(page === "detail"){
+
+    /* Remove the public Family ID shown under the title */
+    document.getElementById("publicFamilyIdText")?.remove();
+
+    /* Restore only the Family page title, not other Family icons/labels. */
+    const familyPageTitle = document.querySelector(
+        "#homeContent h2.page-title > span"
+    );
+    if(familyPageTitle){
+        familyPageTitle.textContent = "Family";
+    }
+
+    if(typeof window.activateFamilyTab === "function"){
+        await window.activateFamilyTab("other");
+    } else {
+        await loadPublicFamilies();
+    }
+
+    setOtherFamilyNavigation("list");
+    return;
+}
+
+
+    if(page === "search"){
+        const familyId = window.currentPublicFamilyId || (window.cachedPublicFamilyDetails && window.cachedPublicFamilyDetails.familyId);
+        if(typeof window.restorePublicFamilyDetail === "function" && familyId){
+            await window.restorePublicFamilyDetail(familyId);
+        }else{
+            setOtherFamilyNavigation("detail");
+        }
+        return;
+    }
+};
+
+otherHomeBtn.onclick = function(){
+    setOtherFamilyNavigation("hidden");
+    showHome();
+};
+    let otherFamiliesContent =
+        document.getElementById("otherFamiliesContent");
+
+    if(familyGrid && !otherFamiliesContent){
+
+        otherFamiliesContent =
+            document.createElement("div");
+
+        otherFamiliesContent.id =
+            "otherFamiliesContent";
+
+        otherFamiliesContent.style.display =
+            "none";
+
+        otherFamiliesContent.style.textAlign =
+            "center";
+
+        otherFamiliesContent.style.padding =
+            "25px 10px";
+
+        otherFamiliesContent.textContent =
+            "Other Families will appear here.";
+
+        familyGrid.insertAdjacentElement(
+            "afterend",
+            otherFamiliesContent
+        );
+
+    }
+
+/* =====================================
+   LOAD SELECTED PUBLIC FAMILY MEMBERS
+   ===================================== */
+
+async function loadPublicFamilyMembers(
+    viewingFamily,
+    purpose
+){
+
+    const allowedPurposes = {
+        search: "showSearch",
+        relations: "showRelations",
+        tree: "showTree"
+    };
+
+    const permissionName =
+        allowedPurposes[purpose];
+
+    if(
+        !permissionName ||
+        viewingFamily[permissionName] !== "Yes"
+    ){
+
+        throw new Error(
+            "This family feature is not permitted."
+        );
+
+    }
+
+    const sessionToken =
+        sessionStorage.getItem(
+            "sessionToken"
+        );
+
+    if(!sessionToken){
+
+        throw new Error(
+            "Login session missing. Please login again."
+        );
+
+    }
+
+    const params =
+        new URLSearchParams();
+
+    params.append(
+        "action",
+        "getFamilyMembers"
+    );
+
+    params.append(
+        "familyId",
+        viewingFamily.familyId
+    );
+
+    params.append(
+        "sessionToken",
+        sessionToken
+    );
+
+    params.append(
+        "purpose",
+        purpose
+    );
+
+    const response = await fetch(
+        API_URL,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type":
+                    "application/x-www-form-urlencoded"
+            },
+            body: params.toString()
+        }
+    );
+
+    if(!response.ok){
+
+        throw new Error(
+            "Unable to connect to the server."
+        );
+
+    }
+
+    const result =
+        await response.json();
+
+    if(result.status !== "success"){
+
+        throw new Error(
+            result.message ||
+            "Unable to load public family members."
+        );
+
+    }
+
+    return Array.isArray(result.members)
+        ? result.members
+        : [];
+
+}
+
+/* =====================================
+   LOAD PUBLIC FAMILIES
+   ===================================== */
+
+async function loadPublicFamilies(){
+
+    const container =
+        document.getElementById(
+            "otherFamiliesContent"
+        );
+
+   if(!container){
+    return;
+}
+
+/* MARK OTHER FAMILIES LIST PAGE */
+delete container.dataset.publicFamilyDetail;
+
+container.textContent =
+    "Loading public families...";
+    const sessionToken =
+        sessionStorage.getItem("sessionToken");
+
+    if(!sessionToken){
+
+        container.textContent =
+            "Login session missing. Please login again.";
+
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append(
+        "action",
+        "getPublicFamilies"
+    );
+
+    formData.append(
+        "sessionToken",
+        sessionToken
+    );
+
+    try{
+
+        const response = await fetch(
+            API_URL,
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+        const result =
+            await response.json();
+
+        if(result.status !== "success"){
+
+            container.textContent =
+                result.message ||
+                "Unable to load public families.";
+
+            return;
+        }
+
+       
+        const myFamily = JSON.parse(
+            localStorage.getItem("currentFamily") || "null"
+        );
+
+        const families =
+            (result.families || []).filter(
+                function(family){
+
+                    return (
+                        !myFamily ||
+                        String(family.familyId).trim() !==
+                        String(myFamily.familyId).trim()
+                    );
+
+                }
+            );
+
+        container.innerHTML = "";
+
+        if(families.length === 0){
+
+            container.textContent =
+                "No public families available.";
+
+            return;
+        }
+
+        families.forEach(function(family){
+
+            const card =
+                document.createElement("div");
+
+            card.dataset.familyId = String(family.familyId || "");
+
+            card.style.cssText = `
+                padding: 14px;
+                margin: 10px 0;
+                border: 1px solid #4A9FE8;
+                border-radius: 10px;
+                background: #EAF8FF;
+                text-align: left;
+            `;
+
+            const name =
+                document.createElement("div");
+
+            name.style.cssText = `
+                font-weight: bold;
+                color: #2A6EB0;
+                margin-bottom: 6px;
+            `;
+
+            name.textContent =
+                family.familyName || "Unnamed Family";
+
+            const id =
+                document.createElement("div");
+
+            id.style.cssText = `
+                font-size: 13px;
+                color: #444;
+            `;
+
+            id.textContent =
+                "Family ID: " + family.familyId;
+
+           
+            card.appendChild(name);
+            card.appendChild(id);
+
+            card.style.cursor = "pointer";
+            card.style.transition = "background-color 120ms ease, color 120ms ease";
+
+            card.onclick = async function(){
+                card.style.background = "#2A6EB0";
+                card.style.borderColor = "#2A6EB0";
+                name.style.color = "#FFFFFF";
+                id.style.color = "#FFFFFF";
+
+                const sessionToken =
+                    sessionStorage.getItem(
+                        "sessionToken"
+                    );
+
+                if(!sessionToken){
+
+                    alert(
+                        "Login session missing. Please login again."
+                    );
+
+                    return;
+                }
+
+                const formData = new FormData();
+
+                formData.append(
+                    "action",
+                    "getPublicFamilyDetails"
+                );
+
+                formData.append(
+                    "sessionToken",
+                    sessionToken
+                );
+
+                formData.append(
+                    "familyId",
+                    family.familyId
+                );
+
+                card.style.pointerEvents = "none";
+
+                try{
+
+                    const response = await fetch(
+                        API_URL,
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+                    const result =
+                        await response.json();
+
+                    if(
+                        result.status !== "success" ||
+                        !result.family
+                    ){
+                        card.style.background = "#EAF8FF";
+                        card.style.borderColor = "#4A9FE8";
+                        name.style.color = "#2A6EB0";
+                        id.style.color = "#444";
+                        card.style.pointerEvents = "auto";
+                        alert(result.message || "Unable to open family.");
+                        return;
+                    }
+
+                   const viewingFamily = result.family;
+
+/* Clear temporary selection as the details page opens. */
+card.style.background = "#EAF8FF";
+card.style.borderColor = "#4A9FE8";
+name.style.color = "#2A6EB0";
+id.style.color = "#444";
+
+container.innerHTML = "";
+
+/* MARK PUBLIC FAMILY DETAIL PAGE */
+container.dataset.publicFamilyDetail = "true";
+setOtherFamilyNavigation("detail");
+if(myFamilyTab) myFamilyTab.style.display = "none";
+if(otherFamiliesTab) otherFamiliesTab.style.display = "none";
+window.otherFamilyReturnToDetail = async function(){
+    /* Invoke the selected card's existing detail loader directly and wait for it.
+       This avoids the intermediate Family page and Other Families list reload. */
+    if(typeof card.onclick === "function"){
+        await card.onclick();
+    }
+};
+window.currentPublicFamilyId = String(viewingFamily.familyId || "");
+
+                    
+                 
+const publicFamilyName = String(
+    viewingFamily.familyName || "Unnamed Family"
+).trim().replace(/\s+Family$/i, "") + " Family";
+window.currentPublicFamilyName = publicFamilyName;
+
+/* Update only the title span inside the Family page content.
+   Do not search by icon/text across the whole document: that can select
+   a different Family icon or leave the visible title unchanged. */
+const familyPageTitle = document.querySelector(
+    "#homeContent h2.page-title > span"
+);
+const titleContainer = familyPageTitle
+    ? familyPageTitle.parentElement
+    : null;
+
+if (familyPageTitle) {
+    familyPageTitle.textContent = publicFamilyName;
+} else {
+    console.warn("Other family page title span was not found.");
+}
+
+/* Remove previously added Family ID rows */
+const titleParent = titleContainer
+    ? titleContainer.parentElement
+    : null;
+
+if (titleParent) {
+    Array.from(titleParent.querySelectorAll("p"))
+        .filter(p =>
+            p.textContent.trim().startsWith("Family ID:")
+        )
+        .forEach(p => p.remove());
+}
+
+/* Display Family ID exactly once */
+const familyIdText = document.createElement("p");
+familyIdText.id = "publicFamilyIdText";
+familyIdText.textContent =
+    "Family ID: " + viewingFamily.familyId;
+
+familyIdText.style.cssText = `
+    margin: 4px 0 0;
+    padding: 0;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.3;
+`;
+
+if (titleContainer && titleContainer.parentElement) {
+    titleContainer.insertAdjacentElement(
+        "afterend",
+        familyIdText
+    );
+}
+
+
+
+                    /* =====================================
+                       PUBLIC FAMILY PERMISSION BUTTONS
+                       ===================================== */
+
+                    const publicActions =
+                        document.createElement("div");
+
+                    publicActions.style.cssText = `
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 12px;
+                        margin-top: 20px;
+                        text-align: center;
+                    `;
+
+                    function addPublicAction(
+                        label,
+                        actionName
+                    ){
+
+                        const button =
+                            document.createElement("button");
+
+                        button.textContent = label;
+
+                        button.style.cssText = `
+                            padding: 14px 8px;
+                            border: 1px solid #2A6EB0;
+                            border-radius: 10px;
+                            background: #EAF8FF;
+                            color: #2A6EB0;
+                            font-weight: bold;
+                            cursor: pointer;
+                        `;
+
+                       
+button.onclick = async function(){
+
+    // OTHER FAMILIES → RELATIONS
+
+    if(actionName === "Relations"){
+
+        window.cachedPublicFamilyDetails = {
+            familyId: viewingFamily.familyId,
+            familyName: publicFamilyName,
+            html: container.innerHTML
+        };
+        button.disabled = true;
+        button.textContent = "Loading Relations...";
+
+        try{
+
+            const members =
+                await loadPublicFamilyMembers(
+                    viewingFamily,
+                    "relations"
+                );
+
+            console.log(
+                "OTHER FAMILY RELATIONS:",
+                viewingFamily.familyName,
+                "MEMBERS:",
+                members.length
+            );
+
+            if(members.length === 0){
+
+                alert("No members found.");
+
+                return;
+            }
+
+window.relationsReturnAction = async function(){
+    window.currentPublicFamilyName = publicFamilyName;
+
+    /* Return directly to this family's detail using its existing card handler.
+       Do not rebuild the generic Family page or reload the Other Families list. */
+    if(typeof window.otherFamilyReturnToDetail === "function"){
+        await window.otherFamilyReturnToDetail();
+        return;
+    }
+
+    /* Fallback for cases where the original card handler is no longer available. */
+    if(typeof window.restorePublicFamilyDetail === "function"){
+        await window.restorePublicFamilyDetail(viewingFamily.familyId);
+    }else{
+        familyBtn.click();
+    }
+};
+
+setOtherFamilyNavigation("hidden");
+openRelationsPage(members, publicFamilyName);
+        }catch(error){
+
+            console.error(
+                "OTHER FAMILY RELATIONS ERROR:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "Unable to load relations."
+            );
+
+        }finally{
+
+            button.disabled = false;
+            button.textContent = label;
+
+        }
+
+        return;
+    }
+/* =====================================
+   OTHER FAMILIES → TREE VIEW
+   ===================================== */
+
+if(actionName === "Tree View"){
+
+    window.cachedPublicFamilyDetails = {
+        familyId: viewingFamily.familyId,
+        familyName: publicFamilyName,
+        html: container.innerHTML
+    };
+    button.disabled = true;
+    button.textContent = "Loading Tree View...";
+
+    try{
+
+        const members =
+            await loadPublicFamilyMembers(
+                viewingFamily,
+                "tree"
+            );
+
+        console.log(
+            "OTHER FAMILY TREE:",
+            viewingFamily.familyName,
+            "MEMBERS:",
+            members.length
+        );
+
+        if(members.length === 0){
+
+            alert("No members found.");
+
+            return;
+        }
+
+        window.familyTreeReturnAction = async function(){
+            window.currentPublicFamilyName = publicFamilyName;
+            if(typeof window.restorePublicFamilyDetail === "function"){
+                await window.restorePublicFamilyDetail(viewingFamily.familyId);
+            }else{
+                familyBtn.click();
+            }
+        };
+
+        setOtherFamilyNavigation("hidden");
+
+        await openFamilyTreePage(
+            viewingFamily,
+            members
+        );
+    }catch(error){
+
+        console.error(
+            "OTHER FAMILY TREE ERROR:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Unable to load Family Tree."
+        );
+
+    }finally{
+
+        button.disabled = false;
+        button.textContent = label;
+
+    }
+
+    return;
+}
+    /* =====================================
+       OTHER FAMILIES → ADD MEMBER
+       Preserve the selected public family as
+       the destination for the Add Member form.
+       ===================================== */
+    if(actionName === "Add Member"){
+
+        window.cachedPublicFamilyDetails = {
+            familyId: viewingFamily.familyId,
+            familyName: publicFamilyName,
+            html: container.innerHTML
+        };
+
+        if(
+            String(viewingFamily.allowAdd || "")
+                .trim().toLowerCase() !== "yes"
+        ){
+            alert("Adding members is not permitted for this family.");
+            return;
+        }
+
+        const publicAddReturnTarget = {
+            familyId: String(viewingFamily.familyId || "").trim(),
+            familyName: String(viewingFamily.familyName || "").trim().replace(/\s+Family$/i, "") + " Family",
+            allowAdd: String(viewingFamily.allowAdd || "No").trim()
+        };
+        /* Keep the selected public family in memory as well as session storage.
+           The Add Member save flow may clear session storage before Back is pressed. */
+        window.currentPublicFamilyAddTarget = publicAddReturnTarget;
+        window.currentPublicFamilyId = publicAddReturnTarget.familyId;
+        window.currentPublicFamilyName = publicAddReturnTarget.familyName;
+        sessionStorage.setItem(
+            "publicFamilyAddTarget",
+            JSON.stringify(publicAddReturnTarget)
+        );
+
+        // Rebuild the Family page controls, then open Add Member
+        // immediately so the Family page does not remain visible first.
+        familyBtn.click();
+
+        const addMemberBtn = document.getElementById("addMemberBtn");
+        if(addMemberBtn){
+            addMemberBtn.click();
+        }else{
+            sessionStorage.removeItem("publicFamilyAddTarget");
+            alert("Add Member page could not be opened. Please try again.");
+        }
+
+        return;
+    }
+
+    if(actionName !== "Search Members"){
+
+        alert(
+            actionName +
+            " functionality will be connected next."
+        );
+
+        return;
+    }
+    window.cachedPublicFamilyDetails = {
+        familyId: viewingFamily.familyId,
+        familyName: publicFamilyName,
+        html: container.innerHTML
+    };
+
+    button.disabled = true;
+    button.textContent = "Loading Members...";
+
+    try{
+
+        const members =
+            await loadPublicFamilyMembers(
+                viewingFamily,
+                "search"
+            );
+
+        container.innerHTML = "";
+
+        /* Show the Search Member name in the existing main title only. */
+        const searchTitleSpan = document.querySelector("#homeContent h2.page-title > span");
+        if(searchTitleSpan){
+            searchTitleSpan.textContent = publicFamilyName + " - Search Member";
+        }
+
+        /* Do not leave a duplicate family/search heading inside the results area. */
+        Array.from(container.querySelectorAll("h1,h2,h3,h4"))
+            .filter(heading => /\bSearch Member\b/i.test(heading.textContent || ""))
+            .forEach(heading => heading.remove());
+
+        /* Shared navigation bar handles Back/Home on Search Members. */
+        setOtherFamilyNavigation("search");
+
+        const searchInput =
+            document.createElement("input");
+
+        searchInput.type = "text";
+        searchInput.placeholder =
+            "Search Name / Member ID";
+
+        searchInput.className =
+            "common-form-input";
+
+        searchInput.style.width = "100%";
+        searchInput.style.margin = "15px 0";
+        const sortBar = document.createElement("div");
+
+sortBar.style.cssText = `
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin:10px 0;
+    width:100%;
+`;
+        const memberCount = document.createElement("span");
+
+memberCount.style.cssText = `
+    font-size:16px;
+    color:black;
+    white-space:nowrap;
+`;
+
+sortBar.appendChild(memberCount);
+const sortAZ = document.createElement("button");
+sortAZ.textContent = "A↕Z";
+
+const sortID = document.createElement("button");
+sortID.textContent = "1↕9";
+const sortButtons = document.createElement("div");
+
+sortButtons.style.cssText = `
+    display:flex;
+    align-items:center;
+    gap:10px;
+`;
+[sortAZ, sortID].forEach(btn => {
+    btn.type = "button";
+    btn.style.cssText = `
+        padding:6px 12px;
+        border:1px solid #2A6EB0;
+        border-radius:8px;
+        background:#EAF8FF;
+        color:#2A6EB0;
+        font-weight:bold;
+        cursor:pointer;
+    `;
+sortButtons.appendChild(btn);});
+        sortBar.appendChild(sortButtons);
+
+let sortMode = "id";
+let nameAscending = false;
+let idAscending = false;
+
+sortAZ.onclick = function(){
+    if(sortMode !== "name"){
+        nameAscending = true;
+    }else{
+        nameAscending = !nameAscending;
+    }
+    sortMode = "name";
+    showMembers();
+};
+
+sortID.onclick = function(){
+    if(sortMode !== "id"){
+        idAscending = true;
+    }else{
+        idAscending = !idAscending;
+    }
+    sortMode = "id";
+    showMembers();
+};
+        const results =
+            document.createElement("div");
+
+        results.style.textAlign = "left";
+
+        function showMembers(){
+
+            const query =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
+
+            const filtered =
+                members.filter(function(member){
+
+                    const name =
+                        String(member.name || "")
+                            .toLowerCase();
+
+                    const id =
+                        String(member.memberId || "")
+                            .toLowerCase();
+
+                    return (
+                        name.includes(query) ||
+                        id.includes(query)
+                    );
+
+                }).sort(function(a, b){
+
+    if(sortMode === "name"){
+
+        const comparison =
+            String(a.name || "").localeCompare(
+                String(b.name || ""),
+                undefined,
+                {sensitivity:"base"}
+            );
+
+        return nameAscending
+            ? comparison
+            : -comparison;
+    }
+
+    const comparison =
+        String(a.memberId || "").localeCompare(
+            String(b.memberId || ""),
+            undefined,
+            {numeric:true, sensitivity:"base"}
+        );
+
+    return idAscending
+        ? comparison
+        : -comparison;
+
+});            
+           results.innerHTML = "";
+
+memberCount.textContent =
+    "Members: " + filtered.length;
+
+if(filtered.length === 0){
+    const empty =
+                    document.createElement("p");
+
+                empty.textContent =
+                    "No matching member";
+
+                results.appendChild(empty);
+                return;
+            }
+
+            filtered.forEach(function(member){
+
+                const item =
+                    document.createElement("div");
+
+                item.style.cssText = `
+                    padding:12px;
+                    margin:8px 0;
+                    border:1px solid #2A6EB0;
+                    border-radius:8px;
+                    background:#EAF8FF;
+                `;
+
+                const name =
+                    document.createElement("strong");
+
+                name.textContent =
+                    member.name || "Unnamed";
+
+                const id =
+                    document.createElement("div");
+
+                id.textContent =
+                    "Member ID: " +
+                    (member.memberId || "");
+
+                item.appendChild(name);
+                item.appendChild(id);
+                
+item.style.cursor = "pointer";
+
+item.onclick = function(){
+
+    const previousSearch =
+        searchInput.value;
+
+    results.innerHTML = "";
+    searchInput.style.display = "none";
+sortBar.style.display = "none";
+    const detailBack =
+        document.createElement("button");
+
+    detailBack.className = "back-btn";
+    detailBack.textContent =
+        "← Back to Search Members";
+
+    detailBack.onclick = function(){
+
+        searchInput.style.display = "";
+        sortBar.style.display = "flex";
+        searchInput.value = previousSearch;
+        showMembers();
+
+    };
+
+    results.appendChild(detailBack);
+
+    const detailHeading =
+        document.createElement("h3");
+
+    detailHeading.textContent =
+        member.name || "Unnamed Member";
+
+    results.appendChild(detailHeading);
+
+   
+const getMemberName = function(memberId){
+
+    if(!memberId){
+        return "—";
+    }
+
+    const relatedMember = members.find(
+        function(m){
+            return String(m.memberId || "").trim() ===
+                   String(memberId).trim();
+        }
+    );
+
+    return relatedMember
+        ? relatedMember.name || "—"
+        : "—";
+};
+
+const fields = [
+    ["Member ID", member.memberId],
+    ["Gender", member.gender],
+    ["Marital Status", member.maritalStatus],
+    ["Life Status", member.lifeStatus],
+    ["Father", getMemberName(member.fatherId)],
+    ["Mother", getMemberName(member.motherId)],
+    ["Partner", getMemberName(member.partnerId)]
+];
+
+    fields.forEach(function(field){
+
+        const row =
+            document.createElement("div");
+
+        row.style.cssText = `
+            padding:12px;
+            margin:8px 0;
+            border:1px solid #2A6EB0;
+            border-radius:8px;
+            background:#EAF8FF;
+        `;
+
+        const label =
+            document.createElement("strong");
+
+        label.textContent =
+            field[0] + ": ";
+
+        const value =
+            document.createElement("span");
+
+        value.textContent =
+            field[1] || "—";
+
+        row.appendChild(label);
+        row.appendChild(value);
+
+        results.appendChild(row);
+
+    });
+
+};
+
+                results.appendChild(item);
+
+            });
+
+        }
+
+        searchInput.addEventListener(
+            "input",
+            showMembers
+        );
+
+        container.appendChild(searchInput);
+container.appendChild(sortBar);
+container.appendChild(results);
+        showMembers();
+
+    }catch(error){
+
+        console.error(
+            "PUBLIC MEMBER SEARCH ERROR:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Unable to load members."
+        );
+
+    }finally{
+
+        button.disabled = false;
+        button.textContent = label;
+
+    }
+
+};
+
+                        publicActions.appendChild(button);
+
+                    }
+
+                    if(viewingFamily.showSearch === "Yes"){
+
+                        addPublicAction(
+                            "Search Members",
+                            "Search Members"
+                        );
+
+                    }
+
+                    if(viewingFamily.showRelations === "Yes"){
+
+                        addPublicAction(
+                            "Relations",
+                            "Relations"
+                        );
+
+                    }
+
+                    if(viewingFamily.showTree === "Yes"){
+
+                        addPublicAction(
+                            "Tree View",
+                            "Tree View"
+                        );
+
+                    }
+
+                    /*
+                     * PUBLIC FAMILY PERMISSIONS
+                     * Show each action only when the family owner has
+                     * explicitly enabled the corresponding permission.
+                     * Missing/blank values are treated as No.
+                     */
+                    const allowPublicAdd =
+                        String(viewingFamily.allowAdd || "")
+                            .trim()
+                            .toLowerCase() === "yes";
+
+                    const allowPublicEdit =
+                        String(viewingFamily.allowEdit || "")
+                            .trim()
+                            .toLowerCase() === "yes";
+
+                    if(allowPublicAdd){
+                        addPublicAction(
+                            "Add Member",
+                            "Add Member"
+                        );
+                    }
+
+                    if(allowPublicEdit){
+                        addPublicAction(
+                            "Edit Member",
+                            "Search – Edit Member"
+                        );
+                    }
+
+                    container.appendChild(publicActions);
+
+                }catch(error){
+
+                    console.error(
+                        "OPEN PUBLIC FAMILY ERROR:",
+                        error
+                    );
+
+                    alert(
+                        "Unable to open family."
+                    );
+
+                }finally{
+
+                    card.style.pointerEvents = "";
+
+                }
+
+            };
+
+            container.appendChild(card);
+
+        });
+
+    }catch(error){
+
+        console.error(
+            "PUBLIC FAMILIES LOAD ERROR:",
+            error
+        );
+
+        container.textContent =
+            "Unable to load public families.";
+
+    }
+
+}
+
+    async function activateFamilyTab(tab){
+
+        const isMyFamily = tab === "my";
+        if(myFamilyTab) myFamilyTab.style.display = "";
+        if(otherFamiliesTab) otherFamiliesTab.style.display = "";
+
+        /* Keep the original centered My Family Back button in place. */
+        const familyBackContainer = document.getElementById("familyBackContainer");
+        if(familyBackContainer){
+            familyBackContainer.style.display = isMyFamily ? "block" : "none";
+        }
+
+        setOtherFamilyNavigation(isMyFamily ? "hidden" : "list");
+
+        if(familyGrid){
+            familyGrid.style.display =
+                isMyFamily ? "" : "none";
+        }
+
+        const familySettingsContainer =
+            document.getElementById(
+                "familySettingsContainer"
+            );
+
+        if(familySettingsContainer){
+            familySettingsContainer.style.display =
+                isMyFamily ? "block" : "none";
+        }
+
+       
+        if(otherFamiliesContent){
+
+            otherFamiliesContent.style.display =
+                isMyFamily ? "none" : "block";
+
+            if(!isMyFamily){
+
+                await loadPublicFamilies();
+
+            }
+
+        }
+
+        if(myFamilyTab){
+
+            myFamilyTab.style.background =
+                isMyFamily ? "#2A6EB0" : "transparent";
+
+            myFamilyTab.style.color =
+                isMyFamily ? "white" : "#2A6EB0";
+
+        }
+
+        if(otherFamiliesTab){
+
+            otherFamiliesTab.style.background =
+                isMyFamily ? "transparent" : "#2A6EB0";
+
+            otherFamiliesTab.style.color =
+                isMyFamily ? "#2A6EB0" : "white";
+
+        }
+
+    }
+
+    window.activateFamilyTab = activateFamilyTab;
+
+    window.restorePublicFamilyDetail = async function(familyId){
+        /*
+         * Rebuild the selected public-family detail using its real card handler,
+         * so the restored action buttons receive fresh event handlers. Keep the
+         * content area invisible during the internal rebuild so users do not see
+         * the intermediate generic Family page and Other Families list.
+         */
+        const targetId = String(familyId || window.currentPublicFamilyId || "").trim();
+        if(!targetId) return;
+
+        const homeContentElement = document.getElementById("homeContent");
+        const previousVisibility = homeContentElement
+            ? homeContentElement.style.visibility
+            : "";
+
+        if(homeContentElement){
+            homeContentElement.style.visibility = "hidden";
+        }
+
+        try{
+            familyBtn.click();
+
+            /* Recreate the Other Families list with fresh cards and handlers. */
+            if(typeof window.activateFamilyTab === "function"){
+                await window.activateFamilyTab("other");
+            } else {
+                await loadPublicFamilies();
+            }
+
+            const listContainer = document.getElementById("otherFamiliesContent");
+            if(!listContainer){
+                console.error("Other Families container is missing while restoring:", targetId);
+                return;
+            }
+
+            const targetCard = Array.from(
+                listContainer.querySelectorAll("[data-family-id]")
+            ).find(card => String(card.dataset.familyId || "").trim() === targetId);
+
+            if(!targetCard || typeof targetCard.onclick !== "function"){
+                console.error("Unable to restore selected public family:", targetId);
+                setOtherFamilyNavigation("list");
+                return;
+            }
+
+            /* Run the original card handler to rebuild detail and bind its buttons. */
+            await targetCard.onclick();
+
+            const titleSpan = document.querySelector("#homeContent h2.page-title > span");
+            const familyName = String(
+                window.currentPublicFamilyName ||
+                (window.cachedPublicFamilyDetails && window.cachedPublicFamilyDetails.familyName) ||
+                "Family"
+            ).trim();
+            if(titleSpan) titleSpan.textContent = familyName;
+
+            window.currentPublicFamilyId = targetId;
+            window.setOtherFamilyNavigation?.("detail");
+            sessionStorage.removeItem("publicFamilyAddTarget");
+        } finally {
+            /* Always reveal the final page, including when restoration fails. */
+            const currentHomeContent = document.getElementById("homeContent");
+            if(currentHomeContent){
+                currentHomeContent.style.visibility = previousVisibility;
+            }
+        }
+    };
+
+    if(myFamilyTab){
+
+        myFamilyTab.onclick = function(){
+            activateFamilyTab("my");
+        };
+
+    }
+
+    if(otherFamiliesTab){
+
+        otherFamiliesTab.onclick = function(){
+            activateFamilyTab("other");
+        };
+
+    }
+/* =====================================
+   FAMILY → ABOUT
+   ===================================== */
+
+const familyAboutBtn =
+    document.getElementById(
+        "familyAboutBtn"
+    );
+
+if(familyAboutBtn){
+
+    familyAboutBtn.onclick =
+        function(){
+
+            const currentLanguage =
+                languageSelect.value;
+
+            const txt =
+                languageData[
+                    currentLanguage
+                ];
+
+            if(
+                !txt ||
+                !txt.familyAbout
+            ){
+
+                console.log(
+                    "Family About content not found:",
+                    currentLanguage
+                );
+
+                return;
+            }
+
+          showPage(`
+
+    <div class="family-about-page">
+
+        <div class="family-about-page-title">
+
+            <img
+                src="images/colorbtns/About1.png"
+                class="family-about-title-icon">
+
+            <h2>
+                About Family App
+            </h2>
+
+        </div>
+
+
+        <div class="family-about-scroll-box">
+
+            <div class="family-about-content">
+
+                ${txt.familyAbout}
+
+            </div>
+
+        </div>
+
+
+        <div class="family-about-bottom">
+
+    <button
+        id="familyAboutBackBtn"
+        class="family-about-nav-btn">
+
+        ← Back
+
+    </button>
+
+    <button
+        id="familyAboutHomeBtn"
+        class="family-about-nav-btn">
+
+        🏠 Home
+
+    </button>
+
+</div>
+    </div>
+
+`);
+
+            document
+                .getElementById(
+                    "familyAboutBackBtn"
+                )
+                .onclick =
+                    function(){
+
+                        familyBtn.click();
+
+                    };
+           const familyAboutHomeBtn =
+    document.getElementById(
+        "familyAboutHomeBtn"
+    );
+
+if(familyAboutHomeBtn){
+
+    familyAboutHomeBtn.onclick =
+        function(){
+
+            homeBtn.click();
+
+        };
+
+}
+
+        };
+
+}
+   /* =====================================
+   FAMILY → RELATIONS
+   ===================================== */
+
+const relationsBtn =
+    document.getElementById(
+        "relationsBtn"
+    );
+
+
+if(relationsBtn){
+
+    relationsBtn.onclick =
+        function(){
+
+            console.log(
+                "RELATIONS BUTTON CLICKED"
+            );
+
+            openRelationsPage();
+
+        };
+
+}
+/* =====================================
+   FAMILY → BACK
+   ===================================== */
+
+const familyBackBtn = document.getElementById("familyBack");
+
+if(familyBackBtn){
+    /* My Family Back remains centered and returns to Home. */
+    familyBackBtn.onclick = function(){
+        setOtherFamilyNavigation("hidden");
+        showHome();
+    };
+}
+function openRelationsPage(publicMembers = null, publicFamilyTitle = ""){
+    console.log(
+        "OPENING RELATIONS PAGE"
+    );
+
+   showPage(
+
+    `
+    <div style="margin-top:-20px;">
+    `
+    +
+    pageTitle(
+        publicFamilyTitle ? `${publicFamilyTitle} - Relations` : "Relations",
+        "images/colorbtns/Relations1.png"
+    )
+    +
+    `
+    </div>
+
+    <div style="height:30px;"></div>
+
+<!-- =================================
+     SELECT / SEARCH MEMBER
+     ================================= -->
+
+<div
+    id="relationsMemberGroup"
+    class="common-form-group">
+    <label class="common-form-label">
+        Member
+    </label>
+    
+    <span class="common-form-colon">
+        :
+    </span>
+
+   <div
+    class="relations-member-search-wrap">
+
+    <div class="partner-search-input-wrap">
+
+        <input
+            type="text"
+            id="relationsMemberSearch"
+            class="common-form-select"
+            placeholder="Select / Search"
+            autocomplete="off">
+
+        <div class="partner-sort-controls">
+
+            <!-- RELATIONS MEMBER COUNT -->
+
+            <span
+                id="relationsMemberCount"
+                class="relation-member-count"
+                style="display:none;">
+            </span>
+
+            <!-- RELATIONS SORT ARROWS -->
+
+            <span
+                id="relationsSortAZ"
+                class="partner-sort-arrow"
+                title="Alphabetical Order">
+                A↕Z
+            </span>
+
+            <span
+                id="relationsSortID"
+                class="partner-sort-arrow"
+                title="ID Number Order">
+                1↕9
+            </span>
+
+        </div>
+
+    </div>
+
+    <div
+        id="relationsMemberDropdown"
+        class="relations-member-dropdown">
+    </div>
+
+</div>
+</div>
+<div class="relations-page">
+
+           <div class="relations-member-header">
+
+    <div id="relationMemberPhoto">
+    </div>
+
+    <div id="relationMemberName">
+        
+    </div>
+
+    <div id="relationMemberGender">
+      
+    </div>
+
+</div>
+
+
+   
+<!-- =================================
+     RELATIONS DETAILS
+     ================================= -->
+
+<!-- 1. PARTNER -->
+<div
+    id="relationPartnerSection"
+    class="relations-section relation-direct-row relations-partner">
+    <div class="relation-row">
+
+        <span class="relation-label partner-label">
+    Partner
+</span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span
+            id="relationPartner"
+            class="relation-value">
+            --------
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- 2. CHILDREN -->
+<div
+    id="relationChildrenSection"
+    class="relations-section relations-children">
+
+    <h3 id="relationChildrenTitle">
+        Children
+    </h3>
+
+    <div
+        id="relationSonsRow"
+        class="relation-child-group">
+
+        <div
+            id="relationSonsTitle"
+            class="relation-child-title">
+        </div>
+
+        <div
+            id="relationSons">
+        </div>
+
+    </div>
+
+
+    <div
+        id="relationDaughtersRow"
+        class="relation-child-group">
+
+        <div
+            id="relationDaughtersTitle"
+            class="relation-child-title">
+        </div>
+
+        <div
+            id="relationDaughters">
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 3. PARENTS -->
+<div
+    id="relationParentsSection"
+    class="relations-section relations-parents">
+    <h3>Parents</h3>
+
+    <div class="relation-row">
+
+        <span class="relation-label">
+            Father
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span
+            id="relationFather"
+            class="relation-value">
+            --------
+        </span>
+
+    </div>
+
+
+    <div class="relation-row">
+
+        <span class="relation-label">
+            Mother
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span
+            id="relationMother"
+            class="relation-value">
+            --------
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- 4. SIBLINGS -->
+<div
+    id="relationSiblingsSection"
+    class="relations-section relations-siblings">
+
+<h3 id="relationSiblingsTitle">
+    Siblings
+</h3>
+    <strong>Brothers</strong>
+
+    <div
+        id="relationBrothers">
+        --------
+    </div>
+
+
+    <strong>Sisters</strong>
+
+    <div
+        id="relationSisters">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 5. FATHER SIBLINGS -->
+<div
+    id="relationFatherSiblingsSection"
+    class="relations-section relation-father-siblings">
+
+<h3 id="relationFatherSiblingsTitle">
+    Father Siblings
+</h3>
+    <div
+    id="relationFatherSiblings">
+
+    <div
+        id="relationFatherSiblingsTitle"
+        class="relation-siblings-title">
+    </div>
+
+    <div
+        id="relationFatherSiblingsBrothersRow"
+        class="relation-siblings-group">
+
+        <div
+            id="relationFatherSiblingsBrothersTitle"
+            class="relation-siblings-subtitle">
+        </div>
+
+        <div
+            id="relationFatherSiblingsBrothers">
+        </div>
+
+    </div>
+
+    <div
+        id="relationFatherSiblingsSistersRow"
+        class="relation-siblings-group">
+
+        <div
+            id="relationFatherSiblingsSistersTitle"
+            class="relation-siblings-subtitle">
+        </div>
+
+        <div
+            id="relationFatherSiblingsSisters">
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+
+<!-- 6. MOTHER SIBLINGS -->
+<div
+    id="relationMotherSiblingsSection"
+    class="relations-section relation-mother-siblings">
+
+    <h3 id="relationMotherSiblingsTitle">
+        Mother Siblings
+    </h3>
+
+
+    <div
+        id="relationMotherSiblings">
+
+
+        <!-- BROTHERS -->
+        <div
+            id="relationMotherSiblingsBrothersRow"
+            class="relation-siblings-group">
+
+            <div
+                id="relationMotherSiblingsBrothersTitle"
+                class="relation-siblings-subtitle">
+            </div>
+
+            <div
+                id="relationMotherSiblingsBrothers">
+            </div>
+
+        </div>
+
+
+        <!-- SISTERS -->
+        <div
+            id="relationMotherSiblingsSistersRow"
+            class="relation-siblings-group">
+
+            <div
+                id="relationMotherSiblingsSistersTitle"
+                class="relation-siblings-subtitle">
+            </div>
+
+            <div
+                id="relationMotherSiblingsSisters">
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>   
+<div
+        id="relationMotherSiblingsBrothersRow"
+        class="relation-siblings-group">
+
+        <div
+            id="relationMotherSiblingsBrothersTitle"
+            class="relation-siblings-subtitle">
+        </div>
+
+        <div
+            id="relationMotherSiblingsBrothers">
+        </div>
+
+    </div>
+
+    <div
+        id="relationMotherSiblingsSistersRow"
+        class="relation-siblings-group">
+
+        <div
+            id="relationMotherSiblingsSistersTitle"
+            class="relation-siblings-subtitle">
+        </div>
+
+        <div
+            id="relationMotherSiblingsSisters">
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- 7. IN-LAWS -->
+<div
+    id="relationInLawsSection"
+    class="relations-section relations-inlaws">
+
+    <h3>In-Laws</h3>
+
+    <div class="relation-row">
+
+        <span class="relation-label">
+            Father-in-Law
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span
+            id="relationFatherInLaw"
+            class="relation-value">
+            --------
+        </span>
+
+    </div>
+
+
+    <div class="relation-row">
+
+        <span class="relation-label">
+            Mother-in-Law
+        </span>
+
+        <span class="relation-colon">
+            :
+        </span>
+
+        <span
+            id="relationMotherInLaw"
+            class="relation-value">
+            --------
+        </span>
+
+    </div>
+
+</div>
+
+<!-- 8. PARTNER SIBLINGS -->
+<div
+    id="relationPartnerSiblingsSection"
+    class="relations-section relations-siblings">
+
+    <h3 id="relationPartnerSiblingsTitle">
+        Partner Siblings
+    </h3>
+
+    <strong id="relationPartnerBrothersTitle">
+        Brothers
+    </strong>
+
+    <div id="relationPartnerBrothers">
+        --------
+    </div>
+
+
+    <strong id="relationPartnerSistersTitle">
+        Sisters
+    </strong>
+
+    <div id="relationPartnerSisters">
+        --------
+    </div>
+
+</div>
+
+
+<!-- 9. FATHER-IN-LAW SIBLINGS -->
+<div
+    id="relationFatherInLawSiblingsSection"
+    class="relations-section relation-father-inlaw-siblings">
+
+    <h3 id="relationFatherInLawSiblingsTitle">
+        Father-in-Law Siblings
+    </h3>
+
+
+    <div
+        id="relationFatherInLawSiblings">
+
+
+        <!-- BROTHERS -->
+        <div
+            id="relationFatherInLawSiblingsBrothersRow"
+            class="relation-siblings-group">
+
+            <div
+                id="relationFatherInLawSiblingsBrothersTitle"
+                class="relation-siblings-subtitle">
+            </div>
+
+            <div
+                id="relationFatherInLawSiblingsBrothers">
+            </div>
+
+        </div>
+
+
+        <!-- SISTERS -->
+        <div
+            id="relationFatherInLawSiblingsSistersRow"
+            class="relation-siblings-group">
+
+            <div
+                id="relationFatherInLawSiblingsSistersTitle"
+                class="relation-siblings-subtitle">
+            </div>
+
+            <div
+                id="relationFatherInLawSiblingsSisters">
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+<!-- 9. MOTHER-IN-LAW SIBLINGS -->
+<div
+    id="relationMotherInLawSiblingsSection"
+    class="relations-section relation-mother-inlaw-siblings">
+
+    <h3 id="relationMotherInLawSiblingsTitle">
+        Mother-in-Law Siblings
+    </h3>
+
+
+    <div
+        id="relationMotherInLawSiblings">
+
+
+        <!-- BROTHERS -->
+        <div
+            id="relationMotherInLawSiblingsBrothersRow"
+            class="relation-siblings-group">
+
+            <div
+                id="relationMotherInLawSiblingsBrothersTitle"
+                class="relation-siblings-subtitle">
+            </div>
+
+            <div
+                id="relationMotherInLawSiblingsBrothers">
+            </div>
+
+        </div>
+
+
+        <!-- SISTERS -->
+        <div
+            id="relationMotherInLawSiblingsSistersRow"
+            class="relation-siblings-group">
+
+            <div
+                id="relationMotherInLawSiblingsSistersTitle"
+                class="relation-siblings-subtitle">
+            </div>
+
+            <div
+                id="relationMotherInLawSiblingsSisters">
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- 10. GRAND PARENTS -->
+<div
+    id="relationGrandParentsSection"
+    class="relations-section relation-grandparents">
+
+    <h3>
+        Grand Parents
+    </h3>
+
+
+    <strong>
+        Paternal Grand Parents
+    </strong>
+
+
+    <div
+        id="paternalGrandParents">
+
+
+        <div
+            id="relationFathersFatherRow"
+            class="grandparent-row">
+
+            <span class="grandparent-label">
+                Father's Father
+            </span>
+
+            <span class="grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="relationFathersFather"
+                class="grandparent-value">
+            </span>
+
+        </div>
+
+
+        <div
+            id="relationFathersMotherRow"
+            class="grandparent-row">
+
+            <span class="grandparent-label">
+                Father's Mother
+            </span>
+
+            <span class="grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="relationFathersMother"
+                class="grandparent-value">
+            </span>
+
+        </div>
+
+    </div>
+
+
+  <strong id="maternalGrandParentsTitle">
+    Maternal Grand Parents
+</strong>
+
+
+    <div
+        id="maternalGrandParents">
+
+
+        <div
+            id="relationMothersFatherRow"
+            class="grandparent-row">
+
+            <span class="grandparent-label">
+                Mother's Father
+            </span>
+
+            <span class="grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="relationMothersFather"
+                class="grandparent-value">
+            </span>
+
+        </div>
+
+
+        <div
+            id="relationMothersMotherRow"
+            class="grandparent-row">
+
+            <span class="grandparent-label">
+                Mother's Mother
+            </span>
+
+            <span class="grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="relationMothersMother"
+                class="grandparent-value">
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- 11. GRAND GRAND PARENTS -->
+<div
+    id="relationGrandGrandParentsSection"
+    class="relations-section relation-grand-grandparents">
+
+    <h3>
+        Grand Grand Parents
+    </h3>
+
+
+    <!-- PATERNAL GRAND PARENTS -->
+    <strong id="grandGrandPaternalTitle">
+        Paternal Grand Parents
+    </strong>
+
+    <div id="grandGrandPaternal">
+
+        <div
+            id="ggPaternalFatherFatherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Fa - Father
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggPaternalFatherFather"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+
+        <div
+            id="ggPaternalFatherMotherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Fa - Mother
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggPaternalFatherMother"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+
+        <div
+            id="ggPaternalMotherFatherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Ma - Father
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggPaternalMotherFather"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+
+        <div
+            id="ggPaternalMotherMotherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Ma - Mother
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggPaternalMotherMother"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- MATERNAL GRAND PARENTS -->
+    <strong id="grandGrandMaternalTitle">
+        Maternal Grand Parents
+    </strong>
+
+    <div id="grandGrandMaternal">
+
+        <div
+            id="ggMaternalFatherFatherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Fa - Father
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggMaternalFatherFather"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+
+        <div
+            id="ggMaternalFatherMotherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Fa - Mother
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggMaternalFatherMother"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+
+        <div
+            id="ggMaternalMotherFatherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Ma - Father
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggMaternalMotherFather"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+
+        <div
+            id="ggMaternalMotherMotherRow"
+            class="grand-grandparent-row">
+
+            <span class="grand-grandparent-label">
+                Grand Ma - Mother
+            </span>
+
+            <span class="grand-grandparent-colon">
+                :
+            </span>
+
+            <span
+                id="ggMaternalMotherMother"
+                class="grand-grandparent-value">
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- BACK + HOME BUTTONS -->
+<div
+    class="relations-navigation"
+    align="center">
+
+    <button
+        id="relationsBackBtn"
+        class="back-btn">
+
+
+        ← Back
+
+    </button>
+
+    <button
+        id="relationsHomeBtn"
+        class="back-btn">
+
+        🏠 Home
+
+    </button>
+
+</div>            
+        </div>
+
+        `
+    );
+
+const relationsMemberSearch =
+    document.getElementById(
+        "relationsMemberSearch"
+    );
+
+const relationsMemberDropdown =
+    document.getElementById(
+        "relationsMemberDropdown"
+    );
+
+
+/* =====================================
+   LOAD MEMBERS INTO RELATIONS SEARCH
+   ===================================== */
+
+if(
+    relationsMemberSearch &&
+    relationsMemberDropdown
+){
+
+   const familyMembers =
+    Array.isArray(publicMembers)
+        ? publicMembers
+        : JSON.parse(
+            localStorage.getItem(
+                "familyMembers"
+            ) || "[]"
+        );
+
+    console.log(
+        "RELATIONS FAMILY MEMBERS:",
+        familyMembers
+    );
+
+/* =================================
+   RELATIONS MEMBER SORTING
+   ================================= */
+
+let relationsSortMode = "id";
+
+let relationsNameAscending = true;
+let relationsIdAscending = true;
+
+const relationsSortAZ =
+    document.getElementById("relationsSortAZ");
+
+const relationsSortID =
+    document.getElementById("relationsSortID");
+    /* =================================
+       SHOW MEMBER LIST
+       ================================= */
+
+    function showRelationsMemberDropdown(){
+
+        const searchText =
+            String(
+                relationsMemberSearch.value || ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        relationsMemberDropdown.innerHTML =
+            "";
+
+
+        /* =============================
+           FILTER MEMBERS
+           ============================= */
+
+        const matchingMembers =
+            familyMembers.filter(
+                function(member){
+
+                    if(
+                        !member ||
+                        !member.memberId
+                    ){
+
+                        return false;
+
+                    }
+
+
+                    const memberName =
+                        String(
+                            member.name || ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+
+                    /* EMPTY SEARCH
+                       → SHOW ALL */
+
+                    if(
+                        searchText === ""
+                    ){
+
+                        return (
+                            memberName !== ""
+                        );
+
+                    }
+
+
+                    /* TEXT SEARCH */
+
+                    return (
+                        memberName !== "" &&
+                        memberName.includes(
+                            searchText
+                        )
+                    );
+
+                               }
+            );
+
+/* =================================
+   RELATIONS MEMBER COUNT
+   ================================= */
+
+const relationsMemberCount =
+    document.getElementById(
+        "relationsMemberCount"
+    );
+
+if(relationsMemberCount){
+
+    relationsMemberCount.textContent =
+        matchingMembers.length;
+
+}
+
+        /* =================================
+   RELATIONS MEMBERS SORTING
+   ================================= */
+
+matchingMembers.sort(function(a, b){
+
+    if(relationsSortMode === "name"){
+
+        const nameA =
+            String(a.name || "").trim();
+
+        const nameB =
+            String(b.name || "").trim();
+
+        const result =
+            nameA.localeCompare(
+                nameB,
+                undefined,
+                { sensitivity: "base" }
+            );
+
+        return relationsNameAscending
+            ? result
+            : -result;
+    }
+
+    const getMemberNumber = function(member){
+
+        const id =
+            String(member.memberId || "");
+
+        const match =
+            id.match(/(\d+)$/);
+
+        return match
+            ? Number(match[1])
+            : 0;
+    };
+
+    const result =
+        getMemberNumber(a) -
+        getMemberNumber(b);
+
+    return relationsIdAscending
+        ? result
+        : -result;
+
+});
+        console.log(
+            "RELATIONS SEARCH:",
+            searchText,
+            matchingMembers
+        );
+
+
+        /* =============================
+           NO MATCH
+           ============================= */
+
+        if(
+            matchingMembers.length === 0
+        ){
+
+            relationsMemberDropdown.innerHTML =
+                `<div class="relations-no-match">
+                    No matching member
+                </div>`;
+
+            relationsMemberDropdown.style.display =
+                "block";
+
+            return;
+
+        }
+
+
+        /* =============================
+           CREATE MEMBER ITEMS
+           ============================= */
+
+        matchingMembers.forEach(
+            function(member){
+
+                const option =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                option.className =
+                    "relations-member-option";
+
+
+                option.textContent =
+                    member.name ||
+                    "Unnamed";
+
+
+                option.dataset.memberId =
+                    member.memberId;
+
+
+                relationsMemberDropdown.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        relationsMemberDropdown.style.display =
+            "block";
+
+    }
+
+/* =================================
+   RELATIONS SORT ARROW CLICK EVENTS
+   ================================= */
+
+if(relationsSortAZ){
+
+    relationsSortAZ.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(relationsSortMode === "name"){
+
+                relationsNameAscending =
+                    !relationsNameAscending;
+
+            }else{
+
+                relationsSortMode = "name";
+                relationsNameAscending = true;
+
+            }
+
+            showRelationsMemberDropdown();
+
+        }
+    );
+
+}
+
+if(relationsSortID){
+
+    relationsSortID.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(relationsSortMode === "id"){
+
+                relationsIdAscending =
+                    !relationsIdAscending;
+
+            }else{
+
+                relationsSortMode = "id";
+                relationsIdAscending = true;
+
+            }
+
+            showRelationsMemberDropdown();
+
+        }
+    );
+
+}
+  /* =================================
+   MEMBER SEARCH
+   ================================= */
+
+relationsMemberSearch.addEventListener(
+    "focus",
+    function(){
+         relationsMemberSearch
+    .closest(".partner-search-input-wrap")
+    ?.classList.remove(
+        "relations-name-selected"
+    );
+        const count =
+            document.getElementById("relationsMemberCount");
+
+        const sortAZ =
+            document.getElementById("relationsSortAZ");
+
+        const sortID =
+            document.getElementById("relationsSortID");
+
+        if(count){
+            count.style.display = "inline-flex";
+        }
+
+        if(sortAZ){
+            sortAZ.style.display = "inline-flex";
+        }
+
+        if(sortID){
+            sortID.style.display = "inline-flex";
+        }
+
+        showRelationsMemberDropdown();
+
+    }
+);
+
+
+relationsMemberSearch.addEventListener(
+    "input",
+    function(){
+
+        showRelationsMemberDropdown();
+
+    }
+);
+    /* =================================
+       MEMBER SELECT
+       ================================= */
+
+    relationsMemberDropdown.addEventListener(
+        "click",
+        function(event){
+
+            const option =
+                event.target.closest(
+                    ".relations-member-option"
+                );
+
+
+            if(!option){
+
+                return;
+
+            }
+
+
+            const selectedMemberId =
+                option.dataset.memberId;
+
+
+            const selectedMember =
+                familyMembers.find(
+                    function(member){
+
+                        return String(
+                            member.memberId
+                        ) === String(
+                            selectedMemberId
+                        );
+
+                    }
+                );
+
+
+            if(!selectedMember){
+
+                console.log(
+                    "SELECTED MEMBER NOT FOUND"
+                );
+
+                return;
+
+            }
+
+
+            console.log(
+                "SELECTED RELATIONS MEMBER:",
+                selectedMember
+            );
+
+
+            /* =========================
+               PUT SELECTED NAME
+               IN SEARCH BOX
+               ========================= */
+
+           relationsMemberSearch.value =
+    selectedMember.name || "";
+
+const relationsSearchWrap =
+    relationsMemberSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(relationsSearchWrap){
+
+    relationsSearchWrap.classList.add(
+        "relations-name-selected"
+    );
+
+}
+
+            /* =========================
+               HIDE LIST ONLY
+               ========================= */
+
+            relationsMemberDropdown.innerHTML =
+                "";
+
+            relationsMemberDropdown.style.display =
+                "none";
+
+
+            /* =========================
+               LOAD RELATIONS
+               ========================= */
+
+            loadSelectedMemberRelations(
+                selectedMember,
+                familyMembers
+            );
+
+        }
+    );
+
+
+    /* =================================
+       OUTSIDE CLICK
+       → HIDE LIST
+       → KEEP EMPTY BOX
+       ================================= */
+
+    document.addEventListener(
+        "click",
+        function(event){
+            if(
+    !event.target.closest(
+        ".relations-member-search-wrap"
+    )
+){
+
+    relationsMemberDropdown.innerHTML = "";
+
+    relationsMemberDropdown.style.display = "none";
+/* CLEAR TYPED TEXT ON OUTSIDE CLICK
+   ONLY WHEN MEMBER IS NOT SELECTED */
+
+const relationsMemberHeader =
+    document.querySelector(
+        ".relations-member-header"
+    );
+
+const relationsMemberSelected =
+    relationsMemberHeader &&
+    getComputedStyle(
+        relationsMemberHeader
+    ).display !== "none";
+
+if(!relationsMemberSelected){
+
+    relationsMemberSearch.value = "";
+
+}
+    const relationsCount =
+        document.getElementById(
+            "relationsMemberCount"
+        );
+
+    if(relationsCount){
+        relationsCount.style.display = "none";
+    }
+
+    if(relationsSortAZ){
+        relationsSortAZ.style.display = "none";
+    }
+
+    if(relationsSortID){
+        relationsSortID.style.display = "none";
+    }
+
+}        }
+    );
+
+}
+      const relationsBackBtn =
+    document.getElementById(
+        "relationsBackBtn"
+    );
+
+if(relationsBackBtn){
+
+    relationsBackBtn.onclick =
+        async function(){
+
+            // Public Other Families Relations has one-step Back to its family detail.
+            const publicReturnAction = window.relationsReturnAction;
+            if(typeof publicReturnAction === "function"){
+                window.relationsReturnAction = null;
+                await publicReturnAction();
+                return;
+            }
+
+            /* =================================
+               MEMBER SELECTED
+               → GO BACK TO MEMBER SELECTION
+               ================================= */
+
+            if(
+                relationsMemberSearch &&
+                relationsMemberSearch.value.trim() !== ""
+            ){
+
+                /* Clear selected member */
+
+                relationsMemberSearch.value =
+                    "";
+
+
+                /* Hide member details header */
+
+                const memberHeader =
+                    document.querySelector(
+                        ".relations-member-header"
+                    );
+
+                if(memberHeader){
+
+                    memberHeader.style.display =
+                        "none";
+
+                }
+
+
+                /* Show member selection */
+
+                const memberGroup =
+                    document.getElementById(
+                        "relationsMemberGroup"
+                    );
+
+                if(memberGroup){
+
+                    memberGroup.style.display =
+                        "";
+
+                }
+
+
+                /* Hide all relation details */
+
+                document.querySelectorAll(
+                    ".relations-section"
+                ).forEach(
+                    function(section){
+
+                        section.style.display =
+                            "none";
+
+                    }
+                );
+
+
+                /* Clear member dropdown list */
+
+                if(relationsMemberDropdown){
+
+                    relationsMemberDropdown.innerHTML =
+                        "";
+
+                    relationsMemberDropdown.style.display =
+                        "none";
+
+                }
+
+            }
+
+            /* =================================
+               NO MEMBER SELECTED
+               → ONE STEP BACK
+               ================================= */
+
+            else{
+
+                const returnAction = window.relationsReturnAction;
+                window.relationsReturnAction = null;
+
+                if(typeof returnAction === "function"){
+                    returnAction();
+                }else{
+                    familyBtn.click();
+                }
+
+            }
+
+        };
+
+}
+      
+const relationsHomeBtn =
+    document.getElementById(
+        "relationsHomeBtn"
+    );
+
+if(relationsHomeBtn){
+
+    relationsHomeBtn.onclick =
+        function(){
+
+            homeBtn.click();
+
+        };
+
+}
+}
+
+
+
+   function loadSelectedMemberRelations(
+    member,
+    familyMembers
+){
+
+    console.log(
+        "LOADING RELATIONS FOR:",
+        member.name
+    );
+
+
+    /* =================================
+       HIDE MEMBER SEARCH
+       ================================= */
+
+    const memberGroup =
+        document.getElementById(
+            "relationsMemberGroup"
+        );
+
+    if(memberGroup){
+
+        memberGroup.style.display =
+            "none";
+
+    }
+
+
+    /* =================================
+       SHOW MEMBER HEADER
+       ================================= */
+
+    const memberHeader =
+        document.querySelector(
+            ".relations-member-header"
+        );
+
+    if(memberHeader){
+
+        memberHeader.style.display =
+            "flex";
+
+    }
+/* ================================
+   SHOW ALL RELATION SECTIONS
+   ================================ */
+
+document.querySelectorAll(
+    ".relations-section"
+).forEach(
+    function(section){
+
+        section.style.display =
+            "block";
+
+    }
+);
+
+    /* =================================
+       MEMBER NAME
+       ================================= */
+
+    const nameField =
+        document.getElementById(
+            "relationMemberName"
+        );
+
+    if(nameField){
+
+        nameField.textContent =
+            member.name || "-";
+
+    }
+
+
+    /* =================================
+       MEMBER GENDER
+       ================================= */
+
+    const genderField =
+        document.getElementById(
+            "relationMemberGender"
+        );
+
+    if(genderField){
+
+        genderField.textContent =
+            member.gender || "-";
+
+    }
+
+
+    /* =================================
+       MEMBER PHOTO
+       ================================= */
+
+    const photoField =
+        document.getElementById(
+            "relationMemberPhoto"
+        );
+
+    if(photoField){
+
+        photoField.innerHTML = "";
+
+        const photoUrl =
+            member.photo ||
+            member.photoUrl ||
+            member.photoURL ||
+            member.profilePhoto ||
+            member.image ||
+            "";
+
+        if(photoUrl){
+
+            const img =
+                document.createElement(
+                    "img"
+                );
+
+            img.src =
+                photoUrl;
+
+            img.alt =
+                member.name || "Member";
+
+            img.onerror =
+                function(){
+
+                    photoField.innerHTML =
+                        "";
+
+                };
+
+            photoField.appendChild(
+                img
+            );
+
+        }
+
+    }
+
+
+    /* =================================
+       HELPER
+       ================================= */
+
+    function findMember(id){
+
+        if(!id){
+
+            return null;
+
+        }
+
+        return familyMembers.find(
+            function(item){
+
+                return String(
+                    item.memberId || ""
+                ).trim() ===
+                String(
+                    id
+                ).trim();
+
+            }
+        ) || null;
+
+    }
+
+
+    function getName(member){
+
+        if(!member){
+
+            return "";
+
+        }
+
+        return String(
+            member.name || ""
+        ).trim();
+
+    }
+
+
+    function hideSection(id){
+
+        const section =
+            document.getElementById(id);
+
+        if(section){
+
+            section.style.display =
+                "none";
+
+        }
+
+    }
+
+
+    function showSection(id){
+
+        const section =
+            document.getElementById(id);
+
+        if(section){
+
+            section.style.display =
+                "";
+
+        }
+
+    }
+
+
+    /* =================================
+       FIND DIRECT RELATIONS
+       ================================= */
+
+    const father =
+        findMember(
+            member.fatherId
+        );
+
+
+    const mother =
+        findMember(
+            member.motherId
+        );
+
+
+    const partner =
+        findMember(
+            member.partnerId
+        );
+
+
+    const maritalStatus =
+        String(
+            member.maritalStatus || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const isMarried =
+        maritalStatus === "yes" ||
+        !!partner;
+
+
+    console.log(
+        "RELATIONS DIRECT:",
+        {
+            father,
+            mother,
+            partner,
+            isMarried
+        }
+    );
+
+
+    /* =================================
+       1. PARTNER
+       ================================= */
+
+    const partnerSection =
+        document.getElementById(
+            "relationPartnerSection"
+        );
+
+
+    const partnerField =
+        document.getElementById(
+            "relationPartner"
+        );
+
+
+    if(
+        isMarried &&
+        partner &&
+        getName(partner)
+    ){
+
+       if(partnerSection){
+
+    console.log(
+        "PARTNER SECTION FOUND:",
+        partnerSection
+    );
+
+    partnerSection.style.display =
+        "block";
+
+    partnerSection.style.visibility =
+        "visible";
+
+    partnerSection.style.height =
+        "auto";
+
+}
+
+        if(partnerField){
+
+            partnerField.textContent =
+                getName(partner);
+
+        }
+
+    }
+    else{
+
+        hideSection(
+            "relationPartnerSection"
+        );
+
+    }
+
+
+   /* =================================
+   2. CHILDREN
+   ================================= */
+
+const children =
+    familyMembers.filter(
+        function(item){
+
+            if(
+                String(
+                    item.memberId || ""
+                ).trim() ===
+                String(
+                    member.memberId || ""
+                ).trim()
+            ){
+
+                return false;
+
+            }
+
+            const isFather =
+                String(
+                    item.fatherId || ""
+                ).trim() ===
+                String(
+                    member.memberId || ""
+                ).trim();
+
+            const isMother =
+                String(
+                    item.motherId || ""
+                ).trim() ===
+                String(
+                    member.memberId || ""
+                ).trim();
+
+            return (
+                isFather ||
+                isMother
+            );
+
+        }
+    );
+
+
+/* =================================
+   CHILDREN SECTION
+   ================================= */
+
+const childrenSection =
+    document.getElementById(
+        "relationChildrenSection"
+    );
+
+
+const childrenTitle =
+    document.getElementById(
+        "relationChildrenTitle"
+    );
+
+
+const sonsRow =
+    document.getElementById(
+        "relationSonsRow"
+    );
+
+
+const daughtersRow =
+    document.getElementById(
+        "relationDaughtersRow"
+    );
+
+
+const sonsTitle =
+    document.getElementById(
+        "relationSonsTitle"
+    );
+
+
+const daughtersTitle =
+    document.getElementById(
+        "relationDaughtersTitle"
+    );
+
+
+const sonsField =
+    document.getElementById(
+        "relationSons"
+    );
+
+
+const daughtersField =
+    document.getElementById(
+        "relationDaughters"
+    );
+
+
+/* =================================
+   HIDE CHILDREN IF NOT MARRIED
+   ================================= */
+
+if(
+    !isMarried ||
+    (
+        !getName(partner) &&
+        children.length === 0
+    )
+){
+
+    hideSection(
+        "relationChildrenSection"
+    );
+
+}
+else{
+
+    if(childrenSection){
+
+        childrenSection.style.display =
+            "block";
+
+    }
+
+    /* ===============================
+       CHILDREN TOTAL COUNT
+       =============================== */
+
+    if(childrenTitle){
+
+    if(children.length === 0){
+
+        childrenTitle.textContent =
+            "Children : No";
+
+    }
+    else{
+
+        childrenTitle.textContent =
+            "Children : " +
+            children.length;
+
+    }
+
+}
+
+
+    /* ===============================
+       SPLIT SONS
+       =============================== */
+
+    const sons =
+        children.filter(
+            function(child){
+
+                return String(
+                    child.gender || ""
+                )
+                .trim()
+                .toLowerCase() ===
+                "male";
+
+            }
+        );
+
+
+    /* ===============================
+       SPLIT DAUGHTERS
+       =============================== */
+
+    const daughters =
+        children.filter(
+            function(child){
+
+                return String(
+                    child.gender || ""
+                )
+                .trim()
+                .toLowerCase() ===
+                "female";
+
+            }
+        );
+
+
+    /* ===============================
+       SONS
+       =============================== */
+
+    if(sons.length === 0){
+
+        if(sonsRow){
+
+            sonsRow.style.display =
+                "none";
+
+        }
+
+    }
+    else{
+
+        if(sonsRow){
+
+            sonsRow.style.display =
+                "";
+
+        }
+
+
+        if(sonsTitle){
+
+            sonsTitle.textContent =
+                "Sons : " +
+                sons.length;
+
+        }
+
+
+        if(sonsField){
+
+            sonsField.innerHTML =
+                "";
+
+            sons.forEach(
+                function(
+                    son,
+                    index
+                ){
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+                    div.textContent =
+                        (index + 1) +
+                        ". " +
+                        (
+                            getName(son) ||
+                            "--------"
+                        );
+
+                    sonsField.appendChild(
+                        div
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* ===============================
+       DAUGHTERS
+       =============================== */
+
+    if(daughters.length === 0){
+
+        if(daughtersRow){
+
+            daughtersRow.style.display =
+                "none";
+
+        }
+
+    }
+    else{
+
+        if(daughtersRow){
+
+            daughtersRow.style.display =
+                "";
+
+        }
+
+
+        if(daughtersTitle){
+
+            daughtersTitle.textContent =
+                "Daughters : " +
+                daughters.length;
+
+        }
+
+
+        if(daughtersField){
+
+            daughtersField.innerHTML =
+                "";
+
+            daughters.forEach(
+                function(
+                    daughter,
+                    index
+                ){
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+                    div.textContent =
+                        (index + 1) +
+                        ". " +
+                        (
+                            getName(daughter) ||
+                            "--------"
+                        );
+
+                    daughtersField.appendChild(
+                        div
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+}
+    /* =================================
+       3. PARENTS
+       ================================= */
+
+    const fatherField =
+        document.getElementById(
+            "relationFather"
+        );
+
+
+    const motherField =
+        document.getElementById(
+            "relationMother"
+        );
+
+
+    if(fatherField){
+
+        fatherField.textContent =
+            getName(father);
+
+        const fatherRow =
+            fatherField.closest(
+                ".relation-row"
+            );
+
+        if(fatherRow){
+
+    fatherRow.style.display =
+        getName(father)
+            ? "flex"
+            : "none";
+
+}
+
+    }
+
+
+    if(motherField){
+
+        motherField.textContent =
+            getName(mother);
+
+        const motherRow =
+            motherField.closest(
+                ".relation-row"
+            );
+
+       if(motherRow){
+
+    motherRow.style.display =
+        getName(mother)
+            ? "flex"
+            : "none";
+
+}
+    }
+
+
+    if(
+    getName(father) ||
+    getName(mother)
+){
+
+    const parentsSection =
+        document.getElementById(
+            "relationParentsSection"
+        );
+
+    if(parentsSection){
+
+        parentsSection.style.display =
+            "block";
+
+    }
+
+}    else{
+
+        hideSection(
+            "relationParentsSection"
+        );
+
+    }
+
+    /* =================================
+       4. SIBLINGS
+       ================================= */
+
+    const siblings =
+        familyMembers.filter(
+            function(item){
+
+                if(
+                    String(
+                        item.memberId || ""
+                    ).trim() ===
+                    String(
+                        member.memberId || ""
+                    ).trim()
+                ){
+
+                    return false;
+
+                }
+
+
+                const sameFather =
+                    member.fatherId &&
+                    item.fatherId &&
+                    String(
+                        item.fatherId
+                    ).trim() ===
+                    String(
+                        member.fatherId
+                    ).trim();
+
+
+                const sameMother =
+                    member.motherId &&
+                    item.motherId &&
+                    String(
+                        item.motherId
+                    ).trim() ===
+                    String(
+                        member.motherId
+                    ).trim();
+
+
+                return (
+                    sameFather ||
+                    sameMother
+                );
+
+            }
+        );
+const siblingsTitle =
+    document.getElementById(
+        "relationSiblingsTitle"
+    );
+
+if(siblingsTitle){
+
+    siblingsTitle.textContent =
+        "Siblings : " +
+        siblings.length;
+
+}
+
+    const brothers =
+        siblings.filter(
+            function(item){
+
+                return String(
+                    item.gender || ""
+                )
+                .trim()
+                .toLowerCase() ===
+                "male";
+
+            }
+        );
+
+
+    const sisters =
+        siblings.filter(
+            function(item){
+
+                          return String(
+                    item.gender || ""
+                )
+                .trim()
+                .toLowerCase() ===
+                "female";
+
+            }
+        );
+
+
+    const brothersField =
+        document.getElementById(
+            "relationBrothers"
+        );
+
+
+    const sistersField =
+        document.getElementById(
+            "relationSisters"
+        );
+
+
+/* =================================
+   SIBLINGS → BROTHERS / SISTERS
+   ================================= */
+
+if(brothersField){
+
+    brothersField.innerHTML = "";
+
+    const brothersLabel =
+        brothersField.previousElementSibling;
+
+    if(brothers.length === 0){
+
+        /* Hide Brothers row */
+        brothersField.style.display =
+            "none";
+
+        if(brothersLabel){
+
+            brothersLabel.style.display =
+                "none";
+
+        }
+
+    }
+    else{
+
+        /* Show Brothers row */
+        brothersField.style.display =
+            "";
+
+        if(brothersLabel){
+
+            brothersLabel.style.display =
+                "";
+
+            brothersLabel.textContent =
+                "Brothers : " +
+                brothers.length;
+
+        }
+
+        brothers.forEach(
+            function(
+                brother,
+                index
+            ){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    getName(brother);
+
+                brothersField.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+if(sistersField){
+
+    sistersField.innerHTML = "";
+
+    const sistersLabel =
+        sistersField.previousElementSibling;
+
+    if(sisters.length === 0){
+
+        /* Hide Sisters row */
+        sistersField.style.display =
+            "none";
+
+        if(sistersLabel){
+
+            sistersLabel.style.display =
+                "none";
+
+        }
+
+    }
+    else{
+
+        /* Show Sisters row */
+        sistersField.style.display =
+            "";
+
+        if(sistersLabel){
+
+            sistersLabel.style.display =
+                "";
+
+            sistersLabel.textContent =
+                "Sisters : " +
+                sisters.length;
+
+        }
+
+        sisters.forEach(
+            function(
+                sister,
+                index
+            ){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    getName(sister);
+
+                sistersField.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+      
+    if(
+    brothers.length ||
+    sisters.length
+){
+
+    const siblingsSection =
+        document.getElementById(
+            "relationSiblingsSection"
+        );
+
+    if(siblingsSection){
+
+        siblingsSection.style.display =
+            "block";
+
+    }
+
+}
+else{
+
+    hideSection(
+        "relationSiblingsSection"
+    );
+
+}
+
+/* =================================
+   5. FATHER SIBLINGS
+   ================================= */
+
+const fatherSiblings =
+    father
+        ? familyMembers.filter(
+            function(item){
+
+                if(
+                    String(
+                        item.memberId || ""
+                    ).trim() ===
+                    String(
+                        father.memberId || ""
+                    ).trim()
+                ){
+
+                    return false;
+
+                }
+
+
+                const sameFather =
+                    father.fatherId &&
+                    item.fatherId &&
+                    String(
+                        item.fatherId
+                    ).trim() ===
+                    String(
+                        father.fatherId
+                    ).trim();
+
+
+                const sameMother =
+                    father.motherId &&
+                    item.motherId &&
+                    String(
+                        item.motherId
+                    ).trim() ===
+                    String(
+                        father.motherId
+                    ).trim();
+
+
+                return (
+                    sameFather ||
+                    sameMother
+                );
+
+            }
+        )
+        : [];
+
+
+/* =================================
+   FATHER SIBLINGS ELEMENTS
+   ================================= */
+
+const fatherSiblingsField =
+    document.getElementById(
+        "relationFatherSiblings"
+    );
+
+
+const fatherSiblingsTitle =
+    document.getElementById(
+        "relationFatherSiblingsTitle"
+    );
+
+
+const fatherSiblingsBrothersRow =
+    document.getElementById(
+        "relationFatherSiblingsBrothersRow"
+    );
+
+
+const fatherSiblingsSistersRow =
+    document.getElementById(
+        "relationFatherSiblingsSistersRow"
+    );
+
+
+const fatherSiblingsBrothersTitle =
+    document.getElementById(
+        "relationFatherSiblingsBrothersTitle"
+    );
+
+
+const fatherSiblingsSistersTitle =
+    document.getElementById(
+        "relationFatherSiblingsSistersTitle"
+    );
+
+
+const fatherSiblingsBrothers =
+    document.getElementById(
+        "relationFatherSiblingsBrothers"
+    );
+
+
+const fatherSiblingsSisters =
+    document.getElementById(
+        "relationFatherSiblingsSisters"
+    );
+
+
+/* =================================
+   CLEAR OLD CONTENT
+   ================================= */
+
+if(fatherSiblingsField){
+
+    /*
+       Important:
+       Don't use innerHTML = ""
+       here because the child elements
+       are inside this container.
+    */
+
+}
+
+
+/* =================================
+   SPLIT BROTHERS
+   ================================= */
+
+const fatherBrothers =
+    fatherSiblings.filter(
+        function(item){
+
+            return String(
+                item.gender || ""
+            )
+            .trim()
+            .toLowerCase() ===
+            "male";
+
+        }
+    );
+
+
+/* =================================
+   SPLIT SISTERS
+   ================================= */
+
+const fatherSisters =
+    fatherSiblings.filter(
+        function(item){
+
+            return String(
+                item.gender || ""
+            )
+            .trim()
+            .toLowerCase() ===
+            "female";
+
+        }
+    );
+
+
+/* =================================
+   TOTAL COUNT
+   ================================= */
+
+const fatherSiblingsHeading =
+    document.getElementById(
+        "relationFatherSiblingsTitle"
+    );
+
+if(fatherSiblingsHeading){
+
+    fatherSiblingsHeading.textContent =
+        "Father Siblings : " +
+        fatherSiblings.length;
+
+}
+
+/* =================================
+   BROTHERS
+   ================================= */
+
+if(
+    fatherBrothers.length === 0
+){
+
+    if(fatherSiblingsBrothersRow){
+
+        fatherSiblingsBrothersRow.style.display =
+            "none";
+
+    }
+
+}
+else{
+
+    if(fatherSiblingsBrothersRow){
+
+        fatherSiblingsBrothersRow.style.display =
+            "";
+
+    }
+
+   
+    if(fatherSiblingsBrothersTitle){
+
+        fatherSiblingsBrothersTitle.textContent =
+            "Brothers : " +
+            fatherBrothers.length;
+
+    }
+
+
+    if(fatherSiblingsBrothers){
+
+        fatherSiblingsBrothers.innerHTML =
+            "";
+
+
+        fatherBrothers.forEach(
+            function(
+                item,
+                index
+            ){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        getName(item) ||
+                        "--------"
+                    );
+
+
+                fatherSiblingsBrothers.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =================================
+   SISTERS
+   ================================= */
+
+if(
+    fatherSisters.length === 0
+){
+
+    if(fatherSiblingsSistersRow){
+
+        fatherSiblingsSistersRow.style.display =
+            "none";
+
+    }
+
+}
+else{
+
+    if(fatherSiblingsSistersRow){
+
+        fatherSiblingsSistersRow.style.display =
+            "";
+
+    }
+
+
+    if(fatherSiblingsSistersTitle){
+
+        fatherSiblingsSistersTitle.textContent =
+            "Sisters : " +
+            fatherSisters.length;
+
+    }
+
+
+    if(fatherSiblingsSisters){
+
+        fatherSiblingsSisters.innerHTML =
+            "";
+
+
+        fatherSisters.forEach(
+            function(
+                item,
+                index
+            ){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        getName(item) ||
+                        "--------"
+                    );
+
+
+                fatherSiblingsSisters.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =================================
+   SHOW / HIDE SECTION
+   ================================= */
+
+if(
+    fatherSiblings.length
+){
+
+    const fatherSiblingsSection =
+        document.getElementById(
+            "relationFatherSiblingsSection"
+        );
+
+
+    if(fatherSiblingsSection){
+
+        fatherSiblingsSection.style.display =
+            "block";
+
+    }
+
+}
+else{
+
+    hideSection(
+        "relationFatherSiblingsSection"
+    );
+
+}
+      
+ /* =================================
+   6. MOTHER SIBLINGS
+   ================================= */
+
+const motherSiblings =
+    mother
+        ? familyMembers.filter(
+            function(item){
+
+                if(
+                    String(
+                        item.memberId || ""
+                    ).trim() ===
+                    String(
+                        mother.memberId || ""
+                    ).trim()
+                ){
+
+                    return false;
+
+                }
+
+
+                const sameFather =
+                    mother.fatherId &&
+                    item.fatherId &&
+                    String(
+                        item.fatherId
+                    ).trim() ===
+                    String(
+                        mother.fatherId
+                    ).trim();
+
+
+                const sameMother =
+                    mother.motherId &&
+                    item.motherId &&
+                    String(
+                        item.motherId
+                    ).trim() ===
+                    String(
+                        mother.motherId
+                    ).trim();
+
+
+                return (
+                    sameFather ||
+                    sameMother
+                );
+
+            }
+        )
+        : [];
+
+
+/* =================================
+   MOTHER SIBLINGS ELEMENTS
+   ================================= */
+
+const motherSiblingsTitle =
+    document.getElementById(
+        "relationMotherSiblingsTitle"
+    );
+
+
+const motherSiblingsBrothersRow =
+    document.getElementById(
+        "relationMotherSiblingsBrothersRow"
+    );
+
+
+const motherSiblingsSistersRow =
+    document.getElementById(
+        "relationMotherSiblingsSistersRow"
+    );
+
+
+const motherSiblingsBrothersTitle =
+    document.getElementById(
+        "relationMotherSiblingsBrothersTitle"
+    );
+
+
+const motherSiblingsSistersTitle =
+    document.getElementById(
+        "relationMotherSiblingsSistersTitle"
+    );
+
+
+const motherSiblingsBrothers =
+    document.getElementById(
+        "relationMotherSiblingsBrothers"
+    );
+
+
+const motherSiblingsSisters =
+    document.getElementById(
+        "relationMotherSiblingsSisters"
+    );
+
+
+/* =================================
+   TOTAL COUNT
+   ================================= */
+
+if(motherSiblingsTitle){
+
+    motherSiblingsTitle.textContent =
+        "Mother Siblings : " +
+        motherSiblings.length;
+
+}
+
+
+/* =================================
+   BROTHERS
+   ================================= */
+
+const motherBrothers =
+    motherSiblings.filter(
+        function(item){
+
+            return String(
+                item.gender || ""
+            )
+            .trim()
+            .toLowerCase() ===
+            "male";
+
+        }
+    );
+
+
+if(motherBrothers.length === 0){
+
+    if(motherSiblingsBrothersRow){
+
+        motherSiblingsBrothersRow.style.display =
+            "none";
+
+    }
+
+}
+else{
+
+    if(motherSiblingsBrothersRow){
+
+        motherSiblingsBrothersRow.style.display =
+            "";
+
+    }
+
+
+    if(motherSiblingsBrothersTitle){
+
+        motherSiblingsBrothersTitle.textContent =
+            "Brothers : " +
+            motherBrothers.length;
+
+    }
+
+
+    if(motherSiblingsBrothers){
+
+        motherSiblingsBrothers.innerHTML =
+            "";
+
+
+        motherBrothers.forEach(
+            function(
+                item,
+                index
+            ){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        getName(item) ||
+                        "--------"
+                    );
+
+
+                motherSiblingsBrothers.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =================================
+   SISTERS
+   ================================= */
+
+const motherSisters =
+    motherSiblings.filter(
+        function(item){
+
+            return String(
+                item.gender || ""
+            )
+            .trim()
+            .toLowerCase() ===
+            "female";
+
+        }
+    );
+
+
+if(motherSisters.length === 0){
+
+    if(motherSiblingsSistersRow){
+
+        motherSiblingsSistersRow.style.display =
+            "none";
+
+    }
+
+}
+else{
+
+    if(motherSiblingsSistersRow){
+
+        motherSiblingsSistersRow.style.display =
+            "";
+
+    }
+
+
+    if(motherSiblingsSistersTitle){
+
+        motherSiblingsSistersTitle.textContent =
+            "Sisters : " +
+            motherSisters.length;
+
+    }
+
+
+    if(motherSiblingsSisters){
+
+        motherSiblingsSisters.innerHTML =
+            "";
+
+
+        motherSisters.forEach(
+            function(
+                item,
+                index
+            ){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        getName(item) ||
+                        "--------"
+                    );
+
+
+                motherSiblingsSisters.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =================================
+   SHOW / HIDE SECTION
+   ================================= */
+
+if(
+    motherSiblings.length
+){
+
+    const motherSiblingsSection =
+        document.getElementById(
+            "relationMotherSiblingsSection"
+        );
+
+
+    if(motherSiblingsSection){
+
+        motherSiblingsSection.style.display =
+            "block";
+
+    }
+
+}
+else{
+
+    hideSection(
+        "relationMotherSiblingsSection"
+    );
+
+}
+
+    /* =================================
+       7. IN-LAWS
+       ================================= */
+
+    let fatherInLaw =
+        null;
+
+    let motherInLaw =
+        null;
+
+
+    if(isMarried && partner){
+
+        fatherInLaw =
+            findMember(
+                partner.fatherId
+            );
+
+        motherInLaw =
+            findMember(
+                partner.motherId
+            );
+
+    }
+
+
+    const fatherInLawField =
+        document.getElementById(
+            "relationFatherInLaw"
+        );
+
+
+    const motherInLawField =
+        document.getElementById(
+            "relationMotherInLaw"
+        );
+
+
+    if(fatherInLawField){
+
+        fatherInLawField.textContent =
+            getName(fatherInLaw);
+
+        const row =
+            fatherInLawField.closest(
+                ".relation-row"
+            );
+
+        if(row){
+
+            row.style.display =
+                getName(fatherInLaw)
+                    ? ""
+                    : "none";
+
+        }
+
+    }
+
+
+    if(motherInLawField){
+
+        motherInLawField.textContent =
+            getName(motherInLaw);
+
+        const row =
+            motherInLawField.closest(
+                ".relation-row"
+            );
+
+        if(row){
+
+            row.style.display =
+                getName(motherInLaw)
+                    ? ""
+                    : "none";
+
+        }
+
+    }
+
+
+   if(
+    isMarried &&
+    (
+        getName(fatherInLaw) ||
+        getName(motherInLaw)
+    )
+){
+
+    const inLawsSection =
+        document.getElementById(
+            "relationInLawsSection"
+        );
+
+    if(inLawsSection){
+
+        inLawsSection.style.display =
+            "block";
+
+    }
+
+}
+else{
+
+    hideSection(
+        "relationInLawsSection"
+    );
+
+}
+
+    /* =================================
+   8. PARTNER SIBLINGS
+   ================================= */
+
+const partnerSiblings =
+    partner
+        ? familyMembers.filter(
+            function(item){
+
+                if(
+                    String(
+                        item.memberId || ""
+                    ).trim() ===
+                    String(
+                        partner.memberId || ""
+                    ).trim()
+                ){
+                    return false;
+                }
+
+
+                const sameFather =
+                    partner.fatherId &&
+                    item.fatherId &&
+                    String(
+                        item.fatherId
+                    ).trim() ===
+                    String(
+                        partner.fatherId
+                    ).trim();
+
+
+                const sameMother =
+                    partner.motherId &&
+                    item.motherId &&
+                    String(
+                        item.motherId
+                    ).trim() ===
+                    String(
+                        partner.motherId
+                    ).trim();
+
+
+                return (
+                    sameFather ||
+                    sameMother
+                );
+
+            }
+        )
+        : [];
+
+
+/* =================================
+   SPLIT PARTNER BROTHERS / SISTERS
+   ================================= */
+
+const partnerBrothers =
+    partnerSiblings.filter(
+        function(item){
+
+            return String(
+                item.gender || ""
+            )
+            .trim()
+            .toLowerCase() ===
+            "male";
+
+        }
+    );
+
+
+const partnerSisters =
+    partnerSiblings.filter(
+        function(item){
+
+            return String(
+                item.gender || ""
+            )
+            .trim()
+            .toLowerCase() ===
+            "female";
+
+        }
+    );
+
+
+/* =================================
+   PARTNER SIBLINGS ELEMENTS
+   ================================= */
+
+const partnerSiblingsTitle =
+    document.getElementById(
+        "relationPartnerSiblingsTitle"
+    );
+
+const partnerBrothersTitle =
+    document.getElementById(
+        "relationPartnerBrothersTitle"
+    );
+
+const partnerSistersTitle =
+    document.getElementById(
+        "relationPartnerSistersTitle"
+    );
+
+const partnerBrothersField =
+    document.getElementById(
+        "relationPartnerBrothers"
+    );
+
+const partnerSistersField =
+    document.getElementById(
+        "relationPartnerSisters"
+    );
+
+
+/* =================================
+   TOTAL COUNT
+   ================================= */
+
+if(partnerSiblingsTitle){
+
+    partnerSiblingsTitle.textContent =
+        "Partner Siblings : " +
+        partnerSiblings.length;
+
+}
+
+
+/* =================================
+   BROTHERS
+   ================================= */
+
+if(partnerBrothers.length === 0){
+
+    if(partnerBrothersTitle){
+        partnerBrothersTitle.style.display =
+            "none";
+    }
+
+    if(partnerBrothersField){
+        partnerBrothersField.style.display =
+            "none";
+    }
+
+}
+else{
+
+    if(partnerBrothersTitle){
+
+        partnerBrothersTitle.style.display =
+            "";
+
+        partnerBrothersTitle.textContent =
+            "Brothers : " +
+            partnerBrothers.length;
+
+    }
+
+    if(partnerBrothersField){
+
+        partnerBrothersField.style.display =
+            "";
+
+        partnerBrothersField.innerHTML =
+            "";
+
+        partnerBrothers.forEach(
+            function(
+                item,
+                index
+            ){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        getName(item) ||
+                        "--------"
+                    );
+
+                partnerBrothersField.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =================================
+   SISTERS
+   ================================= */
+
+if(partnerSisters.length === 0){
+
+    if(partnerSistersTitle){
+        partnerSistersTitle.style.display =
+            "none";
+    }
+
+    if(partnerSistersField){
+        partnerSistersField.style.display =
+            "none";
+    }
+
+}
+else{
+
+    if(partnerSistersTitle){
+
+        partnerSistersTitle.style.display =
+            "";
+
+        partnerSistersTitle.textContent =
+            "Sisters : " +
+            partnerSisters.length;
+
+    }
+
+    if(partnerSistersField){
+
+        partnerSistersField.style.display =
+            "";
+
+        partnerSistersField.innerHTML =
+            "";
+
+        partnerSisters.forEach(
+            function(
+                item,
+                index
+            ){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        getName(item) ||
+                        "--------"
+                    );
+
+                partnerSistersField.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =================================
+   SHOW / HIDE PARTNER SIBLINGS
+   ================================= */
+
+if(
+    isMarried &&
+    partner &&
+    partnerSiblings.length
+){
+
+    const partnerSiblingsSection =
+        document.getElementById(
+            "relationPartnerSiblingsSection"
+        );
+
+    if(partnerSiblingsSection){
+
+        partnerSiblingsSection.style.display =
+            "block";
+
+    }
+
+}
+else{
+
+    hideSection(
+        "relationPartnerSiblingsSection"
+    );
+
+}
+
+/* =================================
+   SPECIAL SIBLING RELATION CHECK
+   ================================= */
+
+function areSiblingsForSpecialRelation(
+    person1,
+    person2
+){
+
+    if(
+        !person1 ||
+        !person2
+    ){
+        return false;
+    }
+
+    /* SAME PERSON CHECK */
+
+    const person1Id =
+        String(
+            person1.memberId || ""
+        ).trim();
+
+    const person2Id =
+        String(
+            person2.memberId || ""
+        ).trim();
+
+    if(
+        !person1Id ||
+        !person2Id ||
+        person1Id === person2Id
+    ){
+        return false;
+    }
+
+
+    /* SAME FAMILY CHECK */
+
+    const family1 =
+        String(
+            person1.familyId || ""
+        ).trim();
+
+    const family2 =
+        String(
+            person2.familyId || ""
+        ).trim();
+
+    if(
+        family1 &&
+        family2 &&
+        family1 !== family2
+    ){
+        return false;
+    }
+
+
+    /* FATHER CHECK */
+
+    const father1 =
+        String(
+            person1.fatherId || ""
+        ).trim();
+
+    const father2 =
+        String(
+            person2.fatherId || ""
+        ).trim();
+
+    const sameFather =
+        father1 &&
+        father2 &&
+        father1 === father2;
+
+
+    /* MOTHER CHECK */
+
+    const mother1 =
+        String(
+            person1.motherId || ""
+        ).trim();
+
+    const mother2 =
+        String(
+            person2.motherId || ""
+        ).trim();
+
+    const sameMother =
+        mother1 &&
+        mother2 &&
+        mother1 === mother2;
+
+
+    return !!(
+        sameFather ||
+        sameMother
+    );
+}
+      /* =================================
+       8. FATHER-IN-LAW SIBLINGS
+       ================================= */
+
+    const fatherInLawSiblings =
+        fatherInLaw
+            ? familyMembers.filter(
+                function(item){
+
+                    if(
+                        String(
+                            item.memberId || ""
+                        ).trim() ===
+                        String(
+                            fatherInLaw.memberId || ""
+                        ).trim()
+                    ){
+
+                        return false;
+
+                    }
+
+
+                    const sameFather =
+                        fatherInLaw.fatherId &&
+                        item.fatherId &&
+                        String(
+                            item.fatherId
+                        ).trim() ===
+                        String(
+                            fatherInLaw.fatherId
+                        ).trim();
+
+
+                    const sameMother =
+                        fatherInLaw.motherId &&
+                        item.motherId &&
+                        String(
+                            item.motherId
+                        ).trim() ===
+                        String(
+                            fatherInLaw.motherId
+                        ).trim();
+
+
+                    return (
+                        sameFather ||
+                        sameMother
+                    );
+
+                }
+            )
+            : [];
+
+/* =================================
+   SPECIAL CASE
+   FATHER-IN-LAW IS MOTHER'S BROTHER
+   ================================= */
+
+const fatherInLawIsMothersSibling =
+    !!fatherInLaw &&
+    !!mother &&
+    areSiblingsForSpecialRelation(
+        fatherInLaw,
+        mother
+    );
+      
+   /* =================================
+   FATHER-IN-LAW SIBLINGS
+   BROTHERS / SISTERS
+   ================================= */
+
+const fatherInLawSiblingsTitle =
+    document.getElementById(
+        "relationFatherInLawSiblingsTitle"
+    );
+
+
+const fatherInLawSiblingsBrothersRow =
+    document.getElementById(
+        "relationFatherInLawSiblingsBrothersRow"
+    );
+
+
+const fatherInLawSiblingsSistersRow =
+    document.getElementById(
+        "relationFatherInLawSiblingsSistersRow"
+    );
+
+
+const fatherInLawSiblingsBrothersTitle =
+    document.getElementById(
+        "relationFatherInLawSiblingsBrothersTitle"
+    );
+
+
+const fatherInLawSiblingsSistersTitle =
+    document.getElementById(
+        "relationFatherInLawSiblingsSistersTitle"
+    );
+
+
+const fatherInLawSiblingsBrothers =
+    document.getElementById(
+        "relationFatherInLawSiblingsBrothers"
+    );
+
+
+const fatherInLawSiblingsSisters =
+    document.getElementById(
+        "relationFatherInLawSiblingsSisters"
+    );
+
+
+/* =================================
+   TITLE + TOTAL COUNT
+   ================================= */
+
+if(fatherInLawSiblingsTitle){
+
+    fatherInLawSiblingsTitle.textContent =
+        "Father-in-Law Siblings : " +
+        fatherInLawSiblings.length;
+
+}
+      const fatherInLawSiblingsContainer =
+    document.getElementById(
+        "relationFatherInLawSiblings"
+    );
+      
+  /* =================================
+   REMOVE OLD SPECIAL MESSAGE
+   ================================= */
+
+document
+    .querySelectorAll(
+        ".father-in-law-special-message"
+    )
+    .forEach(
+        function(message){
+            message.remove();
+        }
+    );    
+/* =================================
+   FATHER-IN-LAW SIBLINGS
+   SPECIAL CONDITION
+   ================================= */
+if(
+    fatherInLawIsMothersSibling
+){
+
+    /* Hide normal Brothers row */
+
+    if(fatherInLawSiblingsBrothersRow){
+
+        fatherInLawSiblingsBrothersRow.style.display =
+            "none";
+
+    }
+
+
+    /* Hide normal Sisters row */
+
+    if(fatherInLawSiblingsSistersRow){
+
+        fatherInLawSiblingsSistersRow.style.display =
+            "none";
+
+    }
+
+
+    /* Change title */
+
+    if(fatherInLawSiblingsTitle){
+
+        fatherInLawSiblingsTitle.textContent =
+            "Father-in-Law Siblings";
+    }
+
+
+    /* Show special message */
+
+   if(fatherInLawSiblingsContainer){
+
+        const message =
+            document.createElement(
+                "div"
+            );
+
+        message.className =
+    "father-in-law-special-message";
+        message.textContent =
+            "Same as Mother " +
+            (
+                getName(mother) ||
+                "Mother"
+            ) +
+            " siblings because Father-in-Law is my mother's brother";
+
+
+        fatherInLawSiblingsContainer.appendChild(
+            message
+        );
+
+    }
+
+}
+      else{
+
+    /* =================================
+       NORMAL BROTHERS / SISTERS
+       ================================= */
+
+    const fatherInLawBrothers =
+        fatherInLawSiblings.filter(
+            function(item){
+
+                return String(
+                    item.gender || ""
+                )
+                .trim()
+                .toLowerCase() ===
+                "male";
+
+            }
+        );
+
+
+    const fatherInLawSisters =
+        fatherInLawSiblings.filter(
+            function(item){
+
+                return String(
+                    item.gender || ""
+                )
+                .trim()
+                .toLowerCase() ===
+                "female";
+
+            }
+        );
+
+
+    /* =================================
+       BROTHERS
+       ================================= */
+
+    if(
+        fatherInLawBrothers.length === 0
+    ){
+
+        if(fatherInLawSiblingsBrothersRow){
+
+            fatherInLawSiblingsBrothersRow.style.display =
+                "none";
+
+        }
+
+    }
+    else{
+
+        if(fatherInLawSiblingsBrothersRow){
+
+            fatherInLawSiblingsBrothersRow.style.display =
+                "";
+
+        }
+
+
+        if(fatherInLawSiblingsBrothersTitle){
+
+            fatherInLawSiblingsBrothersTitle.textContent =
+                "Brothers : " +
+                fatherInLawBrothers.length;
+
+        }
+
+
+        if(fatherInLawSiblingsBrothers){
+
+            fatherInLawSiblingsBrothers.innerHTML =
+                "";
+
+
+            fatherInLawBrothers.forEach(
+                function(
+                    item,
+                    index
+                ){
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    div.textContent =
+                        (index + 1) +
+                        ". " +
+                        (
+                            getName(item) ||
+                            "--------"
+                        );
+
+
+                    fatherInLawSiblingsBrothers.appendChild(
+                        div
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* =================================
+       SISTERS
+       ================================= */
+
+    if(
+        fatherInLawSisters.length === 0
+    ){
+
+        if(fatherInLawSiblingsSistersRow){
+
+            fatherInLawSiblingsSistersRow.style.display =
+                "none";
+
+        }
+
+    }
+    else{
+
+        if(fatherInLawSiblingsSistersRow){
+
+            fatherInLawSiblingsSistersRow.style.display =
+                "";
+
+        }
+
+
+        if(fatherInLawSiblingsSistersTitle){
+
+            fatherInLawSiblingsSistersTitle.textContent =
+                "Sisters : " +
+                fatherInLawSisters.length;
+
+        }
+
+
+        if(fatherInLawSiblingsSisters){
+
+            fatherInLawSiblingsSisters.innerHTML =
+                "";
+
+
+            fatherInLawSisters.forEach(
+                function(
+                    item,
+                    index
+                ){
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    div.textContent =
+                        (index + 1) +
+                        ". " +
+                        (
+                            getName(item) ||
+                            "--------"
+                        );
+
+
+                    fatherInLawSiblingsSisters.appendChild(
+                        div
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =================================
+   SHOW / HIDE SECTION
+   ================================= */
+
+if(
+    isMarried &&
+    fatherInLawSiblings.length > 0
+){
+
+    const fatherInLawSiblingsSection =
+        document.getElementById(
+            "relationFatherInLawSiblingsSection"
+        );
+
+
+    if(fatherInLawSiblingsSection){
+
+        fatherInLawSiblingsSection.style.display =
+            "block";
+
+    }
+
+}
+else{
+
+    hideSection(
+        "relationFatherInLawSiblingsSection"
+    );
+
+}
+
+
+    /* =================================
+       9. MOTHER-IN-LAW SIBLINGS
+       ================================= */
+
+    const motherInLawSiblings =
+        motherInLaw
+            ? familyMembers.filter(
+                function(item){
+
+                    if(
+                        String(
+                            item.memberId || ""
+                        ).trim() ===
+                        String(
+                            motherInLaw.memberId || ""
+                        ).trim()
+                    ){
+
+                        return false;
+
+                    }
+
+
+                    const sameFather =
+                        motherInLaw.fatherId &&
+                        item.fatherId &&
+                        String(
+                            item.fatherId
+                        ).trim() ===
+                        String(
+                            motherInLaw.fatherId
+                        ).trim();
+
+
+                    const sameMother =
+                        motherInLaw.motherId &&
+                        item.motherId &&
+                        String(
+                            item.motherId
+                        ).trim() ===
+                        String(
+                            motherInLaw.motherId
+                        ).trim();
+
+
+                    return (
+                        sameFather ||
+                        sameMother
+                    );
+
+                }
+            )
+            : [];
+
+      
+
+const motherInLawIsMySibling =
+    !!motherInLaw &&
+    !!member &&
+    areSiblingsForSpecialRelation(
+        motherInLaw,
+        member
+    );
+
+const motherInLawIsFathersSibling =
+    !!motherInLaw &&
+    !!father &&
+    areSiblingsForSpecialRelation(
+        motherInLaw,
+        father
+    );
+
+      console.log(
+    "SELECTED MEMBER =",
+    getName(member),
+    member
+);
+
+console.log(
+    "MOTHER-IN-LAW =",
+    getName(motherInLaw),
+    motherInLaw
+);
+
+console.log(
+    "FATHER =",
+    getName(father),
+    father
+);
+
+console.log(
+    "MIL IS MY SIBLING =",
+    motherInLawIsMySibling
+);
+
+console.log(
+    "MIL IS FATHER SIBLING =",
+    motherInLawIsFathersSibling
+);
+      /* =================================
+   MOTHER-IN-LAW SIBLINGS
+   BROTHERS / SISTERS
+   ================================= */
+
+const motherInLawSiblingsTitle =
+    document.getElementById(
+        "relationMotherInLawSiblingsTitle"
+    );
+
+
+const motherInLawSiblingsBrothersRow =
+    document.getElementById(
+        "relationMotherInLawSiblingsBrothersRow"
+    );
+
+
+const motherInLawSiblingsSistersRow =
+    document.getElementById(
+        "relationMotherInLawSiblingsSistersRow"
+    );
+
+
+const motherInLawSiblingsBrothersTitle =
+    document.getElementById(
+        "relationMotherInLawSiblingsBrothersTitle"
+    );
+
+
+const motherInLawSiblingsSistersTitle =
+    document.getElementById(
+        "relationMotherInLawSiblingsSistersTitle"
+    );
+
+
+const motherInLawSiblingsBrothers =
+    document.getElementById(
+        "relationMotherInLawSiblingsBrothers"
+    );
+
+
+const motherInLawSiblingsSisters =
+    document.getElementById(
+        "relationMotherInLawSiblingsSisters"
+    );
+
+
+/* =================================
+   TITLE + TOTAL COUNT
+   ================================= */
+
+if(motherInLawSiblingsTitle){
+
+    motherInLawSiblingsTitle.textContent =
+        "Mother-in-Law Siblings : " +
+        motherInLawSiblings.length;
+
+}
+
+
+/* =================================
+   SEPARATE BROTHERS
+   ================================= */
+
+const motherInLawBrothers =
+    motherInLawSiblings.filter(
+        function(item){
+
+            return String(
+                item.gender || ""
+            )
+            .trim()
+            .toLowerCase() ===
+            "male";
+
+        }
+    );
+
+
+/* =================================
+   SEPARATE SISTERS
+   ================================= */
+
+const motherInLawSisters =
+    motherInLawSiblings.filter(
+        function(item){
+
+            return String(
+                item.gender || ""
+            )
+            .trim()
+            .toLowerCase() ===
+            "female";
+
+        }
+    );
+
+
+/* =================================
+   BROTHERS
+   ================================= */
+
+if(
+    motherInLawBrothers.length === 0
+){
+
+    if(motherInLawSiblingsBrothersRow){
+
+        motherInLawSiblingsBrothersRow.style.display =
+            "none";
+
+    }
+
+}
+else{
+
+    if(motherInLawSiblingsBrothersRow){
+
+        motherInLawSiblingsBrothersRow.style.display =
+            "";
+
+    }
+
+
+    if(motherInLawSiblingsBrothersTitle){
+
+        motherInLawSiblingsBrothersTitle.textContent =
+            "Brothers : " +
+            motherInLawBrothers.length;
+
+    }
+
+
+    if(motherInLawSiblingsBrothers){
+
+        motherInLawSiblingsBrothers.innerHTML =
+            "";
+
+
+        motherInLawBrothers.forEach(
+            function(
+                item,
+                index
+            ){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        getName(item) ||
+                        "--------"
+                    );
+
+
+                motherInLawSiblingsBrothers.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =================================
+   SISTERS
+   ================================= */
+
+if(
+    motherInLawSisters.length === 0
+){
+
+    if(motherInLawSiblingsSistersRow){
+
+        motherInLawSiblingsSistersRow.style.display =
+            "none";
+
+    }
+
+}
+else{
+
+    if(motherInLawSiblingsSistersRow){
+
+        motherInLawSiblingsSistersRow.style.display =
+            "";
+
+    }
+
+
+    if(motherInLawSiblingsSistersTitle){
+
+        motherInLawSiblingsSistersTitle.textContent =
+            "Sisters : " +
+            motherInLawSisters.length;
+
+    }
+
+
+    if(motherInLawSiblingsSisters){
+
+        motherInLawSiblingsSisters.innerHTML =
+            "";
+
+
+        motherInLawSisters.forEach(
+            function(
+                item,
+                index
+            ){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        getName(item) ||
+                        "--------"
+                    );
+
+
+                motherInLawSiblingsSisters.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}
+
+      const motherInLawSiblingsContainer =
+    document.getElementById(
+        "relationMotherInLawSiblings"
+    );
+
+
+       /* =================================
+   REMOVE OLD SPECIAL MESSAGE
+   ================================= */
+
+document
+    .querySelectorAll(
+        ".mother-in-law-special-message"
+    )
+    .forEach(
+        function(message){
+            message.remove();
+        }
+    );
+
+
+/* =================================
+   MOTHER-IN-LAW IS MY SIBLING
+   ================================= */
+
+if(
+    motherInLawIsMySibling
+){
+    if(motherInLawSiblingsBrothersRow){
+        motherInLawSiblingsBrothersRow.style.display =
+            "none";
+    }
+    if(motherInLawSiblingsSistersRow){
+        motherInLawSiblingsSistersRow.style.display =
+            "none";
+    }
+    if(motherInLawSiblingsTitle){
+        motherInLawSiblingsTitle.textContent =
+            "Mother-in-Law Siblings";
+    }
+    const motherInLawSiblingsContainer =
+        document.getElementById(
+            "relationMotherInLawSiblings"
+        );
+    if(motherInLawSiblingsContainer){
+       
+       const specialMessage =
+    document.createElement(
+        "div"
+    );
+
+specialMessage.className =
+    "mother-in-law-special-message";
+
+specialMessage.textContent =
+    "Same as my siblings because Mother-in-Law is my sister";
+
+motherInLawSiblingsContainer.appendChild(
+    specialMessage
+);
+    }
+
+}else if(
+    motherInLawIsFathersSibling
+){
+
+    if(motherInLawSiblingsBrothersRow){
+
+        motherInLawSiblingsBrothersRow.style.display =
+            "none";
+
+    }
+
+
+    if(motherInLawSiblingsSistersRow){
+
+        motherInLawSiblingsSistersRow.style.display =
+            "none";
+
+    }
+
+
+    if(motherInLawSiblingsTitle){
+
+        motherInLawSiblingsTitle.textContent =
+            "Mother-in-Law Siblings";
+
+    }
+
+
+    const motherInLawSiblingsContainer =
+        document.getElementById(
+            "relationMotherInLawSiblings"
+        );
+
+
+    if(motherInLawSiblingsContainer){
+
+           const specialMessage =
+            document.createElement(
+                "div"
+            );
+        specialMessage.className =
+       "mother-in-law-special-message";
+
+        specialMessage.textContent =
+            "Same as Father " +
+            (
+                getName(father) ||
+                "Father"
+            ) +
+            " siblings because Mother-in-Law is my father's sister";
+
+
+        motherInLawSiblingsContainer.appendChild(
+            specialMessage
+        );
+
+    }
+
+}
+
+   else{
+
+    /* =================================
+       NORMAL MOTHER-IN-LAW SIBLINGS
+       ================================= */
+
+    if(motherInLawSiblingsBrothersRow){
+
+        motherInLawSiblingsBrothersRow.style.display =
+            motherInLawBrothers.length > 0
+                ? ""
+                : "none";
+
+    }
+
+
+    if(motherInLawSiblingsSistersRow){
+
+        motherInLawSiblingsSistersRow.style.display =
+            motherInLawSisters.length > 0
+                ? ""
+                : "none";
+
+    }
+
+
+    if(motherInLawSiblingsBrothersTitle){
+
+        motherInLawSiblingsBrothersTitle.textContent =
+            "Brothers : " +
+            motherInLawBrothers.length;
+
+    }
+
+
+    if(motherInLawSiblingsSistersTitle){
+
+        motherInLawSiblingsSistersTitle.textContent =
+            "Sisters : " +
+            motherInLawSisters.length;
+
+    }
+
+
+    if(motherInLawSiblingsBrothers){
+
+        motherInLawSiblingsBrothers.innerHTML =
+            "";
+
+        motherInLawBrothers.forEach(
+            function(item, index){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        getName(item) ||
+                        "--------"
+                    );
+
+                motherInLawSiblingsBrothers.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+
+    if(motherInLawSiblingsSisters){
+
+        motherInLawSiblingsSisters.innerHTML =
+            "";
+
+        motherInLawSisters.forEach(
+            function(item, index){
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.textContent =
+                    (index + 1) +
+                    ". " +
+                    (
+                        getName(item) ||
+                        "--------"
+                    );
+
+                motherInLawSiblingsSisters.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+}   
+/* =================================
+   SHOW / HIDE SECTION
+   ================================= */
+
+if(
+    isMarried &&
+    motherInLawSiblings.length > 0
+){
+
+    const motherInLawSiblingsSection =
+        document.getElementById(
+            "relationMotherInLawSiblingsSection"
+        );
+
+
+    if(motherInLawSiblingsSection){
+
+        motherInLawSiblingsSection.style.display =
+            "block";
+
+    }
+
+}
+else{
+
+    hideSection(
+        "relationMotherInLawSiblingsSection"
+    );
+
+}
+
+   
+/* =================================
+   10. GRAND PARENTS
+   ================================= */
+
+
+/* =================================
+   FIND PATERNAL GRAND PARENTS
+   ================================= */
+
+const fathersFather =
+    father &&
+    father.fatherId
+        ? familyMembers.find(
+            function(item){
+
+                return String(
+                    item.memberId || ""
+                ).trim() ===
+                String(
+                    father.fatherId
+                ).trim();
+
+            }
+        )
+        : null;
+
+
+const fathersMother =
+    father &&
+    father.motherId
+        ? familyMembers.find(
+            function(item){
+
+                return String(
+                    item.memberId || ""
+                ).trim() ===
+                String(
+                    father.motherId
+                ).trim();
+
+            }
+        )
+        : null;
+
+
+/* =================================
+   FIND MATERNAL GRAND PARENTS
+   ================================= */
+
+const mothersFather =
+    mother &&
+    mother.fatherId
+        ? familyMembers.find(
+            function(item){
+
+                return String(
+                    item.memberId || ""
+                ).trim() ===
+                String(
+                    mother.fatherId
+                ).trim();
+
+            }
+        )
+        : null;
+
+
+const mothersMother =
+    mother &&
+    mother.motherId
+        ? familyMembers.find(
+            function(item){
+
+                return String(
+                    item.memberId || ""
+                ).trim() ===
+                String(
+                    mother.motherId
+                ).trim();
+
+            }
+        )
+        : null;
+
+
+/* =================================
+   FATHER'S FATHER
+   ================================= */
+
+const fathersFatherRow =
+    document.getElementById(
+        "relationFathersFatherRow"
+    );
+
+const fathersFatherField =
+    document.getElementById(
+        "relationFathersFather"
+    );
+
+
+if(
+    fathersFather &&
+    getName(fathersFather)
+){
+
+    fathersFatherField.textContent =
+        getName(fathersFather);
+
+    fathersFatherRow.style.display =
+        "";
+
+}
+else{
+
+    fathersFatherRow.style.display =
+        "none";
+
+}
+
+
+/* =================================
+   FATHER'S MOTHER
+   ================================= */
+
+const fathersMotherRow =
+    document.getElementById(
+        "relationFathersMotherRow"
+    );
+
+const fathersMotherField =
+    document.getElementById(
+        "relationFathersMother"
+    );
+
+
+if(
+    fathersMother &&
+    getName(fathersMother)
+){
+
+    fathersMotherField.textContent =
+        getName(fathersMother);
+
+    fathersMotherRow.style.display =
+        "";
+
+}
+else{
+
+    fathersMotherRow.style.display =
+        "none";
+
+}
+
+
+/* =================================
+   MOTHER'S FATHER
+   ================================= */
+
+const mothersFatherRow =
+    document.getElementById(
+        "relationMothersFatherRow"
+    );
+
+const mothersFatherField =
+    document.getElementById(
+        "relationMothersFather"
+    );
+
+
+if(
+    mothersFather &&
+    getName(mothersFather)
+){
+
+    mothersFatherField.textContent =
+        getName(mothersFather);
+
+    mothersFatherRow.style.display =
+        "";
+
+}
+else{
+
+    mothersFatherRow.style.display =
+        "none";
+
+}
+
+
+/* =================================
+   MOTHER'S MOTHER
+   ================================= */
+
+const mothersMotherRow =
+    document.getElementById(
+        "relationMothersMotherRow"
+    );
+
+const mothersMotherField =
+    document.getElementById(
+        "relationMothersMother"
+    );
+
+
+if(
+    mothersMother &&
+    getName(mothersMother)
+){
+
+    mothersMotherField.textContent =
+        getName(mothersMother);
+
+    mothersMotherRow.style.display =
+        "";
+
+}
+else{
+
+    mothersMotherRow.style.display =
+        "none";
+
+}
+
+
+/* =================================
+   SHOW / HIDE GRAND PARENTS
+   ================================= */
+
+const grandParentsSection =
+    document.getElementById(
+        "relationGrandParentsSection"
+    );
+
+
+const hasGrandParents =
+    (
+        fathersFather &&
+        getName(fathersFather)
+    ) ||
+    (
+        fathersMother &&
+        getName(fathersMother)
+    ) ||
+    (
+        mothersFather &&
+        getName(mothersFather)
+    ) ||
+    (
+        mothersMother &&
+        getName(mothersMother)
+    );
+
+
+if(grandParentsSection){
+
+    if(hasGrandParents){
+
+        grandParentsSection.style.display =
+            "block";
+
+    }
+    else{
+
+        grandParentsSection.style.display =
+            "none";
+
+    }
+
+}
+
+/* =================================
+   HIDE EMPTY GRAND PARENT GROUP TITLES
+   ================================= */
+
+const paternalGrandParentsTitle =
+    document.querySelector(
+        "#paternalGrandParents"
+    )?.previousElementSibling;
+
+const maternalGrandParentsTitle =
+    document.getElementById(
+        "maternalGrandParentsTitle"
+    );
+
+
+const hasPaternalGrandParents =
+    (
+        fathersFather &&
+        getName(fathersFather)
+    ) ||
+    (
+        fathersMother &&
+        getName(fathersMother)
+    );
+
+
+const hasMaternalGrandParents =
+    (
+        mothersFather &&
+        getName(mothersFather)
+    ) ||
+    (
+        mothersMother &&
+        getName(mothersMother)
+    );
+
+
+if(paternalGrandParentsTitle){
+
+    paternalGrandParentsTitle.style.display =
+        hasPaternalGrandParents
+            ? ""
+            : "none";
+
+}
+
+
+if(maternalGrandParentsTitle){
+
+    maternalGrandParentsTitle.style.display =
+        hasMaternalGrandParents
+            ? ""
+            : "none";
+
+}
+
+/* =================================
+   11. GRAND GRAND PARENTS
+   ================================= */
+
+
+/* =================================
+   HELPER FUNCTION
+   ================================= */
+
+function setGrandGrandParentRow(
+    rowId,
+    fieldId,
+    person
+){
+
+    const row =
+        document.getElementById(
+            rowId
+        );
+
+    const field =
+        document.getElementById(
+            fieldId
+        );
+
+
+    if(
+        person &&
+        getName(person)
+    ){
+
+        if(field){
+
+            field.textContent =
+                getName(person);
+
+        }
+
+        if(row){
+
+            row.style.display =
+                "";
+
+        }
+
+        return true;
+
+    }
+
+
+    if(row){
+
+        row.style.display =
+            "none";
+
+    }
+
+    return false;
+
+}
+
+
+/* =================================
+   PATERNAL GRAND PARENTS
+   ================================= */
+
+
+/* Grand Fa - Father */
+
+const ggPaternalFatherFather =
+    fathersFather &&
+    fathersFather.fatherId
+        ? findMember(
+            fathersFather.fatherId
+        )
+        : null;
+
+
+/* Grand Fa - Mother */
+
+const ggPaternalFatherMother =
+    fathersFather &&
+    fathersFather.motherId
+        ? findMember(
+            fathersFather.motherId
+        )
+        : null;
+
+
+/* Grand Ma - Father */
+
+const ggPaternalMotherFather =
+    fathersMother &&
+    fathersMother.fatherId
+        ? findMember(
+            fathersMother.fatherId
+        )
+        : null;
+
+
+/* Grand Ma - Mother */
+
+const ggPaternalMotherMother =
+    fathersMother &&
+    fathersMother.motherId
+        ? findMember(
+            fathersMother.motherId
+        )
+        : null;
+
+
+/* =================================
+   MATERNAL GRAND PARENTS
+   ================================= */
+
+
+/* Grand Fa - Father */
+
+const ggMaternalFatherFather =
+    mothersFather &&
+    mothersFather.fatherId
+        ? findMember(
+            mothersFather.fatherId
+        )
+        : null;
+
+
+/* Grand Fa - Mother */
+
+const ggMaternalFatherMother =
+    mothersFather &&
+    mothersFather.motherId
+        ? findMember(
+            mothersFather.motherId
+        )
+        : null;
+
+
+/* Grand Ma - Father */
+
+const ggMaternalMotherFather =
+    mothersMother &&
+    mothersMother.fatherId
+        ? findMember(
+            mothersMother.fatherId
+        )
+        : null;
+
+
+/* Grand Ma - Mother */
+
+const ggMaternalMotherMother =
+    mothersMother &&
+    mothersMother.motherId
+        ? findMember(
+            mothersMother.motherId
+        )
+        : null;
+
+
+/* =================================
+   SHOW / HIDE PATERNAL ROWS
+   ================================= */
+
+const hasGGPaternalFatherFather =
+    setGrandGrandParentRow(
+        "ggPaternalFatherFatherRow",
+        "ggPaternalFatherFather",
+        ggPaternalFatherFather
+    );
+
+
+const hasGGPaternalFatherMother =
+    setGrandGrandParentRow(
+        "ggPaternalFatherMotherRow",
+        "ggPaternalFatherMother",
+        ggPaternalFatherMother
+    );
+
+
+const hasGGPaternalMotherFather =
+    setGrandGrandParentRow(
+        "ggPaternalMotherFatherRow",
+        "ggPaternalMotherFather",
+        ggPaternalMotherFather
+    );
+
+
+const hasGGPaternalMotherMother =
+    setGrandGrandParentRow(
+        "ggPaternalMotherMotherRow",
+        "ggPaternalMotherMother",
+        ggPaternalMotherMother
+    );
+
+
+/* =================================
+   SHOW / HIDE MATERNAL ROWS
+   ================================= */
+
+const hasGGMaternalFatherFather =
+    setGrandGrandParentRow(
+        "ggMaternalFatherFatherRow",
+        "ggMaternalFatherFather",
+        ggMaternalFatherFather
+    );
+
+
+const hasGGMaternalFatherMother =
+    setGrandGrandParentRow(
+        "ggMaternalFatherMotherRow",
+        "ggMaternalFatherMother",
+        ggMaternalFatherMother
+    );
+
+
+const hasGGMaternalMotherFather =
+    setGrandGrandParentRow(
+        "ggMaternalMotherFatherRow",
+        "ggMaternalMotherFather",
+        ggMaternalMotherFather
+    );
+
+
+const hasGGMaternalMotherMother =
+    setGrandGrandParentRow(
+        "ggMaternalMotherMotherRow",
+        "ggMaternalMotherMother",
+        ggMaternalMotherMother
+    );
+
+
+/* =================================
+   PATERNAL TITLE SHOW / HIDE
+   ================================= */
+
+const grandGrandPaternalTitle =
+    document.getElementById(
+        "grandGrandPaternalTitle"
+    );
+
+
+const hasAnyGGPaternal =
+    hasGGPaternalFatherFather ||
+    hasGGPaternalFatherMother ||
+    hasGGPaternalMotherFather ||
+    hasGGPaternalMotherMother;
+
+
+if(grandGrandPaternalTitle){
+
+    grandGrandPaternalTitle.style.display =
+        hasAnyGGPaternal
+            ? ""
+            : "none";
+
+}
+
+
+/* =================================
+   MATERNAL TITLE SHOW / HIDE
+   ================================= */
+
+const grandGrandMaternalTitle =
+    document.getElementById(
+        "grandGrandMaternalTitle"
+    );
+
+
+const hasAnyGGMaternal =
+    hasGGMaternalFatherFather ||
+    hasGGMaternalFatherMother ||
+    hasGGMaternalMotherFather ||
+    hasGGMaternalMotherMother;
+
+
+if(grandGrandMaternalTitle){
+
+    grandGrandMaternalTitle.style.display =
+        hasAnyGGMaternal
+            ? ""
+            : "none";
+
+}
+
+
+/* =================================
+   SHOW / HIDE GRAND GRAND PARENTS
+   ================================= */
+
+const grandGrandParentsSection =
+    document.getElementById(
+        "relationGrandGrandParentsSection"
+    );
+
+
+const hasAnyGrandGrandParents =
+    hasAnyGGPaternal ||
+    hasAnyGGMaternal;
+
+
+if(grandGrandParentsSection){
+
+    if(hasAnyGrandGrandParents){
+
+        grandGrandParentsSection.style.display =
+            "block";
+
+    }
+    else{
+
+        grandGrandParentsSection.style.display =
+            "none";
+
+    }
+
+}
+      
+   
+      
+console.log(
+    "RELATIONS SECTIONS IN DOM:",
+    document.querySelectorAll(
+        ".relations-section"
+    ).length
+);
+
+console.log(
+    "RELATIONS PAGE IN DOM:",
+    document.querySelector(
+        ".relations-page"
+    )
+);
+
+    console.log(
+    "RELATIONS COMPLETE:",
+    {
+        partner,
+        children,
+        father,
+        mother,
+        siblings,
+        fatherSiblings,
+        motherSiblings,
+        fatherInLaw,
+        motherInLaw,
+        fatherInLawSiblings,
+        motherInLawSiblings
+    }
+);
+      
+}
+
+
+/* =====================================
+   FAMILY → SEARCH / EDIT MEMBER
+   ===================================== */
+
+/* =====================================
+   FAMILY → SEARCH / EDIT MEMBER
+   ===================================== */
+
+function bindSearchMemberButton(){
+
+    const searchMemberBtn =
+        document.getElementById(
+            "searchMemberBtn"
+        );
+
+
+    if(!searchMemberBtn){
+        return;
+    }
+
+window.openSearchEditMemberPage =
+    function(){
+    
+            const currentFamily =
+                JSON.parse(
+                    localStorage.getItem(
+                        "currentFamily"
+                    ) || "null"
+                );
+
+
+            if(!currentFamily){
+
+                alert(
+                    "Family not found."
+                );
+
+                return;
+
+            }
+
+
+            /* =================================
+               LOAD SEARCH PAGE
+               ================================= */
+
+            showPage(
+
+                pageTitle(
+"Update Member",
+                    "images/colorbtns/CustomSearch1.png"
+                )
+
+                +
+
+                `
+                <div class="common-page">
+
+                    <div class="common-form">
+
+                        <div class="common-form-group">
+
+                            <label
+                                class="common-form-label"
+                                for="searchEditMember">
+                                Member
+                            </label>
+
+                            <span
+                                class="common-form-colon">
+                                :
+                            </span>
+
+
+                            <div
+                                class="search-edit-member-wrapper">
+
+                               <div class="partner-search-input-wrap">
+
+    <input
+        type="text"
+        id="searchEditMember"
+        class="common-form-input"
+        placeholder="Search Member"
+        autocomplete="off">
+
+   <div class="partner-sort-controls">
+
+    <!-- SEARCH EDIT MEMBER COUNT -->
+
+    <span
+        id="searchEditMemberCount"
+        class="relation-member-count"
+        style="display:none;">
+    </span>
+
+    <!-- SEARCH EDIT SORT ARROWS -->
+
+    <span
+        id="searchEditSortAZ"
+        class="partner-sort-arrow"
+        title="Alphabetical Order">
+        A↕Z
+    </span>
+
+    <span
+        id="searchEditSortID"
+        class="partner-sort-arrow"
+        title="ID Number Order">
+        1↕9
+    </span>
+
+</div>
+</div>
+
+                                <div
+                                    id="searchEditMemberDropdown"
+                                    class="relations-member-dropdown"
+                                    style="display:none;">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+<div class="search-edit-bottom-actions">
+    <button
+        type="button"
+        id="searchEditBackBtn"
+        class="back-btn">
+        ← Back
+    </button>
+
+    <button
+        type="button"
+        id="searchEditHomeBtn"
+        class="back-btn">
+        🏠 Home
+    </button>
+
+</div>
+                </div>
+                `
+            );
+
+
+            const searchInput =
+                document.getElementById(
+                    "searchEditMember"
+                );
+
+
+            const dropdown =
+                document.getElementById(
+                    "searchEditMemberDropdown"
+                );
+
+
+            const backBtn =
+                document.getElementById(
+                    "searchEditBackBtn"
+                );
+            const homeBtn =
+    document.getElementById(
+        "searchEditHomeBtn"
+    );
+
+            /* =================================
+               VARIABLES
+               ================================= */
+let members =
+    JSON.parse(
+        localStorage.getItem(
+            "familyMembers"
+        ) || "[]"
+    );
+
+
+let membersLoading =
+    members.length === 0;
+
+
+let membersLoaded =
+    members.length > 0;
+
+            /* =================================
+               BACK
+               ================================= */
+
+            if(backBtn){
+
+                backBtn.onclick =
+                    function(){
+
+                        const familyBtn =
+                            document.getElementById(
+                                "familyBtn"
+                            );
+
+
+                        if(familyBtn){
+
+                            familyBtn.click();
+
+                        }
+
+                    };
+
+            }
+
+/* =================================
+   HOME
+   ================================= */
+
+if(homeBtn){
+
+    homeBtn.onclick =
+        function(){
+
+            const mainHomeBtn =
+                document.getElementById(
+                    "homeBtn"
+                );
+
+            if(mainHomeBtn){
+                mainHomeBtn.click();
+            }
+
+        };
+
+}
+
+        
+            /* =================================
+               SHOW SEARCH MEMBERS
+               ================================= */
+
+let searchEditSortMode = "id";
+let searchEditNameAscending = true;
+let searchEditIdAscending = true;
+let lastSearchEditSortMode = "";
+        
+            function showSearchMembers(){
+
+
+                /* =============================
+                   STILL LOADING
+                   ============================= */
+
+                if(membersLoading){
+
+                    dropdown.innerHTML =
+                        `
+                        <div class="relations-no-match">
+                            Loading members...
+                        </div>
+                        `;
+
+
+                    dropdown.style.display =
+                        "block";
+
+
+                    return;
+
+                }
+
+
+                /* =============================
+                   NO MEMBERS
+                   ============================= */
+
+                if(
+                    membersLoaded &&
+                    members.length === 0
+                ){
+
+                    dropdown.innerHTML =
+                        `
+                        <div class="relations-no-match">
+                            No members found
+                        </div>
+                        `;
+
+
+                    dropdown.style.display =
+                        "block";
+
+
+                    return;
+
+                }
+
+
+                /* =============================
+                   SEARCH TEXT
+                   ============================= */
+
+                const searchText =
+                    String(
+                        searchInput.value || ""
+                    )
+                    .trim()
+                    .toLowerCase();
+
+
+                dropdown.innerHTML =
+                    "";
+
+
+                /* =============================
+                   FILTER MEMBERS
+                   ============================= */
+
+                const matchingMembers =
+                    members.filter(
+                        function(member){
+
+                            if(
+                                !member ||
+                                !member.memberId
+                            ){
+
+                                return false;
+
+                            }
+
+
+                            const memberName =
+                                String(
+                                    member.name || ""
+                                )
+                                .trim()
+                                .toLowerCase();
+
+
+                            const memberId =
+                                String(
+                                    member.memberId || ""
+                                )
+                                .trim()
+                                .toLowerCase();
+
+
+                            if(
+                                searchText === ""
+                            ){
+
+                                return (
+                                    memberName !== ""
+                                );
+
+                            }
+
+
+                            return (
+
+                                memberName.includes(
+                                    searchText
+                                )
+
+                                ||
+
+                                memberId.includes(
+                                    searchText
+                                )
+
+                            );
+
+                                               }
+                    );
+
+/* =================================
+   SEARCH EDIT MEMBER COUNT
+   ================================= */
+
+const searchEditMemberCount =
+    document.getElementById(
+        "searchEditMemberCount"
+    );
+
+if(searchEditMemberCount){
+
+    searchEditMemberCount.textContent =
+        matchingMembers.length;
+
+    if(
+        document.activeElement === searchInput
+    ){
+
+        searchEditMemberCount.style.display =
+            "inline-flex";
+
+    }
+
+}
+matchingMembers.sort(function(a, b){
+    if(searchEditSortMode === "name"){
+
+        const result =
+            String(a.name || "").localeCompare(
+                String(b.name || ""),
+                undefined,
+                {sensitivity:"base"}
+            );
+
+        return searchEditNameAscending
+            ? result
+            : -result;
+    }
+
+    const aId =
+        parseInt(
+            String(a.memberId || "").split("-").pop(),
+            10
+        ) || 0;
+
+    const bId =
+        parseInt(
+            String(b.memberId || "").split("-").pop(),
+            10
+        ) || 0;
+
+    const result = aId - bId;
+
+    return searchEditIdAscending
+        ? result
+        : -result;
+
+});
+
+                /* =============================
+                   NO MATCH
+                   ============================= */
+
+                if(
+                    matchingMembers.length === 0
+                ){
+
+                    dropdown.innerHTML =
+                        `
+                        <div class="relations-no-match">
+                            No matching member
+                        </div>
+                        `;
+
+
+                    dropdown.style.display =
+                        "block";
+
+
+                    return;
+
+                }
+
+
+                /* =============================
+                   CREATE MEMBER LIST
+                   ============================= */
+
+                matchingMembers.forEach(
+                    function(member){
+
+                        const option =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        option.className =
+                            "relations-member-option";
+
+
+                        option.textContent =
+                            (member.name || "") +
+                            " (" +
+                            (member.memberId || "") +
+                            ")";
+
+
+                        option.dataset.memberId =
+                            member.memberId;
+
+
+                       option.onclick =
+    function(){
+
+        console.log(
+            "SELECTED MEMBER:",
+            member
+        );
+
+
+       
+        /* =================================
+           SAVE SELECTED MEMBER FOR EDIT
+           ================================= */
+
+        localStorage.setItem(
+            "editMember",
+            JSON.stringify(member)
+        );
+
+
+        searchInput.value =
+    member.name || "";
+
+/* SELECTED MEMBER - FULL WIDTH */
+
+const editInputWrap =
+    searchInput.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(editInputWrap){
+    editInputWrap.classList.add(
+        "edit-member-selected"
+    );
+}
+
+
+        dropdown.innerHTML =
+            "";
+
+
+        dropdown.style.display =
+            "none";
+
+
+        /* =================================
+           FIRST OPEN FAMILY PAGE
+           ================================= */
+
+        const familyBtn =
+            document.getElementById(
+                "familyBtn"
+            );
+
+
+        if(!familyBtn){
+
+            console.error(
+                "Family button not found"
+            );
+
+            return;
+
+        }
+
+
+        familyBtn.click();
+
+
+        /* =================================
+           THEN OPEN ADD MEMBER PAGE
+           ================================= */
+
+        setTimeout(
+            function(){
+
+                const addMemberBtn =
+                    document.getElementById(
+                        "addMemberBtn"
+                    );
+
+
+               if(addMemberBtn){
+
+    sessionStorage.setItem(
+        "openMemberMode",
+        "edit"
+    );
+
+    addMemberBtn.click();
+
+}                else{
+
+                    console.error(
+                        "Add Member button not found"
+                    );
+
+                }
+
+            },
+            50
+        );
+
+    };
+                        dropdown.appendChild(
+                            option
+                        );
+
+                    }
+                );
+
+
+                dropdown.style.display =
+                    "block";
+
+            }
+
+const searchEditAZ =
+    document.getElementById("searchEditSortAZ");
+
+const searchEditID =
+    document.getElementById("searchEditSortID");
+
+if(searchEditAZ){
+
+    searchEditAZ.onclick = function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        searchEditNameAscending =
+            lastSearchEditSortMode === "name"
+                ? !searchEditNameAscending
+                : true;
+
+        searchEditSortMode = "name";
+        lastSearchEditSortMode = "name";
+
+        showSearchMembers();
+        dropdown.style.display = "block";
+    };
+}
+
+if(searchEditID){
+
+    searchEditID.onclick = function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        searchEditIdAscending =
+            lastSearchEditSortMode === "id"
+                ? !searchEditIdAscending
+                : true;
+
+        searchEditSortMode = "id";
+        lastSearchEditSortMode = "id";
+
+        showSearchMembers();
+        dropdown.style.display = "block";
+    };
+}
+            /* =================================
+               SEARCH EVENTS
+
+               IMPORTANT:
+               THESE ARE ADDED BEFORE FETCH
+               ================================= */
+
+           /* =================================
+   SEARCH EDIT MEMBER - FOCUS
+   ================================= */
+
+searchInput.addEventListener(
+    "focus",
+    function(){
+        const editInputWrap =
+    searchInput.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(editInputWrap){
+    editInputWrap.classList.remove(
+        "edit-member-selected"
+    );
+}
+
+        /* SHOW MEMBER COUNT */
+
+        const memberCount =
+            document.getElementById(
+                "searchEditMemberCount"
+            );
+
+        if(memberCount){
+            memberCount.style.display = "inline-flex";
+        }
+
+      /* SHOW SORT ARROWS */
+
+if(searchEditAZ){
+    searchEditAZ.style.display = "inline-flex";
+}
+
+if(searchEditID){
+    searchEditID.style.display = "inline-flex";
+}
+
+        /* SHOW MEMBERS DROPDOWN */
+
+        showSearchMembers();
+
+    }
+);
+/* SEARCH EDIT MEMBER - CLICK FIX */
+
+searchInput.addEventListener(
+    "click",
+    function(){
+
+        const memberCount =
+            document.getElementById(
+                "searchEditMemberCount"
+            );
+
+        if(memberCount){
+            memberCount.style.display = "inline-flex";
+        }
+
+        if(searchEditAZ){
+            searchEditAZ.style.display = "inline-flex";
+        }
+
+        if(searchEditID){
+            searchEditID.style.display = "inline-flex";
+        }
+
+        showSearchMembers();
+
+    }
+);
+           
+        searchInput.addEventListener(
+                "input",
+                function(){
+                    const editInputWrap =
+    searchInput.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(editInputWrap){
+    editInputWrap.classList.remove(
+        "edit-member-selected"
+    );
+}
+
+                    showSearchMembers();
+
+                }
+            );
+
+
+/* =================================
+   SEARCH EDIT MEMBER - OUTSIDE CLICK
+   ================================= */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        /* IGNORE LISTENERS FROM OLD PAGES */
+
+        if(!searchInput.isConnected){
+            return;
+        }
+
+        const searchWrap =
+            searchInput.closest(
+                ".search-edit-member-wrapper"
+            );
+        if(
+            searchWrap &&
+            !searchWrap.contains(event.target)
+        ){
+
+            /* CLOSE DROPDOWN */
+
+            dropdown.style.display = "none";
+
+           /* CLEAR SEARCH TEXT */
+
+searchInput.value = "";
+
+/* RESET INPUT FOCUS */
+
+searchInput.blur();
+            /* HIDE SORT ARROWS AND MEMBER COUNT */
+
+if(searchEditAZ){
+    searchEditAZ.style.display = "none";
+}
+
+if(searchEditID){
+    searchEditID.style.display = "none";
+}
+
+const memberCount =
+    document.getElementById(
+        "searchEditMemberCount"
+    );
+
+if(memberCount){
+    memberCount.style.display = "none";
+}
+        }
+
+    }
+);
+
+            /* =================================
+               GET MEMBERS FROM GOOGLE SHEET
+               ================================= */
+
+            async function loadSearchMembers(){
+
+    try{
+
+        /* =====================================
+           LOAD MEMBERS FROM EXISTING CACHE
+           ===================================== */
+
+        const savedFamily = JSON.parse(
+            localStorage.getItem("currentFamily") || "null"
+        );
+
+        const cachedMembers = JSON.parse(
+            localStorage.getItem("familyMembers") || "[]"
+        );
+
+
+        
+        if(
+            savedFamily &&
+            savedFamily.familyId === currentFamily.familyId &&
+            Array.isArray(cachedMembers) &&
+            cachedMembers.length > 0
+        ){
+
+            members = cachedMembers;
+
+            membersLoading = false;
+
+            membersLoaded = true;
+
+            console.log(
+                "SEARCH MEMBERS FROM CACHE:",
+                members.length
+            );
+
+            if(
+                document.activeElement === searchInput
+            ){
+                showSearchMembers();
+            }
+
+            return;
+        }
+                    const params =
+                        new URLSearchParams();
+
+
+                    params.append(
+                        "action",
+                        "getFamilyMembers"
+                    );
+
+
+                    params.append(
+                        "familyId",
+                        currentFamily.familyId || ""
+                    );
+
+params.append(
+    "sessionToken",
+    sessionStorage.getItem("sessionToken") || ""
+);
+
+
+                    const response =
+                        await fetch(
+
+                            API_URL,
+
+                            {
+                                method:
+                                    "POST",
+
+                                headers:{
+                                    "Content-Type":
+                                        "application/x-www-form-urlencoded"
+                                },
+
+                                body:
+                                    params.toString()
+                            }
+
+                        );
+
+
+                    const result =
+                        await response.json();
+
+
+                    console.log(
+                        "SEARCH EDIT MEMBERS:",
+                        result
+                    );
+
+
+                    if(
+                        result.status !==
+                        "success"
+                    ){
+
+                        membersLoading =
+                            false;
+
+                        membersLoaded =
+                            false;
+
+
+                        dropdown.innerHTML =
+                            `
+                            <div class="relations-no-match">
+                                Members could not be loaded
+                            </div>
+                            `;
+
+
+                        if(
+                            document.activeElement ===
+                            searchInput
+                        ){
+
+                            dropdown.style.display =
+                                "block";
+
+                        }
+
+
+                        return;
+
+                    }
+
+
+                    members =
+                        Array.isArray(
+                            result.members
+                        )
+                            ? result.members
+                            : [];
+localStorage.setItem(
+    "familyMembers",
+    JSON.stringify(
+        members
+    )
+);
+
+                    membersLoading =
+                        false;
+
+
+                    membersLoaded =
+                        true;
+
+
+                    console.log(
+                        "SEARCH MEMBERS COUNT:",
+                        members.length
+                    );
+
+
+                    /* =============================
+                       USER ALREADY CLICKED INPUT
+                       → SHOW LIST IMMEDIATELY
+                       ============================= */
+
+                    if(
+                        document.activeElement ===
+                        searchInput
+                    ){
+
+                        showSearchMembers();
+
+                    }
+
+
+                }
+                catch(error){
+
+                    membersLoading =
+                        false;
+
+                    membersLoaded =
+                        false;
+
+
+                    console.error(
+                        "Search Edit Load Error:",
+                        error
+                    );
+
+
+                    dropdown.innerHTML =
+                        `
+                        <div class="relations-no-match">
+                            Unable to load members
+                        </div>
+                        `;
+
+
+                    if(
+                        document.activeElement ===
+                        searchInput
+                    ){
+
+                        dropdown.style.display =
+                            "block";
+
+                    }
+
+                }
+
+            }
+
+
+            /* =================================
+               START LOADING MEMBERS
+               ================================= */
+
+            loadSearchMembers();
+
+        };
+
+    searchMemberBtn.onclick =
+        window.openSearchEditMemberPage;
+
+}
+
+/* =====================================
+   BIND SEARCH MEMBER BUTTON
+   ================================= */
+
+bindSearchMemberButton();
+
+
+   
+/* =====================================
+   FAMILY → ADD MEMBER
+   ===================================== */
+
+function bindAddMemberButton(){
+
+    const addMemberBtn =
+        document.getElementById("addMemberBtn");
+
+    if(!addMemberBtn) return;
+
+   addMemberBtn.onclick = () => {
+
+    /* =================================
+       ADD / EDIT MEMBER MODE
+       ================================= */
+
+    const openMemberMode =
+        sessionStorage.getItem(
+            "openMemberMode"
+        ) || "add";
+
+
+    sessionStorage.removeItem(
+        "openMemberMode"
+    );
+
+
+    /* NORMAL ADD MEMBER
+       → REMOVE OLD EDIT MEMBER */
+
+    if(openMemberMode !== "edit"){
+
+        localStorage.removeItem(
+            "editMember"
+        );
+
+    }
+
+
+    console.log(
+        "OPEN MEMBER MODE:",
+        openMemberMode
+    );
+
+    const publicAddTargetForTitle = JSON.parse(
+        sessionStorage.getItem("publicFamilyAddTarget") || "null"
+    );
+    const publicAddFamilyNameForTitle = publicAddTargetForTitle
+        ? String(publicAddTargetForTitle.familyName || "Unnamed Family")
+            .trim().replace(/\s+Family$/i, "") + " Family"
+        : "";
+    const addMemberPageTitle = publicAddFamilyNameForTitle
+        ? publicAddFamilyNameForTitle + " - Add Member"
+        : "Add Member";
+
+       showPage(`
+
+<div class="member-page-title">
+    <input
+        type="file"
+        id="memberPhoto"
+        accept="image/*"
+        hidden>
+
+    <button
+        type="button"
+        id="memberPhotoBtn"
+        aria-label="Select Member Photo"
+        class="member-title-photo-btn">
+
+        <span id="memberPhotoPlaceholder">
+            Select<br>Photo
+        </span>
+
+        <img
+            id="memberPhotoPreview"
+            alt="Member Photo">
+
+    </button>
+
+    <h2 class="page-title">
+        ${addMemberPageTitle}
+    </h2>
+
+</div>
+
+<div class="common-page">
+        <div class="common-form">
+
+            <!-- =================================
+                 FAMILY ID
+                 ================================= -->
+
+           <div
+    class="common-form-group"
+    style="display:none;">
+
+                <label class="common-form-label">
+                    Family ID
+                </label>
+
+                <span class="common-form-colon">
+                    :
+                </span>
+
+                <strong
+                    id="memberFamilyId"
+                    class="common-form-value">
+                    -
+                </strong>
+
+            </div>
+
+
+            <!-- =================================
+                 FAMILY NAME
+                 Display selected family's name as read-only text
+                 ================================= -->
+
+<div
+    class="common-form-group">
+                <label class="common-form-label">
+                    Family Name
+                </label>
+
+                <span class="common-form-colon">
+                    :
+                </span>
+
+                <strong
+                    id="memberFamilyName"
+                    class="common-form-value">
+                    -
+                </strong>
+
+            </div>
+
+
+            <!-- =================================
+                 MEMBER ID
+                 ================================= -->
+
+            <div class="common-form-group">
+
+                <label class="common-form-label">
+                    Member ID
+                </label>
+
+                <span class="common-form-colon">
+                    :
+                </span>
+
+                <strong
+                    id="memberId"
+                    class="common-form-value">
+                    auto generation
+                </strong>
+
+            </div>
+
+
+            <!-- =================================
+                 NAME
+                 ================================= -->
+
+            <div class="common-form-group member-name-row">
+
+                <label
+                    class="common-form-label"
+                    for="memberName">
+                    Name
+                </label>
+
+                <span class="common-form-colon">
+                    :
+                </span>
+
+                <input
+                    type="text"
+                    id="memberName"
+                    class="common-form-input"
+                    placeholder="Enter Name"
+                    required
+                    autocomplete="off">
+
+            </div>
+
+
+            <!-- =================================
+                 GENDER
+                 ================================= -->
+
+            <div class="common-form-group">
+
+                <label
+                    class="common-form-label"
+                    for="memberGender">
+                    Gender
+                </label>
+
+                <span class="common-form-colon">
+                    :
+                </span>
+
+                <select
+                    id="memberGender"
+                    class="common-form-select"
+                    required>
+
+                    <option value="">
+                        Select Gender
+                    </option>
+
+                    <option value="Male">
+                        Male
+                    </option>
+
+                    <option value="Female">
+                        Female
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- =================================
+                 DATE OF BIRTH
+                 ================================= -->
+
+            <div class="common-form-group">
+
+                <label
+                    class="common-form-label"
+                    for="memberDob">
+                    DoB
+                </label>
+
+                <span class="common-form-colon">
+                    :
+                </span>
+
+                <input
+                    type="date"
+                    id="memberDob"
+                    class="common-form-input"
+                    required>
+
+            </div>
+
+            <!-- =================================
+                 MARITAL STATUS
+                 ================================= -->
+
+            <div class="common-form-group">
+
+                <label class="common-form-label">
+                    Marital Status
+                </label>
+
+                <span class="common-form-colon">
+                    :
+                </span>
+
+                <div class="common-radio-group">
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="memberMaritalStatus"
+                            value="Yes"
+                            id="marriedYes">
+                        Yes
+                    </label>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="memberMaritalStatus"
+                            value="No"
+                            id="marriedNo">
+                        No
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================
+                 MARRIAGE CONFIRMATION
+                 ================================= -->
+
+            <div
+                id="marriageConfirmation"
+                class="common-form-group"
+                style="display:none;">
+
+                <label class="common-form-label">
+                    Confirmation
+                </label>
+
+                <span class="common-form-colon">
+                    :
+                </span>
+
+                <div class="common-radio-group">
+
+                    <span>
+                        Are you really married?
+                    </span>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="marriageConfirm"
+                            value="Yes"
+                            id="confirmMarriageYes">
+                        Yes
+                    </label>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="marriageConfirm"
+                            value="No"
+                            id="confirmMarriageNo">
+                        No
+                    </label>
+
+                </div>
+
+            </div>
+
+<!-- =================================
+     MARRIAGE DATE
+     ================================= -->
+
+<div
+    id="marriageDateGroup"
+    class="common-form-group"
+    style="display:none;">
+
+    <label
+        class="common-form-label"
+        for="memberMarriageDate">
+        Marriage Date
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="date"
+        id="memberMarriageDate"
+        class="common-form-input">
+
+</div>
+            <!-- =================================
+                 PARTNER
+                 ================================= -->
+
+            <div
+                id="memberPartnerGroup"
+                class="common-form-group"
+                style="display:none;">
+
+                <label
+                    class="common-form-label"
+                    for="memberPartner">
+                    Partner
+                </label>
+
+                <span class="common-form-colon">
+                    :
+                </span>
+
+               <div
+    class="relations-member-search-wrap"
+    id="memberPartnerSearchWrap">
+
+   <div class="partner-search-input-wrap">
+
+    <input
+        type="text"
+        id="memberPartnerSearch"
+        class="common-form-select"
+        maxlength="12"
+            placeholder="Select / Search"
+        autocomplete="off">
+
+  <div class="partner-sort-controls">
+
+    <!-- PARTNER MEMBER COUNT -->
+
+    <span
+        id="partnerMemberCount"
+        class="relation-member-count"
+        style="display:none;">
+    </span>
+
+    <!-- PARTNER SORT ARROWS -->
+
+    <span
+        id="partnerSortAZ"
+        class="partner-sort-arrow"
+        title="Alphabetical Order">
+        A↕Z
+    </span>
+
+    <span
+        id="partnerSortID"
+        class="partner-sort-arrow"
+        title="ID Number Order">
+        1↕9
+    </span>
+
+</div>
+
+</div>
+<div
+    id="memberPartnerDropdown"
+    class="relations-member-dropdown">
+</div>
+    <!-- Existing value holder.
+         Save/Edit code continues to use this. -->
+    <select
+        id="memberPartner"
+        style="display:none;">
+
+        <option value="">
+            Select Partner
+        </option>
+
+        <option value="__ADD_NEW__">
+            Add New Member
+        </option>
+
+    </select>
+
+</div>
+            </div>
+
+
+<!-- =================================
+     FATHER
+     ================================= -->
+
+<div
+    id="memberFatherGroup"
+    class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberFather">
+        Father
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <div
+    class="relations-member-search-wrap"
+    id="memberFatherSearchWrap">
+
+    <div class="partner-search-input-wrap">
+
+        <input
+    type="text"
+    id="memberFatherSearch"
+    class="common-form-select"
+    maxlength="12"
+            placeholder="Select / Search"
+    autocomplete="off"
+    disabled>
+       <div class="partner-sort-controls">
+
+    <!-- FATHER MEMBER COUNT -->
+    <span
+        id="fatherMemberCount"
+        class="relation-member-count"
+        style="display:none;">
+    </span>
+
+    <!-- FATHER SORT ARROWS -->
+    <span
+        id="fatherSortAZ"
+        class="partner-sort-arrow"
+        title="Alphabetical Order">
+        A↕Z
+    </span>
+
+    <span
+        id="fatherSortID"
+        class="partner-sort-arrow"
+        title="ID Number Order">
+        1↕9
+    </span>
+
+</div>
+
+</div>
+    <div
+        id="memberFatherDropdown"
+        class="relations-member-dropdown">
+    </div>
+
+    <select
+        id="memberFather"
+        style="display:none;">
+
+        <option value="">
+            Select Father
+        </option>
+
+        <option value="__ADD_NEW__">
+            Add New Member
+        </option>
+
+    </select>
+
+</div>
+
+        
+</div>
+<!-- =================================
+     MOTHER
+     ================================= -->
+
+<div
+    id="memberMotherGroup"
+    class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberMother">
+        Mother
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+   <div
+    class="relations-member-search-wrap"
+    id="memberMotherSearchWrap">
+
+    <div class="partner-search-input-wrap">
+
+        <input
+            type="text"
+            id="memberMotherSearch"
+            class="common-form-select"
+            maxlength="12"
+            placeholder="Select / Search"
+            autocomplete="off"
+            disabled>
+
+<div class="partner-sort-controls">
+
+    <!-- MOTHER MEMBER COUNT -->
+    <span
+        id="motherMemberCount"
+        class="relation-member-count"
+        style="display:none;">
+    </span>
+
+    <!-- MOTHER SORT ARROWS -->
+    <span
+        id="motherSortAZ"
+        class="partner-sort-arrow"
+        title="Alphabetical Order">
+        A↕Z
+    </span>
+
+    <span
+        id="motherSortID"
+        class="partner-sort-arrow"
+        title="ID Number Order">
+        1↕9
+    </span>
+
+</div>
+
+</div>    <div
+        id="memberMotherDropdown"
+        class="relations-member-dropdown"
+        style="display:none;">
+    </div>
+
+    <select
+        id="memberMother"
+        style="display:none;">
+
+        <option value="">
+            Select Mother
+        </option>
+
+        <option value="__ADD_NEW__">
+            Add New Member
+        </option>
+
+    </select>
+
+</div>
+</div>
+
+<!-- =================================
+     NATIVE PLACE
+     ================================= -->
+
+<div class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberNativePlace">
+        Native Place
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="text"
+        id="memberNativePlace"
+        class="common-form-input"
+        placeholder="Enter Native Place"
+            maxlength="15"
+
+        autocomplete="off">
+
+</div>
+
+
+<!-- =================================
+     OCCUPATION
+     ================================= -->
+
+<div class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberOccupation">
+        Occupation
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <div class="occupation-dropdown">
+
+        <input
+            type="text"
+            id="memberOccupation"
+            class="common-form-input"
+            placeholder="Select / Enter Occupation"
+            maxlength="15"
+            autocomplete="off">
+
+        <div
+            id="occupationList"
+            class="occupation-list">
+
+            <div class="occupation-option">
+                Engineer
+            </div>
+
+            <div class="occupation-option">
+                Doctor
+            </div>
+
+            <div class="occupation-option">
+                Teacher
+            </div>
+
+            <div class="occupation-option">
+                Government Employee
+            </div>
+              <div class="occupation-option">
+                Private Employee
+                 </div>
+             <div class="occupation-option">
+                Software Engineer
+            </div>
+
+            <div class="occupation-option">
+                Business
+            </div>
+
+            <div class="occupation-option">
+                Farmer
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =================================
+     QUALIFICATION
+     ================================= -->
+
+<div class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberQualification">
+        Qualification
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <div
+        class="qualification-dropdown">
+
+        <input
+            type="text"
+            id="memberQualification"
+            class="common-form-input"
+            placeholder="Select / Enter Qualification"
+            maxlength="15"
+            autocomplete="off">
+
+        <div
+            id="qualificationList"
+            class="qualification-list">
+
+            <div
+                class="qualification-option">
+                10th
+            </div>
+
+            <div
+                class="qualification-option">
+                Intermediate
+            </div>
+
+            <div
+                class="qualification-option">
+                Diploma
+            </div>
+
+            <div
+                class="qualification-option">
+                Graduation
+            </div>
+
+            <div
+                class="qualification-option">
+                Post Graduation
+            </div>
+
+            <div
+                class="qualification-option">
+                PhD
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- =================================
+     LIFE STATUS
+     ================================= -->
+
+<div class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberLifeStatus">
+        Life Status
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <select
+        id="memberLifeStatus"
+        class="common-form-select"
+        required>
+
+        <option value="">
+            Select Status
+        </option>
+
+        <option value="Living">
+            Living
+        </option>
+
+        <option value="Deceased">
+            Deceased
+        </option>
+
+    </select>
+
+</div>
+
+
+<!-- =================================
+     BLOOD GROUP
+     ================================= -->
+
+<div
+    id="bloodGroupGroup"
+    class="common-form-group"
+    style="display:none;">
+
+    <label
+        class="common-form-label"
+        for="memberBloodGroup">
+        Blood Group
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <select
+        id="memberBloodGroup"
+        class="common-form-select">
+
+        <option value="">
+            Select Blood Group
+        </option>
+
+        <option value="A+">A+</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B-">B-</option>
+        <option value="AB+">AB+</option>
+        <option value="AB-">AB-</option>
+        <option value="O+">O+</option>
+        <option value="O-">O-</option>
+
+    </select>
+
+</div>
+
+
+<!-- =================================
+     MOBILE NUMBER
+     ================================= -->
+
+<div
+    id="mobileNumberGroup"
+    class="common-form-group"
+    style="display:none;">
+
+    <label
+        class="common-form-label"
+        for="memberMobileNumber">
+        Mobile Number
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="tel"
+        id="memberMobileNumber"
+        class="common-form-input"
+        placeholder="Enter Mobile Number"
+        maxlength="10"
+    inputmode="numeric"
+    pattern="[0-9]{10}"
+        autocomplete="tel">
+
+</div>
+
+
+<!-- =================================
+     CURRENT PLACE
+     ================================= -->
+
+<div
+    id="currentPlaceGroup"
+    class="common-form-group"
+    style="display:none;">
+
+    <label
+        class="common-form-label"
+        for="memberCurrentPlace">
+        Current Place
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="text"
+        id="memberCurrentPlace"
+        class="common-form-input"
+        placeholder="Enter Current Place"
+        autocomplete="off">
+
+</div>
+
+<!-- =================================
+     DECEASED DATE
+     ================================= -->
+
+<div
+    id="deceasedDateGroup"
+    class="common-form-group"
+    style="display:none;">
+
+    <label
+        class="common-form-label"
+        for="memberDeceasedDate">
+        Deceased Date
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <input
+        type="date"
+        id="memberDeceasedDate"
+        class="common-form-input">
+
+</div>
+
+<!-- =================================
+     ABOUT ME
+     ================================= -->
+
+<div class="common-form-group">
+
+    <label
+        class="common-form-label"
+        for="memberAboutMe">
+        About Me
+    </label>
+
+    <span class="common-form-colon">
+        :
+    </span>
+
+    <textarea
+    id="memberAboutMe"
+    class="common-form-input"
+    maxlength="500"
+    rows="10"
+    placeholder="Write about yourself..."
+    autocomplete="off"></textarea>
+</div>
+<!-- =================================
+     MEMBER ACTIONS
+     ================================= -->
+
+<div
+    id="memberActions"
+    class="common-form-actions member-actions">
+</div>
+</div>
+
+    </div>
+
+      `);
+
+/* =================================
+   REFRESH RELATIONS WHEN GENDER CHANGES
+   ================================= */
+
+      
+const memberGender =
+    document.getElementById(
+        "memberGender"
+    );
+
+
+if(memberGender){
+
+    memberGender.addEventListener(
+        "change",
+        function(){
+
+            loadMemberRelations();
+
+        }
+    );
+
+}
+       
+/* =================================
+   PHOTO CIRCLE + PHOTO PREVIEW
+   ================================= */
+
+const memberPhoto =
+    document.getElementById(
+        "memberPhoto"
+    );
+
+const memberPhotoBtn =
+    document.getElementById(
+        "memberPhotoBtn"
+    );
+
+const memberPhotoPreview =
+    document.getElementById(
+        "memberPhotoPreview"
+    );
+
+const memberPhotoPlaceholder =
+    document.getElementById(
+        "memberPhotoPlaceholder"
+    );
+
+
+if(
+    memberPhoto &&
+    memberPhotoBtn
+){
+
+    /* =============================
+       TAP CIRCLE → SELECT PHOTO
+       ============================= */
+
+    memberPhotoBtn.onclick =
+        function(){
+
+            memberPhoto.click();
+
+        };
+
+
+    /* =============================
+       NEW PHOTO SELECTED
+       ============================= */
+
+    memberPhoto.onchange =
+        function(){
+
+            if(
+                !memberPhoto.files ||
+                memberPhoto.files.length === 0
+            ){
+
+                return;
+
+            }
+
+
+            const file =
+                memberPhoto.files[0];
+
+
+            if(
+                !file.type.startsWith(
+                    "image/"
+                )
+            ){
+
+                alert(
+                    "Please select an image file."
+                );
+
+                memberPhoto.value = "";
+
+                return;
+
+            }
+
+
+            if(memberPhotoPreview){
+
+                memberPhotoPreview.src =
+                    URL.createObjectURL(
+                        file
+                    );
+
+                memberPhotoPreview.style.display =
+                    "block";
+
+            }
+
+
+            if(memberPhotoPlaceholder){
+
+                memberPhotoPlaceholder.style.display =
+                    "none";
+
+            }
+
+        };
+
+}
+/* =================================
+   LIFE STATUS LOGIC
+   ================================= */
+
+const memberLifeStatus =
+    document.getElementById(
+        "memberLifeStatus"
+    );
+
+const bloodGroupGroup =
+    document.getElementById(
+        "bloodGroupGroup"
+    );
+
+const mobileNumberGroup =
+    document.getElementById(
+        "mobileNumberGroup"
+    );
+
+const currentPlaceGroup =
+    document.getElementById(
+        "currentPlaceGroup"
+    );
+const deceasedDateGroup =
+    document.getElementById(
+        "deceasedDateGroup"
+    );
+
+/* =================================
+   LIFE STATUS CHANGE
+   ================================= */
+
+if(memberLifeStatus){
+
+    memberLifeStatus.addEventListener(
+        "change",
+        function(){
+
+            /* =============================
+               LIVING
+               ============================= */
+
+            if(this.value === "Living"){
+
+                if(bloodGroupGroup){
+
+                    bloodGroupGroup.style.display =
+                        "flex";
+
+                }
+
+                if(mobileNumberGroup){
+
+                    mobileNumberGroup.style.display =
+                        "flex";
+
+                }
+
+                if(currentPlaceGroup){
+
+                    currentPlaceGroup.style.display =
+                        "flex";
+
+                }
+               if(deceasedDateGroup){
+
+    deceasedDateGroup.style.display =
+        "none";
+
+}
+
+            }
+
+
+            /* =============================
+               DECEASED
+               ============================= */
+
+            else if(this.value === "Deceased"){
+
+                if(bloodGroupGroup){
+
+                    bloodGroupGroup.style.display =
+                        "none";
+
+                }
+
+                if(mobileNumberGroup){
+
+                    mobileNumberGroup.style.display =
+                        "none";
+
+                }
+
+                if(currentPlaceGroup){
+
+                    currentPlaceGroup.style.display =
+                        "none";
+
+                }
+               if(deceasedDateGroup){
+
+    deceasedDateGroup.style.display =
+        "flex";
+
+}
+
+            }
+
+
+            /* =============================
+               NOTHING SELECTED
+               ============================= */
+
+            else{
+
+                if(bloodGroupGroup){
+
+                    bloodGroupGroup.style.display =
+                        "none";
+
+                }
+
+                if(mobileNumberGroup){
+
+                    mobileNumberGroup.style.display =
+                        "none";
+
+                }
+
+                if(currentPlaceGroup){
+
+                    currentPlaceGroup.style.display =
+                        "none";
+
+                }
+               if(deceasedDateGroup){
+
+    deceasedDateGroup.style.display =
+        "none";
+
+}
+
+            }
+
+        }
+    );
+
+}
+       
+   /* =================================
+   MARITAL STATUS LOGIC
+   ================================= */
+
+const memberDob =
+    document.getElementById(
+        "memberDob"
+    );
+       const memberOccupation =
+    document.getElementById(
+        "memberOccupation"
+    );
+       /* =================================
+   OCCUPATION DROPDOWN
+   ================================= */
+
+const occupationList =
+    document.getElementById(
+        "occupationList"
+    );
+
+const occupationOptions =
+    document.querySelectorAll(
+        ".occupation-option"
+    );
+
+
+if(memberOccupation){
+
+    memberOccupation.addEventListener(
+        "focus",
+        function(){
+
+            if(occupationList){
+
+                occupationList.style.display =
+                    "block";
+
+            }
+
+        }
+    );
+
+
+    memberOccupation.addEventListener(
+        "input",
+        function(){
+
+            const searchText =
+                this.value
+                    .trim()
+                    .toLowerCase();
+
+
+            occupationOptions.forEach(
+                function(option){
+
+                    const text =
+                        option.textContent
+                            .trim()
+                            .toLowerCase();
+
+
+                    if(
+                        searchText === "" ||
+                        text.includes(searchText)
+                    ){
+
+                        option.style.display =
+                            "block";
+
+                    }
+                    else{
+
+                        option.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+
+            if(occupationList){
+
+                occupationList.style.display =
+                    "block";
+
+            }
+
+        }
+    );
+
+
+    occupationOptions.forEach(
+        function(option){
+
+            option.addEventListener(
+                "click",
+                function(){
+
+                    memberOccupation.value =
+                        this.textContent.trim();
+
+
+                    if(occupationList){
+
+                        occupationList.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
+       /* =================================
+   CLOSE OCCUPATION DROPDOWN
+   WHEN CLICKING OUTSIDE
+   ================================= */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const occupationDropdown =
+            document.querySelector(
+                ".occupation-dropdown"
+            );
+
+        if(!occupationDropdown){
+            return;
+        }
+
+        if(
+            !occupationDropdown.contains(
+                event.target
+            )
+        ){
+
+            if(occupationList){
+
+                occupationList.style.display =
+                    "none";
+
+            }
+
+        }
+
+    }
+);
+       
+/* =====================================
+   EDIT MEMBER MODE
+   ===================================== */
+
+const editMember =
+    JSON.parse(
+        localStorage.getItem(
+            "editMember"
+        ) || "null"
+    );
+
+
+if(editMember){
+
+    console.log(
+        "EDIT MEMBER LOADED:",
+        editMember
+    );
+
+/* =================================
+   EXISTING MEMBER PHOTO PREVIEW
+   ================================= */
+
+const existingPhoto =
+    String(
+        editMember.photo ||
+        editMember.photoUrl ||
+        editMember.profilePhoto ||
+        ""
+    ).trim();
+
+
+if(existingPhoto){
+
+    if(memberPhotoPreview){
+
+        memberPhotoPreview.src =
+            existingPhoto;
+
+        memberPhotoPreview.style.display =
+            "block";
+
+    }
+
+
+    if(memberPhotoPlaceholder){
+
+        memberPhotoPlaceholder.style.display =
+            "none";
+
+    }
+
+}
+   /* =================================
+       CHANGE PAGE TITLE
+       ================================= */
+
+    const pageHeading =
+        document.querySelector(
+            "h2.page-title"
+        );
+
+
+    if(pageHeading){
+
+        pageHeading.textContent =
+    "Update Member";
+
+    }
+
+
+    /* =================================
+       MEMBER ID
+       ================================= */
+
+    const editMemberIdField =
+        document.getElementById(
+            "memberId"
+        );
+
+
+    if(editMemberIdField){
+
+        editMemberIdField.textContent =
+            editMember.memberId || "-";
+
+
+        editMemberIdField.dataset.memberId =
+            editMember.memberId || "";
+
+    }
+
+
+    /* =================================
+       NAME
+       ================================= */
+
+    const editNameField =
+        document.getElementById(
+            "memberName"
+        );
+
+
+    if(editNameField){
+
+        editNameField.value =
+            editMember.name || "";
+
+    }
+
+
+    /* =================================
+       GENDER
+       ================================= */
+
+    const editGenderField =
+        document.getElementById(
+            "memberGender"
+        );
+
+
+    if(editGenderField){
+
+        editGenderField.value =
+            editMember.gender || "";
+
+    }
+
+
+    /* =================================
+       DATE OF BIRTH
+       ================================= */
+
+   const editDobField =
+    document.getElementById(
+        "memberDob"
+    );
+
+
+if(editDobField){
+
+    let dobValue =
+        String(
+            editMember.dob || ""
+        ).trim();
+
+
+    if(
+        dobValue.includes("T")
+    ){
+
+        dobValue =
+            dobValue.split("T")[0];
+
+    }
+
+    else if(
+        dobValue.includes("/")
+    ){
+
+        const parts =
+            dobValue.split("/");
+
+        if(parts.length === 3){
+
+            dobValue =
+                parts[2] +
+                "-" +
+                parts[1].padStart(2, "0") +
+                "-" +
+                parts[0].padStart(2, "0");
+
+        }
+
+    }
+
+    else if(
+        /^\d{2}-\d{2}-\d{4}$/.test(
+            dobValue
+        )
+    ){
+
+        const parts =
+            dobValue.split("-");
+
+        dobValue =
+            parts[2] +
+            "-" +
+            parts[1] +
+            "-" +
+            parts[0];
+
+    }
+
+
+    editDobField.value =
+        dobValue;
+
+
+    console.log(
+        "EDIT DOB:",
+        editMember.dob,
+        "→",
+        dobValue
+    );
+
+}
+
+/* =================================
+   MARITAL STATUS
+   ================================= */
+
+const editMaritalStatus =
+    String(
+        editMember.maritalStatus || ""
+    )
+    .trim()
+    .toLowerCase();
+
+const editMarriedYes =
+    document.getElementById(
+        "marriedYes"
+    );
+
+const editMarriedNo =
+    document.getElementById(
+        "marriedNo"
+    );
+
+
+if(editMaritalStatus === "yes"){
+
+    if(editMarriedYes){
+        editMarriedYes.checked = true;
+    }
+
+    if(editMarriedNo){
+        editMarriedNo.checked = false;
+    }
+
+
+    /* =================================
+       SHOW PARTNER ROW
+       ================================= */
+
+    const editPartnerGroup =
+        document.getElementById(
+            "memberPartnerGroup"
+        );
+
+    if(editPartnerGroup){
+
+        editPartnerGroup.style.display =
+            "flex";
+
+    }
+
+
+    /* =================================
+       SHOW MARRIAGE DATE ROW
+       ================================= */
+
+    const editMarriageDateGroup =
+        document.getElementById(
+            "marriageDateGroup"
+        );
+
+    if(editMarriageDateGroup){
+
+        editMarriageDateGroup.style.display =
+            "flex";
+
+    }
+
+}   
+else if(editMaritalStatus === "no"){
+
+    if(editMarriedYes){
+        editMarriedYes.checked = false;
+    }
+
+    if(editMarriedNo){
+        editMarriedNo.checked = true;
+    }
+
+    const editMarriageDateGroup =
+        document.getElementById(
+            "marriageDateGroup"
+        );
+
+    if(editMarriageDateGroup){
+
+        editMarriageDateGroup.style.display =
+            "none";
+
+    }
+
+}
+   
+/* =================================
+   MARRIAGE DATE
+   ================================= */
+
+const editMarriageDateField =
+    document.getElementById(
+        "memberMarriageDate"
+    );
+
+if(editMarriageDateField){
+
+    let marriageDateValue =
+        String(
+            editMember.marriageDate || ""
+        ).trim();
+console.log(
+    "EDIT MARRIAGE DATE RAW:",
+    editMember.marriageDate
+);
+
+console.log(
+    "FULL EDIT MEMBER:",
+    editMember
+);
+    if(marriageDateValue.includes("T")){
+
+        marriageDateValue =
+            marriageDateValue.split("T")[0];
+
+    }
+
+    else if(marriageDateValue.includes("/")){
+
+        const parts =
+            marriageDateValue.split("/");
+
+        if(parts.length === 3){
+
+            marriageDateValue =
+                parts[2] +
+                "-" +
+                parts[1].padStart(2, "0") +
+                "-" +
+                parts[0].padStart(2, "0");
+
+        }
+
+    }
+
+    else if(
+        /^\d{2}-\d{2}-\d{4}$/.test(
+            marriageDateValue
+        )
+    ){
+
+        const parts =
+            marriageDateValue.split("-");
+
+        marriageDateValue =
+            parts[2] +
+            "-" +
+            parts[1] +
+            "-" +
+            parts[0];
+
+    }
+
+    editMarriageDateField.value =
+        marriageDateValue;
+
+}
+
+/* =================================
+   EDIT MEMBER - ADDITIONAL DETAILS
+   ================================= */
+
+/* LIFE STATUS */
+
+const editLifeStatusField =
+    document.getElementById(
+        "memberLifeStatus"
+    );
+
+if(editLifeStatusField){
+
+    editLifeStatusField.value =
+        editMember.lifeStatus || "";
+
+    editLifeStatusField.dispatchEvent(
+        new Event(
+            "change",
+            {
+                bubbles: true
+            }
+        )
+    );
+
+}
+
+/* NATIVE PLACE */
+
+const editNativePlaceField =
+    document.getElementById(
+        "memberNativePlace"
+    );
+
+if(editNativePlaceField){
+
+    editNativePlaceField.value =
+        editMember.nativePlace || "";
+
+}
+
+
+/* OCCUPATION */
+
+const editOccupationField =
+    document.getElementById(
+        "memberOccupation"
+    );
+
+if(editOccupationField){
+
+    editOccupationField.value =
+        editMember.occupation || "";
+
+}
+
+
+/* QUALIFICATION */
+
+const editQualificationField =
+    document.getElementById(
+        "memberQualification"
+    );
+
+if(editQualificationField){
+
+    editQualificationField.value =
+        editMember.qualification || "";
+
+}
+
+
+/* BLOOD GROUP */
+
+const editBloodGroupField =
+    document.getElementById(
+        "memberBloodGroup"
+    );
+
+if(editBloodGroupField){
+
+    editBloodGroupField.value =
+        editMember.bloodGroup || "";
+
+}
+
+
+/* MOBILE NUMBER */
+
+const editMobileNumberField =
+    document.getElementById(
+        "memberMobileNumber"
+    );
+
+if(editMobileNumberField){
+
+    editMobileNumberField.value =
+        editMember.mobileNumber || "";
+
+}
+
+
+/* CURRENT PLACE */
+
+const editCurrentPlaceField =
+    document.getElementById(
+        "memberCurrentPlace"
+    );
+
+if(editCurrentPlaceField){
+
+    editCurrentPlaceField.value =
+        editMember.currentPlace || "";
+
+}
+
+
+/* DECEASED DATE */
+
+const editDeceasedDateField =
+    document.getElementById(
+        "memberDeceasedDate"
+    );
+
+if(editDeceasedDateField){
+
+    let deceasedDateValue =
+        String(
+            editMember.deceasedDate || ""
+        ).trim();
+
+    if(
+        deceasedDateValue.includes("T")
+    ){
+
+        deceasedDateValue =
+            deceasedDateValue.split("T")[0];
+
+    }
+
+    editDeceasedDateField.value =
+        deceasedDateValue;
+
+}
+
+
+/* ABOUT ME */
+
+const editAboutMeField =
+    document.getElementById(
+        "memberAboutMe"
+    );
+
+if(editAboutMeField){
+
+    editAboutMeField.value =
+        editMember.aboutMe || "";
+
+}
+   
+}
+
+/* =================================
+   LOAD RELATIONS AFTER EDIT VALUES
+   ================================= */
+
+loadMemberRelations();
+/* =================================
+   ENABLE FORM AFTER NAME + GENDER + DOB
+   ================================= */
+
+const memberName =
+    document.getElementById(
+        "memberName"
+    );
+const memberQualification =
+    document.getElementById(
+        "memberQualification"
+    );
+/* =================================
+   QUALIFICATION DROPDOWN
+   ================================= */
+
+const qualificationList =
+    document.getElementById(
+        "qualificationList"
+    );
+
+
+const qualificationOptions =
+    document.querySelectorAll(
+        ".qualification-option"
+    );
+
+
+if(memberQualification){
+
+    memberQualification.addEventListener(
+        "focus",
+        function(){
+
+            if(qualificationList){
+
+                qualificationList.style.display =
+                    "block";
+
+            }
+
+        }
+    );
+
+
+    memberQualification.addEventListener(
+        "input",
+        function(){
+
+            const searchText =
+                this.value
+                    .trim()
+                    .toLowerCase();
+
+
+            qualificationOptions.forEach(
+                function(option){
+
+                    const text =
+                        option.textContent
+                            .trim()
+                            .toLowerCase();
+
+
+                    if(
+                        searchText === "" ||
+                        text.includes(searchText)
+                    ){
+
+                        option.style.display =
+                            "block";
+
+                    }
+                    else{
+
+                        option.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+
+            if(qualificationList){
+
+                qualificationList.style.display =
+                    "block";
+
+            }
+
+        }
+    );
+
+
+    qualificationOptions.forEach(
+        function(option){
+
+            option.addEventListener(
+                "click",
+                function(){
+
+                    memberQualification.value =
+                        this.textContent.trim();
+
+
+                    if(qualificationList){
+
+                        qualificationList.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
+   /* =================================
+   CLOSE QUALIFICATION DROPDOWN
+   WHEN CLICKING OUTSIDE
+   ================================= */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const qualificationDropdown =
+            document.querySelector(
+                ".qualification-dropdown"
+            );
+
+        if(!qualificationDropdown){
+            return;
+        }
+
+        if(
+            !qualificationDropdown.contains(
+                event.target
+            )
+        ){
+
+            if(qualificationList){
+
+                qualificationList.style.display =
+                    "none";
+
+            }
+
+        }
+
+    }
+);    
+/* =================================
+   ENABLE / DISABLE MEMBER FORM
+   NAME + GENDER + DOB REQUIRED
+   ================================= */
+
+function updateMemberFormState(){
+
+    const nameReady =
+        memberName &&
+        memberName.value.trim() !== "";
+
+    const genderReady =
+        memberGender &&
+        memberGender.value !== "";
+
+    const dobReady =
+        memberDob &&
+        memberDob.value !== "";
+
+    const basicDetailsReady =
+        nameReady &&
+        genderReady &&
+        dobReady;
+
+
+    /* =============================
+       ELEMENTS TO ENABLE / DISABLE
+       ============================= */
+
+    const fieldsToEnable = [
+
+        "memberPhotoBtn",
+
+        "marriedYes",
+        "marriedNo",
+
+        "memberPartner",
+
+        "memberFather",
+        "memberMother",
+
+        "memberLifeStatus",
+
+        "memberNativePlace",
+        "memberOccupation",
+        "memberQualification",
+        "memberAboutMe",
+
+        "memberBloodGroup",
+        "memberMobileNumber",
+        "memberCurrentPlace",
+
+        "memberDeceasedDate"
+
+    ];
+
+
+    /* =============================
+       APPLY DISABLED STATE
+       ============================= */
+
+    fieldsToEnable.forEach(
+        function(id){
+
+            const element =
+                document.getElementById(id);
+
+            if(element){
+
+                element.disabled =
+                    !basicDetailsReady;
+
+            }
+
+        }
+    );
+
+    /* =================================
+   MOTHER SEARCH ENABLE / DISABLE
+   ================================= */
+
+const motherSearchInput =
+    document.getElementById("memberMotherSearch");
+
+const motherAZControl =
+    document.getElementById("motherSortAZ");
+
+const motherIDControl =
+    document.getElementById("motherSortID");
+
+if(motherSearchInput){
+
+    motherSearchInput.disabled =
+        !basicDetailsReady;
+
+}
+
+[motherAZControl, motherIDControl].forEach(
+    function(arrow){
+
+        if(arrow){
+
+            arrow.style.pointerEvents =
+                basicDetailsReady
+                    ? "auto"
+                    : "none";
+
+            arrow.style.opacity = "1";
+
+        }
+
+    }
+);
+/* =============================
+   FATHER SEARCH ENABLE / DISABLE
+   ============================= */
+
+const fatherSearchInput =
+    document.getElementById(
+        "memberFatherSearch"
+    );
+
+const fatherSortAZ =
+    document.getElementById(
+        "fatherSortAZ"
+    );
+
+const fatherSortID =
+    document.getElementById(
+        "fatherSortID"
+    );
+
+if(fatherSearchInput){
+
+    fatherSearchInput.disabled =
+        !basicDetailsReady;
+
+}
+
+[fatherSortAZ, fatherSortID].forEach(
+    function(arrow){
+
+        if(arrow){
+
+            arrow.style.pointerEvents =
+                basicDetailsReady
+                    ? "auto"
+                    : "none";
+
+           arrow.style.opacity = "1";
+
+        }
+
+    }
+);
+    /* =============================
+       PHOTO BUTTON
+       ============================= */
+
+    const photoBtn =
+        document.getElementById(
+            "memberPhotoBtn"
+        );
+
+    if(photoBtn){
+
+        photoBtn.disabled =
+            !basicDetailsReady;
+
+    }
+
+   /* ================================
+   LIFE STATUS CHANGE
+   CLEAR DECEASED DATE WHEN LIVING
+   ================================ */
+
+const lifeStatusField =
+    document.getElementById(
+        "memberLifeStatus"
+    );
+
+const deceasedDateField =
+    document.getElementById(
+        "memberDeceasedDate"
+    );
+
+
+if(lifeStatusField){
+
+    lifeStatusField.onchange =
+        function(){
+
+            const status =
+                String(
+                    lifeStatusField.value || ""
+                )
+                .trim()
+                .toLowerCase();
+
+
+            /* =========================
+               LIVING
+               ========================= */
+
+            if(
+                status === "living"
+            ){
+
+                /* CLEAR OLD DECEASED DATE */
+
+                if(deceasedDateField){
+
+                    deceasedDateField.value =
+                        "";
+
+                }
+
+
+                /* DISABLE DECEASED DATE */
+
+                if(deceasedDateField){
+
+                    deceasedDateField.disabled =
+                        true;
+
+                }
+
+
+                /* HIDE DECEASED DATE ROW */
+
+                const deceasedGroup =
+                    deceasedDateField
+                        ?.closest(
+                            ".common-form-group"
+                        );
+
+                if(deceasedGroup){
+
+                    deceasedGroup.style.display =
+                        "none";
+
+                }
+
+            }
+
+
+            /* =========================
+               DECEASED
+               ========================= */
+
+            else if(
+                status === "deceased"
+            ){
+
+                /* ENABLE DECEASED DATE */
+
+                if(deceasedDateField){
+
+                    deceasedDateField.disabled =
+                        false;
+
+                }
+
+
+                /* SHOW DECEASED DATE ROW */
+
+                const deceasedGroup =
+                    deceasedDateField
+                        ?.closest(
+                            ".common-form-group"
+                        );
+
+                if(deceasedGroup){
+
+                    deceasedGroup.style.display =
+                        "";
+
+                }
+
+            }
+
+        };
+
+}
+
+}
+       
+/* ================================
+   MOBILE NUMBER - NUMBERS ONLY
+   ================================ */
+
+const memberMobileNumber =
+    document.getElementById(
+        "memberMobileNumber"
+    );
+
+if(memberMobileNumber){
+
+    memberMobileNumber.addEventListener(
+        "input",
+        function(){
+
+            this.value =
+                this.value.replace(
+                    /[^0-9]/g,
+                    ""
+                );
+
+        }
+    );
+
+}
+       if(memberName){
+
+    memberName.addEventListener(
+        "input",
+        updateMemberFormState
+    );
+
+}
+       if(memberGender){
+
+    memberGender.addEventListener(
+        "change",
+        updateMemberFormState
+    );
+
+}
+       if(memberDob){
+
+    memberDob.addEventListener(
+        "change",
+        updateMemberFormState
+    );
+
+}
+       updateMemberFormState();
+const marriedYes =
+    document.getElementById(
+        "marriedYes"
+    );
+
+const marriedNo =
+    document.getElementById(
+        "marriedNo"
+    );
+
+const marriageConfirmation =
+    document.getElementById(
+        "marriageConfirmation"
+    );
+
+const confirmMarriageYes =
+    document.getElementById(
+        "confirmMarriageYes"
+    );
+
+const confirmMarriageNo =
+    document.getElementById(
+        "confirmMarriageNo"
+    );
+
+const memberPartnerGroup =
+    document.getElementById(
+        "memberPartnerGroup"
+    );
+
+const marriageDateGroup =
+    document.getElementById(
+        "marriageDateGroup"
+    );
+/* =================================
+   CALCULATE AGE
+   ================================= */
+
+function calculateMemberAge(
+    dateOfBirth
+){
+
+    if(!dateOfBirth){
+        return null;
+    }
+
+    const dob =
+        new Date(dateOfBirth);
+
+    const today =
+        new Date();
+
+    let age =
+        today.getFullYear()
+        - dob.getFullYear();
+
+    const monthDifference =
+        today.getMonth()
+        - dob.getMonth();
+
+    if(
+        monthDifference < 0 ||
+        (
+            monthDifference === 0 &&
+            today.getDate() < dob.getDate()
+        )
+    ){
+
+        age--;
+
+    }
+
+    return age;
+
+}
+
+
+/* =================================
+   HIDE PARTNER
+   ================================= */
+
+function hidePartner(){
+
+    if(memberPartnerGroup){
+
+        memberPartnerGroup.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =================================
+   SHOW PARTNER
+   ================================= */
+
+function showPartner(){
+
+    if(memberPartnerGroup){
+
+        memberPartnerGroup.style.display =
+            "flex";
+
+    }
+
+}
+
+
+/* =================================
+   RESET CONFIRMATION
+   ================================= */
+
+function hideMarriageConfirmation(){
+
+    if(marriageConfirmation){
+
+        marriageConfirmation.style.display =
+            "none";
+
+    }
+
+    if(confirmMarriageYes){
+
+        confirmMarriageYes.checked =
+            false;
+
+    }
+
+    if(confirmMarriageNo){
+
+        confirmMarriageNo.checked =
+            false;
+
+    }
+       if(marriageDateGroup){
+
+        marriageDateGroup.style.display =
+            "none";
+
+    }
+
+}
+/* =================================
+   DOB CHANGE
+   ================================= */
+
+if(memberDob){
+
+    memberDob.addEventListener(
+        "change",
+        function(){
+
+            const age =
+                calculateMemberAge(
+                    this.value
+                );
+
+
+            /* DoB not selected */
+
+            if(age === null){
+
+                hideMarriageConfirmation();
+
+                hidePartner();
+
+                if(marriedYes){
+                    marriedYes.checked = false;
+                }
+
+                if(marriedNo){
+                    marriedNo.checked = false;
+                }
+
+                return;
+
+            }
+
+
+            /* Age 18 or above */
+
+           if(age >= 18){
+
+    hideMarriageConfirmation();
+
+    if(
+        marriedYes &&
+        marriedYes.checked
+    ){
+
+        showPartner();
+
+        if(marriageDateGroup){
+            marriageDateGroup.style.display =
+                "flex";
+        }
+
+    }
+
+}
+
+            /* Age below 18 */
+
+            else {
+
+                /*
+                   If Yes is already selected,
+                   ask confirmation again
+                */
+
+                if(
+                    marriedYes &&
+                    marriedYes.checked
+                ){
+
+                    hidePartner();
+
+                    if(marriageConfirmation){
+
+                        marriageConfirmation.style.display =
+                            "flex";
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+   
+}
+
+/* =================================
+   YES
+   ================================= */
+
+if(marriedYes){
+
+    marriedYes.addEventListener(
+        "change",
+        function(){
+
+            if(!this.checked){
+                return;
+            }
+
+
+            hidePartner();
+
+
+            const age =
+                calculateMemberAge(
+                    memberDob
+                        ? memberDob.value
+                        : ""
+                );
+
+
+            /* DoB not selected */
+
+            if(age === null){
+
+                alert(
+                    "Please select DoB first."
+                );
+
+                this.checked =
+                    false;
+
+                return;
+
+            }
+
+
+            /* Under 18 */
+
+            if(age < 18){
+
+                if(marriageConfirmation){
+
+                    marriageConfirmation.style.display =
+                        "flex";
+
+                }
+
+                return;
+
+            }
+
+
+            /* 18 or above */
+
+hideMarriageConfirmation();
+
+showPartner();
+
+
+/* =============================
+   SHOW MARRIAGE DATE
+   ============================= */
+
+if(marriageDateGroup){
+
+    marriageDateGroup.style.display =
+        "flex";
+
+}
+        }
+    );
+
+}
+
+
+/* =================================
+   NO
+   ================================= */
+
+if(marriedNo){
+
+    marriedNo.addEventListener(
+        "change",
+        function(){
+
+            if(!this.checked){
+                return;
+            }
+
+            hideMarriageConfirmation();
+
+            hidePartner();
+
+        }
+    );
+
+}
+
+
+
+/* =================================
+   CONFIRMATION YES
+   ================================= */
+
+if(confirmMarriageYes){
+
+    confirmMarriageYes.addEventListener(
+        "change",
+        function(){
+
+            if(!this.checked){
+                return;
+            }
+
+
+            /* =============================
+               HIDE CONFIRMATION
+               ============================= */
+
+if(marriageConfirmation){
+
+    marriageConfirmation.style.display =
+        "none";
+
+}
+/* =============================
+   SHOW PARTNER
+   ============================= */
+
+showPartner();
+
+
+/* =============================
+   SHOW MARRIAGE DATE
+   ============================= */
+
+if(marriageDateGroup){
+
+    marriageDateGroup.style.display =
+        "flex";
+
+}
+        }
+    );
+
+}
+
+
+
+/* =================================
+   CONFIRMATION NO
+   ================================= */
+
+if(confirmMarriageNo){
+
+    confirmMarriageNo.addEventListener(
+        "change",
+        function(){
+
+            if(!this.checked){
+                return;
+            }
+
+
+            /* =============================
+               MARITAL STATUS → NO
+               ============================= */
+
+            if(marriedNo){
+
+                marriedNo.checked =
+                    true;
+
+            }
+
+
+            /* =============================
+               HIDE CONFIRMATION
+               ============================= */
+
+if(marriageConfirmation){
+
+    marriageConfirmation.style.display =
+        "none";
+
+}
+
+            /* =============================
+               HIDE PARTNER
+               ============================= */
+
+            hidePartner();
+
+        }
+    );
+
+}  
+       
+/* =================================
+   LOAD MEMBER RELATIONS
+   ================================= */
+
+async function loadMemberRelations(){
+   
+    const currentFamily =
+        JSON.parse(
+            localStorage.getItem(
+                "currentFamily"
+            )
+        );
+
+
+    if(!currentFamily){
+        return;
+    }
+
+
+   /* =================================
+   GET MEMBERS FROM GOOGLE SHEET
+   ================================= */
+
+/* =================================
+   LOAD MEMBERS FROM CACHE
+   ================================= */
+
+let members = [];
+
+try{
+
+    const cachedMembers =
+        JSON.parse(
+            localStorage.getItem(
+                "familyMembers"
+            ) || "[]"
+        );
+
+
+    if(
+        Array.isArray(cachedMembers)
+    ){
+
+        members =
+            cachedMembers;
+
+    }
+
+
+    console.log(
+        "RELATIONS MEMBERS FROM CACHE:",
+        members.length
+    );
+
+}
+catch(error){
+
+    console.error(
+        "Members Cache Error:",
+        error
+    );
+
+    members = [];
+
+}
+   
+/* =================================
+   CURRENT FAMILY MEMBERS
+   ================================= */
+
+const filteredFamilyMembers =
+    members.filter(
+        function(member){
+
+            return (
+                String(
+                    member.familyId || ""
+                ).trim() ===
+                String(
+                    currentFamily.familyId || ""
+                ).trim()
+            );
+
+        }
+    );
+
+
+/* =================================
+   FALLBACK
+
+   Search/Edit API already fetched
+   members using current familyId.
+   ================================= */
+
+const familyMembers =
+    filteredFamilyMembers.length > 0
+        ? filteredFamilyMembers
+        : members;
+
+
+console.log(
+    "TOTAL CACHE MEMBERS:",
+    members.length,
+    "CURRENT FAMILY MEMBERS:",
+    familyMembers.length
+);
+   /* =================================
+       GET CURRENT GENDER
+       ================================= */
+
+    const genderField =
+        document.getElementById(
+            "memberGender"
+        );
+
+
+    const currentGender =
+        genderField
+            ? String(
+                genderField.value || ""
+              ).toLowerCase().trim()
+            : "";
+
+
+    console.log(
+        "CURRENT GENDER:",
+        currentGender
+    );
+
+/* =================================
+   GET CURRENT MEMBER AGE
+   ================================= */
+
+function calculateAge(dob){
+
+    if(!dob){
+        return null;
+    }
+
+    const birthDate =
+        new Date(dob);
+
+    if(
+        isNaN(
+            birthDate.getTime()
+        )
+    ){
+        return null;
+    }
+
+    const today =
+        new Date();
+
+    let age =
+        today.getFullYear() -
+        birthDate.getFullYear();
+
+    const monthDifference =
+        today.getMonth() -
+        birthDate.getMonth();
+
+    if(
+        monthDifference < 0 ||
+        (
+            monthDifference === 0 &&
+            today.getDate() <
+            birthDate.getDate()
+        )
+    ){
+
+        age--;
+
+    }
+
+    return age;
+}
+
+
+/* =================================
+   CURRENT MEMBER DOB
+   ================================= */
+
+const currentDobField =
+    document.getElementById(
+        "memberDob"
+    );
+
+
+const currentDob =
+    currentDobField ?
+    currentDobField.value :
+    "";
+
+
+/* =================================
+   CURRENT MEMBER AGE
+   ================================= */
+
+const currentAge =
+    calculateAge(
+        currentDob
+    );
+
+
+console.log(
+    "CURRENT MEMBER AGE:",
+    currentAge
+);
+    /* =================================
+       GET CURRENT MEMBER ID
+       ================================= */
+
+    const memberIdField =
+        document.getElementById(
+            "memberId"
+        );
+
+
+    const currentMemberId =
+        memberIdField
+            ? String(
+                memberIdField.dataset.memberId ||
+                ""
+              ).trim()
+            : "";
+
+
+    /* =================================
+       GET DROPDOWNS
+       ================================= */
+
+    const partnerField =
+        document.getElementById(
+            "memberPartner"
+        );
+
+
+    const fatherField =
+        document.getElementById(
+            "memberFather"
+        );
+
+
+    const motherField =
+        document.getElementById(
+            "memberMother"
+        );
+
+
+   
+    /* =================================
+       CLEAR OLD OPTIONS
+       ================================= */
+
+    function resetSelect(
+        select,
+        defaultText
+    ){
+
+        if(!select){
+            return;
+        }
+
+
+        select.innerHTML = "";
+
+
+        const defaultOption =
+            document.createElement(
+                "option"
+            );
+
+
+        defaultOption.value = "";
+
+
+        defaultOption.textContent =
+            defaultText;
+
+
+        select.appendChild(
+            defaultOption
+        );
+
+    }
+
+
+    resetSelect(
+        partnerField,
+        "Select Partner"
+    );
+
+
+    resetSelect(
+        fatherField,
+        "Select Father"
+    );
+
+
+    resetSelect(
+        motherField,
+        "Select Mother"
+    );
+
+
+    /* =================================
+    Add New Member
+       ================================= */
+
+  function addNewPersonOption(
+    select
+){
+
+    if(!select){
+        return;
+    }
+
+    const option =
+        document.createElement(
+            "option"
+        );
+
+    option.value =
+        "__ADD_NEW__";
+
+    option.textContent =
+        "Add New Member";
+
+    select.insertBefore(
+        option,
+        select.children[1] || null
+    );
+}
+
+    addNewPersonOption(
+        partnerField
+    );
+
+addNewPersonOption(
+    fatherField
+);
+   
+    /* =================================
+       ADD MEMBER OPTION
+       ================================= */
+
+    function addMemberOption(
+        select,
+        member
+    ){
+
+        if(!select){
+            return;
+        }
+
+
+        const fullMemberId =
+            String(
+                member.memberId || ""
+            ).trim();
+
+
+        if(!fullMemberId){
+            return;
+        }
+
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+
+        /* =============================
+           OPTION VALUE
+           ============================= */
+
+        option.value =
+            fullMemberId;
+
+
+        /* =============================
+           MEMBER NUMBER
+           ============================= */
+
+        const memberNumber =
+            fullMemberId
+                .split("-")
+                .pop();
+
+
+        /* =============================
+           MEMBER NAME
+           ============================= */
+
+        let displayName = "";
+
+
+        if(
+            typeof member.name ===
+            "string"
+        ){
+
+            displayName =
+                member.name.trim();
+
+        }
+        else if(
+            member.name &&
+            typeof member.name ===
+            "object"
+        ){
+
+            displayName =
+                String(
+                    member.name.name ||
+                    member.name.value ||
+                    ""
+                ).trim();
+
+        }
+
+
+        /* =============================
+           DISPLAY
+           ============================= */
+
+        option.textContent =
+            displayName +
+            " (" +
+            memberNumber +
+            ")";
+
+
+        select.appendChild(
+            option
+        );
+
+    }
+
+/* =================================
+   SORT MEMBERS BY ID NUMBER
+   ================================= */
+
+familyMembers.sort(
+    function(a, b){
+
+        const aId =
+            String(
+                a.memberId || ""
+            ).trim();
+
+        const bId =
+            String(
+                b.memberId || ""
+            ).trim();
+
+
+        const aNumber =
+            parseInt(
+                aId.split("-").pop(),
+                10
+            ) || 0;
+
+        const bNumber =
+            parseInt(
+                bId.split("-").pop(),
+                10
+            ) || 0;
+
+
+        return aNumber - bNumber;
+
+    }
+);
+    /* =================================
+       FILTER MEMBERS
+       ================================= */
+
+    familyMembers.forEach(
+        function(member){
+
+            const memberId =
+                String(
+                    member.memberId || ""
+                ).trim();
+
+
+            const memberGender =
+                String(
+                    member.gender || ""
+                ).toLowerCase().trim();
+
+
+            const memberMarital =
+                String(
+                    member.maritalStatus || ""
+                ).toLowerCase().trim();
+/* =============================
+   MEMBER AGE
+   ============================= */
+
+const memberAge =
+    calculateAge(
+        member.dob
+    );
+
+
+console.log(
+    "MEMBER AGE:",
+    member.name,
+    memberAge
+);
+
+            const isMarried =
+                memberMarital === "yes";
+
+
+          /* =============================
+   EXISTING PARTNERS COUNT
+   0 OR 1  → ALLOW
+   2+      → DO NOT ALLOW
+   ============================= */
+
+const partnerIds =
+    new Set();
+
+
+/* DIRECT PARTNER */
+
+if(member.partnerId){
+
+    partnerIds.add(
+        String(
+            member.partnerId
+        ).trim()
+    );
+
+}
+
+
+/* REVERSE PARTNER LINK */
+
+familyMembers.forEach(
+    function(item){
+
+        if(!item){
+            return;
+        }
+
+        if(
+            String(
+                item.partnerId || ""
+            ).trim() === memberId
+        ){
+
+            partnerIds.add(
+                String(
+                    item.memberId || ""
+                ).trim()
+            );
+
+        }
+
+    }
+);
+
+
+/* PARTNERS THROUGH CHILDREN */
+
+familyMembers.forEach(
+    function(child){
+
+        if(!child){
+            return;
+        }
+
+        const fatherId =
+            String(
+                child.fatherId || ""
+            ).trim();
+
+        const motherId =
+            String(
+                child.motherId || ""
+            ).trim();
+
+
+        if(
+            fatherId === memberId &&
+            motherId &&
+            motherId !== memberId
+        ){
+
+            partnerIds.add(
+                motherId
+            );
+
+        }
+
+
+        if(
+            motherId === memberId &&
+            fatherId &&
+            fatherId !== memberId
+        ){
+
+            partnerIds.add(
+                fatherId
+            );
+
+        }
+
+    }
+);
+
+
+partnerIds.delete("");
+partnerIds.delete(memberId);
+
+
+const partnerCount =
+    partnerIds.size;
+
+
+const canAddPartner =
+    partnerCount < 2;
+
+
+console.log(
+    "MEMBER:",
+    member.name,
+    "PARTNER COUNT:",
+    partnerCount,
+    "CAN ADD PARTNER:",
+    canAddPartner
+);
+
+            
+
+            /* =============================
+               DO NOT SHOW CURRENT MEMBER
+               ============================= */
+
+            if(
+                memberId ===
+                currentMemberId
+            ){
+
+                return;
+
+            }
+
+
+/* =============================
+   FATHER     MALE + MARRIED   + 15 YEARS OLDER
+   ============================= */
+
+if(
+    memberGender === "male" &&
+    currentAge !== null &&
+    memberAge !== null &&
+    memberAge >= currentAge + 15
+){
+
+    addMemberOption(
+        fatherField,
+        member
+    );
+
+}
+
+
+
+/* =============================
+   MOTHER   FEMALE + MARRIED   + 15 YEARS OLDER
+   ============================= */
+
+if(
+    memberGender === "female" &&
+    currentAge !== null &&
+    memberAge !== null &&
+    memberAge >= currentAge + 15
+){
+
+    addMemberOption(
+        motherField,
+        member
+    );
+
+}
+
+
+            /* =============================
+               PARTNER
+               ============================= */
+
+            if(
+    isMarried &&
+    currentGender &&
+    memberGender !== currentGender &&
+    canAddPartner
+){
+
+    addMemberOption(
+        partnerField,
+        member
+    );
+
+}
+        }
+    );
+
+
+    /* =================================
+   FATHER SEARCH DROPDOWN
+   ================================= */
+
+const fatherSearch =
+    document.getElementById(
+        "memberFatherSearch"
+    );
+
+const fatherDropdown =
+    document.getElementById(
+        "memberFatherDropdown"
+    );
+
+let fatherSortMode = "id";
+let fatherNameAscending = true;
+let fatherIdAscending = true;
+let lastFatherSortMode = "";
+
+if(
+    fatherSearch &&
+    fatherDropdown &&
+    fatherField
+){
+
+    function showFatherDropdown(){
+
+        if(fatherSearch.disabled){
+            fatherDropdown.style.display = "none";
+            return;
+        }
+
+        const searchText =
+            fatherSearch.value
+                .trim()
+                .toLowerCase();
+
+        let matchingOptions =
+            Array.from(
+                fatherField.options
+            ).filter(function(option){
+
+                if(!option.value){
+                    return false;
+                }
+
+                if(option.value === "__ADD_NEW__"){
+                    return true;
+                }
+
+               return String(
+    option.textContent || ""
+)
+.trim()
+.toLowerCase()
+.includes(searchText);
+            });
+
+        const addNewOption =
+            matchingOptions.find(
+                option =>
+                    option.value === "__ADD_NEW__"
+            );
+
+        matchingOptions =
+            matchingOptions.filter(
+                option =>
+                    option.value !== "__ADD_NEW__"
+            );
+const fatherCount =
+    document.getElementById("fatherMemberCount");
+
+if(fatherCount){
+    fatherCount.textContent = matchingOptions.length;
+}
+        matchingOptions.sort(function(a,b){
+
+            if(fatherSortMode === "name"){
+
+                const result =
+                    a.textContent.localeCompare(
+                        b.textContent,
+                        undefined,
+                        {sensitivity:"base"}
+                    );
+
+                return fatherNameAscending
+                    ? result
+                    : -result;
+            }
+
+            const aNumber =
+                parseInt(
+                    a.value.split("-").pop(),
+                    10
+                ) || 0;
+
+            const bNumber =
+                parseInt(
+                    b.value.split("-").pop(),
+                    10
+                ) || 0;
+
+            const result =
+                aNumber - bNumber;
+
+            return fatherIdAscending
+                ? result
+                : -result;
+
+        });
+
+        fatherDropdown.innerHTML = "";
+
+        if(addNewOption){
+            matchingOptions.unshift(addNewOption);
+        }
+
+        if(matchingOptions.length === 0){
+
+            fatherDropdown.textContent =
+                "No matching father";
+
+        }else{
+
+            matchingOptions.forEach(
+                function(option){
+
+                    const item =
+                        document.createElement("div");
+
+                    item.textContent =
+                        option.textContent;
+
+                    item.onclick = function(){
+
+                        fatherField.value =
+                            option.value;
+                     document.getElementById(
+    "fatherSortAZ"
+).style.display = "none";
+
+document.getElementById(
+    "fatherSortID"
+).style.display = "none";
+                        /* HIDE FATHER COUNT AFTER SELECTION */
+
+const fatherCount =
+    document.getElementById(
+        "fatherMemberCount"
+    );
+
+if(fatherCount){
+    fatherCount.style.display = "none";
+}
+                        fatherSearch.value =
+                            option.value === "__ADD_NEW__"
+                                ? ""
+                                : option.textContent;
+
+                        /* FATHER SELECTED NAME - FULL WIDTH */
+
+const fatherInputWrap =
+    fatherSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(fatherInputWrap){
+    fatherInputWrap.classList.add(
+        "father-name-selected"
+    );
+}
+                        fatherDropdown.style.display =
+                            "none";
+
+                        fatherField.dispatchEvent(
+                            new Event(
+                                "change",
+                                {bubbles:true}
+                            )
+                        );
+
+                    };
+
+                    fatherDropdown.appendChild(item);
+
+                }
+            );
+
+        }
+
+        fatherDropdown.style.display =
+            "block";
+
+    }
+
+    /* =================================
+   FATHER SEARCH - FOCUS
+   ================================= */
+
+fatherSearch.addEventListener(
+    "focus",
+    function(){
+                const fatherInputWrap =
+    fatherSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(fatherInputWrap){
+    fatherInputWrap.classList.remove(
+        "father-name-selected"
+    );
+}
+        /* SHOW FATHER SORT ARROWS */
+
+        const fatherAZ =
+            document.getElementById(
+                "fatherSortAZ"
+            );
+
+        const fatherID =
+            document.getElementById(
+                "fatherSortID"
+            );
+
+        if(fatherAZ){
+            fatherAZ.style.display = "inline-flex";
+        }
+
+        if(fatherID){
+            fatherID.style.display = "inline-flex";
+        }
+
+        /* CLEAR DISPLAY FOR NEW SEARCH */
+
+        if(fatherField.value){
+            fatherSearch.value = "";
+        }
+
+        /* SHOW FATHER DROPDOWN */
+/* SHOW FATHER MEMBER COUNT */
+
+const fatherCount =
+    document.getElementById(
+        "fatherMemberCount"
+    );
+
+if(fatherCount){
+
+    fatherCount.style.display =
+        "inline-flex";
+
+}
+        showFatherDropdown();
+
+    }
+);
+    fatherSearch.addEventListener(
+        "input",
+        function(){
+            const fatherInputWrap =
+    fatherSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(fatherInputWrap){
+    fatherInputWrap.classList.remove(
+        "father-name-selected"
+    );
+}
+
+            fatherField.value = "";
+            showFatherDropdown();
+
+        }
+    );
+
+    const fatherSortAZ =
+        document.getElementById(
+            "fatherSortAZ"
+        );
+
+    const fatherSortID =
+        document.getElementById(
+            "fatherSortID"
+        );
+
+    if(fatherSortAZ){
+
+        fatherSortAZ.onclick = function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(fatherSearch.disabled){
+                return;
+            }
+
+            fatherNameAscending =
+                lastFatherSortMode === "name"
+                    ? !fatherNameAscending
+                    : true;
+
+            fatherSortMode = "name";
+            lastFatherSortMode = "name";
+
+            showFatherDropdown();
+
+        };
+
+    }
+
+    if(fatherSortID){
+
+        fatherSortID.onclick = function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(fatherSearch.disabled){
+                return;
+            }
+
+            fatherIdAscending =
+                lastFatherSortMode === "id"
+                    ? !fatherIdAscending
+                    : true;
+
+            fatherSortMode = "id";
+            lastFatherSortMode = "id";
+
+            showFatherDropdown();
+
+        };
+
+    }
+
+}
+    /* =========================================
+   MOTHER SEARCH + SORTING
+   ========================================= */
+
+const motherSearch =
+    document.getElementById(
+        "memberMotherSearch"
+    );
+
+const motherDropdown =
+    document.getElementById(
+        "memberMotherDropdown"
+    );
+
+let motherSortMode = "id";
+let motherNameAscending = true;
+let motherIdAscending = true;
+let lastMotherSortMode = "";
+
+if(
+    motherSearch &&
+    motherDropdown &&
+    motherField
+){
+
+    function showMotherDropdown(){
+
+        if(motherSearch.disabled){
+
+            motherDropdown.style.display = "none";
+            return;
+
+        }
+
+        const searchText =
+            motherSearch.value
+                .trim()
+                .toLowerCase();
+
+        let matchingOptions =
+            Array.from(
+                motherField.options
+            ).filter(function(option){
+
+                if(!option.value){
+                    return false;
+                }
+
+                if(option.value === "__ADD_NEW__"){
+                    return true;
+                }
+
+               return String(
+    option.textContent || ""
+)
+.trim()
+.toLowerCase()
+.includes(searchText);
+            });
+
+        const addNewOption =
+            matchingOptions.find(
+                function(option){
+                    return option.value === "__ADD_NEW__";
+                }
+            );
+
+        matchingOptions =
+            matchingOptions.filter(
+                function(option){
+                    return option.value !== "__ADD_NEW__";
+                }
+            );
+
+const motherCount =
+    document.getElementById("motherMemberCount");
+
+if(motherCount){
+    motherCount.textContent = matchingOptions.length;
+}
+        
+        matchingOptions.sort(function(a,b){
+
+            if(motherSortMode === "name"){
+
+                const result =
+                    a.textContent.localeCompare(
+                        b.textContent,
+                        undefined,
+                        {sensitivity:"base"}
+                    );
+
+                return motherNameAscending
+                    ? result
+                    : -result;
+
+            }
+
+            const aNumber =
+                parseInt(
+                    a.value.split("-").pop(),
+                    10
+                ) || 0;
+
+            const bNumber =
+                parseInt(
+                    b.value.split("-").pop(),
+                    10
+                ) || 0;
+
+            const result =
+                aNumber - bNumber;
+
+            return motherIdAscending
+                ? result
+                : -result;
+
+        });
+
+        motherDropdown.innerHTML = "";
+
+        if(addNewOption){
+            matchingOptions.unshift(addNewOption);
+        }
+
+        if(matchingOptions.length === 0){
+
+            motherDropdown.innerHTML =
+                '<div class="relations-no-match">' +
+                'No matching mother' +
+                '</div>';
+
+        }else{
+
+            matchingOptions.forEach(
+                function(option){
+
+                    const item =
+                        document.createElement("div");
+
+                    item.className =
+                        "relations-member-option";
+
+                    item.textContent =
+                        option.textContent;
+
+                    item.onclick = function(){
+
+                        motherField.value =
+                            option.value;
+
+                        motherSearch.value =
+                            option.value === "__ADD_NEW__"
+                                ? ""
+                                : option.textContent;
+                       /* MOTHER SELECTED NAME - FULL WIDTH */
+
+const motherInputWrap =
+    motherSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(motherInputWrap){
+    motherInputWrap.classList.add(
+        "mother-name-selected"
+    );
+}
+                        motherDropdown.style.display =
+                            "none";
+
+                        /* HIDE SORT ARROWS */
+
+                        const az =
+                            document.getElementById(
+                                "motherSortAZ"
+                            );
+
+                        const id =
+                            document.getElementById(
+                                "motherSortID"
+                            );
+
+                        if(az){
+                            az.style.display = "none";
+                        }
+
+                        if(id){
+                            id.style.display = "none";
+                        }
+
+                        /* HIDE MOTHER COUNT AFTER SELECTION */
+
+const motherCount =
+    document.getElementById(
+        "motherMemberCount"
+    );
+
+if(motherCount){
+    motherCount.style.display = "none";
+}
+
+                        /* KEEP EXISTING CHANGE LOGIC */
+
+                        motherField.dispatchEvent(
+                            new Event(
+                                "change",
+                                {bubbles:true}
+                            )
+                        );
+
+                    };
+
+                    motherDropdown.appendChild(item);
+
+                }
+            );
+
+        }
+
+        motherDropdown.style.display =
+            "block";
+
+    }
+
+    /* =================================
+       FOCUS
+       ================================= */
+
+   /* =================================
+   MOTHER SEARCH - FOCUS
+   ================================= */
+
+motherSearch.addEventListener(
+    "focus",
+    function(){
+        /* MOTHER SEARCH OPEN - NORMAL WIDTH */
+
+const motherInputWrap =
+    motherSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(motherInputWrap){
+    motherInputWrap.classList.remove(
+        "mother-name-selected"
+    );
+}
+
+        /* SHOW MOTHER SORT ARROWS */
+
+        const motherAZ =
+            document.getElementById(
+                "motherSortAZ"
+            );
+
+        const motherID =
+            document.getElementById(
+                "motherSortID"
+            );
+
+        if(motherAZ){
+            motherAZ.style.display = "inline-flex";
+        }
+
+        if(motherID){
+            motherID.style.display = "inline-flex";
+        }
+
+        /* CLEAR DISPLAY FOR NEW SEARCH */
+
+        if(motherField.value){
+            motherSearch.value = "";
+        }
+
+        /* SHOW MOTHER DROPDOWN */
+
+        /* SHOW MOTHER MEMBER COUNT */
+
+const motherCount =
+    document.getElementById(
+        "motherMemberCount"
+    );
+
+if(motherCount){
+
+    motherCount.style.display =
+        "inline-flex";
+
+}
+        showMotherDropdown();
+
+    }
+);
+    /* =================================
+       SEARCH INPUT
+       ================================= */
+
+    motherSearch.addEventListener(
+        "input",
+        function(){
+            /* MOTHER TYPING - SHOW COUNT AND ARROWS */
+
+const motherInputWrap =
+    motherSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(motherInputWrap){
+    motherInputWrap.classList.remove(
+        "mother-name-selected"
+    );
+}
+
+            motherField.value = "";
+
+            showMotherDropdown();
+
+        }
+    );
+
+    /* =================================
+       SORT ARROWS
+       ================================= */
+
+    const motherSortAZ =
+        document.getElementById(
+            "motherSortAZ"
+        );
+
+    const motherSortID =
+        document.getElementById(
+            "motherSortID"
+        );
+
+    if(motherSortAZ){
+
+        motherSortAZ.onclick = function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(motherSearch.disabled){
+                return;
+            }
+
+            motherNameAscending =
+                lastMotherSortMode === "name"
+                    ? !motherNameAscending
+                    : true;
+
+            motherSortMode = "name";
+            lastMotherSortMode = "name";
+
+            showMotherDropdown();
+
+        };
+
+    }
+
+    if(motherSortID){
+
+        motherSortID.onclick = function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(motherSearch.disabled){
+                return;
+            }
+
+            motherIdAscending =
+                lastMotherSortMode === "id"
+                    ? !motherIdAscending
+                    : true;
+
+            motherSortMode = "id";
+            lastMotherSortMode = "id";
+
+            showMotherDropdown();
+
+        };
+
+    }
+
+}
+/* =================================
+   PARTNER SEARCH
+   ================================= */
+
+const partnerSearch =
+    document.getElementById(
+        "memberPartnerSearch"
+    );
+
+const partnerDropdown =
+    document.getElementById(
+        "memberPartnerDropdown"
+    );
+/* =============================
+   PARTNER SORT MODE
+   FIRST OPEN = ID ORDER
+   ============================= */
+
+let partnerSortMode = "id";
+
+let partnerNameAscending = true;
+let partnerIdAscending = true;
+
+let lastPartnerSortMode = "";
+    
+if(
+    partnerSearch &&
+    partnerDropdown &&
+    partnerField
+){
+
+    /* =============================
+       GET ELIGIBLE PARTNERS
+       FROM ALREADY FILTERED SELECT
+       ============================= */
+
+    function getEligiblePartnerOptions(){
+
+        return Array.from(
+            partnerField.options
+        ).filter(
+            function(option){
+
+                return (
+                    option.value &&
+                    option.value !== "__ADD_NEW__"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =============================
+       SHOW PARTNER LIST
+       ============================= */
+
+    function showPartnerDropdown(){
+
+        const searchText =
+            String(
+                partnerSearch.value || ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        partnerDropdown.innerHTML = "";
+
+
+        const eligibleOptions =
+            getEligiblePartnerOptions();
+
+
+        const matchingOptions =
+            eligibleOptions.filter(
+                function(option){
+                    const text =
+                        String(
+                            option.textContent || ""
+                        )
+                        .trim()
+                        .toLowerCase();
+                    const id =
+                        String(
+                            option.value || ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+
+                    if(searchText === ""){
+                        return true;
+                    }
+
+
+                   return text.includes(searchText);
+
+                }
+            );
+        const partnerCount =
+    document.getElementById("partnerMemberCount");
+
+if(partnerCount){
+    partnerCount.textContent = matchingOptions.length;
+}
+/* =============================
+   SORT PARTNER LIST
+   ============================= */
+matchingOptions.sort(
+    function(a, b){
+
+        /* =========================
+           ALPHABETICAL SORT
+           A-Z / Z-A
+           ========================= */
+
+        if(partnerSortMode === "name"){
+
+            const aName =
+                String(
+                    a.textContent || ""
+                ).trim();
+
+            const bName =
+                String(
+                    b.textContent || ""
+                ).trim();
+
+            const result =
+                aName.localeCompare(
+                    bName,
+                    undefined,
+                    {
+                        sensitivity: "base"
+                    }
+                );
+
+            return partnerNameAscending
+                ? result
+                : -result;
+        }
+
+
+        /* =========================
+           ID NUMBER SORT
+           1-9 / 9-1
+           ========================= */
+
+        const aId =
+            String(
+                a.value || ""
+            ).trim();
+
+        const bId =
+            String(
+                b.value || ""
+            ).trim();
+
+        const aNumber =
+            parseInt(
+                aId.split("-").pop(),
+                10
+            ) || 0;
+
+        const bNumber =
+            parseInt(
+                bId.split("-").pop(),
+                10
+            ) || 0;
+
+        const result =
+            aNumber - bNumber;
+
+        return partnerIdAscending
+            ? result
+            : -result;
+
+    }
+);
+
+        /* =============================
+           NO MATCH
+           ============================= */
+
+        if(
+            matchingOptions.length === 0
+        ){
+
+            partnerDropdown.innerHTML =
+                `<div class="relations-no-match">
+                    No matching partner
+                </div>`;
+
+            partnerDropdown.style.display =
+                "block";
+
+            return;
+
+        }
+
+
+        /* =============================
+           CREATE PARTNER ITEMS
+           ============================= */
+
+        matchingOptions.forEach(
+            function(selectOption){
+
+                const option =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                option.className =
+                    "relations-member-option";
+
+
+                option.textContent =
+                    selectOption.textContent;
+
+
+                option.dataset.memberId =
+                    selectOption.value;
+
+
+                option.onclick =
+                    function(){
+
+                        const selectedId =
+                            option.dataset.memberId;
+
+
+                        /* SAVE ORIGINAL ID */
+
+                        partnerField.value =
+                            selectedId;
+                      /* HIDE PARTNER SORT ARROWS AFTER SELECTION */
+
+const partnerAZ =
+    document.getElementById("partnerSortAZ");
+
+const partnerID =
+    document.getElementById("partnerSortID");
+
+if(partnerAZ){
+    partnerAZ.style.display = "none";
+}
+
+if(partnerID){
+    partnerID.style.display = "none";
+}
+const partnerCount =
+    document.getElementById(
+        "partnerMemberCount"
+    );
+
+if(partnerCount){
+    partnerCount.style.display = "none";
+}
+                        /* SHOW NAME IN SEARCH */
+
+                        partnerSearch.value =
+                            selectOption.textContent;
+                        /* SELECTED NAME - FULL WIDTH */
+
+const partnerInputWrap =
+    partnerSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(partnerInputWrap){
+    partnerInputWrap.classList.add(
+        "partner-name-selected"
+    );
+}
+
+                        partnerDropdown.innerHTML =
+                            "";
+
+                        partnerDropdown.style.display =
+                            "none";
+
+                        console.log(
+                            "PARTNER SELECTED:",
+                            selectedId
+                        );
+
+                    };
+
+
+                partnerDropdown.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        partnerDropdown.style.display =
+            "block";
+
+    }
+
+
+    /* =============================
+       CLICK / FOCUS
+       ============================= */
+
+    /* =============================
+   PARTNER OPEN / SORT TOGGLE
+
+   1st click = ID order
+   2nd click = A-Z
+   3rd click = ID order
+   ============================= */
+partnerSearch.addEventListener(
+    "focus",
+    function(){
+        /* SEARCH OPEN - SHOW COUNT AND ARROWS */
+
+const partnerInputWrap =
+    partnerSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(partnerInputWrap){
+    partnerInputWrap.classList.remove(
+        "partner-name-selected"
+    );
+}
+        /* SHOW SORT ARROWS WHEN PARTNER SEARCH OPENS */
+
+const partnerAZ =
+    document.getElementById("partnerSortAZ");
+
+const partnerID =
+    document.getElementById("partnerSortID");
+
+if(partnerAZ){
+    partnerAZ.style.display = "inline-flex";
+}
+
+if(partnerID){
+    partnerID.style.display = "inline-flex";
+}
+
+        if(partnerField.value){
+
+            partnerSearch.value = "";
+
+        }
+/* SHOW PARTNER MEMBER COUNT */
+
+const partnerCount =
+    document.getElementById(
+        "partnerMemberCount"
+    );
+
+if(partnerCount){
+
+    partnerCount.style.display =
+        "inline-flex";
+
+}
+
+        showPartnerDropdown();
+
+    }
+);
+    
+
+    /* =============================
+       SEARCH WHILE TYPING
+       ============================= */
+
+    partnerSearch.addEventListener(
+        "input",
+        function(){
+
+             const partnerInputWrap =
+    partnerSearch.closest(
+        ".partner-search-input-wrap"
+    );
+
+if(partnerInputWrap){
+    partnerInputWrap.classList.remove(
+        "partner-name-selected"
+    );
+}
+            /*
+             User started a new search.
+             Clear previous selected ID.
+            */
+
+            partnerField.value = "";
+
+            showPartnerDropdown();
+
+        }
+    );
+/* =============================
+   PARTNER SORT ARROWS
+   ↑ = A-Z NAME ORDER
+   ↓ = ID NUMBER ORDER
+   ============================= */
+
+const partnerSortAZ =
+    document.getElementById(
+        "partnerSortAZ"
+    );
+
+const partnerSortID =
+    document.getElementById(
+        "partnerSortID"
+    );
+
+
+/* =============================
+   A-Z / Z-A SORT
+   ============================= */
+
+if(partnerSortAZ){
+
+    partnerSortAZ.onclick = function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        if(lastPartnerSortMode === "name"){
+
+            partnerNameAscending =
+                !partnerNameAscending;
+
+        }
+        else{
+
+            partnerNameAscending = true;
+
+        }
+
+        partnerSortMode = "name";
+        lastPartnerSortMode = "name";
+
+        showPartnerDropdown();
+
+    };
+
+}
+
+
+/* =============================
+   1-9 / 9-1 SORT
+   ============================= */
+
+if(partnerSortID){
+
+    partnerSortID.onclick = function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        if(lastPartnerSortMode === "id"){
+
+            partnerIdAscending =
+                !partnerIdAscending;
+
+        }
+        else{
+
+            partnerIdAscending = true;
+
+        }
+
+        partnerSortMode = "id";
+        lastPartnerSortMode = "id";
+
+        showPartnerDropdown();
+
+    };
+
+}
+    /* =============================
+       OUTSIDE CLICK
+       ============================= */
+
+    document.addEventListener(
+        "click",
+        function(event){
+
+            const wrap =
+                document.getElementById(
+                    "memberPartnerSearchWrap"
+                );
+
+
+            if(
+                wrap &&
+                !wrap.contains(
+                    event.target
+                )
+            ){
+
+                partnerDropdown.style.display =
+                    "none";
+
+
+            }
+
+        }
+    );
+
+}
+/* =========================================
+   PARTNER + FATHER
+   CLEAR SEARCH TEXT ON OUTSIDE CLICK
+   ========================================= */
+
+if(
+    !document.documentElement.dataset
+        .relationSearchOutsideBound
+){
+
+    document.documentElement.dataset
+        .relationSearchOutsideBound = "1";
+
+
+    document.addEventListener(
+        "pointerdown",
+        function(event){
+
+            const relationBoxes = [
+
+    /* =========================
+       PARTNER
+       ========================= */
+
+    {
+        searchId:
+            "memberPartnerSearch",
+
+        selectId:
+            "memberPartner",
+
+        dropdownId:
+            "memberPartnerDropdown",
+
+        wrapId:
+            "memberPartnerSearchWrap",
+
+        sortAZ:
+            "partnerSortAZ",
+
+        sortID:
+            "partnerSortID",
+
+        countId:
+            "partnerMemberCount"
+    },
+
+    /* =========================
+       FATHER
+       ========================= */
+
+    {
+        searchId:
+            "memberFatherSearch",
+
+        selectId:
+            "memberFather",
+
+        dropdownId:
+            "memberFatherDropdown",
+
+        wrapId:
+            "memberFatherSearchWrap",
+
+        sortAZ:
+            "fatherSortAZ",
+
+        sortID:
+            "fatherSortID",
+
+        countId:
+            "fatherMemberCount"
+    },
+
+    /* =========================
+       MOTHER
+       ========================= */
+
+    {
+        searchId:
+            "memberMotherSearch",
+
+        selectId:
+            "memberMother",
+
+        dropdownId:
+            "memberMotherDropdown",
+
+        wrapId:
+            "memberMotherSearchWrap",
+
+        sortAZ:
+            "motherSortAZ",
+
+        sortID:
+            "motherSortID",
+
+        countId:
+            "motherMemberCount"
+    }
+
+];
+
+
+            relationBoxes.forEach(
+                function(config){
+
+                    const search =
+                        document.getElementById(
+                            config.searchId
+                        );
+
+                    const select =
+                        document.getElementById(
+                            config.selectId
+                        );
+
+                    const dropdown =
+                        document.getElementById(
+                            config.dropdownId
+                        );
+
+                    const wrap =
+                        document.getElementById(
+                            config.wrapId
+                        );
+
+
+                    if(
+                        !search ||
+                        !select ||
+                        !dropdown
+                    ){
+                        return;
+                    }
+
+
+                    /* =========================
+                       CLICK INSIDE BOX
+                       ========================= */
+
+                    if(
+                        (wrap &&
+                         wrap.contains(event.target)) ||
+
+                        search.contains(event.target) ||
+
+                        dropdown.contains(event.target)
+                    ){
+                        return;
+                    }
+
+
+                    /* =========================
+                       SELECTED MEMBER EXISTS
+                       ========================= */
+
+                    if(
+                        select.value &&
+                        select.value !== "__ADD_NEW__"
+                    ){
+
+                        const selectedOption =
+                            Array.from(
+                                select.options
+                            ).find(
+                                function(option){
+
+                                    return (
+                                        option.value ===
+                                        select.value
+                                    );
+
+                                }
+                            );
+
+
+                        search.value =
+                            selectedOption
+                                ? selectedOption.textContent.trim()
+                                : "";
+
+                    }
+
+                    /* =========================
+                       NO MEMBER SELECTED
+                       ========================= */
+
+                    else{
+
+                        search.value = "";
+
+                    }
+
+
+                    /* =========================
+                       CLOSE DROPDOWN
+                       ========================= */
+
+                    dropdown.style.display =
+                        "none";
+
+
+                    /* =========================
+                       HIDE SORT ARROWS
+                       ========================= */
+
+                    const sortAZ =
+                        document.getElementById(
+                            config.sortAZ
+                        );
+
+                    const sortID =
+                        document.getElementById(
+                            config.sortID
+                        );
+
+
+                    if(sortAZ){
+
+                        sortAZ.style.display =
+                            "none";
+
+                    }
+
+
+                   if(sortID){
+
+    sortID.style.display =
+        "none";
+
+}
+
+/* =================================
+   HIDE MEMBER COUNT ON OUTSIDE CLICK
+   ================================= */
+
+const count =
+    document.getElementById(
+        config.countId
+    );
+
+if(count){
+
+    count.style.display =
+        "none";
+
+}
+
+                }
+            );
+
+        }
+    );
+
+}
+
+    
+/* =================================
+   ADD NEW PERSON
+   FATHER / MOTHER
+   ================================= */
+
+if(fatherField){
+
+    addNewPersonOption(
+        fatherField
+    );
+
+}
+
+if(motherField){
+
+    addNewPersonOption(
+        motherField
+    );
+
+}
+
+   /* =====================================
+   EDIT MEMBER - SELECT EXISTING RELATIONS
+   ===================================== */
+
+const relationEditMember =
+    JSON.parse(
+        localStorage.getItem(
+            "editMember"
+        ) || "null"
+    );
+
+
+if(
+    relationEditMember &&
+    String(
+        relationEditMember.memberId || ""
+    ).trim() === currentMemberId
+){
+
+    /* =================================
+       HELPER
+       ================================= */
+
+    function selectExistingRelation(
+        selectField,
+        relationId
+    ){
+
+        if(
+            !selectField ||
+            !relationId
+        ){
+            return;
+        }
+
+
+        const relationIdText =
+            String(
+                relationId
+            ).trim();
+
+
+        const relationMember =
+            familyMembers.find(
+                function(member){
+
+                    return String(
+                        member.memberId || ""
+                    ).trim() ===
+                    relationIdText;
+
+                }
+            );
+
+
+        if(!relationMember){
+            return;
+        }
+
+
+        /* CHECK WHETHER OPTION EXISTS */
+
+        const optionExists =
+            Array.from(
+                selectField.options
+            ).some(
+                function(option){
+
+                    return String(
+                        option.value
+                    ) === relationIdText;
+
+                }
+            );
+
+
+        /* ADD OPTION IF FILTER DID NOT ADD IT */
+
+        if(!optionExists){
+
+            addMemberOption(
+                selectField,
+                relationMember
+            );
+
+        }
+
+
+        /* SELECT EXISTING VALUE */
+
+        selectField.value =
+            relationIdText;
+
+    }
+
+
+    /* =================================
+       FATHER
+       ================================= */
+
+    selectExistingRelation(
+        fatherField,
+        relationEditMember.fatherId
+    );
+
+
+    /* =================================
+       MOTHER
+       ================================= */
+
+    selectExistingRelation(
+        motherField,
+        relationEditMember.motherId
+    );
+
+
+    /* =================================
+       PARTNER
+       ================================= */
+
+    selectExistingRelation(
+        partnerField,
+        relationEditMember.partnerId
+    );
+
+}
+/* =================================
+   REFRESH RELATIONS WHEN GENDER CHANGES
+   ================================= */
+
+if(genderField){
+
+    genderField.onchange = function(){
+
+        loadMemberRelations();
+
+    };
+
+}
+
+
+/* =================================
+   REFRESH RELATIONS WHEN DOB CHANGES
+   ================================= */
+
+const dobField =
+    document.getElementById(
+        "memberDob"
+    );
+
+if(dobField){
+
+    dobField.onchange = function(){
+
+        loadMemberRelations();
+
+    };
+
+}
+}
+       /* =================================
+   MEMBER ACTION BUTTONS
+   ================================= */
+
+const memberActions =
+    document.getElementById(
+        "memberActions"
+    );
+
+
+if(memberActions){
+
+
+async function compressMemberPhotoForSheet(file){
+
+    return new Promise(
+        function(resolve,reject){
+
+            const reader =
+                new FileReader();
+
+            reader.onload =
+                function(){
+
+                    const img =
+                        new Image();
+
+                    img.onload =
+                        function(){
+
+                            try{
+
+                                const MAX_SIZE = 160;
+
+                                let width =
+                                    img.width;
+
+                                let height =
+                                    img.height;
+
+
+                                if(
+                                    width > height &&
+                                    width > MAX_SIZE
+                                ){
+
+                                    height =
+                                        Math.round(
+                                            height *
+                                            MAX_SIZE /
+                                            width
+                                        );
+
+                                    width =
+                                        MAX_SIZE;
+
+                                }
+                                else if(
+                                    height >= width &&
+                                    height > MAX_SIZE
+                                ){
+
+                                    width =
+                                        Math.round(
+                                            width *
+                                            MAX_SIZE /
+                                            height
+                                        );
+
+                                    height =
+                                        MAX_SIZE;
+
+                                }
+
+
+                                const canvas =
+                                    document.createElement(
+                                        "canvas"
+                                    );
+
+                                canvas.width =
+                                    width;
+
+                                canvas.height =
+                                    height;
+
+
+                                const ctx =
+                                    canvas.getContext(
+                                        "2d"
+                                    );
+
+
+                                ctx.drawImage(
+                                    img,
+                                    0,
+                                    0,
+                                    width,
+                                    height
+                                );
+
+
+                                let quality =
+                                    0.65;
+
+                                let compressed =
+                                    canvas.toDataURL(
+                                        "image/jpeg",
+                                        quality
+                                    );
+
+
+                                /*
+                                   Google Sheet cell limit safety.
+                                   Keep photo comfortably below limit.
+                                */
+
+                                while(
+                                    compressed.length > 40000 &&
+                                    quality > 0.25
+                                ){
+
+                                    quality -= 0.10;
+
+                                    compressed =
+                                        canvas.toDataURL(
+                                            "image/jpeg",
+                                            quality
+                                        );
+
+                                }
+
+
+                                if(
+                                    compressed.length > 45000
+                                ){
+
+                                    reject(
+                                        new Error(
+                                            "Photo is too large. Please select another photo."
+                                        )
+                                    );
+
+                                    return;
+
+                                }
+
+
+                                resolve(
+                                    compressed
+                                );
+
+                            }
+                            catch(error){
+
+                                reject(error);
+
+                            }
+
+                        };
+
+
+                    img.onerror =
+                        function(){
+
+                            reject(
+                                new Error(
+                                    "Photo could not be processed."
+                                )
+                            );
+
+                        };
+
+
+                    img.src =
+                        reader.result;
+
+                };
+
+
+            reader.onerror =
+                function(){
+
+                    reject(
+                        new Error(
+                            "Photo could not be read."
+                        )
+                    );
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+
+}
+   
+    /* =============================
+       SAVE
+       ============================= */
+
+   const saveMemberBtn =
+    createPrimaryButton(
+        editMember
+            ? "Update"
+            : "Save",
+        "saveMemberBtn"
+    );
+
+/* =================================
+   SAVE MEMBER
+   ================================= */
+
+    /* =============================
+       BACK
+       ============================= */
+
+    const memberBackBtn =
+        createBackButton(
+            "memberBackBtn"
+        );
+
+
+    /* =============================
+       HOME
+       ============================= */
+
+    const memberHomeBtn =
+        createPrimaryButton(
+            "⌂ Home",
+            "memberHomeBtn"
+        );
+
+/* =============================
+   BACK ACTION
+   ============================= */
+
+memberBackBtn.onclick =
+    async function(e){
+
+        e?.preventDefault?.();
+        console.log("ADD MEMBER → BACK");
+
+        const publicTarget = window.currentPublicFamilyAddTarget ||
+            JSON.parse(sessionStorage.getItem("publicFamilyAddTarget") || "null");
+        if(publicTarget?.familyId && typeof window.restorePublicFamilyDetail === "function"){
+            await window.restorePublicFamilyDetail(publicTarget.familyId);
+            window.currentPublicFamilyAddTarget = null;
+            return;
+        }
+        familyBtn.click();
+    };
+
+   
+/* =================================
+   SAVE MEMBER → GOOGLE SHEET
+   ================================= */
+
+saveMemberBtn.onclick = async function(){
+
+    /* ================================
+       CURRENT FAMILY
+       ================================ */
+
+ const publicFamilyAddTarget =
+    JSON.parse(
+        sessionStorage.getItem("publicFamilyAddTarget") || "null"
+    );
+
+ let currentFamily = publicFamilyAddTarget
+    ? {
+        familyId: publicFamilyAddTarget.familyId || "",
+        familyName: publicFamilyAddTarget.familyName || ""
+      }
+    : JSON.parse(
+        localStorage.getItem(
+            "currentFamily"
+        ) || "null"
+    );
+/* =================================
+   LOAD CURRENT USER FAMILY
+   IF NOT ALREADY AVAILABLE
+   ================================= */
+
+if(!currentFamily){
+
+    const loggedUser =
+        JSON.parse(
+            sessionStorage.getItem(
+                "user"
+            )
+        ) || null;
+
+
+    if(loggedUser){
+
+        const params =
+            new URLSearchParams();
+
+
+        params.append(
+            "action",
+            "getUserFamilyTree"
+        );
+
+
+        params.append(
+            "loginUserName",
+            loggedUser.loginUserName || ""
+        );
+
+
+        params.append(
+            "email",
+            loggedUser.email || ""
+        );
+
+
+        params.append(
+            "mobile",
+            loggedUser.mobile || ""
+        );
+
+
+        fetch(
+            API_URL,
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"
+                },
+
+                body:
+                    params.toString()
+            }
+        )
+        .then(
+            function(response){
+
+                return response.json();
+
+            }
+        )
+        .then(
+            function(result){
+
+                console.log(
+                    "ADD MEMBER FAMILY RESULT:",
+                    result
+                );
+
+
+                if(
+                    result.status !==
+                    "success"
+                ){
+
+                    console.log(
+                        "No Family Tree found for current user."
+                    );
+
+                    return;
+
+                }
+
+
+                /* =============================
+                   CREATE CURRENT FAMILY
+                   ============================= */
+
+                currentFamily = {
+
+                    familyId:
+                        result.familyId || "",
+
+                    familyName:
+                        result.familyName || "",
+
+                    loginId:
+                        result.loginUserName ||
+                        loggedUser.loginUserName ||
+                        "",
+
+                    userId:
+                        loggedUser.userId || "",
+
+                    userMail:
+                        result.email ||
+                        loggedUser.email ||
+                        "",
+
+                    mobile:
+                        result.mobile ||
+                        loggedUser.mobile ||
+                        "",
+
+                    createdAt:
+                        new Date().toISOString()
+
+                };
+
+
+                /* =============================
+                   SAVE CURRENT FAMILY
+                   ============================= */
+
+                localStorage.setItem(
+                    "currentFamily",
+                    JSON.stringify(
+                        currentFamily
+                    )
+                );
+
+
+                /* =============================
+                   DISPLAY FAMILY ID
+                   ============================= */
+
+                const familyIdField =
+                    document.getElementById(
+                        "memberFamilyId"
+                    );
+
+
+                if(familyIdField){
+
+                    familyIdField.textContent =
+                        currentFamily.familyId || "-";
+
+                }
+
+
+                /* =============================
+                   DISPLAY FAMILY NAME
+                   ============================= */
+
+                const familyNameField =
+                    document.getElementById(
+                        "memberFamilyName"
+                    );
+
+
+                if(familyNameField){
+
+                    familyNameField.textContent =
+                        currentFamily.familyName || "-";
+
+                }
+
+
+                /* =============================
+                   LOAD RELATIONS
+                   ============================= */
+
+                loadMemberRelations();
+
+
+                console.log(
+                    "CURRENT FAMILY LOADED:",
+                    currentFamily
+                );
+
+            }
+        )
+        .catch(
+            function(error){
+
+                console.error(
+                    "Add Member Family Load Error:",
+                    error
+                );
+
+            }
+        );
+
+    }
+
+}
+
+    if(!currentFamily){
+
+        showMessage(
+            "Family information not available.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    /* ================================
+       GET USER
+       ================================ */
+
+    const user =
+        JSON.parse(
+            sessionStorage.getItem(
+                "user"
+            ) || "null"
+        );
+
+
+    if(!user){
+
+        showMessage(
+            "User information not available.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    /* ================================
+       GET FORM VALUES
+       ================================ */
+
+    const nameField =
+        document.getElementById(
+            "memberName"
+        );
+
+    const genderField =
+        document.getElementById(
+            "memberGender"
+        );
+
+    const dobField =
+        document.getElementById(
+            "memberDob"
+        );
+
+
+  const name =
+    nameField
+        ? String(nameField.value || "").trim()
+        : "";
+
+
+const gender =
+    genderField
+        ? String(genderField.value || "").trim()
+        : "";
+
+
+    const dob =
+        dobField ?
+        dobField.value :
+        "";
+
+
+    /* ================================
+       VALIDATION
+       ================================ */
+
+    if(!name){
+
+        showMessage(
+            "Please enter Member Name.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    if(!gender){
+
+        showMessage(
+            "Please select Gender.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    if(!dob){
+
+        showMessage(
+            "Please select Date of Birth.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+/* ================================
+   FUTURE DOB VALIDATION
+   ================================ */
+
+const selectedDob =
+    new Date(dob);
+
+const todayDate =
+    new Date();
+
+todayDate.setHours(
+    0, 0, 0, 0
+);
+
+selectedDob.setHours(
+    0, 0, 0, 0
+);
+
+
+if(selectedDob > todayDate){
+
+    showMessage(
+        "Future date not allowed.",
+        "warning",
+        3000
+    );
+
+    return;
+
+}
+
+/* ================================
+   DECEASED DATE VALIDATION
+   ================================ */
+
+const deceasedDateField =
+    document.getElementById(
+        "memberDeceasedDate"
+    );
+
+const deceasedDate =
+    deceasedDateField
+        ? deceasedDateField.value
+        : "";
+
+
+if(deceasedDate){
+
+    const selectedDeceasedDate =
+        new Date(deceasedDate);
+
+    const todayDeceasedDate =
+        new Date();
+
+    todayDeceasedDate.setHours(
+        0, 0, 0, 0
+    );
+
+    selectedDeceasedDate.setHours(
+        0, 0, 0, 0
+    );
+
+
+    if(
+        selectedDeceasedDate >
+        todayDeceasedDate
+    ){
+
+        showMessage(
+            "Future date not allowed.",
+            "warning",
+            3000
+        );
+
+        return;
+
+    }
+
+/* ================================
+   DECEASED DATE BEFORE DOB
+   ================================ */
+
+if(
+    selectedDeceasedDate <
+    selectedDob
+){
+
+    showMessage(
+        "Date cannot be before Date of Birth.",
+        "warning",
+        3000
+    );
+
+    return;
+
+}
+   
+}
+
+   /* ================================
+   MARRIAGE DATE VALIDATION
+   ================================ */
+
+const marriageDateField =
+    document.getElementById(
+        "memberMarriageDate"
+    );
+
+const marriageDate =
+    marriageDateField
+        ? marriageDateField.value
+        : "";
+
+
+if(marriageDate){
+
+    const selectedMarriageDate =
+        new Date(marriageDate);
+
+    selectedMarriageDate.setHours(
+        0, 0, 0, 0
+    );
+
+
+    /* ================================
+       MARRIAGE DATE BEFORE DOB
+       ================================ */
+
+    if(
+        selectedMarriageDate <
+        selectedDob
+    ){
+
+        showMessage(
+            "Marriage Date cannot be before Date of Birth.",
+            "warning",
+            3000
+        );
+
+        return;
+
+    }
+
+
+    /* ================================
+       FUTURE MARRIAGE DATE
+       ================================ */
+
+    if(
+        selectedMarriageDate >
+        todayDate
+    ){
+
+        showMessage(
+            "Future date not allowed.",
+            "warning",
+            3000
+        );
+
+        return;
+
+    }
+
+}
+    /* ================================
+       MARITAL STATUS
+       ================================ */
+
+    const maritalField =
+        document.querySelector(
+            'input[name="memberMaritalStatus"]:checked'
+        );
+
+console.log(
+    "MARITAL FIELD:",
+    maritalField
+);
+
+console.log(
+    "MARITAL VALUE:",
+    maritalField ? maritalField.value : "NONE"
+);
+   const maritalStatus =
+    maritalField
+        ? String(maritalField.value || "").trim()
+        : "";
+
+
+   /* ================================
+   MARRIAGE DATE
+   ================================ */
+
+   /* ================================
+   DECEASED DATE AFTER MARRIAGE DATE
+   ================================ */
+
+if(
+    maritalStatus.toLowerCase() === "yes" &&
+    deceasedDate &&
+    marriageDate
+){
+
+    const selectedMarriageDate =
+        new Date(marriageDate);
+
+    const selectedDeceasedDate =
+        new Date(deceasedDate);
+
+    selectedMarriageDate.setHours(
+        0, 0, 0, 0
+    );
+
+    selectedDeceasedDate.setHours(
+        0, 0, 0, 0
+    );
+
+
+    if(
+        selectedDeceasedDate <=
+        selectedMarriageDate
+    ){
+
+        showMessage(
+            "Deceased Date must be after Marriage Date.",
+            "warning",
+            3000
+        );
+
+        return;
+
+    }
+
+}
+/* ================================
+   UNDER 18 MARRIAGE CONFIRMATION
+   ================================ */
+
+const birthDate =
+    new Date(dob);
+
+const today =
+    new Date();
+
+let age =
+    today.getFullYear() -
+    birthDate.getFullYear();
+
+const monthDifference =
+    today.getMonth() -
+    birthDate.getMonth();
+
+if(
+    monthDifference < 0 ||
+    (
+        monthDifference === 0 &&
+        today.getDate() <
+        birthDate.getDate()
+    )
+){
+
+    age--;
+
+}
+
+
+/* =================================
+   MARITAL STATUS REQUIRED
+   ================================= */
+
+if(!maritalField){
+
+    showMessage(
+        "Please select Marital Status.",
+        "warning",
+        3000
+    );
+
+    return;
+
+}
+
+
+/* =================================
+   UNDER 18 + MARRIED
+   CONFIRMATION REQUIRED
+   ================================= */
+
+if(
+    age < 18 &&
+    maritalStatus.toLowerCase() === "yes"
+){
+
+    const confirmationSelected =
+        (
+            confirmMarriageYes &&
+            confirmMarriageYes.checked
+        ) ||
+        (
+            confirmMarriageNo &&
+            confirmMarriageNo.checked
+        );
+
+
+    if(!confirmationSelected){
+
+        showMessage(
+            'Please Confirm marital status?',
+            "warning",
+            3000
+        );
+
+        return;
+
+    }
+
+}
+   /* ================================
+       RELATIONS
+       ================================ */
+
+    const fatherField =
+        document.getElementById(
+            "memberFather"
+        );
+
+    const motherField =
+        document.getElementById(
+            "memberMother"
+        );
+
+    const partnerField =
+        document.getElementById(
+            "memberPartner"
+        );
+
+
+    const fatherId =
+        fatherField ?
+        fatherField.value :
+        "";
+
+
+    const motherId =
+        motherField ?
+        motherField.value :
+        "";
+
+
+    const partnerId =
+        partnerField ?
+        partnerField.value :
+        "";
+
+
+   /* ================================
+   MEMBER ID
+   ================================ */
+
+const memberIdField =
+    document.getElementById(
+        "memberId"
+    );
+
+const editMember =
+    JSON.parse(
+        localStorage.getItem(
+            "editMember"
+        ) || "null"
+    );
+
+const memberId =
+    editMember
+        ? String(
+            editMember.memberId || ""
+          ).trim()
+        : "";   
+ /* ================================
+   PHOTO - COMPRESS FOR GOOGLE SHEET
+   ================================ */
+
+const photoField =
+    document.getElementById(
+        "memberPhoto"
+    );
+
+let photoData = "";
+let photoName = "";
+
+
+if(
+    photoField &&
+    photoField.files &&
+    photoField.files.length > 0
+){
+
+    const file =
+        photoField.files[0];
+
+    photoName =
+        file.name || "member-photo.jpg";
+
+
+    photoData =
+        await compressMemberPhotoForSheet(
+            file
+        );
+
+}
+
+    /* ================================
+       DISABLE SAVE BUTTON
+       ================================ */
+
+  saveMemberBtn.disabled = true;
+
+saveMemberBtn.textContent =
+    editMember
+        ? "Updating..."
+        : "Saving...";
+
+    /* ================================
+       API PARAMETERS
+       ================================ */
+
+    const params =
+        new URLSearchParams();
+
+
+    params.append(
+        "action",
+        "saveMember"
+    );
+
+
+    params.append(
+        "familyId",
+        currentFamily.familyId || ""
+    );
+
+
+    params.append(
+        "familyName",
+        currentFamily.familyName || ""
+    );
+
+    if(publicFamilyAddTarget){
+        params.append("publicFamilyAdd", "Yes");
+        params.append(
+            "sessionToken",
+            sessionStorage.getItem("sessionToken") || ""
+        );
+    }
+
+
+    params.append(
+        "memberId",
+        memberId
+    );
+
+
+    params.append(
+        "name",
+        name
+    );
+
+
+    params.append(
+        "gender",
+        gender
+    );
+
+
+    params.append(
+        "dob",
+        dob
+    );
+
+
+    params.append(
+    "photoData",
+    photoData
+);
+
+params.append(
+    "photoName",
+    photoName
+);
+
+params.append(
+    "existingPhoto",
+    editMember
+        ? (
+            editMember.photo ||
+            editMember.photoUrl ||
+            ""
+          )
+        : ""
+);
+
+    params.append(
+        "maritalStatus",
+        maritalStatus
+    );
+
+
+    params.append(
+        "fatherId",
+        fatherId
+    );
+
+
+    params.append(
+        "motherId",
+        motherId
+    );
+
+
+    params.append(
+        "partnerId",
+        partnerId
+    );
+
+   params.append(
+    "marriageDate",
+    maritalStatus.toLowerCase() === "yes"
+        ? (
+            document.getElementById(
+                "memberMarriageDate"
+            )?.value || ""
+        )
+        : ""
+);
+/* ================================
+   MARRIAGE DATE
+   ================================ */
+
+params.append(
+    "marriageDate",
+    maritalStatus.toLowerCase() === "yes"
+        ? (
+            document.getElementById(
+                "memberMarriageDate"
+            )?.value || ""
+        )
+        : ""
+);
+/* ================================
+   ADDITIONAL MEMBER DETAILS
+   ================================ */
+params.append(
+    "lifeStatus",
+    document.getElementById(
+        "memberLifeStatus"
+    )?.value || ""
+);
+params.append(
+    "nativePlace",
+    document.getElementById(
+        "memberNativePlace"
+    )?.value || ""
+);
+
+params.append(
+    "occupation",
+    document.getElementById(
+        "memberOccupation"
+    )?.value || ""
+);
+
+params.append(
+    "qualification",
+    document.getElementById(
+        "memberQualification"
+    )?.value || ""
+);
+
+params.append(
+    "bloodGroup",
+    document.getElementById(
+        "memberBloodGroup"
+    )?.value || ""
+);
+
+params.append(
+    "mobileNumber",
+    document.getElementById(
+        "memberMobileNumber"
+    )?.value || ""
+);
+
+params.append(
+    "currentPlace",
+    document.getElementById(
+        "memberCurrentPlace"
+    )?.value || ""
+);
+
+/* ================================
+   DECEASED DATE
+   ================================ */
+
+const currentLifeStatus =
+    String(
+        document.getElementById(
+            "memberLifeStatus"
+        )?.value || ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+const currentDeceasedDate =
+    currentLifeStatus === "deceased"
+        ? (
+            document.getElementById(
+                "memberDeceasedDate"
+            )?.value || ""
+        )
+        : "";
+
+
+params.append(
+    "deceasedDate",
+    currentDeceasedDate
+);
+params.append(
+    "aboutMe",
+    document.getElementById(
+        "memberAboutMe"
+    )?.value || ""
+);
+
+    params.append(
+        "createdBy",
+        user.loginUserName || ""
+    );
+
+
+    params.append(
+        "email",
+        user.email || ""
+    );
+
+
+    params.append(
+        "mobile",
+        user.mobile || ""
+    );
+
+
+    /* ================================
+       SEND TO GOOGLE APPS SCRIPT
+       ================================ */
+
+    try{
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+
+                    body:
+                        params.toString()
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        /* ================================
+           ERROR
+           ================================ */
+
+        if(
+            result.status !==
+            "success"
+        ){
+
+            saveMemberBtn.disabled =
+                false;
+
+          saveMemberBtn.textContent =
+    editMember
+        ? "Update"
+        : "Save";
+
+console.error(
+    "SAVE MEMBER SERVER ERROR:",
+    result
+);
+
+showMessage(
+    result.error ||
+    result.message ||
+    "Member could not be saved.",
+    "error",
+    5000
+);
+
+            return;
+        }
+
+
+        /* ================================
+           SUCCESS
+           ================================ */
+
+        showMessage(
+    editMember
+        ? "Member updated successfully."
+        : "Member saved successfully.",
+    "success",
+    3000
+);
+
+if(publicFamilyAddTarget){
+    sessionStorage.removeItem("publicFamilyAddTarget");
+}
+
+/* ================================
+   DISPLAY GENERATED MEMBER ID
+   ================================ */
+
+const generatedMemberId =
+    result.memberId ||
+    result.memberID ||
+    "";
+
+console.log(
+    "GENERATED MEMBER ID:",
+    generatedMemberId
+);
+
+
+if(
+    memberIdField &&
+    generatedMemberId
+){
+
+    memberIdField.textContent =
+        generatedMemberId;
+
+    memberIdField.dataset.memberId =
+        generatedMemberId;
+
+}
+       /* ================================
+   UPDATE MEMBER ID DISPLAY
+   ================================ */
+
+const savedMemberId =
+    result.memberId || "";
+
+if(
+    memberIdField &&
+    savedMemberId
+){
+
+    memberIdField.textContent =
+        savedMemberId;
+
+    memberIdField.dataset.memberId =
+        savedMemberId;
+
+}
+/* ================================
+   UPDATE LOCAL MEMBER LIST
+   ================================ */
+
+let familyMembers =
+    JSON.parse(
+        localStorage.getItem(
+            "familyMembers"
+        ) || "[]"
+    );
+
+/* ================================
+   GET CLEAN MEMBER VALUES
+   ================================ */
+
+const savedName =
+    String(
+        document.getElementById(
+            "memberName"
+        )?.value || ""
+    ).trim();
+
+
+const savedGender =
+    String(
+        document.getElementById(
+            "memberGender"
+        )?.value || ""
+    ).trim();
+
+
+const savedDob =
+    String(
+        document.getElementById(
+            "memberDob"
+        )?.value || ""
+    ).trim();
+
+       
+const newMember = {
+
+    memberId:
+        result.memberId || memberId,
+
+    familyId:
+        currentFamily.familyId,
+
+    familyName:
+        currentFamily.familyName,
+
+    name:
+        savedName,
+
+    gender:
+        savedGender,
+
+    dob:
+        savedDob,
+
+    maritalStatus:
+        document.querySelector(
+            'input[name="memberMaritalStatus"]:checked'
+        )?.value || "",
+
+    fatherId:
+        fatherId,
+
+    motherId:
+        motherId,
+
+    partnerId:
+        partnerId,
+
+    marriageDate:
+        document.getElementById(
+            "memberMarriageDate"
+        )?.value || "",
+
+    lifeStatus:
+        document.getElementById(
+            "memberLifeStatus"
+        )?.value || "",
+
+    nativePlace:
+        document.getElementById(
+            "memberNativePlace"
+        )?.value || "",
+
+    occupation:
+        document.getElementById(
+            "memberOccupation"
+        )?.value || "",
+
+    qualification:
+        document.getElementById(
+            "memberQualification"
+        )?.value || "",
+
+    bloodGroup:
+        document.getElementById(
+            "memberBloodGroup"
+        )?.value || "",
+
+    mobileNumber:
+        document.getElementById(
+            "memberMobileNumber"
+        )?.value || "",
+
+    currentPlace:
+        document.getElementById(
+            "memberCurrentPlace"
+        )?.value || "",
+
+    deceasedDate:
+        document.getElementById(
+            "memberDeceasedDate"
+        )?.value || "",
+
+    aboutMe:
+        document.getElementById(
+            "memberAboutMe"
+        )?.value || "",
+
+    createdAt:
+        editMember
+            ? (
+                editMember.createdAt || ""
+              )
+            : new Date().toISOString()
+
+};
+       if(editMember){
+
+    const index =
+        familyMembers.findIndex(
+            function(member){
+
+                return String(
+                    member.memberId || ""
+                ).trim() ===
+                String(
+                    editMember.memberId || ""
+                ).trim();
+
+            }
+        );
+
+    if(index !== -1){
+
+        familyMembers[index] =
+            newMember;
+
+    }
+
+}
+else{
+
+    familyMembers.push(
+        newMember
+    );
+
+} 
+
+       
+
+/* =================================
+   SAVE UPDATED MEMBERS TO CACHE
+   ================================= */
+
+localStorage.setItem(
+    "familyMembers",
+    JSON.stringify(
+        familyMembers
+    )
+);
+
+
+/* =================================
+   CLEAR EDIT MEMBER AFTER UPDATE
+   ================================= */
+
+if(editMember){
+
+    localStorage.removeItem(
+        "editMember"
+    );
+
+}
+       
+/* ================================
+   NEW MEMBER ADDED → NOT FOR EDIT
+   ================================ */
+
+/* ================================
+   CHANGE PAGE TITLE
+   ================================ */
+
+/* ================================
+   CHANGE TITLE AFTER SAVE
+   ================================ */
+
+const addMemberPageTitle =
+    document.querySelector(
+        "h2.page-title"
+    );
+
+if(addMemberPageTitle){
+
+    addMemberPageTitle.innerHTML =
+        editMember
+            ? "Member updated"
+            : "New Member added";
+
+}
+       
+/* ================================
+   DISABLE ALL MEMBER FIELDS
+   ================================ */
+
+const memberFields =
+    [
+
+        "memberName",
+        "memberGender",
+        "memberDob",
+
+
+        "memberPartner",
+        "memberMarriageDate",
+        "memberFather",
+        "memberMother",
+
+        "memberLifeStatus",
+        "memberNativePlace",
+        "memberOccupation",
+        "memberQualification",
+
+        "memberBloodGroup",
+        "memberMobileNumber",
+        "memberCurrentPlace",
+
+        "memberDeceasedDate",
+        "memberAboutMe"
+
+    ];
+
+/* ================================
+   MARITAL STATUS → SINGLE TEXT
+   ================================ */
+
+const maritalStatusGroup =
+    document.getElementById(
+        "marriedYes"
+    )?.closest(
+        ".common-form-group"
+    );
+
+
+const selectedMarital =
+    document.querySelector(
+        'input[name="memberMaritalStatus"]:checked'
+    );
+
+
+if(maritalStatusGroup){
+
+    /* ================================
+       GET SELECTED VALUE
+       ================================ */
+
+    const maritalValue =
+        selectedMarital
+            ? String(
+                selectedMarital.value || ""
+              ).trim()
+            : "";
+
+
+    /* ================================
+       HIDE ALL MARITAL CONTROLS   KEEP ONLY:
+       Marital Status label
+       :
+       ================================ */
+
+    Array.from(
+        maritalStatusGroup.children
+    ).forEach(
+        function(element){
+
+            if(
+                element.classList.contains(
+                    "common-form-label"
+                )
+            ){
+
+                return;
+
+            }
+
+
+            if(
+                element.classList.contains(
+                    "common-form-colon"
+                )
+            ){
+
+                return;
+
+            }
+
+
+            element.style.display =
+                "none";
+
+        }
+    );
+
+
+    /* ================================
+       REMOVE OLD DISPLAY
+       ================================ */
+
+    const oldMaritalDisplay =
+        maritalStatusGroup.querySelector(
+            ".saved-marital-status"
+        );
+
+    if(oldMaritalDisplay){
+
+        oldMaritalDisplay.remove();
+
+    }
+
+
+    /* ================================
+       CREATE SINGLE TEXT
+       ================================ */
+
+    const maritalDisplay =
+        document.createElement(
+            "span"
+        );
+
+    maritalDisplay.className =
+        "common-form-value saved-marital-status";
+
+
+    maritalDisplay.textContent =
+        maritalValue || "--------";
+
+
+    /* ================================
+       ADD ONLY SELECTED STATUS
+       ================================ */
+
+    maritalStatusGroup.appendChild(
+        maritalDisplay
+    );
+
+}
+       
+/* ================================
+   HIDE MARRIAGE CONFIRMATION
+   AFTER SAVE
+   ================================ */
+
+const confirmMarriageYesField =
+    document.getElementById(
+        "confirmMarriageYes"
+    );
+
+if(confirmMarriageYesField){
+
+    const confirmationGroup =
+        confirmMarriageYesField.closest(
+            ".common-form-group"
+        );
+
+    if(confirmationGroup){
+
+        confirmationGroup.style.display =
+            "none";
+
+    }
+
+}
+/* ================================
+   NEW MEMBER → TEXT ONLY
+   REMOVE INPUT BOXES
+   ================================ */
+
+memberFields.forEach(
+    function(id){
+
+        const field =
+            document.getElementById(id);
+
+        if(!field){
+            return;
+        }
+
+
+        /* ================================
+           GET DISPLAY VALUE
+           ================================ */
+
+        let displayValue = "";
+
+
+        /* SELECT FIELD */
+
+        /* SELECT FIELD */
+
+if(
+    field.tagName ===
+    "SELECT"
+){
+
+    const selectedOption =
+        field.options[
+            field.selectedIndex
+        ];
+
+
+    if(
+        selectedOption &&
+        field.selectedIndex > 0 &&
+        selectedOption.value
+    ){
+
+        displayValue =
+            selectedOption.textContent
+                .trim();
+
+    }
+    else{
+
+        displayValue =
+            "";
+
+    }
+
+}
+        /* INPUT / TEXTAREA */
+
+        else{
+
+            displayValue =
+                field.value || "";
+
+        }
+
+        /* ================================
+           CREATE TEXT
+           ================================ */
+
+        const text =
+            document.createElement(
+                "span"
+            );
+
+        text.className =
+            "common-form-value";
+
+        text.textContent =
+            displayValue || "--------";
+
+
+        /* ================================
+           ABOUT ME
+           ================================ */
+
+        if(
+            id ===
+            "memberAboutMe"
+        ){
+
+            text.classList.add(
+                "member-about-me-value"
+            );
+
+        }
+
+
+        /* ================================
+           REPLACE BOX
+           ================================ */
+
+        field.replaceWith(
+            text
+        );
+
+    }
+);
+
+
+/* =================================
+   NEW MEMBER ADDED → FATHER / MOTHER TEXT ONLY
+   Keep pickers on Add Member page.
+   After Save, show one selected name or one dash line.
+   ================================= */
+
+[
+    {
+        groupId: "memberFatherGroup",
+        searchWrapId: "memberFatherSearchWrap",
+        dropdownId: "memberFatherDropdown",
+        selectId: "memberFather",
+        placeholderId: "publicAddFatherPlaceholder",
+        defaultText: "Select Father"
+    },
+    {
+        groupId: "memberMotherGroup",
+        searchWrapId: "memberMotherSearchWrap",
+        dropdownId: "memberMotherDropdown",
+        selectId: "memberMother",
+        placeholderId: "publicAddMotherPlaceholder",
+        defaultText: "Select Mother"
+    }
+].forEach(function(config){
+
+    const group = document.getElementById(config.groupId);
+    if(!group) return;
+
+    const select = document.getElementById(config.selectId);
+    const searchWrap = document.getElementById(config.searchWrapId);
+    const dropdown = document.getElementById(config.dropdownId);
+
+    // Read selected parent name before hiding the controls.
+    let displayValue = "";
+    if(select && select.value && select.value !== "__ADD_NEW__"){
+        const option = select.options[select.selectedIndex];
+        const optionText = String(option?.textContent || "").trim();
+        if(optionText && optionText !== config.defaultText && optionText !== "Add New Member"){
+            displayValue = optionText;
+        }
+    }
+
+    if(searchWrap) searchWrap.style.display = "none";
+    if(dropdown) dropdown.style.display = "none";
+
+    // Remove any earlier placeholder/value so dashes cannot appear twice.
+    const oldPlaceholder = document.getElementById(config.placeholderId);
+    if(oldPlaceholder) oldPlaceholder.remove();
+
+    group.querySelectorAll(".common-form-value").forEach(function(oldValue){
+        oldValue.remove();
+    });
+
+    const valueText = document.createElement("span");
+    valueText.className = "common-form-value";
+    valueText.textContent = displayValue || "--------";
+    valueText.style.display = "inline";
+
+    const colon = group.querySelector(".common-form-colon");
+    if(colon){
+        colon.insertAdjacentElement("afterend", valueText);
+    }else{
+        group.appendChild(valueText);
+    }
+});
+
+
+/* ================================
+   SAVED MEMBER PHOTO
+   KEEP PHOTO VISIBLE
+   ================================ */
+
+if(memberPhotoBtn){
+
+    memberPhotoBtn.disabled =
+        true;
+
+    memberPhotoBtn.style.pointerEvents =
+        "none";
+
+    memberPhotoBtn.style.cursor =
+        "default";
+
+    memberPhotoBtn.style.display =
+        "flex";
+
+}
+
+
+if(memberPhotoPreview){
+
+    memberPhotoPreview.style.display =
+        memberPhotoPreview.src
+            ? "block"
+            : "none";
+
+}
+
+
+if(memberPhotoPlaceholder){
+
+    memberPhotoPlaceholder.style.display =
+        memberPhotoPreview &&
+        memberPhotoPreview.src
+            ? "none"
+            : "block";
+
+}
+       
+/* ================================
+   HIDE SAVE BUTTON
+   ================================ */
+
+if(saveMemberBtn){
+
+    saveMemberBtn.style.display =
+        "none";
+
+}
+
+
+/* ================================
+   BACK → ADD MEMBER
+   ================================ */
+
+if(memberBackBtn){
+
+    memberBackBtn.onclick =
+        function(){
+
+            /* ================================
+               UPDATED MEMBER
+               → DIRECT SEARCH - EDIT MEMBER
+               ================================ */
+
+            if(editMember){
+
+                console.log(
+                    "UPDATED MEMBER → SEARCH EDIT"
+                );
+
+                if(
+                    typeof window.openSearchEditMemberPage ===
+                    "function"
+                ){
+
+                    window.openSearchEditMemberPage();
+
+                }
+
+                return;
+            }
+
+
+            /* ================================
+               NEW MEMBER
+               → ADD MEMBER PAGE
+               ================================ */
+
+            console.log(
+                "NEW MEMBER → ADD MEMBER"
+            );
+
+            if(addMemberBtn){
+
+                addMemberBtn.click();
+
+            }
+
+        };
+
+}
+       saveMemberBtn.disabled =
+            false;
+
+        saveMemberBtn.textContent =
+    editMember
+        ? "Update"
+        : "Save";
+
+    }catch(error){
+
+        console.error(
+            "Save Member Error:",
+            error
+        );
+
+
+        saveMemberBtn.disabled =
+            false;
+
+        saveMemberBtn.textContent =
+    editMember
+        ? "Update"
+        : "Save";
+
+
+        showMessage(
+            "Unable to save Member.",
+            "error",
+            3000
+        );
+
+    }
+
+};
+    
+    
+   /* =============================
+       ADD ALL 3 BUTTONS
+       ============================= */
+
+    memberActions.appendChild(
+        saveMemberBtn
+    );
+
+    memberActions.appendChild(
+        memberBackBtn
+    );
+
+    memberActions.appendChild(
+        memberHomeBtn
+    );
+
+
+    /* =============================
+       HOME ACTION
+       ============================= */
+
+  memberHomeBtn.onclick =
+    function(e){
+
+        e.preventDefault();
+
+        console.log(
+            "MEMBER HOME CLICKED"
+        );
+
+        showHome();
+
+    };
+ /* =============================
+   BACK ACTION
+   ============================= */
+
+memberBackBtn.onclick =
+    async function(e){
+
+        e.preventDefault();
+
+        console.log(
+            "MEMBER BACK CLICKED"
+        );
+
+        const publicTarget = window.currentPublicFamilyAddTarget || JSON.parse(
+            sessionStorage.getItem("publicFamilyAddTarget") || "null"
+        );
+        if(publicTarget?.familyId && typeof window.restorePublicFamilyDetail === "function"){
+            await window.restorePublicFamilyDetail(publicTarget.familyId);
+            window.currentPublicFamilyAddTarget = null;
+            return;
+        }
+
+        familyBtn.click();
+
+    };
+
+}
+  
+
+/* =================================
+   GET CURRENT FAMILY
+   ================================= */
+
+/* =================================
+   GET CURRENT USER
+   ================================= */
+
+const loggedUser =
+    JSON.parse(
+        sessionStorage.getItem("user")
+    ) || {};
+
+
+/* =================================
+   GET STORED FAMILY
+   ================================= */
+
+const storedFamily =
+    JSON.parse(
+        localStorage.getItem(
+            "currentFamily"
+        ) || "null"
+    );
+
+
+/* =================================
+   PUBLIC FAMILY ADD TARGET
+   When Add Member was opened from Other Families,
+   display/use that selected family's details instead
+   of the logged-in user's My Family.
+   ================================= */
+
+const publicFamilyAddTargetForFamilyInfo =
+    JSON.parse(
+        sessionStorage.getItem("publicFamilyAddTarget") || "null"
+    );
+
+
+/* =================================
+   VERIFY / SET CURRENT FAMILY
+   ================================= */
+
+let currentFamily = publicFamilyAddTargetForFamilyInfo
+    ? {
+        familyId: publicFamilyAddTargetForFamilyInfo.familyId || "",
+        familyName: publicFamilyAddTargetForFamilyInfo.familyName || ""
+      }
+    : null;
+
+
+if(
+    !publicFamilyAddTargetForFamilyInfo &&
+    storedFamily &&
+    loggedUser
+){
+
+    const loginMatch =
+        storedFamily.loginId &&
+        loggedUser.loginUserName &&
+        String(
+            storedFamily.loginId
+        ).trim().toLowerCase() ===
+        String(
+            loggedUser.loginUserName
+        ).trim().toLowerCase();
+
+
+    const emailMatch =
+        storedFamily.userMail &&
+        loggedUser.email &&
+        String(
+            storedFamily.userMail
+        ).trim().toLowerCase() ===
+        String(
+            loggedUser.email
+        ).trim().toLowerCase();
+
+
+    const mobileMatch =
+        storedFamily.mobile &&
+        loggedUser.mobile &&
+        String(
+            storedFamily.mobile
+        ).trim() ===
+        String(
+            loggedUser.mobile
+        ).trim();
+
+
+    if(
+        loginMatch ||
+        emailMatch ||
+        mobileMatch
+    ){
+
+        currentFamily =
+            storedFamily;
+
+    }
+
+}
+
+
+/* =================================
+   INVALID OLD FAMILY
+   ================================= */
+
+/* =================================
+   LOAD FAMILY FROM SERVER
+   ================================= */
+
+if(!currentFamily){
+
+    const params =
+        new URLSearchParams();
+
+    params.append(
+        "action",
+        "getUserFamilyTree"
+    );
+
+    params.append(
+        "loginUserName",
+        loggedUser.loginUserName || ""
+    );
+
+    params.append(
+        "email",
+        loggedUser.email || ""
+    );
+
+    params.append(
+        "mobile",
+        loggedUser.mobile || ""
+    );
+
+
+    console.log(
+        "ADD MEMBER → GET FAMILY:",
+        loggedUser.loginUserName,
+        loggedUser.email,
+        loggedUser.mobile
+    );
+
+
+    fetch(
+        API_URL,
+        {
+            method:"POST",
+
+            headers:{
+                "Content-Type":
+                    "application/x-www-form-urlencoded"
+            },
+
+            body:
+                params.toString()
+        }
+    )
+    .then(
+        function(response){
+
+            return response.json();
+
+        }
+    )
+    .then(
+        function(result){
+
+            console.log(
+                "ADD MEMBER → FAMILY RESULT:",
+                result
+            );
+
+
+            if(
+                result.status !==
+                "success"
+            ){
+
+                console.log(
+                    "NO FAMILY FOUND"
+                );
+
+                return;
+
+            }
+
+
+            /* =========================
+               CREATE CURRENT FAMILY
+               ========================= */
+
+            currentFamily = {
+
+                familyId:
+                    result.familyId || "",
+
+                familyName:
+                    result.familyName || "",
+
+                loginId:
+                    result.loginUserName ||
+                    loggedUser.loginUserName ||
+                    "",
+
+                userId:
+                    loggedUser.userId || "",
+
+                userMail:
+                    result.email ||
+                    loggedUser.email ||
+                    "",
+
+                mobile:
+                    result.mobile ||
+                    loggedUser.mobile ||
+                    "",
+
+                createdAt:
+                    new Date().toISOString()
+
+            };
+
+
+            /* =========================
+               SAVE
+               ========================= */
+
+            localStorage.setItem(
+                "currentFamily",
+                JSON.stringify(
+                    currentFamily
+                )
+            );
+
+
+            /* =========================
+               DISPLAY FAMILY ID
+               ========================= */
+
+            const familyIdField =
+                document.getElementById(
+                    "memberFamilyId"
+                );
+
+
+            const familyNameField =
+                document.getElementById(
+                    "memberFamilyName"
+                );
+
+
+            if(familyIdField){
+
+                familyIdField.textContent =
+                    currentFamily.familyId ||
+                    "-";
+
+            }
+
+
+            if(familyNameField){
+
+                familyNameField.textContent =
+                    currentFamily.familyName ||
+                    "-";
+
+            }
+
+            /* =========================
+               LOAD RELATIONS
+               ========================= */
+
+            loadMemberRelations();
+
+
+        }
+    )
+    .catch(
+        function(error){
+
+            console.error(
+                "ADD MEMBER FAMILY ERROR:",
+                error
+            );
+
+        }
+    );
+
+}
+
+
+/* =================================
+   DISPLAY FAMILY INFORMATION
+   ================================= */
+
+if(currentFamily){
+
+    const familyIdField =
+        document.getElementById(
+            "memberFamilyId"
+        );
+
+    const familyNameField =
+        document.getElementById(
+            "memberFamilyName"
+        );
+
+
+    if(familyIdField){
+
+        familyIdField.textContent =
+            currentFamily.familyId || "-";
+
+    }
+
+
+    if(familyNameField){
+
+        familyNameField.textContent =
+            currentFamily.familyName || "-";
+
+    }
+
+}
+/* =================================
+   GENERATE MEMBER ID PREFIX
+   ================================= */
+
+const memberIdField =
+    document.getElementById(
+        "memberId"
+    );
+
+
+
+       
+};
+}
+    /* =====================================
+       FAMILY → ADD TREE
+       ===================================== */
+
+    document
+        .getElementById("addFamilyBtn")
+        .onclick = () => {
+
+
+        const user =
+            JSON.parse(
+                sessionStorage.getItem("user")
+            );
+
+
+        if(!user){
+
+            showMessage(
+                "User information not available.",
+                "warning",
+                3000
+            );
+
+            return;
+        }
+
+
+        /* =====================================
+           CREATE FAMILY TREE PAGE
+           ===================================== */
+
+                showPage(
+
+            pageTitle(
+                "Create Family Tree",
+                "images/colorbtns/AddFamily1.png"
+            )
+
+            +`
+
+          <div class="family-box">
+
+    <!-- FAMILY ID -->
+
+    <div class="family-row">
+
+        <span class="family-label">
+            Family ID
+        </span>
+
+        <span class="family-colon">
+            :
+        </span>
+
+        <strong id="newFamilyId">
+            auto generation
+        </strong>
+
+    </div>
+
+
+    <!-- FAMILY NAME -->
+
+   <!-- FAMILY NAME -->
+
+<div class="family-row">
+
+    <span class="family-label">
+        Family Name
+    </span>
+
+    <span class="family-colon">
+        :
+    </span>
+
+    <div class="family-name-field">
+
+        <input
+            type="text"
+            id="newFamilyName"
+            placeholder="Enter Family Name"
+            maxlength="20"
+            autocomplete="off"
+        >
+
+        <div
+            id="familyIdStatus"
+            class="family-id-status">
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<!-- CREATE BUTTON -->
+
+<div class="family-create-action">
+
+    <button
+        id="createFamilyTreeBtn"
+        class="family-create-btn"
+        disabled>
+
+        Create Family Tree
+
+    </button>
+
+</div>
+
+
+<!-- BACK BUTTON -->
+
+<div class="family-back-action">
+
+    <button
+        id="createFamilyBackBtn"
+        class="back-btn">
+
+        ← Back
+
+    </button>
+
+</div>
+            `
+        );
+/* =====================================
+   LOAD EXISTING FAMILY TREE
+   ===================================== */
+
+const loggedUser =
+    JSON.parse(
+        sessionStorage.getItem("user")
+    ) || {};
+
+/* =================================
+   SHOW CURRENT FAMILY IMMEDIATELY
+   ================================= */
+
+const savedFamily =
+    JSON.parse(
+        localStorage.getItem(
+            "currentFamily"
+        ) || "null"
+    );
+
+
+const newFamilyIdField =
+    document.getElementById(
+        "newFamilyId"
+    );
+
+const newFamilyNameField =
+    document.getElementById(
+        "newFamilyName"
+    );
+
+
+ if(savedFamily && savedFamily.familyId){
+
+    const createBtn =
+        document.getElementById(
+            "createFamilyTreeBtn"
+        );
+
+
+    // =====================================
+    // HIDE CREATE FAMILY TREE BUTTON
+    // =====================================
+if(createBtn){
+
+    createBtn.style.setProperty(
+        "display",
+        "none",
+        "important"
+    );
+
+    const createAction =
+        createBtn.closest(
+            ".family-create-action"
+        );
+
+    if(createAction){
+
+        createAction.style.setProperty(
+            "display",
+            "none",
+            "important"
+        );
+
+    }
+
+}
+
+
+    // =====================================
+    // SHOW EXISTING FAMILY ID
+    // =====================================
+
+    if(newFamilyIdField){
+
+        newFamilyIdField.textContent =
+            savedFamily.familyId || "";
+
+        newFamilyIdField.classList.remove(
+            "generated"
+        );
+
+        newFamilyIdField.classList.add(
+            "family-id-grey"
+        );
+
+    }
+
+
+    // =====================================
+    // SHOW EXISTING FAMILY NAME
+    // =====================================
+
+    if(newFamilyNameField){
+
+        newFamilyNameField.value =
+            savedFamily.familyName || "";
+
+        newFamilyNameField.disabled =
+            true;
+
+        newFamilyNameField.classList.add(
+            "family-name-grey"
+        );
+
+    }
+
+
+    // =====================================
+    // SHOW ALREADY HAVE FAMILY MESSAGE
+    // =====================================
+
+    const statusField =
+        document.getElementById(
+            "familyIdStatus"
+        );
+
+
+    if(statusField){
+
+        statusField.textContent =
+"User already has a Family Tree.";
+        statusField.className =
+            "family-id-status available";
+
+    }
+
+}
+
+/* =================================
+   GET FAMILY TREE
+   ================================= */
+
+           
+if(
+    loggedUser &&
+    !(savedFamily && savedFamily.familyId)
+){
+    const params =
+        new URLSearchParams();
+
+    params.append(
+        "action",
+        "getUserFamilyTree"
+    );
+
+    params.append(
+        "loginUserName",
+        loggedUser.loginUserName || ""
+    );
+
+    params.append(
+        "email",
+        loggedUser.email || ""
+    );
+
+    params.append(
+        "mobile",
+        loggedUser.mobile || ""
+    );
+
+
+    fetch(
+        API_URL,
+        {
+            method:"POST",
+
+            headers:{
+                "Content-Type":
+                    "application/x-www-form-urlencoded"
+            },
+
+            body:
+                params.toString()
+        }
+    )
+    .then(
+    async function(response){
+
+        const text =
+            await response.text();
+
+        console.log(
+            "API STATUS:",
+            response.status
+        );
+
+        console.log(
+            "API RESPONSE:",
+            text
+        );
+
+        if(!response.ok){
+
+            throw new Error(
+                "API HTTP Error " +
+                response.status +
+                ": " +
+                text.substring(0,300)
+            );
+
+        }
+
+        try{
+
+            return JSON.parse(text);
+
+        }catch(error){
+
+            console.error(
+                "API returned NON-JSON:",
+                text
+            );
+
+            throw new Error(
+                "Server did not return JSON."
+            );
+
+        }
+
+    }
+)
+    .then(
+        function(result){
+
+            /* =========================
+               FAMILY TREE FOUND
+               ========================= */
+
+           if(
+    result.status !==
+    "success"
+){
+
+    console.log(
+        "NO FAMILY TREE FOR CURRENT USER"
+    );
+
+    localStorage.removeItem(
+        "currentFamily"
+    );
+
+    localStorage.removeItem(
+        "familyMembers"
+    );
+
+    return;
+
+}
+
+/* ================================
+   SET CURRENT FAMILY FROM SERVER
+   ================================ */
+
+const serverFamily = {
+
+    familyId:
+        result.familyId || "",
+
+    familyName:
+        result.familyName || "",
+
+    loginId:
+        loggedUser.loginUserName || "",
+
+    userId:
+        loggedUser.userId || "",
+
+    userMail:
+        loggedUser.email || "",
+
+    mobile:
+        loggedUser.mobile || "",
+
+    createdAt:
+        new Date().toISOString()
+
+};
+
+
+localStorage.setItem(
+    "currentFamily",
+    JSON.stringify(
+        serverFamily
+    )
+);
+           
+            /* =========================
+               GET FAMILY ELEMENTS
+               ========================= */
+
+            const createBtn =
+                document.getElementById(
+                    "createFamilyTreeBtn"
+                );
+
+            const familyNameInput =
+                document.getElementById(
+                    "newFamilyName"
+                );
+
+            const familyIdField =
+                document.getElementById(
+                    "newFamilyId"
+                );
+
+            const statusField =
+                document.getElementById(
+                    "familyIdStatus"
+                );
+
+
+            /* =========================
+               HIDE CREATE BUTTON
+               ========================= */
+
+           if(createBtn){
+
+    createBtn.style.setProperty(
+        "display",
+        "none",
+        "important"
+    );
+
+    const createAction =
+        createBtn.closest(
+            ".family-create-action"
+        );
+
+    if(createAction){
+
+        createAction.style.setProperty(
+            "display",
+            "none",
+            "important"
+        );
+
+    }
+
+}
+
+/* =========================
+   SHOW FAMILY ID
+   ========================= */
+
+if(familyIdField){
+
+    familyIdField.textContent =
+        result.familyId || "";
+
+    familyIdField.classList.remove(
+        "generated"
+    );
+
+    familyIdField.classList.add(
+        "family-id-grey"
+    );
+
+}
+
+/* =========================
+   SHOW FAMILY NAME
+   ========================= */
+
+if(familyNameInput){
+
+    familyNameInput.value =
+        result.familyName || "";
+
+    familyNameInput.disabled =
+        true;
+
+    familyNameInput.classList.add(
+        "family-name-grey"
+    );
+
+}
+            /* =========================
+               SHOW MESSAGE
+               ========================= */
+
+            if(statusField){
+
+                statusField.textContent =
+"User already has a Family Tree.";
+                statusField.className =
+                    "family-id-status available";
+
+            }
+
+        }
+    )
+    .catch(
+        function(error){
+
+            console.error(
+                "Family Tree Load Error:",
+                error
+            );
+
+        }
+    );
+
+}
+          
+        /* =====================================
+           FAMILY NAME → GENERATE FAMILY ID
+           ===================================== */
+
+      /* =====================================
+   FAMILY NAME → FAMILY ID
+   ===================================== */
+
+/* =====================================
+   FAMILY NAME → FAMILY ID
+   VERIFY AVAILABILITY
+   ===================================== */
+
+let familyAvailabilityTimer = null;
+let familyInputVersion = 0;
+           
+document
+    .getElementById("newFamilyName")
+    .addEventListener(
+        "input",
+        function(){
+        
+            const familyName =
+                this.value.trim();
+
+            const familyIdField =
+                document.getElementById(
+                    "newFamilyId"
+                );
+
+            const statusField =
+                document.getElementById(
+                    "familyIdStatus"
+                );
+
+            const createBtn =
+                document.getElementById(
+                    "createFamilyTreeBtn"
+                );
+
+            /* =================================
+               CANCEL PREVIOUS CHECK
+               ================================= */
+
+            if(familyAvailabilityTimer){
+
+                clearTimeout(
+                    familyAvailabilityTimer
+                );
+
+                familyAvailabilityTimer =
+                    null;
+            }
+
+
+           /* =================================
+   FAMILY NAME VALIDATION
+   ================================= */
+
+const invalidCharacters =
+    /[^A-Za-z0-9_.@-]/;
+
+if(invalidCharacters.test(familyName)){
+
+    statusField.textContent =
+        "Only letters, numbers, - _ . @ are allowed";
+
+    statusField.className =
+        "family-id-status not-available";
+
+    createBtn.disabled = true;
+
+    familyIdField.textContent =
+        "auto generation";
+
+    familyIdField.classList.remove(
+        "generated"
+    );
+
+    return;
+}
+            /* =================================
+               NEW INPUT VERSION
+               ================================= */
+
+            familyInputVersion++;
+
+            const currentVersion =
+                familyInputVersion;
+
+
+            /* =================================
+               CREATE BUTTON DISABLED
+               ================================= */
+
+            createBtn.disabled = true;
+
+
+            /* =================================
+               EMPTY
+               ================================= */
+
+            if(familyName.length === 0){
+
+                familyIdField.textContent =
+                    "auto generation";
+
+                familyIdField.classList.remove(
+                    "generated"
+                );
+
+                statusField.textContent =
+                    "";
+
+                statusField.className =
+                    "family-id-status";
+
+                return;
+            }
+
+
+            /* =================================
+               LESS THAN 4 LETTERS
+               ================================= */
+
+            if(familyName.length < 4){
+
+                familyIdField.textContent =
+                    "auto generation";
+
+                familyIdField.classList.remove(
+                    "generated"
+                );
+
+                statusField.textContent =
+    "Name must be min 4 letters";
+
+statusField.className =
+    "family-id-status min-length";
+
+                return;
+            }
+
+
+            /* =================================
+               GENERATE ID ONLY ONCE
+               ================================= */
+
+            if(
+                !familyIdField.classList.contains(
+                    "generated"
+                )
+            ){
+
+                familyIdField.textContent =
+                    generateFamilyId(
+                        familyName.substring(0,4)
+                    );
+
+                familyIdField.classList.add(
+                    "generated"
+                );
+            }
+
+
+            /* =================================
+               FIXED FAMILY ID
+               ================================= */
+
+            const generatedFamilyId =
+                familyIdField.textContent.trim();
+
+
+            /* =================================
+               CHECKING MESSAGE
+               ================================= */
+
+            statusField.innerHTML =
+                '<span class="checking-spinner"></span> Checking availability...';
+
+            statusField.className =
+                "family-id-status checking";
+
+
+            /* =================================
+               DELAYED AVAILABILITY CHECK
+               ================================= */
+
+            familyAvailabilityTimer =
+                setTimeout(
+                    function(){
+
+                        /* =========================
+                           IGNORE OLD REQUEST
+                           ========================= */
+
+                        if(
+                            currentVersion !==
+                            familyInputVersion
+                        ){
+
+                            return;
+                        }
+
+
+                        /* =========================
+                           CHECK CURRENT TEXT AGAIN
+                           ========================= */
+
+                        const currentName =
+                            document
+                                .getElementById(
+                                    "newFamilyName"
+                                )
+                                .value
+                                .trim();
+
+
+                        /* =========================
+                           LESS THAN 4 NOW
+                           ========================= */
+
+                        if(
+                            currentName.length < 4
+                        ){
+
+                            statusField.textContent =
+                                currentName.length === 0
+                                    ? ""
+                                    : "Name must be min 4 letters";
+
+                           statusField.className =
+    currentName.length === 0
+        ? "family-id-status"
+        : "family-id-status min-length";
+
+                            createBtn.disabled =
+                                true;
+
+                            return;
+                        }
+
+
+                       /* =========================
+   BACKEND AVAILABILITY CHECK
+   ========================= */
+
+const currentUser =
+    JSON.parse(
+        sessionStorage.getItem("user")
+    ) || {};
+
+
+const params =
+    new URLSearchParams();
+
+
+params.append(
+    "action",
+    "checkFamilyAvailability"
+);
+
+
+params.append(
+    "familyId",
+    generatedFamilyId
+);
+
+
+params.append(
+    "familyName",
+    currentName
+);
+
+
+params.append(
+    "loginUserName",
+    currentUser.loginUserName || ""
+);
+
+
+params.append(
+    "email",
+    currentUser.email || ""
+);
+
+
+params.append(
+    "mobile",
+    currentUser.mobile || ""
+);
+
+
+/* =========================
+   SEND TO BACKEND
+   ========================= */
+
+fetch(
+    API_URL,
+    {
+        method:"POST",
+
+        headers:{
+            "Content-Type":
+                "application/x-www-form-urlencoded"
+        },
+
+        body:
+            params.toString()
+    }
+)
+.then(
+    function(response){
+
+        return response.json();
+
+    }
+)
+.then(
+    function(result){
+
+        /* =====================
+           IGNORE OLD RESPONSE
+           ===================== */
+
+        if(
+            currentVersion !==
+            familyInputVersion
+        ){
+
+            return;
+        }
+
+
+        /* =====================
+           AVAILABLE
+           ===================== */
+
+        if(
+            result.status ===
+            "available"
+        ){
+
+            statusField.textContent =
+                "Family Name available";
+
+            statusField.className =
+                "family-id-status available";
+
+            createBtn.disabled =
+                false;
+
+            return;
+        }
+
+
+        /* =====================
+           NOT AVAILABLE
+           ===================== */
+
+        statusField.textContent =
+            result.message ||
+            "Family Name not available";
+
+        statusField.className =
+            "family-id-status not-available";
+
+        createBtn.disabled =
+            true;
+
+    })
+    .catch(function(error){
+    console.error(
+        "Family availability check error:",
+        error
+    );
+
+
+    /* ================================
+       CANCEL OLD CHECK
+       ================================ */
+
+    if(familyAvailabilityTimer){
+
+        clearTimeout(
+            familyAvailabilityTimer
+        );
+
+        familyAvailabilityTimer =
+            null;
+    }
+
+
+    /* ================================
+       INVALIDATE OLD REQUEST
+       ================================ */
+
+    familyInputVersion++;
+
+
+    /* ================================
+       CLEAR FAMILY NAME BOX
+       ================================ */
+
+    const familyNameInput =
+        document.getElementById(
+            "newFamilyName"
+        );
+
+    if(familyNameInput){
+
+        familyNameInput.value = "";
+
+    }
+
+
+    /* ================================
+       RESET FAMILY ID
+       ================================ */
+
+    familyIdField.textContent =
+        "auto generation";
+
+    familyIdField.classList.remove(
+        "generated"
+    );
+
+
+    /* ================================
+       CLEAR STATUS MESSAGE
+       ================================ */
+
+    statusField.textContent =
+        "";
+
+    statusField.className =
+        "family-id-status";
+
+
+    /* ================================
+       DISABLE CREATE BUTTON
+       ================================ */
+
+    createBtn.disabled = true;
+
+
+    /* ================================
+       FOCUS BACK TO FAMILY NAME
+       ================================ */
+
+    if(familyNameInput){
+
+        familyNameInput.focus();
+
+    }
+
+}
+                       );
+                    },
+                    800
+                );
+
+        }
+    );
+
+           /* =================================
+   BLOCK SPACE KEY
+   FAMILY NAME
+   ================================= */
+
+document
+    .getElementById("newFamilyName")
+    .addEventListener(
+        
+        "keydown",
+        function(event){
+
+            if(event.key === " "){
+
+                event.preventDefault();
+
+            }
+
+        }
+    );
+           /* =====================================
+           CREATE FAMILY TREE
+           ===================================== */
+
+        /* =====================================
+   CREATE FAMILY TREE
+   ===================================== */
+
+document
+    .getElementById("createFamilyTreeBtn")
+    .onclick = async () => {
+
+
+    /* ================================
+       GET FAMILY NAME
+       ================================ */
+
+    const familyName =
+        document
+            .getElementById(
+                "newFamilyName"
+            )
+            .value
+            .trim();
+
+
+    /* ================================
+       MINIMUM 4 LETTERS
+       ================================ */
+
+    if(familyName.length < 4){
+
+        validationMessage(
+            "Family Name must contain at least 4 letters.",
+            document.getElementById(
+                "newFamilyName"
+            )
+        );
+
+        return;
+    }
+
+
+    /* ================================
+       GET GENERATED FAMILY ID
+       ================================ */
+
+    const savedFamilyId =
+        document
+            .getElementById(
+                "newFamilyId"
+            )
+            .textContent
+            .trim();
+
+
+    /* ================================
+       FAMILY ID CHECK
+       ================================ */
+
+    if(
+        !savedFamilyId ||
+        savedFamilyId === "auto generation" ||
+        savedFamilyId === "-"
+    ){
+
+        showMessage(
+            "Family ID is not available.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+    /* ================================
+       USER INFORMATION
+       ================================ */
+
+    const user =
+        JSON.parse(
+            sessionStorage.getItem("user")
+        );
+
+
+    if(!user){
+
+        showMessage(
+            "User information not available.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+
+
+        
+    /* ================================
+       DISABLE CREATE BUTTON
+       ================================ */
+
+    const createBtn =
+        document.getElementById(
+            "createFamilyTreeBtn"
+        );
+
+
+    createBtn.disabled = true;
+
+
+    /* ================================
+       CHECKING / SAVING MESSAGE
+       ================================ */
+
+    const statusField =
+        document.getElementById(
+            "familyIdStatus"
+        );
+
+
+   if(statusField){
+
+    statusField.innerHTML =
+        '<span class="checking-spinner saving-spinner"></span> Saving Family Tree...';
+
+    statusField.className =
+        "family-id-status saving";
+
+}
+
+
+    /* ================================
+       GOOGLE SHEET DATA
+       ================================ */
+
+    const params =
+        new URLSearchParams();
+
+
+    
+    params.append(
+        "action",
+        "saveFamilyTree"
+    );
+
+    params.append(
+        "sessionToken",
+        sessionStorage.getItem("sessionToken") || ""
+    );
+
+
+
+    params.append(
+        "familyId",
+        savedFamilyId
+    );
+
+
+    params.append(
+        "familyName",
+        familyName
+    );
+
+
+    params.append(
+        "loginUserName",
+        user.loginUserName || ""
+    );
+
+
+    params.append(
+        "email",
+        user.email || ""
+    );
+
+
+    params.append(
+        "mobile",
+        user.mobile || ""
+    );
+
+
+    /* ================================
+       SAVE TO GOOGLE SHEET
+       ================================ */
+
+       
+    try{
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+
+                    body:
+                        params.toString()
+                }
+            );
+
+
+        const result =
+            await response.json();
+console.log(
+    "SAVE MEMBER RESULT:",
+    result
+);
+
+console.log(
+    "GENERATED MEMBER ID:",
+    result.memberId
+);
+
+        /* ================================
+           BACKEND ERROR
+           ================================ */
+
+        if(
+            result.status !==
+            "success"
+        ){
+
+            createBtn.disabled = false;
+
+
+            if(statusField){
+
+                statusField.textContent =
+                    result.message ||
+                    "Family Tree could not be saved.";
+
+                statusField.className =
+                    "family-id-status not-available";
+
+            }
+
+            return;
+        }
+
+        /* ================================
+   GET LOCAL FAMILY LIST
+   ONLY AFTER BACKEND SUCCESS
+   ================================ */
+
+const existingFamilies =
+    JSON.parse(
+        localStorage.getItem(
+            "familyTrees"
+        ) || "[]"
+    );
+        /* ================================
+           FAMILY OBJECT
+           ================================ */
+
+        const familyData = {
+
+            familyId:
+                savedFamilyId,
+
+            familyName:
+                familyName,
+
+            loginId:
+                user.loginUserName || "",
+
+            userId:
+                user.userId || "",
+
+            userMail:
+                user.email || "",
+
+            mobile:
+                user.mobile || "",
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+
+        /* ================================
+           SAVE CURRENT FAMILY
+           ================================ */
+
+        localStorage.setItem(
+            "currentFamily",
+            JSON.stringify(
+                familyData
+            )
+        );
+
+
+        /* ================================
+           SAVE FAMILY LIST
+           ================================ */
+
+        existingFamilies.push(
+            familyData
+        );
+
+
+        localStorage.setItem(
+            "familyTrees",
+            JSON.stringify(
+                existingFamilies
+            )
+        );
+
+
+        /* ================================
+           SUCCESS
+           ================================ */
+
+        if(statusField){
+
+            statusField.textContent =
+                "Family Tree saved successfully.";
+
+            statusField.className =
+                "family-id-status available";
+
+        }
+
+
+        showMessage(
+            "Family Tree Created Successfully.",
+            "success",
+            3000
+        );
+
+
+        /* ================================
+           RETURN TO FAMILY PAGE
+           ================================ */
+
+        familyBtn.click();
+
+
+    }catch(error){
+
+        console.error(
+            "Family Tree Save Error:",
+            error
+        );
+
+
+        createBtn.disabled = false;
+
+
+        if(statusField){
+
+            statusField.textContent =
+                "Unable to save Family Tree. Please try again.";
+
+            statusField.className =
+                "family-id-status not-available";
+
+        }
+
+
+        showMessage(
+            "Unable to save Family Tree.",
+            "error",
+            3000
+        );
+
+    }
+
+};
+
+        /* =====================================
+           CREATE FAMILY TREE → BACK
+           ===================================== */
+
+        document
+            .getElementById(
+                "createFamilyBackBtn"
+            )
+            .onclick = () => {
+
+                familyBtn.click();
+
+            };
+
+    };
+
+
+   
+};
+
+
+
+let familyTreeBaseScale = 1;
+let familyTreeZoomFactor = 1;
+let familyTreePanX = 0;
+let familyTreePanY = 0;
+
+let familyTreeIsDragging = false;
+
+let familyTreeDragStartX = 0;
+let familyTreeDragStartY = 0;
+
+let familyTreePanStartX = 0;
+let familyTreePanStartY = 0;
+
+
+
+
+
+/* =====================================
+   AUTO FIT FAMILY TREE TO SCREEN
+   ===================================== */
+
+function fitFamilyTreeToScreen(){
+
+    const wrapper =
+        document.querySelector(
+            ".family-tree-scroll"
+        );
+
+    const canvas =
+        document.getElementById(
+            "familyTreeCanvas"
+        );
+
+    if(!wrapper || !canvas){
+        return;
+    }
+
+
+    /* RESET BEFORE MEASURING */
+
+    canvas.style.transform = "none";
+    canvas.style.marginBottom = "0";
+    canvas.style.marginLeft = "0";
+
+
+    const canvasRect =
+        canvas.getBoundingClientRect();
+
+
+    const visibleNodes =
+        Array.from(
+            canvas.querySelectorAll(
+                ".family-tree-test-node"
+            )
+        ).filter(
+            node =>
+                node.offsetParent !== null
+        );
+
+
+    if(!visibleNodes.length){
+
+        familyTreeBaseScale = 1;
+        familyTreeZoomFactor = 1;
+        familyTreePanX = 0;
+        familyTreePanY = 0;
+
+        applyFamilyTreeZoom();
+
+        return;
+    }
+
+
+    const nodeRects =
+        visibleNodes.map(
+            node =>
+                node.getBoundingClientRect()
+        );
+
+
+    const leftMost =
+        Math.min(
+            ...nodeRects.map(
+                rect => rect.left
+            )
+        );
+
+
+    const rightMost =
+        Math.max(
+            ...nodeRects.map(
+                rect => rect.right
+            )
+        );
+
+
+    const contentLeft =
+        leftMost -
+        canvasRect.left;
+
+
+   const treeWidth =
+    rightMost -
+    leftMost;
+
+
+/* =====================================
+   ACTUAL TREE VERTICAL BOUNDS
+   ===================================== */
+
+const topMost =
+    Math.min(
+        ...nodeRects.map(
+            rect => rect.top
+        )
+    );
+
+
+const bottomMost =
+    Math.max(
+        ...nodeRects.map(
+            rect => rect.bottom
+        )
+    );
+
+
+const contentTop =
+    topMost -
+    canvasRect.top;
+
+
+const treeHeight =
+    bottomMost -
+    topMost;
+
+
+const availableWidth =
+    wrapper.clientWidth;
+
+
+const availableHeight =
+    wrapper.clientHeight;
+
+    /* AUTO FIT — NEVER AUTO ENLARGE */
+
+    familyTreeBaseScale =
+        treeWidth > 0
+            ? Math.min(
+                1,
+                availableWidth / treeWidth
+              )
+            : 1;
+
+
+    familyTreeZoomFactor = 1;
+
+
+    const scaledTreeWidth =
+        treeWidth *
+        familyTreeBaseScale;
+
+
+    /* CENTER ACTUAL TREE CONTENT */
+
+    familyTreePanX =
+        (
+            availableWidth -
+            scaledTreeWidth
+        ) / 2
+        -
+        (
+            contentLeft *
+            familyTreeBaseScale
+        );
+
+
+   /* =====================================
+   CENTER TREE VERTICALLY
+   ===================================== */
+
+const scaledTreeHeight =
+    treeHeight *
+    familyTreeBaseScale;
+
+
+familyTreePanY =
+    (
+        availableHeight -
+        scaledTreeHeight
+    ) / 2
+    -
+    (
+        contentTop *
+        familyTreeBaseScale
+    );
+
+applyFamilyTreeZoom();
+}
+
+
+function applyFamilyTreeZoom(){
+
+    const canvas =
+        document.getElementById(
+            "familyTreeCanvas"
+        );
+
+    const zoomValue =
+        document.getElementById(
+            "familyTreeZoomValue"
+        );
+
+
+    if(!canvas){
+        return;
+    }
+
+
+    const finalScale =
+        familyTreeBaseScale *
+        familyTreeZoomFactor;
+
+
+    canvas.style.transformOrigin =
+        "top left";
+
+
+    canvas.style.transform =
+        `translate(${familyTreePanX}px, ${familyTreePanY}px) scale(${finalScale})`;
+
+
+    const originalHeight =
+        canvas.scrollHeight;
+
+
+    const scaledHeight =
+        originalHeight *
+        finalScale;
+
+
+    /* KEEP PAGE HEIGHT CORRECT */
+
+    canvas.style.marginBottom =
+        `${scaledHeight - originalHeight}px`;
+
+
+    if(zoomValue){
+
+        zoomValue.textContent =
+            Math.round(
+                finalScale * 100
+            ) + "%";
+    }
+}
+/* =====================================
+   OPEN FAMILY TREE PAGE
+   ===================================== */
+
+async function openFamilyTreePage(
+    publicFamily = null,
+    publicMembers = null
+){
+
+    /* Tree View uses only its own Back/Home pair. */
+    if(typeof window.setOtherFamilyNavigation === "function"){
+        window.setOtherFamilyNavigation("hidden");
+    }
+
+    /* =====================================
+       USE FAMILY DATA LOADED AT LOGIN
+       ===================================== */
+    const loggedUser =
+        JSON.parse(
+            sessionStorage.getItem("user") ||
+            "null"
+        );
+
+      if(!loggedUser){
+
+        console.error(
+            "Family Tree: Login user not found"
+        );
+
+        return;
+    }
+
+
+    const currentFamily =
+        publicFamily ||
+        JSON.parse(
+            localStorage.getItem(
+                "currentFamily"
+            ) || "null"
+        );
+
+
+    const members =
+        Array.isArray(publicMembers)
+            ? publicMembers
+            : JSON.parse(
+                localStorage.getItem(
+                    "familyMembers"
+                ) || "[]"
+            );
+
+
+    if(!currentFamily){
+        showMessage(
+            "Family information not available.",
+            "warning",
+            3000
+        );
+
+        return;
+    }
+   
+
+const rawFamilyName =
+    currentFamily.familyName ||
+    currentFamily.name ||
+    "";
+const familyName = rawFamilyName
+    ? String(rawFamilyName).trim().replace(/\s+Family$/i, "") + " Family"
+    : "";
+   showPage(
+    `<div class="family-tree-view-page">
+        <div style="margin-top:-20px;">
+    `
+    + pageTitle(
+        familyName ? familyName + " - Family Tree" : "Family Tree",
+        "images/colorbtns/Family1.png"
+    )
+    + `
+        </div>
+    `
+    +
+
+    `
+    <div class="family-tree-page">
+            <!-- MEMBER -->
+
+            <div class="family-tree-control">
+
+    <label class="family-tree-label">
+        Select Member
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+ <div class="search-edit-member-wrapper family-tree-search-wrapper">
+
+    <div class="partner-search-input-wrap">
+
+        <input
+            type="text"
+            id="familyTreeMemberSearch"
+            class="common-form-input"
+            placeholder="Search Member"
+            autocomplete="off">
+
+        <div class="partner-sort-controls">
+
+            <span
+                id="familyTreeMemberCount"
+                class="relation-member-count"
+                style="display:none;">
+            </span>
+
+            <span
+                id="familyTreeSortAZ"
+                class="partner-sort-arrow"
+                title="Alphabetical Order">
+                A↕Z
+            </span>
+
+            <span
+                id="familyTreeSortID"
+                class="partner-sort-arrow"
+                title="ID Number Order">
+                1↕9
+            </span>
+
+        </div>
+
+    </div>
+
+    <div
+        id="familyTreeMemberDropdown"
+        class="relations-member-dropdown"
+        style="display:none;">
+    </div>
+
+</div>           </div>
+
+
+            <!-- GENERATIONS -->
+
+<div
+    class="family-tree-generation-row"
+    id="familyTreeOptionsRow"
+    style="display:none;">
+    
+                <div class="family-tree-control">
+
+    <label class="family-tree-label">
+        Before Generations
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreeBefore"
+        class="common-form-input">
+
+       <option value="1">1</option>
+<option value="2" selected>2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+    </select>
+
+</div>
+                <div class="family-tree-control">
+
+    <label class="family-tree-label">
+        After Generations
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreeAfter"
+        class="common-form-input">
+
+       <option value="1">1</option>
+<option value="2" selected>2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+    </select>
+
+</div>
+
+<div class="family-tree-control">
+
+    <label class="family-tree-label">
+        Member Partner
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreeShowMemberPartner"
+        class="common-form-input">
+
+        <option value="yes" selected>
+            Yes
+        </option>
+
+        <option value="no">
+            No
+        </option>
+
+    </select>
+
+</div>
+<!-- =================================
+     PARTNER VIEW
+     MULTIPLE PARTNERS ONLY
+     ================================= -->
+
+<div
+    class="family-tree-control"
+    id="familyTreePartnerViewRow"
+    style="display:none;">
+
+    <label class="family-tree-label">
+        Partner View
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreePartnerView"
+        class="common-form-input">
+
+        <option value="all" selected>
+            All Partners
+        </option>
+
+    </select>
+
+</div>
+<div class="family-tree-control">
+
+    <label class="family-tree-label">
+        Member Siblings
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreeShowSiblings"
+        class="common-form-input">
+
+        <option value="yes">
+            Yes
+        </option>
+
+        <option value="no" selected>
+            No
+        </option>
+
+    </select>
+
+</div>
+
+<!-- PARTNER SIBLINGS -->
+
+<div class="family-tree-control">
+
+    <label class="family-tree-label">
+        Partner Siblings
+    </label>
+
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreeShowPartnerSiblings"
+        class="common-form-input">
+
+        <option value="yes">
+            Yes
+        </option>
+
+        <option value="no" selected>
+            No
+        </option>
+
+    </select>
+
+</div>
+
+<!-- SHOW PARTNER -->
+
+<div
+    class="family-tree-control"
+    id="familyTreeOtherPartnersRow">
+    
+    <label class="family-tree-label">
+        Other Partners
+    </label>
+    <span class="family-tree-colon">
+        :
+    </span>
+
+    <select
+        id="familyTreeShowPartner"
+        class="common-form-input">
+
+        <option value="yes" selected>
+            Yes
+        </option>
+
+        <option value="no">
+            No
+        </option>
+
+    </select>
+
+
+
+</div>
+
+
+
+
+            </div>
+
+
+            <button
+                type="button"
+                id="showFamilyTreeBtn"                
+                class="family-create-btn">
+
+                Show Family Tree
+
+            </button>
+
+
+            <!-- TREE WILL COME HERE -->
+
+            <div
+                id="familyTreeDiagram"
+                class="family-tree-diagram">
+
+            </div>
+
+
+            <div class="family-tree-bottom-actions">
+
+                <button
+                    type="button"
+                    id="familyTreeBackBtn"
+                    class="back-btn">
+
+                    ← Back
+
+                </button>
+
+                <button
+                    type="button"
+                    id="familyTreeHomeBtn"
+                    class="back-btn">
+
+                    🏠 Home
+
+                </button>
+
+                       </div>
+
+        </div>
+
+        </div> <!-- family-tree-view-page -->
+
+        `
+    );
+
+
+    /* ================================
+       LOAD MEMBERS INTO SELECT
+       ================================ */
+
+/* =====================================
+   TREE VIEW MEMBER SEARCH
+   ===================================== */
+
+const familyTreeSearchInput =
+    document.getElementById(
+        "familyTreeMemberSearch"
+    );
+
+
+const familyTreeDropdown =
+    document.getElementById(
+        "familyTreeMemberDropdown"
+    );
+
+
+let selectedFamilyTreeMemberId =
+    "";
+
+/* =====================================
+   FAMILY TREE MEMBER SORTING
+   ===================================== */
+
+let familyTreeSortMode = "name";
+
+let familyTreeNameAscending = true;
+let familyTreeIdAscending = true;
+
+const familyTreeSortAZ =
+    document.getElementById(
+        "familyTreeSortAZ"
+    );
+
+const familyTreeSortID =
+    document.getElementById(
+        "familyTreeSortID"
+    );
+
+/* =====================================
+   SHOW / FILTER MEMBERS
+   ===================================== */
+
+function showFamilyTreeMembers(){
+
+    const searchText =
+        String(
+            familyTreeSearchInput.value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    familyTreeDropdown.innerHTML =
+        "";
+
+
+    const matchingMembers =
+        members
+            .filter(
+                function(member){
+
+                    if(
+                        !member ||
+                        !member.memberId ||
+                        !member.name
+                    ){
+
+                        return false;
+
+                    }
+
+
+                    const memberName =
+                        String(
+                            member.name || ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+
+                    const memberId =
+                        String(
+                            member.memberId || ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+
+                    /* EMPTY SEARCH
+                       → SHOW ALL MEMBERS */
+
+                    if(
+                        searchText === ""
+                    ){
+
+                        return true;
+
+                    }
+
+
+                                     /* NAME OR MEMBER ID SEARCH */
+
+                    return (
+                        memberName.includes(
+                            searchText
+                        )
+                        ||
+                        memberId.includes(
+                            searchText
+                        )
+                    );
+
+                }
+            )
+            .sort(
+    function(a, b){
+
+        /* ALPHABETICAL SORTING */
+
+        if(familyTreeSortMode === "name"){
+
+            const result =
+                String(a.name || "")
+                .localeCompare(
+                    String(b.name || ""),
+                    undefined,
+                    { sensitivity: "base" }
+                );
+
+            return familyTreeNameAscending
+                ? result
+                : -result;
+
+        }
+
+        /* MEMBER ID NUMBER SORTING */
+
+        const getMemberNumber = function(member){
+
+            const id =
+                String(member.memberId || "");
+
+            const match =
+                id.match(/(\d+)$/);
+
+            return match
+                ? Number(match[1])
+                : 0;
+
+        };
+
+        const result =
+            getMemberNumber(a) -
+            getMemberNumber(b);
+
+        return familyTreeIdAscending
+            ? result
+            : -result;
+
+    }
+);
+
+/* =====================================
+   FAMILY TREE MEMBER COUNT
+   ===================================== */
+
+const familyTreeMemberCount =
+    document.getElementById(
+        "familyTreeMemberCount"
+    );
+
+if(familyTreeMemberCount){
+
+    familyTreeMemberCount.textContent =
+        matchingMembers.length;
+
+}
+
+
+    /* =====================================
+       NO MATCH
+       ===================================== */
+
+    if(
+        matchingMembers.length === 0
+    ){
+
+        familyTreeDropdown.innerHTML =
+            `
+            <div class="relations-no-match">
+                No matching member
+            </div>
+            `;
+
+
+        familyTreeDropdown.style.display =
+            "block";
+
+
+        return;
+
+    }
+
+
+    /* =====================================
+       CREATE DROPDOWN ITEMS
+       ===================================== */
+
+    matchingMembers.forEach(
+        function(member){
+
+            const option =
+                document.createElement(
+                    "div"
+                );
+
+
+            option.className =
+                "relations-member-option";
+
+
+            option.textContent =
+                member.name +
+                " (" +
+                member.memberId +
+                ")";
+
+
+            option.dataset.memberId =
+                member.memberId;
+
+
+            /* =================================
+               MEMBER SELECT
+               ================================= */
+
+     option.onclick =
+    function(){
+
+        selectedFamilyTreeMemberId =
+            member.memberId;
+
+        familyTreeSearchInput.value =
+            member.name;
+
+        /* SELECTED NAME FULL WIDTH */
+
+        const treeSearchWrap =
+            familyTreeSearchInput.closest(
+                ".partner-search-input-wrap"
+            );
+
+        if(treeSearchWrap){
+
+            treeSearchWrap.classList.add(
+                "family-tree-name-selected"
+            );
+
+        }
+
+        familyTreeDropdown.innerHTML =
+            "";
+
+        familyTreeDropdown.style.display =
+            "none";
+
+        /* =====================================
+           MEMBER SELECTED
+           → SHOW TREE OPTIONS
+           ===================================== */
+
+        const familyTreeOptionsRow =
+            document.getElementById(
+                "familyTreeOptionsRow"
+            );
+
+
+        if(familyTreeOptionsRow){
+
+            familyTreeOptionsRow.style.display =
+                "";
+
+        }
+/* =====================================
+   VALID MEMBER SELECTED
+   → RESTORE TREE OPTIONS
+   ===================================== */
+
+if(familyTreeOptionsRow){
+
+    familyTreeOptionsRow
+        .querySelectorAll(
+            ".family-tree-control"
+        )
+        .forEach(
+            function(control){
+
+                control.style.display = "";
+
+            }
+        );
+
+}
+
+
+/* SHOW FAMILY TREE BUTTON */
+
+const showTreeButton =
+    document.getElementById(
+        "showFamilyTreeBtn"
+    );
+
+if(showTreeButton){
+
+    showTreeButton.style.display = "";
+
+}
+
+       /* =====================================
+   SELECTED MEMBER
+   → DETECT ALL PARTNERS
+   → BUILD PARTNER VIEW
+   ===================================== */
+
+const partnerViewRow =
+    document.getElementById(
+        "familyTreePartnerViewRow"
+    );
+
+const partnerViewSelect =
+    document.getElementById(
+        "familyTreePartnerView"
+    );
+
+
+if(
+    partnerViewRow &&
+    partnerViewSelect
+){
+
+    const selectedMemberId =
+        String(
+            member.memberId || ""
+        ).trim();
+
+
+    const partnerIds =
+        new Set();
+
+
+    /* DIRECT PARTNER */
+
+    if(member.partnerId){
+
+        partnerIds.add(
+            String(
+                member.partnerId
+            ).trim()
+        );
+
+    }
+
+
+    /* REVERSE PARTNER LINK */
+
+    members.forEach(
+        function(item){
+
+            if(!item){
+                return;
+            }
+
+            if(
+                String(
+                    item.partnerId || ""
+                ).trim() ===
+                selectedMemberId
+            ){
+
+                partnerIds.add(
+                    String(
+                        item.memberId || ""
+                    ).trim()
+                );
+
+            }
+
+        }
+    );
+
+
+    /* PARTNERS THROUGH CHILDREN */
+
+    members.forEach(
+        function(child){
+
+            if(!child){
+                return;
+            }
+
+
+            const fatherId =
+                String(
+                    child.fatherId || ""
+                ).trim();
+
+            const motherId =
+                String(
+                    child.motherId || ""
+                ).trim();
+
+
+            if(
+                fatherId === selectedMemberId &&
+                motherId &&
+                motherId !== selectedMemberId
+            ){
+
+                partnerIds.add(
+                    motherId
+                );
+
+            }
+
+
+            if(
+                motherId === selectedMemberId &&
+                fatherId &&
+                fatherId !== selectedMemberId
+            ){
+
+                partnerIds.add(
+                    fatherId
+                );
+
+            }
+
+        }
+    );
+
+
+    partnerIds.delete("");
+    partnerIds.delete(
+        selectedMemberId
+    );
+
+
+    const selectedPartners =
+        Array.from(
+            partnerIds
+        )
+        .map(
+            function(partnerId){
+
+                return members.find(
+                    function(item){
+
+                        return String(
+                            item.memberId || ""
+                        ).trim() ===
+                        partnerId;
+
+                    }
+                ) || null;
+
+            }
+        )
+        .filter(Boolean);
+
+
+    console.log(
+        "PARTNER VIEW PARTNERS:",
+        selectedPartners
+    );
+
+
+    /* CLEAR OLD OPTIONS */
+
+    partnerViewSelect.innerHTML =
+        "";
+
+
+    /* =================================
+       MULTIPLE PARTNERS
+       ================================= */
+
+    if(
+        selectedPartners.length > 1
+    ){
+
+        const allOption =
+            document.createElement(
+                "option"
+            );
+
+        allOption.value =
+            "all";
+
+        allOption.textContent =
+            "All Partners";
+
+        partnerViewSelect.appendChild(
+            allOption
+        );
+
+
+        selectedPartners.forEach(
+            function(partner){
+
+                const partnerOption =
+                    document.createElement(
+                        "option"
+                    );
+
+                partnerOption.value =
+                    String(
+                        partner.memberId
+                    );
+
+                partnerOption.textContent =
+                    partner.name ||
+                    partner.memberId;
+
+                partnerViewSelect.appendChild(
+                    partnerOption
+                );
+
+            }
+        );
+
+
+        /* DEFAULT */
+
+        partnerViewSelect.value =
+            "all";
+
+
+        partnerViewRow.style.display =
+            "";
+
+    }
+
+    /* =================================
+       ZERO / ONE PARTNER
+       → PARTNER VIEW NOT REQUIRED
+       ================================= */
+
+    else{
+
+        partnerViewRow.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =====================================
+   REFRESH DEPENDENT OPTIONS
+   ===================================== */
+
+updatePartnerSiblingsVisibility();
+updatePartnerViewSiblingControls();
+updateOtherPartnersVisibility();    };
+
+            familyTreeDropdown.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    familyTreeDropdown.style.display =
+        "block";
+
+}
+/* =====================================
+   FAMILY TREE SORT ARROW CLICK EVENTS
+   ===================================== */
+
+if(familyTreeSortAZ){
+
+    familyTreeSortAZ.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(familyTreeSortMode === "name"){
+
+                familyTreeNameAscending =
+                    !familyTreeNameAscending;
+
+            }else{
+
+                familyTreeSortMode = "name";
+                familyTreeNameAscending = true;
+
+            }
+
+            showFamilyTreeMembers();
+
+        }
+    );
+
+}
+
+if(familyTreeSortID){
+
+    familyTreeSortID.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(familyTreeSortMode === "id"){
+
+                familyTreeIdAscending =
+                    !familyTreeIdAscending;
+
+            }else{
+
+                familyTreeSortMode = "id";
+                familyTreeIdAscending = true;
+
+            }
+
+            showFamilyTreeMembers();
+
+        }
+    );
+
+}
+/* =====================================
+   TREE VIEW SEARCH EVENTS
+   ===================================== */
+
+familyTreeSearchInput.addEventListener(
+    "focus",
+    function(){
+        /* RESTORE SEARCH CONTROLS */
+
+familyTreeSearchInput
+    .closest(".partner-search-input-wrap")
+    ?.classList.remove(
+        "family-tree-name-selected"
+    );
+        /* =================================
+   FAMILY TREE SEARCH CONTROLS
+   ================================= */
+
+const treeCount =
+    document.getElementById(
+        "familyTreeMemberCount"
+    );
+
+const treeSortAZ =
+    document.getElementById(
+        "familyTreeSortAZ"
+    );
+
+const treeSortID =
+    document.getElementById(
+        "familyTreeSortID"
+    );
+
+if(treeCount){
+    treeCount.style.display = "inline-flex";
+}
+
+if(treeSortAZ){
+    treeSortAZ.style.display = "inline-flex";
+}
+
+if(treeSortID){
+    treeSortID.style.display = "inline-flex";
+}
+        /* EXISTING SELECTED MEMBER
+           MUST REMAIN SELECTED */
+
+        showFamilyTreeMembers();
+
+    }
+);
+
+   familyTreeSearchInput.addEventListener(
+    "input",
+    function(){
+
+        /* USER CHANGED THE MEMBER TEXT
+           → OLD MEMBER SELECTION INVALID */
+
+        selectedFamilyTreeMemberId =
+            "";
+
+
+        /* HIDE TREE OPTIONS UNTIL
+           A VALID MEMBER IS SELECTE
+           D */
+
+        const familyTreeOptionsRow =
+            document.getElementById(
+                "familyTreeOptionsRow"
+            );
+
+        if(familyTreeOptionsRow){
+
+            familyTreeOptionsRow.style.display =
+                "none";
+
+        }
+
+
+        /* RESET / HIDE PARTNER VIEW */
+
+        const partnerViewRow =
+            document.getElementById(
+                "familyTreePartnerViewRow"
+            );
+
+        const partnerViewSelect =
+            document.getElementById(
+                "familyTreePartnerView"
+            );
+
+        if(partnerViewRow){
+
+            partnerViewRow.style.display =
+                "none";
+
+        }
+
+        if(partnerViewSelect){
+
+            partnerViewSelect.innerHTML =
+                `
+                <option value="all" selected>
+                    All Partners
+                </option>
+                `;
+
+        }
+
+
+        /* SHOW MATCHING MEMBERS /
+           NO MATCHING MEMBER */
+
+        showFamilyTreeMembers();
+
+    }
+);
+   /* =====================================
+   CLOSE FAMILY TREE MEMBER DROPDOWN
+   WHEN CLICKING OUTSIDE
+   ===================================== */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        if(
+    !familyTreeSearchInput ||
+    !familyTreeDropdown ||
+    !familyTreeSearchInput.isConnected
+){
+    return;
+}
+        const clickedSearchInput =
+            familyTreeSearchInput.contains(
+                event.target
+            );
+
+        const clickedDropdown =
+            familyTreeDropdown.contains(
+                event.target
+            );
+
+
+       if(
+    !clickedSearchInput &&
+    !clickedDropdown
+){
+
+   familyTreeDropdown.style.display =
+    "none";
+
+/* CLEAR TYPED TEXT ONLY
+   WHEN MEMBER IS NOT SELECTED */
+
+if(!selectedFamilyTreeMemberId){
+
+    familyTreeSearchInput.value = "";
+
+    familyTreeSearchInput.blur();
+
+}
+
+/* HIDE MEMBER COUNT */
+    const treeCount =
+        document.getElementById(
+            "familyTreeMemberCount"
+        );
+
+    if(treeCount){
+        treeCount.style.display = "none";
+    }
+
+    /* HIDE SORT ARROWS */
+
+    if(familyTreeSortAZ){
+        familyTreeSortAZ.style.display = "none";
+    }
+
+    if(familyTreeSortID){
+        familyTreeSortID.style.display = "none";
+    }
+
+}
+    }
+);
+
+  /* =====================================
+   MEMBER PARTNER
+   → PARTNER SIBLINGS VISIBILITY
+   ===================================== */
+
+const familyTreeMemberPartnerControl =
+    document.getElementById(
+        "familyTreeShowMemberPartner"
+    );
+
+const familyTreeShowPartnerSiblingsControl =
+    document.getElementById(
+        "familyTreeShowPartnerSiblings"
+    );
+/* =====================================
+   OTHER PARTNERS CONTROL
+   ===================================== */
+
+const familyTreeOtherPartnersControl =
+    document.getElementById(
+        "familyTreeShowPartner"
+    );
+
+
+/* =====================================
+   OTHER PARTNERS
+   → TEMPORARY POPUP MESSAGE
+   ===================================== */
+
+familyTreeOtherPartnersControl?.addEventListener(
+    "focus",
+    function(){
+
+        showMessage(
+    'If "Other Partners" is set to "Yes," partners will be shown for all persons except the selected member.',
+            "info",
+            4000
+        );
+
+    }
+);
+const partnerSiblingsControlRow =
+    familyTreeShowPartnerSiblingsControl
+        ?.closest(
+            ".family-tree-control"
+        );
+
+
+function updatePartnerSiblingsVisibility(){
+
+    if(
+        !familyTreeMemberPartnerControl ||
+        !familyTreeShowPartnerSiblingsControl ||
+        !partnerSiblingsControlRow
+    ){
+        return;
+    }
+
+
+    if(
+        familyTreeMemberPartnerControl.value === "yes"
+    ){
+
+        /* MEMBER PARTNER = YES
+           → PARTNER SIBLINGS VISIBLE */
+
+        partnerSiblingsControlRow.style.display =
+            "";
+
+    }else{
+
+    familyTreeShowPartnerSiblingsControl.value =
+        "no";
+
+    partnerSiblingsControlRow.style.display =
+        "none";
+}
+
+
+/* OTHER PARTNERS ALSO DEPENDS
+   ON SIBLING OPTIONS */
+
+updateOtherPartnersVisibility();}
+
+
+   /* =====================================
+   PARTNER VIEW
+   → SIBLINGS SHOW / HIDE
+   ===================================== */
+
+function updatePartnerViewSiblingControls(){
+
+    const partnerViewRow =
+        document.getElementById(
+            "familyTreePartnerViewRow"
+        );
+
+    const partnerViewSelect =
+        document.getElementById(
+            "familyTreePartnerView"
+        );
+
+    const memberSiblingsControl =
+        document.getElementById(
+            "familyTreeShowSiblings"
+        );
+
+    const partnerSiblingsControl =
+        document.getElementById(
+            "familyTreeShowPartnerSiblings"
+        );
+
+
+    if(
+        !partnerViewRow ||
+        !partnerViewSelect ||
+        !memberSiblingsControl ||
+        !partnerSiblingsControl
+    ){
+        return;
+    }
+
+
+    const memberSiblingsRow =
+        memberSiblingsControl.closest(
+            ".family-tree-control"
+        );
+
+    const partnerSiblingsRow =
+        partnerSiblingsControl.closest(
+            ".family-tree-control"
+        );
+
+
+    const partnerViewVisible =
+        partnerViewRow.style.display !==
+        "none";
+
+
+    /* =================================
+       ALL PARTNERS
+       → HIDE BOTH SIBLING OPTIONS
+       ================================= */
+
+    if(
+        partnerViewVisible &&
+        partnerViewSelect.value === "all"
+    ){
+
+        memberSiblingsControl.value =
+            "no";
+
+        partnerSiblingsControl.value =
+            "no";
+
+
+        if(memberSiblingsRow){
+
+            memberSiblingsRow.style.display =
+                "none";
+
+        }
+
+
+        if(partnerSiblingsRow){
+
+            partnerSiblingsRow.style.display =
+                "none";
+
+        }
+
+        return;
+    }
+
+
+    /* =================================
+       ONE PARTNER / NORMAL MODE
+       → MEMBER SIBLINGS VISIBLE
+       ================================= */
+
+    if(memberSiblingsRow){
+
+        memberSiblingsRow.style.display =
+            "";
+
+    }
+
+
+    /*
+       Partner Siblings visibility
+       already depends on
+       Member Partner Yes / No.
+    */
+
+    updatePartnerSiblingsVisibility();
+
+}
+   const familyTreePartnerViewControl =
+    document.getElementById(
+        "familyTreePartnerView"
+    );
+
+
+familyTreePartnerViewControl?.addEventListener(
+    "change",
+    function(){
+
+        updatePartnerViewSiblingControls();
+
+    }
+);
+/* =====================================
+   MEMBER / PARTNER SIBLINGS
+   → OTHER PARTNERS VISIBILITY
+   ===================================== */
+
+function updateOtherPartnersVisibility(){
+
+    const otherPartnersRow =
+        document.getElementById(
+            "familyTreeOtherPartnersRow"
+        );
+
+    if(otherPartnersRow){
+
+        otherPartnersRow.style.display =
+            "";
+
+    }
+
+}
+   /* INITIAL STATE */
+
+updatePartnerSiblingsVisibility();
+
+
+/* MEMBER PARTNER YES / NO CHANGE */
+
+familyTreeMemberPartnerControl?.addEventListener(
+    "change",
+    function(){
+
+        const partnerViewRow =
+            document.getElementById(
+                "familyTreePartnerViewRow"
+            );
+
+        const partnerViewSelect =
+            document.getElementById(
+                "familyTreePartnerView"
+            );
+
+        const memberSiblingsControl =
+            document.getElementById(
+                "familyTreeShowSiblings"
+            );
+
+        const memberSiblingsRow =
+            memberSiblingsControl
+                ?.closest(
+                    ".family-tree-control"
+                );
+
+
+        /* =================================
+           MEMBER PARTNER = NO
+           ================================= */
+
+        if(
+            familyTreeMemberPartnerControl.value ===
+            "no"
+        ){
+
+            /* HIDE PARTNER VIEW */
+
+            if(partnerViewRow){
+
+                partnerViewRow.style.display =
+                    "none";
+
+            }
+
+
+            /* MEMBER SIBLINGS VISIBLE */
+
+            if(memberSiblingsRow){
+
+                memberSiblingsRow.style.display =
+                    "";
+
+            }
+
+
+            /* PARTNER SIBLINGS
+               will be hidden by existing function */
+
+            updatePartnerSiblingsVisibility();
+
+
+            /* OTHER PARTNERS
+               ALWAYS VISIBLE */
+
+            const otherPartnersRow =
+                document.getElementById(
+                    "familyTreeOtherPartnersRow"
+                );
+
+            if(otherPartnersRow){
+
+                otherPartnersRow.style.display =
+                    "";
+
+            }
+
+
+            return;
+        }
+
+
+        /* =================================
+           MEMBER PARTNER = YES
+           ================================= */
+
+        if(
+            partnerViewRow &&
+            partnerViewSelect &&
+            partnerViewSelect.options.length > 1
+        ){
+
+            partnerViewRow.style.display =
+                "";
+
+        }
+
+
+        updatePartnerSiblingsVisibility();
+        updatePartnerViewSiblingControls();
+
+
+        /* OTHER PARTNERS ALWAYS VISIBLE */
+
+        const otherPartnersRow =
+            document.getElementById(
+                "familyTreeOtherPartnersRow"
+            );
+
+        if(otherPartnersRow){
+
+            otherPartnersRow.style.display =
+                "";
+
+        }
+
+    }
+);
+const familyTreeMemberSiblingsControl =
+    document.getElementById(
+        "familyTreeShowSiblings"
+    );
+
+
+familyTreeMemberSiblingsControl?.addEventListener(
+    "change",
+    updateOtherPartnersVisibility
+);
+
+
+familyTreeShowPartnerSiblingsControl?.addEventListener(
+    "change",
+    updateOtherPartnersVisibility
+);
+   
+const familyTreeOtherPartnersHint =
+    document.getElementById(
+        "familyTreeOtherPartnersHint"
+    );
+
+
+function showOtherPartnersHint(){
+
+    if(!familyTreeOtherPartnersHint){
+        return;
+    }
+
+    familyTreeOtherPartnersHint.style.display =
+        "block";
+}
+
+
+familyTreeOtherPartnersControl?.addEventListener(
+    "focus",
+    showOtherPartnersHint
+);
+
+familyTreeOtherPartnersControl?.addEventListener(
+    "click",
+    showOtherPartnersHint
+);
+
+familyTreeOtherPartnersControl?.addEventListener(
+    "change",
+    showOtherPartnersHint
+);
+/* =====================================
+   SHOW FAMILY TREE BUTTON
+   ===================================== */
+
+const showFamilyTreeBtn =
+    document.getElementById(
+        "showFamilyTreeBtn"
+    );
+
+if(showFamilyTreeBtn){
+
+    showFamilyTreeBtn.onclick =
+        function(){
+   /* =========================
+         TREE OPTIONS
+      ========================= */
+const beforeGen =
+    Number(
+        document.getElementById(
+            "familyTreeBefore"
+        ).value
+    );
+
+const afterGen =
+    Number(
+        document.getElementById(
+            "familyTreeAfter"
+        ).value
+    );
+
+const showSiblings =
+    document.getElementById(
+        "familyTreeShowSiblings"
+    ).value === "yes";
+
+const showPartner =
+    document.getElementById(
+        "familyTreeShowPartner"
+    )?.value === "yes";
+const showMemberPartner =
+    document.getElementById(
+        "familyTreeShowMemberPartner"
+    ).value === "yes";
+
+const showPartnerSiblings =
+    document.getElementById(
+        "familyTreeShowPartnerSiblings"
+    ).value === "yes";
+
+  /* =====================================
+   PARTNER VIEW SELECTION
+   ===================================== */
+
+const partnerViewControl =
+    document.getElementById(
+        "familyTreePartnerView"
+    );
+
+const selectedPartnerView =
+    partnerViewControl
+        ? String(
+            partnerViewControl.value || "all"
+          ).trim()
+        : "all";
+
+
+console.log(
+    "SELECTED PARTNER VIEW:",
+    selectedPartnerView
+);         
+console.log(
+    "FAMILY TREE OPTIONS:",
+    {
+        beforeGen,
+        afterGen,
+        showSiblings,
+        showPartner,
+        showMemberPartner,
+        showPartnerSiblings
+    }
+);
+           
+
+           
+           const memberId =
+    selectedFamilyTreeMemberId;
+
+            if(!memberId){
+
+                showMessage(
+                    "Please select a member.",
+                    "warning",
+                    2500
+                );
+
+                return;
+            }
+
+
+            const selectedMember =
+                members.find(
+                    member =>
+                        String(member.memberId) ===
+                        String(memberId)
+                );
+
+
+            if(!selectedMember){
+
+                showMessage(
+                    "Member not found.",
+                    "error",
+                    2500
+                );
+
+                return;
+            }
+           /* =====================================
+   HIDE TREE SELECTION CONTROLS
+   ===================================== */
+
+const memberControl =
+    document.getElementById(
+        "familyTreeMemberSearch"
+    )?.closest(
+        ".family-tree-control"
+    );
+
+const beforeControl =
+    document.getElementById(
+        "familyTreeBefore"
+    )?.closest(
+        ".family-tree-control"
+    );
+
+
+const afterControl =
+    document.getElementById(
+        "familyTreeAfter"
+    )?.closest(
+        ".family-tree-control"
+    );
+
+
+if(memberControl){
+    memberControl.style.display =
+        "none";
+}
+
+
+if(beforeControl){
+    beforeControl.style.display =
+        "none";
+}
+
+
+if(afterControl){
+    afterControl.style.display =
+        "none";
+}
+
+
+const generationRow =
+    document.querySelector(
+        ".family-tree-generation-row"
+    );
+
+if(generationRow){
+    generationRow.style.display =
+        "none";
+}
+
+
+showFamilyTreeBtn.style.display =
+    "none";
+
+            const genderLetter =
+                String(selectedMember.gender)
+                    .toLowerCase() === "female"
+                    ? "F"
+                    : "M";
+
+
+            const diagram =
+                document.getElementById(
+                    "familyTreeDiagram"
+                );
+/* =====================================
+   GET FATHER AND MOTHER
+   ===================================== */
+
+const father =
+    members.find(
+        member =>
+            String(member.memberId) ===
+            String(selectedMember.fatherId || "")
+    );
+
+
+const mother =
+    members.find(
+        member =>
+            String(member.memberId) ===
+            String(selectedMember.motherId || "")
+    );
+
+
+function createTreeMemberBox(member){
+
+    if(!member){
+        return "";
+    }
+
+    const gender =
+        String(member.gender)
+            .toLowerCase() === "female"
+            ? "F"
+            : "M";
+
+    const genderClass =
+        gender === "M"
+            ? "gender-male"
+            : "gender-female";
+
+
+    return `
+
+        <div class="family-tree-test-node">
+
+            <strong>
+                ${member.name}
+            </strong>
+
+            <span class="${genderClass}">
+                ${gender}
+            </span>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================
+   TREE VIEW - GET ALL PARTNERS
+   ===================================== */
+
+function getAllTreePartners(person){
+
+    if(!person){
+        return [];
+    }
+
+    const personId =
+        String(
+            person.memberId || ""
+        ).trim();
+
+    const partnerIds =
+        new Set();
+
+
+    /* DIRECT PARTNER */
+
+    if(person.partnerId){
+
+        partnerIds.add(
+            String(
+                person.partnerId
+            ).trim()
+        );
+
+    }
+
+
+    /* REVERSE PARTNER LINKS */
+
+    members.forEach(
+        function(member){
+
+            if(!member){
+                return;
+            }
+
+            if(
+                String(
+                    member.partnerId || ""
+                ).trim() === personId
+            ){
+
+                partnerIds.add(
+                    String(
+                        member.memberId || ""
+                    ).trim()
+                );
+
+            }
+
+        }
+    );
+
+
+    /* PARTNERS FOUND THROUGH CHILDREN */
+
+    members.forEach(
+        function(child){
+
+            if(!child){
+                return;
+            }
+
+            const fatherId =
+                String(
+                    child.fatherId || ""
+                ).trim();
+
+            const motherId =
+                String(
+                    child.motherId || ""
+                ).trim();
+
+
+            if(
+                fatherId === personId &&
+                motherId &&
+                motherId !== personId
+            ){
+
+                partnerIds.add(
+                    motherId
+                );
+
+            }
+
+
+            if(
+                motherId === personId &&
+                fatherId &&
+                fatherId !== personId
+            ){
+
+                partnerIds.add(
+                    fatherId
+                );
+
+            }
+
+        }
+    );
+
+
+    partnerIds.delete("");
+    partnerIds.delete(personId);
+
+
+    return Array.from(
+        partnerIds
+    )
+    .map(
+        function(partnerId){
+
+            return members.find(
+                function(member){
+
+                    return String(
+                        member.memberId || ""
+                    ).trim() === partnerId;
+
+                }
+            ) || null;
+
+        }
+    )
+    .filter(Boolean);
+
+}
+
+
+/* =====================================
+   ALL PARTNERS OF SELECTED MEMBER
+   ===================================== */
+
+let selectedMemberPartners =
+    getAllTreePartners(
+        selectedMember
+    );
+
+
+/* =====================================
+   PARTNER VIEW
+   APPLY SELECTED PARTNER
+   ===================================== */
+
+if(
+    showMemberPartner &&
+    selectedPartnerView !== "all"
+){
+
+    selectedMemberPartners =
+        selectedMemberPartners.filter(
+            function(partner){
+
+                return String(
+                    partner.memberId || ""
+                ).trim() ===
+                String(
+                    selectedPartnerView
+                ).trim();
+
+            }
+        );
+
+}
+
+
+/* MEMBER PARTNER = NO
+   → NO SELECTED MEMBER PARTNER */
+
+if(!showMemberPartner){
+
+    selectedMemberPartners =
+        [];
+
+}
+
+
+
+console.log(
+    "TREE SELECTED MEMBER PARTNERS:",
+    selectedMemberPartners
+);
+/* =====================================
+   TWO PARTNER LAYOUT
+   LEFT PARTNER | MEMBER | RIGHT PARTNER
+   ===================================== */
+
+const twoPartnerMode =
+    selectedMemberPartners.length >= 2;
+
+
+let leftPartner = null;
+let rightPartner = null;
+
+
+/* =====================================
+   TWO PARTNER SIDE ASSIGNMENT
+
+   PRIORITY:
+   1. MARRIAGE DATE
+      Earlier marriage → LEFT
+      Later marriage   → RIGHT
+
+   2. DOB
+      Older partner    → LEFT
+      Younger partner  → RIGHT
+
+   3. FALLBACK
+      Existing order
+   ===================================== */
+
+if(twoPartnerMode){
+
+    const partner1 =
+        selectedMemberPartners[0];
+
+    const partner2 =
+        selectedMemberPartners[1];
+
+
+    /* =================================
+       DATE HELPER
+       ================================= */
+
+    function getTreeDateValue(value){
+
+        if(!value){
+            return null;
+        }
+
+        const text =
+            String(value).trim();
+
+        if(!text){
+            return null;
+        }
+
+
+        /* YYYY-MM-DD */
+
+        if(
+            /^\d{4}-\d{2}-\d{2}$/.test(
+                text
+            )
+        ){
+
+            const time =
+                new Date(
+                    text + "T00:00:00"
+                ).getTime();
+
+            return Number.isNaN(time)
+                ? null
+                : time;
+        }
+
+
+        /* DD-MM-YYYY / DD/MM/YYYY */
+
+        const parts =
+            text.split(
+                /[-\/]/
+            );
+
+        if(parts.length === 3){
+
+            const day =
+                Number(parts[0]);
+
+            const month =
+                Number(parts[1]);
+
+            const year =
+                Number(parts[2]);
+
+            if(
+                day &&
+                month &&
+                year
+            ){
+
+                const time =
+                    new Date(
+                        year,
+                        month - 1,
+                        day
+                    ).getTime();
+
+                return Number.isNaN(time)
+                    ? null
+                    : time;
+            }
+
+        }
+
+
+        const fallbackTime =
+            new Date(text).getTime();
+
+        return Number.isNaN(
+            fallbackTime
+        )
+            ? null
+            : fallbackTime;
+
+    }
+
+
+    /* =================================
+       MARRIAGE DATES
+       ================================= */
+
+    const marriageDate1 =
+        getTreeDateValue(
+            partner1.marriageDate
+        );
+
+    const marriageDate2 =
+        getTreeDateValue(
+            partner2.marriageDate
+        );
+
+
+    if(
+        marriageDate1 !== null &&
+        marriageDate2 !== null &&
+        marriageDate1 !== marriageDate2
+    ){
+
+        if(
+            marriageDate1 <
+            marriageDate2
+        ){
+
+            leftPartner =
+                partner1;
+
+            rightPartner =
+                partner2;
+
+        }
+        else{
+
+            leftPartner =
+                partner2;
+
+            rightPartner =
+                partner1;
+
+        }
+
+    }
+
+
+    /* =================================
+       MARRIAGE DATE NOT AVAILABLE /
+       SAME → USE DATE OF BIRTH
+       ================================= */
+
+    else{
+
+        const dob1 =
+            getTreeDateValue(
+                partner1.dob ||
+                partner1.dateOfBirth
+            );
+
+        const dob2 =
+            getTreeDateValue(
+                partner2.dob ||
+                partner2.dateOfBirth
+            );
+
+
+        if(
+            dob1 !== null &&
+            dob2 !== null &&
+            dob1 !== dob2
+        ){
+
+            /*
+               Earlier DOB = Older Person
+               Older Partner → LEFT
+            */
+
+            if(
+                dob1 <
+                dob2
+            ){
+
+                leftPartner =
+                    partner1;
+
+                rightPartner =
+                    partner2;
+
+            }
+            else{
+
+                leftPartner =
+                    partner2;
+
+                rightPartner =
+                    partner1;
+
+            }
+
+        }
+
+        else{
+
+            /* FALLBACK */
+
+            leftPartner =
+                partner1;
+
+            rightPartner =
+                partner2;
+
+        }
+
+    }
+
+}
+
+/* =====================================
+   DEBUG - PARTNER SIDE ASSIGNMENT
+   ===================================== */
+
+console.log(
+    "TREE TWO PARTNER MODE:",
+    twoPartnerMode
+);
+
+console.log(
+    "TREE LEFT PARTNER:",
+    leftPartner
+);
+
+console.log(
+    "TREE RIGHT PARTNER:",
+    rightPartner
+);
+
+/* =====================================
+   TWO PARTNER CHILDREN SPLIT
+   ===================================== */
+
+let leftPartnerChildren = [];
+let rightPartnerChildren = [];
+let unassignedPartnerChildren = [];
+
+
+if(twoPartnerMode){
+
+    const selectedMemberId =
+        String(
+            selectedMember.memberId || ""
+        ).trim();
+
+    const leftPartnerId =
+        String(
+            leftPartner?.memberId || ""
+        ).trim();
+
+    const rightPartnerId =
+        String(
+            rightPartner?.memberId || ""
+        ).trim();
+
+    members.forEach(
+        function(child){
+
+            if(!child){
+                return;
+            }
+            const childId =
+                String(
+                    child.memberId || ""
+                ).trim();
+
+            const fatherId =
+                String(
+                    child.fatherId || ""
+                ).trim();
+
+            const motherId =
+                String(
+                    child.motherId || ""
+                ).trim();
+
+            /* DO NOT TREAT SELECTED MEMBER
+               OR PARTNERS AS CHILDREN */
+            if(
+                !childId ||
+                childId === selectedMemberId ||
+                childId === leftPartnerId ||
+                childId === rightPartnerId
+            ){
+                return;
+            }
+            /* =================================
+               LEFT PARTNER + SELECTED MEMBER
+               ================================= */
+
+            const belongsToLeftPartner =
+                (
+                    fatherId === selectedMemberId &&
+                    motherId === leftPartnerId
+                )
+                ||
+                (
+                    motherId === selectedMemberId &&
+                    fatherId === leftPartnerId
+                );
+
+            /* =================================
+               RIGHT PARTNER + SELECTED MEMBER
+               ================================= */
+            const belongsToRightPartner =
+                (
+                    fatherId === selectedMemberId &&
+                    motherId === rightPartnerId
+                )
+                ||
+                (
+                    motherId === selectedMemberId &&
+                    fatherId === rightPartnerId
+                );
+            if(belongsToLeftPartner){
+
+                leftPartnerChildren.push(
+                    child
+                );
+
+                return;
+            }
+            if(belongsToRightPartner){
+
+                rightPartnerChildren.push(
+                    child
+                );
+
+                return;
+            }
+            /* =================================
+               CHILD BELONGS TO SELECTED MEMBER
+               BUT PARTNER COULD NOT BE MATCHED
+               ================================= */
+            if(
+                fatherId === selectedMemberId ||
+                motherId === selectedMemberId
+            ){
+                unassignedPartnerChildren.push(
+                    child
+                );
+
+            }
+
+        }
+    );
+
+}
+
+/* =====================================
+   DEBUG - TWO PARTNER CHILDREN
+   ===================================== */
+
+console.log(
+    "TREE LEFT PARTNER CHILDREN:",
+    leftPartnerChildren
+);
+
+console.log(
+    "TREE RIGHT PARTNER CHILDREN:",
+    rightPartnerChildren
+);
+
+console.log(
+    "TREE UNASSIGNED CHILDREN:",
+    unassignedPartnerChildren
+);
+           
+         /* =====================================
+   SINGLE PARTNER FOR TREE
+
+   Partner View specific partner
+   → use filtered selectedMemberPartners[0]
+
+   All Partners with only one partner
+   → use that partner
+
+   Member Partner = No
+   → null
+   ===================================== */
+
+const partner =
+    showMemberPartner &&
+    selectedMemberPartners.length === 1
+
+        ? selectedMemberPartners[0]
+
+        : null;
+
+
+console.log(
+    "TREE ACTIVE SINGLE PARTNER:",
+    partner
+);
+
+
+let partnerHTML = "";
+
+
+if(partner){
+
+    const partnerGender =
+        String(partner.gender)
+            .toLowerCase() === "female"
+            ? "F"
+            : "M";
+
+
+    partnerHTML = `
+
+        <div class="family-tree-spouse-line"></div>
+
+
+        <div class="family-tree-test-node">
+
+            <strong>
+                ${partner.name}
+            </strong>
+
+            <span class="${
+    partnerGender === "M"
+        ? "gender-male"
+        : "gender-female"
+}">
+    ${partnerGender}
+</span>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================
+   FAMILY TREE RELATIONS
+   ===================================== */
+
+const getMemberById =
+    function(id){
+
+        if(!id){
+            return null;
+        }
+
+        return members.find(
+            m =>
+                String(m.memberId) ===
+                String(id)
+        ) || null;
+
+    };
+
+
+const getChildren =
+    function(member){
+
+        if(!member){
+            return [];
+        }
+
+        return members.filter(
+            m =>
+                String(m.fatherId || "") ===
+                    String(member.memberId)
+                ||
+                String(m.motherId || "") ===
+                    String(member.memberId)
+        );
+
+    };
+
+
+
+/* =====================================
+   SELECTED MEMBER SIBLINGS
+   ===================================== */
+
+const siblings =
+    members.filter(
+        m => {
+
+            if(
+                String(m.memberId) ===
+                String(selectedMember.memberId)
+            ){
+                return false;
+            }
+
+            const sameFather =
+                selectedMember.fatherId &&
+                String(m.fatherId || "") ===
+                String(selectedMember.fatherId);
+
+            const sameMother =
+                selectedMember.motherId &&
+                String(m.motherId || "") ===
+                String(selectedMember.motherId);
+
+            return sameFather || sameMother;
+
+        }
+    );
+
+
+/* =====================================
+   PARTNER PARENTS
+   ===================================== */
+
+const partnerFather =
+    partner
+        ? getMemberById(
+            partner.fatherId
+          )
+        : null;
+
+
+const partnerMother =
+    partner
+        ? getMemberById(
+            partner.motherId
+          )
+        : null;
+
+/* =====================================
+   TWO PARTNER PARENTS
+   ===================================== */
+
+const leftPartnerFather =
+    twoPartnerMode &&
+    leftPartner
+        ? getMemberById(
+            leftPartner.fatherId
+          )
+        : null;
+
+
+const leftPartnerMother =
+    twoPartnerMode &&
+    leftPartner
+        ? getMemberById(
+            leftPartner.motherId
+          )
+        : null;
+
+
+const rightPartnerFather =
+    twoPartnerMode &&
+    rightPartner
+        ? getMemberById(
+            rightPartner.fatherId
+          )
+        : null;
+
+
+const rightPartnerMother =
+    twoPartnerMode &&
+    rightPartner
+        ? getMemberById(
+            rightPartner.motherId
+          )
+        : null;
+
+
+if(twoPartnerMode){
+
+    console.log(
+        "TREE LEFT PARTNER PARENTS:",
+        leftPartnerFather,
+        leftPartnerMother
+    );
+
+    console.log(
+        "TREE MEMBER PARENTS:",
+        father,
+        mother
+    );
+
+    console.log(
+        "TREE RIGHT PARTNER PARENTS:",
+        rightPartnerFather,
+        rightPartnerMother
+    );
+
+}
+   
+         /* =====================================
+   TWO PARTNER PARENTS
+
+   LEFT PARTNER PARENTS
+   MEMBER PARENTS
+   RIGHT PARTNER PARENTS
+   ===================================== */
+/* =====================================
+   DEBUG - TWO PARTNER PARENTS
+   ===================================== */
+
+if(twoPartnerMode){
+
+    console.log(
+        "TREE LEFT PARTNER PARENTS:",
+        {
+            father: leftPartnerFather,
+            mother: leftPartnerMother
+        }
+    );
+
+    console.log(
+        "TREE MEMBER PARENTS:",
+        {
+            father,
+            mother
+        }
+    );
+
+    console.log(
+        "TREE RIGHT PARTNER PARENTS:",
+        {
+            father: rightPartnerFather,
+            mother: rightPartnerMother
+        }
+    );
+
+}  
+/* =====================================
+   ANCESTRY LAYOUT CASE
+   ===================================== */
+
+const memberHasParents =
+    !!(father || mother);
+
+const partnerHasParents =
+    !!(
+        showMemberPartner &&
+        partner &&
+        (partnerFather || partnerMother)
+    );
+let ancestryCase = 0;
+
+if(
+    memberHasParents &&
+    partnerHasParents
+){
+    // CASE 1
+    // LEFT  = Complete Member Ancestry
+    // RIGHT = Complete Partner Ancestry
+
+    ancestryCase = 1;
+
+}else if(
+    memberHasParents &&
+    partner
+){
+    // CASE 2
+    // Member has parents
+    // Partner exists but partner has no parents
+    // LEFT  = Member Father Ancestry
+    // RIGHT = Member Mother Ancestry
+
+    ancestryCase = 2;
+
+}else if(
+    memberHasParents &&
+    !partner
+){
+    // CASE 3
+    // Member has parents
+    // No Partner
+    // LEFT  = Member Father Ancestry
+    // RIGHT = Member Mother Ancestry
+
+    ancestryCase = 3;
+
+}else if(
+    !memberHasParents &&
+    partnerHasParents
+){
+    // CASE 4
+    // Member has no parents
+    // Partner has parents
+    // LEFT  = Partner Father Ancestry
+    // RIGHT = Partner Mother Ancestry
+
+    ancestryCase = 4;
+}
+
+console.log(
+    "FAMILY TREE ANCESTRY CASE:",
+    ancestryCase
+);
+/* =====================================
+   GRAND PARENTS
+   ===================================== */
+
+/* Selected Member - Father's Parents */
+
+const fatherFather =
+    father
+        ? getMemberById(father.fatherId)
+        : null;
+
+const fatherMother =
+    father
+        ? getMemberById(father.motherId)
+        : null;
+
+
+/* Selected Member - Mother's Parents */
+
+const motherFather =
+    mother
+        ? getMemberById(mother.fatherId)
+        : null;
+
+const motherMother =
+    mother
+        ? getMemberById(mother.motherId)
+        : null;
+
+
+/* Partner - Father's Parents */
+
+const partnerFatherFather =
+    partnerFather
+        ? getMemberById(
+            partnerFather.fatherId
+        )
+        : null;
+
+const partnerFatherMother =
+    partnerFather
+        ? getMemberById(
+            partnerFather.motherId
+        )
+        : null;
+
+
+/* Partner - Mother's Parents */
+
+const partnerMotherFather =
+    partnerMother
+        ? getMemberById(
+            partnerMother.fatherId
+        )
+        : null;
+
+const partnerMotherMother =
+    partnerMother
+        ? getMemberById(
+            partnerMother.motherId
+        )
+        : null;
+/* =====================================
+   PARTNER SIBLINGS
+   ===================================== */
+
+const partnerSiblings =
+    partner
+        ? members.filter(
+            function(member){
+
+                if(
+                    !member ||
+                    String(member.memberId) ===
+                    String(partner.memberId)
+                ){
+                    return false;
+                }
+
+
+                const sameFather =
+                    partner.fatherId &&
+                    String(
+                        member.fatherId || ""
+                    ) ===
+                    String(
+                        partner.fatherId
+                    );
+
+
+                const sameMother =
+                    partner.motherId &&
+                    String(
+                        member.motherId || ""
+                    ) ===
+                    String(
+                        partner.motherId
+                    );
+
+
+                return (
+                    sameFather ||
+                    sameMother
+                );
+
+            }
+        )
+        : [];      
+
+/* =====================================
+   CHILDREN
+   ===================================== */
+
+const children =
+    members.filter(
+        m =>
+            String(m.fatherId || "") ===
+                String(selectedMember.memberId)
+            ||
+            String(m.motherId || "") ===
+                String(selectedMember.memberId)
+            ||
+            (
+                partner &&
+                (
+                    String(m.fatherId || "") ===
+                        String(partner.memberId)
+                    ||
+                    String(m.motherId || "") ===
+                        String(partner.memberId)
+                )
+            )
+    );
+/* =====================================
+   GREAT GRANDPARENTS
+   Parents of Grandparents
+   ===================================== */
+
+// Father's Father parents
+const fatherFatherFather =
+    fatherFather
+        ? getMemberById(fatherFather.fatherId)
+        : null;
+
+const fatherFatherMother =
+    fatherFather
+        ? getMemberById(fatherFather.motherId)
+        : null;
+
+
+// Father's Mother parents
+const fatherMotherFather =
+    fatherMother
+        ? getMemberById(fatherMother.fatherId)
+        : null;
+
+const fatherMotherMother =
+    fatherMother
+        ? getMemberById(fatherMother.motherId)
+        : null;
+
+
+// Mother's Father parents
+const motherFatherFather =
+    motherFather
+        ? getMemberById(motherFather.fatherId)
+        : null;
+
+const motherFatherMother =
+    motherFather
+        ? getMemberById(motherFather.motherId)
+        : null;
+
+
+// Mother's Mother parents
+const motherMotherFather =
+    motherMother
+        ? getMemberById(motherMother.fatherId)
+        : null;
+
+const motherMotherMother =
+    motherMother
+        ? getMemberById(motherMother.motherId)
+        : null;
+
+
+// Partner Father's Father parents
+const partnerFatherFatherFather =
+    partnerFatherFather
+        ? getMemberById(
+            partnerFatherFather.fatherId
+        )
+        : null;
+
+const partnerFatherFatherMother =
+    partnerFatherFather
+        ? getMemberById(
+            partnerFatherFather.motherId
+        )
+        : null;
+
+
+// Partner Father's Mother parents
+const partnerFatherMotherFather =
+    partnerFatherMother
+        ? getMemberById(
+            partnerFatherMother.fatherId
+        )
+        : null;
+
+const partnerFatherMotherMother =
+    partnerFatherMother
+        ? getMemberById(
+            partnerFatherMother.motherId
+        )
+        : null;
+
+
+// Partner Mother's Father parents
+const partnerMotherFatherFather =
+    partnerMotherFather
+        ? getMemberById(
+            partnerMotherFather.fatherId
+        )
+        : null;
+
+const partnerMotherFatherMother =
+    partnerMotherFather
+        ? getMemberById(
+            partnerMotherFather.motherId
+        )
+        : null;
+
+
+// Partner Mother's Mother parents
+const partnerMotherMotherFather =
+    partnerMotherMother
+        ? getMemberById(
+            partnerMotherMother.fatherId
+        )
+        : null;
+
+const partnerMotherMotherMother =
+    partnerMotherMother
+        ? getMemberById(
+            partnerMotherMother.motherId
+        )
+        : null;
+
+/* =====================================
+   GENERATION 4
+   GREAT-GREAT-GRANDPARENTS
+   SELECTED MEMBER SIDE
+   ===================================== */
+
+/* Father → Father → Father */
+const fatherFatherFatherFather =
+    getMemberById(
+        fatherFatherFather
+            ? fatherFatherFather.fatherId
+            : ""
+    );
+
+const fatherFatherFatherMother =
+    getMemberById(
+        fatherFatherFather
+            ? fatherFatherFather.motherId
+            : ""
+    );
+
+
+/* Father → Father → Mother */
+const fatherFatherMotherFather =
+    getMemberById(
+        fatherFatherMother
+            ? fatherFatherMother.fatherId
+            : ""
+    );
+
+const fatherFatherMotherMother =
+    getMemberById(
+        fatherFatherMother
+            ? fatherFatherMother.motherId
+            : ""
+    );
+
+
+/* Father → Mother → Father */
+const fatherMotherFatherFather =
+    getMemberById(
+        fatherMotherFather
+            ? fatherMotherFather.fatherId
+            : ""
+    );
+
+const fatherMotherFatherMother =
+    getMemberById(
+        fatherMotherFather
+            ? fatherMotherFather.motherId
+            : ""
+    );
+
+
+/* Father → Mother → Mother */
+const fatherMotherMotherFather =
+    getMemberById(
+        fatherMotherMother
+            ? fatherMotherMother.fatherId
+            : ""
+    );
+
+const fatherMotherMotherMother =
+    getMemberById(
+        fatherMotherMother
+            ? fatherMotherMother.motherId
+            : ""
+    );
+
+
+/* Mother → Father → Father */
+const motherFatherFatherFather =
+    getMemberById(
+        motherFatherFather
+            ? motherFatherFather.fatherId
+            : ""
+    );
+
+const motherFatherFatherMother =
+    getMemberById(
+        motherFatherFather
+            ? motherFatherFather.motherId
+            : ""
+    );
+
+
+/* Mother → Father → Mother */
+const motherFatherMotherFather =
+    getMemberById(
+        motherFatherMother
+            ? motherFatherMother.fatherId
+            : ""
+    );
+
+const motherFatherMotherMother =
+    getMemberById(
+        motherFatherMother
+            ? motherFatherMother.motherId
+            : ""
+    );
+
+
+/* Mother → Mother → Father */
+const motherMotherFatherFather =
+    getMemberById(
+        motherMotherFather
+            ? motherMotherFather.fatherId
+            : ""
+    );
+
+const motherMotherFatherMother =
+    getMemberById(
+        motherMotherFather
+            ? motherMotherFather.motherId
+            : ""
+    );
+
+
+/* Mother → Mother → Mother */
+const motherMotherMotherFather =
+    getMemberById(
+        motherMotherMother
+            ? motherMotherMother.fatherId
+            : ""
+    );
+
+const motherMotherMotherMother =
+    getMemberById(
+        motherMotherMother
+            ? motherMotherMother.motherId
+            : ""
+    );
+
+/* =====================================
+   GENERATION 4
+   GREAT-GREAT-GRANDPARENTS
+   PARTNER SIDE
+   ===================================== */
+
+/* Partner Father → Father → Father */
+const partnerFatherFatherFatherFather =
+    getMemberById(
+        partnerFatherFather
+            ? partnerFatherFather.fatherId
+            : ""
+    );
+
+const partnerFatherFatherFatherMother =
+    getMemberById(
+        partnerFatherFather
+            ? partnerFatherFather.motherId
+            : ""
+    );
+
+
+/* Partner Father → Father → Mother */
+const partnerFatherFatherMotherFather =
+    getMemberById(
+        partnerFatherFatherMother
+            ? partnerFatherFatherMother.fatherId
+            : ""
+    );
+
+const partnerFatherFatherMotherMother =
+    getMemberById(
+        partnerFatherFatherMother
+            ? partnerFatherFatherMother.motherId
+            : ""
+    );
+
+
+/* Partner Father → Mother → Father */
+const partnerFatherMotherFatherFather =
+    getMemberById(
+        partnerFatherMotherFather
+            ? partnerFatherMotherFather.fatherId
+            : ""
+    );
+
+const partnerFatherMotherFatherMother =
+    getMemberById(
+        partnerFatherMotherFather
+            ? partnerFatherMotherFather.motherId
+            : ""
+    );
+
+
+/* Partner Father → Mother → Mother */
+const partnerFatherMotherMotherFather =
+    getMemberById(
+        partnerFatherMotherMother
+            ? partnerFatherMotherMother.fatherId
+            : ""
+    );
+
+const partnerFatherMotherMotherMother =
+    getMemberById(
+        partnerFatherMotherMother
+            ? partnerFatherMotherMother.motherId
+            : ""
+    );
+
+
+/* Partner Mother → Father → Father */
+const partnerMotherFatherFatherFather =
+    getMemberById(
+        partnerMotherFatherFather
+            ? partnerMotherFatherFather.fatherId
+            : ""
+    );
+
+const partnerMotherFatherFatherMother =
+    getMemberById(
+        partnerMotherFatherFather
+            ? partnerMotherFatherFather.motherId
+            : ""
+    );
+
+
+/* Partner Mother → Father → Mother */
+const partnerMotherFatherMotherFather =
+    getMemberById(
+        partnerMotherFatherMother
+            ? partnerMotherFatherMother.fatherId
+            : ""
+    );
+
+const partnerMotherFatherMotherMother =
+    getMemberById(
+        partnerMotherFatherMother
+            ? partnerMotherFatherMother.motherId
+            : ""
+    );
+
+
+/* Partner Mother → Mother → Father */
+const partnerMotherMotherFatherFather =
+    getMemberById(
+        partnerMotherMotherFather
+            ? partnerMotherMotherFather.fatherId
+            : ""
+    );
+
+const partnerMotherMotherFatherMother =
+    getMemberById(
+        partnerMotherMotherFather
+            ? partnerMotherMotherFather.motherId
+            : ""
+    );
+
+
+/* Partner Mother → Mother → Mother */
+const partnerMotherMotherMotherFather =
+    getMemberById(
+        partnerMotherMotherMother
+            ? partnerMotherMotherMother.fatherId
+            : ""
+    );
+
+const partnerMotherMotherMotherMother =
+    getMemberById(
+        partnerMotherMotherMother
+            ? partnerMotherMotherMother.motherId
+            : ""
+    );
+
+           
+/* =====================================
+   TREE BOX
+   ===================================== */
+
+function treeBox(member, extraClass = ""){
+
+    if(!member){
+        return "";
+    }
+
+    const isFemale =
+        String(member.gender)
+            .toLowerCase() === "female";
+
+    const genderClass =
+        isFemale
+            ? "tree-female"
+            : "tree-male";
+
+
+    return `
+
+        <div
+            class="
+                family-tree-test-node
+                ${genderClass}
+                ${extraClass}
+            "
+            data-tree-member="${member.memberId}">
+
+            <strong>
+                ${member.name || ""}
+            </strong>
+
+        </div>
+
+    `;
+
+}
+ function coupleBoxes(
+    person,
+    personClass,
+    partner,
+    partnerClass,
+    showPartnerBox = true
+){
+
+    if(!person){
+        return "";
+    }
+
+    if(
+        !partner ||
+        !showPartnerBox
+    ){
+        return treeBox(
+            person,
+            personClass
+        );
+    }
+
+    const personIsFemale =
+        String(person.gender || "")
+            .trim()
+            .toLowerCase() === "female";
+
+    const partnerIsFemale =
+        String(partner.gender || "")
+            .trim()
+            .toLowerCase() === "female";
+
+
+    /* MALE LEFT - FEMALE RIGHT */
+
+    if(
+        personIsFemale &&
+        !partnerIsFemale
+    ){
+
+        return (
+            treeBox(
+                partner,
+                partnerClass
+            )
+            +
+            treeBox(
+                person,
+                personClass
+            )
+        );
+    }
+
+
+    return (
+        treeBox(
+            person,
+            personClass
+        )
+        +
+        treeBox(
+            partner,
+            partnerClass
+        )
+    );
+}          
+/* =====================================
+   ANCESTOR HIERARCHY RENDERER
+
+   Selected Member:
+   prefix = ""
+
+   Partner:
+   prefix = "partner"
+
+   depth = beforeGen
+   ===================================== */
+
+function renderAncestorParents(
+    person,
+    depth,
+    prefix = ""
+){
+
+    if(!person || depth <= 0){
+        return "";
+    }
+
+
+    const isRootAncestorBranch =
+        prefix === "" ||
+        prefix === "partner";
+
+    const father =
+        getMemberById(
+            person.fatherId
+        );
+
+    const mother =
+        getMemberById(
+            person.motherId
+        );
+
+
+    if(!father && !mother){
+        return "";
+    }
+
+
+    const fatherPath =
+        prefix
+            ? `${prefix}-father`
+            : "father";
+
+    const motherPath =
+        prefix
+            ? `${prefix}-mother`
+            : "mother";
+
+
+    return `
+
+    <div class="
+        family-tree-ancestor-generation-branch
+        ${
+            isRootAncestorBranch
+                ? "family-tree-root-ancestor-branch"
+                : ""
+        }
+        ${
+            prefix === "partner"
+                ? "family-tree-root-partner-ancestor-branch"
+                : ""
+        }
+    ">
+            <!-- FATHER BRANCH -->
+
+            ${
+                father
+                    ? `
+                        <div class="family-tree-ancestor-parent-branch">
+
+                            ${renderAncestorParents(
+                                father,
+                                depth - 1,
+                                fatherPath
+                            )}
+
+                            ${treeBox(
+                                father,
+                                `tree-${fatherPath}`
+                            )}
+
+                        </div>
+                      `
+                    : ""
+            }
+
+
+            <!-- MOTHER BRANCH -->
+
+            ${
+                mother
+                    ? `
+                        <div class="family-tree-ancestor-parent-branch">
+
+                            ${renderAncestorParents(
+                                mother,
+                                depth - 1,
+                                motherPath
+                            )}
+
+                            ${treeBox(
+                                mother,
+                                `tree-${motherPath}`
+                            )}
+
+                        </div>
+                      `
+                    : ""
+            }
+
+        </div>
+
+    `;
+}
+
+/* =====================================
+   SINGLE ANCESTOR SIDE RENDERER
+   ===================================== */
+
+function renderAncestorParentBranch(
+    parent,
+    depth,
+    path
+){
+
+    if(!parent || depth <= 0){
+        return "";
+    }
+
+    return `
+
+        <div class="family-tree-ancestor-parent-branch">
+
+            ${renderAncestorParents(
+                parent,
+                depth - 1,
+                path
+            )}
+
+            ${treeBox(
+                parent,
+                `tree-${path}`
+            )}
+
+        </div>
+
+    `;
+}
+/* =====================================
+   ANCESTRY LEFT / RIGHT HTML
+   ===================================== */
+
+
+      let leftAncestorHTML = "";
+let centerAncestorHTML = "";
+let rightAncestorHTML = "";
+
+
+/* =====================================
+   TWO PARTNER MODE
+   THREE OWN ANCESTRY BRANCHES
+
+   LEFT   = Left Partner
+   CENTER = Selected Member
+   RIGHT  = Right Partner
+   ===================================== */
+
+if(twoPartnerMode){
+
+    leftAncestorHTML =
+        renderAncestorParents(
+            leftPartner,
+            beforeGen,
+            "left-partner"
+        );
+
+
+    centerAncestorHTML =
+        renderAncestorParents(
+            selectedMember,
+            beforeGen,
+            ""
+        );
+
+
+    rightAncestorHTML =
+        renderAncestorParents(
+            rightPartner,
+            beforeGen,
+            "right-partner"
+        );
+
+}
+else if(ancestryCase === 1){     
+           /* =====================================
+       ANCESTRY SIDE RULE
+
+       MALE PERSON   → ALWAYS LEFT
+       FEMALE PERSON → ALWAYS RIGHT
+
+       Selected member evaraina
+       ee rule maradu.
+       ===================================== */
+
+    const selectedIsFemale =
+        String(
+            selectedMember.gender || ""
+        )
+        .trim()
+        .toLowerCase() === "female";
+
+
+    const partnerIsFemale =
+        partner &&
+        String(
+            partner.gender || ""
+        )
+        .trim()
+        .toLowerCase() === "female";
+
+
+    /*
+       Normal male + female couple
+    */
+
+    if(
+        selectedIsFemale &&
+        !partnerIsFemale
+    ){
+
+        /*
+           Selected = FEMALE
+           Partner  = MALE
+
+           LEFT  → MALE partner ancestry
+           RIGHT → FEMALE selected ancestry
+        */
+
+        leftAncestorHTML =
+            renderAncestorParents(
+                partner,
+                beforeGen,
+                "partner"
+            );
+
+
+        rightAncestorHTML =
+            renderAncestorParents(
+                selectedMember,
+                beforeGen,
+                ""
+            );
+    }
+    else{
+        /*
+           Selected = MALE
+           Partner  = FEMALE
+           LEFT  → MALE selected ancestry
+           RIGHT → FEMALE partner ancestry
+        */
+        leftAncestorHTML =
+            renderAncestorParents(
+                selectedMember,
+                beforeGen,
+                ""
+            );
+        rightAncestorHTML =
+            renderAncestorParents(
+                partner,
+                beforeGen,
+                "partner"
+            );
+    }
+}else if(
+    ancestryCase === 2 ||
+    ancestryCase === 3
+){
+
+    /* CASE 2 / CASE 3
+       LEFT  = Member Father Ancestry
+       RIGHT = Member Mother Ancestry
+    */
+
+    leftAncestorHTML =
+        renderAncestorParentBranch(
+            father,
+            beforeGen,
+            "father"
+        );
+
+    rightAncestorHTML =
+        renderAncestorParentBranch(
+            mother,
+            beforeGen,
+            "mother"
+        );
+
+
+}else if(ancestryCase === 4){
+
+    /* CASE 4
+       LEFT  = Partner Father Ancestry
+       RIGHT = Partner Mother Ancestry
+    */
+
+    leftAncestorHTML =
+        renderAncestorParentBranch(
+            partnerFather,
+            beforeGen,
+            "partner-father"
+        );
+
+    rightAncestorHTML =
+        renderAncestorParentBranch(
+            partnerMother,
+            beforeGen,
+            "partner-mother"
+        );
+}
+           
+/* =====================================
+   GRAND CHILDREN HTML
+   ===================================== */
+
+let childrenHTML = "";
+
+
+/* =====================================
+   CHILD BRANCH HTML GENERATOR
+   ===================================== */
+
+function buildSelectedChildrenHTML(
+    childList
+){
+
+    let html = "";
+
+
+    childList.forEach(
+        child => {
+
+        const childPartner =
+            members.find(
+                m =>
+                    String(m.memberId) ===
+                    String(child.partnerId || "")
+            )
+            ||
+            members.find(
+                m =>
+                    String(m.partnerId || "") ===
+                    String(child.memberId)
+            );
+
+
+        const grandChildren =
+            getChildren(child);
+
+
+        html += `
+            <div class="family-tree-child-branch">
+
+               <div class="family-tree-child-couple">
+
+    ${coupleBoxes(
+        child,
+        "tree-child-node",
+        childPartner,
+        "tree-child-partner",
+        showPartner
+    )}
+
+</div>
+
+                ${
+                    grandChildren.length
+                    ? `
+
+                        <div class="family-tree-grandchildren-row">
+
+                            ${
+                                grandChildren
+    .map(
+        grandChild => {
+
+            const grandChildPartner =
+                members.find(
+                    member =>
+                        String(member.memberId) ===
+                        String(grandChild.partnerId || "")
+                )
+                ||
+                members.find(
+                    member =>
+                        String(member.partnerId || "") ===
+                        String(grandChild.memberId)
+                );
+
+            const greatGrandChildren =
+                members.filter(
+                    member =>
+                        String(member.fatherId || "") ===
+                            String(grandChild.memberId)
+                        ||
+                        String(member.motherId || "") ===
+                            String(grandChild.memberId)
+                        ||
+                        (
+                            grandChildPartner &&
+                            (
+                                String(member.fatherId || "") ===
+                                    String(grandChildPartner.memberId)
+                                ||
+                                String(member.motherId || "") ===
+                                    String(grandChildPartner.memberId)
+                            )
+                        )
+                );
+
+            return `
+                <div class="family-tree-grandchild-branch">
+
+                    <div class="family-tree-grandchild-couple">
+
+    ${coupleBoxes(
+        grandChild,
+        "tree-grandchild-node",
+        grandChildPartner,
+        "tree-grandchild-partner",
+        showPartner
+    )}
+
+</div>
+                    ${
+                        greatGrandChildren.length
+                            ? `
+                                <div class="family-tree-great-grandchildren-row">
+
+                                    ${
+                                        greatGrandChildren
+    .map(
+        greatGrandChild => {
+
+            const greatGrandChildPartner =
+                members.find(
+                    member =>
+                        String(member.memberId) ===
+                        String(
+                            greatGrandChild.partnerId || ""
+                        )
+                )
+                ||
+                members.find(
+                    member =>
+                        String(member.partnerId || "") ===
+                        String(greatGrandChild.memberId)
+                );
+/* =====================================
+   GENERATION 4
+   GREAT-GREAT-GRANDCHILDREN
+   ===================================== */
+
+const greatGreatGrandChildren =
+    members.filter(
+        member =>
+
+            String(member.fatherId || "") ===
+                String(greatGrandChild.memberId)
+
+            ||
+
+            String(member.motherId || "") ===
+                String(greatGrandChild.memberId)
+
+            ||
+
+            (
+                greatGrandChildPartner &&
+                (
+                    String(member.fatherId || "") ===
+                        String(greatGrandChildPartner.memberId)
+
+                    ||
+
+                    String(member.motherId || "") ===
+                        String(greatGrandChildPartner.memberId)
+                )
+            )
+    );
+
+    return `
+    <div class="family-tree-great-grandchild-branch">
+
+        <div class="family-tree-great-grandchild-couple">
+
+            ${coupleBoxes(
+                greatGrandChild,
+                "tree-great-grandchild-node",
+                greatGrandChildPartner,
+                "tree-great-grandchild-partner",
+                showPartner
+            )}
+
+        </div>
+
+
+        ${
+            greatGreatGrandChildren.length
+
+                ? `
+
+                    <div class="family-tree-great-great-grandchildren-row">
+
+                        ${
+                            greatGreatGrandChildren
+                                .map(
+                                    greatGreatGrandChild => {
+
+                                        const greatGreatGrandChildPartner =
+                                            members.find(
+                                                member =>
+                                                    String(
+                                                        member.memberId
+                                                    ) ===
+                                                    String(
+                                                        greatGreatGrandChild.partnerId || ""
+                                                    )
+                                            )
+                                            ||
+                                            members.find(
+                                                member =>
+                                                    String(
+                                                        member.partnerId || ""
+                                                    ) ===
+                                                    String(
+                                                        greatGreatGrandChild.memberId
+                                                    )
+                                            );
+
+
+                                        return `
+                                            <div class="family-tree-great-great-grandchild-couple">
+
+                                                ${coupleBoxes(
+                                                    greatGreatGrandChild,
+                                                    "tree-great-great-grandchild-node",
+                                                    greatGreatGrandChildPartner,
+                                                    "tree-great-great-grandchild-partner",
+                                                    showPartner
+                                                )}
+
+                                            </div>
+                                        `;
+
+                                    }
+                                )
+                                .join("")
+                        }
+
+                    </div>
+
+                  `
+
+                : ""
+        }
+
+    </div>
+`;
+        }
+    )
+    .join("")                                    }
+
+                                </div>
+                              `
+                            : ""
+                    }
+
+                </div>
+            `;
+        }
+    )
+    .join("")
+                            }
+
+                        </div>
+
+                      `
+                    : ""
+                }
+
+            </div>
+
+        `;
+
+    
+    }
+);
+
+
+    return html;
+
+}
+
+/* =====================================
+   PARTNER VIEW
+   SPECIFIC PARTNER CHILDREN ONLY
+   ===================================== */
+
+let displayChildren =
+    children;
+
+
+if(
+    showMemberPartner &&
+    selectedPartnerView !== "all" &&
+    partner
+){
+
+    const selectedMemberId =
+        String(
+            selectedMember.memberId || ""
+        ).trim();
+
+    const selectedPartnerId =
+        String(
+            partner.memberId || ""
+        ).trim();
+
+
+    displayChildren =
+        children.filter(
+            function(child){
+
+                const fatherId =
+                    String(
+                        child.fatherId || ""
+                    ).trim();
+
+                const motherId =
+                    String(
+                        child.motherId || ""
+                    ).trim();
+
+
+                return (
+                    fatherId === selectedMemberId &&
+                    motherId === selectedPartnerId
+                )
+                ||
+                (
+                    motherId === selectedMemberId &&
+                    fatherId === selectedPartnerId
+                );
+
+            }
+        );
+
+}
+
+
+console.log(
+    "TREE DISPLAY CHILDREN:",
+    displayChildren
+);
+/* =====================================
+   NORMAL CHILDREN HTML
+   Existing one-partner behaviour
+   ===================================== */
+
+childrenHTML =
+    buildSelectedChildrenHTML(
+        displayChildren
+    );
+
+/* =====================================
+   TWO PARTNER CHILDREN HTML
+   ===================================== */
+
+const leftPartnerChildrenHTML =
+    twoPartnerMode
+        ? buildSelectedChildrenHTML(
+            leftPartnerChildren
+          )
+        : "";
+
+
+const rightPartnerChildrenHTML =
+    twoPartnerMode
+        ? buildSelectedChildrenHTML(
+            rightPartnerChildren
+          )
+        : "";
+
+/* =====================================
+   PERMANENT FAMILY SIDE RULE
+
+   MALE PERSON FAMILY   → LEFT
+   FEMALE PERSON FAMILY → RIGHT
+   ===================================== */
+
+const selectedIsFemaleForLayout =
+    String(
+        selectedMember.gender || ""
+    )
+    .trim()
+    .toLowerCase() === "female";
+
+
+const partnerIsFemaleForLayout =
+    partner &&
+    String(
+        partner.gender || ""
+    )
+    .trim()
+    .toLowerCase() === "female";
+
+
+/*
+   These variables decide whose siblings
+   belong on LEFT and RIGHT.
+
+   IMPORTANT:
+   siblings          = selected member siblings
+   partnerSiblings   = partner siblings
+*/
+
+let leftSideSiblings = [];
+let rightSideSiblings = [];
+
+
+if(
+    partner &&
+    selectedIsFemaleForLayout &&
+    !partnerIsFemaleForLayout
+){
+
+    /*
+       Partner  = MALE   → LEFT
+       Selected = FEMALE → RIGHT
+    */
+
+    leftSideSiblings =
+        partnerSiblings;
+
+    rightSideSiblings =
+        siblings;
+
+}
+else{
+
+    /*
+       Selected = MALE   → LEFT
+       Partner  = FEMALE → RIGHT
+    */
+
+    leftSideSiblings =
+        siblings;
+
+    rightSideSiblings =
+        partner
+            ? partnerSiblings
+            : [];
+
+}
+
+           
+/* =====================================
+   SIBLINGS + PARTNERS + CHILDREN
+   ===================================== */
+
+           
+let siblingsHTML = "";
+
+if(showSiblings){
+
+siblings.forEach(
+    sibling => {
+        const siblingPartner =
+            members.find(
+                member =>
+                    String(member.memberId) ===
+                    String(sibling.partnerId || "")
+            )
+            ||
+            members.find(
+                member =>
+                    String(member.partnerId || "") ===
+                    String(sibling.memberId)
+            );
+
+
+        const siblingChildren =
+            members.filter(
+                child =>
+                    String(child.fatherId || "") ===
+                        String(sibling.memberId)
+                    ||
+                    String(child.motherId || "") ===
+                        String(sibling.memberId)
+                    ||
+                    (
+                        siblingPartner &&
+                        (
+                            String(child.fatherId || "") ===
+                                String(siblingPartner.memberId)
+                            ||
+                            String(child.motherId || "") ===
+                                String(siblingPartner.memberId)
+                        )
+                    )
+            );
+
+
+        siblingsHTML += `
+
+            <div class="family-tree-sibling-branch">
+
+                <div class="family-tree-sibling-couple">
+
+    ${coupleBoxes(
+        sibling,
+        "tree-sibling",
+        siblingPartner,
+        "tree-sibling-partner",
+        showPartner
+    )}
+
+</div>
+
+   ${
+    siblingChildren.length
+        ? `
+            <div class="family-tree-sibling-children-row">
+
+                ${
+                    siblingChildren
+                        .map(
+                            child => {
+
+                                const childPartner =
+                                    members.find(
+                                        member =>
+                                            String(member.memberId) ===
+                                            String(child.partnerId || "")
+                                    )
+                                    ||
+                                    members.find(
+                                        member =>
+                                            String(member.partnerId || "") ===
+                                            String(child.memberId)
+                                    );
+
+
+                                const childChildren =
+                                    members.filter(
+                                        member =>
+                                            String(member.fatherId || "") ===
+                                                String(child.memberId)
+                                            ||
+                                            String(member.motherId || "") ===
+                                                String(child.memberId)
+                                            ||
+                                            (
+                                                childPartner &&
+                                                (
+                                                    String(member.fatherId || "") ===
+                                                        String(childPartner.memberId)
+                                                    ||
+                                                    String(member.motherId || "") ===
+                                                        String(childPartner.memberId)
+                                                )
+                                            )
+                                    );
+
+
+                                return `
+
+                                    <div class="family-tree-sibling-child-branch">
+
+                                       <div class="family-tree-sibling-child-couple">
+
+    ${coupleBoxes(
+        child,
+        "tree-sibling-child",
+        childPartner,
+        "tree-sibling-child-partner",
+        showPartner
+    )}
+
+</div>
+
+                                        ${
+                                            childChildren.length
+                                                ? `
+                                                    <div class="family-tree-sibling-grandchildren-row">
+
+                                                        ${
+                                                           childChildren
+    .map(
+        grandChild => {
+
+            const grandChildPartner =
+                members.find(
+                    member =>
+                        String(member.memberId) ===
+                        String(grandChild.partnerId || "")
+                )
+                ||
+                members.find(
+                    member =>
+                        String(member.partnerId || "") ===
+                        String(grandChild.memberId)
+                );
+
+
+            const greatGrandChildren =
+                members.filter(
+                    member =>
+                        String(member.fatherId || "") ===
+                            String(grandChild.memberId)
+                        ||
+                        String(member.motherId || "") ===
+                            String(grandChild.memberId)
+                        ||
+                        (
+                            grandChildPartner &&
+                            (
+                                String(member.fatherId || "") ===
+                                    String(grandChildPartner.memberId)
+                                ||
+                                String(member.motherId || "") ===
+                                    String(grandChildPartner.memberId)
+                            )
+                        )
+                );
+
+
+            return `
+
+                <div class="family-tree-sibling-grandchild-branch">
+
+                 <div class="family-tree-sibling-grandchild-couple">
+
+    ${coupleBoxes(
+        grandChild,
+        "tree-sibling-grandchild",
+        grandChildPartner,
+        "tree-sibling-grandchild-partner",
+        showPartner
+    )}
+
+</div>
+
+                    ${
+                        greatGrandChildren.length
+                            ? `
+                                <div class="family-tree-sibling-great-grandchildren-row">
+
+                                    ${
+                                        greatGrandChildren
+                                            .map(
+                                                greatGrandChild =>
+                                                    treeBox(
+                                                        greatGrandChild,
+                                                        "tree-sibling-great-grandchild"
+                                                    )
+                                            )
+                                            .join("")
+                                    }
+
+                                </div>
+                              `
+                            : ""
+                    }
+
+                </div>
+            `;
+        }
+    )
+    .join("")                                                        }
+
+                                                    </div>
+                                                  `
+                                                : ""
+                                        }
+
+                                    </div>
+                                `;
+
+                            }
+                        )
+                        .join("")
+                }
+
+            </div>
+          `
+        : ""
+}
+
+            </div>
+        `;
+
+    }
+);
+
+} // END showSiblings
+
+ /* =====================================
+   PARTNER SIBLINGS + PARTNERS + CHILDREN
+   ===================================== */
+let partnerSiblingsHTML = "";
+
+if(showPartnerSiblings){
+
+partnerSiblings.forEach(
+    sibling => {
+        const siblingPartner =
+            members.find(
+                member =>
+                    String(member.memberId) ===
+                    String(sibling.partnerId || "")
+            )
+            ||
+            members.find(
+                member =>
+                    String(member.partnerId || "") ===
+                    String(sibling.memberId)
+            );
+
+
+        const siblingChildren =
+            members.filter(
+                child =>
+                    String(child.fatherId || "") ===
+                        String(sibling.memberId)
+                    ||
+                    String(child.motherId || "") ===
+                        String(sibling.memberId)
+                    ||
+                    (
+                        siblingPartner &&
+                        (
+                            String(child.fatherId || "") ===
+                                String(siblingPartner.memberId)
+                            ||
+                            String(child.motherId || "") ===
+                                String(siblingPartner.memberId)
+                        )
+                    )
+            );
+
+
+        partnerSiblingsHTML += `
+
+            <div class="family-tree-partner-sibling-branch">
+
+               <div class="family-tree-partner-sibling-couple">
+
+    ${coupleBoxes(
+        sibling,
+        "tree-partner-sibling",
+        siblingPartner,
+        "tree-partner-sibling-partner",
+        showPartner
+    )}
+
+</div>
+
+               ${
+    siblingChildren.length
+        ? `
+            <div class="family-tree-partner-sibling-children-row">
+
+                ${
+                    siblingChildren
+                        .map(
+                            child => {
+
+                                const childPartner =
+                                    members.find(
+                                        member =>
+                                            String(member.memberId) ===
+                                            String(child.partnerId || "")
+                                    )
+                                    ||
+                                    members.find(
+                                        member =>
+                                            String(member.partnerId || "") ===
+                                            String(child.memberId)
+                                    );
+
+
+                                const childChildren =
+                                    members.filter(
+                                        member =>
+                                            String(member.fatherId || "") ===
+                                                String(child.memberId)
+                                            ||
+                                            String(member.motherId || "") ===
+                                                String(child.memberId)
+                                            ||
+                                            (
+                                                childPartner &&
+                                                (
+                                                    String(member.fatherId || "") ===
+                                                        String(childPartner.memberId)
+                                                    ||
+                                                    String(member.motherId || "") ===
+                                                        String(childPartner.memberId)
+                                                )
+                                            )
+                                    );
+
+
+                                return `
+
+                                    <div class="family-tree-partner-sibling-child-branch">
+
+                                        <div class="family-tree-partner-sibling-child-couple">
+
+    ${coupleBoxes(
+        child,
+        "tree-partner-sibling-child",
+        childPartner,
+        "tree-partner-sibling-child-partner",
+        showPartner
+    )}
+
+</div>
+
+                                        ${
+                                            childChildren.length
+                                                ? `
+                                                    <div class="family-tree-partner-sibling-grandchildren-row">
+
+                                                        ${
+                                                            childChildren
+                                                                .map(
+                                                                    grandChild =>
+                                                                        treeBox(
+                                                                            grandChild,
+                                                                            "tree-partner-sibling-grandchild"
+                                                                        )
+                                                                )
+                                                                .join("")
+                                                        }
+
+                                                    </div>
+                                                  `
+                                                : ""
+                                        }
+
+                                    </div>
+                                `;
+
+                            }
+                        )
+                        .join("")
+                }
+
+            </div>
+          `
+        : ""
+}
+            </div>
+        `;
+
+    }
+);   
+
+   } // END showPartnerSiblings
+
+/* =====================================
+   MAIN TREE HTML
+   ===================================== */
+
+diagram.innerHTML = `
+<div class="family-tree-toolbar">
+    <div class="family-tree-legend">
+
+        <div class="family-tree-legend-item">
+            <span class="legend-box legend-male"></span>
+            <span>Male</span>
+        </div>
+
+        <div class="family-tree-legend-item">
+            <span class="legend-box legend-female"></span>
+            <span>Female</span>
+        </div>
+
+    </div>
+
+
+    <div class="family-tree-zoom-controls">
+
+        <button
+            type="button"
+            id="familyTreeZoomOut"
+            class="family-tree-zoom-btn">
+            −
+        </button>
+
+        <span id="familyTreeZoomValue">
+            100%
+        </span>
+
+        <button
+            type="button"
+            id="familyTreeZoomIn"
+            class="family-tree-zoom-btn">
+            +
+        </button>
+
+        <button
+            type="button"
+            id="familyTreeZoomReset"
+            class="family-tree-zoom-reset">
+            Reset
+        </button>
+<button
+    type="button"
+    id="familyTreeDownloadBtn"
+    class="family-tree-download-btn">
+    Download
+</button>
+
+<div
+    id="familyTreeDownloadMenu"
+    class="family-tree-download-menu"
+    style="display:none;">
+
+    <div class="family-tree-download-title">
+        Select Page Size
+    </div>
+
+    <button type="button" data-tree-page="A4">
+        A4
+    </button>
+
+    <button type="button" data-tree-page="LEGAL">
+        Legal
+    </button>
+
+    <button type="button" data-tree-page="A3">
+        A3
+    </button>
+
+    <button type="button" data-tree-page="A2">
+        A2
+    </button>
+
+    <button type="button" data-tree-page="A1">
+        A1
+    </button>
+
+    <button
+        type="button"
+        id="familyTreeDownloadCancel">
+        Cancel
+    </button>
+
+</div>
+    </div>
+
+</div>
+<div class="family-tree-scroll">
+
+       <div
+    id="familyTreeCanvas"
+    class="family-tree-canvas ${
+        partner
+            ? "family-tree-has-partner"
+            : "family-tree-no-partner"
+    }">
+
+            <svg
+                id="familyTreeLines"
+                class="family-tree-lines">
+   
+            </svg>
+
+${
+    ancestryCase > 0
+        ? `
+            <div class="family-tree-split-ancestor-zone">
+
+                <!-- LEFT ANCESTRY -->
+
+                <div class="family-tree-member-ancestor-tree">
+
+                    ${leftAncestorHTML}
+
+                </div>
+
+
+               <!-- CENTER ANCESTRY - SELECTED MEMBER -->
+
+<div class="family-tree-ancestor-center-space">
+
+    ${
+        twoPartnerMode
+            ? centerAncestorHTML
+            : ""
+    }
+
+</div>
+
+                <!-- RIGHT ANCESTRY -->
+
+                <div class="family-tree-partner-ancestor-tree">
+
+                    ${rightAncestorHTML}
+
+                </div>
+
+            </div>
+          `
+        : ""
+}
+<!-- ============================
+     GREAT-GREAT-GRANDPARENTS ROW
+     GENERATION 4
+     ============================ -->
+
+
+<!-- ============================
+     GREAT-GREAT-GRANDPARENTS ROW
+     GENERATION 4
+     ============================ -->
+
+<div class="family-tree-great-great-grandparents-row">
+
+    <!-- SELECTED MEMBER SIDE -->
+
+    <div class="family-tree-ancestor-selected-side">
+    
+    <div class="family-tree-great-great-grandparent-couple">
+        ${fatherFatherFatherFather
+            ? treeBox(fatherFatherFatherFather, "tree-father-father-father-father")
+            : ""}
+
+        ${fatherFatherFatherMother
+            ? treeBox(fatherFatherFatherMother, "tree-father-father-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${fatherFatherMotherFather
+            ? treeBox(fatherFatherMotherFather, "tree-father-father-mother-father")
+            : ""}
+
+        ${fatherFatherMotherMother
+            ? treeBox(fatherFatherMotherMother, "tree-father-father-mother-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${fatherMotherFatherFather
+            ? treeBox(fatherMotherFatherFather, "tree-father-mother-father-father")
+            : ""}
+
+        ${fatherMotherFatherMother
+            ? treeBox(fatherMotherFatherMother, "tree-father-mother-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${fatherMotherMotherFather
+            ? treeBox(fatherMotherMotherFather, "tree-father-mother-mother-father")
+            : ""}
+
+        ${fatherMotherMotherMother
+            ? treeBox(fatherMotherMotherMother, "tree-father-mother-mother-mother")
+            : ""}
+    </div>
+
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${motherFatherFatherFather
+            ? treeBox(motherFatherFatherFather, "tree-mother-father-father-father")
+            : ""}
+
+        ${motherFatherFatherMother
+            ? treeBox(motherFatherFatherMother, "tree-mother-father-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${motherFatherMotherFather
+            ? treeBox(motherFatherMotherFather, "tree-mother-father-mother-father")
+            : ""}
+
+        ${motherFatherMotherMother
+            ? treeBox(motherFatherMotherMother, "tree-mother-father-mother-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${motherMotherFatherFather
+            ? treeBox(motherMotherFatherFather, "tree-mother-mother-father-father")
+            : ""}
+
+        ${motherMotherFatherMother
+            ? treeBox(motherMotherFatherMother, "tree-mother-mother-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${motherMotherMotherFather
+            ? treeBox(motherMotherMotherFather, "tree-mother-mother-mother-father")
+            : ""}
+
+        ${motherMotherMotherMother
+            ? treeBox(motherMotherMotherMother, "tree-mother-mother-mother-mother")
+            : ""}
+    </div>
+
+
+        </div>
+
+    <!-- PARTNER SIDE -->
+
+    <div class="family-tree-ancestor-partner-side">
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerFatherFatherFatherFather
+            ? treeBox(partnerFatherFatherFatherFather, "tree-partner-father-father-father-father")
+            : ""}
+
+        ${partnerFatherFatherFatherMother
+            ? treeBox(partnerFatherFatherFatherMother, "tree-partner-father-father-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerFatherFatherMotherFather
+            ? treeBox(partnerFatherFatherMotherFather, "tree-partner-father-father-mother-father")
+            : ""}
+
+        ${partnerFatherFatherMotherMother
+            ? treeBox(partnerFatherFatherMotherMother, "tree-partner-father-father-mother-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerFatherMotherFatherFather
+            ? treeBox(partnerFatherMotherFatherFather, "tree-partner-father-mother-father-father")
+            : ""}
+
+        ${partnerFatherMotherFatherMother
+            ? treeBox(partnerFatherMotherFatherMother, "tree-partner-father-mother-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerFatherMotherMotherFather
+            ? treeBox(partnerFatherMotherMotherFather, "tree-partner-father-mother-mother-father")
+            : ""}
+
+        ${partnerFatherMotherMotherMother
+            ? treeBox(partnerFatherMotherMotherMother, "tree-partner-father-mother-mother-mother")
+            : ""}
+    </div>
+
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerMotherFatherFatherFather
+            ? treeBox(partnerMotherFatherFatherFather, "tree-partner-mother-father-father-father")
+            : ""}
+
+        ${partnerMotherFatherFatherMother
+            ? treeBox(partnerMotherFatherFatherMother, "tree-partner-mother-father-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerMotherFatherMotherFather
+            ? treeBox(partnerMotherFatherMotherFather, "tree-partner-mother-father-mother-father")
+            : ""}
+
+        ${partnerMotherFatherMotherMother
+            ? treeBox(partnerMotherFatherMotherMother, "tree-partner-mother-father-mother-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerMotherMotherFatherFather
+            ? treeBox(partnerMotherMotherFatherFather, "tree-partner-mother-mother-father-father")
+            : ""}
+
+        ${partnerMotherMotherFatherMother
+            ? treeBox(partnerMotherMotherFatherMother, "tree-partner-mother-mother-father-mother")
+            : ""}
+    </div>
+
+    <div class="family-tree-great-great-grandparent-couple">
+        ${partnerMotherMotherMotherFather
+            ? treeBox(partnerMotherMotherMotherFather, "tree-partner-mother-mother-mother-father")
+            : ""}
+
+        ${partnerMotherMotherMotherMother
+            ? treeBox(partnerMotherMotherMotherMother, "tree-partner-mother-mother-mother-mother")
+            : ""}
+    </div>
+
+</div>
+</div>
+
+
+<!-- =====================
+     GREAT GRANDPARENTS ROW
+     ===================== -->
+<div class="family-tree-great-grandparents-row">
+
+    <!-- SELECTED MEMBER SIDE -->
+    <div class="family-tree-ancestor-selected-side">
+
+        <div class="family-tree-great-grandparent-couple">    
+        ${fatherFatherFather
+            ? treeBox(
+                fatherFatherFather,
+                "tree-father-father-father"
+              )
+            : ""}
+
+        ${fatherFatherMother
+            ? treeBox(
+                fatherFatherMother,
+                "tree-father-father-mother"
+              )
+            : ""}
+    </div>
+    <div class="family-tree-great-grandparent-couple">
+        ${fatherMotherFather
+            ? treeBox(
+                fatherMotherFather,
+                "tree-father-mother-father"
+              )
+            : ""}
+
+        ${fatherMotherMother
+            ? treeBox(
+                fatherMotherMother,
+                "tree-father-mother-mother"
+              )
+            : ""}
+    </div>
+
+    <div class="family-tree-great-grandparent-couple">
+        ${motherFatherFather
+            ? treeBox(
+                motherFatherFather,
+                "tree-mother-father-father"
+              )
+            : ""}
+
+        ${motherFatherMother
+            ? treeBox(
+                motherFatherMother,
+                "tree-mother-father-mother"
+              )
+            : ""}
+    </div>
+
+    <div class="family-tree-great-grandparent-couple">
+        ${motherMotherFather
+            ? treeBox(
+                motherMotherFather,
+                "tree-mother-mother-father"
+              )
+            : ""}
+
+        ${motherMotherMother
+            ? treeBox(
+                motherMotherMother,
+                "tree-mother-mother-mother"
+              )
+            : ""}
+        </div>
+
+    <!-- END SELECTED MEMBER SIDE -->
+    </div>
+
+    <!-- PARTNER SIDE -->
+    <div class="family-tree-ancestor-partner-side">
+    <div class="family-tree-great-grandparent-couple">
+        ${partnerFatherFatherFather
+            ? treeBox(
+                partnerFatherFather,
+                "tree-partner-father-father-father"
+              )
+            : ""}
+
+        ${partnerFatherFatherMother
+            ? treeBox(
+                partnerFatherFatherMother,
+                "tree-partner-father-father-mother"
+              )
+            : ""}
+    </div>
+
+    <div class="family-tree-great-grandparent-couple">
+        ${partnerFatherMotherFather
+            ? treeBox(
+                partnerFatherMotherFather,
+                "tree-partner-father-mother-father"
+              )
+            : ""}
+
+        ${partnerFatherMotherMother
+            ? treeBox(
+                partnerFatherMotherMother,
+                "tree-partner-father-mother-mother"
+              )
+            : ""}
+    </div>
+
+    <div class="family-tree-great-grandparent-couple">
+        ${partnerMotherFatherFather
+            ? treeBox(
+                partnerMotherFatherFather,
+                "tree-partner-mother-father-father"
+              )
+            : ""}
+
+        ${partnerMotherFatherMother
+            ? treeBox(
+                partnerMotherFatherMother,
+                "tree-partner-mother-father-mother"
+              )
+            : ""}
+    </div>
+
+    <div class="family-tree-great-grandparent-couple">
+        ${partnerMotherMotherFather
+            ? treeBox(
+                partnerMotherMotherFather,
+                "tree-partner-mother-mother-father"
+              )
+            : ""}
+
+        ${partnerMotherMotherMother
+            ? treeBox(
+                partnerMotherMotherMother,
+                "tree-partner-mother-mother-mother"
+              )
+            : ""}
+        </div>
+
+    <!-- END PARTNER SIDE -->
+    </div>
+
+<!-- END GEN 3 ROW -->
+</div>
+
+
+<!-- =====================
+     GRANDPARENTS ROW
+     ===================== -->
+
+<div class="family-tree-grandparents-row">
+
+    <!-- =========================
+         SELECTED MEMBER SIDE
+         ========================= -->
+    <div class="family-tree-ancestor-selected-side">
+
+
+        <!-- MEMBER FATHER PARENTS -->
+
+        <div class="family-tree-grandparent-couple">
+        
+        ${
+            fatherFather
+                ? treeBox(
+                    fatherFather,
+                    "tree-father-father"
+                  )
+                : ""
+        }
+
+        ${
+            fatherMother
+                ? treeBox(
+                    fatherMother,
+                    "tree-father-mother"
+                  )
+                : ""
+        }
+
+    </div>
+
+    <!-- MEMBER MOTHER PARENTS -->
+
+    <div class="family-tree-grandparent-couple">
+
+        ${
+            motherFather
+                ? treeBox(
+                    motherFather,
+                    "tree-mother-father"
+                  )
+                : ""
+        }
+
+        ${
+            motherMother
+                ? treeBox(
+                    motherMother,
+                    "tree-mother-mother"
+                  )
+                : ""
+        }
+
+    </div>
+    <!-- END SELECTED MEMBER SIDE -->
+    </div>
+
+    <!-- =========================
+         PARTNER SIDE
+         ========================= -->
+    <div class="family-tree-ancestor-partner-side">
+
+    <!-- PARTNER FATHER PARENTS -->
+
+    <div class="family-tree-grandparent-couple">
+
+        ${
+            partnerFatherFather
+                ? treeBox(
+                    partnerFatherFather,
+                    "tree-partner-father-father"
+                  )
+                : ""
+        }
+
+        ${
+            partnerFatherMother
+                ? treeBox(
+                    partnerFatherMother,
+                    "tree-partner-father-mother"
+                  )
+                : ""
+        }
+
+    </div>
+
+
+    <!-- PARTNER MOTHER PARENTS -->
+
+    <div class="family-tree-grandparent-couple">
+
+        ${
+            partnerMotherFather
+                ? treeBox(
+                    partnerMotherFather,
+                    "tree-partner-mother-father"
+                  )
+                : ""
+        }
+
+        ${
+            partnerMotherMother
+                ? treeBox(
+                    partnerMotherMother,
+                    "tree-partner-mother-mother"
+                  )
+                : ""
+        }
+
+    </div>
+
+
+    <!-- END PARTNER SIDE -->
+    </div>
+
+<!-- END GEN 2 ROW -->
+</div>
+
+<!-- =====================
+     PARENTS ROW
+     ===================== -->
+
+${
+    twoPartnerMode &&
+    showMemberPartner
+
+        ? `
+
+            <!-- =====================================
+                 TWO PARTNER PARENTS ROW
+
+                 LEFT PARTNER PARENTS
+                 MEMBER PARENTS
+                 RIGHT PARTNER PARENTS
+                 ===================================== -->
+
+            <div class="family-tree-top-row family-tree-two-partner-parents-row">
+
+
+                <!-- =========================
+                     LEFT PARTNER PARENTS
+                     ========================= -->
+
+                <div class="family-tree-two-partner-parent-side family-tree-left-partner-parents">
+
+                    <div class="family-tree-parent-group">
+
+                        ${
+                            leftPartnerFather
+                                ? treeBox(
+                                    leftPartnerFather,
+                                    "tree-left-partner-father"
+                                  )
+                                : ""
+                        }
+
+                        ${
+                            leftPartnerMother
+                                ? treeBox(
+                                    leftPartnerMother,
+                                    "tree-left-partner-mother"
+                                  )
+                                : ""
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     SELECTED MEMBER PARENTS
+                     ========================= -->
+
+                <div class="family-tree-two-partner-parent-side family-tree-member-parents">
+
+                    <div class="family-tree-parent-group">
+
+                        ${
+                            father
+                                ? treeBox(
+                                    father,
+                                    "tree-father"
+                                  )
+                                : ""
+                        }
+
+                        ${
+                            mother
+                                ? treeBox(
+                                    mother,
+                                    "tree-mother"
+                                  )
+                                : ""
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     RIGHT PARTNER PARENTS
+                     ========================= -->
+
+                <div class="family-tree-two-partner-parent-side family-tree-right-partner-parents">
+
+                    <div class="family-tree-parent-group">
+
+                        ${
+                            rightPartnerFather
+                                ? treeBox(
+                                    rightPartnerFather,
+                                    "tree-right-partner-father"
+                                  )
+                                : ""
+                        }
+
+                        ${
+                            rightPartnerMother
+                                ? treeBox(
+                                    rightPartnerMother,
+                                    "tree-right-partner-mother"
+                                  )
+                                : ""
+                        }
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+          `
+
+        : `
+
+            <!-- =====================================
+                 EXISTING SINGLE PARTNER PARENTS ROW
+                 ===================================== -->
+
+            <div class="family-tree-top-row">
+
+                <!-- SELECTED MEMBER SIDE -->
+
+                <div class="family-tree-ancestor-selected-side">
+
+                    <div class="family-tree-parent-group">
+
+                        ${
+                            father
+                                ? treeBox(
+                                    father,
+                                    "tree-father"
+                                  )
+                                : ""
+                        }
+
+                        ${
+                            mother
+                                ? treeBox(
+                                    mother,
+                                    "tree-mother"
+                                  )
+                                : ""
+                        }
+
+                    </div>
+
+                </div>
+
+
+                ${
+                    partner
+
+                        ? `
+
+                            <!-- PARTNER SIDE -->
+
+                            <div class="family-tree-ancestor-partner-side">
+
+                                <div class="family-tree-parent-group">
+
+                                    ${
+                                        partnerFather
+                                            ? treeBox(
+                                                partnerFather,
+                                                "tree-partner-father"
+                                              )
+                                            : ""
+                                    }
+
+                                    ${
+                                        partnerMother
+                                            ? treeBox(
+                                                partnerMother,
+                                                "tree-partner-mother"
+                                              )
+                                            : ""
+                                    }
+
+                                </div>
+
+                            </div>
+
+                          `
+
+                        : ""
+                }
+
+            </div>
+
+          `
+}
+
+            <!-- =====================
+                 MAIN GENERATION
+                 ===================== -->
+
+<div class="family-tree-main-row">
+
+    ${
+        showMemberPartner &&
+        partner &&
+        selectedIsFemaleForLayout &&
+        !partnerIsFemaleForLayout
+
+        ? `
+            <!-- MALE PARTNER SIBLINGS → LEFT -->
+
+            <div class="family-tree-partner-siblings-row">
+
+                ${partnerSiblingsHTML}
+
+            </div>
+          `
+
+        : `
+            <!-- MALE SELECTED MEMBER SIBLINGS → LEFT -->
+
+            <div class="family-tree-siblings-row">
+
+                ${siblingsHTML}
+
+            </div>
+          `
+    }
+
+
+    <div class="family-tree-selected-branch">
+
+        <div class="
+            family-tree-selected-couple
+            ${twoPartnerMode ? "family-tree-two-partner-couple" : ""}
+        ">
+
+        ${
+            twoPartnerMode &&
+            showMemberPartner
+
+                ? `
+
+                    <!-- =========================
+                         LEFT PARTNER
+                         ========================= -->
+
+                    <div
+                        class="
+                            family-tree-selected-partner-slot
+                            family-tree-left-partner-slot
+                        ">
+
+                        ${treeBox(
+                            leftPartner,
+                            "tree-left-partner"
+                        )}
+
+                    </div>
+
+
+                    <!-- =========================
+                         SELECTED MEMBER
+                         ========================= -->
+
+                    <div
+                        class="
+                            family-tree-selected-member-slot
+                            family-tree-two-partner-member-slot
+                        ">
+
+                        ${treeBox(
+                            selectedMember,
+                            "tree-selected"
+                        )}
+
+                    </div>
+
+
+                    <!-- =========================
+                         RIGHT PARTNER
+                         ========================= -->
+
+                    <div
+                        class="
+                            family-tree-selected-partner-slot
+                            family-tree-right-partner-slot
+                        ">
+
+                        ${treeBox(
+                            rightPartner,
+                            "tree-right-partner"
+                        )}
+
+                    </div>
+
+                  `
+
+                :
+
+                (
+                    showMemberPartner &&
+                    partner &&
+                    String(
+                        selectedMember.gender || ""
+                    )
+                    .trim()
+                    .toLowerCase() === "female"
+                    &&
+                    String(
+                        partner.gender || ""
+                    )
+                    .trim()
+                    .toLowerCase() !== "female"
+
+                        ? `
+
+                            <div class="family-tree-selected-partner-slot">
+
+                                ${treeBox(
+                                    partner,
+                                    "tree-partner"
+                                )}
+
+                            </div>
+
+
+                            <div class="family-tree-selected-member-slot">
+
+                                ${treeBox(
+                                    selectedMember,
+                                    "tree-selected"
+                                )}
+
+                            </div>
+
+                          `
+
+                        : `
+
+                            <div class="family-tree-selected-member-slot">
+
+                                ${treeBox(
+                                    selectedMember,
+                                    "tree-selected"
+                                )}
+
+                            </div>
+
+
+                            ${
+                                showMemberPartner &&
+                                partner
+
+                                    ? `
+
+                                        <div class="family-tree-selected-partner-slot">
+
+                                            ${treeBox(
+                                                partner,
+                                                "tree-partner"
+                                            )}
+
+                                        </div>
+
+                                      `
+
+                                    : ""
+                            }
+
+                          `
+                )
+        }
+
+        </div>
+
+
+               ${
+            twoPartnerMode
+
+                ? `
+
+                    <div class="family-tree-two-partner-children-row">
+
+                        <!-- LEFT PARTNER CHILDREN -->
+
+                        <div class="family-tree-left-children-group">
+
+                            ${
+                                leftPartnerChildren.length
+                                    ? leftPartnerChildrenHTML
+                                    : ""
+                            }
+
+                        </div>
+
+
+                        <!-- IMAGINARY SELECTED MEMBER CENTER -->
+
+                        <div class="family-tree-children-center-space"></div>
+
+
+                        <!-- RIGHT PARTNER CHILDREN -->
+
+                        <div class="family-tree-right-children-group">
+
+                            ${
+                                rightPartnerChildren.length
+                                    ? rightPartnerChildrenHTML
+                                    : ""
+                            }
+
+                        </div>
+
+                    </div>
+
+                  `
+
+                :
+
+               (
+    displayChildren.length
+
+        ? `
+
+                            <div class="family-tree-selected-children-row">
+
+                                ${childrenHTML}
+
+                            </div>
+
+                          `
+
+                        : ""
+                )
+        }
+    </div>
+
+
+   ${
+
+    showMemberPartner &&
+    partner
+
+        ? (
+
+            selectedIsFemaleForLayout &&
+            !partnerIsFemaleForLayout
+
+                ? (
+
+                    showSiblings
+
+                        ? `
+                            <!-- FEMALE SELECTED SIBLINGS → RIGHT -->
+
+                            <div class="family-tree-siblings-row">
+
+                                ${siblingsHTML}
+
+                            </div>
+                          `
+
+                        : ""
+
+                )
+
+                : (
+
+                    showPartnerSiblings
+
+                        ? `
+                            <!-- FEMALE PARTNER SIBLINGS → RIGHT -->
+
+                            <div class="family-tree-partner-siblings-row">
+
+                                ${partnerSiblingsHTML}
+
+                            </div>
+                          `
+
+                        : ""
+
+                )
+
+        )
+
+        : ""
+}
+
+
+</div>
+
+          <!-- =====================
+             CHILDREN
+             ===================== -->
+
+          
+
+        </div>
+
+    </div>
+
+
+
+`;
+        
+    requestAnimationFrame(
+    function(){
+
+      /* =====================================
+   BEFORE GENERATIONS VISIBILITY
+   ===================================== */
+
+/* =====================================
+   OLD FLAT ANCESTOR ROWS
+   DISABLED - CASE 1 TO 4 TREE IS USED
+   ===================================== */
+
+const oldAncestorRows =
+    diagram.querySelectorAll(
+        ".family-tree-great-great-grandparents-row, " +
+        ".family-tree-great-grandparents-row, " +
+        ".family-tree-grandparents-row, " +
+        ".family-tree-top-row"
+    );
+
+oldAncestorRows.forEach(
+    row => {
+        row.style.setProperty(
+            "display",
+            "none",
+            "important"
+        );
+    }
+);
+       /* =====================================
+   AFTER GENERATIONS VISIBILITY
+   ALL FAMILY BRANCHES
+   ===================================== */
+
+
+/* =====================================
+   AFTER GENERATION 1+
+
+   CHILDREN LEVEL
+
+   Selected member children are already
+   always visible.
+
+   Sibling children and Partner sibling
+   children should also remain visible.
+   ===================================== */
+
+
+/* =====================================
+   AFTER GENERATION 2
+   GRANDCHILDREN LEVEL
+   ===================================== */
+
+const generation2Rows =
+    diagram.querySelectorAll(
+        [
+            ".family-tree-grandchildren-row",
+            ".family-tree-sibling-grandchildren-row",
+            ".family-tree-partner-sibling-grandchildren-row"
+        ].join(",")
+    );
+
+generation2Rows.forEach(
+    function(row){
+
+        row.style.display =
+            afterGen >= 2
+                ? "flex"
+                : "none";
+
+    }
+);
+
+
+/* =====================================
+   AFTER GENERATION 3
+   GREAT-GRANDCHILDREN LEVEL
+   ===================================== */
+
+const generation3Rows =
+    diagram.querySelectorAll(
+        [
+            ".family-tree-great-grandchildren-row",
+            ".family-tree-sibling-great-grandchildren-row"
+        ].join(",")
+    );
+generation3Rows.forEach(
+    function(row){
+
+        row.style.display =
+            afterGen >= 3
+                ? "flex"
+                : "none";
+
+    }
+);
+
+   /* =====================================
+   AFTER GENERATION 4
+   GREAT-GREAT-GRANDCHILDREN LEVEL
+   ===================================== */
+
+const generation4Rows =
+    diagram.querySelectorAll(
+        ".family-tree-great-great-grandchildren-row"
+    );
+
+
+generation4Rows.forEach(
+    function(row){
+
+        row.style.display =
+            afterGen >= 4
+                ? "flex"
+                : "none";
+
+    }
+);    
+/* =====================================
+   CLEAR OLD FAMILY TREE LINES
+   ===================================== */
+
+const familyTreeSvg =
+    document.getElementById(
+        "familyTreeLines"
+    );
+
+if(familyTreeSvg){
+
+    familyTreeSvg.innerHTML = "";
+
+}
+
+      alignSiblingChildrenToGrandChildren();
+
+
+/* =====================================
+   TWO PARTNER PARENTS
+   ALIGN TO OWN MEMBER CENTERS
+   ===================================== */
+
+const twoPartnerParentsRow =
+    diagram.querySelector(
+        ".family-tree-two-partner-parents-row"
+    );
+
+const leftPartnerTreeNode =
+    diagram.querySelector(
+        ".tree-left-partner"
+    );
+
+const selectedTreeNode =
+    diagram.querySelector(
+        ".tree-selected"
+    );
+
+const rightPartnerTreeNode =
+    diagram.querySelector(
+        ".tree-right-partner"
+    );
+
+const leftParentsGroup =
+    diagram.querySelector(
+        ".family-tree-left-partner-parents"
+    );
+
+const memberParentsGroup =
+    diagram.querySelector(
+        ".family-tree-member-parents"
+    );
+
+const rightParentsGroup =
+    diagram.querySelector(
+        ".family-tree-right-partner-parents"
+    );
+
+
+if(
+    twoPartnerParentsRow &&
+    leftPartnerTreeNode &&
+    selectedTreeNode &&
+    rightPartnerTreeNode
+){
+
+    const rowRect =
+        twoPartnerParentsRow
+            .getBoundingClientRect();
+
+
+    function alignParentGroupToMember(
+        parentGroup,
+        memberNode
+    ){
+
+        if(
+            !parentGroup ||
+            !memberNode
+        ){
+            return;
+        }
+
+
+        const memberRect =
+            memberNode
+                .getBoundingClientRect();
+
+
+        const memberCenterX =
+            memberRect.left +
+            memberRect.width / 2;
+
+
+        const targetX =
+            memberCenterX -
+            rowRect.left;
+
+
+        parentGroup.style.position =
+            "absolute";
+
+        parentGroup.style.left =
+            targetX + "px";
+
+        parentGroup.style.transform =
+            "translateX(-50%)";
+
+        parentGroup.style.margin =
+            "0";
+
+    }
+
+
+    twoPartnerParentsRow.style.position =
+    "relative";
+
+twoPartnerParentsRow.style.width =
+    diagram.scrollWidth + "px";
+
+twoPartnerParentsRow.style.minWidth =
+    diagram.scrollWidth + "px";
+
+
+alignParentGroupToMember(
+    leftParentsGroup,
+    leftPartnerTreeNode
+);
+
+
+alignParentGroupToMember(
+    memberParentsGroup,
+    selectedTreeNode
+);
+
+
+alignParentGroupToMember(
+    rightParentsGroup,
+    rightPartnerTreeNode
+);
+}
+
+
+drawFamilyTreeLines();
+
+fitFamilyTreeToScreen();
+        const zoomInBtn =          
+    document.getElementById(
+        "familyTreeZoomIn"
+    );
+
+const zoomOutBtn =
+    document.getElementById(
+        "familyTreeZoomOut"
+    );
+
+const zoomResetBtn =
+    document.getElementById(
+        "familyTreeZoomReset"
+    );
+
+const familyTreeDownloadBtn =
+    document.getElementById(
+        "familyTreeDownloadBtn"
+    );
+
+const familyTreeDownloadMenu =
+    document.getElementById(
+        "familyTreeDownloadMenu"
+    );
+
+const familyTreeDownloadCancel =
+    document.getElementById(
+        "familyTreeDownloadCancel"
+    );
+
+
+if(
+    familyTreeDownloadBtn &&
+    familyTreeDownloadMenu
+){
+
+    familyTreeDownloadBtn.onclick =
+        function(){
+
+            familyTreeDownloadMenu.style.display =
+                "block";
+
+        };
+
+}
+
+
+if(
+    familyTreeDownloadCancel &&
+    familyTreeDownloadMenu
+){
+
+    familyTreeDownloadCancel.onclick =
+        function(){
+
+            familyTreeDownloadMenu.style.display =
+                "none";
+
+        };
+
+}
+       
+/* =====================================
+   ZOOM IN
+   ===================================== */
+
+if(zoomInBtn){
+
+    zoomInBtn.onclick =
+        function(){
+
+            const wrapper =
+                document.querySelector(
+                    ".family-tree-scroll"
+                );
+
+            if(!wrapper){
+                return;
+            }
+
+            const oldScale =
+                familyTreeBaseScale *
+                familyTreeZoomFactor;
+
+            const newZoomFactor =
+                Math.min(
+                    familyTreeZoomFactor * 1.5,
+                    10 / familyTreeBaseScale
+                );
+
+            const newScale =
+                familyTreeBaseScale *
+                newZoomFactor;
+
+            const anchorX =
+                wrapper.clientWidth / 2;
+
+            const anchorY =
+                wrapper.clientHeight / 2;
+
+
+            if(oldScale > 0){
+
+                const ratio =
+                    newScale /
+                    oldScale;
+
+                familyTreePanX =
+                    anchorX -
+                    (
+                        anchorX -
+                        familyTreePanX
+                    ) * ratio;
+
+                familyTreePanY =
+                    anchorY -
+                    (
+                        anchorY -
+                        familyTreePanY
+                    ) * ratio;
+
+            }
+
+
+            familyTreeZoomFactor =
+                newZoomFactor;
+
+            applyFamilyTreeZoom();
+
+        };
+}       
+/* =====================================
+   ZOOM OUT
+   ===================================== */
+
+if(zoomOutBtn){
+
+    zoomOutBtn.onclick =
+        function(){
+
+            const wrapper =
+                document.querySelector(
+                    ".family-tree-scroll"
+                );
+
+            if(!wrapper){
+                return;
+            }
+
+            const oldScale =
+                familyTreeBaseScale *
+                familyTreeZoomFactor;
+
+            const newZoomFactor =
+                Math.max(
+                    familyTreeZoomFactor / 1.5,
+                    0.1
+                );
+
+            const newScale =
+                familyTreeBaseScale *
+                newZoomFactor;
+
+            const anchorX =
+                wrapper.clientWidth / 2;
+
+            const anchorY =
+                wrapper.clientHeight / 2;
+
+
+            if(oldScale > 0){
+
+                const ratio =
+                    newScale /
+                    oldScale;
+
+                familyTreePanX =
+                    anchorX -
+                    (
+                        anchorX -
+                        familyTreePanX
+                    ) * ratio;
+
+                familyTreePanY =
+                    anchorY -
+                    (
+                        anchorY -
+                        familyTreePanY
+                    ) * ratio;
+
+            }
+
+
+            familyTreeZoomFactor =
+                newZoomFactor;
+
+            applyFamilyTreeZoom();
+
+        };
+}
+       /* =====================================
+   RESET ZOOM
+   ===================================== */
+
+if(zoomResetBtn){
+
+    zoomResetBtn.onclick =
+        function(){
+
+            familyTreeZoomFactor = 1;
+
+            fitFamilyTreeToScreen();
+
+        };
+
+}
+/* =====================================
+   FAMILY TREE PDF DOWNLOAD
+   A4 / LEGAL / A3 / A2 / A1
+   LANDSCAPE
+   ===================================== */
+
+
+if(familyTreeDownloadMenu){
+
+    const pageButtons =
+        familyTreeDownloadMenu.querySelectorAll(
+            "[data-tree-page]"
+        );
+
+    pageButtons.forEach(
+        button => {
+
+            button.onclick =
+                async function(){
+
+                    const pageSize =
+                        this.getAttribute(
+                            "data-tree-page"
+                        );
+
+                    const treeCanvas =
+                        document.getElementById(
+                            "familyTreeCanvas"
+                        );
+
+                    if(!treeCanvas){
+                        return;
+                    }
+
+                    if(
+                        typeof html2canvas ===
+                        "undefined"
+                    ){
+                        alert(
+                            "PDF image library is not loaded."
+                        );
+
+                        return;
+                    }
+
+                    if(
+                        !window.jspdf ||
+                        !window.jspdf.jsPDF
+                    ){
+                        alert(
+                            "PDF library is not loaded."
+                        );
+
+                        return;
+                    }
+
+
+                    familyTreeDownloadMenu.style.display =
+                        "none";
+
+
+                    /* =============================
+                       SAVE CURRENT SCREEN TRANSFORM
+                       ============================= */
+
+                    const oldTransform =
+                        treeCanvas.style.transform;
+
+                    const oldTransformOrigin =
+                        treeCanvas.style.transformOrigin;
+
+
+                    try{
+
+                        /* =============================
+                           REMOVE SCREEN ZOOM / PAN
+                           ONLY WHILE CAPTURING PDF
+                           ============================= */
+
+                        treeCanvas.style.transform =
+                            "none";
+
+                        treeCanvas.style.transformOrigin =
+                            "top left";
+
+
+                        await new Promise(
+                            resolve =>
+                                requestAnimationFrame(
+                                    () =>
+                                        requestAnimationFrame(
+                                            resolve
+                                        )
+                                )
+                        );
+
+
+                        /* =============================
+                           CAPTURE COMPLETE TREE
+                           ============================= */
+
+                        const capturedCanvas =
+                            await html2canvas(
+                                treeCanvas,
+                                {
+                                    backgroundColor:
+                                        "#ffffff",
+
+                                    scale: 2,
+
+                                    useCORS: true,
+
+                                    logging: false,
+
+                                    width:
+                                        treeCanvas.scrollWidth,
+
+                                    height:
+                                        treeCanvas.scrollHeight,
+
+                                    windowWidth:
+                                        treeCanvas.scrollWidth,
+
+                                    windowHeight:
+                                        treeCanvas.scrollHeight
+                                }
+                            );
+
+
+                        const imageData =
+                            capturedCanvas.toDataURL(
+                                "image/png"
+                            );
+
+
+                        const {
+                            jsPDF
+                        } = window.jspdf;
+
+
+                        /* =============================
+                           SELECT PDF PAPER SIZE
+                           LANDSCAPE
+                           ============================= */
+
+                        let pdfFormat;
+
+                        switch(pageSize){
+
+                            case "LEGAL":
+
+                                pdfFormat =
+                                    [
+                                        215.9,
+                                        355.6
+                                    ];
+
+                                break;
+
+
+                            case "A3":
+
+                                pdfFormat =
+                                    "a3";
+
+                                break;
+
+
+                            case "A2":
+
+                                pdfFormat =
+                                    "a2";
+
+                                break;
+
+
+                            case "A1":
+
+                                pdfFormat =
+                                    "a1";
+
+                                break;
+
+
+                            case "A4":
+
+                            default:
+
+                                pdfFormat =
+                                    "a4";
+
+                                break;
+                        }
+
+
+                        const pdf =
+                            new jsPDF({
+                                orientation:
+                                    "landscape",
+
+                                unit:
+                                    "mm",
+
+                                format:
+                                    pdfFormat
+                            });
+
+
+                        const pageWidth =
+                            pdf.internal.pageSize
+                                .getWidth();
+
+                        const pageHeight =
+                            pdf.internal.pageSize
+                                .getHeight();
+
+
+                        /* =============================
+                           FIT COMPLETE TREE
+                           INSIDE SELECTED PAPER
+                           ============================= */
+/* =============================
+   PDF PAGE BORDER
+   ============================= */
+
+const borderMargin = 5;
+
+pdf.setLineWidth(0.6);
+
+pdf.rect(
+    borderMargin,
+    borderMargin,
+    pageWidth - borderMargin * 2,
+    pageHeight - borderMargin * 2
+);
+                       
+                        const margin = 8;
+
+                        const availableWidth =
+                            pageWidth -
+                            margin * 2;
+
+                        const availableHeight =
+                            pageHeight -
+                            margin * 2;
+
+
+                        const imageRatio =
+                            capturedCanvas.width /
+                            capturedCanvas.height;
+
+                        const pageRatio =
+                            availableWidth /
+                            availableHeight;
+
+
+                        let imageWidth;
+                        let imageHeight;
+
+
+                        if(
+                            imageRatio >
+                            pageRatio
+                        ){
+
+                            imageWidth =
+                                availableWidth;
+
+                            imageHeight =
+                                imageWidth /
+                                imageRatio;
+
+                        }
+                        else{
+
+                            imageHeight =
+                                availableHeight;
+
+                            imageWidth =
+                                imageHeight *
+                                imageRatio;
+
+                        }
+
+
+                        const imageX =
+                            (
+                                pageWidth -
+                                imageWidth
+                            ) / 2;
+
+                        const imageY =
+                            (
+                                pageHeight -
+                                imageHeight
+                            ) / 2;
+
+
+                        pdf.addImage(
+                            imageData,
+                            "PNG",
+                            imageX,
+                            imageY,
+                            imageWidth,
+                            imageHeight,
+                            undefined,
+                            "FAST"
+                        );
+
+
+                        pdf.save(
+                            "Family-Tree-" +
+                            pageSize +
+                            ".pdf"
+                        );
+
+                    }
+                    catch(error){
+
+                        console.error(
+                            "FAMILY TREE PDF ERROR:",
+                            error
+                        );
+
+                        alert(
+                            "Family Tree PDF could not be created."
+                        );
+
+                    }
+                    finally{
+
+                        /* =============================
+                           RESTORE SCREEN EXACTLY
+                           ============================= */
+
+                        treeCanvas.style.transform =
+                            oldTransform;
+
+                        treeCanvas.style.transformOrigin =
+                            oldTransformOrigin;
+
+                    }
+
+                };
+
+        }
+    );
+
+}
+           
+/* =====================================
+   FAMILY TREE
+   PAN + PINCH ZOOM
+   DESKTOP + MOBILE
+   ===================================== */
+
+const treeWrapper =
+    document.querySelector(
+        ".family-tree-scroll"
+    );
+
+
+if(treeWrapper){
+
+    const activePointers =
+        new Map();
+
+
+    let pinchStartDistance = 0;
+    let pinchStartZoom = 1;
+
+
+    function getPointerDistance(){
+
+        const points =
+            Array.from(
+                activePointers.values()
+            );
+
+        if(points.length < 2){
+            return 0;
+        }
+
+
+        const dx =
+            points[0].x -
+            points[1].x;
+
+        const dy =
+            points[0].y -
+            points[1].y;
+
+
+        return Math.sqrt(
+            dx * dx +
+            dy * dy
+        );
+
+    }
+
+
+    treeWrapper.addEventListener(
+        "pointerdown",
+        function(event){
+
+            activePointers.set(
+                event.pointerId,
+                {
+                    x: event.clientX,
+                    y: event.clientY
+                }
+            );
+
+
+            treeWrapper.setPointerCapture(
+                event.pointerId
+            );
+
+
+            if(
+                activePointers.size === 1
+            ){
+
+                familyTreeIsDragging =
+                    true;
+
+                familyTreeDragStartX =
+                    event.clientX;
+
+                familyTreeDragStartY =
+                    event.clientY;
+
+                familyTreePanStartX =
+                    familyTreePanX;
+
+                familyTreePanStartY =
+                    familyTreePanY;
+
+
+                treeWrapper.classList.add(
+                    "dragging"
+                );
+
+            }
+
+
+            if(
+                activePointers.size === 2
+            ){
+
+                familyTreeIsDragging =
+                    false;
+
+
+                pinchStartDistance =
+                    getPointerDistance();
+
+
+                pinchStartZoom =
+                    familyTreeZoomFactor;
+
+            }
+
+
+            event.preventDefault();
+
+        }
+    );
+
+
+    treeWrapper.addEventListener(
+        "pointermove",
+        function(event){
+
+            if(
+                !activePointers.has(
+                    event.pointerId
+                )
+            ){
+                return;
+            }
+
+
+            activePointers.set(
+                event.pointerId,
+                {
+                    x: event.clientX,
+                    y: event.clientY
+                }
+            );
+
+
+            /* =========================
+               TWO FINGER PINCH
+               ========================= */
+
+            if(
+                activePointers.size >= 2
+            ){
+
+                const currentDistance =
+                    getPointerDistance();
+
+
+                if(
+                    pinchStartDistance > 0
+                ){
+
+                    const ratio =
+                        currentDistance /
+                        pinchStartDistance;
+
+
+                   familyTreeZoomFactor =
+    Math.max(
+        0.1,
+        Math.min(
+            10 / familyTreeBaseScale,
+            pinchStartZoom *
+            ratio
+        )
+    );
+
+                    applyFamilyTreeZoom();
+
+                }
+
+
+                event.preventDefault();
+
+                return;
+
+            }
+
+
+            /* =========================
+               ONE FINGER PAN
+               ========================= */
+
+            if(
+                familyTreeIsDragging
+            ){
+
+                const moveX =
+                    event.clientX -
+                    familyTreeDragStartX;
+
+                const moveY =
+                    event.clientY -
+                    familyTreeDragStartY;
+
+
+                familyTreePanX =
+                    familyTreePanStartX +
+                    moveX;
+
+                familyTreePanY =
+                    familyTreePanStartY +
+                    moveY;
+
+
+                applyFamilyTreeZoom();
+
+            }
+
+
+            event.preventDefault();
+
+        }
+    );
+
+
+    function endPointer(event){
+
+        activePointers.delete(
+            event.pointerId
+        );
+
+
+        if(
+            treeWrapper.hasPointerCapture(
+                event.pointerId
+            )
+        ){
+
+            treeWrapper.releasePointerCapture(
+                event.pointerId
+            );
+
+        }
+
+
+        if(
+            activePointers.size === 0
+        ){
+
+            familyTreeIsDragging =
+                false;
+
+            treeWrapper.classList.remove(
+                "dragging"
+            );
+
+        }
+
+
+        if(
+            activePointers.size === 1
+        ){
+
+            const remainingPoint =
+                Array.from(
+                    activePointers.values()
+                )[0];
+
+
+            familyTreeIsDragging =
+                true;
+
+
+            familyTreeDragStartX =
+                remainingPoint.x;
+
+            familyTreeDragStartY =
+                remainingPoint.y;
+
+
+            familyTreePanStartX =
+                familyTreePanX;
+
+            familyTreePanStartY =
+                familyTreePanY;
+
+        }
+
+    }
+
+
+    treeWrapper.addEventListener(
+        "pointerup",
+        endPointer
+    );
+
+
+   
+    treeWrapper.addEventListener(
+        "pointercancel",
+        endPointer
+    );
+
+}
+
+
+       
+    }
+);  
+        
+        };
+
+}
+
+/* =====================================
+   FAMILY TREE → BACK
+   Return directly to the page that opened Tree View.
+   ===================================== */
+
+const familyTreeBackBtn =
+    document.getElementById("familyTreeBackBtn");
+
+if(familyTreeBackBtn){
+    familyTreeBackBtn.onclick = async function(){
+        const returnAction = window.familyTreeReturnAction;
+        window.familyTreeReturnAction = null;
+
+        if(typeof returnAction === "function"){
+            await returnAction();
+        }else{
+            const mainFamilyBtn = document.getElementById("familyBtn");
+            if(mainFamilyBtn) mainFamilyBtn.click();
+        }
+    };
+}
+
+/* =====================================
+   FAMILY TREE → HOME
+   ===================================== */
+
+const familyTreeHomeBtn =
+    document.getElementById(
+        "familyTreeHomeBtn"
+    );
+
+if(familyTreeHomeBtn){
+
+    familyTreeHomeBtn.onclick =
+        function(){
+
+            const mainHomeBtn =
+                document.getElementById(
+                    "homeBtn"
+                );
+
+            if(mainHomeBtn){
+
+                mainHomeBtn.click();
+
+            }
+
+        };
+
+}
+   
+}
+
+/* =====================================
+   ALIGN MEMBER-SIBLING CHILDREN
+   OVER THEIR DIRECT CHILDREN
+
+   Example:
+   SaiLaxmi → Reya + Shivesti
+   Sravani  → Prerana + Thaneesha
+   ===================================== */
+/* =====================================
+   ALIGN SIBLING CHILD COUPLES
+   OVER THEIR DIRECT CHILDREN
+   ===================================== */
+
+function alignSiblingChildrenToGrandChildren(){
+
+    const canvas =
+        document.getElementById(
+            "familyTreeCanvas"
+        );
+
+    if(!canvas){
+        return;
+    }
+
+
+    const branches =
+        Array.from(
+            canvas.querySelectorAll(
+                ".family-tree-sibling-child-branch"
+            )
+        );
+
+
+    branches.forEach(
+        branch => {
+
+            const child =
+                branch.querySelector(
+                    ".tree-sibling-child"
+                );
+
+            const partner =
+                branch.querySelector(
+                    ".tree-sibling-child-partner"
+                );
+
+            const couple =
+                branch.querySelector(
+                    ".family-tree-sibling-child-couple"
+                );
+
+            const grandChildren =
+                Array.from(
+                    branch.querySelectorAll(
+                        ".tree-sibling-grandchild"
+                    )
+                );
+
+
+            if(
+                !child ||
+                !couple ||
+                grandChildren.length < 2
+            ){
+                return;
+            }
+
+
+            /* reset previous adjustment */
+
+            couple.style.transform = "none";
+
+
+            /* =================================
+               CHILDREN MIDPOINT
+               ================================= */
+
+            const grandChildCenters =
+                grandChildren.map(
+                    grandChild => {
+
+                        const rect =
+                            grandChild.getBoundingClientRect();
+
+                        return (
+                            rect.left +
+                            rect.width / 2
+                        );
+
+                    }
+                );
+
+
+            const childrenCenterX =
+                (
+                    Math.min(...grandChildCenters) +
+                    Math.max(...grandChildCenters)
+                ) / 2;
+
+
+            /* =================================
+               PARENT SOURCE X
+
+               Partner exists:
+               child ↔ partner midpoint
+
+               No partner:
+               child box center
+               ================================= */
+
+            let parentCenterX;
+
+
+            if(partner){
+
+                const childRect =
+                    child.getBoundingClientRect();
+
+                const partnerRect =
+                    partner.getBoundingClientRect();
+
+
+                const childRightX =
+                    childRect.right;
+
+                const partnerLeftX =
+                    partnerRect.left;
+
+
+                parentCenterX =
+                    (
+                        childRightX +
+                        partnerLeftX
+                    ) / 2;
+
+            }
+            else{
+
+                const childRect =
+                    child.getBoundingClientRect();
+
+
+                parentCenterX =
+                    childRect.left +
+                    childRect.width / 2;
+
+            }
+
+
+            /* =================================
+               MOVE COMPLETE COUPLE
+
+               Not child alone.
+               ================================= */
+
+            const moveX =
+                childrenCenterX -
+                parentCenterX;
+
+
+            couple.style.transform =
+                `translateX(${moveX}px)`;
+
+        }
+    );
+
+}
+
+
+/* =====================================
+   DIRECT PARENTS → OWN MEMBER
+   HORIZONTAL ROUTE AT EXACT 50%
+   ===================================== */
+
+function connectDirectParentsToMember(
+    parentCenter,
+    memberNode
+){
+
+    if(
+        !parentCenter ||
+        !memberNode
+    ){
+        return;
+    }
+
+
+    const memberPoint =
+        getPoint(
+            memberNode,
+            "top"
+        );
+
+
+    const middleY =
+        parentCenter.y +
+        (
+            memberPoint.y -
+            parentCenter.y
+        ) / 2;
+
+
+    /* PARENTS ↓ 50% */
+
+    addLine(
+        parentCenter.x,
+        parentCenter.y,
+        parentCenter.x,
+        middleY
+    );
+
+
+    /* HORIZONTAL ROUTE AT EXACT CENTER */
+
+    if(
+        parentCenter.x !==
+        memberPoint.x
+    ){
+
+        addLine(
+            parentCenter.x,
+            middleY,
+            memberPoint.x,
+            middleY
+        );
+
+    }
+
+
+    /* CENTER ↓ MEMBER */
+
+    addLine(
+        memberPoint.x,
+        middleY,
+        memberPoint.x,
+        memberPoint.y
+    );
+
+}
+/* =====================================
+   DRAW FAMILY TREE CONNECTING LINES
+   ===================================== */
+
+function drawFamilyTreeLines(){
+
+    const canvas =
+        document.getElementById(
+            "familyTreeCanvas"
+        );
+
+    const svg =
+        document.getElementById(
+            "familyTreeLines"
+        );
+
+
+    if(!canvas || !svg){
+        return;
+    }
+
+
+    const selected =
+        canvas.querySelector(
+            ".tree-selected"
+        );
+   const canvasRect =
+        canvas.getBoundingClientRect();
+    svg.setAttribute(
+        "width",
+        canvas.scrollWidth
+    );
+
+    svg.setAttribute(
+        "height",
+        canvas.scrollHeight
+    );
+
+
+    svg.innerHTML = "";
+
+    function getPoint(
+        element,
+        position
+    ){
+
+        if(!element){
+    return null;
+}
+
+
+/* =====================================
+   IGNORE HIDDEN TREE NODES
+   ===================================== */
+
+if(
+    element.offsetParent === null ||
+    window.getComputedStyle(element).display === "none"
+){
+    return null;
+}
+
+
+const rect =
+    element.getBoundingClientRect();
+
+        const left =
+            rect.left -
+            canvasRect.left;
+
+
+        const top =
+            rect.top -
+            canvasRect.top;
+
+
+        if(position === "top"){
+
+            return {
+                x:
+                    left +
+                    rect.width / 2,
+
+                y:
+                    top
+            };
+
+        }
+
+
+        if(position === "bottom"){
+
+            return {
+                x:
+                    left +
+                    rect.width / 2,
+
+                y:
+                    top +
+                    rect.height
+            };
+
+        }
+
+
+        if(position === "left"){
+
+            return {
+                x:
+                    left,
+
+                y:
+                    top +
+                    rect.height / 2
+            };
+
+        }
+
+
+        return {
+            x:
+                left +
+                rect.width,
+
+            y:
+                top +
+                rect.height / 2
+        };
+
+    }
+
+
+    function addLine(
+        x1,
+        y1,
+        x2,
+        y2
+    ){
+
+        const line =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "line"
+            );
+
+
+        line.setAttribute(
+            "x1",
+            x1
+        );
+
+        line.setAttribute(
+            "y1",
+            y1
+        );
+
+        line.setAttribute(
+            "x2",
+            x2
+        );
+
+        line.setAttribute(
+            "y2",
+            y2
+        );
+
+        line.setAttribute(
+            "class",
+            "family-tree-svg-line"
+        );
+
+
+        svg.appendChild(
+            line
+        );
+
+    }
+   /* =====================================
+   STANDARD FAMILY CONNECTOR STEM
+
+   Box / couple midpoint nundi
+   first horizontal turn varaku
+   same short distance.
+   ===================================== */
+
+const FAMILY_STEM_HEIGHT = 18;
+   
+  function connectCouple(
+    first,
+    second
+){
+
+    if(!first || !second){
+        return null;
+    }
+
+
+    /* =====================================
+       DETECT ACTUAL VISUAL LEFT / RIGHT
+       Do not depend on male/female
+       or DOM order
+       ===================================== */
+
+    const firstRect =
+        first.getBoundingClientRect();
+
+    const secondRect =
+        second.getBoundingClientRect();
+
+
+    let leftNode;
+    let rightNode;
+
+
+    if(
+        firstRect.left <=
+        secondRect.left
+    ){
+        leftNode = first;
+        rightNode = second;
+    }
+    else{
+        leftNode = second;
+        rightNode = first;
+    }
+
+
+    /* =====================================
+       INNER EDGE → INNER EDGE ONLY
+       ===================================== */
+
+    const leftPoint =
+        getPoint(
+            leftNode,
+            "right"
+        );
+
+    const rightPoint =
+        getPoint(
+            rightNode,
+            "left"
+        );
+
+
+    /* Hidden couple → no line */
+
+    if(
+        !leftPoint ||
+        !rightPoint
+    ){
+        return null;
+    }
+
+
+    /* Couple horizontal line */
+
+    addLine(
+        leftPoint.x,
+        leftPoint.y,
+        rightPoint.x,
+        rightPoint.y
+    );
+
+
+    /* =====================================
+       EXACT COUPLE MIDPOINT
+       ===================================== */
+
+    return {
+
+        x:
+            (
+                leftPoint.x +
+                rightPoint.x
+            ) / 2,
+
+        y:
+            (
+                leftPoint.y +
+                rightPoint.y
+            ) / 2
+
+    };
+
+}
+
+/* =====================================
+   STANDARD DESCENDANT CONNECTOR
+
+   Couple / Person
+          │
+          │
+          └──────────────┐
+                         │
+              ───────────┼──────────
+              │          │
+            Child      Child
+
+   Children / Grandchildren /
+   Great-grandchildren ki
+   same routing pattern.
+   ===================================== */
+
+function connectDescendantsStandard(
+    parentCenter,
+    children
+){
+
+    if(
+        !parentCenter ||
+        !children ||
+        !children.length
+    ){
+        return;
+    }
+
+
+    const childPoints =
+        children
+            .map(
+                child =>
+                    getPoint(
+                        child,
+                        "top"
+                    )
+            )
+            .filter(Boolean);
+
+
+    if(!childPoints.length){
+        return;
+    }
+
+
+    const childTopY =
+        Math.min(
+            ...childPoints.map(
+                point => point.y
+            )
+        );
+
+
+    const childBusY =
+        parentCenter.y +
+        (
+            childTopY -
+            parentCenter.y
+        ) * 0.60;
+
+
+    /* =================================
+       PARENT / COUPLE → CHILDREN BUS
+       ================================= */
+
+    addLine(
+        parentCenter.x,
+        parentCenter.y,
+        parentCenter.x,
+        childBusY
+    );
+
+
+    /* =================================
+       ONLY ONE CHILD
+       ================================= */
+
+    if(childPoints.length === 1){
+
+        const childPoint =
+            childPoints[0];
+
+
+        if(
+            parentCenter.x !==
+            childPoint.x
+        ){
+
+            addLine(
+                parentCenter.x,
+                childBusY,
+                childPoint.x,
+                childBusY
+            );
+
+        }
+
+
+        addLine(
+            childPoint.x,
+            childBusY,
+            childPoint.x,
+            childPoint.y
+        );
+
+
+        return;
+    }
+
+
+    /* =================================
+       TWO OR MORE CHILDREN
+       ================================= */
+
+    const minChildX =
+        Math.min(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    const maxChildX =
+        Math.max(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    const busStartX =
+        Math.min(
+            minChildX,
+            parentCenter.x
+        );
+
+
+    const busEndX =
+        Math.max(
+            maxChildX,
+            parentCenter.x
+        );
+
+
+    addLine(
+        busStartX,
+        childBusY,
+        busEndX,
+        childBusY
+    );
+
+
+    childPoints.forEach(
+        childPoint => {
+
+            addLine(
+                childPoint.x,
+                childBusY,
+                childPoint.x,
+                childPoint.y
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================
+   TWO PARTNER CHILDREN CONNECTOR
+   ===================================== */
+
+function connectTwoPartnerChildren(
+    parentCenter,
+    children
+){
+
+    if(
+        !parentCenter ||
+        !children ||
+        !children.length
+    ){
+        return;
+    }
+
+
+    const childPoints =
+        children
+            .map(
+                child =>
+                    getPoint(
+                        child,
+                        "top"
+                    )
+            )
+            .filter(Boolean);
+
+
+    if(!childPoints.length){
+        return;
+    }
+
+
+    const childTopY =
+        Math.min(
+            ...childPoints.map(
+                point => point.y
+            )
+        );
+
+
+    const childBusY =
+        parentCenter.y +
+        (
+            childTopY -
+            parentCenter.y
+        ) * 0.60;
+
+
+    /* =================================
+       ONE CHILD
+       ================================= */
+
+    if(childPoints.length === 1){
+
+        const childPoint =
+            childPoints[0];
+
+
+        addLine(
+            parentCenter.x,
+            parentCenter.y,
+            parentCenter.x,
+            childBusY
+        );
+
+
+        if(
+            parentCenter.x !==
+            childPoint.x
+        ){
+
+            addLine(
+                parentCenter.x,
+                childBusY,
+                childPoint.x,
+                childBusY
+            );
+
+        }
+
+
+        addLine(
+            childPoint.x,
+            childBusY,
+            childPoint.x,
+            childPoint.y
+        );
+
+
+        return;
+    }
+
+
+    /* =================================
+       TWO OR MORE CHILDREN
+       ================================= */
+
+    const minChildX =
+        Math.min(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    const maxChildX =
+        Math.max(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    /*
+       CHILDREN HORIZONTAL BUS
+       EXACT CENTER
+    */
+
+    const busCenterX =
+        (
+            minChildX +
+            maxChildX
+        ) / 2;
+
+
+    /*
+       First come down from
+       partner-member midpoint.
+    */
+
+    const approachY =
+        parentCenter.y +
+        (
+            childBusY -
+            parentCenter.y
+        ) * 0.50;
+
+
+    addLine(
+        parentCenter.x,
+        parentCenter.y,
+        parentCenter.x,
+        approachY
+    );
+
+
+    /*
+       Then move horizontally
+       towards children bus center.
+    */
+
+    if(
+        parentCenter.x !==
+        busCenterX
+    ){
+
+        addLine(
+            parentCenter.x,
+            approachY,
+            busCenterX,
+            approachY
+        );
+
+    }
+
+
+    /*
+       Then come vertically down
+       into EXACT bus middle.
+    */
+
+    addLine(
+        busCenterX,
+        approachY,
+        busCenterX,
+        childBusY
+    );
+
+
+    /* CHILDREN BUS */
+
+    addLine(
+        minChildX,
+        childBusY,
+        maxChildX,
+        childBusY
+    );
+
+
+    /* BUS → CHILDREN */
+
+    childPoints.forEach(
+        childPoint => {
+
+            addLine(
+                childPoint.x,
+                childBusY,
+                childPoint.x,
+                childPoint.y
+            );
+
+        }
+    );
+
+}
+   
+   /* =====================================
+   STANDARD FAMILY CONNECTOR STEM
+   ===================================== */
+
+
+/* =====================================
+   PARENTS → CHILDREN
+
+   STANDARD ROUTING
+
+   Parent / Couple
+        │
+        │ short stem
+        └──────────────┐
+                       │
+                       │
+        ───────────────┼──── bus
+        │              │
+      Child          Child
+   ===================================== */
+
+function connectParentsToChildren(
+    parentCenter,
+    children,
+    centerBusOnParent = false,
+    routeOffset = 0,
+    useExactMiddle = false
+){
+    if(
+        !parentCenter ||
+        !children ||
+        !children.length
+    ){
+        return;
+    }
+
+
+    const childPoints =
+        children
+            .map(
+                child =>
+                    getPoint(
+                        child,
+                        "top"
+                    )
+            )
+            .filter(Boolean);
+
+
+    if(!childPoints.length){
+        return;
+    }
+
+
+    /* =====================================
+       SINGLE CHILD
+       ===================================== */
+
+    if(childPoints.length === 1){
+
+        const childPoint =
+            childPoints[0];
+
+
+        const availableGap =
+            childPoint.y -
+            parentCenter.y;
+
+
+        const stemHeight =
+            Math.min(
+                FAMILY_STEM_HEIGHT,
+                Math.max(
+                    4,
+                    availableGap / 3
+                )
+            );
+
+
+        const routeY =
+    useExactMiddle
+        ? (
+            parentCenter.y +
+            childPoint.y
+          ) / 2
+        : (
+            parentCenter.y +
+            stemHeight +
+            routeOffset
+          );
+        /* 1. Parent ↓ short stem */
+
+        addLine(
+            parentCenter.x,
+            parentCenter.y,
+            parentCenter.x,
+            routeY
+        );
+
+
+        /* 2. Route level → child X */
+
+        if(
+            parentCenter.x !==
+            childPoint.x
+        ){
+
+            addLine(
+                parentCenter.x,
+                routeY,
+                childPoint.x,
+                routeY
+            );
+
+        }
+
+
+        /* 3. Route ↓ child top-center */
+
+        addLine(
+            childPoint.x,
+            routeY,
+            childPoint.x,
+            childPoint.y
+        );
+
+
+        return;
+    }
+
+
+    /* =====================================
+       MULTIPLE CHILDREN
+       ===================================== */
+
+    const childTopY =
+        Math.min(
+            ...childPoints.map(
+                point => point.y
+            )
+        );
+
+
+    const availableGap =
+        childTopY -
+        parentCenter.y;
+
+
+    const stemHeight =
+        Math.min(
+            FAMILY_STEM_HEIGHT,
+            Math.max(
+                4,
+                availableGap / 3
+            )
+        );
+
+
+    /* Parent-side short route level */
+
+    const routeY =
+        parentCenter.y +
+        stemHeight +
+        routeOffset;
+
+
+    /*
+       Actual children bus stays
+       close to children.
+    */
+
+    const busY =
+        childTopY -
+        stemHeight;
+
+
+    const minX =
+        Math.min(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    const maxX =
+        Math.max(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    let busStartX;
+    let busEndX;
+
+
+    if(centerBusOnParent){
+
+        busStartX =
+            minX;
+
+        busEndX =
+            maxX;
+
+    }
+    else{
+
+        busStartX =
+            Math.min(
+                minX,
+                parentCenter.x
+            );
+
+        busEndX =
+            Math.max(
+                maxX,
+                parentCenter.x
+            );
+
+    }
+
+
+    /* =====================================
+       EXACT CHILDREN BUS CENTER
+       ===================================== */
+
+    const busCenterX =
+        centerBusOnParent
+            ? (
+                busStartX +
+                busEndX
+              ) / 2
+            : parentCenter.x;
+
+
+    /* =====================================
+       1. PARENT ↓ SHORT STEM
+       ===================================== */
+
+    addLine(
+        parentCenter.x,
+        parentCenter.y,
+        parentCenter.x,
+        routeY
+    );
+
+
+    /* =====================================
+       2. ROUTE LEVEL HORIZONTAL
+       ===================================== */
+
+    if(
+        parentCenter.x !==
+        busCenterX
+    ){
+
+        addLine(
+            parentCenter.x,
+            routeY,
+            busCenterX,
+            routeY
+        );
+
+    }
+
+
+    /* =====================================
+       3. ROUTE ↓ CHILDREN BUS
+       ===================================== */
+
+    addLine(
+        busCenterX,
+        routeY,
+        busCenterX,
+        busY
+    );
+
+
+    /* =====================================
+       4. HORIZONTAL CHILDREN BUS
+       ===================================== */
+
+    addLine(
+        busStartX,
+        busY,
+        busEndX,
+        busY
+    );
+
+
+    /* =====================================
+       5. BUS ↓ EACH CHILD
+       ===================================== */
+
+    childPoints.forEach(
+        point => {
+
+            addLine(
+                point.x,
+                busY,
+                point.x,
+                point.y
+            );
+
+        }
+    );
+
+}
+
+/* =====================================
+   NEW SPLIT ANCESTOR
+   PARENT COUPLE → BIOLOGICAL CHILD
+   ===================================== */
+
+function connectSplitAncestorFamily(
+    fatherSelector,
+    motherSelector,
+    childSelector
+){
+
+    const fatherNode =
+        canvas.querySelector(
+            fatherSelector
+        );
+
+    const motherNode =
+        canvas.querySelector(
+            motherSelector
+        );
+
+    const childNode =
+        canvas.querySelector(
+            childSelector
+        );
+
+
+    if(!childNode){
+        return;
+    }
+
+
+    let parentCenter = null;
+
+
+    /* BOTH PARENTS */
+
+    if(
+        fatherNode &&
+        motherNode
+    ){
+
+        parentCenter =
+            connectCouple(
+                fatherNode,
+                motherNode
+            );
+
+    }
+
+    /* ONLY ONE PARENT */
+
+    else{
+
+        const singleParent =
+            fatherNode ||
+            motherNode;
+
+
+        if(singleParent){
+
+            parentCenter =
+                getPoint(
+                    singleParent,
+                    "bottom"
+                );
+
+        }
+
+    }
+
+
+    /* PARENTS → BIOLOGICAL CHILD */
+
+    connectParentsToChildren(
+        parentCenter,
+        [childNode]
+    );
+
+}
+
+   
+/* =====================================
+   GREAT-GREAT-GRANDPARENTS
+   → GREAT-GRANDPARENTS
+   GENERATION 4 → GENERATION 3
+   ===================================== */
+
+function connectGreatGreatGrandParents(
+    fatherSelector,
+    motherSelector,
+    childSelector
+){
+
+    const greatGreatGrandFather =
+        canvas.querySelector(
+            fatherSelector
+        );
+
+    const greatGreatGrandMother =
+        canvas.querySelector(
+            motherSelector
+        );
+
+    const greatGrandParent =
+        canvas.querySelector(
+            childSelector
+        );
+
+
+    if(!greatGrandParent){
+        return;
+    }
+
+
+    let coupleCenter = null;
+
+
+    /* FATHER ↔ MOTHER */
+    if(
+        greatGreatGrandFather &&
+        greatGreatGrandMother
+    ){
+
+        coupleCenter =
+            connectCouple(
+                greatGreatGrandFather,
+                greatGreatGrandMother
+            );
+
+    }
+
+    /* ONLY ONE PARENT AVAILABLE */
+    else{
+
+        const singleParent =
+            greatGreatGrandFather ||
+            greatGreatGrandMother;
+
+        if(singleParent){
+
+            coupleCenter =
+                getPoint(
+                    singleParent,
+                    "bottom"
+                );
+
+        }
+    }
+
+
+    /* PARENTS → BIOLOGICAL CHILD */
+    connectParentsToChildren(
+        coupleCenter,
+        [greatGrandParent]
+    );
+}
+
+/* =====================================
+   SPLIT ANCESTOR TREE CONNECTOR
+   MEMBER LEFT | PARTNER RIGHT
+   ===================================== */
+
+function connectSplitAncestorBranch(
+    person,
+    depth,
+    prefix = ""
+){
+
+    if(!person || depth <= 0){
+        return;
+    }
+
+
+    const father =
+        getMemberById(
+            person.fatherId
+        );
+
+    const mother =
+        getMemberById(
+            person.motherId
+        );
+
+
+    const fatherPath =
+        prefix
+            ? `${prefix}-father`
+            : "father";
+
+    const motherPath =
+        prefix
+            ? `${prefix}-mother`
+            : "mother";
+
+
+    const fatherNode =
+        father
+            ? canvas.querySelector(
+                `.tree-${fatherPath}`
+              )
+            : null;
+
+    const motherNode =
+        mother
+            ? canvas.querySelector(
+                `.tree-${motherPath}`
+              )
+            : null;
+
+
+    /* FIRST CONNECT OLDER GENERATIONS */
+
+    if(father){
+
+        connectSplitAncestorBranch(
+            father,
+            depth - 1,
+            fatherPath
+        );
+    }
+
+
+    if(mother){
+
+        connectSplitAncestorBranch(
+            mother,
+            depth - 1,
+            motherPath
+        );
+    }
+
+
+    /* ROOT MEMBER / ROOT PARTNER
+       ARE CONNECTED SEPARATELY */
+
+    if(
+        prefix === "" ||
+        prefix === "partner"
+    ){
+        return;
+    }
+
+
+    /* BIOLOGICAL CHILD */
+
+    const childNode =
+        canvas.querySelector(
+            `.tree-${prefix}`
+        );
+
+
+    if(!childNode){
+        return;
+    }
+
+
+    let parentCenter = null;
+
+
+    /* BOTH BIOLOGICAL PARENTS */
+
+    if(
+        fatherNode &&
+        motherNode
+    ){
+
+        parentCenter =
+            connectCouple(
+                fatherNode,
+                motherNode
+            );
+
+    }else{
+
+        /* ONLY ONE BIOLOGICAL PARENT */
+
+        const singleParent =
+            fatherNode ||
+            motherNode;
+
+
+        if(singleParent){
+
+            parentCenter =
+                getPoint(
+                    singleParent,
+                    "bottom"
+                );
+        }
+    }
+
+
+    /* PARENTS → BIOLOGICAL CHILD TOP-CENTER */
+
+    if(parentCenter){
+
+        connectParentsToChildren(
+            parentCenter,
+            [childNode]
+        );
+    }
+}
+/* =====================================
+   SELECTED MEMBER SIDE
+   ===================================== */
+connectGreatGreatGrandParents(
+    ".tree-father-father-father-father",
+    ".tree-father-father-father-mother",
+    ".tree-father-father-father"
+);
+
+connectGreatGreatGrandParents(
+    ".tree-father-father-mother-father",
+    ".tree-father-father-mother-mother",
+    ".tree-father-father-mother"
+);
+
+connectGreatGreatGrandParents(
+    ".tree-father-mother-father-father",
+    ".tree-father-mother-father-mother",
+    ".tree-father-mother-father"
+);
+
+connectGreatGreatGrandParents(
+    ".tree-father-mother-mother-father",
+    ".tree-father-mother-mother-mother",
+    ".tree-father-mother-mother"
+);
+
+connectGreatGreatGrandParents(
+    ".tree-mother-father-father-father",
+    ".tree-mother-father-father-mother",
+    ".tree-mother-father-father"
+);
+
+connectGreatGreatGrandParents(
+    ".tree-mother-father-mother-father",
+    ".tree-mother-father-mother-mother",
+    ".tree-mother-father-mother"
+);
+
+connectGreatGreatGrandParents(
+    ".tree-mother-mother-father-father",
+    ".tree-mother-mother-father-mother",
+    ".tree-mother-mother-father"
+);
+
+connectGreatGreatGrandParents(
+    ".tree-mother-mother-mother-father",
+    ".tree-mother-mother-mother-mother",
+    ".tree-mother-mother-mother"
+);
+
+
+/* =====================================
+   PARTNER SIDE
+   ===================================== */
+
+connectGreatGreatGrandParents(
+    ".tree-partner-father-father-father-father",
+    ".tree-partner-father-father-father-mother",
+    ".tree-partner-father-father-father"
+);
+
+connectGreatGreatGrandParents(
+    ".tree-partner-father-father-mother-father",
+    ".tree-partner-father-father-mother-mother",
+    ".tree-partner-father-father-mother"
+);
+
+connectGreatGreatGrandParents(
+    ".tree-partner-father-mother-father-father",
+    ".tree-partner-father-mother-father-mother",
+    ".tree-partner-father-mother-father"
+);
+
+connectGreatGreatGrandParents(
+    ".tree-partner-father-mother-mother-father",
+    ".tree-partner-father-mother-mother-mother",
+    ".tree-partner-father-mother-mother"
+);
+
+connectGreatGreatGrandParents(
+    ".tree-partner-mother-father-father-father",
+    ".tree-partner-mother-father-father-mother",
+    ".tree-partner-mother-father-father"
+);
+
+connectGreatGreatGrandParents(
+    ".tree-partner-mother-father-mother-father",
+    ".tree-partner-mother-father-mother-mother",
+    ".tree-partner-mother-father-mother"
+);
+
+connectGreatGreatGrandParents(
+    ".tree-partner-mother-mother-father-father",
+    ".tree-partner-mother-mother-father-mother",
+    ".tree-partner-mother-mother-father"
+);
+
+connectGreatGreatGrandParents(
+    ".tree-partner-mother-mother-mother-father",
+    ".tree-partner-mother-mother-mother-mother",
+    ".tree-partner-mother-mother-mother"
+);
+
+   /* =====================================
+   NEW SPLIT TREE
+   GENERATION 2 → GENERATION 1
+
+   MEMBER SIDE — LEFT
+   ===================================== */
+
+
+/* =====================================
+   NEW SPLIT ANCESTOR TREE CONNECTORS
+   PARTNER PRESENT ONLY
+   ===================================== */
+
+   /* =====================================
+   GREAT GRANDPARENTS
+   → GRANDPARENTS
+   ===================================== */
+
+function connectGreatGrandParents(
+    fatherSelector,
+    motherSelector,
+   
+    childSelector
+){
+
+    const greatGrandFather =
+        canvas.querySelector(
+            fatherSelector
+        );
+
+    const greatGrandMother =
+        canvas.querySelector(
+            motherSelector
+        );
+
+    const grandParent =
+        canvas.querySelector(
+            childSelector
+        );
+
+    if(!grandParent){
+        return;
+    }
+
+    let coupleCenter = null;
+
+    if(
+        greatGrandFather &&
+        greatGrandMother
+    ){
+
+        coupleCenter =
+            connectCouple(
+                greatGrandFather,
+                greatGrandMother
+            );
+
+    }
+    else{
+
+        const singleParent =
+            greatGrandFather ||
+            greatGrandMother;
+
+        if(singleParent){
+
+            coupleCenter =
+                getPoint(
+                    singleParent,
+                    "bottom"
+                );
+
+        }
+    }
+
+    connectParentsToChildren(
+        coupleCenter,
+        [grandParent]
+    );
+}
+
+
+/* SELECTED MEMBER SIDE */
+
+connectGreatGrandParents(
+    ".tree-father-father-father",
+    ".tree-father-father-mother",
+    ".tree-father-father"
+);
+
+connectGreatGrandParents(
+    ".tree-father-mother-father",
+    ".tree-father-mother-mother",
+    ".tree-father-mother"
+);
+
+connectGreatGrandParents(
+    ".tree-mother-father-father",
+    ".tree-mother-father-mother",
+    ".tree-mother-father"
+);
+
+connectGreatGrandParents(
+    ".tree-mother-mother-father",
+    ".tree-mother-mother-mother",
+    ".tree-mother-mother"
+);
+
+
+/* PARTNER SIDE */
+
+connectGreatGrandParents(
+    ".tree-partner-father-father-father",
+    ".tree-partner-father-father-mother",
+    ".tree-partner-father-father"
+);
+
+connectGreatGrandParents(
+    ".tree-partner-father-mother-father",
+    ".tree-partner-father-mother-mother",
+    ".tree-partner-father-mother"
+);
+
+connectGreatGrandParents(
+    ".tree-partner-mother-father-father",
+    ".tree-partner-mother-father-mother",
+    ".tree-partner-mother-father"
+);
+
+connectGreatGrandParents(
+    ".tree-partner-mother-mother-father",
+    ".tree-partner-mother-mother-mother",
+    ".tree-partner-mother-mother"
+);
+/* =====================================
+   GRANDPARENTS → PARENTS
+   ===================================== */
+
+
+/* -------------------------
+   FATHER'S PARENTS → FATHER
+   ------------------------- */
+
+const fatherFather =
+    canvas.querySelector(
+        ".tree-father-father"
+    );
+
+const fatherMother =
+    canvas.querySelector(
+        ".tree-father-mother"
+    );
+
+const fatherNode =
+    canvas.querySelector(
+        ".tree-father"
+    );
+
+
+let fatherGrandParentCenter =
+    null;
+
+
+if(
+    fatherFather &&
+    fatherMother
+){
+
+    fatherGrandParentCenter =
+        connectCouple(
+            fatherFather,
+            fatherMother
+        );
+
+}
+else{
+
+    const singleFatherParent =
+        fatherFather ||
+        fatherMother;
+
+    if(singleFatherParent){
+
+        fatherGrandParentCenter =
+            getPoint(
+                singleFatherParent,
+                "bottom"
+            );
+
+    }
+
+}
+
+
+connectParentsToChildren(
+    fatherGrandParentCenter,
+    fatherNode
+        ? [fatherNode]
+        : []
+);
+
+
+/* -------------------------
+   MOTHER'S PARENTS → MOTHER
+   ------------------------- */
+
+const motherFather =
+    canvas.querySelector(
+        ".tree-mother-father"
+    );
+
+const motherMother =
+    canvas.querySelector(
+        ".tree-mother-mother"
+    );
+
+const motherNode =
+    canvas.querySelector(
+        ".tree-mother"
+    );
+
+
+let motherGrandParentCenter =
+    null;
+
+
+if(
+    motherFather &&
+    motherMother
+){
+
+    motherGrandParentCenter =
+        connectCouple(
+            motherFather,
+            motherMother
+        );
+
+}
+else{
+
+    const singleMotherParent =
+        motherFather ||
+        motherMother;
+
+    if(singleMotherParent){
+
+        motherGrandParentCenter =
+            getPoint(
+                singleMotherParent,
+                "bottom"
+            );
+
+    }
+
+}
+
+
+connectParentsToChildren(
+    motherGrandParentCenter,
+    motherNode
+        ? [motherNode]
+        : []
+);
+
+
+/* -------------------------
+   PARTNER FATHER'S PARENTS
+   → PARTNER FATHER
+   ------------------------- */
+
+const partnerFatherFather =
+    canvas.querySelector(
+        ".tree-partner-father-father"
+    );
+
+const partnerFatherMother =
+    canvas.querySelector(
+        ".tree-partner-father-mother"
+    );
+
+const partnerFatherNode =
+    canvas.querySelector(
+        ".tree-partner-father"
+    );
+
+
+let partnerFatherGrandParentCenter =
+    null;
+
+
+if(
+    partnerFatherFather &&
+    partnerFatherMother
+){
+
+    partnerFatherGrandParentCenter =
+        connectCouple(
+            partnerFatherFather,
+            partnerFatherMother
+        );
+
+}
+else{
+
+    const singlePartnerFatherParent =
+        partnerFatherFather ||
+        partnerFatherMother;
+
+    if(singlePartnerFatherParent){
+
+        partnerFatherGrandParentCenter =
+            getPoint(
+                singlePartnerFatherParent,
+                "bottom"
+            );
+
+    }
+
+}
+
+
+connectParentsToChildren(
+    partnerFatherGrandParentCenter,
+    partnerFatherNode
+        ? [partnerFatherNode]
+        : []
+);
+
+
+/* -------------------------
+   PARTNER MOTHER'S PARENTS
+   → PARTNER MOTHER
+   ------------------------- */
+
+const partnerMotherFather =
+    canvas.querySelector(
+        ".tree-partner-mother-father"
+    );
+
+const partnerMotherMother =
+    canvas.querySelector(
+        ".tree-partner-mother-mother"
+    );
+
+const partnerMotherNode =
+    canvas.querySelector(
+        ".tree-partner-mother"
+    );
+
+
+let partnerMotherGrandParentCenter =
+    null;
+
+
+if(
+    partnerMotherFather &&
+    partnerMotherMother
+){
+
+    partnerMotherGrandParentCenter =
+        connectCouple(
+            partnerMotherFather,
+            partnerMotherMother
+        );
+
+}
+else{
+
+    const singlePartnerMotherParent =
+        partnerMotherFather ||
+        partnerMotherMother;
+
+    if(singlePartnerMotherParent){
+
+        partnerMotherGrandParentCenter =
+            getPoint(
+                singlePartnerMotherParent,
+                "bottom"
+            );
+
+    }
+
+}
+
+
+   
+connectParentsToChildren(
+    partnerMotherGrandParentCenter,
+    partnerMotherNode
+        ? [partnerMotherNode]
+        : []
+);
+
+
+   /* =====================================
+   TWO PARTNER MODE
+   DIRECT PARENTS → OWN MEMBER
+   ===================================== */
+
+const leftPartnerNodeForParents =
+    canvas.querySelector(
+        ".tree-left-partner"
+    );
+
+const rightPartnerNodeForParents =
+    canvas.querySelector(
+        ".tree-right-partner"
+    );
+
+
+if(
+    selected &&
+    leftPartnerNodeForParents &&
+    rightPartnerNodeForParents
+){
+
+    /* LEFT PARTNER PARENTS */
+
+    const leftPartnerFatherNode =
+        canvas.querySelector(
+            ".tree-left-partner-father"
+        );
+
+    const leftPartnerMotherNode =
+        canvas.querySelector(
+".tree-left-partner-mother"
+        );
+
+    let leftPartnerParentCenter = null;
+
+
+    if(
+        leftPartnerFatherNode &&
+        leftPartnerMotherNode
+    ){
+
+        leftPartnerParentCenter =
+            connectCouple(
+                leftPartnerFatherNode,
+                leftPartnerMotherNode
+            );
+
+    }
+    else{
+
+        const singleLeftPartnerParent =
+            leftPartnerFatherNode ||
+            leftPartnerMotherNode;
+
+        if(singleLeftPartnerParent){
+
+            leftPartnerParentCenter =
+                getPoint(
+                    singleLeftPartnerParent,
+                    "bottom"
+                );
+
+        }
+
+    }
+
+
+  connectParentsToChildren(
+    leftPartnerParentCenter,
+    [leftPartnerNodeForParents],
+    false,
+    0,
+    true
+);
+
+
+
+    /* RIGHT PARTNER PARENTS */
+
+    const rightPartnerFatherNode =
+        canvas.querySelector(
+            ".tree-right-partner-father"
+        );
+
+    const rightPartnerMotherNode =
+        canvas.querySelector(
+            ".tree-right-partner-mother"
+        );
+
+    let rightPartnerParentCenter = null;
+
+
+    if(
+        rightPartnerFatherNode &&
+        rightPartnerMotherNode
+    ){
+
+        rightPartnerParentCenter =
+            connectCouple(
+                rightPartnerFatherNode,
+                rightPartnerMotherNode
+            );
+
+    }
+    else{
+
+        const singleRightPartnerParent =
+            rightPartnerFatherNode ||
+            rightPartnerMotherNode;
+
+        if(singleRightPartnerParent){
+
+            rightPartnerParentCenter =
+                getPoint(
+                    singleRightPartnerParent,
+                    "bottom"
+                );
+
+        }
+
+    }
+
+
+    connectParentsToChildren(
+    rightPartnerParentCenter,
+    [rightPartnerNodeForParents],
+    false,
+    0,
+    true
+);
+   
+}
+    /* ================================
+       SELECTED MEMBER PARENTS
+       ================================ */
+
+    const father =
+        canvas.querySelector(
+            ".tree-father"
+        );
+
+    const mother =
+        canvas.querySelector(
+            ".tree-mother"
+        );
+
+
+    let parentCenter = null;
+
+
+    if(father && mother){
+
+        parentCenter =
+            connectCouple(
+                father,
+                mother
+            );
+
+    }
+    else{
+
+        const singleParent =
+            father || mother;
+
+
+        if(singleParent){
+
+            parentCenter =
+                getPoint(
+                    singleParent,
+                    "bottom"
+                );
+
+        }
+
+    }
+
+
+    const siblings =
+        Array.from(
+            canvas.querySelectorAll(
+                ".tree-sibling"
+            )
+        );
+
+
+    
+const selectedIsFemaleForConnector =
+    selected &&
+    selected.classList.contains(
+        "tree-female"
+    );
+
+const partnerNodeForGender =
+    canvas.querySelector(
+        ".tree-partner"
+    );
+
+const partnerIsFemaleForConnector =
+    partnerNodeForGender &&
+    partnerNodeForGender.classList.contains(
+        "tree-female"
+    );
+
+/* =====================================
+   MEMBER PARENTS
+   → SELECTED MEMBER + SIBLINGS
+   ===================================== */
+
+const memberChildrenOfParents =
+    [
+        ...siblings,
+        selected
+    ].filter(Boolean);
+
+
+if(selectedIsFemaleForConnector){
+
+    connectFemaleParentsToChildren(
+        parentCenter,
+        memberChildrenOfParents
+    );
+
+}
+else{
+
+    if(siblings.length === 0){
+
+        /* SELECTED MEMBER ONLY
+           Parents → Member
+           horizontal route exact 50% */
+
+        connectParentsToChildren(
+            parentCenter,
+            [selected],
+            false,
+            0,
+            true
+        );
+
+    }
+    else{
+
+        /* SELECTED MEMBER + SIBLINGS
+           keep existing connector behavior */
+
+        connectParentsToChildren(
+            parentCenter,
+            memberChildrenOfParents,
+            false,
+            12
+        );
+
+    }
+
+}   
+   /* =====================================
+   SIBLING + PARTNER → THEIR CHILDREN
+   STANDARD DESCENDANT CONNECTOR
+   ===================================== */
+
+const siblingBranches =
+    Array.from(
+        canvas.querySelectorAll(
+            ".family-tree-sibling-branch"
+        )
+    );
+
+
+siblingBranches.forEach(
+    branch => {
+
+        const sibling =
+            branch.querySelector(
+                ".tree-sibling"
+            );
+
+        const siblingPartner =
+            branch.querySelector(
+                ".tree-sibling-partner"
+            );
+
+        const siblingChildren =
+            Array.from(
+                branch.querySelectorAll(
+                    ".tree-sibling-child"
+                )
+            );
+
+
+        if(
+            !sibling ||
+            !siblingChildren.length
+        ){
+            return;
+        }
+
+
+        let siblingFamilyCenter =
+            null;
+
+
+        /* =================================
+           SIBLING + PARTNER
+           ================================= */
+
+        if(siblingPartner){
+
+            siblingFamilyCenter =
+                connectCouple(
+                    sibling,
+                    siblingPartner
+                );
+
+        }
+
+
+        /* =================================
+           SIBLING WITHOUT PARTNER
+           ================================= */
+
+        else{
+
+            siblingFamilyCenter =
+                getPoint(
+                    sibling,
+                    "bottom"
+                );
+
+        }
+
+
+        /* =================================
+           SAME STANDARD DESCENDANT ROUTING
+           ================================= */
+
+        connectDescendantsStandard(
+            siblingFamilyCenter,
+            siblingChildren
+        );
+
+    }
+);  
+   /* ================================
+       PARTNER PARENTS
+       ================================ */
+
+    const partnerFather =
+        canvas.querySelector(
+            ".tree-partner-father"
+        );
+
+    const partnerMother =
+        canvas.querySelector(
+            ".tree-partner-mother"
+        );
+
+    const partner =
+        canvas.querySelector(
+            ".tree-partner"
+        );
+
+
+    let partnerParentCenter = null;
+
+
+    if(
+        partnerFather &&
+        partnerMother
+    ){
+
+       partnerParentCenter =
+    connectCouple(
+        partnerFather,
+        partnerMother
+    );
+    }
+    else{
+
+        const singlePartnerParent =
+            partnerFather ||
+            partnerMother;
+
+
+        if(singlePartnerParent){
+
+            partnerParentCenter =
+                getPoint(
+                    singlePartnerParent,
+                    "bottom"
+                );
+
+        }
+
+    }
+
+
+ /* =====================================
+   PARTNER PARENTS
+   → PARTNER + PARTNER SIBLINGS
+   ===================================== */
+
+const partnerSiblings =
+    Array.from(
+        canvas.querySelectorAll(
+            ".tree-partner-sibling"
+        )
+    );
+
+
+/* =====================================
+   PARTNER PARENTS
+   → PARTNER + PARTNER SIBLINGS
+   ===================================== */
+
+const partnerChildrenOfParents =
+    [
+        partner,
+        ...partnerSiblings
+    ].filter(Boolean);
+
+
+if(partnerIsFemaleForConnector){
+
+    connectFemaleParentsToChildren(
+        partnerParentCenter,
+        partnerChildrenOfParents
+    );
+
+}
+else{
+
+    connectParentsToChildren(
+        partnerParentCenter,
+        partnerChildrenOfParents,
+        false,
+        12
+    );
+
+}
+/* =====================================
+   ACTUAL GENDER FOR PARENT ROUTING
+
+   Male family   → normal route
+   Female family → special upper route
+   ===================================== */
+
+
+
+  /* =====================================
+   FEMALE PARENTS → CHILDREN
+
+   SPECIAL RIGHT-SIDE ROUTING
+
+   Female parents
+        │
+        └───────────────┐
+                        │
+                        │
+   male bus ------------│---
+                        │
+                        ↓
+                  female / siblings
+
+   Male routing is NOT changed.
+   ===================================== */
+
+function connectFemaleParentsToChildren(
+    parentCenter,
+    children
+){
+
+    if(
+        !parentCenter ||
+        !children ||
+        !children.length
+    ){
+        return;
+    }
+
+
+    const childPoints =
+        children
+            .map(
+                child =>
+                    getPoint(
+                        child,
+                        "top"
+                    )
+            )
+            .filter(Boolean);
+
+
+    if(!childPoints.length){
+        return;
+    }
+
+
+    const childTopY =
+        Math.min(
+            ...childPoints.map(
+                point => point.y
+            )
+        );
+
+
+    const minChildX =
+        Math.min(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    const maxChildX =
+        Math.max(
+            ...childPoints.map(
+                point => point.x
+            )
+        );
+
+
+    /*
+       Female horizontal route:
+       parent couple daggara short stem.
+    */
+
+   const FEMALE_PARENT_ROUTE_GAP = 35;
+
+const femaleRouteY =
+    parentCenter.y +
+    FEMALE_PARENT_ROUTE_GAP;
+
+
+    /*
+       Actual children bus:
+       child boxes daggara fixed short stem.
+    */
+
+    const femaleBusY =
+        childTopY -
+        FAMILY_STEM_HEIGHT;
+
+
+    /*
+       Female family children midpoint.
+    */
+
+    const childrenCenterX =
+        (
+            minChildX +
+            maxChildX
+        ) / 2;
+
+
+    /* =====================================
+       SINGLE CHILD
+       ===================================== */
+
+    if(childPoints.length === 1){
+
+        const childPoint =
+            childPoints[0];
+
+
+        /* Female parents ↓ short */
+
+        addLine(
+            parentCenter.x,
+            parentCenter.y,
+            parentCenter.x,
+            femaleRouteY
+        );
+
+
+        /* → female child X */
+
+        if(
+            parentCenter.x !==
+            childPoint.x
+        ){
+            addLine(
+                parentCenter.x,
+                femaleRouteY,
+                childPoint.x,
+                femaleRouteY
+            );
+        }
+
+
+        /* ↓ female child */
+
+        addLine(
+            childPoint.x,
+            femaleRouteY,
+            childPoint.x,
+            childPoint.y
+        );
+
+
+        return;
+    }
+
+
+    /* =====================================
+       MULTIPLE CHILDREN
+       ===================================== */
+
+
+    /* 1. Female parents ↓ short stem */
+
+    addLine(
+        parentCenter.x,
+        parentCenter.y,
+        parentCenter.x,
+        femaleRouteY
+    );
+
+
+    /*
+       2. Horizontal route only at
+          female special upper level.
+    */
+
+    if(
+        parentCenter.x !==
+        childrenCenterX
+    ){
+        addLine(
+            parentCenter.x,
+            femaleRouteY,
+            childrenCenterX,
+            femaleRouteY
+        );
+    }
+
+
+    /*
+       3. Female route ↓
+          to its own children bus.
+    */
+
+    addLine(
+        childrenCenterX,
+        femaleRouteY,
+        childrenCenterX,
+        femaleBusY
+    );
+
+
+    /*
+       4. Female children bus.
+    */
+
+    addLine(
+        minChildX,
+        femaleBusY,
+        maxChildX,
+        femaleBusY
+    );
+
+
+    /*
+       5. Bus ↓ each female-family child.
+    */
+
+    childPoints.forEach(
+        point => {
+
+            addLine(
+                point.x,
+                femaleBusY,
+                point.x,
+                point.y
+            );
+
+        }
+    );
+
+} 
+/* =====================================
+   PARTNER SIBLING + PARTNER
+   → THEIR CHILDREN
+   ===================================== */
+
+const partnerSiblingBranches =
+    Array.from(
+        canvas.querySelectorAll(
+            ".family-tree-partner-sibling-branch"
+        )
+    );
+
+
+partnerSiblingBranches.forEach(
+    branch => {
+
+        const sibling =
+            branch.querySelector(
+                ".tree-partner-sibling"
+            );
+
+        const siblingPartner =
+            branch.querySelector(
+                ".tree-partner-sibling-partner"
+            );
+
+        const siblingChildren =
+            Array.from(
+                branch.querySelectorAll(
+                    ".tree-partner-sibling-child"
+                )
+            );
+
+
+        let siblingCoupleCenter =
+            null;
+
+
+        if(
+            sibling &&
+            siblingPartner
+        ){
+
+            /* sibling ↔ partner horizontal line */
+
+            siblingCoupleCenter =
+                connectCouple(
+                    sibling,
+                    siblingPartner
+                );
+
+        }
+        else if(sibling){
+
+            siblingCoupleCenter =
+                getPoint(
+                    sibling,
+                    "bottom"
+                );
+
+        }
+
+
+        /* couple → biological children */
+
+       connectDescendantsStandard(
+    siblingCoupleCenter,
+    siblingChildren
+);
+    }
+);
+   
+     /* ================================
+       SELECTED + PARTNER / PARTNERS
+       ================================ */
+
+let selectedCoupleCenter = null;
+
+let leftCoupleCenter = null;
+let rightCoupleCenter = null;
+
+/* =====================================
+   TWO PARTNER MODE
+   LEFT PARTNER ↔ MEMBER ↔ RIGHT PARTNER
+   ===================================== */
+
+const leftPartnerNode =
+    canvas.querySelector(
+        ".tree-left-partner"
+    );
+
+const rightPartnerNode =
+    canvas.querySelector(
+        ".tree-right-partner"
+    );
+
+
+if(
+    selected &&
+    leftPartnerNode &&
+    rightPartnerNode
+){
+
+    /* LEFT PARTNER ↔ SELECTED MEMBER */
+
+       leftCoupleCenter =
+        connectCouple(
+            leftPartnerNode,
+            selected
+        );
+
+
+    /* SELECTED MEMBER ↔ RIGHT PARTNER */
+
+    rightCoupleCenter =
+        connectCouple(
+            selected,
+            rightPartnerNode
+        );
+
+    /*
+       For the moment keep selected member
+       as the descendant center point.
+       Children split connectors will be
+       handled separately in next step.
+    */
+
+    selectedCoupleCenter =
+        getPoint(
+            selected,
+            "bottom"
+        );
+
+}
+
+
+/* =====================================
+   NORMAL SINGLE PARTNER MODE
+   ===================================== */
+
+else if(
+    selected &&
+    partner
+){
+
+    selectedCoupleCenter =
+        connectCouple(
+            selected,
+            partner
+        );
+
+}
+
+
+/* =====================================
+   NO PARTNER
+   ===================================== */
+
+else if(selected){
+
+    selectedCoupleCenter =
+        getPoint(
+            selected,
+            "bottom"
+        );
+
+}
+
+
+    /* ================================
+       CHILDREN
+       ================================ */
+
+    const childBranches =
+    Array.from(
+        canvas.querySelectorAll(
+            ".family-tree-child-branch"
+        )
+    );
+
+
+const childTargets =
+    childBranches
+        .map(
+            branch => {
+
+                const child =
+                    branch.querySelector(
+                        ".tree-child-node"
+                    );
+
+                const childPartner =
+                    branch.querySelector(
+                        ".tree-child-partner"
+                    );
+
+
+                if(
+                    child &&
+                    childPartner
+                ){
+
+                    return {
+                        child,
+                        childPartner,
+                        couple: true
+                    };
+
+                }
+
+
+                if(child){
+
+                    return {
+                        child,
+                        childPartner: null,
+                        couple: false
+                    };
+
+                }
+
+
+                return null;
+
+            }
+        )
+        .filter(Boolean);
+
+
+/* CHILD / CHILD-PARTNER COUPLE LINES */
+
+const childCenters = [];
+
+
+childTargets.forEach(
+    item => {
+
+        if(
+            item.couple &&
+            item.childPartner
+        ){
+
+            connectCouple(
+                item.child,
+                item.childPartner
+            );
+
+            const childTop =
+                getPoint(
+                    item.child,
+                    "top"
+                );
+
+            childCenters.push(
+                {
+                    element:
+                        item.child,
+
+                    x:
+                        childTop.x,
+
+                    y:
+                        childTop.y
+                }
+            );
+
+        }
+        else{
+
+            const topPoint =
+                getPoint(
+                    item.child,
+                    "top"
+                );
+
+            childCenters.push(
+                {
+                    element:
+                        item.child,
+
+                    x:
+                        topPoint.x,
+
+                    y:
+                        topPoint.y
+                }
+            );
+
+        }
+
+    }
+);
+   
+
+
+/* =====================================
+   SELECTED COUPLE → CHILDREN
+   STANDARD DESCENDANT CONNECTOR
+   ===================================== */
+
+if(
+    leftPartnerNode &&
+    rightPartnerNode &&
+    leftCoupleCenter &&
+    rightCoupleCenter
+){
+
+    /* =================================
+       LEFT PARTNER + MEMBER
+       → LEFT PARTNER CHILDREN
+       ================================= */
+
+    const leftChildElements =
+        Array.from(
+            canvas.querySelectorAll(
+                ".family-tree-left-children-group .family-tree-child-branch"
+            )
+        )
+        .map(
+            branch =>
+                branch.querySelector(
+                    ".tree-child-node"
+                )
+        )
+        .filter(Boolean);
+
+
+    if(leftChildElements.length){
+
+        connectTwoPartnerChildren(
+    leftCoupleCenter,
+    leftChildElements
+);
+    }
+
+
+    /* =================================
+       MEMBER + RIGHT PARTNER
+       → RIGHT PARTNER CHILDREN
+       ================================= */
+
+    const rightChildElements =
+        Array.from(
+            canvas.querySelectorAll(
+                ".family-tree-right-children-group .family-tree-child-branch"
+            )
+        )
+        .map(
+            branch =>
+                branch.querySelector(
+                    ".tree-child-node"
+                )
+        )
+        .filter(Boolean);
+
+
+    if(rightChildElements.length){
+
+       connectTwoPartnerChildren(
+    rightCoupleCenter,
+    rightChildElements
+);
+    }
+
+}
+
+
+/* =====================================
+   NORMAL ONE PARTNER / NO PARTNER
+   Existing behaviour
+   ===================================== */
+
+else if(
+    selectedCoupleCenter &&
+    childCenters.length
+){
+
+    connectDescendantsStandard(
+        selectedCoupleCenter,
+        childCenters
+            .map(
+                point => point.element
+            )
+            .filter(Boolean)
+    );
+
+}
+
+   
+   /* =====================================
+   MEMBER SIBLING CHILD + PARTNER
+   → THEIR CHILDREN
+   ===================================== */
+
+const siblingChildBranches =
+    Array.from(
+        canvas.querySelectorAll(
+            ".family-tree-sibling-child-branch"
+        )
+    );
+
+
+siblingChildBranches.forEach(
+    branch => {
+
+        const child =
+            branch.querySelector(
+                ".tree-sibling-child"
+            );
+
+        const childPartner =
+            branch.querySelector(
+                ".tree-sibling-child-partner"
+            );
+
+        const grandChildren =
+            Array.from(
+                branch.querySelectorAll(
+                    ".tree-sibling-grandchild"
+                )
+            );
+
+
+        let childCoupleCenter = null;
+
+
+        if(
+            child &&
+            childPartner
+        ){
+
+            childCoupleCenter =
+                connectCouple(
+                    child,
+                    childPartner
+                );
+
+        }
+        else if(child){
+
+            childCoupleCenter =
+                getPoint(
+                    child,
+                    "bottom"
+                );
+
+        }
+
+
+        /* =====================================
+   SIBLING CHILD → GRANDCHILDREN
+   AFTER GENERATION 2
+   Example:
+   SaiLaxmi → Reya + Shivesti
+   ===================================== */
+
+/* =====================================
+   SIBLING CHILD → GRANDCHILDREN
+   CLEAN CONNECTOR ROUTING
+   ===================================== */
+
+if(
+    childCoupleCenter &&
+    grandChildren.length
+){
+
+    const grandChildPoints =
+        grandChildren
+            .map(
+                grandChild =>
+                    getPoint(
+                        grandChild,
+                        "top"
+                    )
+            )
+            .filter(Boolean);
+
+
+    if(!grandChildPoints.length){
+        return;
+    }
+
+
+    /* =================================
+       ONLY ONE GRANDCHILD
+       ================================= */
+
+    if(grandChildPoints.length === 1){
+
+        const grandChildPoint =
+            grandChildPoints[0];
+
+
+        const routeY =
+            childCoupleCenter.y +
+            (
+                grandChildPoint.y -
+                childCoupleCenter.y
+            ) / 2;
+
+
+        /* Parent ↓ */
+
+        addLine(
+            childCoupleCenter.x,
+            childCoupleCenter.y,
+            childCoupleCenter.x,
+            routeY
+        );
+
+
+        /* Horizontal only if required */
+
+        if(
+            childCoupleCenter.x !==
+            grandChildPoint.x
+        ){
+
+            addLine(
+                childCoupleCenter.x,
+                routeY,
+                grandChildPoint.x,
+                routeY
+            );
+
+        }
+
+
+        /* ↓ Grandchild top-center */
+
+        addLine(
+            grandChildPoint.x,
+            routeY,
+            grandChildPoint.x,
+            grandChildPoint.y
+        );
+
+
+        return;
+    }
+
+
+    /* =================================
+       TWO OR MORE GRANDCHILDREN
+       ================================= */
+
+    const minGrandChildX =
+        Math.min(
+            ...grandChildPoints.map(
+                point => point.x
+            )
+        );
+
+
+    const maxGrandChildX =
+        Math.max(
+            ...grandChildPoints.map(
+                point => point.x
+            )
+        );
+
+
+    const grandChildrenCenterX =
+        (
+            minGrandChildX +
+            maxGrandChildX
+        ) / 2;
+
+
+    const grandChildTopY =
+        Math.min(
+            ...grandChildPoints.map(
+                point => point.y
+            )
+        );
+
+
+    /*
+       Actual children bus.
+       Parent/couple mariyu grandchildren
+       madhyalo untundi.
+    */
+
+    const busY =
+        childCoupleCenter.y +
+        (
+            grandChildTopY -
+            childCoupleCenter.y
+        ) * 0.65;
+
+
+    /*
+       Separate routing level.
+
+       IMPORTANT:
+       Ee horizontal line children bus meeda
+       overlap avvakudadhu.
+    */
+
+    const routeY =
+        childCoupleCenter.y +
+        (
+            busY -
+            childCoupleCenter.y
+        ) * 0.5;
+
+
+    /* =================================
+       1. Parent/couple midpoint ↓
+       ================================= */
+
+    addLine(
+        childCoupleCenter.x,
+        childCoupleCenter.y,
+        childCoupleCenter.x,
+        routeY
+    );
+
+
+    /* =================================
+       2. Separate horizontal route
+       ================================= */
+
+    if(
+        childCoupleCenter.x !==
+        grandChildrenCenterX
+    ){
+
+        addLine(
+            childCoupleCenter.x,
+            routeY,
+            grandChildrenCenterX,
+            routeY
+        );
+
+    }
+
+
+    /* =================================
+       3. ↓ To grandchildren bus
+       ================================= */
+
+    addLine(
+        grandChildrenCenterX,
+        routeY,
+        grandChildrenCenterX,
+        busY
+    );
+
+
+    /* =================================
+       4. Actual grandchildren bus
+       ================================= */
+
+    addLine(
+        minGrandChildX,
+        busY,
+        maxGrandChildX,
+        busY
+    );
+
+
+    /* =================================
+       5. Bus ↓ each grandchild TOP CENTER
+       ================================= */
+
+    grandChildPoints.forEach(
+        point => {
+
+            addLine(
+                point.x,
+                busY,
+                point.x,
+                point.y
+            );
+
+        }
+    );
+
+}
+    }
+);
+
+
+/* =====================================
+   PARTNER SIBLING CHILD + PARTNER
+   → THEIR CHILDREN
+   ===================================== */
+
+const partnerSiblingChildBranches =
+    Array.from(
+        canvas.querySelectorAll(
+            ".family-tree-partner-sibling-child-branch"
+        )
+    );
+
+
+partnerSiblingChildBranches.forEach(
+    branch => {
+
+        const child =
+            branch.querySelector(
+                ".tree-partner-sibling-child"
+            );
+
+        const childPartner =
+            branch.querySelector(
+                ".tree-partner-sibling-child-partner"
+            );
+
+        const grandChildren =
+            Array.from(
+                branch.querySelectorAll(
+                    ".tree-partner-sibling-grandchild"
+                )
+            );
+
+
+        let childCoupleCenter = null;
+
+
+        if(
+            child &&
+            childPartner
+        ){
+
+            childCoupleCenter =
+                connectCouple(
+                    child,
+                    childPartner
+                );
+
+        }
+        else if(child){
+
+            childCoupleCenter =
+                getPoint(
+                    child,
+                    "bottom"
+                );
+
+        }
+
+
+        connectParentsToChildren(
+            childCoupleCenter,
+            grandChildren
+        );
+
+    }
+);
+   /* =====================================
+   CHILD + PARTNER
+   → GRANDCHILDREN
+   ===================================== */
+
+const selectedChildBranches =
+    Array.from(
+        canvas.querySelectorAll(
+            ".family-tree-child-branch"
+        )
+    );
+
+
+selectedChildBranches.forEach(
+    branch => {
+
+        const child =
+            branch.querySelector(
+                ".tree-child-node"
+            );
+
+        const childPartner =
+            branch.querySelector(
+                ".tree-child-partner"
+            );
+
+        const grandChildren =
+            Array.from(
+                branch.querySelectorAll(
+                    ".tree-grandchild-node"
+                )
+            );
+
+
+        if(
+            !child ||
+            !grandChildren.length
+        ){
+            return;
+        }
+
+
+        let childCoupleCenter = null;
+
+
+        /* CHILD ↔ PARTNER */
+        if(
+            child &&
+            childPartner
+        ){
+
+            childCoupleCenter =
+                connectCouple(
+                    child,
+                    childPartner
+                );
+
+        }
+
+        /* NO PARTNER */
+        else{
+
+            childCoupleCenter =
+                getPoint(
+                    child,
+                    "bottom"
+                );
+
+        }
+
+
+        /* =================================
+           COUPLE → BIOLOGICAL CHILDREN
+           grandchild box TOP-CENTER only
+           ================================= */
+
+        connectParentsToChildren(
+            childCoupleCenter,
+            grandChildren
+        );
+
+    }
+);
+   /* =====================================
+   GRANDCHILD + PARTNER
+   → GREAT GRANDCHILDREN
+   ===================================== */
+
+const grandChildBranches =
+    Array.from(
+        canvas.querySelectorAll(
+            ".family-tree-grandchild-branch"
+        )
+    );
+
+grandChildBranches.forEach(
+    branch => {
+
+        const grandChild =
+            branch.querySelector(
+                ".tree-grandchild-node"
+            );
+
+        const grandChildPartner =
+            branch.querySelector(
+                ".tree-grandchild-partner"
+            );
+
+        const greatGrandChildren =
+            Array.from(
+                branch.querySelectorAll(
+                    ".tree-great-grandchild-node"
+                )
+            );
+
+        let grandChildCoupleCenter = null;
+
+        if(
+            grandChild &&
+            grandChildPartner
+        ){
+
+            grandChildCoupleCenter =
+                connectCouple(
+                    grandChild,
+                    grandChildPartner
+                );
+
+        }
+        else if(grandChild){
+
+            grandChildCoupleCenter =
+                getPoint(
+                    grandChild,
+                    "bottom"
+                );
+
+        }
+
+        connectParentsToChildren(
+            grandChildCoupleCenter,
+            greatGrandChildren
+        );
+/* =====================================
+   GREAT-GRANDCHILD ↔ OWN PARTNER
+   ===================================== */
+
+const greatGrandChildCouples =
+    Array.from(
+        branch.querySelectorAll(
+            ".family-tree-great-grandchild-couple"
+        )
+    );
+
+
+greatGrandChildCouples.forEach(
+    function(couple){
+
+        const greatGrandChild =
+            couple.querySelector(
+                ".tree-great-grandchild-node"
+            );
+
+        const greatGrandChildPartner =
+            couple.querySelector(
+                ".tree-great-grandchild-partner"
+            );
+
+
+        if(
+            greatGrandChild &&
+            greatGrandChildPartner
+        ){
+
+            connectCouple(
+                greatGrandChild,
+                greatGrandChildPartner
+            );
+
+        }
+
+    }
+);
+
+/* =====================================
+   GREAT-GRANDCHILD + PARTNER
+   → GREAT-GREAT-GRANDCHILDREN
+   ===================================== */
+
+const greatGrandChildBranches =
+    Array.from(
+        branch.querySelectorAll(
+            ".family-tree-great-grandchild-branch"
+        )
+    );
+
+
+greatGrandChildBranches.forEach(
+    function(greatGrandChildBranch){
+
+        const greatGrandChild =
+            greatGrandChildBranch.querySelector(
+                ".tree-great-grandchild-node"
+            );
+
+        const greatGrandChildPartner =
+            greatGrandChildBranch.querySelector(
+                ".tree-great-grandchild-partner"
+            );
+
+        const greatGreatGrandChildren =
+            Array.from(
+                greatGrandChildBranch.querySelectorAll(
+                    ".tree-great-great-grandchild-node"
+                )
+            );
+
+
+        let greatGrandChildCoupleCenter = null;
+
+
+        if(
+            greatGrandChild &&
+            greatGrandChildPartner
+        ){
+
+            greatGrandChildCoupleCenter =
+                connectCouple(
+                    greatGrandChild,
+                    greatGrandChildPartner
+                );
+
+        }
+        else if(greatGrandChild){
+
+            greatGrandChildCoupleCenter =
+                getPoint(
+                    greatGrandChild,
+                    "bottom"
+                );
+
+        }
+
+
+        /* =====================================
+   CONNECT 3RD GEN PARENTS
+   → 4TH GEN COUPLE CENTERS
+   ===================================== */
+
+connectParentsToChildren(
+    greatGrandChildCoupleCenter,
+    greatGreatGrandChildren,
+    true,
+    0,
+    true
+);
+        /* =================================
+           4TH GENERATION
+           MEMBER ↔ OWN PARTNER
+           ================================= */
+
+        const greatGreatGrandChildCouples =
+            Array.from(
+                greatGrandChildBranch.querySelectorAll(
+                    ".family-tree-great-great-grandchild-couple"
+                )
+            );
+
+
+        greatGreatGrandChildCouples.forEach(
+            function(couple){
+
+                const member =
+                    couple.querySelector(
+                        ".tree-great-great-grandchild-node"
+                    );
+
+                const partner =
+                    couple.querySelector(
+                        ".tree-great-great-grandchild-partner"
+                    );
+
+
+                if(
+                    member &&
+                    partner
+                ){
+
+                    connectCouple(
+                        member,
+                        partner
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+        
+        
+    }
+);
+}
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
