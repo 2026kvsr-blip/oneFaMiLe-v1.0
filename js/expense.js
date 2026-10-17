@@ -214,6 +214,7 @@
     activeReport='normal';cachedExpenses=[];
     showPage(shell('Expenses — Custom Search',reportControls(true)));setupReportControls(true,'normal');
   }
+  
   function showInfo(){showPage(shell('About Expenses','<div class="expense-panel"><p>Record family expenses and search reports by date, category, member, payment mode, amount and sensitivity.</p><p>Normal Reports exclude Sensitive = Yes records. Sensitive and All Reports require the Sensitive Pass Code.</p></div>'));$('expenseModuleBack').onclick=goBack}
   // Initialize member list before form opens; form also works if member loading fails.
   document.addEventListener('DOMContentLoaded',()=>{loadMembers()});
