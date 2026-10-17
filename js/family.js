@@ -9976,13 +9976,19 @@ if(editInputWrap){
             localStorage.setItem("editMember", JSON.stringify(member));
 
             const publicEditAddMemberBtn = document.getElementById("addMemberBtn");
-            if(!publicEditAddMemberBtn){
-                console.error("Add Member button not found for public-family edit");
-                alert("Edit Member page could not be opened. Please try again.");
+            sessionStorage.setItem("openMemberMode", "edit");
+            if(publicEditAddMemberBtn){
+                publicEditAddMemberBtn.click();
                 return;
             }
-            sessionStorage.setItem("openMemberMode", "edit");
-            publicEditAddMemberBtn.click();
+            // The search page replaced the Family page, so the button may not
+            // exist in the DOM. Call the saved form-opening handler directly.
+            if(typeof window.openExistingMemberForm === "function"){
+                window.openExistingMemberForm();
+                return;
+            }
+            console.error("Saved Add Member form handler is unavailable");
+            alert("Edit Member form could not be opened. Please return to Other Families and try again.");
             return;
         }
 
@@ -10469,7 +10475,9 @@ function bindAddMemberButton(){
 
     if(!addMemberBtn) return;
 
-   addMemberBtn.onclick = () => {
+   // Keep the form-opening callback available even when showPage() replaces
+   // the Family page and removes the button from the current DOM.
+   addMemberBtn.onclick = window.openExistingMemberForm = () => {
 
     /* =================================
        ADD / EDIT MEMBER MODE
@@ -17941,7 +17949,9 @@ const storedFamily =
 
 const publicFamilyAddTargetForFamilyInfo =
     JSON.parse(
-        sessionStorage.getItem("publicFamilyAddTarget") || "null"
+        sessionStorage.getItem("publicFamilyEditTarget") ||
+        sessionStorage.getItem("publicFamilyAddTarget") ||
+        "null"
     );
 
 
