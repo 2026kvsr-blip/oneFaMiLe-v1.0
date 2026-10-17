@@ -2954,12 +2954,6 @@ button.onclick = async function(){
                 members.length
             );
 
-            if(members.length === 0){
-
-                alert("No members found.");
-
-                return;
-            }
 
 /* Save the actual public-family detail DOM before Relations replaces the page.
    Moving nodes into a DocumentFragment preserves their existing event handlers,
@@ -3055,12 +3049,6 @@ if(actionName === "Tree View"){
             members.length
         );
 
-        if(members.length === 0){
-
-            alert("No members found.");
-
-            return;
-        }
 
         /* Save the visible public-family detail nodes before Tree View replaces them. */
         window.cachePublicFamilyDetailForDirectReturn?.();
