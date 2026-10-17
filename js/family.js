@@ -2762,12 +2762,8 @@ container.dataset.publicFamilyDetail = "true";
 setOtherFamilyNavigation("detail");
 if(myFamilyTab) myFamilyTab.style.display = "none";
 if(otherFamiliesTab) otherFamiliesTab.style.display = "none";
-window.otherFamilyReturnToDetail = async function(){
-    /* Invoke the selected card's existing detail loader directly and wait for it.
-       This avoids the intermediate Family page and Other Families list reload. */
-    if(typeof card.onclick === "function"){
-        await card.onclick();
-    }
+window.otherFamilyReturnToDetail = function(){
+    card.click();
 };
 window.currentPublicFamilyId = String(viewingFamily.familyId || "");
 
@@ -2902,17 +2898,41 @@ button.onclick = async function(){
                 return;
             }
 
+/* Save the actual public-family detail DOM before Relations replaces the page.
+   Moving nodes into a DocumentFragment preserves their existing event handlers,
+   so Back can restore the page instantly without another API/list reload. */
+const publicHomeContent = document.getElementById("homeContent");
+if(publicHomeContent){
+    const savedDetail = document.createDocumentFragment();
+    while(publicHomeContent.firstChild){
+        savedDetail.appendChild(publicHomeContent.firstChild);
+    }
+    window.cachedPublicFamilyDetailFragment = savedDetail;
+    window.cachedPublicFamilyDetailHomeContent = publicHomeContent;
+}
+
 window.relationsReturnAction = async function(){
     window.currentPublicFamilyName = publicFamilyName;
+    const savedDetail = window.cachedPublicFamilyDetailFragment;
+    const homeContent = window.cachedPublicFamilyDetailHomeContent ||
+        document.getElementById("homeContent");
 
-    /* Return directly to this family's detail using its existing card handler.
-       Do not rebuild the generic Family page or reload the Other Families list. */
-    if(typeof window.otherFamilyReturnToDetail === "function"){
-        await window.otherFamilyReturnToDetail();
+    if(savedDetail && homeContent){
+        while(homeContent.firstChild){
+            homeContent.removeChild(homeContent.firstChild);
+        }
+        homeContent.appendChild(savedDetail);
+        window.cachedPublicFamilyDetailFragment = null;
+        window.cachedPublicFamilyDetailHomeContent = null;
+        window.currentPublicFamilyId = String(viewingFamily.familyId || "");
+        window.currentPublicFamilyName = publicFamilyName;
+        if(typeof window.setOtherFamilyNavigation === "function"){
+            window.setOtherFamilyNavigation("detail");
+        }
         return;
     }
 
-    /* Fallback for cases where the original card handler is no longer available. */
+    /* Safe fallback only if the saved page is unavailable. */
     if(typeof window.restorePublicFamilyDetail === "function"){
         await window.restorePublicFamilyDetail(viewingFamily.familyId);
     }else{
