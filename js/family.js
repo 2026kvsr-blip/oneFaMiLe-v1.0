@@ -1,4 +1,6 @@
 
+
+
 console.log(
     "FAMILY JS VERSION:",
     "06-10-2026-TEST-1"
@@ -15899,7 +15901,12 @@ memberBackBtn.onclick =
 
         const publicTarget = window.currentPublicFamilyAddTarget ||
             JSON.parse(sessionStorage.getItem("publicFamilyAddTarget") || "null");
-        if(publicTarget?.familyId && window.restoreCachedPublicFamilyDetailDirectly?.()){
+
+        // If Add Member was opened from a selected public-family detail,
+        // restore the exact cached page even if the add/save flow cleared
+        // the return-target state in sessionStorage.
+        if(window.cachedPublicFamilyDirectReturn &&
+           window.restoreCachedPublicFamilyDetailDirectly?.()){
             window.currentPublicFamilyAddTarget = null;
             sessionStorage.removeItem("publicFamilyAddTarget");
             return;
