@@ -46,17 +46,19 @@
 }
 .expense-actions {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
     width: 100%;
+    box-sizing: border-box;
     flex-wrap: nowrap;
 }
 
 .expense-actions button {
     flex: 1 1 0;
+    width: 0;
     min-width: 0;
-    padding: 12px 8px;
+    padding: 12px 2px;
     font-size: 16px;
     font-weight: 600;
     min-height: 44px;
