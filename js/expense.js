@@ -74,6 +74,7 @@
       ${field('Expense Date',`<input id="exDate" name="expenseDate" type="date" value="${dateToday()}" required>`,'exDate')}
       ${field('Main Category',`<select id="exCategory" name="mainCategory" required>${selectOptions(Object.keys(CATEGORIES),'Select Category')}</select>`,'exCategory')}
       <div id="exSubCategoryRow">${field('Sub Category',`<select id="exSubCategory" name="subCategory" required>${selectOptions([],'Select Subcategory')}</select>`,'exSubCategory')}</div>
+      ${field('Description',`<textarea id="exDescription" name="description" maxlength="30" placeholder="Enter expense details"></textarea>`,'exDescription')}
       <div id="exVehicleFields" class="hidden">
        ${field('Vehicle Type',`<select id="exVehicleType" name="vehicleType">${selectOptions(VEHICLE_TYPES,'Select Vehicle')}</select>`,'exVehicleType')}
        ${field('Maintenance Type',`<select id="exMaintenanceType" name="maintenanceType">${selectOptions(MAINTENANCE_TYPES,'Select Maintenance')}</select>`,'exMaintenanceType')}
@@ -84,8 +85,7 @@
       <div class="expense-help">Login name is selected by default...</div>
       ${field('Payment Mode',`<select id="exPaymentMode" name="paymentMode" required>${selectOptions(PAYMENT_MODES,'Select Payment Mode')}</select>`,'exPaymentMode')}
       ${field('Sensitive',`<select id="exSensitive" name="sensitive" required><option value="No" selected>No</option><option value="Yes">Yes</option></select>`,'exSensitive')}
-      ${field('Description',`<textarea id="exDescription" name="description" maxlength="1000" placeholder="Enter expense details"></textarea>`,'exDescription')}
-      <div id="expenseStatus" class="expense-status" role="status"></div>
+<div id="expenseStatus" class="expense-status" role="status"></div>
       <div class="expense-actions"><button class="expense-primary" type="submit" id="expenseSaveBtn">Save</button><button class="expense-secondary" type="reset" id="expenseResetBtn">Reset</button><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>
     </form>`;
     showPage(shell('Add Expense',inner,true));
