@@ -78,7 +78,7 @@
        ${field('Maintenance Type',`<select id="exMaintenanceType" name="maintenanceType">${selectOptions(MAINTENANCE_TYPES,'Select Maintenance')}</select>`,'exMaintenanceType')}
        ${field('Vehicle Number',`<input id="exVehicleNumber" name="vehicleNumber" maxlength="30" placeholder="Optional vehicle number">`,'exVehicleNumber')}
       </div>
-      ${field('Amount',`<input id="exAmount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="Enter Amount ₹" required>`,'exAmount')}
+      ${field('Amount',`<input id="exAmount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="₹ Enter Amount" required>`,'exAmount')}
       ${field('Spent By',`<div class="expense-spentby"><input id="exSpentBySearch" list="exMemberList" placeholder="Search or type a new name" value="${esc(defaultName)}" required><datalist id="exMemberList">${memberNames.map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>`,'exSpentBySearch')}
       <div class="expense-help">Login name is selected by default. Search a family member or type a new name.</div>
       ${field('Payment Mode',`<select id="exPaymentMode" name="paymentMode" required>${selectOptions(PAYMENT_MODES,'Select Payment Mode')}</select>`,'exPaymentMode')}
