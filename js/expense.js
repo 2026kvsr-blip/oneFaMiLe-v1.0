@@ -4,14 +4,14 @@
   const API = "https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
   const CATEGORIES = {
     "Food & Groceries":["Vegetables","Rice & Groceries","Milk & Dairy","Fruits","Meat & Fish","Hotel & Tiffin","Other Food"],
-    "House & Utilities":["Electricity","Water","Gas Cylinder","Rent","Internet & Phone","House Repairs","Cleaning","Other House Expense"],
-    "Medical & Health":["Doctor","Medicines","Medical Tests","Hospital","Dental","Health Insurance","Other Medical"],
+    "House & Utilities":["Electricity","Water","Gas Cylinder","Rent","Internet & Phone","House Repairs","Cleaning","House Servants","Other House Expense"],
+    "Medical & Health":["Doctor","Medicines","Medical Tests","Hospital","Other Medical"],
     "Vehicle Maintenance":["Vehicle Maintenance"],
     "Transport & Travel":["Petrol","Diesel","Bus","Train","Auto / Taxi","Parking & Tolls","Tour & Travel","Other Transport"],
-    "Education":["School Fees","College Fees","Books & Stationery","Uniform","Tuition","Exam Fees","Other Education"],
+    "Education":["Fees","Books & Stationery","Other Education"],
     "Personal & Shopping":["Clothes","Footwear","Haircut","Cosmetics & Personal Care","Accessories","Other Shopping"],
     "Family & Functions":["Marriage","Birthday","Festivals","Gifts","Family Functions","Donations","Other Family Expense"],
-    "Loans & Financial":["Loan Interest","Bank Charges","Late Fees","Financial Charges","Other Financial"],
+    "Loans & Financial":["Car Loan","Bike Loan","House Loan","Site Loan","Personal Loan","Other Loans"],
     "Home Items & Appliances":["Furniture","Fridge / TV / Appliances","Kitchen Items","Home Repairs","Other Home Items"],
     "Entertainment & Recreation":["Movies","Outings","Games","Subscriptions","Sports","Other Entertainment"],
     "Other Expenses":["Other"]
@@ -72,7 +72,7 @@
     const inner=`<form id="expenseForm" class="expense-form" autocomplete="off">
       ${field('Expense Date',`<input id="exDate" name="expenseDate" type="date" value="${dateToday()}" required>`,'exDate')}
       ${field('Main Category',`<select id="exCategory" name="mainCategory" required>${selectOptions(Object.keys(CATEGORIES),'Select Category')}</select>`,'exCategory')}
-      ${field('Sub Category',`<select id="exSubCategory" name="subCategory" required>${selectOptions([],'Select Subcategory')}</select>`,'exSubCategory')}
+      <div id="exSubCategoryRow">${field('Sub Category',`<select id="exSubCategory" name="subCategory" required>${selectOptions([],'Select Subcategory')}</select>`,'exSubCategory')}</div>
       <div id="exVehicleFields" class="hidden">
        ${field('Vehicle Type',`<select id="exVehicleType" name="vehicleType">${selectOptions(VEHICLE_TYPES,'Select Vehicle')}</select>`,'exVehicleType')}
        ${field('Maintenance Type',`<select id="exMaintenanceType" name="maintenanceType">${selectOptions(MAINTENANCE_TYPES,'Select Maintenance')}</select>`,'exMaintenanceType')}
@@ -89,13 +89,14 @@
     </form>`;
     showPage(shell('Add Expense',inner,true));
     $('expenseModuleBack').onclick=goBack;
-    const cat=$('exCategory'),sub=$('exSubCategory'),vehicleFields=$('exVehicleFields');
+    const cat=$('exCategory'),sub=$('exSubCategory'),subRow=$('exSubCategoryRow'),vehicleFields=$('exVehicleFields');
     cat.onchange=()=>{
       const isVehicle=cat.value==='Vehicle Maintenance';
       vehicleFields.classList.toggle('hidden',!isVehicle);
+      subRow.classList.toggle('hidden',isVehicle);
       sub.innerHTML=selectOptions(CATEGORIES[cat.value]||[],'Select Subcategory');
-      if(isVehicle)sub.value='Vehicle Maintenance';
-      sub.required=true;
+      sub.required=!isVehicle;
+      if(isVehicle)sub.value='';
     };
     $('expenseForm').onsubmit=async ev=>{
       ev.preventDefault();
@@ -110,11 +111,11 @@
         const res=await request('saveExpense',payload);
         if(res.status!=='success')throw new Error(res.message||'Could not save expense.');
         status('Expense saved successfully.','success');
-        $('expenseForm').reset();$('exDate').value=dateToday();$('exSpentBySearch').value=defaultName;vehicleFields.classList.add('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');
+        $('expenseForm').reset();$('exDate').value=dateToday();$('exSpentBySearch').value=defaultName;vehicleFields.classList.add('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');subRow.classList.remove('hidden');sub.required=true;
       }catch(err){status(err.message||'Unable to save expense. Please try again.','error')}
       finally{btn.disabled=false;btn.textContent='Save'}
     };
-    $('expenseResetBtn').onclick=()=>setTimeout(()=>{ $('exDate').value=dateToday();$('exSpentBySearch').value=defaultName;vehicleFields.classList.add('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');status('');},0);
+    $('expenseResetBtn').onclick=()=>setTimeout(()=>{ $('exDate').value=dateToday();$('exSpentBySearch').value=defaultName;vehicleFields.classList.add('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');subRow.classList.remove('hidden');sub.required=true;status('');},0);
   }
   function renderSensitiveGate(kind){
     activeReport=kind;
@@ -214,7 +215,6 @@
     activeReport='normal';cachedExpenses=[];
     showPage(shell('Expenses — Custom Search',reportControls(true)));setupReportControls(true,'normal');
   }
-  
   function showInfo(){showPage(shell('About Expenses','<div class="expense-panel"><p>Record family expenses and search reports by date, category, member, payment mode, amount and sensitivity.</p><p>Normal Reports exclude Sensitive = Yes records. Sensitive and All Reports require the Sensitive Pass Code.</p></div>'));$('expenseModuleBack').onclick=goBack}
   // Initialize member list before form opens; form also works if member loading fails.
   document.addEventListener('DOMContentLoaded',()=>{loadMembers()});
