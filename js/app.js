@@ -4486,13 +4486,7 @@ const formData = new FormData();
 
     try{
         showLoader("Signing In...");
-        const response = await fetch(API_URL,{
-            method:"POST",
-            body:formData
-        });
-
-        const result = await response.json();
-        
+       const result = await loginViaIframe(formData); 
        
         if(result.status=="success"){
 
