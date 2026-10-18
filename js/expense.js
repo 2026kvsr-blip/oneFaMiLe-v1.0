@@ -162,13 +162,50 @@ ${field('Photos',`
       if(!Number.isFinite(amount)||amount<=0){status('Enter an amount greater than zero.','error');$('exAmount').focus();return}
       if(!$('exSpentBySearch').value.trim()){status('Select a family member or enter a name.','error');return}
       const btn=$('expenseSaveBtn');btn.disabled=true;btn.textContent='Saving…';status('Saving expense…');
-      try{
-        const payload={expenseDate:$('exDate').value,mainCategory:cat.value,subCategory:sub.value,vehicleType:$('exVehicleType').value,maintenanceType:$('exMaintenanceType').value,vehicleNumber:$('exVehicleNumber').value.trim(),amount:String(amount),spentBy:$('exSpentBySearch').value.trim(),paymentMode:$('exPaymentMode').value,sensitive:$('exSensitive').value,description:$('exDescription').value.trim()};
-        const res=await request('saveExpense',payload);
-        if(res.status!=='success')throw new Error(res.message||'Could not save expense.');
-        status('Expense saved successfully.','success');
-        $('expenseForm').reset();$('exDate').value=dateToday();$('exSpentBySearch').value=defaultName;vehicleFields.classList.add('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');subRow.classList.remove('hidden');sub.required=true;
-      }catch(err){status(err.message||'Unable to save expense. Please try again.','error')}
+     try {
+  const photoInput = $('exPhotos');
+  const photoFiles = photoInput ? Array.from(photoInput.files || []) : [];
+
+  if (photoFiles.length > 3) {
+    throw new Error('Please select a maximum of 3 photos.');
+  }
+
+  const payload = {
+    expenseDate: $('exDate').value,
+    mainCategory: cat.value,
+    subCategory: sub.value,
+    vehicleType: $('exVehicleType').value,
+    maintenanceType: $('exMaintenanceType').value,
+    vehicleNumber: $('exVehicleNumber').value.trim(),
+    amount: String(amount),
+    spentBy: $('exSpentBySearch').value.trim(),
+    paymentMode: $('exPaymentMode').value,
+    sensitive: $('exSensitive').value,
+    description: $('exDescription').value.trim()
+  };
+
+  for (let i = 0; i < 3; i++) {
+    payload['photo' + (i + 1) + 'Data'] =
+      photoFiles[i] ? await compressExpensePhoto(photoFiles[i]) : '';
+  }
+
+  const res = await request('saveExpense', payload);
+
+  if (res.status !== 'success') {
+    throw new Error(res.message || 'Could not save expense.');
+  }
+
+  status('Expense saved successfully.', 'success');
+
+  $('expenseForm').reset();
+  $('exDate').value = dateToday();
+  $('exSpentBySearch').value = defaultName;
+  vehicleFields.classList.add('hidden');
+  sub.innerHTML = selectOptions([], 'Select Subcategory');
+  subRow.classList.remove('hidden');
+  sub.required = true;
+
+} catch(err){status(err.message||'Unable to save expense. Please try again.','error')}
       finally{btn.disabled=false;btn.textContent='Save'}
     };
     $('expenseResetBtn').onclick=()=>setTimeout(()=>{ $('exDate').value=dateToday();$('exSpentBySearch').value=defaultName;vehicleFields.classList.add('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');subRow.classList.remove('hidden');sub.required=true;status('');},0);
