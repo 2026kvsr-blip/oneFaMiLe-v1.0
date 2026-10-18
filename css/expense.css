@@ -46,9 +46,10 @@
  .expense-page .expense-filter-grid{grid-template-columns:1fr}
  .expense-page .expense-help{margin-left:42%}
 }
+
 .expense-actions {
     display: flex;
-    justify-content: center;
+    justify-content: stretch;
     align-items: center;
     gap: 8px;
     width: 100%;
@@ -58,8 +59,11 @@
 
 .expense-actions button {
     flex: 1 1 0;
+    width: 0;
     min-width: 0;
-    padding: 12px 2px;
+    max-width: none;
+    margin: 0;
+    padding: 12px 4px;
     font-size: 16px;
     font-weight: 600;
     min-height: 44px;
