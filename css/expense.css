@@ -46,27 +46,20 @@
  .expense-page .expense-filter-grid{grid-template-columns:1fr}
  .expense-page .expense-help{margin-left:42%}
 }
-
 .expense-actions {
-    display: flex;
-    justify-content: stretch;
-    align-items: center;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: 8px;
-    width: 100%;
+    width: 100% !important;
     box-sizing: border-box;
-    flex-wrap: nowrap;
 }
 
 .expense-actions button {
-    flex: 1 1 0;
-    width: 0;
-    min-width: 0;
-    max-width: none;
-    margin: 0;
-    padding: 12px 4px;
-    font-size: 16px;
-    font-weight: 600;
-    min-height: 44px;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex: none !important;
+    margin: 0 !important;
     box-sizing: border-box;
     white-space: nowrap;
 }
