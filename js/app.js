@@ -1,5 +1,4 @@
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -4398,6 +4397,81 @@ async function loadCurrentLoginFamily(){
 
     }
 
+}
+
+function loginViaIframe(formData) {
+
+    return new Promise((resolve, reject) => {
+
+        const iframe = document.createElement("iframe");
+        iframe.name = "loginFrame_" + Date.now();
+        iframe.style.display = "none";
+
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = API_URL;
+        form.target = iframe.name;
+        form.style.display = "none";
+
+        for (const [key, value] of formData.entries()) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = value;
+            form.appendChild(input);
+        }
+
+        const transport = document.createElement("input");
+        transport.type = "hidden";
+        transport.name = "transport";
+        transport.value = "iframe";
+        form.appendChild(transport);
+
+        let finished = false;
+
+        function cleanup() {
+            window.removeEventListener("message", onMessage);
+            clearTimeout(timeout);
+            form.remove();
+            iframe.remove();
+        }
+
+        function onMessage(event) {
+
+            if (event.source !== iframe.contentWindow) {
+                return;
+            }
+
+            if (!event.data ||
+                typeof event.data.status !== "string") {
+                return;
+            }
+
+            finished = true;
+            cleanup();
+            resolve(event.data);
+        }
+
+        const timeout = setTimeout(() => {
+
+            if (finished) return;
+
+            finished = true;
+            cleanup();
+
+            reject(new Error(
+                "Login server response timed out."
+            ));
+
+        }, 30000);
+
+        window.addEventListener("message", onMessage);
+
+        document.body.appendChild(iframe);
+        document.body.appendChild(form);
+
+        form.submit();
+    });
 }
 
 loginSubmitBtn.onclick = async ()=>{
