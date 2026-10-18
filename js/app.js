@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -3010,25 +3011,19 @@ async function sendSignupOTP(){
     // SEND OTP
     // ================================
 
-
-const formData = new FormData();
+    const formData = new FormData();
 
 formData.append(
     "action",
     "sendSignupOTP"
 );
 
-formData.append(
-    "loginUserName",
-    loginUserName.value.trim()
-);
 
 formData.append(
     "mobile",
     mobileNo.value.trim()
 );
-
-formData.append(
+    formData.append(
     "email",
     emailId.value.trim()
 );
@@ -3642,16 +3637,14 @@ async function checkSignup(){
 
         const formData = new FormData();
 
-        formData.append("action", "checkSignup");
+        formData.append(
+            "action",
+            "checkSignup"
+        );
 
         formData.append(
             "loginUserName",
             loginUserName.value.trim()
-        );
-
-        formData.append(
-            "email",
-            emailId.value.trim()
         );
 
         formData.append(
@@ -3666,10 +3659,12 @@ async function checkSignup(){
 
         const result = await response.json();
 
+        console.log("checkSignup Result:", result);
+
         if(result.status !== "success"){
 
             showMessage(
-                result.message || "Signup details already exist.",
+                result.message || "Signup validation failed.",
                 "warning",
                 3000
             );
@@ -3681,7 +3676,7 @@ async function checkSignup(){
 
     }catch(error){
 
-        console.log("checkSignup Error:", error);
+        console.error("checkSignup Error:", error);
 
         showMessage(
             "Unable to connect to server.",
@@ -3691,9 +3686,8 @@ async function checkSignup(){
 
         return false;
     }
+
 }
-
-
 /* ======================
 
 REGISTER USER
@@ -3779,14 +3773,8 @@ const newPassCode = data.passCode;
         if(result.status=="success"){
            clearTimeout(loginAttemptTimer);
            loginAttempts = 0;
-           // Keep the same loader visible; loginSubmitBtn will update its text.
-           showLoader("Signing In...");
-
-    // Keep the registration message until automatic login completes.
-    sessionStorage.setItem(
-        "oneFaMiLeRegistrationSuccessMessage",
-        result.message || "User Registered Successfully"
-    );
+           hideLoader();
+    showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
 
     // Clear Signup Form
     document.getElementById("loginUserName").value = "";
@@ -3806,8 +3794,7 @@ const newPassCode = data.passCode;
     clearOTP();
 
 // Registration successful.
-// Automatically sign in with the credentials just registered.
-// Login success will hide the Login page and show the success message.
+// Use existing Login flow to create the session.
 
 const loginIdInput =
     document.getElementById("loginId");
@@ -3815,23 +3802,25 @@ const loginIdInput =
 const loginPassInput =
     document.getElementById("loginPassCode");
 
-showScreen(loginPage);
-
 if(loginIdInput && loginPassInput){
+
     loginIdInput.value = newLoginId;
     loginPassInput.value = newPassCode;
+
+    showScreen(loginPage);
+
     loginSubmitBtn.click();
+
 }else{
-    showMessage(
-        "User Registered Successfully. Please log in.",
-        "success",
-        5000
+
+    console.error(
+        "Auto Login: Login input fields not found."
     );
+
     showScreen(loginPage);
 }
 }else{
 
-    hideLoader();
     showMessage(     result.message,     result.status === "success" ? "success" : "warning",     3000 );
 
 }
@@ -4099,10 +4088,9 @@ async function verifySignupOTP(){
 
         // ================================
         // 5. OTP CORRECT
-        // Keep the loader visible through registration and automatic login.
         // ================================
 
-        showLoader("Registering User...");
+        hideLoader();
 
         await registerUser();
 
@@ -4399,81 +4387,6 @@ async function loadCurrentLoginFamily(){
 
 }
 
-function loginViaIframe(formData) {
-
-    return new Promise((resolve, reject) => {
-
-        const iframe = document.createElement("iframe");
-        iframe.name = "loginFrame_" + Date.now();
-        iframe.style.display = "none";
-
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = API_URL;
-        form.target = iframe.name;
-        form.style.display = "none";
-
-        for (const [key, value] of formData.entries()) {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = key;
-            input.value = value;
-            form.appendChild(input);
-        }
-
-        const transport = document.createElement("input");
-        transport.type = "hidden";
-        transport.name = "transport";
-        transport.value = "iframe";
-        form.appendChild(transport);
-
-        let finished = false;
-
-        function cleanup() {
-            window.removeEventListener("message", onMessage);
-            clearTimeout(timeout);
-            form.remove();
-            iframe.remove();
-        }
-
-        function onMessage(event) {
-
-            if (event.source !== iframe.contentWindow) {
-                return;
-            }
-
-            if (!event.data ||
-                typeof event.data.status !== "string") {
-                return;
-            }
-
-            finished = true;
-            cleanup();
-            resolve(event.data);
-        }
-
-        const timeout = setTimeout(() => {
-
-            if (finished) return;
-
-            finished = true;
-            cleanup();
-
-            reject(new Error(
-                "Login server response timed out."
-            ));
-
-        }, 30000);
-
-        window.addEventListener("message", onMessage);
-
-        document.body.appendChild(iframe);
-        document.body.appendChild(form);
-
-        form.submit();
-    });
-}
-
 loginSubmitBtn.onclick = async ()=>{
 
    if(isLocked("login")){
@@ -4560,7 +4473,13 @@ const formData = new FormData();
 
     try{
         showLoader("Signing In...");
-       const result = await loginViaIframe(formData); 
+        const response = await fetch(API_URL,{
+            method:"POST",
+            body:formData
+        });
+
+        const result = await response.json();
+        
        
         if(result.status=="success"){
 
@@ -4614,22 +4533,6 @@ updateMenuIcon();
             dashboard.classList.remove("hidden");
 
 homeBtn.click();
-
-// Show registration success only after Login page has closed.
-const registrationSuccessMessage = sessionStorage.getItem(
-    "oneFaMiLeRegistrationSuccessMessage"
-);
-
-if(registrationSuccessMessage){
-    sessionStorage.removeItem(
-        "oneFaMiLeRegistrationSuccessMessage"
-    );
-    showMessage(
-        registrationSuccessMessage,
-        "success",
-        5000
-    );
-}
 
 
 /* =====================================
