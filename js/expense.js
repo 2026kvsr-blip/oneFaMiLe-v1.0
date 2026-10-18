@@ -85,6 +85,15 @@
       <div class="expense-help">Login name is selected by default...</div>
       ${field('Payment Mode',`<select id="exPaymentMode" name="paymentMode" required>${selectOptions(PAYMENT_MODES,'Select Payment Mode')}</select>`,'exPaymentMode')}
       ${field('Sensitive',`<select id="exSensitive" name="sensitive" required><option value="No" selected>No</option><option value="Yes">Yes</option></select>`,'exSensitive')}
+${field('Photos',`
+  <input
+    id="exPhotos"
+    type="file"
+    accept="image/*"
+    multiple
+  >
+  <small>Select up to 3 photos</small>
+`,'exPhotos')}
 <div id="expenseStatus" class="expense-status" role="status"></div>
       <div class="expense-actions"><button class="expense-primary" type="submit" id="expenseSaveBtn">Save</button><button class="expense-secondary" type="reset" id="expenseResetBtn">Reset</button><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>
     </form>`;
