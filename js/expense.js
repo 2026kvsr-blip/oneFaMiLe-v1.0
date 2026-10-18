@@ -36,6 +36,52 @@
     const body=new URLSearchParams({action,sessionToken:token(),familyId:String(f.familyId||''),...fields});
     return fetch(API,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body}).then(r=>r.json());
   }
+  
+async function compressExpensePhoto(file){
+  const imageUrl = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error("Unable to read photo."));
+    reader.readAsDataURL(file);
+  });
+
+  const img = await new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("Invalid photo selected."));
+    image.src = imageUrl;
+  });
+
+  const maxDimension = 1400;
+  const scale = Math.min(
+    1,
+    maxDimension / Math.max(img.width, img.height)
+  );
+
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(img.width * scale));
+  canvas.height = Math.max(1, Math.round(img.height * scale));
+
+  const ctx = canvas.getContext("2d");
+  if(!ctx) throw new Error("Unable to process photo.");
+
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+  let quality = 0.75;
+  let data = canvas.toDataURL("image/jpeg", quality);
+
+  while(data.length * 0.75 > 250 * 1024 && quality > 0.3){
+    quality -= 0.1;
+    data = canvas.toDataURL("image/jpeg", quality);
+  }
+
+  if(data.length * 0.75 > 700 * 1024){
+    throw new Error("Photo is too large. Please choose a smaller photo.");
+  }
+
+  return data;
+}
+
   function status(message,type=''){const el=$('expenseStatus');if(el){el.className='expense-status '+type;el.textContent=message||'';}}
   function field(label, control, id){return `<div class="expense-field"><label class="expense-label" for="${id||''}"><span class="expense-label-text">${label}</span><span class="expense-colon">:</span></label>${control}</div>`}
   function selectOptions(items,placeholder='Select') {return `<option value="">${placeholder}</option>`+items.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
