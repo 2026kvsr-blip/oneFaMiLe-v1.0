@@ -1,4 +1,5 @@
 
+
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -196,15 +197,14 @@ function status(message, type = '') {
 
 ${field('Photos',`
   <div style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;">
-  <div class="expense-photo-picker" style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;">
-    <button type="button" id="exPhotoChooseBtn" class="expense-secondary" style="min-width:76px;">Photo</button>
-    <button type="button" class="expense-photo-slot" data-photo-slot="0" id="exPhotoSlot1" aria-label="Choose photo 1" style="width:42px;height:38px;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">1</button>
-    <button type="button" class="expense-photo-slot" data-photo-slot="1" id="exPhotoSlot2" aria-label="Choose photo 2" style="width:42px;height:38px;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">2</button>
-    <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:42px;height:38px;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
-  </div>
-  <input id="exPhotos" type="file" accept="image/*" multiple style="display:none;">
-  </div>
-  <small id="exPhotoCount" style="display:block;white-space:nowrap;font-size:12px;line-height:16px;margin:0;">0 photos selected (Max 3)</small>
+    <div class="expense-photo-picker" style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;">
+      <button type="button" id="exPhotoChooseBtn" class="expense-secondary" style="min-width:76px;">Photo</button>
+      <button type="button" class="expense-photo-slot" data-photo-slot="0" id="exPhotoSlot1" aria-label="Choose photo 1" style="width:42px;height:38px;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">1</button>
+      <button type="button" class="expense-photo-slot" data-photo-slot="1" id="exPhotoSlot2" aria-label="Choose photo 2" style="width:42px;height:38px;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">2</button>
+      <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:42px;height:38px;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
+    </div>
+    <input id="exPhotos" type="file" accept="image/*" multiple style="display:none;">
+    <small id="exPhotoCount" style="display:block;white-space:nowrap;font-size:12px;line-height:16px;margin:0;">0 photos selected (Max 3)</small>
   </div>
 `,'exPhotos')}
 <div id="expenseStatus" class="expense-status" role="status"></div>
