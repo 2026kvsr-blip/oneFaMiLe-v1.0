@@ -1,4 +1,5 @@
 
+
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -180,11 +181,12 @@ function status(message, type = '') {
       ${field('Expense Date',`<input id="exDate" name="expenseDate" type="date" value="${dateToday()}" required>`,'exDate')}
       ${field('Main Category',`<select id="exCategory" name="mainCategory" required>${selectOptions(Object.keys(CATEGORIES),'Select Category')}</select>`,'exCategory')}
       <div id="exSubCategoryRow">${field('Sub Category',`<select id="exSubCategory" name="subCategory" required>${selectOptions([],'Select Subcategory')}</select>`,'exSubCategory')}</div>
-      ${field('Description',`<textarea id="exDescription" name="description" maxlength="30" placeholder="Enter expense details"></textarea>`,'exDescription')}
+      <div id="exNormalDescription">${field('Description',`<textarea id="exDescription" name="description" rows="1" style="height:38px;min-height:38px;resize:none;box-sizing:border-box;" maxlength="30" placeholder="Enter expense details"></textarea>`,'exDescription')}</div>
       <div id="exVehicleFields" class="hidden">
        ${field('Vehicle Type',`<select id="exVehicleType" name="vehicleType">${selectOptions(VEHICLE_TYPES,'Select Vehicle')}</select>`,'exVehicleType')}
        ${field('Maintenance Type',`<select id="exMaintenanceType" name="maintenanceType">${selectOptions(MAINTENANCE_TYPES,'Select Maintenance')}</select>`,'exMaintenanceType')}
        ${field('Vehicle Number',`<input id="exVehicleNumber" name="vehicleNumber" maxlength="30" placeholder="Optional vehicle number">`,'exVehicleNumber')}
+       ${field('Description',`<textarea id="exVehicleDescription" name="vehicleDescription" rows="1" style="height:38px;min-height:38px;resize:none;box-sizing:border-box;" maxlength="30" placeholder="Enter expense details"></textarea>`,'exVehicleDescription')}
       </div>
       ${field('Amount',`<input id="exAmount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="₹ Enter Amount" required>`,'exAmount')}
       ${field('Spent By',`<div class="expense-spentby"><input id="exSpentBySearch" list="exMemberList" placeholder="Search or type a new name" value="${esc(defaultName)}" required><datalist id="exMemberList">${memberNames.map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>`,'exSpentBySearch')}
@@ -194,6 +196,7 @@ function status(message, type = '') {
 
 
 ${field('Photos',`
+  <div style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;">
   <div class="expense-photo-picker" style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;">
     <button type="button" id="exPhotoChooseBtn" class="expense-secondary" style="min-width:76px;">Photo</button>
     <button type="button" class="expense-photo-slot" data-photo-slot="0" id="exPhotoSlot1" aria-label="Choose photo 1" style="width:42px;height:38px;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">1</button>
@@ -201,7 +204,9 @@ ${field('Photos',`
     <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:42px;height:38px;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
   </div>
   <input id="exPhotos" type="file" accept="image/*" multiple style="display:none;">
-  <small id="exPhotoCount" style="display:block;white-space:nowrap;font-size:12px;">0 photos selected (Max 3)</small>
+  </div>
+  <small id="exPhotoCount" style="display:block;white-space:nowrap;font-size:12px;line-height:16px;margin:0;">0 photos selected (Max 3)</small>
+  </div>
 `,'exPhotos')}
 <div id="expenseStatus" class="expense-status" role="status"></div>
       <div class="expense-actions"><button class="expense-primary" type="submit" id="expenseSaveBtn">Save</button><button class="expense-secondary" type="reset" id="expenseResetBtn">Reset</button><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>
@@ -292,6 +297,7 @@ ${field('Photos',`
     cat.onchange=()=>{
       const isVehicle=cat.value==='Vehicle Maintenance';
       vehicleFields.classList.toggle('hidden',!isVehicle);
+      $('exNormalDescription').classList.toggle('hidden',isVehicle);
       subRow.classList.toggle('hidden',isVehicle);
       sub.innerHTML=selectOptions(CATEGORIES[cat.value]||[],'Select Subcategory');
       sub.required=!isVehicle;
@@ -319,7 +325,7 @@ ${field('Photos',`
     spentBy: $('exSpentBySearch').value.trim(),
     paymentMode: $('exPaymentMode').value,
     sensitive: $('exSensitive').value,
-    description: $('exDescription').value.trim()
+    description: (cat.value === 'Vehicle Maintenance' ? $('exVehicleDescription').value : $('exDescription').value).trim()
   };
 
   for (let i = 0; i < 3; i++) {
@@ -341,6 +347,7 @@ ${field('Photos',`
   $('exDate').value = dateToday();
   $('exSpentBySearch').value = defaultName;
   vehicleFields.classList.add('hidden');
+  $('exNormalDescription').classList.remove('hidden');
   sub.innerHTML = selectOptions([], 'Select Subcategory');
   subRow.classList.remove('hidden');
   sub.required = true;
@@ -348,7 +355,7 @@ ${field('Photos',`
 } catch(err){status(err.message||'Unable to save expense. Please try again.','error')}
       finally{btn.disabled=false;btn.textContent='Save'}
     };
-    $('expenseResetBtn').onclick=()=>setTimeout(()=>{ selectedExpensePhotos=[null,null,null];updateExpensePhotoSlots();$('exDate').value=dateToday();$('exSpentBySearch').value=defaultName;vehicleFields.classList.add('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');subRow.classList.remove('hidden');sub.required=true;status('');},0);
+    $('expenseResetBtn').onclick=()=>setTimeout(()=>{ selectedExpensePhotos=[null,null,null];updateExpensePhotoSlots();$('exDate').value=dateToday();$('exSpentBySearch').value=defaultName;vehicleFields.classList.add('hidden');$('exNormalDescription').classList.remove('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');subRow.classList.remove('hidden');sub.required=true;status('');},0);
   }
   function renderSensitiveGate(kind){
     activeReport=kind;
