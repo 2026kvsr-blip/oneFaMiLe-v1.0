@@ -211,6 +211,14 @@ ${field('Photos',`
       <div class="expense-actions"><button class="expense-primary" type="submit" id="expenseSaveBtn">Save</button><button class="expense-secondary" type="reset" id="expenseResetBtn">Reset</button><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>
     </form>`;
     showPage(shell('Add Expense',inner,true));
+    // Keep the Photos label and colon vertically centered against the Photo/1/2/3 buttons.
+    const photoField = $('exPhotos')?.closest('.expense-field');
+    if (photoField) {
+      photoField.style.alignItems = 'center';
+      photoField.style.alignSelf = 'stretch';
+      const photoLabel = photoField.querySelector('.expense-label');
+      if (photoLabel) photoLabel.style.transform = 'translateY(-12px)';
+    }
     $('expenseModuleBack').onclick=goBack;
     
     // =====================================
