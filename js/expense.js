@@ -201,7 +201,7 @@ ${field('Photos',`
     <button type="button" class="expense-photo-slot" data-photo-slot="1" id="exPhotoSlot2" aria-label="Choose photo 2" style="width:42px;height:38px;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">2</button>
     <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:42px;height:38px;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
   </div>
-  <input id="exPhotos" type="file" accept="image/*" style="display:none;">
+  <input id="exPhotos" type="file" accept="image/*" multiple style="display:none;">
   <small id="exPhotoCount">0 photos selected (Maximum 3)</small>
 `,'exPhotos')}
 <div id="expenseStatus" class="expense-status" role="status"></div>
@@ -264,14 +264,28 @@ ${field('Photos',`
 
     if (photoInput) {
       photoInput.addEventListener('change', () => {
-        const file = photoInput.files && photoInput.files[0];
-        if (!file) return;
-        if (!file.type || !file.type.startsWith('image/')) {
-          alert('దయచేసి ఫోటో ఫైల్‌ను ఎంచుకోండి.');
+        const files = Array.from(photoInput.files || []);
+        if (!files.length) return;
+
+        // Photo బటన్ ద్వారా ఒకేసారి 1, 2 లేదా 3 ఫోటోలు ఎంచుకోవచ్చు.
+        if (files.some(file => !file.type || !file.type.startsWith('image/'))) {
+          alert('దయచేసి ఫోటో ఫైళ్లను మాత్రమే ఎంచుకోండి.');
+          photoInput.value = '';
           return;
         }
-        selectedExpensePhotos[activePhotoSlot] = file;
+
+        const availableSlots = 3 - activePhotoSlot;
+        if (files.length > availableSlots) {
+          alert('ఎంచుకున్న స్థానం నుంచి గరిష్ఠంగా ' + availableSlots + ' ఫోటో(లు) మాత్రమే ఎంచుకోండి. మొత్తం 3 ఫోటోల వరకు మాత్రమే అనుమతి ఉంది.');
+          photoInput.value = '';
+          return;
+        }
+
+        files.forEach((file, index) => {
+          selectedExpensePhotos[activePhotoSlot + index] = file;
+        });
         updateExpensePhotoSlots();
+        photoInput.value = '';
       });
     }
 
