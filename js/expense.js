@@ -1,6 +1,4 @@
 
-
-
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -194,6 +192,7 @@ function status(message, type = '') {
       ${field('Payment Mode',`<select id="exPaymentMode" name="paymentMode" required>${selectOptions(PAYMENT_MODES,'Select Payment Mode')}</select>`,'exPaymentMode')}
       ${field('Sensitive',`<select id="exSensitive" name="sensitive" required><option value="No" selected>No</option><option value="Yes">Yes</option></select>`,'exSensitive')}
 
+
 ${field('Photos',`
   <input
     id="exPhotos"
@@ -201,9 +200,8 @@ ${field('Photos',`
     accept="image/*"
     multiple
   >
-  <small id="exPhotoCount">
-    0 photos selected (Maximum 3)
-  </small>
+  <small id="exPhotoCount">0 photos selected (Maximum 3)</small>
+  <div id="exPhotoList"></div>
 `,'exPhotos')}
 <div id="expenseStatus" class="expense-status" role="status"></div>
       <div class="expense-actions"><button class="expense-primary" type="submit" id="expenseSaveBtn">Save</button><button class="expense-secondary" type="reset" id="expenseResetBtn">Reset</button><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>
@@ -211,6 +209,61 @@ ${field('Photos',`
     showPage(shell('Add Expense',inner,true));
     $('expenseModuleBack').onclick=goBack;
     
+    // =====================================
+    // EXPENSE PHOTOS: ADD ONE BY ONE
+    // =====================================
+
+    const photoInput = $('exPhotos');
+    let selectedExpensePhotos = [];
+
+    if (photoInput) {
+      photoInput.addEventListener('change', () => {
+
+        const newFiles = Array.from(
+          photoInput.files || []
+        );
+
+        // Maximum 3 photos
+        if (selectedExpensePhotos.length + newFiles.length > 3) {
+          alert('గరిష్ఠంగా 3 ఫోటోలు మాత్రమే ఎంచుకోండి.');
+          photoInput.value = '';
+          return;
+        }
+
+        // Add newly selected photos
+        selectedExpensePhotos.push(...newFiles);
+
+        // Update photo count
+        const countLabel = $('exPhotoCount');
+
+        if (countLabel) {
+          countLabel.textContent =
+            selectedExpensePhotos.length +
+            ' photo(s) selected (Maximum 3)';
+        }
+
+        // Display selected photo names
+        const photoList = $('exPhotoList');
+
+        if (photoList) {
+          photoList.innerHTML = '';
+
+          selectedExpensePhotos.forEach((file, index) => {
+            const item = document.createElement('div');
+
+            item.textContent =
+              (index + 1) + '. ' + file.name;
+
+            photoList.appendChild(item);
+          });
+        }
+
+        // Allow selecting photos again
+        photoInput.value = '';
+
+      });
+    }
+
 const photoInput = $('exPhotos');
 
 if (photoInput) {
