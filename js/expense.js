@@ -189,7 +189,7 @@ function status(message, type = '') {
        ${field('Description',`<textarea id="exVehicleDescription" name="vehicleDescription" rows="1" style="height:38px;min-height:38px;resize:none;box-sizing:border-box;" maxlength="30" placeholder="Enter expense details"></textarea>`,'exVehicleDescription')}
       </div>
       ${field('Amount',`<input id="exAmount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="₹ Enter Amount" required>`,'exAmount')}
-      ${field('Spent By',`<div class="expense-spentby"><input id="exSpentBySearch" list="exMemberList" placeholder="Search or type a new name" value="${esc(defaultName)}" required><datalist id="exMemberList">${memberNames.map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>`,'exSpentBySearch')}
+      ${field('Spent By',`<div class="expense-spentby"><input id="exSpentBySearch" list="exMemberList" placeholder="Enter category, subcategory and amount first" value="" required disabled><datalist id="exMemberList">${memberNames.map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>`,'exSpentBySearch')}
       <div class="expense-help">Login name is selected by default...</div>
       ${field('Payment Mode',`<select id="exPaymentMode" name="paymentMode" required>${selectOptions(PAYMENT_MODES,'Select Payment Mode')}</select>`,'exPaymentMode')}
       ${field('Sensitive',`<select id="exSensitive" name="sensitive" required><option value="No" selected>No</option><option value="Yes">Yes</option></select>`,'exSensitive')}
@@ -197,14 +197,14 @@ function status(message, type = '') {
 
 ${field('Photos',`
   <div style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;">
-    <div class="expense-photo-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;">
-      <button type="button" id="exPhotoChooseBtn" class="expense-secondary" style="min-width:64px;width:64px;padding-left:4px;padding-right:4px;">Photo</button>
-      <button type="button" class="expense-photo-slot" data-photo-slot="0" id="exPhotoSlot1" aria-label="Choose photo 1" style="width:38px;min-width:38px;height:38px;flex:0 0 38px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">1</button>
-      <button type="button" class="expense-photo-slot" data-photo-slot="1" id="exPhotoSlot2" aria-label="Choose photo 2" style="width:38px;min-width:38px;height:38px;flex:0 0 38px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">2</button>
-      <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:38px;min-width:38px;height:38px;flex:0 0 38px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
+    <div class="expense-photo-picker" style="display:flex;align-items:center;gap:5px;flex-wrap:nowrap;width:100%;box-sizing:border-box;">
+      <button type="button" id="exPhotoChooseBtn" class="expense-secondary" disabled style="min-width:58px;width:58px;flex:0 0 58px;box-sizing:border-box;padding-left:2px;padding-right:2px;">Photo</button>
+      <button type="button" class="expense-photo-slot" data-photo-slot="0" id="exPhotoSlot1" aria-label="Choose photo 1" disabled style="width:34px;min-width:34px;height:38px;flex:0 0 34px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">1</button>
+      <button type="button" class="expense-photo-slot" data-photo-slot="1" id="exPhotoSlot2" aria-label="Choose photo 2" disabled style="width:34px;min-width:34px;height:38px;flex:0 0 34px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">2</button>
+      <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" disabled style="width:34px;min-width:34px;height:38px;flex:0 0 34px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
     </div>
     <input id="exPhotos" type="file" accept="image/*" multiple style="display:none;">
-    <small id="exPhotoCount" style="display:block;white-space:nowrap;font-size:12px;line-height:16px;margin:0;">0 photo(s) selected (Max 3)</small>
+    <small id="exPhotoCount" style="display:block;white-space:nowrap;font-size:12px;line-height:16px;margin:0;">0 photos selected (Max 3)</small>
   </div>
 `,'exPhotos')}
 <div id="expenseStatus" class="expense-status" role="status"></div>
@@ -214,10 +214,13 @@ ${field('Photos',`
     // Keep the Photos label and colon vertically centered against the Photo/1/2/3 buttons.
     const photoField = $('exPhotos')?.closest('.expense-field');
     if (photoField) {
-      photoField.style.alignItems = 'center';
-      photoField.style.alignSelf = 'stretch';
+      photoField.style.position = 'relative';
       const photoLabel = photoField.querySelector('.expense-label');
-      if (photoLabel) photoLabel.style.transform = 'translateY(-12px)';
+      if (photoLabel) {
+        photoLabel.style.position = 'relative';
+        photoLabel.style.top = '-14px';
+        photoLabel.style.alignSelf = 'start';
+      }
     }
     $('expenseModuleBack').onclick=goBack;
     
@@ -248,10 +251,11 @@ ${field('Photos',`
         }
       });
       const countLabel = $('exPhotoCount');
-      if (countLabel) countLabel.textContent = count + ' photo(s) selected (Max 3)';
+      if (countLabel) countLabel.textContent = count + ' photo(s) selected (Maximum 3)';
     }
 
     function openExpensePhotoPicker(slotIndex) {
+      if (!expenseDetailsReady) return;
       activePhotoSlot = slotIndex;
       if (photoInput) {
         photoInput.value = '';
@@ -301,6 +305,25 @@ ${field('Photos',`
     }
 
     const cat=$('exCategory'),sub=$('exSubCategory'),subRow=$('exSubCategoryRow'),vehicleFields=$('exVehicleFields');
+    const spentByInput = $('exSpentBySearch');
+    const photoControls = [$('exPhotoChooseBtn'), $('exPhotoSlot1'), $('exPhotoSlot2'), $('exPhotoSlot3')];
+    let expenseDetailsReady = false;
+    function updateExpenseEntryReadiness(){
+      const isVehicle = cat.value === 'Vehicle Maintenance';
+      const categoryReady = !!cat.value;
+      const subcategoryReady = isVehicle ? !!$('exMaintenanceType').value : !!sub.value;
+      const amountValue = Number($('exAmount').value);
+      const amountReady = $('exAmount').value.trim() !== '' && Number.isFinite(amountValue) && amountValue > 0;
+      const ready = categoryReady && subcategoryReady && amountReady;
+      expenseDetailsReady = ready;
+      spentByInput.disabled = !ready;
+      spentByInput.placeholder = ready ? 'Search or type a new name' : 'Enter category, subcategory and amount first';
+      if (ready && !spentByInput.value.trim()) spentByInput.value = defaultName;
+      if (!ready) spentByInput.value = '';
+      photoControls.forEach(control => { if (control) control.disabled = !ready; });
+      const picker = document.querySelector('.expense-photo-picker');
+      if (picker) picker.style.opacity = ready ? '1' : '0.55';
+    }
     cat.onchange=()=>{
       const isVehicle=cat.value==='Vehicle Maintenance';
       vehicleFields.classList.toggle('hidden',!isVehicle);
@@ -309,7 +332,12 @@ ${field('Photos',`
       sub.innerHTML=selectOptions(CATEGORIES[cat.value]||[],'Select Subcategory');
       sub.required=!isVehicle;
       if(isVehicle)sub.value='';
+      updateExpenseEntryReadiness();
     };
+    sub.addEventListener('change', updateExpenseEntryReadiness);
+    $('exMaintenanceType').addEventListener('change', updateExpenseEntryReadiness);
+    $('exAmount').addEventListener('input', updateExpenseEntryReadiness);
+    updateExpenseEntryReadiness();
     $('expenseForm').onsubmit=async ev=>{
       ev.preventDefault();
       const amount=Number($('exAmount').value);
