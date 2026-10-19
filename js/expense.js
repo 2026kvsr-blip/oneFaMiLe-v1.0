@@ -1,4 +1,5 @@
 
+
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -82,7 +83,67 @@ async function compressExpensePhoto(file){
   return data;
 }
 
-  function status(message,type=''){const el=$('expenseStatus');if(el){el.className='expense-status '+type;el.textContent=message||'';}}
+
+function status(message, type = '') {
+  const el = $('expenseStatus');
+
+  // విజయ సందేశం ప్రత్యేక Popup‌గా చూపించాలి
+  if (type === 'success') {
+    if (el) {
+      el.textContent = '';
+      el.className = 'expense-status';
+    }
+
+    let popup = document.getElementById('expenseToast');
+
+    if (!popup) {
+      popup = document.createElement('div');
+      popup.id = 'expenseToast';
+      document.body.appendChild(popup);
+    }
+
+    popup.textContent = message;
+    popup.style.cssText = `
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #218838;
+      color: white;
+      padding: 14px 22px;
+      border-radius: 10px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      z-index: 999999;
+      font-size: 16px;
+      text-align: center;
+      max-width: 90%;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    `;
+
+    clearTimeout(window.expenseToastTimer);
+    clearTimeout(window.expenseToastRemoveTimer);
+
+    popup.style.display = 'block';
+    popup.style.opacity = '1';
+
+    window.expenseToastTimer = setTimeout(() => {
+      popup.style.opacity = '0';
+
+      window.expenseToastRemoveTimer = setTimeout(() => {
+        popup.style.display = 'none';
+      }, 400);
+    }, 3000);
+
+    return;
+  }
+
+  // ఇతర సందేశాలు మునుపటిలాగే ఫారమ్‌లో కనిపిస్తాయి
+  if (el) {
+    el.className = 'expense-status ' + type;
+    el.textContent = message || '';
+  }
+}
   function field(label, control, id){return `<div class="expense-field"><label class="expense-label" for="${id||''}"><span class="expense-label-text">${label}</span><span class="expense-colon">:</span></label>${control}</div>`}
   function selectOptions(items,placeholder='Select') {return `<option value="">${placeholder}</option>`+items.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
   function shell(title,inner,backInside=false){return `<div class="expense-page"><h2 class="expense-title">${esc(title)}</h2>${inner}${backInside?'':`<div class="expense-actions"><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>`}</div>`}
@@ -131,6 +192,7 @@ async function compressExpensePhoto(file){
       <div class="expense-help">Login name is selected by default...</div>
       ${field('Payment Mode',`<select id="exPaymentMode" name="paymentMode" required>${selectOptions(PAYMENT_MODES,'Select Payment Mode')}</select>`,'exPaymentMode')}
       ${field('Sensitive',`<select id="exSensitive" name="sensitive" required><option value="No" selected>No</option><option value="Yes">Yes</option></select>`,'exSensitive')}
+
 ${field('Photos',`
   <input
     id="exPhotos"
@@ -138,13 +200,42 @@ ${field('Photos',`
     accept="image/*"
     multiple
   >
-  <small>Select up to 3 photos</small>
+  <small id="exPhotoCount">
+    0 photos selected (Maximum 3)
+  </small>
 `,'exPhotos')}
 <div id="expenseStatus" class="expense-status" role="status"></div>
       <div class="expense-actions"><button class="expense-primary" type="submit" id="expenseSaveBtn">Save</button><button class="expense-secondary" type="reset" id="expenseResetBtn">Reset</button><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>
     </form>`;
     showPage(shell('Add Expense',inner,true));
     $('expenseModuleBack').onclick=goBack;
+    
+const photoInput = $('exPhotos');
+
+if (photoInput) {
+  photoInput.addEventListener('change', () => {
+    const files = Array.from(photoInput.files || []);
+    const countLabel = $('exPhotoCount');
+
+    if (files.length > 3) {
+      alert('గరిష్ఠంగా 3 ఫోటోలు మాత్రమే ఎంచుకోండి.');
+      photoInput.value = '';
+
+      if (countLabel) {
+        countLabel.textContent =
+          '0 photos selected (Maximum 3)';
+      }
+
+      return;
+    }
+
+    if (countLabel) {
+      countLabel.textContent =
+        files.length + ' photo(s) selected';
+    }
+  });
+}
+
     const cat=$('exCategory'),sub=$('exSubCategory'),subRow=$('exSubCategoryRow'),vehicleFields=$('exVehicleFields');
     cat.onchange=()=>{
       const isVehicle=cat.value==='Vehicle Maintenance';
