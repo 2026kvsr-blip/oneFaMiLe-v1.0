@@ -195,14 +195,14 @@ function status(message, type = '') {
 
 
 ${field('Photos',`
-  <input
-    id="exPhotos"
-    type="file"
-    accept="image/*"
-    multiple
-  >
+  <div class="expense-photo-picker" style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;">
+    <button type="button" id="exPhotoChooseBtn" class="expense-secondary" style="min-width:76px;">Photo</button>
+    <button type="button" class="expense-photo-slot" data-photo-slot="0" id="exPhotoSlot1" aria-label="Choose photo 1" style="width:42px;height:38px;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">1</button>
+    <button type="button" class="expense-photo-slot" data-photo-slot="1" id="exPhotoSlot2" aria-label="Choose photo 2" style="width:42px;height:38px;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">2</button>
+    <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:42px;height:38px;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
+  </div>
+  <input id="exPhotos" type="file" accept="image/*" style="display:none;">
   <small id="exPhotoCount">0 photos selected (Maximum 3)</small>
-  <div id="exPhotoList"></div>
 `,'exPhotos')}
 <div id="expenseStatus" class="expense-status" role="status"></div>
       <div class="expense-actions"><button class="expense-primary" type="submit" id="expenseSaveBtn">Save</button><button class="expense-secondary" type="reset" id="expenseResetBtn">Reset</button><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>
@@ -211,60 +211,69 @@ ${field('Photos',`
     $('expenseModuleBack').onclick=goBack;
     
     // =====================================
-    // EXPENSE PHOTOS: ADD ONE BY ONE
+    // EXPENSE PHOTOS: PHOTO BUTTON + 3 SLOTS
     // =====================================
-
     const photoInput = $('exPhotos');
-    let selectedExpensePhotos = [];
+    let selectedExpensePhotos = [null, null, null];
+    let activePhotoSlot = 0;
+
+    function updateExpensePhotoSlots() {
+      let count = 0;
+      selectedExpensePhotos.forEach((file, index) => {
+        const slot = $('exPhotoSlot' + (index + 1));
+        if (file) {
+          count++;
+          if (slot) {
+            slot.textContent = '✓';
+            slot.title = file.name;
+            slot.style.background = '#d9f2df';
+            slot.style.borderColor = '#218838';
+          }
+        } else if (slot) {
+          slot.textContent = String(index + 1);
+          slot.title = 'Choose photo ' + (index + 1);
+          slot.style.background = '#fff';
+          slot.style.borderColor = '#8aa6c1';
+        }
+      });
+      const countLabel = $('exPhotoCount');
+      if (countLabel) countLabel.textContent = count + ' photo(s) selected (Maximum 3)';
+    }
+
+    function openExpensePhotoPicker(slotIndex) {
+      activePhotoSlot = slotIndex;
+      if (photoInput) {
+        photoInput.value = '';
+        photoInput.click();
+      }
+    }
+
+    $('exPhotoChooseBtn').onclick = () => {
+      let nextSlot = selectedExpensePhotos.findIndex(file => !file);
+      if (nextSlot < 0) {
+        alert('గరిష్ఠంగా 3 ఫోటోలు మాత్రమే ఎంచుకోండి. ఫోటో మార్చాలంటే 1, 2 లేదా 3 బాక్స్‌ను నొక్కండి.');
+        return;
+      }
+      openExpensePhotoPicker(nextSlot);
+    };
+
+    [1, 2, 3].forEach(number => {
+      const slot = $('exPhotoSlot' + number);
+      if (slot) slot.onclick = () => openExpensePhotoPicker(number - 1);
+    });
 
     if (photoInput) {
       photoInput.addEventListener('change', () => {
-
-        const newFiles = Array.from(
-          photoInput.files || []
-        );
-
-        // Maximum 3 photos
-        if (selectedExpensePhotos.length + newFiles.length > 3) {
-          alert('గరిష్ఠంగా 3 ఫోటోలు మాత్రమే ఎంచుకోండి.');
-          photoInput.value = '';
+        const file = photoInput.files && photoInput.files[0];
+        if (!file) return;
+        if (!file.type || !file.type.startsWith('image/')) {
+          alert('దయచేసి ఫోటో ఫైల్‌ను ఎంచుకోండి.');
           return;
         }
-
-        // Add newly selected photos
-        selectedExpensePhotos.push(...newFiles);
-
-        // Update photo count
-        const countLabel = $('exPhotoCount');
-
-        if (countLabel) {
-          countLabel.textContent =
-            selectedExpensePhotos.length +
-            ' photo(s) selected (Maximum 3)';
-        }
-
-        // Display selected photo names
-        const photoList = $('exPhotoList');
-
-        if (photoList) {
-          photoList.innerHTML = '';
-
-          selectedExpensePhotos.forEach((file, index) => {
-            const item = document.createElement('div');
-
-            item.textContent =
-              (index + 1) + '. ' + file.name;
-
-            photoList.appendChild(item);
-          });
-        }
-
-        // Allow selecting photos again
-        photoInput.value = '';
-
+        selectedExpensePhotos[activePhotoSlot] = file;
+        updateExpensePhotoSlots();
       });
     }
-
 
     const cat=$('exCategory'),sub=$('exSubCategory'),subRow=$('exSubCategoryRow'),vehicleFields=$('exVehicleFields');
     cat.onchange=()=>{
@@ -282,12 +291,9 @@ ${field('Photos',`
       if(!token()){status('Login session expired. Please login again.','error');return}
       if(!Number.isFinite(amount)||amount<=0){status('Enter an amount greater than zero.','error');$('exAmount').focus();return}
       if(!$('exSpentBySearch').value.trim()){status('Select a family member or enter a name.','error');return}
-      const btn=$('expenseSaveBtn');btn.disabled=true;btn.textContent='Saving…';status('Saving expense…');
+      const btn=$('expenseSaveBtn');btn.disabled=true;btn.textContent='Saving…';
      try {
- const photoFiles = selectedExpensePhotos.slice();
-  if (photoFiles.length > 3) {
-    throw new Error('Please select a maximum of 3 photos.');
-  }
+  const photoFiles = selectedExpensePhotos.slice();
 
   const payload = {
     expenseDate: $('exDate').value,
@@ -315,17 +321,9 @@ ${field('Photos',`
   }
 
   status('Expense saved successfully.', 'success');
-selectedExpensePhotos = [];
+  selectedExpensePhotos = [null, null, null];
+  updateExpensePhotoSlots();
 
-const countLabel = $('exPhotoCount');
-if (countLabel) {
-  countLabel.textContent = '0 photos selected (Maximum 3)';
-}
-
-const photoList = $('exPhotoList');
-if (photoList) {
-  photoList.innerHTML = '';
-}
   $('expenseForm').reset();
   $('exDate').value = dateToday();
   $('exSpentBySearch').value = defaultName;
@@ -337,7 +335,7 @@ if (photoList) {
 } catch(err){status(err.message||'Unable to save expense. Please try again.','error')}
       finally{btn.disabled=false;btn.textContent='Save'}
     };
-    $('expenseResetBtn').onclick=()=>setTimeout(()=>{ $('exDate').value=dateToday();$('exSpentBySearch').value=defaultName;vehicleFields.classList.add('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');subRow.classList.remove('hidden');sub.required=true;status('');},0);
+    $('expenseResetBtn').onclick=()=>setTimeout(()=>{ selectedExpensePhotos=[null,null,null];updateExpensePhotoSlots();$('exDate').value=dateToday();$('exSpentBySearch').value=defaultName;vehicleFields.classList.add('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');subRow.classList.remove('hidden');sub.required=true;status('');},0);
   }
   function renderSensitiveGate(kind){
     activeReport=kind;
