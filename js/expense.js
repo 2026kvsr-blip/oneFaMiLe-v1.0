@@ -364,16 +364,20 @@ ${field('Photos',`
     $('exVerifyPass').onclick=async()=>{const pass=$('exReportPass').value.trim();if(!pass){status('Enter Pass Code.','error');return}const btn=$('exVerifyPass');btn.disabled=true;try{const res=await request('getExpenses',{reportAccess:kind,passCode:pass});if(res.status!=='success')throw new Error(res.message||'Verification failed.');cachedExpenses=res.expenses||[];renderReports(kind, cachedExpenses)}catch(err){status(err.message,'error');btn.disabled=false}};
   }
   function reportControls(custom=false){
-    const types=['Today','Daily','Weekly','Monthly','Yearly','Abstract'];
-    const periods=['Today','This Week','This Month','This Year','Selected Date','Month','Year'];
+    const types=['Abstract','Detailed'];
+    const periods=['Today','Daily','This Week','Weekly','This Month','Monthly','This Year','Yearly'];
+    const yearOptions=Array.from({length:Math.max(1,new Date().getFullYear()-2010+1)},(_,i)=>new Date().getFullYear()-i)
+      .map(y=>`<option value="${y}">${y}</option>`).join('');
     return `<div class="expense-panel"><div class="expense-filter-grid">
       <div class="expense-field"><label class="expense-label" for="exReportType"><span class="expense-label-text">Report Type</span></label><select id="exReportType">${selectOptions(types,'Select Type')}</select></div>
       <div class="expense-field"><label class="expense-label" for="exReportPeriod"><span class="expense-label-text">Report Period</span></label><select id="exReportPeriod">${selectOptions(periods,'Select Period')}</select></div>
-      <div class="expense-field hidden" id="exSelectedDateWrap"><label class="expense-label" for="exSelectedDate"><span class="expense-label-text">Selected Date</span></label><input id="exSelectedDate" type="date" value="${dateToday()}"></div>
-      <div class="expense-field hidden" id="exMonthWrap"><label class="expense-label" for="exMonth"><span class="expense-label-text">Month</span></label><input id="exMonth" type="month" value="${dateToday().slice(0,7)}"></div>
-      <div class="expense-field hidden" id="exYearWrap"><label class="expense-label" for="exYear"><span class="expense-label-text">Year</span></label><select id="exYear">${Array.from({length:8},(_,i)=>new Date().getFullYear()-i).map(y=>`<option value="${y}">${y}</option>`).join('')}</select></div>
-      ${custom?`<div class="expense-field"><label class="expense-label" for="exFromDate"><span class="expense-label-text">From Date</span></label><input id="exFromDate" type="date"></div><div class="expense-field"><label class="expense-label" for="exToDate"><span class="expense-label-text">To Date</span></label><input id="exToDate" type="date"></div>
-      <div class="expense-field"><label class="expense-label" for="exFilterCategory"><span class="expense-label-text">Main Category</span></label><select id="exFilterCategory">${selectOptions(Object.keys(CATEGORIES),'All Categories')}</select></div>
+      <div class="expense-field hidden" id="exFromDateWrap"><label class="expense-label" for="exFromDate"><span class="expense-label-text">From Date</span></label><input id="exFromDate" type="date"></div>
+      <div class="expense-field hidden" id="exToDateWrap"><label class="expense-label" for="exToDate"><span class="expense-label-text">To Date</span></label><input id="exToDate" type="date" value="${dateToday()}"></div>
+      <div class="expense-field hidden" id="exFromMonthWrap"><label class="expense-label" for="exFromMonth"><span class="expense-label-text">From Month</span></label><input id="exFromMonth" type="month"></div>
+      <div class="expense-field hidden" id="exToMonthWrap"><label class="expense-label" for="exToMonth"><span class="expense-label-text">To Month</span></label><input id="exToMonth" type="month" value="${dateToday().slice(0,7)}"></div>
+      <div class="expense-field hidden" id="exFromYearWrap"><label class="expense-label" for="exFromYear"><span class="expense-label-text">From Year</span></label><select id="exFromYear">${yearOptions}</select></div>
+      <div class="expense-field hidden" id="exToYearWrap"><label class="expense-label" for="exToYear"><span class="expense-label-text">To Year</span></label><select id="exToYear">${yearOptions}</select></div>
+      ${custom?`<div class="expense-field"><label class="expense-label" for="exFilterCategory"><span class="expense-label-text">Main Category</span></label><select id="exFilterCategory">${selectOptions(Object.keys(CATEGORIES),'All Categories')}</select></div>
       <div class="expense-field"><label class="expense-label" for="exFilterSub"><span class="expense-label-text">Sub Category</span></label><select id="exFilterSub">${selectOptions([],'All Subcategories')}</select></div>
       <div class="expense-field"><label class="expense-label" for="exFilterSpentBy"><span class="expense-label-text">Spent By</span></label><input id="exFilterSpentBy" list="exSearchMembers" placeholder="Any member/name"><datalist id="exSearchMembers">${[...new Set([loginName(),...members].filter(Boolean))].map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>
       <div class="expense-field"><label class="expense-label" for="exFilterPayment"><span class="expense-label-text">Payment Mode</span></label><select id="exFilterPayment">${selectOptions(PAYMENT_MODES,'All Modes')}</select></div>
@@ -382,14 +386,28 @@ ${field('Photos',`
       <div class="expense-field"><label class="expense-label" for="exMinAmount"><span class="expense-label-text">Minimum Amount</span></label><input id="exMinAmount" type="number" min="0" step="0.01" placeholder="Any"></div>
       <div class="expense-field"><label class="expense-label" for="exMaxAmount"><span class="expense-label-text">Maximum Amount</span></label><input id="exMaxAmount" type="number" min="0" step="0.01" placeholder="Any"></div>
       <div class="expense-field" style="grid-column:1/-1"><label class="expense-label" for="exSearchText"><span class="expense-label-text">Search Text</span></label><input id="exSearchText" type="search" placeholder="Description, category, spent by…"></div>`:''}
-      </div><div class="expense-actions"><button id="exRunReport" class="expense-primary">${custom?'Search':'Show Report'}</button></div><div id="expenseStatus" class="expense-status" role="status"></div></div><div id="exReportOutput"></div>`;
+      </div>
+      <div class="expense-actions" style="display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;width:100%;"><button id="exRunReport" class="expense-primary">${custom?'Search':'Show Report'}</button><button type="button" id="exReportBack" class="expense-secondary">← Back</button></div>
+      <div id="expenseStatus" class="expense-status" role="status"></div></div><div id="exReportOutput"></div>`;
   }
   function setupReportControls(custom,kind){
-    $('expenseModuleBack').onclick=goBack;
-    const period=$('exReportPeriod');
-    const toggle=()=>{const p=period.value;$('exSelectedDateWrap').classList.toggle('hidden',p!=='Selected Date');$('exMonthWrap').classList.toggle('hidden',p!=='Month');$('exYearWrap').classList.toggle('hidden',p!=='Year');};
-    period.onchange=toggle;
-    if(custom){$('exFilterCategory').onchange=()=>{$('exFilterSub').innerHTML=selectOptions(CATEGORIES[$('exFilterCategory').value]||[],'All Subcategories')};$('exFilterSensitive').onchange=()=>{$('exCustomPassWrap').classList.toggle('hidden',$('exFilterSensitive').value==='No')}}
+    $('exReportBack').onclick=goBack;
+    const period=$('exReportPeriod'),type=$('exReportType');
+    const toggle=()=>{
+      const p=period.value, detailed=type.value==='Detailed';
+      const dateRange=detailed&&p==='Daily',monthRange=detailed&&p==='Monthly',yearRange=detailed&&p==='Yearly';
+      $('exFromDateWrap').classList.toggle('hidden',!dateRange);
+      $('exToDateWrap').classList.toggle('hidden',!dateRange);
+      $('exFromMonthWrap').classList.toggle('hidden',!monthRange);
+      $('exToMonthWrap').classList.toggle('hidden',!monthRange);
+      $('exFromYearWrap').classList.toggle('hidden',!yearRange);
+      $('exToYearWrap').classList.toggle('hidden',!yearRange);
+    };
+    period.onchange=toggle;type.onchange=toggle;
+    if(custom){
+      $('exFilterCategory').onchange=()=>{$('exFilterSub').innerHTML=selectOptions(CATEGORIES[$('exFilterCategory').value]||[],'All Subcategories')};
+      $('exFilterSensitive').onchange=()=>{$('exCustomPassWrap').classList.toggle('hidden',$('exFilterSensitive').value==='No')};
+    }
     $('exRunReport').onclick=async()=>{
       let rows=cachedExpenses;
       let access=kind;
@@ -399,60 +417,115 @@ ${field('Photos',`
         if(!pass){status('Sensitive Pass Code is required when searching Sensitive = Yes or All.','error');$('exCustomPass').focus();return}
         access='all';
       }
-      if(!rows.length || (custom && searchSensitive!=='No' && !rows.some(r=>r.sensitive==='Yes'))){$('exRunReport').disabled=true;status('Loading expenses…');try{const fields={reportAccess:access};if(access==='all'&&custom)fields.passCode=$('exCustomPass').value.trim();const res=await request('getExpenses',fields);if(res.status!=='success')throw new Error(res.message||'Unable to load expenses');rows=res.expenses||[];cachedExpenses=rows}catch(e){status(e.message,'error');$('exRunReport').disabled=false;return}finally{$('exRunReport').disabled=false}}
-      const filtered=filterRows(rows,custom,kind);renderResults(filtered,$('exReportType').value||'Abstract');status(`${filtered.length} expense record(s) found.`,'success');
+      if(!rows.length || (custom && searchSensitive!=='No' && !rows.some(r=>String(r.sensitive||'').toLowerCase()==='yes'))){
+        $('exRunReport').disabled=true;status('Loading expenses…');
+        try{
+          const fields={reportAccess:access};
+          if((access==='all'||access==='sensitive')&&custom)fields.passCode=$('exCustomPass').value.trim();
+          const res=await request('getExpenses',fields);
+          if(res.status!=='success')throw new Error(res.message||'Unable to load expenses');
+          rows=res.expenses||[];cachedExpenses=rows;
+        }catch(e){status(e.message,'error');$('exRunReport').disabled=false;return}
+        finally{$('exRunReport').disabled=false}
+      }
+      const filtered=filterRows(rows,custom,kind);
+      renderResults(filtered,type.value||'Abstract',period.value||'Today');
+      status(`${filtered.length} expense record(s) found.`,'success');
     };
-    if(!custom){$('exReportType').value='Monthly';period.value='This Month';toggle()}
-    if(custom){$('exReportType').value='Abstract';period.value='This Month';toggle()}
+    type.value='Abstract';period.value='Today';toggle();
   }
   function filterRows(rows,custom,kind){
-    const p=$('exReportPeriod').value;const type=$('exReportType').value;let from='',to='';const now=new Date();
-    if(custom){from=$('exFromDate').value;to=$('exToDate').value}
-    if((!custom || (!from && !to)) && p==='Today'){from=to=dateToday()}
-    else if((!custom || (!from && !to)) && p==='This Week'){const d=new Date();const day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);from=fmt(d);const end=new Date(d);end.setDate(end.getDate()+6);to=fmt(end)}
-    else if((!custom || (!from && !to)) && p==='This Month'){from=dateToday().slice(0,7)+'-01';to=dateToday()}
-    else if((!custom || (!from && !to)) && p==='This Year'){from=now.getFullYear()+'-01-01';to=dateToday()}
-    else if((!custom || (!from && !to)) && p==='Selected Date'){from=to=$('exSelectedDate').value}
-    else if((!custom || (!from && !to)) && p==='Month'){const m=$('exMonth').value;if(m){from=m+'-01';const parts=m.split('-').map(Number);to=m+'-'+String(new Date(parts[0],parts[1],0).getDate()).padStart(2,'0')}}
-    else if((!custom || (!from && !to)) && p==='Year'){const y=$('exYear').value;from=y+'-01-01';to=y+'-12-31'}
-    const start=from?new Date(from+'T00:00:00').getTime():null;const end=to?new Date(to+'T23:59:59').getTime():null;
+    const p=$('exReportPeriod').value,type=$('exReportType').value;
+    let from='',to='';const now=new Date();
+    if(type==='Detailed'&&p==='Daily'){from=$('exFromDate').value;to=$('exToDate').value}
+    else if(type==='Detailed'&&p==='Monthly'){
+      const a=$('exFromMonth').value,b=$('exToMonth').value;
+      if(a)from=a+'-01';
+      if(b){const q=b.split('-').map(Number);to=b+'-'+String(new Date(q[0],q[1],0).getDate()).padStart(2,'0')}
+    }else if(type==='Detailed'&&p==='Yearly'){
+      const a=$('exFromYear').value,b=$('exToYear').value;
+      if(a)from=a+'-01-01';if(b)to=b+'-12-31';
+    }else if(p==='Today'){from=to=dateToday()}
+    else if(p==='This Week'){const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));from=fmt(d);const e=new Date(d);e.setDate(e.getDate()+6);to=fmt(e)}
+    else if(p==='This Month'){from=dateToday().slice(0,7)+'-01';to=dateToday()}
+    else if(p==='This Year'){from=now.getFullYear()+'-01-01';to=dateToday()}
+    else if(type==='Abstract'&&p==='Daily'){const d=new Date();d.setDate(d.getDate()-39);from=fmt(d);to=dateToday()}
+    else if(type==='Abstract'&&p==='Weekly'){const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7)-39*7);from=fmt(d);to=dateToday()}
+    else if(type==='Abstract'&&p==='Monthly'){const d=new Date(now.getFullYear(),now.getMonth()-39,1);from=fmt(d);to=dateToday()}
+    // Abstract Yearly intentionally has no date limits: include all years in the stored data.
+    const start=from?new Date(from+'T00:00:00').getTime():null,end=to?new Date(to+'T23:59:59').getTime():null;
     return rows.filter(r=>{
-      const d=String(r.expenseDate||'').slice(0,10);const dt=d?new Date(d+'T12:00:00').getTime():0;
+      const d=String(r.expenseDate||'').slice(0,10),dt=d?new Date(d+'T12:00:00').getTime():0;
       if(start!==null&&dt<start)return false;if(end!==null&&dt>end)return false;
-      if(custom){if($('exFilterCategory').value&&r.mainCategory!==$('exFilterCategory').value)return false;if($('exFilterSub').value&&r.subCategory!==$('exFilterSub').value)return false;if($('exFilterSpentBy').value.trim()&&String(r.spentBy||'').toLowerCase().indexOf($('exFilterSpentBy').value.trim().toLowerCase())<0)return false;if($('exFilterPayment').value&&r.paymentMode!==$('exFilterPayment').value)return false;if($('exFilterSensitive').value==='Yes'&&r.sensitive!=='Yes')return false;if($('exFilterSensitive').value==='No'&&r.sensitive!=='No')return false;const min=$('exMinAmount').value,max=$('exMaxAmount').value;if(min!==''&&Number(r.amount)<Number(min))return false;if(max!==''&&Number(r.amount)>Number(max))return false;const q=$('exSearchText').value.trim().toLowerCase();if(q&&!`${r.description||''} ${r.mainCategory||''} ${r.subCategory||''} ${r.spentBy||''}`.toLowerCase().includes(q))return false}
+      const sensitive=String(r.sensitive||'No').trim().toLowerCase();
+      if(!custom&&kind==='normal'&&sensitive!=='no')return false;
+      if(!custom&&kind==='sensitive'&&sensitive!=='yes')return false;
+      if(custom){
+        if($('exFilterCategory').value&&r.mainCategory!==$('exFilterCategory').value)return false;
+        if($('exFilterSub').value&&r.subCategory!==$('exFilterSub').value)return false;
+        if($('exFilterSpentBy').value.trim()&&String(r.spentBy||'').toLowerCase().indexOf($('exFilterSpentBy').value.trim().toLowerCase())<0)return false;
+        if($('exFilterPayment').value&&r.paymentMode!==$('exFilterPayment').value)return false;
+        const sf=$('exFilterSensitive').value;if(sf==='Yes'&&sensitive!=='yes')return false;if(sf==='No'&&sensitive!=='no')return false;
+        const min=$('exMinAmount').value,max=$('exMaxAmount').value;
+        if(min!==''&&Number(r.amount)<Number(min))return false;if(max!==''&&Number(r.amount)>Number(max))return false;
+        const q=$('exSearchText').value.trim().toLowerCase();
+        if(q&&!`${r.description||''} ${r.mainCategory||''} ${r.subCategory||''} ${r.spentBy||''}`.toLowerCase().includes(q))return false;
+      }
       return true;
     });
   }
   function fmt(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-  function renderResults(rows,type){
-    const total=rows.reduce((s,r)=>s+Number(r.amount||0),0);const counts=rows.length;
+  function renderResults(rows,type,period){
+    const total=rows.reduce((s,r)=>s+Number(r.amount||0),0),counts=rows.length;
+    const dateLabel=ds=>{if(!ds)return 'Unknown';if(type==='Monthly')return new Date(ds+'-01T12:00:00').toLocaleDateString('en-IN',{month:'short',year:'numeric'});return ds};
+    const photoCount=r=>[r.photo1Url||r.photo1||r.photo1Data,r.photo2Url||r.photo2||r.photo2Data,r.photo3Url||r.photo3||r.photo3Data].filter(Boolean).length;
+    const photoCell=r=>{const photos=[r.photo1Url||r.photo1||r.photo1Data,r.photo2Url||r.photo2||r.photo2Data,r.photo3Url||r.photo3||r.photo3Data].filter(Boolean);return photos.length?`<button type="button" class="expense-secondary expense-view-photos" data-photos="${esc(JSON.stringify(photos))}">View</button>`:'—'};
     let table='';
     if(type==='Abstract'){
-      const sums={};rows.forEach(r=>{const k=r.mainCategory||'Other';if(!sums[k])sums[k]={amount:0,count:0};sums[k].amount+=Number(r.amount||0);sums[k].count++});
-      table=`<div class="expense-results"><table><thead><tr><th>Main Category</th><th>Records</th><th>Total Amount</th></tr></thead><tbody>${Object.keys(sums).sort().map(k=>`<tr><td>${esc(k)}</td><td>${sums[k].count}</td><td>${money(sums[k].amount)}</td></tr>`).join('')||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
-    } else if(['Daily','Weekly','Monthly','Yearly'].includes(type)){
       const groups={};
       rows.forEach(r=>{
         const ds=String(r.expenseDate||'').slice(0,10);let key=ds||'Unknown';
-        if(type==='Monthly')key=ds.slice(0,7)||'Unknown';
-        if(type==='Yearly')key=ds.slice(0,4)||'Unknown';
-        if(type==='Weekly'&&ds){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));key=fmt(d)}
+        if(period==='Today')key='Today';
+        else if(period==='This Week')key='This Week';
+        else if(period==='This Month')key='This Month';
+        else if(period==='This Year')key='This Year';
+        else if(period==='Weekly'&&ds){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));key=fmt(d)}
+        else if(period==='Monthly'&&ds)key=ds.slice(0,7);
+        else if(period==='Yearly'&&ds)key=ds.slice(0,4);
         if(!groups[key])groups[key]={amount:0,count:0};groups[key].amount+=Number(r.amount||0);groups[key].count++;
       });
-      const label=type==='Daily'?'Date':type==='Weekly'?'Week Starting':type==='Monthly'?'Month':'Year';
-      table=`<div class="expense-results"><table><thead><tr><th>${label}</th><th>Records</th><th>Total Amount</th></tr></thead><tbody>${Object.keys(groups).sort().reverse().map(k=>`<tr><td>${esc(k)}</td><td>${groups[k].count}</td><td>${money(groups[k].amount)}</td></tr>`).join('')||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
-    } else {
-      table=`<div class="expense-results"><table><thead><tr><th>Date</th><th>Category / Subcategory</th><th>Spent By</th><th>Payment</th><th>Amount</th><th>Sensitive</th><th>Description</th></tr></thead><tbody>${rows.slice().sort((a,b)=>String(b.expenseDate).localeCompare(String(a.expenseDate))).map(r=>`<tr><td>${esc(r.expenseDate)}</td><td>${esc(r.mainCategory)}<br>${esc(r.subCategory)}${r.vehicleType?'<br>'+esc(r.vehicleType)+' / '+esc(r.maintenanceType):''}</td><td>${esc(r.spentBy)}</td><td>${esc(r.paymentMode)}</td><td>${money(r.amount)}</td><td>${esc(r.sensitive)}</td><td>${esc(r.description)}</td></tr>`).join('')||'<tr><td colspan="7">No records found.</td></tr>'}</tbody></table></div>`;
+      const keys=Object.keys(groups).sort((a,b)=>b.localeCompare(a));
+      table=`<div class="expense-results"><table><thead><tr><th>S.No</th><th>Date</th><th>Nos</th><th>Amount</th></tr></thead><tbody>${keys.map((k,i)=>`<tr><td>${i+1}</td><td>${esc(period==='Monthly'?dateLabel(k):k)}</td><td>${groups[k].count}</td><td>${money(groups[k].amount)}</td></tr>`).join('')||'<tr><td colspan="4">No records found.</td></tr>'}</tbody></table></div>`;
+    }else{
+      const detailRow=(r,i)=>`<tr><td>${i+1}</td><td>${esc(r.expenseDate)}</td><td>${esc(r.mainCategory)}</td><td>${esc(r.subCategory)}${r.mainCategory==='Vehicle Maintenance'?`<br>${esc(r.vehicleType||'')} / ${esc(r.maintenanceType||'')}<br>${esc(r.vehicleNumber||'')}`:''}</td><td>${money(r.amount)}</td><td>${esc(r.spentBy)}</td><td>${esc(r.sensitive||'No')}</td><td>${photoCell(r)}</td><td>${photoCount(r)}</td></tr>`;
+      const sorted=rows.slice().sort((a,b)=>String(b.expenseDate||'').localeCompare(String(a.expenseDate||'')));
+      const headers='<tr><th>S.No</th><th>Date</th><th>Main Category</th><th>Sub Category</th><th>Amount Rs</th><th>Spent by</th><th>Sensitive</th><th>Photos</th><th>Nos</th></tr>';
+      if(period==='This Year'){
+        const byMonth={};sorted.forEach(r=>{const ds=String(r.expenseDate||'').slice(0,10),k=ds?ds.slice(0,7):'Unknown';(byMonth[k]||(byMonth[k]=[])).push(r)});
+        table=Object.keys(byMonth).sort().reverse().map(k=>`<h3 style="text-align:center;margin:18px 0 8px;">${esc(k==='Unknown'?k:dateLabel(k))}</h3><div class="expense-results"><table><thead>${headers}</thead><tbody>${byMonth[k].map(detailRow).join('')}</tbody></table></div>`).join('')||`<div class="expense-results"><table><thead>${headers}</thead><tbody><tr><td colspan="9">No records found.</td></tr></tbody></table></div>`;
+      }else{
+        table=`<div class="expense-results"><table><thead>${headers}</thead><tbody>${sorted.map(detailRow).join('')||'<tr><td colspan="9">No records found.</td></tr>'}</tbody></table></div>`;
+      }
     }
     $('exReportOutput').innerHTML=`<div class="expense-summary"><div class="expense-summary-card"><small>Total Records</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense</small><strong>${money(total)}</strong></div></div>${table}`;
+    $('exReportOutput').querySelectorAll('.expense-view-photos').forEach(btn=>btn.onclick=()=>{
+      let photos=[];try{photos=JSON.parse(btn.dataset.photos||'[]')}catch(_){}
+      if(!photos.length)return;
+      const overlay=document.createElement('div');
+      overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;overflow:auto;';
+      const close=document.createElement('button');close.type='button';close.textContent='✕ Close';close.style.cssText='padding:10px 18px;border:0;border-radius:8px;cursor:pointer;';
+      close.onclick=()=>overlay.remove();overlay.appendChild(close);
+      photos.forEach(src=>{const img=document.createElement('img');img.src=src;img.alt='Expense photo';img.style.cssText='max-width:min(92vw,900px);max-height:70vh;object-fit:contain;background:white;border-radius:8px;';overlay.appendChild(img)});
+      overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});document.body.appendChild(overlay);
+    });
   }
   function renderReports(kind='normal',prefetched=null){
     activeReport=kind;cachedExpenses=prefetched||[];const title=kind==='sensitive'?'Sensitive Expenses Reports':kind==='all'?'All Expenses Reports':'Expenses Reports';
-    showPage(shell(title,reportControls(false)));setupReportControls(false,kind);
+    showPage(shell(title,reportControls(false),true));setupReportControls(false,kind);
   }
   function renderCustomSearch(){
     activeReport='normal';cachedExpenses=[];
-    showPage(shell('Expenses — Custom Search',reportControls(true)));setupReportControls(true,'normal');
+    showPage(shell('Expenses — Custom Search',reportControls(true),true));setupReportControls(true,'normal');
   }
   function showInfo(){showPage(shell('About Expenses','<div class="expense-panel"><p>Record family expenses and search reports by date, category, member, payment mode, amount and sensitivity.</p><p>Normal Reports exclude Sensitive = Yes records. Sensitive and All Reports require the Sensitive Pass Code.</p></div>'));$('expenseModuleBack').onclick=goBack}
   // Initialize member list before form opens; form also works if member loading fails.
