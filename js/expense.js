@@ -202,7 +202,7 @@ ${field('Photos',`
     <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:42px;height:38px;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
   </div>
   <input id="exPhotos" type="file" accept="image/*" multiple style="display:none;">
-  <small id="exPhotoCount">0 photos selected (Maximum 3)</small>
+  <small id="exPhotoCount" style="display:block;white-space:nowrap;font-size:12px;">0 photos selected (Max 3)</small>
 `,'exPhotos')}
 <div id="expenseStatus" class="expense-status" role="status"></div>
       <div class="expense-actions"><button class="expense-primary" type="submit" id="expenseSaveBtn">Save</button><button class="expense-secondary" type="reset" id="expenseResetBtn">Reset</button><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>
@@ -312,7 +312,7 @@ ${field('Photos',`
   const payload = {
     expenseDate: $('exDate').value,
     mainCategory: cat.value,
-    subCategory: sub.value,
+    subCategory: cat.value === 'Vehicle Maintenance' ? 'Vehicle Maintenance' : sub.value,
     vehicleType: $('exVehicleType').value,
     maintenanceType: $('exMaintenanceType').value,
     vehicleNumber: $('exVehicleNumber').value.trim(),
