@@ -1,4 +1,5 @@
 
+
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -264,31 +265,6 @@ ${field('Photos',`
       });
     }
 
-const photoInput = $('exPhotos');
-
-if (photoInput) {
-  photoInput.addEventListener('change', () => {
-    const files = Array.from(photoInput.files || []);
-    const countLabel = $('exPhotoCount');
-
-    if (files.length > 3) {
-      alert('గరిష్ఠంగా 3 ఫోటోలు మాత్రమే ఎంచుకోండి.');
-      photoInput.value = '';
-
-      if (countLabel) {
-        countLabel.textContent =
-          '0 photos selected (Maximum 3)';
-      }
-
-      return;
-    }
-
-    if (countLabel) {
-      countLabel.textContent =
-        files.length + ' photo(s) selected';
-    }
-  });
-}
 
     const cat=$('exCategory'),sub=$('exSubCategory'),subRow=$('exSubCategoryRow'),vehicleFields=$('exVehicleFields');
     cat.onchange=()=>{
@@ -308,9 +284,7 @@ if (photoInput) {
       if(!$('exSpentBySearch').value.trim()){status('Select a family member or enter a name.','error');return}
       const btn=$('expenseSaveBtn');btn.disabled=true;btn.textContent='Saving…';status('Saving expense…');
      try {
-  const photoInput = $('exPhotos');
-  const photoFiles = photoInput ? Array.from(photoInput.files || []) : [];
-
+ const photoFiles = selectedExpensePhotos.slice();
   if (photoFiles.length > 3) {
     throw new Error('Please select a maximum of 3 photos.');
   }
@@ -341,7 +315,17 @@ if (photoInput) {
   }
 
   status('Expense saved successfully.', 'success');
+selectedExpensePhotos = [];
 
+const countLabel = $('exPhotoCount');
+if (countLabel) {
+  countLabel.textContent = '0 photos selected (Maximum 3)';
+}
+
+const photoList = $('exPhotoList');
+if (photoList) {
+  photoList.innerHTML = '';
+}
   $('expenseForm').reset();
   $('exDate').value = dateToday();
   $('exSpentBySearch').value = defaultName;
