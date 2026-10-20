@@ -1,5 +1,4 @@
 
-
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -420,11 +419,17 @@ ${field('Photos',`
       <div class="expense-field"><label class="expense-label" for="exMaxAmount"><span class="expense-label-text">Maximum Amount</span></label><input id="exMaxAmount" type="number" min="0" step="0.01" placeholder="Any"></div>
       <div class="expense-field" style="grid-column:1/-1"><label class="expense-label" for="exSearchText"><span class="expense-label-text">Search Text</span></label><input id="exSearchText" type="search" placeholder="Description, category, spent by…"></div>`:''}
       </div>
-      <div class="expense-actions" style="display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;width:100%;"><button id="exRunReport" class="expense-primary">${custom?'Search':'Show Report'}</button><button type="button" id="exReportBack" class="expense-secondary">← Back</button></div>
+      <div class="expense-actions" style="display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;width:100%;"><button id="exRunReport" class="expense-primary">${custom?'Search':'Show Report'}</button><div style="position:relative;display:inline-flex;align-items:center;"><button type="button" id="exDownloadBtn" class="expense-secondary">Download ▼</button><div id="exDownloadMenu" class="hidden" style="position:absolute;top:100%;left:0;z-index:1000;min-width:150px;background:#fff;border:1px solid #9bb6d0;border-radius:8px;padding:6px;box-shadow:0 4px 12px rgba(0,0,0,.15);"><button type="button" data-export="pdf" style="display:block;width:100%;padding:9px;text-align:left;">PDF</button><button type="button" data-export="excel" style="display:block;width:100%;padding:9px;text-align:left;">Excel</button><button type="button" data-export="word" style="display:block;width:100%;padding:9px;text-align:left;">Word</button></div></div><button type="button" id="exReportBack" class="expense-secondary">← Back</button></div>
       <div id="expenseStatus" class="expense-status" role="status"></div></div><div id="exReportOutput"></div>`;
   }
   function setupReportControls(custom,kind){
     $('exReportBack').onclick=goBack;
+    const downloadBtn=$('exDownloadBtn'), downloadMenu=$('exDownloadMenu');
+    downloadBtn.onclick=()=>downloadMenu.classList.toggle('hidden');
+    downloadMenu.querySelectorAll('[data-export]').forEach(btn=>btn.onclick=()=>{
+      downloadMenu.classList.add('hidden');
+      exportExpenseReport(btn.dataset.export,kind);
+    });
     const period=$('exReportPeriod'),type=$('exReportType');
     const toggle=()=>{
       const p=period.value, detailed=type.value==='Detailed';
@@ -551,6 +556,24 @@ ${field('Photos',`
       photos.forEach(src=>{const img=document.createElement('img');img.src=src;img.alt='Expense photo';img.style.cssText='max-width:min(92vw,900px);max-height:70vh;object-fit:contain;background:white;border-radius:8px;';overlay.appendChild(img)});
       overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});document.body.appendChild(overlay);
     });
+  }
+  function exportExpenseReport(format,kind){
+    const output=$('exReportOutput');
+    if(!output || !output.innerHTML.trim()){
+      status('Please show the report before downloading.','error');return;
+    }
+    const title=kind==='sensitive'?'Sensitive Expenses Report':kind==='all'?'All Expenses Report':'Expenses Report';
+    const safeTitle=title.replace(/[^a-z0-9_-]+/gi,'_');
+    const reportHtml=`<!doctype html><html><head><meta charset="utf-8"><title>${title}</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#111}h1{text-align:center;font-size:20px}table{width:100%;border-collapse:collapse;margin:10px 0 18px}th,td{border:1px solid #777;padding:6px;text-align:left;font-size:11px}th{background:#e8eef7} .expense-summary{display:flex;gap:18px;margin-bottom:14px}.expense-summary-card{border:1px solid #aaa;padding:10px}button{display:none!important}@media print{body{padding:0}tr{page-break-inside:avoid}}</style></head><body><h1>${title}</h1>${output.innerHTML}</body></html>`;
+    if(format==='pdf'){
+      const w=window.open('','_blank');
+      if(!w){status('Allow pop-ups to print or save the PDF.','error');return;}
+      w.document.open();w.document.write(reportHtml);w.document.close();w.focus();setTimeout(()=>w.print(),350);return;
+    }
+    const mime=format==='excel'?'application/vnd.ms-excel;charset=utf-8':'application/msword;charset=utf-8';
+    const ext=format==='excel'?'xls':'doc';
+    const blob=new Blob(['\ufeff',reportHtml],{type:mime});
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`${safeTitle}_${dateToday()}.${ext}`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
   }
   function renderReports(kind='normal',prefetched=null){
     activeReport=kind;cachedExpenses=prefetched||[];const title=kind==='sensitive'?'Sensitive Expenses Reports':kind==='all'?'All Expenses Reports':'Expenses Reports';
