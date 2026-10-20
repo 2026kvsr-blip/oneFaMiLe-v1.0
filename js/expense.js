@@ -1,4 +1,5 @@
 
+
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -404,7 +405,7 @@ ${field('Photos',`
   function reportControls(custom=false){
     const types=['Abstract','Detailed'];
     const periods=['Today','This Week','This Month','This Year','Daily','Weekly','Monthly','Yearly'];
-    return `<style>.expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap}.expense-report-actions>button,.expense-download-wrap>button{white-space:nowrap}.expense-download-wrap{position:relative}.expense-download-menu{position:absolute;right:0;top:100%;z-index:9999;display:flex;flex-direction:column;min-width:100px;background:#fff;border:1px solid #9ab;border-radius:8px;box-shadow:0 4px 12px #0002}.expense-download-menu.hidden{display:none}.expense-download-menu button{background:#fff;border:0;padding:9px 14px;text-align:left;color:#222}.expense-report-subheading th{background:#eaf3ff;text-align:left}.expense-report-actions .expense-secondary,.expense-report-actions .expense-primary{padding:8px 12px}.expense-report-actions #exDownloadBtn,.expense-report-actions #expenseReportBack{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}.expense-report-actions #exDownloadBtn:disabled{opacity:1!important;color:#2477c8!important;background:transparent!important;border-color:#2477c8!important;cursor:not-allowed}.expense-summary{display:flex;gap:0;width:100%;margin:10px 0 14px;box-sizing:border-box}.expense-summary-card{display:flex;align-items:center;gap:5px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px}.expense-summary-card:first-child{width:30%;flex:0 0 30%}.expense-summary-card:last-child{width:70%;flex:1 1 70%}.expense-summary-card small{display:inline;font-size:12px}.expense-summary-card strong{display:inline;font-size:14px}.expense-summary-card:last-child small{flex:0 0 auto}.expense-summary-card:last-child strong{overflow:hidden;text-overflow:ellipsis}</style><div class="expense-panel"><div class="expense-filter-grid">
+    return `<style>.expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap}.expense-report-actions>button,.expense-download-wrap>button{white-space:nowrap}.expense-download-wrap{position:relative}.expense-download-menu{position:absolute;right:0;top:100%;z-index:9999;display:flex;flex-direction:column;min-width:100px;background:#fff;border:1px solid #9ab;border-radius:8px;box-shadow:0 4px 12px #0002}.expense-download-menu.hidden{display:none}.expense-download-menu button{background:#fff;border:0;padding:9px 14px;text-align:left;color:#222}.expense-report-subheading th{background:#eaf3ff;text-align:left}.expense-report-actions .expense-secondary,.expense-report-actions .expense-primary{padding:8px 12px}.expense-report-actions #exDownloadBtn,.expense-report-actions #expenseReportBack{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}.expense-report-actions #exDownloadBtn:disabled{opacity:1!important;color:#2477c8!important;background:transparent!important;border-color:#2477c8!important;cursor:not-allowed}.expense-summary{display:flex;gap:0;width:100%;margin:10px 0 14px;box-sizing:border-box}.expense-summary-card{display:flex;align-items:center;gap:5px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px}.expense-summary-card:first-child{width:30%;flex:0 0 30%}.expense-summary-card:last-child{width:70%;flex:1 1 70%}.expense-summary-card small{display:inline;font-size:clamp(9px,2.6vw,12px);white-space:nowrap}.expense-summary-card strong{display:inline;font-size:clamp(10px,2.9vw,14px);white-space:nowrap}.expense-summary-card:last-child small{flex:0 0 auto}.expense-summary-card:last-child strong{overflow:hidden;text-overflow:ellipsis}</style><div class="expense-panel"><div class="expense-filter-grid">
       <div class="expense-field"><label class="expense-label" for="exReportType"><span class="expense-label-text">Report Type</span></label><select id="exReportType">${selectOptions(types,'Select Type')}</select></div>
       <div class="expense-field"><label class="expense-label" for="exReportPeriod"><span class="expense-label-text">Report Period</span></label><select id="exReportPeriod">${selectOptions(periods,'Select Period')}</select></div>
       <div class="expense-field hidden" id="exSelectedDateWrap"><label class="expense-label" for="exSelectedDate"><span class="expense-label-text">Selected Date</span></label><input id="exSelectedDate" type="date" value="${dateToday()}"></div>
@@ -469,14 +470,42 @@ ${field('Photos',`
     if(type==='Abstract'){
       const sums={};rows.forEach(r=>{const k=r.mainCategory||'Other';if(!sums[k])sums[k]={amount:0,count:0};sums[k].amount+=Number(r.amount||0);sums[k].count++});
       table=`<div class="expense-results"><table><thead><tr><th>Main Category</th><th>Records</th><th>Total Amount</th></tr></thead><tbody>${Object.keys(sums).sort().map(k=>`<tr><td>${esc(k)}</td><td>${sums[k].count}</td><td>${money(sums[k].amount)}</td></tr>`).join('')||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
-    } else if(type==='GroupedLegacy'){
-      table='';
     } else {
       const reportPeriod=$('exReportPeriod')?.value||'Detailed';
       const sortedRows=rows.slice().sort((a,b)=>String(a.expenseDate).localeCompare(String(b.expenseDate)));
+      const hasVehicle=sortedRows.some(r=>String(r.mainCategory||'').toLowerCase()==='vehicle maintenance');
+      const headers=['Date','Cat / Sub Cat','Amt / Payment Type','Expense by','Sensitive','No of photos','Photos'];
+      if(hasVehicle){headers.push('Mtc Type','Vehicle Number')}
+      const colCount=headers.length;
+      const photoValues=r=>[
+        r.photo1Url,r.photo2Url,r.photo3Url,r.photo1,r.photo2,r.photo3,
+        r.photo1Data,r.photo2Data,r.photo3Data,r.photo1Link,r.photo2Link,r.photo3Link
+      ].filter(v=>typeof v==='string'&&v.trim()&&(/^(https?:|data:image\/)/i.test(v.trim())));
       let groupedRows=''; let previousHeading='';
-      sortedRows.forEach(r=>{const ds=String(r.expenseDate||'').slice(0,10);let headings=[];if(reportPeriod==='Yearly'){headings=['Year: '+(ds.slice(0,4)||'Unknown'),'Month: '+(ds?new Date(ds+'T12:00:00').toLocaleString('en-US',{month:'long'}):'Unknown')];}else if(reportPeriod==='Monthly'){headings=['Year: '+(ds.slice(0,4)||'Unknown'),'Month: '+(ds?new Date(ds+'T12:00:00').toLocaleString('en-US',{month:'long'}):'Unknown')];}else if(reportPeriod==='Weekly'&&ds){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));headings=['Week starting: '+fmt(d)];}else if(reportPeriod==='Daily')headings=['Date: '+ds];for(const heading of headings){const key=reportPeriod==='Yearly'&&heading.startsWith('Month: ')?'  '+heading:heading;if(key!==previousHeading){groupedRows+=`<tr class="expense-report-subheading"><th colspan="7">${esc(key)}</th></tr>`;previousHeading=key;}}groupedRows+=`<tr><td>${esc(r.expenseDate)}</td><td>${esc(r.mainCategory)}<br>${esc(r.subCategory)}${r.maintenanceType?'<br>'+esc(r.maintenanceType):''}</td><td>${esc(r.spentBy)}</td><td>${esc(r.paymentMode)}</td><td>${money(r.amount)}</td><td>${esc(r.sensitive)}</td><td>${esc(r.description)}</td></tr>`;});
-      table=`<div class="expense-results"><table><thead><tr><th>Date</th><th>Category / Subcategory</th><th>Spent By</th><th>Payment</th><th>Amount</th><th>Sensitive</th><th>Description</th></tr></thead><tbody>${groupedRows||'<tr><td colspan="7">No records found.</td></tr>'}</tbody></table></div>`;
+      sortedRows.forEach(r=>{
+        const ds=String(r.expenseDate||'').slice(0,10);let headings=[];
+        if(reportPeriod==='Yearly') headings=['Year: '+(ds.slice(0,4)||'Unknown'),'Month: '+(ds?new Date(ds+'T12:00:00').toLocaleString('en-US',{month:'long'}):'Unknown')];
+        else if(reportPeriod==='Monthly') headings=['Year: '+(ds.slice(0,4)||'Unknown'),'Month: '+(ds?new Date(ds+'T12:00:00').toLocaleString('en-US',{month:'long'}):'Unknown')];
+        else if(reportPeriod==='Weekly'&&ds){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));headings=['Week starting: '+fmt(d)];}
+        else if(reportPeriod==='Daily') headings=['Date: '+ds];
+        for(const heading of headings){const key=reportPeriod==='Yearly'&&heading.startsWith('Month: ')?'  '+heading:heading;if(key!==previousHeading){groupedRows+=`<tr class="expense-report-subheading"><th colspan="${colCount}">${esc(key)}</th></tr>`;previousHeading=key;}}
+        const photos=photoValues(r);
+        const photosHtml=photos.length?photos.map((url,i)=>`<a href="${esc(url)}" target="_blank" rel="noopener">Photo ${i+1}</a>`).join('<br>'):'—';
+        const category=`${esc(r.mainCategory)}<br>${esc(r.subCategory)}`;
+        const vehicle=String(r.mainCategory||'').toLowerCase()==='vehicle maintenance';
+        const cells=[
+          `<td>${esc(r.expenseDate||'')}</td>`,
+          `<td>${category}</td>`,
+          `<td>${money(r.amount)}<br>${esc(r.paymentMode||'')}</td>`,
+          `<td>${esc(r.spentBy||'')}</td>`,
+          `<td>${esc(r.sensitive||'')}</td>`,
+          `<td>${photos.length}</td>`,
+          `<td>${photosHtml}</td>`
+        ];
+        if(hasVehicle){cells.push(`<td>${vehicle?esc(r.maintenanceType||''):'—'}</td>`,`<td>${vehicle?esc(r.vehicleNumber||''):'—'}</td>`)}
+        groupedRows+=`<tr>${cells.join('')}</tr>`;
+      });
+      table=`<div class="expense-results"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${groupedRows||`<tr><td colspan="${colCount}">No records found.</td></tr>`}</tbody></table></div>`;
     }
     $('exReportOutput').innerHTML=`<div class="expense-summary"><div class="expense-summary-card"><small>Total Records</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense</small><strong>${money(total)}</strong></div></div>${table}`;
   }
