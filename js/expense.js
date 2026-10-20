@@ -1,6 +1,5 @@
 
 
-
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -148,7 +147,12 @@ function status(message, type = '') {
   function field(label, control, id){return `<div class="expense-field"><label class="expense-label" for="${id||''}"><span class="expense-label-text">${label}</span><span class="expense-colon">:</span></label>${control}</div>`}
   function selectOptions(items,placeholder='Select') {return `<option value="">${placeholder}</option>`+items.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
   function shell(title,inner,backInside=false){return `<div class="expense-page"><h2 class="expense-title">${esc(title)}</h2>${inner}${backInside?'':`<div class="expense-actions"><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>`}</div>`}
-  function goBack(){const b=$('expensesBtn');if(b)b.click();else if(typeof showHome==='function')showHome()}
+  function goBack(){
+    // Return directly to the Expenses menu instead of relying on a synthetic click
+    // on the main navigation button (which may be intercepted by app navigation).
+    if(typeof openMenu==='function'){openMenu();return;}
+    if(typeof showHome==='function')showHome();
+  }
   function openMenu(){
     const btn=$('expensesBtn'); if(!btn)return;
     if(typeof updateMenuIcon==='function')updateMenuIcon();
