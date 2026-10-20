@@ -1,4 +1,5 @@
 
+
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -28,7 +29,7 @@
   function family(){ try{return JSON.parse(localStorage.getItem('currentFamily')||'{}')}catch(_){return {}} }
   function user(){ try{return JSON.parse(sessionStorage.getItem('user')||'{}')}catch(_){return {}} }
   function token(){return sessionStorage.getItem('sessionToken')||''}
-  function loginName(){const u=user();return String(u.loginUserName||u.name||'').trim()}
+  function loginName(){const u=user();return String(u.loginUserName||u.loginName||u.userName||u.username||u.name||u.fullName||'').trim()}
   function money(n){return '₹'+(Number(n)||0).toLocaleString('en-IN',{maximumFractionDigits:2})}
   function dateToday(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
   function request(action, fields={}){
@@ -304,8 +305,10 @@ ${field('Photos',`
         expenseByInput.value='';
       }
     }
+    $('exDate').addEventListener('input',syncEntrySequence);
     $('exDate').addEventListener('change',syncEntrySequence);
     amountInput.addEventListener('input',syncEntrySequence);
+    amountInput.addEventListener('change',syncEntrySequence);
     cat.onchange=()=>{
       const isVehicle=cat.value==='Vehicle Maintenance';
       vehicleFields.classList.toggle('hidden',!isVehicle);
@@ -329,7 +332,6 @@ ${field('Photos',`
       if(!$('exDate').value){status('Expense Date is required.','error');$('exDate').focus();return}
       if(!cat.value){status('Main Category is required.','error');cat.focus();return}
       if(!sub.value){status('Sub Category is required.','error');sub.focus();return}
-      if(!$('exSpentBySearch').value.trim()){status('Expense by could not be filled. Please enter a valid amount first.','error');return}
       const btn=$('expenseSaveBtn');btn.disabled=true;btn.textContent='Saving…';
      try {
   const photoFiles = selectedExpensePhotos.slice();
