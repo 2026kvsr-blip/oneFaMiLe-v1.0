@@ -1,5 +1,4 @@
 
-
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -191,8 +190,8 @@ function status(message, type = '') {
 
       ${field('Payment Mode',`<select id="exPaymentMode" name="paymentMode">${selectOptions(PAYMENT_MODES,'Select Payment Mode')}</select>`,'exPaymentMode')}
       ${field('Sensitive',`<select id="exSensitive" name="sensitive"><option value="No" selected>No</option><option value="Yes">Yes</option></select>`,'exSensitive')}
-      ${field('Expense by',`<div class="expense-spentby"><input id="exSpentBySearch" list="exMemberList" placeholder="Login name will fill automatically" value="" disabled style="background-color:#fff !important;color:#333 !important;opacity:1;-webkit-text-fill-color:#333;box-sizing:border-box;max-width:100%;"><datalist id="exMemberList">${memberNames.map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>`,'exSpentBySearch')}
-      <div class="expense-help">Expense by will fill with the login name after required fields and amount are entered.</div>
+      ${field('Expense by',`<div class="expense-spentby"><input id="exSpentBySearch" list="exMemberList" placeholder="      " value="" disabled style="background-color:#fff !important;color:#333 !important;opacity:1;-webkit-text-fill-color:#333;box-sizing:border-box;max-width:100%;"><datalist id="exMemberList">${memberNames.map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>`,'exSpentBySearch')}
+      <div class="expense-help">By default Login user name.</div>
 
 
 ${field('Photos',`
