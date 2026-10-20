@@ -8,7 +8,7 @@
     "Food & Groceries":["Vegetables","Rice & Groceries","Milk & Dairy","Fruits","Meat & Fish","Hotel & Tiffin","Other Food"],
     "House & Utilities":["Electricity","Water","Gas Cylinder","Rent","Internet & Phone","House Repairs","Cleaning","House Servants","Other House Expense"],
     "Medical & Health":["Doctor","Medicines","Medical Tests","Hospital","Other Medical"],
-    "Vehicle Maintenance":["Vehicle Maintenance"],
+    "Vehicle Maintenance":["Car","Bike","Others"],
     "Transport & Travel":["Petrol","Diesel","Bus","Train","Auto / Taxi","Parking & Tolls","Tour & Travel","Other Transport"],
     "Education":["Fees","Books & Stationery","Other Education"],
     "Personal & Shopping":["Clothes","Footwear","Haircut","Cosmetics & Personal Care","Accessories","Other Shopping"],
@@ -181,13 +181,11 @@ function status(message, type = '') {
       ${field('Expense Date',`<input id="exDate" name="expenseDate" type="date" value="${dateToday()}" required>`,'exDate')}
       ${field('Main Category',`<select id="exCategory" name="mainCategory" required>${selectOptions(Object.keys(CATEGORIES),'Select Category')}</select>`,'exCategory')}
       <div id="exSubCategoryRow">${field('Sub Category',`<select id="exSubCategory" name="subCategory" required>${selectOptions([],'Select Subcategory')}</select>`,'exSubCategory')}</div>
-      <div id="exNormalDescription">${field('Description',`<textarea id="exDescription" name="description" rows="1" style="height:38px;min-height:38px;resize:none;box-sizing:border-box;" maxlength="30" placeholder="Enter expense details"></textarea>`,'exDescription')}</div>
       <div id="exVehicleFields" class="hidden">
-       ${field('Vehicle Type',`<select id="exVehicleType" name="vehicleType">${selectOptions(VEHICLE_TYPES,'Select Vehicle')}</select>`,'exVehicleType')}
        ${field('Maintenance Type',`<select id="exMaintenanceType" name="maintenanceType">${selectOptions(MAINTENANCE_TYPES,'Select Maintenance')}</select>`,'exMaintenanceType')}
        ${field('Vehicle Number',`<input id="exVehicleNumber" name="vehicleNumber" maxlength="30" placeholder="Optional vehicle number">`,'exVehicleNumber')}
-       ${field('Description',`<textarea id="exVehicleDescription" name="vehicleDescription" rows="1" style="height:38px;min-height:38px;resize:none;box-sizing:border-box;" maxlength="30" placeholder="Enter expense details"></textarea>`,'exVehicleDescription')}
       </div>
+      ${field('Description',`<textarea id="exDescription" name="description" rows="1" style="height:38px;min-height:38px;resize:none;box-sizing:border-box;" maxlength="30" placeholder="Enter expense details"></textarea>`,'exDescription')}
       ${field('Amount',`<input id="exAmount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="₹ Enter Amount" required>`,'exAmount')}
       ${field('Spent By',`<div class="expense-spentby"><input id="exSpentBySearch" list="exMemberList" placeholder="Search or type a new name" value="${esc(defaultName)}" required><datalist id="exMemberList">${memberNames.map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>`,'exSpentBySearch')}
       <div class="expense-help">Login name is selected by default...</div>
@@ -304,11 +302,12 @@ ${field('Photos',`
     cat.onchange=()=>{
       const isVehicle=cat.value==='Vehicle Maintenance';
       vehicleFields.classList.toggle('hidden',!isVehicle);
-      $('exNormalDescription').classList.toggle('hidden',isVehicle);
-      subRow.classList.toggle('hidden',isVehicle);
+      subRow.classList.remove('hidden');
       sub.innerHTML=selectOptions(CATEGORIES[cat.value]||[],'Select Subcategory');
-      sub.required=!isVehicle;
-      if(isVehicle)sub.value='';
+      sub.required=true;
+      sub.value='';
+      $('exMaintenanceType').required=isVehicle;
+      if(!isVehicle) $('exMaintenanceType').value='';
     };
     $('expenseForm').onsubmit=async ev=>{
       ev.preventDefault();
@@ -324,15 +323,15 @@ ${field('Photos',`
   const payload = {
     expenseDate: $('exDate').value,
     mainCategory: cat.value,
-    subCategory: cat.value === 'Vehicle Maintenance' ? 'Vehicle Maintenance' : sub.value,
-    vehicleType: $('exVehicleType').value,
+    subCategory: sub.value,
+    vehicleType: cat.value === 'Vehicle Maintenance' ? sub.value : '',
     maintenanceType: $('exMaintenanceType').value,
     vehicleNumber: $('exVehicleNumber').value.trim(),
     amount: String(amount),
     spentBy: $('exSpentBySearch').value.trim(),
     paymentMode: $('exPaymentMode').value,
     sensitive: $('exSensitive').value,
-    description: (cat.value === 'Vehicle Maintenance' ? $('exVehicleDescription').value : $('exDescription').value).trim()
+    description: $('exDescription').value.trim()
   };
 
   for (let i = 0; i < 3; i++) {
@@ -505,14 +504,14 @@ ${field('Photos',`
       const keys=Object.keys(groups).sort((a,b)=>b.localeCompare(a));
       table=`<div class="expense-results"><table><thead><tr><th>S.No</th><th>Date</th><th>Nos</th><th>Amount</th></tr></thead><tbody>${keys.map((k,i)=>`<tr><td>${i+1}</td><td>${esc(period==='Monthly'?dateLabel(k):k)}</td><td>${groups[k].count}</td><td>${money(groups[k].amount)}</td></tr>`).join('')||'<tr><td colspan="4">No records found.</td></tr>'}</tbody></table></div>`;
     }else{
-      const detailRow=(r,i)=>`<tr><td>${i+1}</td><td>${esc(r.expenseDate)}</td><td>${esc(r.mainCategory)}</td><td>${esc(r.subCategory)}${r.mainCategory==='Vehicle Maintenance'?`<br>${esc(r.vehicleType||'')} / ${esc(r.maintenanceType||'')}<br>${esc(r.vehicleNumber||'')}`:''}</td><td>${money(r.amount)}</td><td>${esc(r.spentBy)}</td><td>${esc(r.sensitive||'No')}</td><td>${photoCell(r)}</td><td>${photoCount(r)}</td></tr>`;
+      const detailRow=(r,i)=>`<tr><td>${i+1}</td><td>${esc(r.expenseDate)}</td><td>${esc(r.mainCategory)}</td><td>${esc(r.subCategory|| (r.mainCategory==='Vehicle Maintenance' ? r.vehicleType : ''))}</td><td>${esc(r.mainCategory==='Vehicle Maintenance' ? (r.maintenanceType||'—') : '—')}</td><td>${esc(r.mainCategory==='Vehicle Maintenance' ? (r.vehicleNumber||'—') : '—')}</td><td>${money(r.amount)}</td><td>${esc(r.spentBy)}</td><td>${esc(r.sensitive||'No')}</td><td>${photoCell(r)}</td><td>${photoCount(r)}</td></tr>`;
       const sorted=rows.slice().sort((a,b)=>String(b.expenseDate||'').localeCompare(String(a.expenseDate||'')));
-      const headers='<tr><th>S.No</th><th>Date</th><th>Main Category</th><th>Sub Category</th><th>Amount Rs</th><th>Spent by</th><th>Sensitive</th><th>Photos</th><th>Nos</th></tr>';
+      const headers='<tr><th>S.No</th><th>Date</th><th>Main Category</th><th>Sub Category</th><th>Mtc Type</th><th>Vehicle Number</th><th>Amount Rs</th><th>Spent by</th><th>Sensitive</th><th>Photos</th><th>Nos</th></tr>';
       if(period==='This Year'){
         const byMonth={};sorted.forEach(r=>{const ds=String(r.expenseDate||'').slice(0,10),k=ds?ds.slice(0,7):'Unknown';(byMonth[k]||(byMonth[k]=[])).push(r)});
-        table=Object.keys(byMonth).sort().reverse().map(k=>`<h3 style="text-align:center;margin:18px 0 8px;">${esc(k==='Unknown'?k:dateLabel(k))}</h3><div class="expense-results"><table><thead>${headers}</thead><tbody>${byMonth[k].map(detailRow).join('')}</tbody></table></div>`).join('')||`<div class="expense-results"><table><thead>${headers}</thead><tbody><tr><td colspan="9">No records found.</td></tr></tbody></table></div>`;
+        table=Object.keys(byMonth).sort().reverse().map(k=>`<h3 style="text-align:center;margin:18px 0 8px;">${esc(k==='Unknown'?k:dateLabel(k))}</h3><div class="expense-results"><table><thead>${headers}</thead><tbody>${byMonth[k].map(detailRow).join('')}</tbody></table></div>`).join('')||`<div class="expense-results"><table><thead>${headers}</thead><tbody><tr><td colspan="11">No records found.</td></tr></tbody></table></div>`;
       }else{
-        table=`<div class="expense-results"><table><thead>${headers}</thead><tbody>${sorted.map(detailRow).join('')||'<tr><td colspan="9">No records found.</td></tr>'}</tbody></table></div>`;
+        table=`<div class="expense-results"><table><thead>${headers}</thead><tbody>${sorted.map(detailRow).join('')||'<tr><td colspan="11">No records found.</td></tr>'}</tbody></table></div>`;
       }
     }
     $('exReportOutput').innerHTML=`<div class="expense-summary"><div class="expense-summary-card"><small>Total Records</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense</small><strong>${money(total)}</strong></div></div>${table}`;
