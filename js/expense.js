@@ -203,7 +203,7 @@ function status(message, type = '') {
 ${field('Photos',`
   <div style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;width:100%;max-width:100%;box-sizing:border-box;">
     <div class="expense-photo-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;min-width:0;width:100%;max-width:100%;box-sizing:border-box;overflow:visible;">
-      <button type="button" id="exPhotoChooseBtn" class="expense-secondary" style="min-width:76px;max-width:100%;box-sizing:border-box;flex:0 0 auto;">Photo</button>
+      <button type="button" id="exPhotoChooseBtn" class="expense-secondary" style="min-width:68px;width:68px;max-width:68px;box-sizing:border-box;flex:0 0 68px;padding-left:6px;padding-right:6px;">Photo</button>
       <button type="button" class="expense-photo-slot" data-photo-slot="0" id="exPhotoSlot1" aria-label="Choose photo 1" style="width:42px;height:38px;min-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">1</button>
       <button type="button" class="expense-photo-slot" data-photo-slot="1" id="exPhotoSlot2" aria-label="Choose photo 2" style="width:42px;height:38px;min-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">2</button>
       <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:42px;height:38px;min-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
@@ -218,11 +218,11 @@ ${field('Photos',`
     showPage(shell('Add Expense',inner,true));
     // Disabled Amount / Expense by remain white while preserving disabled state.
     const expenseWhiteStyle = document.createElement('style');
-    expenseWhiteStyle.textContent = '#expenseForm #exAmount:disabled, #expenseForm #exSpentBySearch:disabled { background:#fff !important; color:#333 !important; opacity:1 !important; -webkit-text-fill-color:#333 !important; } #expenseForm .expense-photo-picker { max-width:100%; flex-wrap:nowrap !important; gap:6px; } #expenseForm .expense-photo-picker button { flex-shrink:0 !important; } #expenseForm .expense-photo-picker #exPhotoChooseBtn { min-width:76px; } #expenseForm .expense-photo-picker .expense-photo-slot { width:42px!important; min-width:42px!important; }';
+    expenseWhiteStyle.textContent = '#expenseForm #exAmount:disabled, #expenseForm #exSpentBySearch:disabled { background:#fff !important; color:#333 !important; opacity:1 !important; -webkit-text-fill-color:#333 !important; } #expenseForm .expense-photo-picker { max-width:100%; flex-wrap:nowrap !important; gap:6px; } #expenseForm .expense-photo-picker button { flex-shrink:0 !important; } #expenseForm .expense-photo-picker #exPhotoChooseBtn { min-width:68px!important;width:68px!important;max-width:68px!important;flex:0 0 68px!important;padding-left:6px!important;padding-right:6px!important; } #expenseForm .expense-photo-picker .expense-photo-slot { width:42px!important; min-width:42px!important; }';
     document.head.appendChild(expenseWhiteStyle);
     $('expenseModuleBack').onclick=goBack;
     const photoField = $('exPhotos')?.closest('.expense-field');
-    if (photoField) { const photoLabel = photoField.querySelector('.expense-label'); if (photoLabel) { photoLabel.style.alignSelf='center'; photoLabel.style.marginTop='0'; } }
+    if (photoField) { photoField.style.alignItems='center'; const photoLabel = photoField.querySelector('.expense-label'); if (photoLabel) { photoLabel.style.alignSelf='center'; photoLabel.style.marginTop='0'; photoLabel.style.transform='translateY(-10px)'; } }
     
     // =====================================
     // EXPENSE PHOTOS: PHOTO BUTTON + 3 SLOTS
@@ -432,7 +432,7 @@ ${field('Photos',`
     const period=$('exReportPeriod');
     const toggle=()=>{$('exSelectedDateWrap').classList.add('hidden');};
     period.onchange=toggle;
-    const back=$('exReportBack'); if(back) { back.onclick=(event)=>{event.preventDefault();event.stopPropagation();goBack();}; back.addEventListener('touchend',(event)=>{event.preventDefault();goBack();},{passive:false}); }
+    const back=$('expenseReportBack'); if(back) { const returnToExpenses=(event)=>{if(event){event.preventDefault();event.stopPropagation();} const menu=$('expensesBtn'); if(menu){openMenu();} else {goBack();}}; back.onclick=returnToExpenses; back.addEventListener('pointerup',returnToExpenses,{passive:false}); back.addEventListener('keydown',(event)=>{if(event.key==='Enter'||event.key===' '){returnToExpenses(event)} }); }
     const downloadBtn=$('exDownloadBtn'), downloadMenu=$('exDownloadMenu');
     if(downloadBtn&&downloadMenu){
       downloadBtn.disabled=true;
