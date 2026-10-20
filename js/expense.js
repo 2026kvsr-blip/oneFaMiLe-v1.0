@@ -178,19 +178,19 @@ function status(message, type = '') {
     const defaultName=loginName();
     const memberNames=[...new Set([defaultName,...members].filter(Boolean))];
     const inner=`<form id="expenseForm" class="expense-form" autocomplete="off">
+      ${field('Expense by',`<div class="expense-spentby"><input id="exSpentBySearch" list="exMemberList" placeholder="Search or type a new name" value="${esc(defaultName)}" required><datalist id="exMemberList">${memberNames.map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>`,'exSpentBySearch')}
+      <div class="expense-help">Login name is selected by default...</div>
       ${field('Expense Date',`<input id="exDate" name="expenseDate" type="date" value="${dateToday()}" required>`,'exDate')}
       ${field('Main Category',`<select id="exCategory" name="mainCategory" required>${selectOptions(Object.keys(CATEGORIES),'Select Category')}</select>`,'exCategory')}
       <div id="exSubCategoryRow">${field('Sub Category',`<select id="exSubCategory" name="subCategory" required>${selectOptions([],'Select Subcategory')}</select>`,'exSubCategory')}</div>
       <div id="exNormalDescription">${field('Description',`<textarea id="exDescription" name="description" rows="1" style="height:38px;min-height:38px;resize:none;box-sizing:border-box;" maxlength="30" placeholder="Enter expense details"></textarea>`,'exDescription')}</div>
       <div id="exVehicleFields" class="hidden">
-       ${field('Vehicle Type',`<select id="exVehicleType" name="vehicleType">${selectOptions(VEHICLE_TYPES,'Select Vehicle')}</select>`,'exVehicleType')}
        ${field('Maintenance Type',`<select id="exMaintenanceType" name="maintenanceType">${selectOptions(MAINTENANCE_TYPES,'Select Maintenance')}</select>`,'exMaintenanceType')}
        ${field('Vehicle Number',`<input id="exVehicleNumber" name="vehicleNumber" maxlength="30" placeholder="Optional vehicle number">`,'exVehicleNumber')}
        ${field('Description',`<textarea id="exVehicleDescription" name="vehicleDescription" rows="1" style="height:38px;min-height:38px;resize:none;box-sizing:border-box;" maxlength="30" placeholder="Enter expense details"></textarea>`,'exVehicleDescription')}
       </div>
       ${field('Amount',`<input id="exAmount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="₹ Enter Amount" required>`,'exAmount')}
-      ${field('Spent By',`<div class="expense-spentby"><input id="exSpentBySearch" list="exMemberList" placeholder="Search or type a new name" value="${esc(defaultName)}" required><datalist id="exMemberList">${memberNames.map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>`,'exSpentBySearch')}
-      <div class="expense-help">Login name is selected by default...</div>
+
       ${field('Payment Mode',`<select id="exPaymentMode" name="paymentMode" required>${selectOptions(PAYMENT_MODES,'Select Payment Mode')}</select>`,'exPaymentMode')}
       ${field('Sensitive',`<select id="exSensitive" name="sensitive" required><option value="No" selected>No</option><option value="Yes">Yes</option></select>`,'exSensitive')}
 
@@ -297,9 +297,9 @@ ${field('Photos',`
       const isVehicle=cat.value==='Vehicle Maintenance';
       vehicleFields.classList.toggle('hidden',!isVehicle);
       $('exNormalDescription').classList.toggle('hidden',isVehicle);
-      subRow.classList.toggle('hidden',isVehicle);
-      sub.innerHTML=selectOptions(CATEGORIES[cat.value]||[],'Select Subcategory');
-      sub.required=!isVehicle;
+      subRow.classList.remove('hidden');
+      sub.innerHTML=selectOptions(isVehicle ? VEHICLE_TYPES : (CATEGORIES[cat.value]||[]),'Select Subcategory');
+      sub.required=true;
       if(isVehicle)sub.value='';
     };
     $('expenseForm').onsubmit=async ev=>{
@@ -316,8 +316,8 @@ ${field('Photos',`
   const payload = {
     expenseDate: $('exDate').value,
     mainCategory: cat.value,
-    subCategory: cat.value === 'Vehicle Maintenance' ? 'Vehicle Maintenance' : sub.value,
-    vehicleType: $('exVehicleType').value,
+    subCategory: sub.value,
+    vehicleType: cat.value === 'Vehicle Maintenance' ? sub.value : '',
     maintenanceType: $('exMaintenanceType').value,
     vehicleNumber: $('exVehicleNumber').value.trim(),
     amount: String(amount),
@@ -389,7 +389,7 @@ ${field('Photos',`
     const period=$('exReportPeriod');
     const toggle=()=>{const p=period.value;$('exSelectedDateWrap').classList.toggle('hidden',p!=='Selected Date');$('exMonthWrap').classList.toggle('hidden',p!=='Month');$('exYearWrap').classList.toggle('hidden',p!=='Year');};
     period.onchange=toggle;
-    if(custom){$('exFilterCategory').onchange=()=>{$('exFilterSub').innerHTML=selectOptions(CATEGORIES[$('exFilterCategory').value]||[],'All Subcategories')};$('exFilterSensitive').onchange=()=>{$('exCustomPassWrap').classList.toggle('hidden',$('exFilterSensitive').value==='No')}}
+    if(custom){$('exFilterCategory').onchange=()=>{const c=$('exFilterCategory').value;$('exFilterSub').innerHTML=selectOptions(c==='Vehicle Maintenance'?VEHICLE_TYPES:(CATEGORIES[c]||[]),'All Subcategories')};$('exFilterSensitive').onchange=()=>{$('exCustomPassWrap').classList.toggle('hidden',$('exFilterSensitive').value==='No')}}
     $('exRunReport').onclick=async()=>{
       let rows=cachedExpenses;
       let access=kind;
@@ -442,7 +442,7 @@ ${field('Photos',`
       const label=type==='Daily'?'Date':type==='Weekly'?'Week Starting':type==='Monthly'?'Month':'Year';
       table=`<div class="expense-results"><table><thead><tr><th>${label}</th><th>Records</th><th>Total Amount</th></tr></thead><tbody>${Object.keys(groups).sort().reverse().map(k=>`<tr><td>${esc(k)}</td><td>${groups[k].count}</td><td>${money(groups[k].amount)}</td></tr>`).join('')||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
     } else {
-      table=`<div class="expense-results"><table><thead><tr><th>Date</th><th>Category / Subcategory</th><th>Spent By</th><th>Payment</th><th>Amount</th><th>Sensitive</th><th>Description</th></tr></thead><tbody>${rows.slice().sort((a,b)=>String(b.expenseDate).localeCompare(String(a.expenseDate))).map(r=>`<tr><td>${esc(r.expenseDate)}</td><td>${esc(r.mainCategory)}<br>${esc(r.subCategory)}${r.vehicleType?'<br>'+esc(r.vehicleType)+' / '+esc(r.maintenanceType):''}</td><td>${esc(r.spentBy)}</td><td>${esc(r.paymentMode)}</td><td>${money(r.amount)}</td><td>${esc(r.sensitive)}</td><td>${esc(r.description)}</td></tr>`).join('')||'<tr><td colspan="7">No records found.</td></tr>'}</tbody></table></div>`;
+      table=`<div class="expense-results"><table><thead><tr><th>Date</th><th>Category / Subcategory</th><th>Spent By</th><th>Payment</th><th>Amount</th><th>Sensitive</th><th>Description</th></tr></thead><tbody>${rows.slice().sort((a,b)=>String(b.expenseDate).localeCompare(String(a.expenseDate))).map(r=>`<tr><td>${esc(r.expenseDate)}</td><td>${esc(r.mainCategory)}<br>${esc(r.subCategory)}${r.maintenanceType?'<br>'+esc(r.maintenanceType):''}</td><td>${esc(r.spentBy)}</td><td>${esc(r.paymentMode)}</td><td>${money(r.amount)}</td><td>${esc(r.sensitive)}</td><td>${esc(r.description)}</td></tr>`).join('')||'<tr><td colspan="7">No records found.</td></tr>'}</tbody></table></div>`;
     }
     $('exReportOutput').innerHTML=`<div class="expense-summary"><div class="expense-summary-card"><small>Total Records</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense</small><strong>${money(total)}</strong></div></div>${table}`;
   }
