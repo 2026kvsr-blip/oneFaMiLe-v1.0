@@ -1,4 +1,5 @@
 
+
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -147,10 +148,10 @@ function status(message, type = '') {
   function selectOptions(items,placeholder='Select') {return `<option value="">${placeholder}</option>`+items.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
   function shell(title,inner,backInside=false){return `<div class="expense-page"><h2 class="expense-title">${esc(title)}</h2>${inner}${backInside?'':`<div class="expense-actions"><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>`}</div>`}
   function goBack(){
-    // Return directly to the Expenses menu instead of relying on a synthetic click
-    // on the main navigation button (which may be intercepted by app navigation).
-    if(typeof openMenu==='function'){openMenu();return;}
-    if(typeof showHome==='function')showHome();
+    // Return to the Expenses menu directly.
+    try { openMenu(); } catch (e) { console.warn('Expenses menu navigation failed', e); }
+    const menuButton=$('expensesBtn');
+    if(menuButton && typeof setActiveButton==='function') { try { setActiveButton(menuButton); } catch (_) {} }
   }
   function openMenu(){
     const btn=$('expensesBtn'); if(!btn)return;
@@ -201,7 +202,7 @@ function status(message, type = '') {
 
 ${field('Photos',`
   <div style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;width:100%;max-width:100%;box-sizing:border-box;">
-    <div class="expense-photo-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0;width:100%;max-width:100%;box-sizing:border-box;">
+    <div class="expense-photo-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;min-width:0;width:100%;max-width:100%;box-sizing:border-box;overflow:visible;">
       <button type="button" id="exPhotoChooseBtn" class="expense-secondary" style="min-width:76px;max-width:100%;box-sizing:border-box;flex:0 0 auto;">Photo</button>
       <button type="button" class="expense-photo-slot" data-photo-slot="0" id="exPhotoSlot1" aria-label="Choose photo 1" style="width:42px;height:38px;min-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">1</button>
       <button type="button" class="expense-photo-slot" data-photo-slot="1" id="exPhotoSlot2" aria-label="Choose photo 2" style="width:42px;height:38px;min-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">2</button>
@@ -217,7 +218,7 @@ ${field('Photos',`
     showPage(shell('Add Expense',inner,true));
     // Disabled Amount / Expense by remain white while preserving disabled state.
     const expenseWhiteStyle = document.createElement('style');
-    expenseWhiteStyle.textContent = '#expenseForm #exAmount:disabled, #expenseForm #exSpentBySearch:disabled { background:#fff !important; color:#333 !important; opacity:1 !important; -webkit-text-fill-color:#333 !important; } #expenseForm .expense-photo-picker { max-width:100%; }';
+    expenseWhiteStyle.textContent = '#expenseForm #exAmount:disabled, #expenseForm #exSpentBySearch:disabled { background:#fff !important; color:#333 !important; opacity:1 !important; -webkit-text-fill-color:#333 !important; } #expenseForm .expense-photo-picker { max-width:100%; flex-wrap:nowrap !important; gap:6px; } #expenseForm .expense-photo-picker button { flex-shrink:0 !important; } #expenseForm .expense-photo-picker #exPhotoChooseBtn { min-width:76px; } #expenseForm .expense-photo-picker .expense-photo-slot { width:42px!important; min-width:42px!important; }';
     document.head.appendChild(expenseWhiteStyle);
     $('expenseModuleBack').onclick=goBack;
     const photoField = $('exPhotos')?.closest('.expense-field');
@@ -409,7 +410,7 @@ ${field('Photos',`
   function reportControls(custom=false){
     const types=['Abstract','Detailed'];
     const periods=['Today','This Week','This Month','This Year','Daily','Weekly','Monthly','Yearly'];
-    return `<style>.expense-report-inline{display:flex;align-items:center;gap:10px;grid-column:1/-1}.expense-report-inline .expense-label{display:flex;align-items:center;white-space:nowrap;min-width:130px;margin:0}.expense-report-inline select{flex:1;min-width:0}.expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap}.expense-report-actions>button,.expense-download-wrap>button{white-space:nowrap}.expense-download-wrap{position:relative}.expense-download-menu{position:absolute;right:0;top:100%;z-index:9999;display:flex;flex-direction:column;min-width:100px;background:#fff;border:1px solid #9ab;border-radius:8px;box-shadow:0 4px 12px #0002}.expense-download-menu.hidden{display:none}.expense-download-menu button{background:#fff;border:0;padding:9px 14px;text-align:left;color:#222}.expense-report-subheading th{background:#eaf3ff;text-align:left}.expense-report-actions .expense-secondary,.expense-report-actions .expense-primary{padding:8px 12px}.expense-report-actions #exDownloadBtn,.expense-report-actions #expenseReportBack{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}.expense-report-actions #exDownloadBtn:disabled{opacity:1!important;color:#2477c8!important;background:transparent!important;border-color:#2477c8!important;cursor:not-allowed}.expense-summary{display:flex;gap:0;width:100%;margin:10px 0 14px;box-sizing:border-box}.expense-summary-card{display:flex;align-items:center;gap:5px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px}.expense-summary-card:first-child{width:30%;flex:0 0 30%}.expense-summary-card:last-child{width:70%;flex:1 1 70%}.expense-summary-card small{display:inline;font-size:clamp(9px,2.6vw,12px);white-space:nowrap}.expense-summary-card strong{display:inline;font-size:clamp(10px,2.9vw,14px);white-space:nowrap}.expense-summary-card:last-child small{flex:0 0 auto}.expense-summary-card:last-child strong{overflow:hidden;text-overflow:ellipsis}</style><div class="expense-panel"><div class="expense-filter-grid">
+    return `<style>.expense-report-inline{display:flex!important;flex-direction:row!important;align-items:center!important;gap:8px;grid-column:1/-1;width:100%;box-sizing:border-box}.expense-report-inline .expense-label{display:flex!important;flex:0 0 132px;align-items:center;justify-content:space-between;white-space:nowrap;min-width:0;width:132px;margin:0!important}.expense-report-inline .expense-label:after{content:':'}.expense-report-inline select{display:block!important;flex:1 1 0;min-width:0;width:0;max-width:none}.expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap}.expense-report-actions>button,.expense-download-wrap>button{white-space:nowrap}.expense-download-wrap{position:relative}.expense-download-menu{position:absolute;right:0;top:100%;z-index:9999;display:flex;flex-direction:column;min-width:100px;background:#fff;border:1px solid #9ab;border-radius:8px;box-shadow:0 4px 12px #0002}.expense-download-menu.hidden{display:none}.expense-download-menu button{background:#fff;border:0;padding:9px 14px;text-align:left;color:#222}.expense-report-subheading th{background:#eaf3ff;text-align:left}.expense-report-actions .expense-secondary,.expense-report-actions .expense-primary{padding:8px 12px}.expense-report-actions #exDownloadBtn,.expense-report-actions #expenseReportBack{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}.expense-report-actions #exDownloadBtn:disabled{opacity:1!important;color:#2477c8!important;background:transparent!important;border-color:#2477c8!important;cursor:not-allowed}.expense-summary{display:flex;gap:0;width:100%;margin:10px 0 14px;box-sizing:border-box}.expense-summary-card{display:flex;align-items:center;gap:5px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px}.expense-summary-card:first-child{width:30%;flex:0 0 30%}.expense-summary-card:last-child{width:70%;flex:1 1 70%}.expense-summary-card small{display:inline;font-size:clamp(9px,2.6vw,12px);white-space:nowrap}.expense-summary-card strong{display:inline;font-size:clamp(10px,2.9vw,14px);white-space:nowrap}.expense-summary-card:last-child small{flex:0 0 auto}.expense-summary-card:last-child strong{overflow:hidden;text-overflow:ellipsis}</style><div class="expense-panel"><div class="expense-filter-grid">
       <div class="expense-field expense-report-inline"><label class="expense-label" for="exReportType"><span class="expense-label-text">Report Type</span></label><select id="exReportType">${selectOptions(types,'Select Type')}</select></div>
       <div class="expense-field expense-report-inline"><label class="expense-label" for="exReportPeriod"><span class="expense-label-text">Report Period</span></label><select id="exReportPeriod">${selectOptions(periods,'Select Period')}</select></div>
       <div class="expense-field hidden" id="exSelectedDateWrap"><label class="expense-label" for="exSelectedDate"><span class="expense-label-text">Selected Date</span></label><input id="exSelectedDate" type="date" value="${dateToday()}"></div>
@@ -431,7 +432,7 @@ ${field('Photos',`
     const period=$('exReportPeriod');
     const toggle=()=>{$('exSelectedDateWrap').classList.add('hidden');};
     period.onchange=toggle;
-    const back=$('exReportBack'); if(back) back.onclick=goBack;
+    const back=$('exReportBack'); if(back) { back.onclick=(event)=>{event.preventDefault();event.stopPropagation();goBack();}; back.addEventListener('touchend',(event)=>{event.preventDefault();goBack();},{passive:false}); }
     const downloadBtn=$('exDownloadBtn'), downloadMenu=$('exDownloadMenu');
     if(downloadBtn&&downloadMenu){
       downloadBtn.disabled=true;
@@ -470,6 +471,7 @@ ${field('Photos',`
     });
   }
   function fmt(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+  function formatReportDate(value){const raw=String(value||'').slice(0,10);const m=raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?`${m[3]}-${m[2]}-${m[1].slice(2)}`:raw;}
   function renderResults(rows,type){
     const total=rows.reduce((s,r)=>s+Number(r.amount||0),0);const counts=rows.length;
     let table='';
@@ -480,7 +482,7 @@ ${field('Photos',`
       const reportPeriod=$('exReportPeriod')?.value||'Detailed';
       const sortedRows=rows.slice().sort((a,b)=>String(a.expenseDate).localeCompare(String(b.expenseDate)));
       const hasVehicle=sortedRows.some(r=>String(r.mainCategory||'').toLowerCase()==='vehicle maintenance');
-      const headers=['Date','Cat','Sub Cat','Amt','Payment Type','Expense by','Sensitive','No of photos','Photos'];
+      const headers=['Date','Category','Sub-Category','Amount Rs:','Payment Type','Expense by','Sensitive','No of photos','Photos'];
       const colCount=headers.length;
       const photoValues=r=>[
         r.photo1Url,r.photo2Url,r.photo3Url,r.photo1,r.photo2,r.photo3,
@@ -497,7 +499,7 @@ ${field('Photos',`
         const photos=photoValues(r);
         const photosHtml=photos.length?photos.map((url,i)=>`<a href="${esc(url)}" target="_blank" rel="noopener">Photo ${i+1}</a>`).join('<br>'):'—';
         const cells=[
-          `<td>${esc(r.expenseDate||'')}</td>`,
+          `<td>${esc(formatReportDate(r.expenseDate))}</td>`,
           `<td>${esc(r.mainCategory||'')}</td>`,
           `<td>${esc(r.subCategory || (String(r.mainCategory||'').toLowerCase()==='vehicle maintenance' ? r.vehicleType : '') || '')}</td>`,
           `<td>${money(r.amount)}</td>`,
