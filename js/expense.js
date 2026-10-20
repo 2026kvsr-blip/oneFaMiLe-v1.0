@@ -29,7 +29,7 @@
   function family(){ try{return JSON.parse(localStorage.getItem('currentFamily')||'{}')}catch(_){return {}} }
   function user(){ try{return JSON.parse(sessionStorage.getItem('user')||'{}')}catch(_){return {}} }
   function token(){return sessionStorage.getItem('sessionToken')||''}
-  function loginName(){const u=user();return String(u.loginUserName||u.loginName||u.userName||u.username||u.name||u.fullName||'').trim()}
+  function loginName(){const u=user();return String(u.loginUserName||u.name||'').trim()}
   function money(n){return '₹'+(Number(n)||0).toLocaleString('en-IN',{maximumFractionDigits:2})}
   function dateToday(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
   function request(action, fields={}){
@@ -178,21 +178,21 @@ function status(message, type = '') {
     const defaultName=loginName();
     const memberNames=[...new Set([defaultName,...members].filter(Boolean))];
     const inner=`<form id="expenseForm" class="expense-form" autocomplete="off">
-      ${field('Expense by',`<div class="expense-spentby"><input id="exSpentBySearch" list="exMemberList" placeholder="     " value="" disabled><datalist id="exMemberList">${memberNames.map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>`,'exSpentBySearch')}
-      <div class="expense-help">Expense by - default login name .</div>
-      ${field('Expense Date *',`<input id="exDate" name="expenseDate" type="date" value="${dateToday()}" required>`,'exDate')}
-      ${field('Main Category *',`<select id="exCategory" name="mainCategory" required>${selectOptions(Object.keys(CATEGORIES),'Select Category')}</select>`,'exCategory')}
-      <div id="exSubCategoryRow">${field('Sub Category *',`<select id="exSubCategory" name="subCategory" required>${selectOptions([],'Select Subcategory')}</select>`,'exSubCategory')}</div>
+      ${field('Expense by',`<div class="expense-spentby"><input id="exSpentBySearch" list="exMemberList" placeholder="Search or type a new name" value="${esc(defaultName)}" required><datalist id="exMemberList">${memberNames.map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>`,'exSpentBySearch')}
+      <div class="expense-help">Login name is selected by default...</div>
+      ${field('Expense Date',`<input id="exDate" name="expenseDate" type="date" value="${dateToday()}" required>`,'exDate')}
+      ${field('Main Category',`<select id="exCategory" name="mainCategory" required>${selectOptions(Object.keys(CATEGORIES),'Select Category')}</select>`,'exCategory')}
+      <div id="exSubCategoryRow">${field('Sub Category',`<select id="exSubCategory" name="subCategory" required>${selectOptions([],'Select Subcategory')}</select>`,'exSubCategory')}</div>
       <div id="exNormalDescription">${field('Description',`<textarea id="exDescription" name="description" rows="1" style="height:38px;min-height:38px;resize:none;box-sizing:border-box;" maxlength="30" placeholder="Enter expense details"></textarea>`,'exDescription')}</div>
       <div id="exVehicleFields" class="hidden">
        ${field('Maintenance Type',`<select id="exMaintenanceType" name="maintenanceType">${selectOptions(MAINTENANCE_TYPES,'Select Maintenance')}</select>`,'exMaintenanceType')}
        ${field('Vehicle Number',`<input id="exVehicleNumber" name="vehicleNumber" maxlength="30" placeholder="Optional vehicle number">`,'exVehicleNumber')}
        ${field('Description',`<textarea id="exVehicleDescription" name="vehicleDescription" rows="1" style="height:38px;min-height:38px;resize:none;box-sizing:border-box;" maxlength="30" placeholder="Enter expense details"></textarea>`,'exVehicleDescription')}
       </div>
-      ${field('Amount *',`<input id="exAmount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="₹ Enter Amount" required disabled>`,'exAmount')}
+      ${field('Amount',`<input id="exAmount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="₹ Enter Amount" required>`,'exAmount')}
 
-      ${field('Payment Mode',`<select id="exPaymentMode" name="paymentMode">${selectOptions(PAYMENT_MODES,'Select Payment Mode')}</select>`,'exPaymentMode')}
-      ${field('Sensitive',`<select id="exSensitive" name="sensitive"><option value="No" selected>No</option><option value="Yes">Yes</option></select>`,'exSensitive')}
+      ${field('Payment Mode',`<select id="exPaymentMode" name="paymentMode" required>${selectOptions(PAYMENT_MODES,'Select Payment Mode')}</select>`,'exPaymentMode')}
+      ${field('Sensitive',`<select id="exSensitive" name="sensitive" required><option value="No" selected>No</option><option value="Yes">Yes</option></select>`,'exSensitive')}
 
 
 ${field('Photos',`
@@ -293,22 +293,6 @@ ${field('Photos',`
     }
 
     const cat=$('exCategory'),sub=$('exSubCategory'),subRow=$('exSubCategoryRow'),vehicleFields=$('exVehicleFields');
-    const amountInput=$('exAmount'),expenseByInput=$('exSpentBySearch');
-    function syncEntrySequence(){
-      const essentialsFilled=!!($('exDate').value && cat.value && sub.value);
-      amountInput.disabled=!essentialsFilled;
-      const amountValid=essentialsFilled && amountInput.value.trim()!=='' && Number.isFinite(Number(amountInput.value)) && Number(amountInput.value)>0;
-      expenseByInput.disabled=!amountValid;
-      if(amountValid){
-        if(!expenseByInput.value.trim()) expenseByInput.value=defaultName;
-      } else {
-        expenseByInput.value='';
-      }
-    }
-    $('exDate').addEventListener('input',syncEntrySequence);
-    $('exDate').addEventListener('change',syncEntrySequence);
-    amountInput.addEventListener('input',syncEntrySequence);
-    amountInput.addEventListener('change',syncEntrySequence);
     cat.onchange=()=>{
       const isVehicle=cat.value==='Vehicle Maintenance';
       vehicleFields.classList.toggle('hidden',!isVehicle);
@@ -316,22 +300,15 @@ ${field('Photos',`
       subRow.classList.remove('hidden');
       sub.innerHTML=selectOptions(isVehicle ? VEHICLE_TYPES : (CATEGORIES[cat.value]||[]),'Select Subcategory');
       sub.required=true;
-      sub.value='';
-      amountInput.value='';
-      expenseByInput.value='';
-      syncEntrySequence();
+      if(isVehicle)sub.value='';
     };
-    sub.addEventListener('change',()=>{amountInput.value='';expenseByInput.value='';syncEntrySequence()});
-    syncEntrySequence();
     $('expenseForm').onsubmit=async ev=>{
       ev.preventDefault();
       const amount=Number($('exAmount').value);
       if(!family().familyId){status('Current family was not found. Please open your family and try again.','error');return}
       if(!token()){status('Login session expired. Please login again.','error');return}
       if(!Number.isFinite(amount)||amount<=0){status('Enter an amount greater than zero.','error');$('exAmount').focus();return}
-      if(!$('exDate').value){status('Expense Date is required.','error');$('exDate').focus();return}
-      if(!cat.value){status('Main Category is required.','error');cat.focus();return}
-      if(!sub.value){status('Sub Category is required.','error');sub.focus();return}
+      if(!$('exSpentBySearch').value.trim()){status('Select a family member or enter a name.','error');return}
       const btn=$('expenseSaveBtn');btn.disabled=true;btn.textContent='Saving…';
      try {
   const photoFiles = selectedExpensePhotos.slice();
@@ -367,21 +344,17 @@ ${field('Photos',`
 
   $('expenseForm').reset();
   $('exDate').value = dateToday();
-  $('exSpentBySearch').value = '';
-  $('exSpentBySearch').disabled = true;
-  $('exAmount').value = '';
-  $('exAmount').disabled = true;
+  $('exSpentBySearch').value = defaultName;
   vehicleFields.classList.add('hidden');
   $('exNormalDescription').classList.remove('hidden');
   sub.innerHTML = selectOptions([], 'Select Subcategory');
   subRow.classList.remove('hidden');
   sub.required = true;
-  syncEntrySequence();
 
 } catch(err){status(err.message||'Unable to save expense. Please try again.','error')}
       finally{btn.disabled=false;btn.textContent='Save'}
     };
-    $('expenseResetBtn').onclick=()=>setTimeout(()=>{ selectedExpensePhotos=[null,null,null];updateExpensePhotoSlots();$('exDate').value=dateToday();$('exSpentBySearch').value='';$('exSpentBySearch').disabled=true;$('exAmount').value='';$('exAmount').disabled=true;vehicleFields.classList.add('hidden');$('exNormalDescription').classList.remove('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');subRow.classList.remove('hidden');sub.required=true;syncEntrySequence();status('');},0);
+    $('expenseResetBtn').onclick=()=>setTimeout(()=>{ selectedExpensePhotos=[null,null,null];updateExpensePhotoSlots();$('exDate').value=dateToday();$('exSpentBySearch').value=defaultName;vehicleFields.classList.add('hidden');$('exNormalDescription').classList.remove('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');subRow.classList.remove('hidden');sub.required=true;status('');},0);
   }
   function renderSensitiveGate(kind){
     activeReport=kind;
