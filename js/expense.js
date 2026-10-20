@@ -178,7 +178,7 @@ function status(message, type = '') {
     const memberNames=[...new Set([defaultName,...members].filter(Boolean))];
     const inner=`<form id="expenseForm" class="expense-form" autocomplete="off">
       ${field('Expense by',`<div class="expense-spentby"><input id="exSpentBySearch" list="exMemberList" placeholder="     " value="" disabled><datalist id="exMemberList">${memberNames.map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>`,'exSpentBySearch')}
-      <div class="expense-help">Expense by will fill with the login name after required fields and amount are entered.</div>
+      <div class="expense-help">Expense by - default login name .</div>
       ${field('Expense Date *',`<input id="exDate" name="expenseDate" type="date" value="${dateToday()}" required>`,'exDate')}
       ${field('Main Category *',`<select id="exCategory" name="mainCategory" required>${selectOptions(Object.keys(CATEGORIES),'Select Category')}</select>`,'exCategory')}
       <div id="exSubCategoryRow">${field('Sub Category *',`<select id="exSubCategory" name="subCategory" required>${selectOptions([],'Select Subcategory')}</select>`,'exSubCategory')}</div>
