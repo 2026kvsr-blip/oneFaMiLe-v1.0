@@ -203,7 +203,7 @@ function status(message, type = '') {
 ${field('Photos',`
   <div style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;width:100%;max-width:100%;box-sizing:border-box;">
     <div class="expense-photo-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;min-width:0;width:100%;max-width:100%;box-sizing:border-box;overflow:visible;">
-      <button type="button" id="exPhotoChooseBtn" class="expense-secondary" style="min-width:68px;width:68px;max-width:68px;box-sizing:border-box;flex:0 0 68px;padding-left:6px;padding-right:6px;">Photo</button>
+      <button type="button" id="exPhotoChooseBtn" class="expense-secondary" style="min-width:76px;max-width:100%;box-sizing:border-box;flex:0 0 auto;">Photo</button>
       <button type="button" class="expense-photo-slot" data-photo-slot="0" id="exPhotoSlot1" aria-label="Choose photo 1" style="width:42px;height:38px;min-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">1</button>
       <button type="button" class="expense-photo-slot" data-photo-slot="1" id="exPhotoSlot2" aria-label="Choose photo 2" style="width:42px;height:38px;min-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">2</button>
       <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:42px;height:38px;min-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
@@ -218,11 +218,11 @@ ${field('Photos',`
     showPage(shell('Add Expense',inner,true));
     // Disabled Amount / Expense by remain white while preserving disabled state.
     const expenseWhiteStyle = document.createElement('style');
-    expenseWhiteStyle.textContent = '#expenseForm #exAmount:disabled, #expenseForm #exSpentBySearch:disabled { background:#fff !important; color:#333 !important; opacity:1 !important; -webkit-text-fill-color:#333 !important; } #expenseForm .expense-photo-picker { max-width:100%; flex-wrap:nowrap !important; gap:6px; } #expenseForm .expense-photo-picker button { flex-shrink:0 !important; } #expenseForm .expense-photo-picker #exPhotoChooseBtn { min-width:68px!important;width:68px!important;max-width:68px!important;flex:0 0 68px!important;padding-left:6px!important;padding-right:6px!important; } #expenseForm .expense-photo-picker .expense-photo-slot { width:42px!important; min-width:42px!important; }';
+    expenseWhiteStyle.textContent = '#expenseForm #exAmount:disabled, #expenseForm #exSpentBySearch:disabled { background:#fff !important; color:#333 !important; opacity:1 !important; -webkit-text-fill-color:#333 !important; } #expenseForm .expense-photo-picker { max-width:100%; flex-wrap:nowrap !important; gap:6px; } #expenseForm .expense-photo-picker button { flex-shrink:0 !important; } #expenseForm .expense-photo-picker #exPhotoChooseBtn { min-width:76px; } #expenseForm .expense-photo-picker .expense-photo-slot { width:42px!important; min-width:42px!important; }';
     document.head.appendChild(expenseWhiteStyle);
     $('expenseModuleBack').onclick=goBack;
     const photoField = $('exPhotos')?.closest('.expense-field');
-    if (photoField) { photoField.style.alignItems='center'; const photoLabel = photoField.querySelector('.expense-label'); if (photoLabel) { photoLabel.style.alignSelf='center'; photoLabel.style.marginTop='0'; photoLabel.style.transform='translateY(-10px)'; } }
+    if (photoField) { const photoLabel = photoField.querySelector('.expense-label'); if (photoLabel) { photoLabel.style.alignSelf='center'; photoLabel.style.marginTop='0'; } }
     
     // =====================================
     // EXPENSE PHOTOS: PHOTO BUTTON + 3 SLOTS
@@ -410,7 +410,7 @@ ${field('Photos',`
   function reportControls(custom=false){
     const types=['Abstract','Detailed'];
     const periods=['Today','This Week','This Month','This Year','Daily','Weekly','Monthly','Yearly'];
-    return `<style>.expense-report-inline{display:flex!important;flex-direction:row!important;align-items:center!important;gap:8px;grid-column:1/-1;width:100%;box-sizing:border-box}.expense-report-inline .expense-label{display:flex!important;flex:0 0 132px;align-items:center;justify-content:space-between;white-space:nowrap;min-width:0;width:132px;margin:0!important}.expense-report-inline .expense-label:after{content:':'}.expense-report-inline select{display:block!important;flex:1 1 0;min-width:0;width:0;max-width:none}.expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap}.expense-report-actions>button,.expense-download-wrap>button{white-space:nowrap}.expense-download-wrap{position:relative}.expense-download-menu{position:absolute;right:0;top:100%;z-index:9999;display:flex;flex-direction:column;min-width:100px;background:#fff;border:1px solid #9ab;border-radius:8px;box-shadow:0 4px 12px #0002}.expense-download-menu.hidden{display:none}.expense-download-menu button{background:#fff;border:0;padding:9px 14px;text-align:left;color:#222}.expense-report-subheading th{background:#eaf3ff;text-align:left}.expense-report-actions .expense-secondary,.expense-report-actions .expense-primary{padding:8px 12px}.expense-report-actions #exDownloadBtn,.expense-report-actions #expenseReportBack{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}.expense-report-actions #exDownloadBtn:disabled{opacity:1!important;color:#2477c8!important;background:transparent!important;border-color:#2477c8!important;cursor:not-allowed}.expense-summary{display:flex;gap:0;width:100%;margin:10px 0 14px;box-sizing:border-box}.expense-summary-card{display:flex;align-items:center;gap:5px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px}.expense-summary-card:first-child{width:30%;flex:0 0 30%}.expense-summary-card:last-child{width:70%;flex:1 1 70%}.expense-summary-card small{display:inline;font-size:clamp(9px,2.6vw,12px);white-space:nowrap}.expense-summary-card strong{display:inline;font-size:clamp(10px,2.9vw,14px);white-space:nowrap}.expense-summary-card:last-child small{flex:0 0 auto}.expense-summary-card:last-child strong{overflow:hidden;text-overflow:ellipsis}</style><div class="expense-panel"><div class="expense-filter-grid">
+    return `<style>.expense-report-inline{display:flex!important;flex-direction:row!important;align-items:center!important;gap:8px;grid-column:1/-1;width:100%;box-sizing:border-box}.expense-report-inline .expense-label{display:flex!important;flex:0 0 132px;align-items:center;justify-content:space-between;white-space:nowrap;min-width:0;width:132px;margin:0!important}.expense-report-inline .expense-label:after{content:':'}.expense-report-inline select{display:block!important;flex:1 1 0;min-width:0;width:0;max-width:none}.expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap}.expense-report-actions>button,.expense-download-wrap>button{white-space:nowrap}.expense-download-wrap{position:relative}.expense-download-menu{position:absolute;right:0;top:100%;z-index:9999;display:flex;flex-direction:column;min-width:100px;background:#fff;border:1px solid #9ab;border-radius:8px;box-shadow:0 4px 12px #0002}.expense-download-menu.hidden{display:none}.expense-download-menu button{background:#fff;border:0;padding:9px 14px;text-align:left;color:#222}.expense-report-subheading th{background:#fff!important;text-align:left;border-top:1px solid #c4d4ff;border-bottom:1px solid #c4d4ff;color:#2d5274}.expense-report-year th{font-size:28px!important;font-weight:700;padding:10px 8px;background:#fff!important}.expense-report-month th{font-size:20px!important;font-weight:700;padding:8px;background:#fff!important}.expense-report-total td{font-weight:700;background:#fff!important;border-top:1px solid #c4d4ff}.expense-report-date th{font-size:13px!important;font-weight:600;background:#fff!important}.expense-report-actions .expense-secondary,.expense-report-actions .expense-primary{padding:8px 12px}.expense-report-actions #exDownloadBtn,.expense-report-actions #expenseReportBack{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}.expense-report-actions #exDownloadBtn:disabled{opacity:1!important;color:#2477c8!important;background:transparent!important;border-color:#2477c8!important;cursor:not-allowed}.expense-summary{display:flex;gap:0;width:100%;margin:10px 0 14px;box-sizing:border-box}.expense-summary-card{display:flex;align-items:center;gap:5px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px}.expense-summary-card:first-child{width:30%;flex:0 0 30%}.expense-summary-card:last-child{width:70%;flex:1 1 70%}.expense-summary-card small{display:inline;font-size:clamp(9px,2.6vw,12px);white-space:nowrap}.expense-summary-card strong{display:inline;font-size:clamp(10px,2.9vw,14px);white-space:nowrap}.expense-summary-card:last-child small{flex:0 0 auto}.expense-summary-card:last-child strong{overflow:hidden;text-overflow:ellipsis}</style><div class="expense-panel"><div class="expense-filter-grid">
       <div class="expense-field expense-report-inline"><label class="expense-label" for="exReportType"><span class="expense-label-text">Report Type</span></label><select id="exReportType">${selectOptions(types,'Select Type')}</select></div>
       <div class="expense-field expense-report-inline"><label class="expense-label" for="exReportPeriod"><span class="expense-label-text">Report Period</span></label><select id="exReportPeriod">${selectOptions(periods,'Select Period')}</select></div>
       <div class="expense-field hidden" id="exSelectedDateWrap"><label class="expense-label" for="exSelectedDate"><span class="expense-label-text">Selected Date</span></label><input id="exSelectedDate" type="date" value="${dateToday()}"></div>
@@ -432,7 +432,7 @@ ${field('Photos',`
     const period=$('exReportPeriod');
     const toggle=()=>{$('exSelectedDateWrap').classList.add('hidden');};
     period.onchange=toggle;
-    const back=$('expenseReportBack'); if(back) { const returnToExpenses=(event)=>{if(event){event.preventDefault();event.stopPropagation();} const menu=$('expensesBtn'); if(menu){openMenu();} else {goBack();}}; back.onclick=returnToExpenses; back.addEventListener('pointerup',returnToExpenses,{passive:false}); back.addEventListener('keydown',(event)=>{if(event.key==='Enter'||event.key===' '){returnToExpenses(event)} }); }
+    const back=$('exReportBack'); if(back) { back.onclick=(event)=>{event.preventDefault();event.stopPropagation();goBack();}; back.addEventListener('touchend',(event)=>{event.preventDefault();goBack();},{passive:false}); }
     const downloadBtn=$('exDownloadBtn'), downloadMenu=$('exDownloadMenu');
     if(downloadBtn&&downloadMenu){
       downloadBtn.disabled=true;
@@ -488,14 +488,21 @@ ${field('Photos',`
         r.photo1Url,r.photo2Url,r.photo3Url,r.photo1,r.photo2,r.photo3,
         r.photo1Data,r.photo2Data,r.photo3Data,r.photo1Link,r.photo2Link,r.photo3Link
       ].filter(v=>typeof v==='string'&&v.trim()&&(/^(https?:|data:image\/)/i.test(v.trim())));
-      let groupedRows=''; let previousHeading='';
+      let groupedRows='';
+      let currentYear='', currentMonth='', monthTotal=0, monthCount=0, yearTotal=0, yearCount=0;
+      const monthName=ds=>ds?new Date(ds+'T12:00:00').toLocaleString('en-US',{month:'long'}):'Unknown';
+      const addMonthTotal=()=>{if(currentMonth)groupedRows+=`<tr class="expense-report-total"><td colspan="3">${esc(currentMonth)} Total (${monthCount} records)</td><td>${money(monthTotal)}</td><td colspan="5"></td></tr>`;};
+      const addYearTotal=()=>{if(currentYear)groupedRows+=`<tr class="expense-report-total"><td colspan="3">${esc(currentYear)} Total (${yearCount} records)</td><td>${money(yearTotal)}</td><td colspan="5"></td></tr>`;};
       sortedRows.forEach(r=>{
-        const ds=String(r.expenseDate||'').slice(0,10);let headings=[];
-        if(reportPeriod==='Yearly') headings=['Year: '+(ds.slice(0,4)||'Unknown'),'Month: '+(ds?new Date(ds+'T12:00:00').toLocaleString('en-US',{month:'long'}):'Unknown')];
-        else if(reportPeriod==='Monthly') headings=['Year: '+(ds.slice(0,4)||'Unknown'),'Month: '+(ds?new Date(ds+'T12:00:00').toLocaleString('en-US',{month:'long'}):'Unknown')];
-        else if(reportPeriod==='Weekly'&&ds){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));headings=['Week starting: '+fmt(d)];}
-        else if(reportPeriod==='Daily') headings=['Date: '+ds];
-        for(const heading of headings){const key=reportPeriod==='Yearly'&&heading.startsWith('Month: ')?'  '+heading:heading;if(key!==previousHeading){groupedRows+=`<tr class="expense-report-subheading"><th colspan="${colCount}">${esc(key)}</th></tr>`;previousHeading=key;}}
+        const ds=String(r.expenseDate||'').slice(0,10);
+        const yr=ds.slice(0,4)||'Unknown';
+        const mon=monthName(ds);
+        if(reportPeriod==='Monthly'||reportPeriod==='Yearly'){
+          if(yr!==currentYear){addMonthTotal();addYearTotal();currentYear=yr;currentMonth='';monthTotal=0;monthCount=0;yearTotal=0;yearCount=0;groupedRows+=`<tr class="expense-report-subheading expense-report-year"><th colspan="${colCount}">${esc(yr)}</th></tr>`;}
+          const monthKey=mon+' '+yr;
+          if(monthKey!==currentMonth){addMonthTotal();currentMonth=monthKey;monthTotal=0;monthCount=0;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(mon)}</th></tr>`;}
+        } else if(reportPeriod==='Weekly'&&ds){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));groupedRows+=`<tr class="expense-report-subheading"><th colspan="${colCount}">Week starting: ${esc(fmt(d))}</th></tr>`;}
+        else if(reportPeriod==='Daily') groupedRows+=`<tr class="expense-report-subheading expense-report-date"><th colspan="${colCount}">${esc(formatReportDate(ds))}</th></tr>`;
         const photos=photoValues(r);
         const photosHtml=photos.length?photos.map((url,i)=>`<a href="${esc(url)}" target="_blank" rel="noopener">Photo ${i+1}</a>`).join('<br>'):'—';
         const cells=[
@@ -510,7 +517,9 @@ ${field('Photos',`
           `<td>${photosHtml}</td>`
         ];
         groupedRows+=`<tr>${cells.join('')}</tr>`;
+        if(reportPeriod==='Monthly'||reportPeriod==='Yearly'){const amount=Number(r.amount)||0;monthTotal+=amount;monthCount++;yearTotal+=amount;yearCount++;}
       });
+      if(reportPeriod==='Monthly'||reportPeriod==='Yearly'){addMonthTotal();addYearTotal();}
       table=`<div class="expense-results"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${groupedRows||`<tr><td colspan="${colCount}">No records found.</td></tr>`}</tbody></table></div>`;
     }
     $('exReportOutput').innerHTML=`<div class="expense-summary"><div class="expense-summary-card"><small>Total Records</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense</small><strong>${money(total)}</strong></div></div>${table}`;
