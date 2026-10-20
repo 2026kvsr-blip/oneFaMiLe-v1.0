@@ -177,6 +177,8 @@ function status(message, type = '') {
     const defaultName=loginName();
     const memberNames=[...new Set([defaultName,...members].filter(Boolean))];
     const inner=`<form id="expenseForm" class="expense-form" autocomplete="off">
+      ${field('Recorded By',`<div class="expense-spentby"><input id="exSpentBySearch" list="exMemberList" placeholder="Available after amount entry" value="" required disabled><datalist id="exMemberList">${memberNames.map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>`,'exSpentBySearch')}
+      <div class="expense-help" id="exRecordedByHelp">Automatically fills with your login name after entering the expense details.</div>
       ${field('Expense Date',`<input id="exDate" name="expenseDate" type="date" value="${dateToday()}" required>`,'exDate')}
       ${field('Main Category',`<select id="exCategory" name="mainCategory" required>${selectOptions(Object.keys(CATEGORIES),'Select Category')}</select>`,'exCategory')}
       <div id="exSubCategoryRow">${field('Sub Category',`<select id="exSubCategory" name="subCategory" required>${selectOptions([],'Select Subcategory')}</select>`,'exSubCategory')}</div>
@@ -185,9 +187,7 @@ function status(message, type = '') {
        ${field('Vehicle Number',`<input id="exVehicleNumber" name="vehicleNumber" maxlength="30" placeholder="Optional vehicle number">`,'exVehicleNumber')}
       </div>
       ${field('Description',`<textarea id="exDescription" name="description" rows="1" style="height:38px;min-height:38px;resize:none;box-sizing:border-box;" maxlength="30" placeholder="Enter expense details"></textarea>`,'exDescription')}
-      ${field('Amount',`<input id="exAmount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="₹ Enter Amount" required>`,'exAmount')}
-      ${field('Spent By',`<div class="expense-spentby"><input id="exSpentBySearch" list="exMemberList" placeholder="Search or type a new name" value="${esc(defaultName)}" required><datalist id="exMemberList">${memberNames.map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>`,'exSpentBySearch')}
-      <div class="expense-help">Login name is selected by default...</div>
+      ${field('Amount',`<input id="exAmount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="Select Main and Sub Category first" required disabled>`,'exAmount')}
       ${field('Payment Mode',`<select id="exPaymentMode" name="paymentMode" required>${selectOptions(PAYMENT_MODES,'Select Payment Mode')}</select>`,'exPaymentMode')}
       ${field('Sensitive',`<select id="exSensitive" name="sensitive" required><option value="No" selected>No</option><option value="Yes">Yes</option></select>`,'exSensitive')}
 
@@ -195,10 +195,10 @@ function status(message, type = '') {
 ${field('Photos',`
   <div style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;">
     <div class="expense-photo-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;">
-      <button type="button" id="exPhotoChooseBtn" class="expense-secondary" style="min-width:64px;width:64px;padding-left:4px;padding-right:4px;">Photo</button>
-      <button type="button" class="expense-photo-slot" data-photo-slot="0" id="exPhotoSlot1" aria-label="Choose photo 1" style="width:38px;min-width:38px;height:38px;flex:0 0 38px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">1</button>
-      <button type="button" class="expense-photo-slot" data-photo-slot="1" id="exPhotoSlot2" aria-label="Choose photo 2" style="width:38px;min-width:38px;height:38px;flex:0 0 38px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">2</button>
-      <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:38px;min-width:38px;height:38px;flex:0 0 38px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
+      <button type="button" id="exPhotoChooseBtn" class="expense-secondary" disabled style="min-width:64px;width:64px;padding-left:4px;padding-right:4px;">Photo</button>
+      <button type="button" class="expense-photo-slot" data-photo-slot="0" id="exPhotoSlot1" aria-label="Choose photo 1" disabled style="width:38px;min-width:38px;height:38px;flex:0 0 38px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">1</button>
+      <button type="button" class="expense-photo-slot" data-photo-slot="1" id="exPhotoSlot2" aria-label="Choose photo 2" disabled style="width:38px;min-width:38px;height:38px;flex:0 0 38px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">2</button>
+      <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" disabled style="width:38px;min-width:38px;height:38px;flex:0 0 38px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
     </div>
     <input id="exPhotos" type="file" accept="image/*" multiple style="display:none;">
     <small id="exPhotoCount" style="display:block;white-space:nowrap;font-size:12px;line-height:16px;margin:0;">0 photos selected (Max 3)</small>
@@ -249,6 +249,7 @@ ${field('Photos',`
     }
 
     function openExpensePhotoPicker(slotIndex) {
+      if (photoControls.some(control => control && control.disabled)) return;
       activePhotoSlot = slotIndex;
       if (photoInput) {
         photoInput.value = '';
@@ -298,6 +299,23 @@ ${field('Photos',`
     }
 
     const cat=$('exCategory'),sub=$('exSubCategory'),subRow=$('exSubCategoryRow'),vehicleFields=$('exVehicleFields');
+    const amountInput = $('exAmount');
+    const recordedByInput = $('exSpentBySearch');
+    const photoControls = [$('exPhotoChooseBtn'), $('exPhotoSlot1'), $('exPhotoSlot2'), $('exPhotoSlot3')];
+    function updateExpenseEntryReadiness(){
+      const categoryReady = !!cat.value && !!sub.value;
+      amountInput.disabled = !categoryReady;
+      amountInput.placeholder = categoryReady ? '₹ Enter Amount' : 'Select Main and Sub Category first';
+      if (!categoryReady) amountInput.value = '';
+      const amountReady = categoryReady && amountInput.value.trim() !== '' && Number.isFinite(Number(amountInput.value)) && Number(amountInput.value) > 0;
+      recordedByInput.disabled = !amountReady;
+      recordedByInput.placeholder = amountReady ? 'Your login name' : 'Available after amount entry';
+      if (amountReady && !recordedByInput.value.trim()) recordedByInput.value = defaultName;
+      if (!amountReady) recordedByInput.value = '';
+      photoControls.forEach(control => { if (control) control.disabled = !amountReady; });
+      const picker = document.querySelector('.expense-photo-picker');
+      if (picker) picker.style.opacity = amountReady ? '1' : '0.55';
+    }
     cat.onchange=()=>{
       const isVehicle=cat.value==='Vehicle Maintenance';
       vehicleFields.classList.toggle('hidden',!isVehicle);
@@ -307,7 +325,11 @@ ${field('Photos',`
       sub.value='';
       $('exMaintenanceType').required=isVehicle;
       if(!isVehicle) $('exMaintenanceType').value='';
+      updateExpenseEntryReadiness();
     };
+    sub.addEventListener('change', updateExpenseEntryReadiness);
+    amountInput.addEventListener('input', updateExpenseEntryReadiness);
+    updateExpenseEntryReadiness();
     $('expenseForm').onsubmit=async ev=>{
       ev.preventDefault();
       const amount=Number($('exAmount').value);
@@ -350,7 +372,11 @@ ${field('Photos',`
 
   $('expenseForm').reset();
   $('exDate').value = dateToday();
-  $('exSpentBySearch').value = defaultName;
+  $('exSpentBySearch').value = '';
+  recordedByInput.disabled = true;
+  amountInput.value = '';
+  amountInput.disabled = true;
+  photoControls.forEach(control => { if (control) control.disabled = true; });
   vehicleFields.classList.add('hidden');
   $('exNormalDescription').classList.remove('hidden');
   sub.innerHTML = selectOptions([], 'Select Subcategory');
@@ -360,7 +386,7 @@ ${field('Photos',`
 } catch(err){status(err.message||'Unable to save expense. Please try again.','error')}
       finally{btn.disabled=false;btn.textContent='Save'}
     };
-    $('expenseResetBtn').onclick=()=>setTimeout(()=>{ selectedExpensePhotos=[null,null,null];updateExpensePhotoSlots();$('exDate').value=dateToday();$('exSpentBySearch').value=defaultName;vehicleFields.classList.add('hidden');$('exNormalDescription').classList.remove('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');subRow.classList.remove('hidden');sub.required=true;status('');},0);
+    $('expenseResetBtn').onclick=()=>setTimeout(()=>{ selectedExpensePhotos=[null,null,null];updateExpensePhotoSlots();$('exDate').value=dateToday();$('exSpentBySearch').value='';recordedByInput.disabled=true;amountInput.value='';amountInput.disabled=true;photoControls.forEach(control=>{if(control)control.disabled=true;});vehicleFields.classList.add('hidden');$('exNormalDescription').classList.remove('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');subRow.classList.remove('hidden');sub.required=true;status('');},0);
   }
   function renderSensitiveGate(kind){
     activeReport=kind;
