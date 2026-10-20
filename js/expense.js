@@ -1,4 +1,5 @@
 
+
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -404,7 +405,7 @@ ${field('Photos',`
   function reportControls(custom=false){
     const types=['Abstract','Detailed'];
     const periods=['Today','This Week','This Month','This Year','Daily','Weekly','Monthly','Yearly'];
-    return `<style>.expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap}.expense-report-actions>button,.expense-download-wrap>button{white-space:nowrap}.expense-download-wrap{position:relative}.expense-download-menu{position:absolute;right:0;top:100%;z-index:9999;display:flex;flex-direction:column;min-width:100px;background:#fff;border:1px solid #9ab;border-radius:8px;box-shadow:0 4px 12px #0002}.expense-download-menu.hidden{display:none}.expense-download-menu button{background:#fff;border:0;padding:9px 14px;text-align:left;color:#222}.expense-report-subheading th{background:#eaf3ff;text-align:left}.expense-report-actions .expense-secondary,.expense-report-actions .expense-primary{padding:8px 12px}</style><div class="expense-panel"><div class="expense-filter-grid">
+    return `<style>.expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap}.expense-report-actions>button,.expense-download-wrap>button{white-space:nowrap}.expense-download-wrap{position:relative}.expense-download-menu{position:absolute;right:0;top:100%;z-index:9999;display:flex;flex-direction:column;min-width:100px;background:#fff;border:1px solid #9ab;border-radius:8px;box-shadow:0 4px 12px #0002}.expense-download-menu.hidden{display:none}.expense-download-menu button{background:#fff;border:0;padding:9px 14px;text-align:left;color:#222}.expense-report-subheading th{background:#eaf3ff;text-align:left}.expense-report-actions .expense-secondary,.expense-report-actions .expense-primary{padding:8px 12px}.expense-report-actions #exDownloadBtn,.expense-report-actions #expenseReportBack{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}.expense-report-actions #exDownloadBtn:disabled{opacity:1!important;color:#2477c8!important;background:transparent!important;border-color:#2477c8!important;cursor:not-allowed}.expense-summary{display:flex;gap:0;width:100%;margin:10px 0 14px;box-sizing:border-box}.expense-summary-card{display:flex;align-items:center;gap:5px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px}.expense-summary-card:first-child{width:30%;flex:0 0 30%}.expense-summary-card:last-child{width:70%;flex:1 1 70%}.expense-summary-card small{display:inline;font-size:12px}.expense-summary-card strong{display:inline;font-size:14px}.expense-summary-card:last-child small{flex:0 0 auto}.expense-summary-card:last-child strong{overflow:hidden;text-overflow:ellipsis}</style><div class="expense-panel"><div class="expense-filter-grid">
       <div class="expense-field"><label class="expense-label" for="exReportType"><span class="expense-label-text">Report Type</span></label><select id="exReportType">${selectOptions(types,'Select Type')}</select></div>
       <div class="expense-field"><label class="expense-label" for="exReportPeriod"><span class="expense-label-text">Report Period</span></label><select id="exReportPeriod">${selectOptions(periods,'Select Period')}</select></div>
       <div class="expense-field hidden" id="exSelectedDateWrap"><label class="expense-label" for="exSelectedDate"><span class="expense-label-text">Selected Date</span></label><input id="exSelectedDate" type="date" value="${dateToday()}"></div>
@@ -418,7 +419,7 @@ ${field('Photos',`
       <div class="expense-field"><label class="expense-label" for="exMinAmount"><span class="expense-label-text">Minimum Amount</span></label><input id="exMinAmount" type="number" min="0" step="0.01" placeholder="Any"></div>
       <div class="expense-field"><label class="expense-label" for="exMaxAmount"><span class="expense-label-text">Maximum Amount</span></label><input id="exMaxAmount" type="number" min="0" step="0.01" placeholder="Any"></div>
       <div class="expense-field" style="grid-column:1/-1"><label class="expense-label" for="exSearchText"><span class="expense-label-text">Search Text</span></label><input id="exSearchText" type="search" placeholder="Description, category, spent by…"></div>`:''}
-      </div><div class="expense-actions expense-report-actions"><button type="button" id="exRunReport" class="expense-primary">Show Report</button><div class="expense-download-wrap"><button type="button" id="exDownloadBtn" class="expense-secondary">Download ▾</button><div id="exDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div><button type="button" id="expenseReportBack" class="expense-secondary">← Back</button></div><div id="expenseStatus" class="expense-status" role="status"></div></div><div id="exReportOutput"></div>`;
+      </div><div class="expense-actions expense-report-actions"><button type="button" id="exRunReport" class="expense-primary">Show Report</button><div class="expense-download-wrap"><button type="button" id="exDownloadBtn" class="expense-secondary" disabled>Download ▾</button><div id="exDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div><button type="button" id="expenseReportBack" class="expense-secondary">← Back</button></div><div id="expenseStatus" class="expense-status" role="status"></div></div><div id="exReportOutput"></div>`;
   }
   function setupReportControls(custom,kind){
     const period=$('exReportPeriod');
@@ -427,7 +428,8 @@ ${field('Photos',`
     const back=$('exReportBack'); if(back) back.onclick=goBack;
     const downloadBtn=$('exDownloadBtn'), downloadMenu=$('exDownloadMenu');
     if(downloadBtn&&downloadMenu){
-      downloadBtn.onclick=()=>downloadMenu.classList.toggle('hidden');
+      downloadBtn.disabled=true;
+      downloadBtn.onclick=()=>{if(!downloadBtn.disabled)downloadMenu.classList.toggle('hidden')};
       downloadMenu.querySelectorAll('[data-export]').forEach(item=>item.onclick=()=>{downloadMenu.classList.add('hidden');exportExpenseReport(item.dataset.export);});
     }
     if(custom){$('exFilterCategory').onchange=()=>{const c=$('exFilterCategory').value;$('exFilterSub').innerHTML=selectOptions(c==='Vehicle Maintenance'?VEHICLE_TYPES:(CATEGORIES[c]||[]),'All Subcategories')};$('exFilterSensitive').onchange=()=>{$('exCustomPassWrap').classList.toggle('hidden',$('exFilterSensitive').value==='No')}}
@@ -441,7 +443,7 @@ ${field('Photos',`
         access='all';
       }
       if(!rows.length || (custom && searchSensitive!=='No' && !rows.some(r=>r.sensitive==='Yes'))){$('exRunReport').disabled=true;status('Loading expenses…');try{const fields={reportAccess:access};if(access==='all'&&custom)fields.passCode=$('exCustomPass').value.trim();const res=await request('getExpenses',fields);if(res.status!=='success')throw new Error(res.message||'Unable to load expenses');rows=res.expenses||[];cachedExpenses=rows}catch(e){status(e.message,'error');$('exRunReport').disabled=false;return}finally{$('exRunReport').disabled=false}}
-      const filtered=filterRows(rows,custom,kind);renderResults(filtered,$('exReportType').value||'Abstract');status(`${filtered.length} expense record(s) found.`,'success');
+      const filtered=filterRows(rows,custom,kind);renderResults(filtered,$('exReportType').value||'Abstract');if(downloadBtn)downloadBtn.disabled=false;status(`${filtered.length} expense record(s) found.`,'success');
     };
     if(!custom){$('exReportType').value='Abstract';period.value='This Month';toggle()}
     if(custom){$('exReportType').value='Detailed';period.value='This Month';toggle()}
