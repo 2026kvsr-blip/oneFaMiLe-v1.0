@@ -225,6 +225,7 @@ ${field('Photos',`
     const photoField = $('exPhotos')?.closest('.expense-field');
     if (photoField) { const photoLabel = photoField.querySelector('.expense-label'); if (photoLabel) { photoLabel.style.alignSelf='center'; photoLabel.style.marginTop='0'; photoLabel.style.display='flex'; photoLabel.style.alignItems='center'; photoLabel.style.justifyContent='flex-start'; photoLabel.style.height='100%'; } }
     document.querySelectorAll('#expenseForm .expense-field').forEach(fieldEl=>{const label=fieldEl.querySelector(':scope > .expense-label');const control=fieldEl.querySelector(':scope > input, :scope > select, :scope > textarea, :scope > div');if(label&&control){label.style.alignSelf='center';label.style.marginTop='0';}});
+
     
     // =====================================
     // EXPENSE PHOTOS: PHOTO BUTTON + 3 SLOTS
