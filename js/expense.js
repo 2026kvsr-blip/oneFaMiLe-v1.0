@@ -235,7 +235,8 @@ ${field('Photos',`
     function setPhotoSelectionEnabled(enabled){
       ['exPhotoChooseBtn','exPhotoSlot1','exPhotoSlot2','exPhotoSlot3'].forEach(id=>{const b=$(id);if(b){b.disabled=!enabled;b.style.opacity=enabled?'1':'0.5';b.style.cursor=enabled?'pointer':'not-allowed';}});
     }
-    setPhotoSelectionEnabled(false);
+    // Keep Photo controls visually enabled; access is still guarded by the amount/category conditions below.
+    setPhotoSelectionEnabled(true);
 
     function updateExpensePhotoSlots() {
       let count = 0;
@@ -261,7 +262,8 @@ ${field('Photos',`
     }
 
     function openExpensePhotoPicker(slotIndex) {
-      if ($('exAmount').disabled || !(Number($('exAmount').value)>0)) { alert('ముందుగా Amount నమోదు చేయండి.'); return; }
+      const essentialsFilled=!!($('exDate').value && $('exCategory').value && $('exSubCategory').value);
+      if (!essentialsFilled || $('exAmount').disabled || !(Number($('exAmount').value)>0)) { alert('ముందుగా Expense Date, Category, Sub Category ఎంచుకుని సరైన Amount నమోదు చేయండి.'); return; }
       activePhotoSlot = slotIndex;
       if (photoInput) {
         photoInput.value = '';
@@ -317,7 +319,8 @@ ${field('Photos',`
       amountInput.disabled=!essentialsFilled;
       const amountValid=essentialsFilled && amountInput.value.trim()!=='' && Number.isFinite(Number(amountInput.value)) && Number(amountInput.value)>0;
       expenseByInput.disabled=!amountValid;
-      setPhotoSelectionEnabled(amountValid);
+      // Photo buttons remain enabled-looking, but openExpensePhotoPicker enforces the same entry conditions.
+      setPhotoSelectionEnabled(true);
       if(amountValid){
         if(!expenseByInput.value.trim()) expenseByInput.value=defaultName;
       } else {
@@ -488,8 +491,15 @@ ${field('Photos',`
     const total=rows.reduce((s,r)=>s+Number(r.amount||0),0);const counts=rows.length;
     let table='';
     if(type==='Abstract'){
-      const sums={};rows.forEach(r=>{const k=r.mainCategory||'Other';if(!sums[k])sums[k]={amount:0,count:0};sums[k].amount+=Number(r.amount||0);sums[k].count++});
-      table=`<div class="expense-results"><table><thead><tr><th>Main Category</th><th>Records</th><th>Total Amount</th></tr></thead><tbody>${Object.keys(sums).sort().map(k=>`<tr><td>${esc(k)}</td><td>${sums[k].count}</td><td>${money(sums[k].amount)}</td></tr>`).join('')||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
+      const selectedCategory=$('exFilterCategory')?.value||'';
+      if(selectedCategory){
+        const sums={};
+        rows.forEach(r=>{const k=r.subCategory || (String(r.mainCategory||'').toLowerCase()==='vehicle maintenance' ? r.vehicleType : '') || 'Other';if(!sums[k])sums[k]={amount:0,count:0};sums[k].amount+=Number(r.amount||0);sums[k].count++});
+        table=`<div class="expense-abstract-heading">Category: ${esc(selectedCategory)}</div><div class="expense-results"><table><thead><tr><th>Sub-Category</th><th>Records</th><th>Total Amount</th></tr></thead><tbody>${Object.keys(sums).sort().map(k=>`<tr><td>${esc(k)}</td><td>${sums[k].count}</td><td>${money(sums[k].amount)}</td></tr>`).join('')||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
+      } else {
+        const sums={};rows.forEach(r=>{const k=r.mainCategory||'Other';if(!sums[k])sums[k]={amount:0,count:0};sums[k].amount+=Number(r.amount||0);sums[k].count++});
+        table=`<div class="expense-results"><table><thead><tr><th>Main Category</th><th>Records</th><th>Total Amount</th></tr></thead><tbody>${Object.keys(sums).sort().map(k=>`<tr><td>${esc(k)}</td><td>${sums[k].count}</td><td>${money(sums[k].amount)}</td></tr>`).join('')||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
+      }
     } else {
       const reportPeriod=$('exReportPeriod')?.value||'Detailed';
       const sortedRows=rows.slice().sort((a,b)=>{const diff=String(a.expenseDate||'').slice(0,10).localeCompare(String(b.expenseDate||'').slice(0,10));return dateSortAscending?diff:-diff;});
@@ -536,7 +546,7 @@ ${field('Photos',`
       if(['This Year','All','Monthly','Yearly'].includes(reportPeriod)){addMonthTotal();addYearTotal();}
       table=`<div class="expense-results"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${groupedRows||`<tr><td colspan="${colCount}">No records found.</td></tr>`}</tbody></table></div>`;
     }
-    $('exReportOutput').innerHTML=`<div class="expense-summary"><div class="expense-summary-card"><small>Total Records</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense</small><strong>${money(total)}</strong></div></div>${table}`;
+    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${type==='Abstract'?'Abstract':''}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense</small><strong>${money(total)}</strong></div></div>${table}`;
   }
 
   function exportExpenseReport(format){
