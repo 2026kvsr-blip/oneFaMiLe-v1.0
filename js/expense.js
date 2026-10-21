@@ -201,6 +201,7 @@ function status(message, type = '') {
       <div class="expense-help">By default Login user name.</div>
 
 
+
 ${field('Photos',`
   <div style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;width:100%;max-width:100%;box-sizing:border-box;">
     <div class="expense-photo-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;min-width:0;width:100%;max-width:100%;box-sizing:border-box;overflow:visible;">
