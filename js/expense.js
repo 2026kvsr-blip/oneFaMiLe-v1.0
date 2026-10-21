@@ -1,5 +1,4 @@
 
-
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -219,7 +218,7 @@ ${field('Photos',`
     showPage(shell('Add Expense',inner,true));
     // Disabled Amount / Expense by remain white while preserving disabled state.
     const expenseWhiteStyle = document.createElement('style');
-    expenseWhiteStyle.textContent = '#expenseForm #exAmount:disabled, #expenseForm #exSpentBySearch:disabled { background:#fff !important; color:#333 !important; opacity:1 !important; -webkit-text-fill-color:#333 !important; } #expenseForm .expense-photo-picker { max-width:100%; flex-wrap:nowrap !important; gap:6px; } #expenseForm .expense-photo-picker button { flex-shrink:0 !important; } #expenseForm .expense-photo-picker #exPhotoChooseBtn { min-width:76px; } #expenseForm .expense-photo-picker .expense-photo-slot { width:42px!important; min-width:42px!important; } #expenseForm .expense-field{align-items:center} #expenseForm .expense-label{align-self:center;margin-top:0!important;text-align:left!important;justify-content:flex-start!important;display:grid!important;grid-template-columns:minmax(0,1fr) 10px!important;column-gap:2px!important;width:100%!important;box-sizing:border-box!important} #expenseForm .expense-label .expense-label-text{text-align:left!important;justify-self:start!important} #expenseForm .expense-label .expense-colon{text-align:center!important;justify-self:center!important}';
+    expenseWhiteStyle.textContent = '#expenseForm #exAmount:disabled, #expenseForm #exSpentBySearch:disabled { background:#fff !important; color:#333 !important; opacity:1 !important; -webkit-text-fill-color:#333 !important; } #expenseForm .expense-photo-picker { max-width:100%; flex-wrap:nowrap !important; gap:6px; } #expenseForm .expense-photo-picker button { flex-shrink:0 !important; } #expenseForm .expense-photo-picker #exPhotoChooseBtn { min-width:76px; } #expenseForm .expense-photo-picker .expense-photo-slot { width:42px!important; min-width:42px!important; } #expenseForm .expense-field{align-items:center} #expenseForm .expense-label{align-self:center;margin-top:0!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;min-height:38px;box-sizing:border-box} #expenseForm .expense-label .expense-colon{position:relative;left:-4px;margin-left:2px;flex:0 0 auto} #expenseForm .expense-label .expense-label-text{line-height:1.25} #expenseForm .expense-field:has(#exPhotos)>.expense-label{align-self:center!important;display:flex!important;align-items:center!important;min-height:38px}';
     document.head.appendChild(expenseWhiteStyle);
     $('expenseModuleBack').onclick=goBack;
     const photoField = $('exPhotos')?.closest('.expense-field');
@@ -577,7 +576,7 @@ ${field('Photos',`
         if(reportPeriod==='Today' && ds){groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(formatReportDate(ds))}</th></tr>`;}
         else if(reportPeriod==='This Week' && ds){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));const end=new Date(d);end.setDate(end.getDate()+6);const weekLabel=`${formatReportDate(fmt(d))} - ${formatReportDate(fmt(end))}`;if(weekLabel!==currentMonth){currentMonth=weekLabel;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(weekLabel)}</th></tr>`;}}
         else if(reportPeriod==='This Month' && !currentMonth){currentMonth=mon+' '+yr;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(mon)} ${esc(yr)}</th></tr>`;}
-        else if(reportPeriod==='This Year' && !currentYear){currentYear=yr;groupedRows+=`<tr class="expense-report-subheading expense-report-year"><th colspan="${colCount}">${esc(yr)}</th></tr>`;}
+        else if(reportPeriod==='This Year' && !currentYear){currentYear=yr;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(yr)}</th></tr>`;}
         if(wantsYearMonthGrouping){
           if(yr!==currentYear){addMonthTotal();addYearTotal();currentYear=yr;currentMonth='';monthTotal=0;monthCount=0;yearTotal=0;yearCount=0;groupedRows+=`<tr class="expense-report-subheading expense-report-year"><th colspan="${colCount}">${esc(yr)}</th></tr>`;}
           const monthKey=mon+' '+yr;
@@ -605,15 +604,7 @@ ${field('Photos',`
     }
     const reportPeriodTitle=$('exReportPeriod')?.value||'';
     const reportHeading=`${esc(reportPeriodTitle||'All')} - ${type==='Detailed'?'Detailed Report':'Abstract'}`;
-    const abstractPeriodHeading = type==='Abstract'
-      ? (reportPeriodTitle==='All' ? 'All Periods'
-        : reportPeriodTitle==='This Month' ? new Date().toLocaleString('en-US',{month:'long',year:'numeric'})
-        : reportPeriodTitle==='This Year' ? String(new Date().getFullYear())
-        : reportPeriodTitle==='Today' ? formatReportDate(dateToday())
-        : reportPeriodTitle==='This Week' ? (()=>{const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));const e=new Date(d);e.setDate(e.getDate()+6);return `${formatReportDate(fmt(d))} - ${formatReportDate(fmt(e))}`})()
-        : '')
-      : '';
-    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${reportHeading}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-abstract-period{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-year th{color:#218838!important}.expense-report-subheading.expense-report-year th{color:#218838!important}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractPeriodHeading?`<div class="expense-abstract-period">${esc(abstractPeriodHeading)}</div>`:''}${table}`;
+    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${reportHeading}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${table}`;
   }
 
   function exportExpenseReport(format){
