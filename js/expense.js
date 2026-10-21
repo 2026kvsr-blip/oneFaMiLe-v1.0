@@ -1,4 +1,5 @@
 
+
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -424,13 +425,33 @@ ${field('Photos',`
       <div class="expense-field expense-amount-sort-field"><label class="expense-label">Date order</label><button type="button" id="exDateSortBtn" class="expense-date-sort" aria-label="Sort date ascending" title="Sort date ascending">↑ Date Ascending</button></div>
       <div class="expense-field hidden" id="exSelectedDateWrap"><label class="expense-label" for="exSelectedDate"><span class="expense-label-text">Selected Date</span></label><input id="exSelectedDate" type="date" value="${dateToday()}"></div>
       ${custom?`<div class="expense-field"><label class="expense-label" for="exFromDate"><span class="expense-label-text">From Date</span></label><input id="exFromDate" type="date"></div><div class="expense-field"><label class="expense-label" for="exToDate"><span class="expense-label-text">To Date</span></label><input id="exToDate" type="date"></div>
-      <div class="expense-field expense-spentby-filter"><label class="expense-label" for="exFilterSpentBy"><span class="expense-label-text">Expense by</span></label><input id="exFilterSpentBy" list="exSearchMembers" placeholder="Any member/name"><datalist id="exSearchMembers">${[...new Set([loginName(),...members].filter(Boolean))].map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>
+      <div class="expense-field expense-spentby-filter"><label class="expense-label" for="exFilterSpentBy"><span class="expense-label-text">Expense by</span></label><input id="exFilterSpentBy" list="exSearchMembers" placeholder="Any member/name"><datalist id="exSearchMembers">${[...new Set((cachedExpenses||[]).map(r=>String(r.spentBy||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b)).map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>
       <div class="expense-field expense-search-text-filter"><label class="expense-label" for="exSearchText"><span class="expense-label-text">Search Text</span></label><input id="exSearchText" type="search" placeholder="Description, category, spent by…"></div>
       <div class="expense-field hidden" id="exVehicleTypeWrap"><label class="expense-label" for="exFilterVehicleType"><span class="expense-label-text">Vehicle Type</span></label><select id="exFilterVehicleType">${selectOptions(VEHICLE_TYPES,'All Vehicle Types')}</select></div>
       <div class="expense-field hidden" id="exMtcTypeWrap"><label class="expense-label" for="exFilterMtcType"><span class="expense-label-text">Mtc Type</span></label><select id="exFilterMtcType">${selectOptions(MAINTENANCE_TYPES,'All Maintenance Types')}</select></div>`:''}
       </div><div class="expense-actions expense-report-actions"><button type="button" id="exRunReport" class="expense-primary">Show Report</button><div class="expense-download-wrap"><button type="button" id="exDownloadBtn" class="expense-secondary" disabled>Download ▾</button><div id="exDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div><button type="button" id="expenseReportBack" class="expense-secondary">← Back</button></div><div id="expenseStatus" class="expense-status" role="status"></div></div><div id="exReportOutput"></div>`;
   }
+  function updateExpenseByOptions(rows){
+    const list=$('exSearchMembers');
+    if(!list)return;
+    const names=[...new Set((rows||[]).map(r=>String(r.spentBy||'').trim()).filter(Boolean))]
+      .sort((a,b)=>a.localeCompare(b));
+    list.innerHTML=names.map(n=>`<option value="${esc(n)}"></option>`).join('');
+    const input=$('exFilterSpentBy');
+    if(input && input.value && !names.some(n=>n.toLowerCase()===input.value.trim().toLowerCase())) input.value='';
+  }
   function setupReportControls(custom,kind){
+    if(custom){
+      updateExpenseByOptions(cachedExpenses);
+      if(!cachedExpenses.length){
+        request('getExpenses',{reportAccess:kind}).then(res=>{
+          if(res && res.status==='success'){
+            cachedExpenses=res.expenses||[];
+            updateExpenseByOptions(cachedExpenses);
+          }
+        }).catch(()=>{});
+      }
+    }
     const period=$('exReportPeriod');
     const typeSelect=$('exReportType');
     const allPeriods=['Today','This Week','This Month','This Year','Daily','Weekly','Monthly','Yearly','All'];
@@ -454,7 +475,7 @@ ${field('Photos',`
     $('exRunReport').onclick=async()=>{
       let rows=cachedExpenses;
       let access=kind;
-      if(!rows.length){$('exRunReport').disabled=true;status('Loading expenses…');try{const fields={reportAccess:access};const res=await request('getExpenses',fields);if(res.status!=='success')throw new Error(res.message||'Unable to load expenses');rows=res.expenses||[];cachedExpenses=rows}catch(e){status(e.message,'error');$('exRunReport').disabled=false;return}finally{$('exRunReport').disabled=false}}
+      if(!rows.length){$('exRunReport').disabled=true;status('Loading expenses…');try{const fields={reportAccess:access};const res=await request('getExpenses',fields);if(res.status!=='success')throw new Error(res.message||'Unable to load expenses');rows=res.expenses||[];cachedExpenses=rows;if(custom)updateExpenseByOptions(rows)}catch(e){status(e.message,'error');$('exRunReport').disabled=false;return}finally{$('exRunReport').disabled=false}}
       const filtered=filterRows(rows,custom,kind);lastReportRows=filtered.slice();renderResults(filtered,$('exReportType').value||'Abstract');if(downloadBtn)downloadBtn.disabled=false;status(`${filtered.length} expense record(s) found.`,'success');
     };
     if(!custom){$('exReportType').value='Abstract';period.value='This Month';toggle()}
