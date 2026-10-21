@@ -146,7 +146,7 @@ function status(message, type = '') {
   }
 }
   function field(label, control, id){return `<div class="expense-field"><label class="expense-label" for="${id||''}"><span class="expense-label-text">${label}</span><span class="expense-colon">:</span></label>${control}</div>`}
-  function selectOptions(items,placeholder='Select') {return `<option value="">${placeholder}</option>`+items.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
+  function selectOptions(items,placeholder='Select',preserveOrder=false) {const list=preserveOrder?items.slice():items.slice().sort((a,b)=>String(a).localeCompare(String(b),undefined,{sensitivity:'base'}));return `<option value="">${placeholder}</option>`+list.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
   function shell(title,inner,backInside=false){return `<div class="expense-page"><h2 class="expense-title">${esc(title)}</h2>${inner}${backInside?'':`<div class="expense-actions"><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>`}</div>`}
   function goBack(){
     // Always return to the Expenses menu, with a safe fallback if rendering fails.
@@ -203,7 +203,7 @@ function status(message, type = '') {
 ${field('Photos',`
   <div style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;width:100%;max-width:100%;box-sizing:border-box;">
     <div class="expense-photo-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;min-width:0;width:100%;max-width:100%;box-sizing:border-box;overflow:visible;">
-      <button type="button" id="exPhotoChooseBtn" class="expense-secondary" style="min-width:76px;max-width:100%;box-sizing:border-box;flex:0 0 auto;">Photo</button>
+      <button type="button" id="exPhotoChooseBtn" class="expense-secondary" style="min-width:62px;width:62px;max-width:62px;box-sizing:border-box;flex:0 0 62px;">Photo</button>
       <button type="button" class="expense-photo-slot" data-photo-slot="0" id="exPhotoSlot1" aria-label="Choose photo 1" style="width:42px;height:38px;min-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">1</button>
       <button type="button" class="expense-photo-slot" data-photo-slot="1" id="exPhotoSlot2" aria-label="Choose photo 2" style="width:42px;height:38px;min-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">2</button>
       <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:42px;height:38px;min-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
@@ -218,7 +218,7 @@ ${field('Photos',`
     showPage(shell('Add Expense',inner,true));
     // Disabled Amount / Expense by remain white while preserving disabled state.
     const expenseWhiteStyle = document.createElement('style');
-    expenseWhiteStyle.textContent = '#expenseForm #exAmount:disabled, #expenseForm #exSpentBySearch:disabled { background:#fff !important; color:#333 !important; opacity:1 !important; -webkit-text-fill-color:#333 !important; } #expenseForm .expense-photo-picker { max-width:100%; flex-wrap:nowrap !important; gap:6px; } #expenseForm .expense-photo-picker button { flex-shrink:0 !important; } #expenseForm .expense-photo-picker #exPhotoChooseBtn { min-width:76px; } #expenseForm .expense-photo-picker .expense-photo-slot { width:42px!important; min-width:42px!important; } #expenseForm .expense-field{align-items:center} #expenseForm .expense-label{align-self:center;margin-top:0!important}';
+    expenseWhiteStyle.textContent = '#expenseForm #exAmount:disabled, #expenseForm #exSpentBySearch:disabled { background:#fff !important; color:#333 !important; opacity:1 !important; -webkit-text-fill-color:#333 !important; } #expenseForm .expense-photo-picker { max-width:100%; flex-wrap:nowrap !important; gap:6px; } #expenseForm .expense-photo-picker button { flex-shrink:0 !important; } #expenseForm .expense-photo-picker #exPhotoChooseBtn { min-width:62px!important;width:62px!important;max-width:62px!important;flex:0 0 62px!important; } #expenseForm .expense-photo-picker .expense-photo-slot { width:42px!important; min-width:42px!important; } #expenseForm .expense-field{align-items:center} #expenseForm .expense-label{align-self:center;margin-top:0!important;justify-self:center} #expenseForm .expense-label-text,#expenseForm .expense-colon{vertical-align:middle}';
     document.head.appendChild(expenseWhiteStyle);
     $('expenseModuleBack').onclick=goBack;
     const photoField = $('exPhotos')?.closest('.expense-field');
@@ -272,10 +272,7 @@ ${field('Photos',`
 
     $('exPhotoChooseBtn').onclick = () => {
       let nextSlot = selectedExpensePhotos.findIndex(file => !file);
-      if (nextSlot < 0) {
-        alert('గరిష్ఠంగా 3 ఫోటోలు మాత్రమే ఎంచుకోండి. ఫోటో మార్చాలంటే 1, 2 లేదా 3 బాక్స్‌ను నొక్కండి.');
-        return;
-      }
+      if (nextSlot < 0) return;
       openExpensePhotoPicker(nextSlot);
     };
 
@@ -291,14 +288,12 @@ ${field('Photos',`
 
         // Photo బటన్ ద్వారా ఒకేసారి 1, 2 లేదా 3 ఫోటోలు ఎంచుకోవచ్చు.
         if (files.some(file => !file.type || !file.type.startsWith('image/'))) {
-          alert('దయచేసి ఫోటో ఫైళ్లను మాత్రమే ఎంచుకోండి.');
           photoInput.value = '';
           return;
         }
 
         const availableSlots = 3 - activePhotoSlot;
         if (files.length > availableSlots) {
-          alert('ఎంచుకున్న స్థానం నుంచి గరిష్ఠంగా ' + availableSlots + ' ఫోటో(లు) మాత్రమే ఎంచుకోండి. మొత్తం 3 ఫోటోల వరకు మాత్రమే అనుమతి ఉంది.');
           photoInput.value = '';
           return;
         }
@@ -416,7 +411,7 @@ ${field('Photos',`
     const periods=['Today','This Week','This Month','This Year','All'];
     return `<style>.expense-report-inline{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:5px;grid-column:auto!important;width:100%;box-sizing:border-box}.expense-report-inline .expense-label{display:block!important;flex:0 0 auto;align-items:center;justify-content:flex-start;white-space:nowrap;min-width:0;width:100%;margin:0!important}.expense-report-inline .expense-label:after{content:':'}.expense-report-inline select{display:block!important;flex:1 1 auto;min-width:0;width:100%;max-width:none;box-sizing:border-box}.expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap}.expense-report-actions>button,.expense-download-wrap>button{white-space:nowrap}.expense-download-wrap{position:relative}.expense-download-menu{position:absolute;right:0;top:100%;z-index:9999;display:flex;flex-direction:column;min-width:100px;background:#fff;border:1px solid #9ab;border-radius:8px;box-shadow:0 4px 12px #0002}.expense-download-menu.hidden{display:none}.expense-download-menu button{background:#fff;border:0;padding:9px 14px;text-align:left;color:#222}.expense-report-subheading th{background:#fff!important;text-align:left;border-top:1px solid #c4d4ff;border-bottom:1px solid #c4d4ff;color:#2d5274}.expense-report-year th{font-size:24px!important;font-weight:700;padding:10px 8px;background:#fff!important;color:#218838!important}.expense-report-month th{font-size:20px!important;font-weight:700;padding:8px;background:#fff!important;color:#e67e22!important}.expense-report-subheading.expense-report-month th{color:#e67e22!important}.expense-report-total td{font-weight:700;background:#fff!important;border-top:1px solid #c4d4ff}.expense-report-date th{font-size:13px!important;font-weight:600;background:#fff!important}.expense-report-actions .expense-secondary,.expense-report-actions .expense-primary{padding:8px 12px}.expense-date-sort-field{align-self:end}.expense-date-sort{width:100%;min-height:42px;border:1px solid #8baec8;border-radius:8px;background:#fff;color:#2d5274;font-weight:700;padding:8px;cursor:pointer}.expense-date-sort:active{background:#e5f3ff}.expense-payment-filter{grid-column:1!important}.expense-spentby-filter{grid-column:2!important}.expense-custom-filter-grid .expense-field:has(#exFilterCategory),.expense-custom-filter-grid .expense-field:has(#exFilterSub){grid-row:2!important}.expense-custom-filter-grid .expense-payment-filter,.expense-custom-filter-grid .expense-spentby-filter{grid-row:3!important}.expense-custom-filter-grid .expense-field:has(#exMinAmount),.expense-custom-filter-grid .expense-field:has(#exMaxAmount){grid-row:4!important}.expense-custom-filter-grid .expense-field:has(#exFromDate),.expense-custom-filter-grid .expense-field:has(#exToDate){grid-row:5!important}.expense-custom-filter-grid .expense-payment-filter{grid-column:1!important}.expense-custom-filter-grid .expense-spentby-filter{grid-column:2!important}.expense-custom-filter-grid .expense-search-text-filter{grid-row:6!important;grid-column:1!important}.expense-custom-filter-grid .expense-amount-sort-field{grid-row:6!important;grid-column:2!important}.expense-custom-filter-grid #exVehicleTypeWrap,.expense-custom-filter-grid #exMtcTypeWrap{grid-row:7!important;grid-column:auto!important}.expense-filter-grid #exVehicleTypeWrap,.expense-filter-grid #exMtcTypeWrap{grid-column:auto!important}.expense-filter-grid #exVehicleTypeWrap.hidden,.expense-filter-grid #exMtcTypeWrap.hidden{display:none!important}.expense-report-actions #exDownloadBtn,.expense-report-actions #expenseReportBack{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}.expense-report-actions #exDownloadBtn:disabled{opacity:1!important;color:#2477c8!important;background:transparent!important;border-color:#2477c8!important;cursor:not-allowed}.expense-summary{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 14px;box-sizing:border-box;flex-wrap:nowrap}.expense-summary-card{display:flex;align-items:center;justify-content:flex-start;gap:5px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px;flex:1 1 50%;width:50%}.expense-summary-card small{display:inline;font-size:clamp(9px,2.6vw,12px);white-space:nowrap}.expense-summary-card strong{display:inline;font-size:clamp(10px,2.9vw,14px);white-space:nowrap}@media(max-width:600px){.expense-filter-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:10px!important;row-gap:10px!important}.expense-filter-grid>.expense-field{grid-column:auto!important;min-width:0!important;width:100%!important;box-sizing:border-box!important}.expense-filter-grid>.expense-report-inline{grid-column:auto!important}.expense-filter-grid>.expense-field label{display:block!important;white-space:normal!important;max-width:100%!important;margin-bottom:5px!important}.expense-filter-grid>.expense-field input,.expense-filter-grid>.expense-field select{width:100%!important;min-width:0!important;box-sizing:border-box!important}.expense-report-inline .expense-label{flex:0 0 auto!important;width:100%!important;white-space:nowrap!important;margin-bottom:0!important}.expense-report-inline select{flex:1 1 auto!important;width:100%!important}.expense-report-actions{gap:6px!important}.expense-report-actions button{min-width:0!important;flex:1 1 0!important;padding:8px 4px!important;font-size:12px!important}}@media(min-width:601px){.expense-filter-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}.expense-filter-grid>.expense-report-inline{grid-column:auto!important}}</style><div class="expense-panel"><div class="expense-filter-grid ${custom?'expense-custom-filter-grid':''}">
       <div class="expense-field expense-report-inline"><label class="expense-label" for="exReportType"><span class="expense-label-text">Report Type</span></label><select id="exReportType">${selectOptions(types,'Select Type')}</select></div>
-      <div class="expense-field expense-report-inline"><label class="expense-label" for="exReportPeriod"><span class="expense-label-text">Report Period</span></label><select id="exReportPeriod">${selectOptions(periods,'Select Period')}</select></div>
+      <div class="expense-field expense-report-inline"><label class="expense-label" for="exReportPeriod"><span class="expense-label-text">Report Period</span></label><select id="exReportPeriod">${selectOptions(periods,'Select Period',true)}</select></div>
       <div class="expense-field"><label class="expense-label" for="exFilterCategory"><span class="expense-label-text">Category</span></label><select id="exFilterCategory">${selectOptions(Object.keys(CATEGORIES),'All Categories')}</select></div>
       <div class="expense-field"><label class="expense-label" for="exFilterSub"><span class="expense-label-text">Sub-Category</span></label><select id="exFilterSub">${selectOptions([],'All Subcategories')}</select></div>
       <div class="expense-field"><label class="expense-label" for="exMinAmount"><span class="expense-label-text">Amount &gt;</span></label><input id="exMinAmount" type="number" min="0" step="0.01" placeholder="Any"></div>
@@ -456,7 +451,7 @@ ${field('Photos',`
     const typeSelect=$('exReportType');
     const allPeriods=['Today','This Week','This Month','This Year','All'];
     const detailedPeriods=['Today','This Week','This Month','This Year','All'];
-    const syncPeriodOptions=()=>{const previous=period.value;const choices=custom?allPeriods:(typeSelect.value==='Detailed'?detailedPeriods:allPeriods);period.innerHTML=selectOptions(choices,'Select Period');period.value=choices.includes(previous)?previous:'This Month';};
+    const syncPeriodOptions=()=>{const previous=period.value;const choices=custom?allPeriods:(typeSelect.value==='Detailed'?detailedPeriods:allPeriods);period.innerHTML=selectOptions(choices,'Select Period',true);period.value=choices.includes(previous)?previous:'This Month';};
     const toggle=()=>{$('exSelectedDateWrap').classList.add('hidden');};
     typeSelect.onchange=()=>{syncPeriodOptions();toggle();};
     syncPeriodOptions();
@@ -564,7 +559,7 @@ ${field('Photos',`
         r.photo1Data,r.photo2Data,r.photo3Data,r.photo1Link,r.photo2Link,r.photo3Link
       ].filter(v=>typeof v==='string'&&v.trim()&&(/^(https?:|data:image\/)/i.test(v.trim())));
       let groupedRows='';
-      let currentYear='', currentMonth='', monthTotal=0, monthCount=0, yearTotal=0, yearCount=0;
+      let currentYear='', currentMonth='', currentDay='', monthTotal=0, monthCount=0, yearTotal=0, yearCount=0;
       const monthName=ds=>ds?new Date(ds+'T12:00:00').toLocaleString('en-US',{month:'long'}):'Unknown';
       const addMonthTotal=()=>{if(currentMonth)groupedRows+=`<tr class="expense-report-total"><td colspan="3">${esc(currentMonth)} Total (${monthCount} records)</td><td>${money(monthTotal)}</td><td colspan="5"></td></tr>`;};
       const addYearTotal=()=>{if(currentYear)groupedRows+=`<tr class="expense-report-total"><td colspan="3">${esc(currentYear)} Total (${yearCount} records)</td><td>${money(yearTotal)}</td><td colspan="5"></td></tr>`;};
@@ -573,7 +568,7 @@ ${field('Photos',`
         const yr=ds.slice(0,4)||'Unknown';
         const mon=monthName(ds);
         const wantsYearMonthGrouping=['This Year','All','Monthly','Yearly'].includes(reportPeriod);
-        if(reportPeriod==='Today' && ds){groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(formatReportDate(ds))}</th></tr>`;}
+        if(reportPeriod==='Today' && ds && ds!==currentDay){currentDay=ds;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(formatReportDate(ds))}</th></tr>`;}
         else if(reportPeriod==='This Week' && ds){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));const end=new Date(d);end.setDate(end.getDate()+6);const weekLabel=`${formatReportDate(fmt(d))} - ${formatReportDate(fmt(end))}`;if(weekLabel!==currentMonth){currentMonth=weekLabel;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(weekLabel)}</th></tr>`;}}
         else if(reportPeriod==='This Month' && !currentMonth){currentMonth=mon+' '+yr;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(mon)} ${esc(yr)}</th></tr>`;}
         else if(reportPeriod==='This Year' && !currentYear){currentYear=yr;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(yr)}</th></tr>`;}
@@ -604,7 +599,18 @@ ${field('Photos',`
     }
     const reportPeriodTitle=$('exReportPeriod')?.value||'';
     const reportHeading=`${esc(reportPeriodTitle||'All')} - ${type==='Detailed'?'Detailed Report':'Abstract'}`;
-    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${reportHeading}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${table}`;
+    let abstractPeriodHeading='';
+    if(type==='Abstract'){
+      const dates=rows.map(r=>String(r.expenseDate||'').slice(0,10)).filter(Boolean).sort();
+      const today=dateToday();
+      if(reportPeriodTitle==='Today') abstractPeriodHeading=formatReportDate(today);
+      else if(reportPeriodTitle==='This Week'){const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));const e=new Date(d);e.setDate(e.getDate()+6);abstractPeriodHeading=`${formatReportDate(fmt(d))} - ${formatReportDate(fmt(e))}`;}
+      else if(reportPeriodTitle==='This Month'){const d=new Date();abstractPeriodHeading=d.toLocaleString('en-US',{month:'long',year:'numeric'});}
+      else if(reportPeriodTitle==='This Year') abstractPeriodHeading=String(new Date().getFullYear());
+      else if(reportPeriodTitle==='All') abstractPeriodHeading=dates.length?`${new Date(dates[dates.length-1]+'T12:00:00').toLocaleString('en-US',{month:'long',year:'numeric'})} - All Periods`:'All Periods';
+    }
+    const abstractHeadingHtml=abstractPeriodHeading?`<div class="expense-abstract-heading">${esc(abstractPeriodHeading)}</div>`:'';
+    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${reportHeading}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
   }
 
   function exportExpenseReport(format){
