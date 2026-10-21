@@ -599,7 +599,7 @@ ${field('Photos',`
       table=`<div class="expense-results"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${groupedRows||`<tr><td colspan="${colCount}">No records found.</td></tr>`}</tbody></table></div>`;
     }
     const reportPeriodTitle=$('exReportPeriod')?.value||'';
-    const reportHeading=type==='Abstract'?`${esc(reportPeriodTitle||'All')} - Abstract`:'';
+    const reportHeading=`${esc(reportPeriodTitle||'All')} - ${type==='Detailed'?'Detailed Report':'Abstract'}`;
     $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${reportHeading}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${table}`;
   }
 
