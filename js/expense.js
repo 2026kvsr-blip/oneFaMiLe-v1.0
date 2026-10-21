@@ -225,7 +225,6 @@ ${field('Photos',`
     const photoField = $('exPhotos')?.closest('.expense-field');
     if (photoField) { const photoLabel = photoField.querySelector('.expense-label'); if (photoLabel) { photoLabel.style.alignSelf='center'; photoLabel.style.marginTop='0'; photoLabel.style.display='flex'; photoLabel.style.alignItems='center'; photoLabel.style.justifyContent='flex-start'; photoLabel.style.height='100%'; } }
     document.querySelectorAll('#expenseForm .expense-field').forEach(fieldEl=>{const label=fieldEl.querySelector(':scope > .expense-label');const control=fieldEl.querySelector(':scope > input, :scope > select, :scope > textarea, :scope > div');if(label&&control){label.style.alignSelf='center';label.style.marginTop='0';}});
-
     
     // =====================================
     // EXPENSE PHOTOS: PHOTO BUTTON + 3 SLOTS
@@ -608,7 +607,7 @@ ${field('Photos',`
       else if(reportPeriodTitle==='All') abstractPeriodHeading=dates.length?`${new Date(dates[dates.length-1]+'T12:00:00').toLocaleString('en-US',{month:'long',year:'numeric'})} - All Periods`:'All Periods';
     }
     const abstractHeadingHtml=abstractPeriodHeading?`<div class="expense-abstract-heading">${esc(abstractPeriodHeading)}</div>`:'';
-    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${reportHeading}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
+    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${reportHeading}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}.expense-report-subheading.expense-report-year th{color:#2e8b57!important}.expense-report-subheading.expense-report-month th{font-size:14px!important}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
   }
 
   function exportExpenseReport(format){
