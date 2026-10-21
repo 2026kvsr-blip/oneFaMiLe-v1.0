@@ -150,10 +150,9 @@ function status(message, type = '') {
   function selectOptions(items,placeholder='Select') {return `<option value="">${placeholder}</option>`+items.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
   function shell(title,inner,backInside=false){return `<div class="expense-page"><h2 class="expense-title">${esc(title)}</h2>${inner}${backInside?'':`<div class="expense-actions"><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>`}</div>`}
   function goBack(){
-    // Return to the Expenses menu directly.
-    try { openMenu(); } catch (e) { console.warn('Expenses menu navigation failed', e); }
-    const menuButton=$('expensesBtn');
-    if(menuButton && typeof setActiveButton==='function') { try { setActiveButton(menuButton); } catch (_) {} }
+    // Always return to the Expenses menu, with a safe fallback if rendering fails.
+    try { openMenu(); return; } catch (e) { console.warn('Expenses menu navigation failed', e); }
+    try { const menuButton=$('expensesBtn'); if(menuButton) menuButton.click(); else if(typeof showHome==='function') showHome(); } catch (_) { if(typeof showHome==='function') showHome(); }
   }
   function openMenu(){
     const btn=$('expensesBtn'); if(!btn)return;
@@ -423,14 +422,13 @@ ${field('Photos',`
       <div class="expense-field"><label class="expense-label" for="exFilterPayment"><span class="expense-label-text">Payment Type</span></label><select id="exFilterPayment">${selectOptions(PAYMENT_MODES,'All Payment Types')}</select></div>
       <div class="expense-field"><label class="expense-label" for="exMinAmount"><span class="expense-label-text">Amount &gt;</span></label><input id="exMinAmount" type="number" min="0" step="0.01" placeholder="Any"></div>
       <div class="expense-field"><label class="expense-label" for="exMaxAmount"><span class="expense-label-text">Amount &lt;</span></label><input id="exMaxAmount" type="number" min="0" step="0.01" placeholder="Any"></div>
-      <div class="expense-field expense-amount-sort-field"><label class="expense-label">Date order</label><button type="button" id="exDateSortBtn" class="expense-date-sort" aria-label="Sort date ascending" title="Sort date ascending">↑ Date Ascending</button></div>
+      ${custom?'':`<div class="expense-field expense-amount-sort-field"><label class="expense-label">Date order</label><button type="button" id="exDateSortBtn" class="expense-date-sort" aria-label="Sort date ascending" title="Sort date ascending">↑ Date Ascending</button></div>`}
       <div class="expense-field hidden" id="exSelectedDateWrap"><label class="expense-label" for="exSelectedDate"><span class="expense-label-text">Selected Date</span></label><input id="exSelectedDate" type="date" value="${dateToday()}"></div>
       ${custom?`<div class="expense-field"><label class="expense-label" for="exFromDate"><span class="expense-label-text">From Date</span></label><input id="exFromDate" type="date"></div><div class="expense-field"><label class="expense-label" for="exToDate"><span class="expense-label-text">To Date</span></label><input id="exToDate" type="date"></div>
       <div class="expense-field"><label class="expense-label" for="exFilterMtcType"><span class="expense-label-text">Mtc Type</span></label><select id="exFilterMtcType">${selectOptions(MAINTENANCE_TYPES,'All Maintenance Types')}</select></div>
       <div class="expense-field"><label class="expense-label" for="exFilterVehicleNumber"><span class="expense-label-text">Vehicle Number</span></label><input id="exFilterVehicleNumber" type="search" placeholder="Any vehicle number"></div>
       <div class="expense-field"><label class="expense-label" for="exFilterSpentBy"><span class="expense-label-text">Spent By</span></label><input id="exFilterSpentBy" list="exSearchMembers" placeholder="Any member/name"><datalist id="exSearchMembers">${[...new Set([loginName(),...members].filter(Boolean))].map(n=>`<option value="${esc(n)}"></option>`).join('')}</datalist></div>
-      <div class="expense-field"><label class="expense-label" for="exFilterSensitive"><span class="expense-label-text">Sensitive</span></label><select id="exFilterSensitive"><option value="No" selected>No</option><option value="Yes">Yes</option><option value="All">All</option></select></div>
-      <div class="expense-field hidden" id="exCustomPassWrap"><label class="expense-label" for="exCustomPass"><span class="expense-label-text">Sensitive Pass Code</span></label><input id="exCustomPass" type="password" inputmode="numeric" placeholder="Required for Yes / All"></div>
+      <div class="expense-field expense-amount-sort-field"><label class="expense-label">Date order</label><button type="button" id="exDateSortBtn" class="expense-date-sort" aria-label="Sort date ascending" title="Sort date ascending">↑ Date Ascending</button></div>
       <div class="expense-field" style="grid-column:1/-1"><label class="expense-label" for="exSearchText"><span class="expense-label-text">Search Text</span></label><input id="exSearchText" type="search" placeholder="Description, category, spent by…"></div>`:''}
       </div><div class="expense-actions expense-report-actions"><button type="button" id="exRunReport" class="expense-primary">Show Report</button><div class="expense-download-wrap"><button type="button" id="exDownloadBtn" class="expense-secondary" disabled>Download ▾</button><div id="exDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div><button type="button" id="expenseReportBack" class="expense-secondary">← Back</button></div><div id="expenseStatus" class="expense-status" role="status"></div></div><div id="exReportOutput"></div>`;
   }
@@ -444,26 +442,20 @@ ${field('Photos',`
     typeSelect.onchange=()=>{syncPeriodOptions();toggle();};
     syncPeriodOptions();
     period.onchange=toggle;
-    const back=$('exReportBack'); if(back) { back.onclick=(event)=>{event.preventDefault();event.stopPropagation();goBack();}; back.addEventListener('touchend',(event)=>{event.preventDefault();goBack();},{passive:false}); }
+    const back=$('exReportBack'); if(back) { back.type='button'; back.onclick=(event)=>{event.preventDefault();event.stopPropagation();goBack();}; }
     const downloadBtn=$('exDownloadBtn'), downloadMenu=$('exDownloadMenu');
     if(downloadBtn&&downloadMenu){
       downloadBtn.disabled=true;
       downloadBtn.onclick=()=>{if(!downloadBtn.disabled)downloadMenu.classList.toggle('hidden')};
       downloadMenu.querySelectorAll('[data-export]').forEach(item=>item.onclick=()=>{downloadMenu.classList.add('hidden');exportExpenseReport(item.dataset.export);});
     }
-    $('exFilterCategory').onchange=()=>{const c=$('exFilterCategory').value;$('exFilterSub').innerHTML=selectOptions(c==='Vehicle Maintenance'?VEHICLE_TYPES:(CATEGORIES[c]||[]),'All Subcategories')};if(custom){$('exFilterSensitive').onchange=()=>{$('exCustomPassWrap').classList.toggle('hidden',$('exFilterSensitive').value==='No')}}
+    $('exFilterCategory').onchange=()=>{const c=$('exFilterCategory').value;$('exFilterSub').innerHTML=selectOptions(c==='Vehicle Maintenance'?VEHICLE_TYPES:(CATEGORIES[c]||[]),'All Subcategories')};
     const dateSortBtn=$('exDateSortBtn');
     if(dateSortBtn){dateSortBtn.onclick=()=>{dateSortAscending=!dateSortAscending;dateSortBtn.textContent=dateSortAscending?'↑ Date Ascending':'↓ Date Descending';dateSortBtn.setAttribute('aria-label',dateSortAscending?'Sort date ascending':'Sort date descending');dateSortBtn.title=dateSortAscending?'Sort date ascending':'Sort date descending';if(lastReportRows.length)renderResults(lastReportRows,$('exReportType').value||'Abstract');};}
     $('exRunReport').onclick=async()=>{
       let rows=cachedExpenses;
       let access=kind;
-      const searchSensitive=custom ? $('exFilterSensitive').value : '';
-      if(custom && searchSensitive!=='No'){
-        const pass=$('exCustomPass').value.trim();
-        if(!pass){status('Sensitive Pass Code is required when searching Sensitive = Yes or All.','error');$('exCustomPass').focus();return}
-        access='all';
-      }
-      if(!rows.length || (custom && searchSensitive!=='No' && !rows.some(r=>r.sensitive==='Yes'))){$('exRunReport').disabled=true;status('Loading expenses…');try{const fields={reportAccess:access};if(access==='all'&&custom)fields.passCode=$('exCustomPass').value.trim();const res=await request('getExpenses',fields);if(res.status!=='success')throw new Error(res.message||'Unable to load expenses');rows=res.expenses||[];cachedExpenses=rows}catch(e){status(e.message,'error');$('exRunReport').disabled=false;return}finally{$('exRunReport').disabled=false}}
+      if(!rows.length){$('exRunReport').disabled=true;status('Loading expenses…');try{const fields={reportAccess:access};const res=await request('getExpenses',fields);if(res.status!=='success')throw new Error(res.message||'Unable to load expenses');rows=res.expenses||[];cachedExpenses=rows}catch(e){status(e.message,'error');$('exRunReport').disabled=false;return}finally{$('exRunReport').disabled=false}}
       const filtered=filterRows(rows,custom,kind);lastReportRows=filtered.slice();renderResults(filtered,$('exReportType').value||'Abstract');if(downloadBtn)downloadBtn.disabled=false;status(`${filtered.length} expense record(s) found.`,'success');
     };
     if(!custom){$('exReportType').value='Abstract';period.value='This Month';toggle()}
@@ -480,7 +472,7 @@ ${field('Photos',`
     return rows.filter(r=>{
       const d=String(r.expenseDate||'').slice(0,10);const dt=d?new Date(d+'T12:00:00').getTime():0;
       if(start!==null&&dt<start)return false;if(end!==null&&dt>end)return false;
-      if($('exFilterCategory').value&&r.mainCategory!==$('exFilterCategory').value)return false;if($('exFilterSub').value&&r.subCategory!==$('exFilterSub').value&&r.vehicleType!==$('exFilterSub').value)return false;if($('exFilterPayment').value&&r.paymentMode!==$('exFilterPayment').value)return false;const min=$('exMinAmount').value,max=$('exMaxAmount').value;if(min!==''&&Number(r.amount)<=Number(min))return false;if(max!==''&&Number(r.amount)>=Number(max))return false;if(custom){if($('exFilterMtcType').value&&String(r.maintenanceType||'')!==$('exFilterMtcType').value)return false;if($('exFilterVehicleNumber').value.trim()&&String(r.vehicleNumber||'').toLowerCase().indexOf($('exFilterVehicleNumber').value.trim().toLowerCase())<0)return false;if($('exFilterSpentBy').value.trim()&&String(r.spentBy||'').toLowerCase().indexOf($('exFilterSpentBy').value.trim().toLowerCase())<0)return false;if($('exFilterSensitive').value==='Yes'&&r.sensitive!=='Yes')return false;if($('exFilterSensitive').value==='No'&&r.sensitive!=='No')return false;const q=$('exSearchText').value.trim().toLowerCase();if(q&&!`${r.description||''} ${r.mainCategory||''} ${r.subCategory||''} ${r.spentBy||''}`.toLowerCase().includes(q))return false}
+      if($('exFilterCategory').value&&r.mainCategory!==$('exFilterCategory').value)return false;if($('exFilterSub').value&&r.subCategory!==$('exFilterSub').value&&r.vehicleType!==$('exFilterSub').value)return false;if($('exFilterPayment').value&&r.paymentMode!==$('exFilterPayment').value)return false;const min=$('exMinAmount').value,max=$('exMaxAmount').value;if(min!==''&&Number(r.amount)<=Number(min))return false;if(max!==''&&Number(r.amount)>=Number(max))return false;if(custom){if($('exFilterMtcType').value&&String(r.maintenanceType||'')!==$('exFilterMtcType').value)return false;if($('exFilterVehicleNumber').value.trim()&&String(r.vehicleNumber||'').toLowerCase().indexOf($('exFilterVehicleNumber').value.trim().toLowerCase())<0)return false;if($('exFilterSpentBy').value.trim()&&String(r.spentBy||'').toLowerCase().indexOf($('exFilterSpentBy').value.trim().toLowerCase())<0)return false;const q=$('exSearchText').value.trim().toLowerCase();if(q&&!`${r.description||''} ${r.mainCategory||''} ${r.subCategory||''} ${r.spentBy||''}`.toLowerCase().includes(q))return false}
       return true;
     });
   }
@@ -546,7 +538,7 @@ ${field('Photos',`
       if(['This Year','All','Monthly','Yearly'].includes(reportPeriod)){addMonthTotal();addYearTotal();}
       table=`<div class="expense-results"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${groupedRows||`<tr><td colspan="${colCount}">No records found.</td></tr>`}</tbody></table></div>`;
     }
-    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${type==='Abstract'?'Abstract':''}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense</small><strong>${money(total)}</strong></div></div>${table}`;
+    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${type==='Abstract'?'Abstract':''}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${table}`;
   }
 
   function exportExpenseReport(format){
