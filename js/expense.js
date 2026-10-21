@@ -503,6 +503,46 @@ ${field('Photos',`
     const total=rows.reduce((s,r)=>s+Number(r.amount||0),0);const counts=rows.length;
     let table='';
     if(type==='Abstract'){
+      const selectedPeriod=$('exReportPeriod')?.value||'';
+      if(['Daily','Weekly','Monthly','Yearly'].includes(selectedPeriod)){
+        const selectedCategory=$('exFilterCategory')?.value||'';
+        const selectedSub=$('exFilterSub')?.value||'';
+        const selectedPayment=$('exFilterPayment')?.value||'';
+        const categoryLabel=selectedCategory||'All Categories';
+        const subLabel=selectedSub||'All Subcategories';
+        const paymentLabel=selectedPayment||'All Payment Types';
+        const groups={};
+        rows.forEach(r=>{
+          const ds=String(r.expenseDate||'').slice(0,10);
+          let key=ds||'Unknown';
+          if(selectedPeriod==='Weekly'&&ds){
+            const d=new Date(ds+'T12:00:00');
+            d.setDate(d.getDate()-((d.getDay()+6)%7));
+            key=fmt(d);
+          } else if(selectedPeriod==='Monthly') key=ds?ds.slice(0,7):'Unknown';
+          else if(selectedPeriod==='Yearly') key=ds?ds.slice(0,4):'Unknown';
+          if(!groups[key])groups[key]={amount:0,count:0};
+          groups[key].amount+=Number(r.amount||0);
+          groups[key].count++;
+        });
+        const periodHeader=selectedPeriod==='Daily'?'Date':selectedPeriod==='Weekly'?'Week':selectedPeriod==='Monthly'?'Month':'Year';
+        const periodValue=key=>{
+          if(key==='Unknown')return key;
+          if(selectedPeriod==='Daily')return formatReportDate(key);
+          if(selectedPeriod==='Weekly'){
+            const start=new Date(key+'T12:00:00');
+            const end=new Date(start);end.setDate(end.getDate()+6);
+            return `${formatReportDate(fmt(start))} - ${formatReportDate(fmt(end))}`;
+          }
+          if(selectedPeriod==='Monthly'){
+            const parts=key.split('-').map(Number);
+            return new Date(parts[0],parts[1]-1,1).toLocaleString('en-US',{month:'long',year:'numeric'});
+          }
+          return key;
+        };
+        const keys=Object.keys(groups).sort((a,b)=>dateSortAscending?a.localeCompare(b):b.localeCompare(a));
+        table=`<div class="expense-results"><table><thead><tr><th>S.No</th><th>${periodHeader}</th><th>Category</th><th>Sub Category</th><th>Records</th><th>Total Amount</th><th>Payment Type</th></tr></thead><tbody>${keys.map((key,i)=>`<tr><td>${i+1}</td><td>${esc(periodValue(key))}</td><td>${esc(categoryLabel)}</td><td>${esc(subLabel)}</td><td>${groups[key].count}</td><td>${money(groups[key].amount)}</td><td>${esc(paymentLabel)}</td></tr>`).join('')||'<tr><td colspan="7">No records found.</td></tr>'}</tbody></table></div>`;
+      } else {
       const selectedCategory=$('exFilterCategory')?.value||'';
       if(selectedCategory){
         const sums={};
@@ -511,6 +551,7 @@ ${field('Photos',`
       } else {
         const sums={};rows.forEach(r=>{const k=r.mainCategory||'Other';if(!sums[k])sums[k]={amount:0,count:0};sums[k].amount+=Number(r.amount||0);sums[k].count++});
         table=`<div class="expense-results"><table><thead><tr><th>Main Category</th><th>Records</th><th>Total Amount</th></tr></thead><tbody>${Object.keys(sums).sort().map(k=>`<tr><td>${esc(k)}</td><td>${sums[k].count}</td><td>${money(sums[k].amount)}</td></tr>`).join('')||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
+      }
       }
     } else {
       const reportPeriod=$('exReportPeriod')?.value||'Detailed';
