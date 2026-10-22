@@ -209,7 +209,7 @@ ${field('Photos',`
       <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:42px;height:38px;min-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
     </div>
     <input id="exPhotos" type="file" accept="image/*" multiple style="display:none;">
-    <small id="exPhotoCount" style="display:block;white-space:nowrap;font-size:12px;line-height:16px;margin:0;">0 photos selected (Max 3)</small>
+    <small id="exPhotoCount" style="display:block;align-self:flex-start;text-align:left;white-space:nowrap;font-size:12px;line-height:16px;margin:0;padding:0;">0 photos selected (Max 3)</small>
   </div>
 `,'exPhotos')}
 <div id="expenseStatus" class="expense-status" role="status"></div>
@@ -218,7 +218,7 @@ ${field('Photos',`
     showPage(shell('Add Expense',inner,true));
     // Disabled Amount / Expense by remain white while preserving disabled state.
     const expenseWhiteStyle = document.createElement('style');
-    expenseWhiteStyle.textContent = '#expenseForm #exAmount:disabled, #expenseForm #exSpentBySearch:disabled { background:#fff !important; color:#333 !important; opacity:1 !important; -webkit-text-fill-color:#333 !important; } #expenseForm .expense-photo-picker { max-width:100%; flex-wrap:nowrap !important; gap:6px; } #expenseForm .expense-photo-picker button { flex-shrink:0 !important; } #expenseForm .expense-photo-picker #exPhotoChooseBtn { min-width:62px!important;width:62px!important;max-width:62px!important;flex:0 0 62px!important;background:#fff!important;background-color:#fff!important;color:#2477c8!important; } #expenseForm .expense-photo-picker .expense-photo-slot { width:42px!important; min-width:42px!important; } #expenseForm .expense-field{align-items:center} #expenseForm .expense-label{align-self:center;margin-top:0!important;justify-self:center} #expenseForm .expense-label-text,#expenseForm .expense-colon{vertical-align:middle}';
+    expenseWhiteStyle.textContent = '#expenseForm #exAmount:disabled, #expenseForm #exSpentBySearch:disabled { background:#fff !important; color:#333 !important; opacity:1 !important; -webkit-text-fill-color:#333 !important; } #expenseForm .expense-photo-picker { max-width:100%; flex-wrap:nowrap !important; gap:6px; } #expenseForm .expense-photo-picker button { flex-shrink:0 !important; } #expenseForm .expense-photo-picker #exPhotoChooseBtn { min-width:62px!important;width:62px!important;max-width:62px!important;flex:0 0 62px!important;background:#fff!important;background-color:#fff!important;color:#2477c8!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;padding:0!important; } #expenseForm .expense-photo-picker .expense-photo-slot { width:42px!important; min-width:42px!important; } #expenseForm .expense-field{align-items:center} #expenseForm .expense-label{display:grid!important;grid-template-columns:minmax(0,1fr) 10px!important;align-items:center!important;align-self:center;margin-top:0!important;justify-self:stretch!important;text-align:left!important;width:100%!important;box-sizing:border-box!important} #expenseForm .expense-label-text{text-align:left!important;min-width:0!important} #expenseForm .expense-colon{text-align:center!important;display:block!important;width:10px!important}';
     document.head.appendChild(expenseWhiteStyle);
     $('expenseModuleBack').onclick=goBack;
     const photoField = $('exPhotos')?.closest('.expense-field');
@@ -450,7 +450,7 @@ ${field('Photos',`
     const period=$('exReportPeriod');
     const typeSelect=$('exReportType');
     const allPeriods=['Today','This Week','This Month','This Year','All'];
-    const detailedPeriods=['Today','This Week','This Month','This Year','All'];
+    const detailedPeriods=['Today','This Week','This Month','This Year','Daily','Weekly','Monthly','Yearly','All'];
     const abstractPeriods=['Today','This Week','This Month','This Year','All','Daily','Weekly','Monthly','Yearly'];
     const syncPeriodOptions=()=>{const previous=period.value;const choices=typeSelect.value==='Abstract'?abstractPeriods:detailedPeriods;period.innerHTML=selectOptions(choices,'Select Period',true);period.value=choices.includes(previous)?previous:'This Month';};
     const toggle=()=>{$('exSelectedDateWrap').classList.add('hidden');};
@@ -567,7 +567,7 @@ ${field('Photos',`
         if(reportPeriod==='Today' && ds && ds!==currentDay){currentDay=ds;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(formatReportDate(ds))}</th></tr>`;}
         else if(reportPeriod==='This Week' && ds){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));const end=new Date(d);end.setDate(end.getDate()+6);const weekLabel=`${formatReportDate(fmt(d))} - ${formatReportDate(fmt(end))}`;if(weekLabel!==currentMonth){currentMonth=weekLabel;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(weekLabel)}</th></tr>`;}}
         else if(reportPeriod==='This Month' && !currentMonth){currentMonth=mon+' '+yr;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(mon)} ${esc(yr)}</th></tr>`;}
-        else if(reportPeriod==='This Year' && !currentYear){currentYear=yr;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(yr)}</th></tr>`;}
+        else if(reportPeriod==='This Year' && !currentYear){currentYear=yr;groupedRows+=`<tr class="expense-report-subheading expense-report-year"><th colspan="${colCount}">${esc(yr)}</th></tr>`;}
         if(wantsYearMonthGrouping){
           if(yr!==currentYear){addMonthTotal();addYearTotal();currentYear=yr;currentMonth='';monthTotal=0;monthCount=0;yearTotal=0;yearCount=0;groupedRows+=`<tr class="expense-report-subheading expense-report-year"><th colspan="${colCount}">${esc(yr)}</th></tr>`;}
           const monthKey=mon+' '+yr;
