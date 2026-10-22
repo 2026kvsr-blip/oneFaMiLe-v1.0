@@ -210,7 +210,7 @@ ${field('Photos',`
       <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:42px;height:52px;min-width:42px;max-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
     </div>
     <input id="exPhotos" type="file" accept="image/*" multiple style="display:none;">
-    <small id="exPhotoCount" style="display:block;align-self:flex-start;text-align:left;white-space:nowrap;font-size:12px;line-height:16px;margin:0;padding:0;">0 photos selected (Max 3)</small>
+    <small id="exPhotoCount" style="display:block;align-self:flex-start;text-align:left;white-space:nowrap;font-size:12px;line-height:16px;margin:0;padding:0;">0 photos selected (Maxim 3)</small>
   </div>
 `,'exPhotos')}
 <div id="expenseStatus" class="expense-status" role="status"></div>
@@ -454,7 +454,7 @@ ${field('Photos',`
     const detailedPeriods=['Today','This Week','This Month','This Year','All'];
     const abstractPeriods=['Today','This Week','This Month','This Year','All','Daily','Weekly','Monthly','Yearly'];
     const syncPeriodOptions=()=>{const previous=period.value;const choices=typeSelect.value==='Abstract'?abstractPeriods:detailedPeriods;period.innerHTML=selectOptions(choices,'Select Period',true);period.value=choices.includes(previous)?previous:'This Month';};
-    const toggle=()=>{$('exSelectedDateWrap').classList.add('hidden');const p=period.value;const isAbstract=typeSelect.value==='Abstract';const hideDateOrder=isAbstract;const sortField=$('exDateSortBtn')?.closest('.expense-field');if(sortField)sortField.classList.toggle('hidden',hideDateOrder);};
+    const toggle=()=>{$('exSelectedDateWrap').classList.add('hidden');const p=period.value;const isAbstract=typeSelect.value==='Abstract';const hideDateOrder=isAbstract&&['Today','This Week','This Month','This Year'].includes(p);const sortField=$('exDateSortBtn')?.closest('.expense-field');if(sortField)sortField.classList.toggle('hidden',hideDateOrder);};
     typeSelect.onchange=()=>{syncPeriodOptions();toggle();};
     syncPeriodOptions();
     period.onchange=toggle;
