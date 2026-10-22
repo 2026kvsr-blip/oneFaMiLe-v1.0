@@ -540,8 +540,26 @@ ${field('Photos',`
         rows.forEach(r=>{const k=r.subCategory || (String(r.mainCategory||'').toLowerCase()==='vehicle maintenance' ? r.vehicleType : '') || 'Other';if(!sums[k])sums[k]={amount:0,count:0};sums[k].amount+=Number(r.amount||0);sums[k].count++});
         table=`<div class="expense-abstract-heading">Category: ${esc(selectedCategory)}</div><div class="expense-results"><table><thead><tr><th>Sub-Category</th><th>Records</th><th>Total Amount</th></tr></thead><tbody>${Object.keys(sums).sort().map(k=>`<tr><td>${esc(k)}</td><td>${sums[k].count}</td><td>${money(sums[k].amount)}</td></tr>`).join('')||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
       } else {
-        const sums={};rows.forEach(r=>{const k=r.mainCategory||'Other';if(!sums[k])sums[k]={amount:0,count:0};sums[k].amount+=Number(r.amount||0);sums[k].count++});
-        table=`<div class="expense-results"><table><thead><tr><th>Main Category</th><th>Records</th><th>Total Amount</th></tr></thead><tbody>${Object.keys(sums).sort().map(k=>`<tr><td>${esc(k)}</td><td>${sums[k].count}</td><td>${money(sums[k].amount)}</td></tr>`).join('')||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
+        const sums={};
+        rows.forEach(r=>{
+          const main=String(r.mainCategory||'Other');
+          const sub=String(r.subCategory || (main.toLowerCase()==='vehicle maintenance' ? r.vehicleType : '') || 'Other');
+          if(!sums[main])sums[main]={amount:0,count:0,subs:{}};
+          sums[main].amount+=Number(r.amount||0);sums[main].count++;
+          if(!sums[main].subs[sub])sums[main].subs[sub]={amount:0,count:0};
+          sums[main].subs[sub].amount+=Number(r.amount||0);sums[main].subs[sub].count++;
+        });
+        let categoryIndex=0;
+        const categoryRows=Object.keys(sums).sort().map(main=>{
+          const index=categoryIndex++;
+          const group=sums[main];
+          const subRows=Object.keys(group.subs).sort().map(sub=>{
+            const detail=group.subs[sub];
+            return `<tr class="expense-abstract-subrow" data-parent-index="${index}" hidden><td style="padding-left:28px">↳ ${esc(sub)}</td><td>${detail.count}</td><td>${money(detail.amount)}</td></tr>`;
+          }).join('');
+          return `<tr class="expense-abstract-category-row" data-toggle-index="${index}" tabindex="0" role="button" aria-expanded="false" style="cursor:pointer"><td><span class="expense-abstract-toggle" aria-hidden="true">＋</span> ${esc(main)}</td><td>${group.count}</td><td>${money(group.amount)}</td></tr>${subRows}`;
+        }).join('');
+        table=`<div class="expense-results"><table class="expense-abstract-category-table"><thead><tr><th>Main Category</th><th>Records</th><th>Total Amount</th></tr></thead><tbody>${categoryRows||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
       }
       }
     } else {
@@ -606,7 +624,22 @@ ${field('Photos',`
       else if(reportPeriodTitle==='All') abstractPeriodHeading=dates.length?`${new Date(dates[dates.length-1]+'T12:00:00').toLocaleString('en-US',{month:'long',year:'numeric'})} - All Periods`:'All Periods';
     }
     const abstractHeadingHtml=abstractPeriodHeading?`<div class="expense-abstract-heading">${esc(abstractPeriodHeading)}</div>`:'';
-    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${reportHeading}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}.expense-report-subheading.expense-report-year th{color:#2e8b57!important}.expense-report-subheading.expense-report-month th{font-size:14px!important}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
+    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${reportHeading}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}.expense-report-subheading.expense-report-year th{color:#2e8b57!important}.expense-report-subheading.expense-report-month th{font-size:14px!important}.expense-abstract-category-row:focus{outline:2px solid #4a9fe8;outline-offset:-2px}.expense-abstract-subrow td{background:#f4f9ff!important;color:#2d5274}.expense-abstract-toggle{display:inline-block;width:16px;font-weight:700;color:#2477c8}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
+    // Abstract category rows expand/collapse their own subcategory totals. Keep this
+    // behavior scoped to the current report output; no global navigation or filters change.
+    $('exReportOutput').querySelectorAll('.expense-abstract-category-row').forEach(row=>{
+      const toggle=()=>{
+        const index=row.getAttribute('data-toggle-index');
+        const subRows=$('exReportOutput').querySelectorAll(`.expense-abstract-subrow[data-parent-index="${index}"]`);
+        const opening=row.getAttribute('aria-expanded')!=='true';
+        subRows.forEach(subRow=>{subRow.hidden=!opening;});
+        row.setAttribute('aria-expanded',String(opening));
+        const mark=row.querySelector('.expense-abstract-toggle');
+        if(mark)mark.textContent=opening?'－':'＋';
+      };
+      row.addEventListener('click',toggle);
+      row.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();toggle();}});
+    });
   }
 
   function exportExpenseReport(format){
