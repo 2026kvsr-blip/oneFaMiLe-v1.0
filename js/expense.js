@@ -592,7 +592,8 @@ ${field('Photos',`
         } else if(reportPeriod==='Weekly'&&ds){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));groupedRows+=`<tr class="expense-report-subheading"><th colspan="${colCount}">Week starting: ${esc(fmt(d))}</th></tr>`;}
         else if(reportPeriod==='Daily') groupedRows+=`<tr class="expense-report-subheading expense-report-date"><th colspan="${colCount}">${esc(formatReportDate(ds))}</th></tr>`;
         const photos=photoValues(r);
-        const photosHtml=photos.length?photos.map((url,i)=>`<a href="${esc(url)}" target="_blank" rel="noopener">Photo ${i+1}</a>`).join('<br>'):'—';
+        // Show each stored photo as a small preview and keep it clickable to open full size.
+        const photosHtml=photos.length?`<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">${photos.map((url,i)=>`<a href="${esc(url)}" target="_blank" rel="noopener" title="Open Photo ${i+1}" style="display:inline-flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none"><img src="${esc(url)}" alt="Photo ${i+1}" loading="lazy" style="width:54px;height:54px;object-fit:cover;border:1px solid #c4d4ff;border-radius:5px" onerror="this.style.display='none';this.nextElementSibling.textContent='Photo ${i+1}'"><span style="font-size:11px">Photo ${i+1}</span></a>`).join('')}</div>`:'—';
         const cells=[
           `<td>${esc(formatReportDate(r.expenseDate))}</td>`,
           `<td>${esc(r.mainCategory||'')}</td>`,
