@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -3641,15 +3642,21 @@ async function checkSignup(){
             "checkSignup"
         );
 
-        formData.append(
-            "loginUserName",
-            loginUserName.value.trim()
-        );
+       
+formData.append(
+    "loginUserName",
+    loginUserName.value.trim()
+);
 
-        formData.append(
-            "mobile",
-            mobileNo.value.trim()
-        );
+formData.append(
+    "email",
+    document.getElementById("emailId").value.trim()
+);
+
+formData.append(
+    "mobile",
+    mobileNo.value.trim()
+);
 
         const response = await fetch(API_URL, {
             method: "POST",
