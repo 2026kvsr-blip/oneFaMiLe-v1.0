@@ -1,5 +1,3 @@
-
-
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -454,7 +452,7 @@ ${field('Photos',`
     const detailedPeriods=['Today','This Week','This Month','This Year','All'];
     const abstractPeriods=['Today','This Week','This Month','This Year','All','Daily','Weekly','Monthly','Yearly'];
     const syncPeriodOptions=()=>{const previous=period.value;const choices=typeSelect.value==='Abstract'?abstractPeriods:detailedPeriods;period.innerHTML=selectOptions(choices,'Select Period',true);period.value=choices.includes(previous)?previous:'This Month';};
-    const toggle=()=>{$('exSelectedDateWrap').classList.add('hidden');const p=period.value;const isAbstract=typeSelect.value==='Abstract';const hideDateOrder=isAbstract&&['Today','This Week','This Month','This Year'].includes(p);const sortField=$('exDateSortBtn')?.closest('.expense-field');if(sortField)sortField.classList.toggle('hidden',hideDateOrder);};
+    const toggle=()=>{$('exSelectedDateWrap').classList.add('hidden');const p=period.value;const isAbstract=typeSelect.value==='Abstract';const hideDateOrder=isAbstract&&['All','Today','This Week','This Month','This Year'].includes(p);const sortField=$('exDateSortBtn')?.closest('.expense-field');if(sortField)sortField.classList.toggle('hidden',hideDateOrder);};
     typeSelect.onchange=()=>{syncPeriodOptions();toggle();};
     syncPeriodOptions();
     period.onchange=toggle;
