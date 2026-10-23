@@ -1,6 +1,5 @@
 
 
-
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -3643,21 +3642,15 @@ async function checkSignup(){
             "checkSignup"
         );
 
-       
-formData.append(
-    "loginUserName",
-    loginUserName.value.trim()
-);
+        formData.append(
+            "loginUserName",
+            loginUserName.value.trim()
+        );
 
-formData.append(
-    "email",
-    document.getElementById("emailId").value.trim()
-);
-
-formData.append(
-    "mobile",
-    mobileNo.value.trim()
-);
+        formData.append(
+            "mobile",
+            mobileNo.value.trim()
+        );
 
         const response = await fetch(API_URL, {
             method: "POST",
@@ -6369,17 +6362,11 @@ logoutMenuBtn.onclick = ()=>{
     signupPage.classList.add("hidden");
     signupOTPPage.classList.add("hidden");
     welcomePage.classList.remove("hidden");
-   
-const msg = document.getElementById("logoutMessage");
-
-if (msg) {
+    const msg = document.getElementById("logoutMessage");
     msg.style.display = "block";
-
-    setTimeout(() => {
+    setTimeout(()=>{
         msg.style.display = "none";
-    }, 1500);
-}
-
+    },1500);
 };
 
 /* ======================
