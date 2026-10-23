@@ -568,10 +568,21 @@ ${field('Photos',`
       const hasVehicle=sortedRows.some(r=>String(r.mainCategory||'').toLowerCase()==='vehicle maintenance');
       const headers=['Date','Category','Sub-Category','Amount Rs:','Payment Type','Expense by','Sensitive','No of photos','Photos'];
       const colCount=headers.length;
-      const photoValues=r=>[
-        r.photo1Url,r.photo2Url,r.photo3Url,r.photo1,r.photo2,r.photo3,
-        r.photo1Data,r.photo2Data,r.photo3Data,r.photo1Link,r.photo2Link,r.photo3Link
-      ].filter(v=>typeof v==='string'&&v.trim()&&(/^(https?:|data:image\/)/i.test(v.trim())));
+      // Each uploaded photo may be returned under more than one alias
+      // (for example photo1Url and photo1). Select only one value per slot.
+      const photoValues=r=>[1,2,3].map(n=>{
+        const candidates=[
+          r['photo'+n+'Url'],
+          r['photo'+n],
+          r['photo'+n+'Data'],
+          r['photo'+n+'Link']
+        ];
+        return candidates.find(v=>
+          typeof v==='string' &&
+          v.trim() &&
+          /^(https?:|data:image\/)/i.test(v.trim())
+        ) || '';
+      }).filter(Boolean);
       let groupedRows='';
       let currentYear='', currentMonth='', currentDay='', monthTotal=0, monthCount=0, yearTotal=0, yearCount=0;
       const monthName=ds=>ds?new Date(ds+'T12:00:00').toLocaleString('en-US',{month:'long'}):'Unknown';
