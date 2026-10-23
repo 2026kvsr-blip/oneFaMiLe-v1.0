@@ -1,5 +1,4 @@
 
-
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -569,10 +568,21 @@ ${field('Photos',`
       const hasVehicle=sortedRows.some(r=>String(r.mainCategory||'').toLowerCase()==='vehicle maintenance');
       const headers=['Date','Category','Sub-Category','Amount Rs:','Payment Type','Expense by','Sensitive','No of photos','Photos'];
       const colCount=headers.length;
-      const photoValues=r=>[
-        r.photo1Url,r.photo2Url,r.photo3Url,r.photo1,r.photo2,r.photo3,
-        r.photo1Data,r.photo2Data,r.photo3Data,r.photo1Link,r.photo2Link,r.photo3Link
-      ].filter(v=>typeof v==='string'&&v.trim()&&(/^(https?:|data:image\/)/i.test(v.trim())));
+      // Each uploaded photo may be returned under more than one alias
+      // (for example photo1Url and photo1). Select only one value per slot.
+      const photoValues=r=>[1,2,3].map(n=>{
+        const candidates=[
+          r['photo'+n+'Url'],
+          r['photo'+n],
+          r['photo'+n+'Data'],
+          r['photo'+n+'Link']
+        ];
+        return candidates.find(v=>
+          typeof v==='string' &&
+          v.trim() &&
+          /^(https?:|data:image\/)/i.test(v.trim())
+        ) || '';
+      }).filter(Boolean);
       let groupedRows='';
       let currentYear='', currentMonth='', currentDay='', monthTotal=0, monthCount=0, yearTotal=0, yearCount=0;
       const monthName=ds=>ds?new Date(ds+'T12:00:00').toLocaleString('en-US',{month:'long'}):'Unknown';
@@ -603,15 +613,15 @@ ${field('Photos',`
           `<td>${money(r.amount)}</td>`,
           `<td>${esc(r.paymentMode||'')}</td>`,
           `<td>${esc(r.spentBy||'')}</td>`,
-          `<td>${esc(r.sensitive||'No')}</td>`,
-          `<td>${photos.length}</td>`,
+          `<td class="expense-center-cell">${esc(r.sensitive||'No')}</td>`,
+          `<td class="expense-center-cell">${photos.length}</td>`,
           `<td>${photosHtml}</td>`
         ];
         groupedRows+=`<tr>${cells.join('')}</tr>`;
         if(['This Year','All','Monthly','Yearly'].includes(reportPeriod)){const amount=Number(r.amount)||0;monthTotal+=amount;monthCount++;yearTotal+=amount;yearCount++;}
       });
       if(['This Year','All','Monthly','Yearly'].includes(reportPeriod)){addMonthTotal();addYearTotal();}
-      table=`<div class="expense-results"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${groupedRows||`<tr><td colspan="${colCount}">No records found.</td></tr>`}</tbody></table></div>`;
+      table=`<div class="expense-results"><table><thead><tr>${headers.map((h,i)=>`<th${i===6||i===7?' class="expense-center-cell"':''}>${h}</th>`).join('')}</tr></thead><tbody>${groupedRows||`<tr><td colspan="${colCount}">No records found.</td></tr>`}</tbody></table></div>`;
     }
     const reportPeriodTitle=$('exReportPeriod')?.value||'';
     const reportHeading=`${esc(reportPeriodTitle||'All')} - ${type==='Detailed'?'Detailed Report':'Abstract'}`;
@@ -626,7 +636,7 @@ ${field('Photos',`
       else if(reportPeriodTitle==='All') abstractPeriodHeading=dates.length?`${new Date(dates[dates.length-1]+'T12:00:00').toLocaleString('en-US',{month:'long',year:'numeric'})} - All Periods`:'All Periods';
     }
     const abstractHeadingHtml=abstractPeriodHeading?`<div class="expense-abstract-heading">${esc(abstractPeriodHeading)}</div>`:'';
-    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${reportHeading}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}.expense-report-subheading.expense-report-year th{color:#2e8b57!important}.expense-report-subheading.expense-report-month th{font-size:14px!important}.expense-abstract-category-row:focus{outline:2px solid #4a9fe8;outline-offset:-2px}.expense-abstract-subrow td{background:#f4f9ff!important;color:#2d5274}.expense-abstract-toggle{display:inline-block;width:16px;font-weight:700;color:#2477c8}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
+    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${reportHeading}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}.expense-report-subheading.expense-report-year th{color:#2e8b57!important}.expense-report-subheading.expense-report-month th{font-size:14px!important}.expense-abstract-category-row:focus{outline:2px solid #4a9fe8;outline-offset:-2px}.expense-abstract-subrow td{background:#f4f9ff!important;color:#2d5274}.expense-abstract-toggle{display:inline-block;width:16px;font-weight:700;color:#2477c8}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table th.expense-center-cell,.expense-results table td.expense-center-cell{text-align:center!important;vertical-align:middle!important}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
     // Abstract category rows expand/collapse their own subcategory totals. Keep this
     // behavior scoped to the current report output; no global navigation or filters change.
     $('exReportOutput').querySelectorAll('.expense-abstract-category-row').forEach(row=>{
