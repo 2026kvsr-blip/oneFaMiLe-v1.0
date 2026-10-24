@@ -209,7 +209,7 @@ ${field('Photos',`
       <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:42px;height:52px;min-width:42px;max-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
     </div>
     <input id="exPhotos" type="file" accept="image/*" multiple style="display:none;">
-    <small id="exPhotoCount" style="display:block;align-self:flex-start;text-align:left;white-space:nowrap;font-size:12px;line-height:16px;margin:0;padding:0;">0 photos selected (Max 3)</small>
+    <small id="exPhotoCount" style="display:block;align-self:flex-start;text-align:left;white-space:nowrap;font-size:12px;line-height:16px;margin:0;padding:0;">0 photos selected (Maximum 3)</small>
   </div>
 `,'exPhotos')}
 <div id="expenseStatus" class="expense-status" role="status"></div>
@@ -604,9 +604,13 @@ ${field('Photos',`
         } else if(reportPeriod==='Weekly'&&ds){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));groupedRows+=`<tr class="expense-report-subheading"><th colspan="${colCount}">Week starting: ${esc(fmt(d))}</th></tr>`;}
         else if(reportPeriod==='Daily') groupedRows+=`<tr class="expense-report-subheading expense-report-date"><th colspan="${colCount}">${esc(formatReportDate(ds))}</th></tr>`;
         const photos=photoValues(r);
-        // Display small photo thumbnails side-by-side without Photo 1/2/3 labels.
-        // Keep each thumbnail clickable to open its full-size image in a separate tab.
-        const photosHtml=photos.length?`<div style="display:flex;align-items:center;gap:5px;flex-wrap:nowrap;white-space:nowrap">${photos.map((url,i)=>`<a href="${esc(url)}" target="_blank" rel="noopener" title="Open photo ${i+1}" style="display:inline-flex;flex:0 0 46px;width:46px;height:46px;align-items:center;justify-content:center;text-decoration:none"><img src="${esc(url)}" alt="Expense photo ${i+1}" loading="lazy" style="display:block;width:44px;height:44px;object-fit:cover;border:1px solid #c4d4ff;border-radius:5px" onerror="this.parentElement.style.display='none'"></a>`).join('')}</div>`:'—';
+        // Show small clickable thumbnails. For Google Drive links, use its thumbnail endpoint for image display.
+        const photoThumbUrl=url=>{
+          const match=String(url||'').match(/[?&]id=([^&]+)/i) || String(url||'').match(/\/d\/([^/?]+)/i);
+          if(/drive\.google\.com/i.test(String(url||'')) && match) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w180`;
+          return String(url||'');
+        };
+        const photosHtml=photos.length?`<div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;white-space:nowrap">${photos.map((url,i)=>`<a href="${esc(url)}" target="_blank" rel="noopener" title="Open full photo ${i+1}" style="display:inline-flex;flex:0 0 48px;width:48px;height:48px;align-items:center;justify-content:center;text-decoration:none"><img src="${esc(photoThumbUrl(url))}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:46px;height:46px;object-fit:cover;border:1px solid #c4d4ff;border-radius:5px" onerror="this.style.display='none';this.parentElement.title='Photo could not load; open link to view';this.parentElement.style.border='1px solid #c4d4ff';this.parentElement.style.borderRadius='5px';this.parentElement.textContent='Open'"></a>`).join('')}</div>`:'—';
         const cells=[
           `<td>${esc(formatReportDate(r.expenseDate))}</td>`,
           `<td>${esc(r.mainCategory||'')}</td>`,
