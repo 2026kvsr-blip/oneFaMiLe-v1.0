@@ -571,14 +571,21 @@ ${field('Photos',`
       // Each uploaded photo may be returned under more than one alias
       // (for example photo1Url and photo1). Select only one value per slot.
       const photoValues=r=>[1,2,3].map(n=>{
-        const candidates=[
-          r['photo'+n+'Url'],
-          r['photo'+n],
-          r['photo'+n+'Data'],
-          r['photo'+n+'Link']
+        // Match common Google Sheet / Apps Script header aliases without case or spacing sensitivity.
+        const aliases = new Set([
+          'photo'+n, 'photo'+n+'url', 'photo'+n+'data', 'photo'+n+'link',
+          'photos'+n, 'photos'+n+'url', 'photo'+n+'driveurl'
+        ]);
+        const entries = Object.entries(r || {});
+        const candidates = [
+          r['photo'+n+'Url'], r['photo'+n], r['photo'+n+'Data'], r['photo'+n+'Link'],
+          ...entries.filter(([key]) => {
+            const normalized = String(key).toLowerCase().replace(/[^a-z0-9]/g, '');
+            return aliases.has(normalized);
+          }).map(([,value]) => value)
         ];
-        return candidates.find(v=>
-          typeof v==='string' &&
+        return candidates.find(v =>
+          typeof v === 'string' &&
           v.trim() &&
           /^(https?:|data:image\/)/i.test(v.trim())
         ) || '';
@@ -610,7 +617,7 @@ ${field('Photos',`
           if(/drive\.google\.com/i.test(String(url||'')) && match) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w180`;
           return String(url||'');
         };
-        const photosHtml=photos.length?`<div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;white-space:nowrap">${photos.map((url,i)=>`<a href="${esc(url)}" target="_blank" rel="noopener" title="Open full photo ${i+1}" style="display:inline-flex;flex:0 0 48px;width:48px;height:48px;align-items:center;justify-content:center;text-decoration:none"><img src="${esc(photoThumbUrl(url))}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:46px;height:46px;object-fit:cover;border:1px solid #c4d4ff;border-radius:5px" onerror="this.style.display='none';this.parentElement.title='Photo could not load; open link to view';this.parentElement.style.border='1px solid #c4d4ff';this.parentElement.style.borderRadius='5px';this.parentElement.textContent='Open'"></a>`).join('')}</div>`:'—';
+        const photosHtml=photos.length?`<div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;white-space:nowrap">${photos.map((url,i)=>`<button type="button" class="expense-photo-preview-btn" data-expense-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 48px;width:48px;height:48px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;cursor:pointer"><img src="${esc(photoThumbUrl(url))}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:46px;height:46px;object-fit:cover;border:1px solid #c4d4ff;border-radius:5px" onerror="this.style.display='none';this.parentElement.textContent='Open';this.parentElement.style.border='1px solid #c4d4ff';this.parentElement.style.borderRadius='5px';this.parentElement.style.color='#2477c8';this.parentElement.style.fontSize='11px'"></button>`).join('')}</div>`:'—';
         const cells=[
           `<td>${esc(formatReportDate(r.expenseDate))}</td>`,
           `<td>${esc(r.mainCategory||'')}</td>`,
@@ -642,6 +649,33 @@ ${field('Photos',`
     }
     const abstractHeadingHtml=abstractPeriodHeading?`<div class="expense-abstract-heading">${esc(abstractPeriodHeading)}</div>`:'';
     $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${reportHeading}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}.expense-report-subheading.expense-report-year th{color:#2e8b57!important}.expense-report-subheading.expense-report-month th{font-size:14px!important}.expense-abstract-category-row:focus{outline:2px solid #4a9fe8;outline-offset:-2px}.expense-abstract-subrow td{background:#f4f9ff!important;color:#2d5274}.expense-abstract-toggle{display:inline-block;width:16px;font-weight:700;color:#2477c8}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table th.expense-center-cell,.expense-results table td.expense-center-cell{text-align:center!important;vertical-align:middle!important}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
+    // Photo thumbnails open in an in-app preview; the report remains open underneath.
+    const reportOutput = $('exReportOutput');
+    if (reportOutput) {
+      reportOutput.querySelectorAll('.expense-photo-preview-btn').forEach(photoBtn => {
+        photoBtn.addEventListener('click', () => {
+          const rawUrl = photoBtn.getAttribute('data-expense-photo') || '';
+          const match = rawUrl.match(/[?&]id=([^&]+)/i) || rawUrl.match(/\/d\/([^/?]+)/i);
+          const displayUrl = /drive\.google\.com/i.test(rawUrl) && match
+            ? `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`
+            : rawUrl;
+          let modal = document.getElementById('expensePhotoPreviewModal');
+          if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'expensePhotoPreviewModal';
+            modal.style.cssText = 'position:fixed;inset:0;z-index:1000000;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;';
+            modal.innerHTML = '<button type="button" aria-label="Close photo preview" style="position:absolute;top:12px;right:16px;width:42px;height:42px;border:0;border-radius:50%;background:#fff;color:#222;font-size:30px;line-height:1;cursor:pointer;z-index:1">×</button><img alt="Expense photo preview" style="display:block;max-width:100%;max-height:88vh;object-fit:contain;border-radius:6px;box-shadow:0 4px 20px #0008">';
+            document.body.appendChild(modal);
+            const closeModal = () => { modal.style.display = 'none'; };
+            modal.querySelector('button').addEventListener('click', closeModal);
+            modal.addEventListener('click', ev => { if (ev.target === modal) closeModal(); });
+            document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && modal.style.display !== 'none') closeModal(); });
+          }
+          modal.querySelector('img').src = displayUrl;
+          modal.style.display = 'flex';
+        });
+      });
+    }
     // Abstract category rows expand/collapse their own subcategory totals. Keep this
     // behavior scoped to the current report output; no global navigation or filters change.
     $('exReportOutput').querySelectorAll('.expense-abstract-category-row').forEach(row=>{
@@ -678,7 +712,27 @@ ${field('Photos',`
     activeReport='normal';cachedExpenses=[];
     showPage(shell('Expenses — Custom Search',reportControls(true),true));const reportTitle=document.querySelector('.expense-title');if(reportTitle)reportTitle.id='expenseReportTitle';setupReportControls(true,'normal');
   }
-  function showInfo(){showPage(shell('About Expenses','<div class="expense-panel"><p>Record family expenses and search reports by date, category, member, payment mode, amount and sensitivity.</p><p>Normal Reports exclude Sensitive = Yes records. Sensitive and All Reports require the Sensitive Pass Code.</p></div>'));$('expenseModuleBack').onclick=goBack}
+  function showInfo(){
+    const aboutHtml = `
+      <div class="expense-panel">
+        <h3 style="margin-top:0;color:#2477c8">About oneFaMiLe Expenses</h3>
+        <p><strong>Expenses</strong> helps family members record, review and manage day-to-day household and personal expenses in one place.</p>
+        <h4>1. Add Expense</h4>
+        <p>Enter the expense date, main category, sub-category, amount, payment mode, whether the entry is sensitive, and the person who spent the money. Add a short description when useful. Vehicle Maintenance also supports vehicle type, maintenance type and vehicle number.</p>
+        <p>You can attach up to three photos to an expense. The amount must be greater than zero, and the date and category fields are required before saving.</p>
+        <h4>2. Reports</h4>
+        <p>Use Abstract reports to review record counts and totals grouped by category or by day, week, month or year. Use Detailed reports to inspect individual expense entries, including date, category, amount, payment type, expense by, sensitivity and attached photos.</p>
+        <h4>3. Custom Search</h4>
+        <p>Filter records using date range, category, sub-category, amount range, payment type, expense by and search text. Vehicle Maintenance records can also be filtered by vehicle type and maintenance type. Reports can be downloaded in PDF, Word or Excel-compatible format.</p>
+        <h4>4. Sensitive Reports</h4>
+        <p>Mark an expense as Sensitive when appropriate. Normal Reports are intended to exclude sensitive entries. Sensitive Reports and All Reports require the Sensitive Pass Code.</p>
+        <h4>5. Family data and privacy</h4>
+        <p>Expense entries are associated with the currently selected family and the active login session. Check the selected family and the entered details before saving. Keep your login and Sensitive Pass Code private.</p>
+        <p style="margin-bottom:0"><strong>Tip:</strong> Review the date, amount and category before pressing Save. Use Reports or Custom Search to find saved entries later.</p>
+      </div>`;
+    showPage(shell('About Expenses',aboutHtml));
+    $('expenseModuleBack').onclick=goBack;
+  }
   // Initialize member list before form opens; form also works if member loading fails.
   document.addEventListener('DOMContentLoaded',()=>{loadMembers()});
   const expenseButton=$('expensesBtn');
