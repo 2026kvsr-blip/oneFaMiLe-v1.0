@@ -209,7 +209,7 @@ ${field('Photos',`
       <button type="button" class="expense-photo-slot" data-photo-slot="2" id="exPhotoSlot3" aria-label="Choose photo 3" style="width:42px;height:52px;min-width:42px;max-width:42px;flex:0 0 42px;box-sizing:border-box;border:1px solid #8aa6c1;border-radius:7px;background:#fff;">3</button>
     </div>
     <input id="exPhotos" type="file" accept="image/*" multiple style="display:none;">
-    <small id="exPhotoCount" style="display:block;align-self:flex-start;text-align:left;white-space:nowrap;font-size:12px;line-height:16px;margin:0;padding:0;">0 photos selected (Maxi 3)</small>
+    <small id="exPhotoCount" style="display:block;align-self:flex-start;text-align:left;white-space:nowrap;font-size:12px;line-height:16px;margin:0;padding:0;">0 photos selected (Maximum 3)</small>
   </div>
 `,'exPhotos')}
 <div id="expenseStatus" class="expense-status" role="status"></div>
@@ -612,19 +612,10 @@ ${field('Photos',`
         else if(reportPeriod==='Daily') groupedRows+=`<tr class="expense-report-subheading expense-report-date"><th colspan="${colCount}">${esc(formatReportDate(ds))}</th></tr>`;
         const photos=photoValues(r);
         // Show small clickable thumbnails. For Google Drive links, use its thumbnail endpoint for image display.
-        const getDrivePhotoId = url => {
-          const value = String(url || '');
-          if (!/drive\.google\.com/i.test(value)) return '';
-          const match = value.match(/[?&]id=([^&]+)/i)
-            || value.match(/\/(?:file\/)?d\/([^/?]+)/i)
-            || value.match(/\/uc\?.*?[?&]id=([^&]+)/i);
-          return match ? decodeURIComponent(match[1]) : '';
-        };
-        const photoThumbUrl = url => {
-          const id = getDrivePhotoId(url);
-          return id
-            ? `https://drive.google.com/thumbnail?id=${encodeURIComponent(id)}&sz=w240`
-            : String(url || '');
+        const photoThumbUrl=url=>{
+          const match=String(url||'').match(/[?&]id=([^&]+)/i) || String(url||'').match(/\/d\/([^/?]+)/i);
+          if(/drive\.google\.com/i.test(String(url||'')) && match) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w180`;
+          return String(url||'');
         };
         const photosHtml=photos.length?`<div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;white-space:nowrap">${photos.map((url,i)=>`<button type="button" class="expense-photo-preview-btn" data-expense-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 48px;width:48px;height:48px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;cursor:pointer"><img src="${esc(photoThumbUrl(url))}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:46px;height:46px;object-fit:cover;border:1px solid #c4d4ff;border-radius:5px" onerror="this.style.display='none';this.parentElement.textContent='Open';this.parentElement.style.border='1px solid #c4d4ff';this.parentElement.style.borderRadius='5px';this.parentElement.style.color='#2477c8';this.parentElement.style.fontSize='11px'"></button>`).join('')}</div>`:'—';
         const cells=[
@@ -664,49 +655,24 @@ ${field('Photos',`
       reportOutput.querySelectorAll('.expense-photo-preview-btn').forEach(photoBtn => {
         photoBtn.addEventListener('click', () => {
           const rawUrl = photoBtn.getAttribute('data-expense-photo') || '';
-          const driveId = getDrivePhotoId(rawUrl);
-          const candidates = driveId
-            ? [
-                `https://drive.google.com/thumbnail?id=${encodeURIComponent(driveId)}&sz=w1200`,
-                `https://drive.google.com/uc?export=view&id=${encodeURIComponent(driveId)}`,
-                rawUrl
-              ]
-            : [rawUrl];
-
+          const match = rawUrl.match(/[?&]id=([^&]+)/i) || rawUrl.match(/\/d\/([^/?]+)/i);
+          const displayUrl = /drive\.google\.com/i.test(rawUrl) && match
+            ? `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`
+            : rawUrl;
           let modal = document.getElementById('expensePhotoPreviewModal');
           if (!modal) {
             modal = document.createElement('div');
             modal.id = 'expensePhotoPreviewModal';
-            modal.style.cssText = 'position:fixed;inset:0;z-index:1000000;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:12px;box-sizing:border-box;touch-action:manipulation;';
-            modal.innerHTML = '<button type="button" aria-label="Close photo preview" style="position:absolute;top:12px;right:12px;width:44px;height:44px;border:0;border-radius:50%;background:#fff;color:#222;font-size:30px;line-height:1;cursor:pointer;z-index:2">×</button><div class="expense-photo-preview-message" style="display:none;color:#fff;text-align:center;font:16px Arial,sans-serif;padding:20px">Photo could not be loaded. Check that the Google Drive file is shared for viewing.</div><img alt="Expense photo preview" style="display:block;max-width:100%;max-height:88vh;width:auto;height:auto;object-fit:contain;border-radius:6px;box-shadow:0 4px 20px #0008">';
+            modal.style.cssText = 'position:fixed;inset:0;z-index:1000000;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;';
+            modal.innerHTML = '<button type="button" aria-label="Close photo preview" style="position:absolute;top:12px;right:16px;width:42px;height:42px;border:0;border-radius:50%;background:#fff;color:#222;font-size:30px;line-height:1;cursor:pointer;z-index:1">×</button><img alt="Expense photo preview" style="display:block;max-width:100%;max-height:88vh;object-fit:contain;border-radius:6px;box-shadow:0 4px 20px #0008">';
             document.body.appendChild(modal);
             const closeModal = () => { modal.style.display = 'none'; };
             modal.querySelector('button').addEventListener('click', closeModal);
             modal.addEventListener('click', ev => { if (ev.target === modal) closeModal(); });
             document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && modal.style.display !== 'none') closeModal(); });
           }
-
-          const image = modal.querySelector('img');
-          const message = modal.querySelector('.expense-photo-preview-message');
+          modal.querySelector('img').src = displayUrl;
           modal.style.display = 'flex';
-          image.style.display = 'block';
-          message.style.display = 'none';
-
-          let candidateIndex = 0;
-          image.onerror = () => {
-            candidateIndex += 1;
-            if (candidateIndex < candidates.length) {
-              image.src = candidates[candidateIndex];
-            } else {
-              image.style.display = 'none';
-              message.style.display = 'block';
-            }
-          };
-          image.onload = () => {
-            image.style.display = 'block';
-            message.style.display = 'none';
-          };
-          image.src = candidates[0] || rawUrl;
         });
       });
     }
