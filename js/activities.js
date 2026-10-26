@@ -38,7 +38,7 @@
   function styleOnce(){if($('activityReportStyles'))return;const st=document.createElement('style');st.id='activityReportStyles';st.textContent=`
     .activity-page{max-width:1100px;margin:0 auto}.activity-page .expense-panel{padding:12px;background:#f0f7ff;border:1px solid #c4d4ff;border-radius:14px;box-sizing:border-box}
     .activity-page .expense-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
-    .activity-page .activity-id-line{display:flex!important;flex-direction:row!important;align-items:center!important;gap:5px!important;white-space:nowrap!important;overflow:visible;grid-column:1 / -1!important;justify-self:start!important;align-self:start!important;width:100%;min-height:28px;color:#888!important;font-weight:500!important;text-align:left!important;line-height:28px}.activity-page .activity-sensitive-line{display:flex!important;flex-direction:row!important;justify-content:flex-start!important;align-items:center!important;grid-column:1 / -1!important;justify-self:start!important;align-self:start!important;width:100%!important;max-width:100%;text-align:left!important;margin:12px 0!important;padding:0!important}.activity-page .activity-sensitive-line label{display:flex!important;flex-direction:row!important;justify-content:flex-start!important;align-items:center!important;gap:8px;margin:0!important;padding:0!important;width:max-content!important;max-width:100%;text-align:left!important}.activity-page .activity-sensitive-line input{margin:0!important;flex:0 0 auto}.activity-page .activity-reminder-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;grid-column:1 / -1;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-reminder-grid>.expense-field{grid-column:auto!important;min-width:0!important;width:100%!important;max-width:100%!important;box-sizing:border-box}.activity-page .activity-reminder-grid input,.activity-page .activity-reminder-grid select{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box}.activity-page .activity-section-title{font-size:16px;color:#2477c8;border-bottom:1px solid #c4d4ff;padding:8px 0 5px;margin:12px 0 8px}.activity-page .activity-custom-input{margin-top:5px}.activity-page [hidden]{display:none!important}.activity-page .expense-field{min-width:0;display:flex;flex-direction:column;gap:5px}.activity-page .expense-label{font-weight:600;color:#2d5274;display:block;white-space:normal}
+    .activity-page .activity-schedule-date-row{grid-column:1/-1;width:100%;margin-top:8px}.activity-page .activity-schedule-date-row .expense-field{max-width:100%}.activity-page .activity-id-line{display:flex!important;flex-direction:row!important;align-items:center!important;gap:5px!important;white-space:nowrap!important;overflow:visible;grid-column:1 / -1!important;justify-self:start!important;align-self:start!important;width:100%;min-height:28px;color:#888!important;font-weight:500!important;text-align:left!important;line-height:28px}.activity-page .activity-reminder-toggle-wrap{display:contents}.activity-page .activity-sensitive-line{display:flex!important;justify-content:flex-start!important;align-items:center!important;width:100%;text-align:left!important;margin:4px 0!important;padding:0!important}.activity-page .activity-sensitive-line label{display:inline-flex!important;justify-content:flex-start!important;align-items:center!important;gap:3px!important;margin:0!important;padding:0!important;text-align:left!important;width:auto!important}.activity-page .activity-sensitive-line input{margin:0!important;flex:0 0 auto}.activity-page .activity-reminder-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;grid-column:1 / -1;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-reminder-grid>.expense-field{grid-column:auto!important;min-width:0!important;width:100%!important;max-width:100%!important;box-sizing:border-box}.activity-page .activity-reminder-grid input,.activity-page .activity-reminder-grid select{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box}.activity-page .activity-section-title{font-size:16px;color:#2477c8;border-bottom:1px solid #c4d4ff;padding:8px 0 5px;margin:12px 0 8px}.activity-page .activity-custom-input{margin-top:5px}.activity-page [hidden]{display:none!important}.activity-page .expense-field{min-width:0;display:flex;flex-direction:column;gap:5px}.activity-page .expense-label{font-weight:600;color:#2d5274;display:block;white-space:normal}
     .activity-page .expense-field input,.activity-page .expense-field select,.activity-page .expense-field textarea{width:100%;min-width:0;max-width:100%;box-sizing:border-box;min-height:40px;padding:8px 10px;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#222;font:inherit}
     .activity-page .expense-report-inline{display:flex;flex-direction:column;gap:5px}.activity-page .expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap;margin:12px 0}
     .activity-page .expense-report-actions>button,.activity-page .expense-download-wrap>button{white-space:nowrap}.activity-page .expense-download-wrap{position:relative}
@@ -72,9 +72,10 @@
       ${selectField('category','Category',[],'Select Activity Type first',true)}
       ${selectField('subCategory','Sub Category',[],'Select Category first',true)}
       
-      ${field('Description','description','<textarea id="description" name="description" rows="3" maxlength="2000" placeholder="Enter details"></textarea>',true)}</div>
+      ${field('Description','description','<textarea id="description" name="description" rows="3" maxlength="2000" placeholder="Enter details"></textarea>',true)}
+        <div class="activity-schedule-date-row">${field('Scheduled Date *','startDate','<input id="startDate" name="startDate" type="date" value="'+today()+'" required>')}</div></div>
       <div class="expense-filter-grid">
-      ${field('Scheduled Date *','startDate','<input id="startDate" name="startDate" type="date" value="'+today()+'" required>')}
+      
       ${field('Start Time','startTime','<input id="startTime" name="startTime" type="time">')}
       ${field('End Date','endDate','<input id="endDate" name="endDate" type="date">')}
       ${field('End Time','endTime','<input id="endTime" name="endTime" type="time">')}
@@ -88,7 +89,7 @@
       ${field('Progress (%)','progressPercent','<input id="progressPercent" name="progressPercent" type="number" min="0" max="100" value="0">')}
       ${field('Completed Date','completedDate','<input id="completedDate" name="completedDate" type="date">')}</div>
       <div class="expense-filter-grid activity-reminder-grid">
-      ${field('Reminder','reminderEnabled','<select id="reminderEnabled" name="reminderEnabled"><option value="false" selected>No</option><option value="true">Yes</option></select>')}
+      <div class="activity-reminder-toggle-wrap">${field('Reminder','reminderEnabled','<select id="reminderEnabled" name="reminderEnabled"><option value="false" selected>No</option><option value="true">Yes</option></select>')}</div>
       ${field('Reminder Date','reminderDate','<input id="reminderDate" name="reminderDate" type="date">')}${field('Reminder Time','reminderTime','<input id="reminderTime" name="reminderTime" type="time">')}
       ${field('Reminder Repeat','reminderRepeat','<select id="reminderRepeat" name="reminderRepeat"><option value="Once" selected>Once</option><option value="Daily">Daily</option><option value="Weekly">Weekly</option><option value="Monthly">Monthly</option><option value="Yearly">Yearly</option></select>')}</div>
       <div class="expense-filter-grid" data-section="additional">
@@ -116,9 +117,22 @@
       show('reminderDate',reminderOn);show('reminderTime',reminderOn);show('reminderRepeat',reminderOn);
       show('venue',event);show('organiser',event);show('participants',event||meeting);show('meetingWith',meeting);show('locationLink',meeting||appt);show('agenda',meeting);show('appointmentPerson',appt);show('followUpDate',appt);}
     [type,cat,sub,$('priority'),$('status'),$('repeatType'),$('reminderRepeat'),$('reminderEnabled')].forEach(el=>{if(el)customToggle(el.id)});
-    type.addEventListener('change',()=>{updateCat();updateVisibility()});cat.addEventListener('change',()=>{updateSub();updateVisibility()});sub.addEventListener('change',()=>{});$('reminderEnabled').addEventListener('change',updateVisibility);
-    updateCat();$('reminderEnabled').value='false';updateVisibility();$('status').value='Pending';$('priority').value='Normal';
-    function resetForm(){form.reset();$('startDate').value=today();$('status').value='Pending';$('priority').value='Normal';$('reminderEnabled').value='false';$('progressPercent').value='0';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();updateVisibility();status('')}
+    type.addEventListener('change',()=>{updateCat();updateVisibility()});cat.addEventListener('change',()=>{updateSub();updateVisibility()});sub.addEventListener('change',()=>{});$('reminderEnabled').addEventListener('change',()=>{updateVisibility();layoutReminderFields()});
+    updateCat();$('reminderEnabled').value='false';updateVisibility();layoutReminderFields();$('status').value='Pending';$('priority').value='Normal';
+    function layoutReminderFields(){
+      const yes=$('reminderEnabled').value==='true';
+      const statusField=document.querySelector('[data-field="status"]');
+      const reminderToggle=document.querySelector('.activity-reminder-toggle-wrap');
+      const reminderFields=['reminderDate','reminderTime','reminderRepeat'].map(id=>document.querySelector('[data-field="'+id+'"]')).filter(Boolean);
+      if(statusField && reminderToggle){
+        statusField.style.gridColumn='1';
+        reminderToggle.style.gridColumn='2';
+        reminderToggle.style.gridRow='auto';
+      }
+      reminderFields.forEach(el=>{el.style.gridColumn='';});
+      if(!yes){reminderFields.forEach(el=>el.hidden=true);}
+    }
+    function resetForm(){form.reset();$('startDate').value=today();$('status').value='Pending';$('priority').value='Normal';$('reminderEnabled').value='false';$('progressPercent').value='0';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();updateVisibility();layoutReminderFields();status('')}
     form.onsubmit=async ev=>{ev.preventDefault();if(!family().familyId){status('Current family was not found. Please open your family and try again.','error');return}if(!token()){status('Login session expired. Please login again.','error');return}
       const activityType=val('activityType'),category=val('category'),subCategory=val('subCategory');if(!activityType||!category||!subCategory){status('Activity Type, Category and Sub Category are required.','error');return}if(!val('title')){status('Activity Title is required.','error');return}
       const btn=$('activitySaveBtn');btn.disabled=true;btn.textContent='Saving…';status('Saving activity…');try{const fd=new FormData(form),fields={};for(const [k,v] of fd.entries())fields[k]=String(v);
