@@ -65,7 +65,7 @@
     styleOnce();
     const typeItems=Object.keys(ACTIVITY_CONFIG);
     const inner=`<div class="expense-panel"><form id="activityForm" class="expense-form" autocomplete="off">
-      <h3 class="activity-section-title">1. Basic Details</h3><div class="expense-filter-grid">
+      <div class="expense-filter-grid">
       <div class="activity-id-line"><span>Activity ID:</span> <span>Auto-generated</span></div>
       ${selectField('activityType','Activity Type',typeItems,'Select Type',true)}
       ${field('Title *','title','<input id="title" name="title" maxlength="150" required placeholder="Enter activity title">')}
@@ -73,8 +73,8 @@
       ${selectField('subCategory','Sub Category',[],'Select Category first',true)}
       
       ${field('Description','description','<textarea id="description" name="description" rows="3" maxlength="2000" placeholder="Enter details"></textarea>',true)}</div>
-      <h3 class="activity-section-title">2. Schedule</h3><div class="expense-filter-grid">
-      ${field('Start Date *','startDate','<input id="startDate" name="startDate" type="date" value="'+today()+'" required>')}
+      <div class="expense-filter-grid">
+      ${field('Scheduled Date *','startDate','<input id="startDate" name="startDate" type="date" value="'+today()+'" required>')}
       ${field('Start Time','startTime','<input id="startTime" name="startTime" type="time">')}
       ${field('End Date','endDate','<input id="endDate" name="endDate" type="date">')}
       ${field('End Time','endTime','<input id="endTime" name="endTime" type="time">')}
@@ -82,16 +82,16 @@
       ${field('Due Time','dueTime','<input id="dueTime" name="dueTime" type="time">')}
       ${selectField('repeatType','Repeat',repeatOptions,'Does not repeat')}
       ${field('Repeat Until','repeatUntil','<input id="repeatUntil" name="repeatUntil" type="date">')}</div>
-      <h3 class="activity-section-title">3. Status</h3><div class="expense-filter-grid">
+      <div class="expense-filter-grid">
       ${field('Assigned To','assignedTo','<input id="assignedTo" name="assignedTo" placeholder="Family member / Self">')}
-      ${selectField('priority','Priority',priorityOptions,'Select Priority')}${selectField('status','Status',statusOptions,'Select Status')}
+      ${selectField('priority','Priority',priorityOptions,'Select Priority')}${field('Status','status','<select id="status" name="status"><option value="Pending">Pending</option><option value="In Progress">In Progress</option><option value="On Hold">On Hold</option><option value="Completed">Completed</option><option value="Cancelled">Cancelled</option><option value="Not Necessary">Not Necessary</option></select>')}
       ${field('Progress (%)','progressPercent','<input id="progressPercent" name="progressPercent" type="number" min="0" max="100" value="0">')}
       ${field('Completed Date','completedDate','<input id="completedDate" name="completedDate" type="date">')}</div>
-      <h3 class="activity-section-title">4. Reminder</h3><div class="expense-filter-grid activity-reminder-grid">
-      ${field('Reminder','reminderEnabled','<select id="reminderEnabled" name="reminderEnabled"><option value="false" selected>No</option><option value="true">Yes</option><option value="__custom__">＋ Custom text…</option></select><input id="reminderEnabledCustom" class="activity-custom-input" type="text" placeholder="Type a custom value" hidden>')}
+      <div class="expense-filter-grid activity-reminder-grid">
+      ${field('Reminder','reminderEnabled','<select id="reminderEnabled" name="reminderEnabled"><option value="false" selected>No</option><option value="true">Yes</option></select>')}
       ${field('Reminder Date','reminderDate','<input id="reminderDate" name="reminderDate" type="date">')}${field('Reminder Time','reminderTime','<input id="reminderTime" name="reminderTime" type="time">')}
-      ${selectField('reminderRepeat','Reminder Repeat',['Once','Daily','Weekly','Monthly','Yearly','Custom'],'Once')}</div>
-      <h3 class="activity-section-title" data-section="additional">5. Additional Details</h3><div class="expense-filter-grid" data-section="additional">
+      ${field('Reminder Repeat','reminderRepeat','<select id="reminderRepeat" name="reminderRepeat"><option value="Once" selected>Once</option><option value="Daily">Daily</option><option value="Weekly">Weekly</option><option value="Monthly">Monthly</option><option value="Yearly">Yearly</option></select>')}</div>
+      <div class="expense-filter-grid" data-section="additional">
       ${field('Venue','venue','<input id="venue" name="venue" placeholder="Venue">')}${field('Organiser','organiser','<input id="organiser" name="organiser" placeholder="Organiser">')}
       ${field('Participants','participants','<input id="participants" name="participants" placeholder="Names / family members">')}${field('Meeting With','meetingWith','<input id="meetingWith" name="meetingWith" placeholder="Person / team">')}
       ${field('Location / Link','locationLink','<input id="locationLink" name="locationLink" placeholder="Address or meeting link">')}${field('Agenda','agenda','<input id="agenda" name="agenda" placeholder="Meeting agenda">')}
