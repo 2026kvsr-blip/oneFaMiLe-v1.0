@@ -52,6 +52,33 @@
     .activity-page .expense-summary{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 14px;box-sizing:border-box;flex-wrap:nowrap}.activity-page .expense-summary-card{display:flex;align-items:center;gap:5px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px;flex:1 1 33%;width:33%}.activity-page .expense-summary-card small{font-size:clamp(9px,2.6vw,12px)}.activity-page .expense-summary-card strong{font-size:clamp(10px,2.9vw,14px)}
     .activity-page #activityDownloadBtn,.activity-page #activityReportBack{background:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}.activity-page .expense-status{margin:8px 0;white-space:pre-wrap}
     @media(max-width:600px){.activity-page .expense-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:9px;row-gap:10px}.activity-page .expense-filter-grid>.expense-field{grid-column:auto;min-width:0}.activity-page .expense-filter-grid .wide{grid-column:1/-1}.activity-page .expense-report-actions{gap:6px}.activity-page .expense-report-actions button{min-width:0;flex:1 1 0;padding:8px 4px;font-size:12px}.activity-page .expense-summary-card{padding:8px 5px;gap:3px}}
+
+    /* Activity form alignment and spacing fixes */
+    .activity-page .activity-description-date-row .expense-label,
+    .activity-page .activity-description-date-row label{
+      text-align:left!important;align-self:stretch!important;width:100%!important;
+      margin-left:0!important;margin-right:0!important;justify-self:start!important;
+    }
+    .activity-page .activity-description-date-row>.expense-field{
+      align-items:stretch!important;gap:5px!important;
+    }
+    .activity-page .activity-reminder-grid{
+      row-gap:16px!important;column-gap:10px!important;margin-top:14px!important;
+    }
+    .activity-page .activity-reminder-grid .expense-label{
+      text-align:left!important;align-self:stretch!important;width:100%!important;
+      margin:0!important;justify-self:start!important;
+    }
+    .activity-page .activity-sensitive-line{
+      margin-top:18px!important;margin-bottom:8px!important;
+    }
+    @media(max-width:600px){
+      .activity-page .activity-description-date-row .expense-label,
+      .activity-page .activity-reminder-grid .expense-label{text-align:left!important}
+      .activity-page .activity-reminder-grid{row-gap:16px!important;margin-top:14px!important}
+      .activity-page .activity-sensitive-line{margin-top:18px!important}
+    }
+
   `;document.head.appendChild(st)}
   function openMenu(){const btn=$('activitiesBtn');if(!btn)return;if(typeof window.updateMenuIcon==='function')window.updateMenuIcon();if(typeof window.setActiveButton==='function')window.setActiveButton(btn);page(title('Activities')+`<div class="grid-3x2">
     <button class="grid-btn" id="activityAddBtn"><img src="images/colorbtns/Add1.png" class="btn-icon"><span>Add Activity</span></button>
