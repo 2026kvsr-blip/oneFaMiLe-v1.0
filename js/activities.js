@@ -110,23 +110,31 @@
     function isDaily(t){return t==='Daily Activity'}
     function show(id,yes){const el=document.querySelector(`[data-field="${id}"]`);if(el)el.hidden=!yes}
     function updateVisibility(){
-      const t=val('activityType'),task=t==='Task',event=t==='Event',rem=t==='Reminder',meeting=t==='Meeting',appt=t==='Appointment',daily=isDaily(t),reminderOn=$('reminderEnabled').value==='true';
-      show('startTime',event||meeting||appt||rem);show('endDate',event||meeting);show('endTime',event||meeting);show('dueDate',task||rem);show('dueTime',task||rem);
-      show('repeatType',task||rem||event||daily);show('repeatUntil',task||rem||event||daily);show('assignedTo',task);show('priority',task);show('status',true);show('progressPercent',task);show('completedDate',task);
+      const t=val('activityType'),task=t==='Task',event=t==='Event',rem=t==='Reminder',meeting=t==='Meeting',appt=t==='Appointment',daily=isDaily(t);
+      const reminderOn=$('reminderEnabled').value==='true';
+      show('startTime',event||meeting||appt||rem);
+      show('endDate',event||meeting); show('endTime',event||meeting);
+      show('dueDate',task||rem); show('dueTime',task||rem);
+      show('repeatType',task||rem||event||daily); show('repeatUntil',task||rem||event||daily);
+      show('assignedTo',task); show('priority',task); show('status',true);
+      show('progressPercent',task); show('completedDate',task);
       document.querySelectorAll('[data-section="additional"]').forEach(e=>e.hidden=!(event||meeting||appt));
-      // Keep the Reminder selector active. Hide only its dependent fields when No is selected.
+      // Reminder selector remains enabled and clickable; only dependent fields hide for No.
       show('reminderEnabled',rem||task||daily);
       show('reminderDate',reminderOn&&(rem||task||daily));
       show('reminderTime',reminderOn&&(rem||task||daily));
       show('reminderRepeat',reminderOn&&(rem||task||daily));
-      show('venue',event);show('organiser',event);show('participants',event||meeting);show('meetingWith',meeting);show('locationLink',meeting||appt);show('agenda',meeting);show('appointmentPerson',appt);show('followUpDate',appt);
+      show('venue',event); show('organiser',event); show('participants',event||meeting);
+      show('meetingWith',meeting); show('locationLink',meeting||appt); show('agenda',meeting);
+      show('appointmentPerson',appt); show('followUpDate',appt);
     }
+    $('reminderEnabled').addEventListener('change',updateVisibility);
     updateCat();$('reminderEnabled').value='false';updateVisibility();$('status').value='Pending';$('priority').value='Normal';
-    function resetForm(){form.reset();$('startDate').value=today();$('reminderEnabled').value='false';$('status').value='Pending';$('priority').value='Normal';$('reminderEnabled').value='false';$('progressPercent').value='0';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();updateVisibility();status('')}
+    function resetForm(){form.reset();$('startDate').value=today();$('reminderEnabled').value='false';$('status').value='Pending';$('priority').value='Normal';$('progressPercent').value='0';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();updateVisibility();status('')}
     form.onsubmit=async ev=>{ev.preventDefault();if(!family().familyId){status('Current family was not found. Please open your family and try again.','error');return}if(!token()){status('Login session expired. Please login again.','error');return}
       const activityType=val('activityType'),category=val('category'),subCategory=val('subCategory');if(!activityType||!category||!subCategory){status('Activity Type, Category and Sub Category are required.','error');return}if(!val('title')){status('Activity Title is required.','error');return}
       const btn=$('activitySaveBtn');btn.disabled=true;btn.textContent='Saving…';status('Saving activity…');try{const fd=new FormData(form),fields={};for(const [k,v] of fd.entries())fields[k]=String(v);
-        ['activityType','category','subCategory','status','priority','repeatType'].forEach(id=>{if($(id))fields[id]=val(id)});fields.activityType=activityType;fields.category=category;fields.subCategory=subCategory;fields.isSensitive=$('isSensitive').checked?'true':'false';
+        ['activityType','category','subCategory','status','priority','repeatType','reminderRepeat','reminderEnabled'].forEach(id=>{if($(id))fields[id]=val(id)});fields.activityType=activityType;fields.category=category;fields.subCategory=subCategory;fields.isSensitive=$('isSensitive').checked?'true':'false';
         const res=await request('saveActivity',fields);if(res.status!=='success')throw new Error(res.message||'Unable to save activity.');status('Activity saved successfully. Activity ID: '+(res.activityId||''),'success');cached=[];resetForm();
       }catch(e){status(e.message||'Unable to save activity.','error')}finally{btn.disabled=false;btn.textContent='Save'}};
     $('activityResetBtn').onclick=()=>setTimeout(resetForm,0);
@@ -134,8 +142,10 @@
   function sensitiveGate(kind){styleOnce();const label=kind==='sensitive'?'Sensitive Activities Reports':'All Activities Reports';const inner=`<div class="expense-panel"><p>Enter your Sensitive Pass Code to continue.</p><div class="expense-field"><label class="expense-label" for="activityPassCode">Pass Code</label><input id="activityPassCode" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Enter Pass Code"></div><div id="activityStatus" class="expense-status" role="status"></div><div class="expense-actions"><button type="button" id="activityVerifyPass" class="expense-primary">Verify</button></div></div>`;page(shell(label,inner));bindBack();$('activityVerifyPass').onclick=async()=>{const pass=$('activityPassCode').value.trim();if(!pass){status('Enter Pass Code.','error');return}const btn=$('activityVerifyPass');btn.disabled=true;status('Verifying…');try{const res=await request('getActivities',{includeSensitive:'true',passCode:pass});if(res.status!=='success')throw new Error(res.message||'Pass Code verification failed.');cached=res.activities||[];activeAccess=kind;renderReports(kind,false,cached)}catch(e){status(e.message||'Verification failed.','error');btn.disabled=false}}}
   function reportControls(custom){return `<style>.activity-page .expense-filter-grid .expense-field.hidden{display:none!important}
 .activity-page .activity-reminder-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;width:100%;min-width:0;box-sizing:border-box}
-.activity-page .activity-reminder-grid>.expense-field{grid-column:auto!important;min-width:0!important;width:100%!important;max-width:100%!important;box-sizing:border-box}
-.activity-page .activity-reminder-grid input,.activity-page .activity-reminder-grid select{display:block;width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box}
+.activity-page .activity-reminder-grid>.expense-field{display:flex!important;flex-direction:column!important;grid-column:auto!important;min-width:0!important;width:100%!important;max-width:100%!important;box-sizing:border-box}
+.activity-page .activity-reminder-grid .expense-label{display:block!important;width:100%;white-space:normal}
+.activity-page .activity-reminder-grid input,.activity-page .activity-reminder-grid select{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box;margin:0}
+@media(max-width:480px){.activity-page .activity-reminder-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:8px!important;row-gap:10px!important}.activity-page .activity-reminder-grid>.expense-field{overflow:hidden}}
 </style><div class="expense-panel"><div class="expense-filter-grid ${custom?'activity-custom-grid':''}">
     <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportType">Report Type</label><select id="actReportType">${options(['Abstract','Detailed'],'Select Type',true)}</select></div>
     <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportPeriod">Report Period</label><select id="actReportPeriod">${options(['Today','This Week','This Month','This Year','All'],'Select Period',true)}</select></div>
