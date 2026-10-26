@@ -129,9 +129,9 @@
       ${field('Progress (%)','progressPercent','<input id="progressPercent" name="progressPercent" type="number" min="0" max="100" value="0">')}
       ${field('Completed Date','completedDate','<input id="completedDate" name="completedDate" type="date">')}</div>
       <div class="expense-filter-grid activity-reminder-grid" hidden>
-      ${field('Reminder Date','reminderDate','<input id="reminderDate" name="reminderDate" type="date">')}
-      ${field('Reminder Time','reminderTime','<input id="reminderTime" name="reminderTime" type="time">')}
-      ${field('Reminder Repeat','reminderRepeat','<select id="reminderRepeat" name="reminderRepeat"><option value="Once" selected>Once</option><option value="Daily">Daily</option><option value="Weekly">Weekly</option><option value="Monthly">Monthly</option><option value="Yearly">Yearly</option></select>')}</div>
+      ${field('Reminder Date  ','reminderDate','<input id="reminderDate" name="reminderDate" type="date">')}
+      ${field('Reminder Time  ','reminderTime','<input id="reminderTime" name="reminderTime" type="time">')}
+      ${field('Reminder Repeat  ','reminderRepeat','<select id="reminderRepeat" name="reminderRepeat"><option value="Once" selected>Once</option><option value="Daily">Daily</option><option value="Weekly">Weekly</option><option value="Monthly">Monthly</option><option value="Yearly">Yearly</option></select>')}</div>
       <div class="expense-filter-grid" data-section="additional">
       ${field('Venue','venue','<input id="venue" name="venue" placeholder="Venue">')}${field('Organiser','organiser','<input id="organiser" name="organiser" placeholder="Organiser">')}
       ${field('Participants','participants','<input id="participants" name="participants" placeholder="Names / family members">')}${field('Meeting With','meetingWith','<input id="meetingWith" name="meetingWith" placeholder="Person / team">')}
