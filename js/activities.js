@@ -52,6 +52,17 @@
     .activity-page .expense-summary{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 14px;box-sizing:border-box;flex-wrap:nowrap}.activity-page .expense-summary-card{display:flex;align-items:center;gap:5px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px;flex:1 1 33%;width:33%}.activity-page .expense-summary-card small{font-size:clamp(9px,2.6vw,12px)}.activity-page .expense-summary-card strong{font-size:clamp(10px,2.9vw,14px)}
     .activity-page #activityDownloadBtn,.activity-page #activityReportBack{background:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}.activity-page .expense-status{margin:8px 0;white-space:pre-wrap}
     @media(max-width:600px){.activity-page .expense-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:9px;row-gap:10px}.activity-page .expense-filter-grid>.expense-field{grid-column:auto;min-width:0}.activity-page .expense-filter-grid .wide{grid-column:1/-1}.activity-page .expense-report-actions{gap:6px}.activity-page .expense-report-actions button{min-width:0;flex:1 1 0;padding:8px 4px;font-size:12px}.activity-page .expense-summary-card{padding:8px 5px;gap:3px}}
+
+    .activity-page .activity-reminder-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-flow:row!important;align-items:start!important;gap:10px!important;width:100%!important;min-width:0!important;box-sizing:border-box!important}
+    .activity-page .activity-reminder-grid>.expense-field{position:relative!important;display:flex!important;flex-direction:column!important;grid-column:auto!important;grid-row:auto!important;float:none!important;min-width:0!important;width:100%!important;max-width:100%!important;box-sizing:border-box!important;overflow:visible!important}
+    .activity-page .activity-reminder-grid [data-field="reminderEnabled"]{grid-column:1!important;grid-row:1!important}
+    .activity-page .activity-reminder-grid [data-field="reminderDate"]{grid-column:2!important;grid-row:1!important}
+    .activity-page .activity-reminder-grid [data-field="reminderTime"]{grid-column:1!important;grid-row:2!important}
+    .activity-page .activity-reminder-grid [data-field="reminderRepeat"]{grid-column:2!important;grid-row:2!important}
+    .activity-page .activity-reminder-grid input,.activity-page .activity-reminder-grid select{display:block!important;position:relative!important;left:auto!important;right:auto!important;float:none!important;width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important;pointer-events:auto!important}
+    .activity-page .activity-reminder-grid #reminderEnabled{opacity:1!important;pointer-events:auto!important}
+    @media(max-width:480px){.activity-page .activity-reminder-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:8px!important;row-gap:10px!important}.activity-page .activity-reminder-grid>.expense-field{padding:0!important}}
+
   `;document.head.appendChild(st)}
   function openMenu(){const btn=$('activitiesBtn');if(!btn)return;if(typeof window.updateMenuIcon==='function')window.updateMenuIcon();if(typeof window.setActiveButton==='function')window.setActiveButton(btn);page(title('Activities')+`<div class="grid-3x2">
     <button class="grid-btn" id="activityAddBtn"><img src="images/colorbtns/Add1.png" class="btn-icon"><span>Add Activity</span></button>
@@ -119,16 +130,19 @@
       show('assignedTo',task); show('priority',task); show('status',true);
       show('progressPercent',task); show('completedDate',task);
       document.querySelectorAll('[data-section="additional"]').forEach(e=>e.hidden=!(event||meeting||appt));
-      // Reminder selector remains enabled and clickable; only dependent fields hide for No.
-      show('reminderEnabled',rem||task||daily);
-      show('reminderDate',reminderOn&&(rem||task||daily));
-      show('reminderTime',reminderOn&&(rem||task||daily));
-      show('reminderRepeat',reminderOn&&(rem||task||daily));
+
+      // Reminder is always visible and enabled. Only its three dependent fields follow Yes/No.
+      const reminderSelect=$('reminderEnabled');
+      reminderSelect.disabled=false;
+      show('reminderEnabled',true);
+      show('reminderDate',reminderOn);
+      show('reminderTime',reminderOn);
+      show('reminderRepeat',reminderOn);
+
       show('venue',event); show('organiser',event); show('participants',event||meeting);
       show('meetingWith',meeting); show('locationLink',meeting||appt); show('agenda',meeting);
       show('appointmentPerson',appt); show('followUpDate',appt);
     }
-    $('reminderEnabled').addEventListener('change',updateVisibility);
     updateCat();$('reminderEnabled').value='false';updateVisibility();$('status').value='Pending';$('priority').value='Normal';
     function resetForm(){form.reset();$('startDate').value=today();$('reminderEnabled').value='false';$('status').value='Pending';$('priority').value='Normal';$('progressPercent').value='0';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();updateVisibility();status('')}
     form.onsubmit=async ev=>{ev.preventDefault();if(!family().familyId){status('Current family was not found. Please open your family and try again.','error');return}if(!token()){status('Login session expired. Please login again.','error');return}
