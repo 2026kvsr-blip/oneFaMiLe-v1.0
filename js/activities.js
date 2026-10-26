@@ -1,123 +1,110 @@
-/* oneFaMiLe Activities module — load after app.js */
+/* oneFaMiLe Activities module — report page structure follows expense.js */
 (function(){
   'use strict';
-  const API = "https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
+  const API = 'https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec';
   const $ = id => document.getElementById(id);
-  const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const today = () => {const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+  const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const showDate = v => {const s=String(v||'').slice(0,10);const m=s.match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?`${m[3]}-${m[2]}-${m[1].slice(2)}`:s};
   function family(){try{return JSON.parse(localStorage.getItem('currentFamily')||'{}')}catch(_){return {}}}
-  function user(){try{return JSON.parse(sessionStorage.getItem('user')||'{}')}catch(_){return {}}}
   function token(){return sessionStorage.getItem('sessionToken')||''}
-  function request(action,fields={}){
-    const f=family();
-    const body=new URLSearchParams({action,sessionToken:token(),familyId:String(f.familyId||''),...fields});
-    return fetch(API,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body}).then(r=>r.json());
-  }
+  function request(action,fields={}){const f=family();const body=new URLSearchParams({action,sessionToken:token(),familyId:String(f.familyId||''),...fields});return fetch(API,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body}).then(r=>r.json())}
   const CATEGORIES={
-    'Personal':['Routine','Goal','Appointment','Other'],
-    'Family':['Family Meeting','Family Function','Visit','Other'],
-    'Health':['Medical Checkup','Medicine','Exercise','Appointment','Other'],
-    'Home':['Cleaning','Repair','Maintenance','Other'],
-    'Work':['Meeting','Task','Project','Deadline','Other'],
-    'Finance':['Payment','Bill Due','Loan','Banking','Other'],
-    'Education':['Study','Exam','Course','Other'],
-    'Travel':['Trip','Booking','Visit','Other'],
-    'Social':['Function','Event','Community','Other'],
-    'Other':['General','Other']
+    'Personal':['Routine','Goal','Appointment','Other'],'Family':['Family Meeting','Family Function','Visit','Other'],
+    'Health':['Medical Checkup','Medicine','Exercise','Appointment','Other'],'Home':['Cleaning','Repair','Maintenance','Other'],
+    'Work':['Meeting','Task','Project','Deadline','Other'],'Finance':['Payment','Bill Due','Loan','Banking','Other'],
+    'Education':['Study','Exam','Course','Other'],'Travel':['Trip','Booking','Visit','Other'],'Social':['Function','Event','Community','Other'],'Other':['General','Other']
   };
-  function page(html){ if(typeof window.showPage==='function') window.showPage(html); else { const el=$('pageContent')||$('mainContent'); if(el)el.innerHTML=html; } }
-  function title(text){return typeof window.pageTitle==='function'?window.pageTitle(text,'images/colorbtns/Activities1.png'):`<h2>${esc(text)}</h2>`}
-  function backButton(){return '<div style="text-align:center;margin:18px"><button id="activitiesModuleBack" class="back-btn">← Back</button></div>'}
-  function bindBack(){const b=$('activitiesModuleBack');if(b)b.onclick=()=>{const btn=$('activitiesBtn');if(btn)btn.click()}}
-  function status(text,type){const el=$('activityStatus');if(!el)return;el.textContent=text;el.style.color=type==='error'?'#b00020':type==='success'?'#167d36':'#333'}
-  function categoryOptions(selected=''){return Object.keys(CATEGORIES).map(c=>`<option value="${esc(c)}" ${c===selected?'selected':''}>${esc(c)}</option>`).join('')}
-  function subOptions(cat,selected=''){return (CATEGORIES[cat]||[]).map(c=>`<option value="${esc(c)}" ${c===selected?'selected':''}>${esc(c)}</option>`).join('')}
-  function openForm(){
-    page(title('Add Activity')+`<div class="activity-module" style="max-width:680px;margin:0 auto;padding:16px;background:#f0f7ff;border-radius:18px;box-sizing:border-box">
-      <form id="activityForm">
-        <label>Activity Type</label><select name="activityType" class="activity-input"><option>General</option><option>Task</option><option>Appointment</option><option>Event</option><option>Reminder</option><option>Goal</option></select>
-        <label>Title *</label><input name="title" required maxlength="150" placeholder="Enter activity title" class="activity-input">
-        <label>Category *</label><select id="activityCategory" name="category" required class="activity-input">${categoryOptions()}</select>
-        <label>SubCategory *</label><select id="activitySubCategory" name="subCategory" required class="activity-input"></select>
-        <label>Description *</label><textarea name="description" required rows="4" placeholder="Enter full details" class="activity-input"></textarea>
-        <label>Tags (optional)</label><input name="tags" placeholder="Example: urgent, family" class="activity-input">
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px">
-          <div><label>Start Date</label><input name="startDate" type="date" class="activity-input"></div>
-          <div><label>Start Time</label><input name="startTime" type="time" class="activity-input"></div>
-          <div><label>Due Date</label><input name="dueDate" type="date" class="activity-input"></div>
-          <div><label>Due Time</label><input name="dueTime" type="time" class="activity-input"></div>
-        </div>
-        <label>Status</label><select name="status" class="activity-input"><option>Pending</option><option>In Progress</option><option>Completed</option><option>Cancelled</option></select>
-        <label>Priority</label><select name="priority" class="activity-input"><option>Low</option><option selected>Medium</option><option>High</option><option>Urgent</option></select>
-        <label style="display:flex;align-items:center;gap:8px;margin-top:12px"><input name="isSensitive" type="checkbox" value="true"> Sensitive Activity (shown only in Sensitive Reports)</label>
-        <p id="activityStatus" role="status" aria-live="polite"></p>
-        <button type="submit" class="grid-btn" style="width:100%;margin-top:12px">Save Activity</button>
-      </form></div>`+backButton());
-    const form=$('activityForm'), cat=$('activityCategory'), sub=$('activitySubCategory');
-    const refresh=()=>{const previous=sub.value;sub.innerHTML=subOptions(cat.value,previous);};
-    cat.onchange=refresh;refresh();bindBack();
-    form.onsubmit=async ev=>{
-      ev.preventDefault();const btn=form.querySelector('[type="submit"]');btn.disabled=true;status('Saving activity...');
-      try{
-        const fd=new FormData(form), fields={};for(const [k,v] of fd.entries())fields[k]=String(v);
-        fields.isSensitive=form.elements.isSensitive.checked?'true':'false';
-        const result=await request('saveActivity',fields);
-        if(result.status!=='success')throw new Error(result.message||'Unable to save activity.');
-        status('Activity saved successfully.','success');form.reset();refresh();
-      }catch(err){status(err.message||'Unable to save activity.','error')}finally{btn.disabled=false}
-    };
+  let cached=[], lastRows=[], dateAscending=true, activeAccess='normal';
+  const statusOptions=['Pending','In Progress','Completed','Cancelled'];
+  const priorityOptions=['Low','Medium','High','Urgent'];
+  function options(items,placeholder='Select',preserve=false){const list=preserve?items.slice():items.slice().sort((a,b)=>String(a).localeCompare(String(b),undefined,{sensitivity:'base'}));return `<option value="">${esc(placeholder)}</option>`+list.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
+  function page(html){if(typeof window.showPage==='function')window.showPage(html);else{const el=$('homeContent')||$('pageContent')||$('mainContent');if(el)el.innerHTML=html}}
+  function title(text){return typeof window.pageTitle==='function'?window.pageTitle(text,'images/colorbtns/Activities1.png'):`<h2 class="page-title">${esc(text)}</h2>`}
+  function shell(text,inner,inside=false){return `<div class="expense-page activity-page"><h2 class="expense-title">${esc(text)}</h2>${inner}${inside?'':'<div class="expense-actions"><button type="button" class="expense-secondary" id="activityModuleBack">← Back</button></div>'}</div>`}
+  function backToMenu(){try{openMenu();return}catch(e){console.warn('Activities menu navigation failed',e)}const b=$('activitiesBtn');if(b)b.click();else if(typeof window.showHome==='function')window.showHome()}
+  function bindBack(){const b=$('activityModuleBack');if(b)b.onclick=backToMenu}
+  function status(message,type=''){const el=$('activityStatus');if(el){el.textContent=message||'';el.className='expense-status '+type}}
+  function styleOnce(){if($('activityReportStyles'))return;const st=document.createElement('style');st.id='activityReportStyles';st.textContent=`
+    .activity-page{max-width:1100px;margin:0 auto}.activity-page .expense-panel{padding:12px;background:#f0f7ff;border:1px solid #c4d4ff;border-radius:14px;box-sizing:border-box}
+    .activity-page .expense-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
+    .activity-page .expense-field{min-width:0;display:flex;flex-direction:column;gap:5px}.activity-page .expense-label{font-weight:600;color:#2d5274;display:block;white-space:normal}
+    .activity-page .expense-field input,.activity-page .expense-field select,.activity-page .expense-field textarea{width:100%;min-width:0;max-width:100%;box-sizing:border-box;min-height:40px;padding:8px 10px;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#222;font:inherit}
+    .activity-page .expense-report-inline{display:flex;flex-direction:column;gap:5px}.activity-page .expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap;margin:12px 0}
+    .activity-page .expense-report-actions>button,.activity-page .expense-download-wrap>button{white-space:nowrap}.activity-page .expense-download-wrap{position:relative}
+    .activity-page .expense-download-menu{position:absolute;right:0;top:100%;z-index:9999;display:flex;flex-direction:column;min-width:100px;background:#fff;border:1px solid #9ab;border-radius:8px;box-shadow:0 4px 12px #0002}
+    .activity-page .expense-download-menu.hidden{display:none}.activity-page .expense-download-menu button{background:#fff;border:0;padding:9px 14px;text-align:left;color:#222}
+    .activity-page .expense-results{width:100%;overflow:auto;margin-top:8px}.activity-page .expense-results table{width:100%;border-collapse:collapse;background:#fff;font-size:13px}.activity-page .expense-results th,.activity-page .expense-results td{border:1px solid #c4d4ff;padding:7px 8px;text-align:left;vertical-align:top;white-space:normal;overflow-wrap:anywhere}
+    .activity-page .expense-results th{background:#dce7ff;color:#2d5274;position:sticky;top:0}.activity-page .expense-report-subheading th{background:#fff!important;text-align:left;border-top:1px solid #c4d4ff;border-bottom:1px solid #c4d4ff;color:#2d5274}
+    .activity-page .expense-report-year th{font-size:22px!important;font-weight:700;padding:10px 8px;background:#fff!important;color:#218838!important}.activity-page .expense-report-month th{font-size:16px!important;font-weight:700;padding:8px;background:#fff!important;color:#e67e22!important}
+    .activity-page .expense-report-total td{font-weight:700;background:#fff!important;border-top:1px solid #c4d4ff}.activity-page .expense-abstract-title{font-size:23px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}
+    .activity-page .expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}
+    .activity-page .expense-summary{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 14px;box-sizing:border-box;flex-wrap:nowrap}.activity-page .expense-summary-card{display:flex;align-items:center;gap:5px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px;flex:1 1 33%;width:33%}.activity-page .expense-summary-card small{font-size:clamp(9px,2.6vw,12px)}.activity-page .expense-summary-card strong{font-size:clamp(10px,2.9vw,14px)}
+    .activity-page #activityDownloadBtn,.activity-page #activityReportBack{background:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}.activity-page .expense-status{margin:8px 0;white-space:pre-wrap}
+    @media(max-width:600px){.activity-page .expense-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:9px;row-gap:10px}.activity-page .expense-filter-grid>.expense-field{grid-column:auto;min-width:0}.activity-page .expense-filter-grid .wide{grid-column:1/-1}.activity-page .expense-report-actions{gap:6px}.activity-page .expense-report-actions button{min-width:0;flex:1 1 0;padding:8px 4px;font-size:12px}.activity-page .expense-summary-card{padding:8px 5px;gap:3px}}
+  `;document.head.appendChild(st)}
+  function openMenu(){const btn=$('activitiesBtn');if(!btn)return;if(typeof window.updateMenuIcon==='function')window.updateMenuIcon();if(typeof window.setActiveButton==='function')window.setActiveButton(btn);page(title('Activities')+`<div class="grid-3x2">
+    <button class="grid-btn" id="activityAddBtn"><img src="images/colorbtns/Add1.png" class="btn-icon"><span>Add Activity</span></button>
+    <button class="grid-btn" id="activityReportsBtn"><img src="images/colorbtns/Reports1.png" class="btn-icon"><span>Reports</span></button>
+    <button class="grid-btn" id="activitySensitiveBtn"><img src="images/colorbtns/SensitiveReports1.png" class="btn-icon"><span>Sensitive Reports</span></button>
+    <button class="grid-btn" id="activityAllBtn"><img src="images/colorbtns/AllReports1.png" class="btn-icon"><span>All Reports</span></button>
+    <button class="grid-btn" id="activityCustomBtn"><img src="images/colorbtns/CustomSearch1.png" class="btn-icon"><span>Custom Search</span></button>
+    <button class="grid-btn" id="activityAboutBtn"><img src="images/colorbtns/About1.png" class="btn-icon"><span>About</span></button></div><div style="text-align:center"><button class="back-btn" id="activityHomeBack">← Back</button></div>`);
+    $('activityAddBtn').onclick=openForm;$('activityReportsBtn').onclick=()=>renderReports('normal',false);$('activitySensitiveBtn').onclick=()=>sensitiveGate('sensitive');$('activityAllBtn').onclick=()=>sensitiveGate('all');$('activityCustomBtn').onclick=()=>renderReports('normal',true);$('activityAboutBtn').onclick=openAbout;$('activityHomeBack').onclick=()=>{const b=$('homeBtn');if(b)b.click();else if(typeof window.showHome==='function')window.showHome()};}
+  function openForm(){styleOnce();const inner=`<div class="expense-panel"><form id="activityForm" class="expense-form" autocomplete="off">
+    <div class="expense-filter-grid">
+    <div class="expense-field"><label class="expense-label" for="actDate">Activity Date *</label><input id="actDate" name="startDate" type="date" value="${today()}" required></div>
+    <div class="expense-field"><label class="expense-label" for="actType">Activity Type *</label><select id="actType" name="activityType" required>${options(['General','Task','Appointment','Event','Reminder','Goal'],'Select Type',true)}</select></div>
+    <div class="expense-field"><label class="expense-label" for="actTitle">Title *</label><input id="actTitle" name="title" required maxlength="150" placeholder="Enter activity title"></div>
+    <div class="expense-field"><label class="expense-label" for="actCategory">Category *</label><select id="actCategory" name="category" required>${options(Object.keys(CATEGORIES),'Select Category')}</select></div>
+    <div class="expense-field"><label class="expense-label" for="actSubCategory">SubCategory *</label><select id="actSubCategory" name="subCategory" required>${options([],'Select SubCategory')}</select></div>
+    <div class="expense-field"><label class="expense-label" for="actStatus">Status</label><select id="actStatus" name="status">${options(statusOptions,'Select Status',true).replace('<option value="">Select Status</option>','')} </select></div>
+    <div class="expense-field"><label class="expense-label" for="actPriority">Priority</label><select id="actPriority" name="priority">${options(priorityOptions,'Select Priority',true).replace('<option value="">Select Priority</option>','')}</select></div>
+    <div class="expense-field"><label class="expense-label" for="actDueDate">Due Date</label><input id="actDueDate" name="dueDate" type="date"></div>
+    <div class="expense-field"><label class="expense-label" for="actDueTime">Due Time</label><input id="actDueTime" name="dueTime" type="time"></div>
+    <div class="expense-field"><label class="expense-label" for="actTags">Tags</label><input id="actTags" name="tags" placeholder="Optional keywords"></div>
+    <div class="expense-field wide"><label class="expense-label" for="actDescription">Description</label><textarea id="actDescription" name="description" rows="3" maxlength="2000" placeholder="Enter activity details"></textarea></div>
+    <div class="expense-field"><label class="expense-label" for="actRepeat">Repeat</label><select id="actRepeat" name="repeatType">${options(['None','Daily','Weekly','Monthly','Yearly','Custom'],'Select Repeat',true)}</select></div>
+    <div class="expense-field"><label class="expense-label" for="actRepeatUntil">Repeat Until</label><input id="actRepeatUntil" name="repeatUntil" type="date"></div>
+    </div>
+    <div style="margin-top:12px"><label style="display:flex;align-items:center;gap:8px"><input id="actSensitive" name="isSensitive" type="checkbox" value="true"> Sensitive Activity</label></div>
+    <div id="activityStatus" class="expense-status" role="status" aria-live="polite"></div>
+    <div class="expense-actions"><button type="submit" id="activitySaveBtn" class="expense-primary">Save</button><button type="reset" id="activityResetBtn" class="expense-secondary">Reset</button><button type="button" id="activityModuleBack" class="expense-secondary">← Back</button></div>
+    </form></div>`;
+    page(shell('Add Activity',inner,true));bindBack();const form=$('activityForm'),cat=$('actCategory'),sub=$('actSubCategory');const refresh=()=>{const old=sub.value;sub.innerHTML=options(CATEGORIES[cat.value]||[],'Select SubCategory');if((CATEGORIES[cat.value]||[]).includes(old))sub.value=old};cat.onchange=refresh;refresh();$('actStatus').value='Pending';$('actPriority').value='Medium';
+    form.onsubmit=async ev=>{ev.preventDefault();if(!family().familyId){status('Current family was not found. Please open your family and try again.','error');return}if(!token()){status('Login session expired. Please login again.','error');return}if(!cat.value||!sub.value){status('Category and SubCategory are required.','error');return}const btn=$('activitySaveBtn');btn.disabled=true;btn.textContent='Saving…';status('Saving activity…');try{const fd=new FormData(form),fields={};for(const [k,v] of fd.entries())fields[k]=String(v);fields.isSensitive=$('actSensitive').checked?'true':'false';fields.startDate=$('actDate').value;fields.status=$('actStatus').value||'Pending';fields.priority=$('actPriority').value||'Medium';const res=await request('saveActivity',fields);if(res.status!=='success')throw new Error(res.message||'Unable to save activity.');status('Activity saved successfully.','success');form.reset();$('actDate').value=today();$('actStatus').value='Pending';$('actPriority').value='Medium';refresh()}catch(e){status(e.message||'Unable to save activity.','error')}finally{btn.disabled=false;btn.textContent='Save'}};
+    $('activityResetBtn').onclick=()=>setTimeout(()=>{ $('actDate').value=today();$('actStatus').value='Pending';$('actPriority').value='Medium';refresh();status('')},0);
   }
-  async function openList(mode='normal',query=''){
-    page(title(mode==='search'?'Search Activities':mode==='sensitive'?'Sensitive Reports':mode==='all'?'All Activities':'Activities Reports')+`<div style="max-width:900px;margin:auto;padding:12px"><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><input id="activitySearchBox" placeholder="Search title, category, subcategory, description..." style="flex:1;min-width:220px;padding:11px;border:1px solid #aac7e8;border-radius:10px" value="${esc(query)}"><button id="activitySearchGo" class="grid-btn">Search</button></div><div id="activityListStatus">Loading activities...</div><div id="activityListRows"></div></div>`+backButton());
-    bindBack();$('activitySearchGo').onclick=()=>openList('search',$('activitySearchBox').value.trim());
-    $('activitySearchBox').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('activitySearchGo').click()}};
-    try{
-      const needsSensitive = mode==='sensitive' || mode==='all';
-      let requestFields = {};
-      if(needsSensitive){
-        const passCode = window.__activitySensitivePassCode || '';
-        requestFields = {includeSensitive:'true',passCode};
-      }
-      const result=await request('getActivities',requestFields);
-      if(result.status!=='success')throw new Error(result.message||'Unable to load activities.');
-      let rows=result.activities||[];
-      if(mode==='sensitive')rows=rows.filter(a=>a.isSensitive);
-      if(mode==='normal')rows=rows.filter(a=>!a.isSensitive);
-      if(mode==='search'&&query){const q=query.toLowerCase();rows=rows.filter(a=>[a.title,a.category,a.subCategory,a.description,a.tags,a.status].some(v=>String(v||'').toLowerCase().includes(q)))}
-      $('activityListStatus').textContent=rows.length?`${rows.length} activity record(s)`: 'No activities found.';
-      $('activityListRows').innerHTML=rows.map(a=>`<article style="border:1px solid #c4d4ff;border-radius:12px;padding:12px;margin:10px 0;background:#fff"><div style="display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap"><strong>${esc(a.title)}</strong><span>${esc(a.status)} · ${esc(a.priority)}</span></div><div style="margin-top:6px;color:#315a7d">${esc(a.category)} / ${esc(a.subCategory)}${a.startDate?' · '+esc(a.startDate):''}</div><p style="white-space:pre-wrap;margin:8px 0">${esc(a.description)}</p>${a.tags?`<small>Tags: ${esc(a.tags)}</small>`:''}${a.isSensitive?'<div style="color:#b00020;font-weight:600">Sensitive</div>':''}</article>`).join('');
-    }catch(err){$('activityListStatus').textContent=err.message||'Unable to load activities.'}
+  function sensitiveGate(kind){styleOnce();const label=kind==='sensitive'?'Sensitive Activities Reports':'All Activities Reports';const inner=`<div class="expense-panel"><p>Enter your Sensitive Pass Code to continue.</p><div class="expense-field"><label class="expense-label" for="activityPassCode">Pass Code</label><input id="activityPassCode" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Enter Pass Code"></div><div id="activityStatus" class="expense-status" role="status"></div><div class="expense-actions"><button type="button" id="activityVerifyPass" class="expense-primary">Verify</button></div></div>`;page(shell(label,inner));bindBack();$('activityVerifyPass').onclick=async()=>{const pass=$('activityPassCode').value.trim();if(!pass){status('Enter Pass Code.','error');return}const btn=$('activityVerifyPass');btn.disabled=true;status('Verifying…');try{const res=await request('getActivities',{includeSensitive:'true',passCode:pass});if(res.status!=='success')throw new Error(res.message||'Pass Code verification failed.');cached=res.activities||[];activeAccess=kind;renderReports(kind,false,cached)}catch(e){status(e.message||'Verification failed.','error');btn.disabled=false}}}
+  function reportControls(custom){return `<style>.activity-page .expense-filter-grid .expense-field.hidden{display:none!important}</style><div class="expense-panel"><div class="expense-filter-grid ${custom?'activity-custom-grid':''}">
+    <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportType">Report Type</label><select id="actReportType">${options(['Abstract','Detailed'],'Select Type',true)}</select></div>
+    <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportPeriod">Report Period</label><select id="actReportPeriod">${options(['Today','This Week','This Month','This Year','All'],'Select Period',true)}</select></div>
+    <div class="expense-field"><label class="expense-label" for="actFilterCategory">Category</label><select id="actFilterCategory">${options(Object.keys(CATEGORIES),'All Categories')}</select></div>
+    <div class="expense-field"><label class="expense-label" for="actFilterSub">SubCategory</label><select id="actFilterSub">${options([],'All SubCategories')}</select></div>
+    <div class="expense-field"><label class="expense-label" for="actFilterStatus">Status</label><select id="actFilterStatus">${options(statusOptions,'All Statuses',true)}</select></div>
+    <div class="expense-field"><label class="expense-label" for="actFilterPriority">Priority</label><select id="actFilterPriority">${options(priorityOptions,'All Priorities',true)}</select></div>
+    <div class="expense-field"><label class="expense-label" for="actDateSortBtn">Date order</label><button type="button" id="actDateSortBtn" class="expense-date-sort">↑ Date Ascending</button></div>
+    ${custom?`<div class="expense-field"><label class="expense-label" for="actFromDate">From Date</label><input id="actFromDate" type="date"></div><div class="expense-field"><label class="expense-label" for="actToDate">To Date</label><input id="actToDate" type="date"></div><div class="expense-field"><label class="expense-label" for="actSearchText">Search Text</label><input id="actSearchText" type="search" placeholder="Title, description, tags…"></div><div class="expense-field"><label class="expense-label" for="actAssignedTo">Assigned To</label><input id="actAssignedTo" placeholder="Any member/person"></div>`:''}
+    </div><div class="expense-report-actions"><button type="button" id="actRunReport" class="expense-primary">Show Report</button><div class="expense-download-wrap"><button type="button" id="activityDownloadBtn" class="expense-secondary" disabled>Download ▾</button><div id="activityDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div><button type="button" id="activityReportBack" class="expense-secondary">← Back</button></div><div id="activityStatus" class="expense-status" role="status"></div></div><div id="actReportOutput"></div>`}
+  function renderReports(kind='normal',custom=false,prefetched=null){styleOnce();activeAccess=kind;cached=prefetched||[];const label=kind==='sensitive'?'Sensitive Activities Reports':kind==='all'?'All Activities Reports':custom?'Activities — Custom Search':'Activities Reports';page(shell(label,reportControls(custom),true));bindBack();setupReportControls(kind,custom);}
+  function setupReportControls(kind,custom){const type=$('actReportType'),period=$('actReportPeriod'),cat=$('actFilterCategory'),sub=$('actFilterSub'),run=$('actRunReport'),dl=$('activityDownloadBtn'),menu=$('activityDownloadMenu');type.value=custom?'Detailed':'Abstract';const syncPeriods=()=>{const previous=period.value;const choices=type.value==='Abstract'?['Today','This Week','This Month','This Year','All','Daily','Weekly','Monthly','Yearly']:['Today','This Week','This Month','This Year','All'];period.innerHTML=options(choices,'Select Period',true);period.value=choices.includes(previous)?previous:'This Month'};syncPeriods();period.value='This Month';type.onchange=syncPeriods;const syncSub=()=>{const prev=sub.value;sub.innerHTML=options(cat.value?(CATEGORIES[cat.value]||[]):Object.values(CATEGORIES).flat().filter((v,i,a)=>a.indexOf(v)===i),'All SubCategories');if([...sub.options].some(o=>o.value===prev))sub.value=prev};cat.onchange=syncSub;syncSub();$('activityReportBack').onclick=backToMenu;
+    $('actDateSortBtn').onclick=()=>{dateAscending=!dateAscending;$('actDateSortBtn').textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';if(lastRows.length)renderReportResults(lastRows,type.value)};
+    if(dl&&menu){dl.disabled=true;dl.onclick=()=>{if(!dl.disabled)menu.classList.toggle('hidden')};menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportReport(b.dataset.export)})}
+    run.onclick=async()=>{run.disabled=true;status('Loading activities…');try{let rows=cached;if(!rows.length){const fields={};if(kind==='sensitive'||kind==='all'){fields.includeSensitive='true';const pass=$('activityPassCode')?.value?.trim();if(pass)fields.passCode=pass;}const res=await request('getActivities',fields);if(res.status!=='success')throw new Error(res.message||'Unable to load activities.');rows=res.activities||[];cached=rows;}const filtered=filterRows(rows,custom,kind);lastRows=filtered.slice();renderReportResults(filtered,type.value);if(dl)dl.disabled=false;status(`${filtered.length} activity record(s) found.`,'success')}catch(e){status(e.message||'Unable to load activities.','error')}finally{run.disabled=false}};
+    // A successful pass-code verification already returned the protected rows.
+    // Match Expenses: show the report setup first; user presses Show Report when ready.
   }
-  function openAbout(){page(title('About Activities')+`<div style="max-width:700px;margin:auto;padding:16px;line-height:1.7"><p>Activities helps you record and review family tasks, appointments, events, reminders and goals.</p><p>Each record includes Category, SubCategory and Description, along with dates, status, priority and optional sensitive classification.</p><p>Sensitive records are excluded from the ordinary Activities list and are displayed separately in Sensitive Reports.</p></div>`+backButton());bindBack()}
-  function install(){
-    const activities=$('activitiesBtn');if(!activities){setTimeout(install,250);return}
-    activities.onclick=()=>{
-      if(typeof window.updateMenuIcon==='function')window.updateMenuIcon();
-      if(typeof window.setActiveButton==='function')window.setActiveButton(activities);
-      page(title('Activities')+`<div class="grid-3x2">
-        <button class="grid-btn" id="addActivitiesBtn"><img src="images/colorbtns/Add1.png" class="btn-icon"><span>Add Activity</span></button>
-        <button class="grid-btn" id="reportsActivitiesBtn"><img src="images/colorbtns/Reports1.png" class="btn-icon"><span>Reports</span></button>
-        <button class="grid-btn" id="sensitiveActivitiesBtn"><img src="images/colorbtns/SensitiveReports1.png" class="btn-icon"><span>Sensitive Reports</span></button>
-        <button class="grid-btn" id="allReportsActivitiesBtn"><img src="images/colorbtns/AllReports1.png" class="btn-icon"><span>All Reports</span></button>
-        <button class="grid-btn" id="searchActivitiesBtn"><img src="images/colorbtns/CustomSearch1.png" class="btn-icon"><span>Custom Search</span></button>
-        <button class="grid-btn" id="aboutActivitiesBtn"><img src="images/colorbtns/About1.png" class="btn-icon"><span>About</span></button></div><div style="text-align:center"><button id="activitiesBackBtn" class="back-btn">← Back</button></div>`);
-      $('addActivitiesBtn').onclick=openForm;
-      $('reportsActivitiesBtn').onclick=()=>openList('normal');
-      $('sensitiveActivitiesBtn').onclick=()=>{
-        const pass=prompt('Enter Sensitive Pass Code to open Sensitive Reports:');
-        if(pass===null)return;
-        window.__activitySensitivePassCode=pass;
-        openList('sensitive').finally(()=>{window.__activitySensitivePassCode=''});
-      };
-      $('allReportsActivitiesBtn').onclick=()=>{
-        const pass=prompt('Enter Sensitive Pass Code to open All Reports:');
-        if(pass===null)return;
-        window.__activitySensitivePassCode=pass;
-        openList('all').finally(()=>{window.__activitySensitivePassCode=''});
-      };
-      $('searchActivitiesBtn').onclick=()=>openList('search');
-      $('aboutActivitiesBtn').onclick=openAbout;
-      $('activitiesBackBtn').onclick=()=>{const home=$('homeBtn');if(home)home.click()};
-    };
-  }
+  function filterRows(rows,custom,kind){let from=custom?($('actFromDate')?.value||''):'',to=custom?($('actToDate')?.value||''):'';const p=$('actReportPeriod').value,now=new Date();if(!custom||(!from&&!to)){if(p==='Today')from=to=today();else if(p==='This Week'){const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));from=fmt(d);const e=new Date(d);e.setDate(e.getDate()+6);to=fmt(e)}else if(p==='This Month'){from=today().slice(0,7)+'-01';to=today()}else if(p==='This Year'){from=now.getFullYear()+'-01-01';to=today()}}
+    const start=from?new Date(from+'T00:00:00').getTime():null,end=to?new Date(to+'T23:59:59').getTime():null;const c=$('actFilterCategory').value,s=$('actFilterSub').value,st=$('actFilterStatus').value,pr=$('actFilterPriority').value,q=custom?($('actSearchText').value||'').trim().toLowerCase():'',assigned=custom?($('actAssignedTo').value||'').trim().toLowerCase():'';
+    return rows.filter(r=>{const date=String(r.startDate||r.dueDate||r.createdAt||'').slice(0,10);const time=date?new Date(date+'T12:00:00').getTime():0;if(start!==null&&time<start)return false;if(end!==null&&time>end)return false;if(c&&r.category!==c)return false;if(s&&r.subCategory!==s)return false;if(st&&r.status!==st)return false;if(pr&&r.priority!==pr)return false;if(assigned&&!String(r.assignedTo||'').toLowerCase().includes(assigned))return false;if(q&&!`${r.title||''} ${r.category||''} ${r.subCategory||''} ${r.description||''} ${r.tags||''} ${r.status||''} ${r.activityType||''}`.toLowerCase().includes(q))return false;if(kind==='normal'&&r.isSensitive)return false;if(kind==='sensitive'&&!r.isSensitive)return false;return true})}
+  function renderReportResults(rows,type){rows=rows.slice().sort((a,b)=>{const da=String(a.startDate||a.dueDate||a.createdAt||'').slice(0,10),db=String(b.startDate||b.dueDate||b.createdAt||'').slice(0,10);return dateAscending?da.localeCompare(db):db.localeCompare(da)});const total=rows.length,completed=rows.filter(r=>String(r.status).toLowerCase()==='completed').length,pending=rows.filter(r=>String(r.status).toLowerCase()==='pending').length;let table='';const p=$('actReportPeriod')?.value||'All';
+    if(type==='Abstract'){if(['Daily','Weekly','Monthly','Yearly'].includes(p)){const groups={};rows.forEach(r=>{const ds=String(r.startDate||r.dueDate||r.createdAt||'').slice(0,10);let key='Unknown';if(/^\d{4}-\d{2}-\d{2}$/.test(ds)){const d=new Date(ds+'T12:00:00');if(p==='Daily')key=ds;else if(p==='Weekly'){d.setDate(d.getDate()-((d.getDay()+6)%7));key=fmt(d)}else if(p==='Monthly')key=ds.slice(0,7);else key=ds.slice(0,4)}if(!groups[key])groups[key]={count:0,completed:0};groups[key].count++;if(String(r.status).toLowerCase()==='completed')groups[key].completed++});const keys=Object.keys(groups).sort((a,b)=>dateAscending?a.localeCompare(b):b.localeCompare(a));table=`<div class="expense-results"><table><thead><tr><th>S.No</th><th>${esc(p==='Daily'?'Date':p==='Weekly'?'Week Starting':p==='Monthly'?'Month':'Year')}</th><th>Activities</th><th>Completed</th></tr></thead><tbody>${keys.map((k,i)=>`<tr><td>${i+1}</td><td>${esc(k)}</td><td>${groups[k].count}</td><td>${groups[k].completed}</td></tr>`).join('')||'<tr><td colspan="4">No records found.</td></tr>'}</tbody></table></div>`}else{const groups={};rows.forEach(r=>{const c=String(r.category||'Other'),s=String(r.subCategory||'Other');if(!groups[c])groups[c]={count:0,completed:0,subs:{}};groups[c].count++;if(String(r.status).toLowerCase()==='completed')groups[c].completed++;if(!groups[c].subs[s])groups[c].subs[s]=0;groups[c].subs[s]++});let i=0;const body=Object.keys(groups).sort().map(c=>{const idx=i++,g=groups[c],subRows=Object.keys(g.subs).sort().map(s=>`<tr class="activity-abstract-subrow" data-parent="${idx}" hidden><td style="padding-left:28px">↳ ${esc(s)}</td><td>${g.subs[s]}</td><td>—</td></tr>`).join('');return `<tr class="activity-abstract-parent" data-index="${idx}" tabindex="0" role="button" aria-expanded="false" style="cursor:pointer"><td><span class="activity-toggle">＋</span> ${esc(c)}</td><td>${g.count}</td><td>${g.completed}</td></tr>${subRows}`}).join('');table=`<div class="expense-results"><table><thead><tr><th>Category / SubCategory</th><th>Activities</th><th>Completed</th></tr></thead><tbody>${body||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`}}
+    else{const headers=['Date','Activity Type','Title','Category','SubCategory','Description','Status','Priority','Due Date'];const grouped=rows.map(r=>`<tr><td>${esc(showDate(r.startDate||r.createdAt))}</td><td>${esc(r.activityType||'')}</td><td>${esc(r.title||'')}</td><td>${esc(r.category||'')}</td><td>${esc(r.subCategory||'')}</td><td>${esc(r.description||'')}</td><td>${esc(r.status||'')}</td><td>${esc(r.priority||'')}</td><td>${esc(showDate(r.dueDate))}</td></tr>`).join('');table=`<div class="expense-results"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${grouped||`<tr><td colspan="${headers.length}">No records found.</td></tr>`}</tbody></table></div>`}
+    const heading=`${esc(p)} - ${type==='Detailed'?'Detailed Report':'Abstract'}`;$('actReportOutput').innerHTML=`<h2 class="expense-abstract-title">${heading}</h2><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${total}</strong></div><div class="expense-summary-card"><small>Completed :</small><strong>${completed}</strong></div><div class="expense-summary-card"><small>Pending :</small><strong>${pending}</strong></div></div>${table}`;
+    $('actReportOutput').querySelectorAll('.activity-abstract-parent').forEach(row=>{const toggle=()=>{const idx=row.dataset.index,opening=row.getAttribute('aria-expanded')!=='true';$('actReportOutput').querySelectorAll(`.activity-abstract-subrow[data-parent="${idx}"]`).forEach(r=>r.hidden=!opening);row.setAttribute('aria-expanded',String(opening));const mark=row.querySelector('.activity-toggle');if(mark)mark.textContent=opening?'－':'＋'};row.onclick=toggle;row.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}}});}
+  function exportReport(format){const output=$('actReportOutput');if(!output||!output.innerHTML.trim()){status('Press Show Report first.','error');return}const heading=document.querySelector('.activity-page .expense-title')?.textContent||'oneFaMiLe Activities Report';const html=`<!doctype html><html><head><meta charset="utf-8"><title>${esc(heading)}</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#222}table{border-collapse:collapse;width:100%}th,td{border:1px solid #888;padding:6px;text-align:left}.expense-summary{display:flex;gap:12px;margin-bottom:16px}.expense-summary-card{border:1px solid #aaa;padding:10px}</style></head><body><h2>${esc(heading)}</h2>${output.innerHTML}</body></html>`;if(format==='pdf'){const w=window.open('','_blank');if(!w){status('Popup blocked. Allow popups to print/save PDF.','error');return}w.document.open();w.document.write(html);w.document.close();w.focus();setTimeout(()=>w.print(),300);return}const word=format==='word',blob=new Blob([html],{type:(word?'application/msword':'application/vnd.ms-excel')+';charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='oneFaMiLe_Activities_Report.'+(word?'doc':'xls');document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+  function openAbout(){styleOnce();const html=`<div class="expense-panel"><h3 style="margin-top:0;color:#2477c8">About oneFaMiLe Activities</h3><h4>1. Add Activity</h4><p>Record activities with Activity Date, Activity Type, Title, Category, SubCategory, Description, status, priority, due date and optional tags.</p><h4>2. Reports</h4><p>Abstract reports summarize records by Category and SubCategory or by Daily, Weekly, Monthly and Yearly periods. Detailed reports list each activity and its dates, status and priority.</p><h4>3. Custom Search</h4><p>Filter activities by date range, category, subcategory, status, priority, assigned person and search text. Reports can be printed/saved as PDF or downloaded in Word/Excel-compatible format.</p><h4>4. Sensitive Activities</h4><p>Sensitive Reports and All Reports require the Sensitive Pass Code. Ordinary Activities Reports exclude sensitive records.</p><h4>5. Family data</h4><p>Activity records are associated with the selected family and current login session. Check the activity details before saving.</p></div>`;page(shell('About Activities',html));bindBack()}
+  function install(){const b=$('activitiesBtn');if(!b){setTimeout(install,250);return}b.onclick=openMenu}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install);else install();
 })();
