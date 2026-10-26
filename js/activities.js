@@ -38,7 +38,7 @@
   function styleOnce(){if($('activityReportStyles'))return;const st=document.createElement('style');st.id='activityReportStyles';st.textContent=`
     .activity-page{max-width:1100px;margin:0 auto}.activity-page .expense-panel{padding:12px;background:#f0f7ff;border:1px solid #c4d4ff;border-radius:14px;box-sizing:border-box}
     .activity-page .expense-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
-    .activity-page .activity-section-title{font-size:16px;color:#2477c8;border-bottom:1px solid #c4d4ff;padding:8px 0 5px;margin:12px 0 8px}.activity-page .activity-custom-input{margin-top:5px}.activity-page [hidden]{display:none!important}.activity-page .expense-field{min-width:0;display:flex;flex-direction:column;gap:5px}.activity-page .expense-label{font-weight:600;color:#2d5274;display:block;white-space:normal}
+    .activity-page .activity-id-line{display:flex;align-items:center;gap:6px;grid-column:1/-1;min-height:28px;color:#2d5274;font-weight:600}.activity-page .activity-sensitive-line{display:flex;justify-content:flex-start;align-items:center;width:100%;text-align:left;margin:12px 0}.activity-page .activity-sensitive-line label{display:flex;justify-content:flex-start;align-items:center;gap:8px;margin:0;text-align:left}.activity-page .activity-sensitive-line input{margin:0}.activity-page .activity-section-title{font-size:16px;color:#2477c8;border-bottom:1px solid #c4d4ff;padding:8px 0 5px;margin:12px 0 8px}.activity-page .activity-custom-input{margin-top:5px}.activity-page [hidden]{display:none!important}.activity-page .expense-field{min-width:0;display:flex;flex-direction:column;gap:5px}.activity-page .expense-label{font-weight:600;color:#2d5274;display:block;white-space:normal}
     .activity-page .expense-field input,.activity-page .expense-field select,.activity-page .expense-field textarea{width:100%;min-width:0;max-width:100%;box-sizing:border-box;min-height:40px;padding:8px 10px;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#222;font:inherit}
     .activity-page .expense-report-inline{display:flex;flex-direction:column;gap:5px}.activity-page .expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap;margin:12px 0}
     .activity-page .expense-report-actions>button,.activity-page .expense-download-wrap>button{white-space:nowrap}.activity-page .expense-download-wrap{position:relative}
@@ -66,7 +66,7 @@
     const typeItems=Object.keys(ACTIVITY_CONFIG);
     const inner=`<div class="expense-panel"><form id="activityForm" class="expense-form" autocomplete="off">
       <h3 class="activity-section-title">1. Basic Details</h3><div class="expense-filter-grid">
-      ${field('Activity ID','actId','<input id="actId" type="text" value="Auto-generated" disabled>')}
+      <div class="activity-id-line"><span>Activity ID:</span><span>Auto-generated</span></div>
       ${selectField('activityType','Activity Type',typeItems,'Select Type',true)}
       ${field('Title *','title','<input id="title" name="title" maxlength="150" required placeholder="Enter activity title">')}
       ${selectField('category','Category',[],'Select Activity Type first',true)}
@@ -88,7 +88,7 @@
       ${field('Progress (%)','progressPercent','<input id="progressPercent" name="progressPercent" type="number" min="0" max="100" value="0">')}
       ${field('Completed Date','completedDate','<input id="completedDate" name="completedDate" type="date">')}</div>
       <h3 class="activity-section-title" data-section="reminder">4. Reminder</h3><div class="expense-filter-grid" data-section="reminder">
-      ${field('Reminder Required','reminderEnabled','<select id="reminderEnabled" name="reminderEnabled"><option value="false">No</option><option value="true">Yes</option><option value="__custom__">＋ Custom text…</option></select><input id="reminderEnabledCustom" class="activity-custom-input" type="text" placeholder="Type a custom value" hidden>')}
+      ${field('Reminder','reminderEnabled','<select id="reminderEnabled" name="reminderEnabled"><option value="false" selected>No</option><option value="true">Yes</option><option value="__custom__">＋ Custom text…</option></select><input id="reminderEnabledCustom" class="activity-custom-input" type="text" placeholder="Type a custom value" hidden>')}
       ${field('Reminder Date','reminderDate','<input id="reminderDate" name="reminderDate" type="date">')}${field('Reminder Time','reminderTime','<input id="reminderTime" name="reminderTime" type="time">')}
       ${selectField('reminderRepeat','Reminder Repeat',['Once','Daily','Weekly','Monthly','Yearly','Custom'],'Once')}</div>
       <h3 class="activity-section-title" data-section="additional">5. Additional Details</h3><div class="expense-filter-grid" data-section="additional">
@@ -98,7 +98,7 @@
       ${field('Person / Doctor / Office','appointmentPerson','<input id="appointmentPerson" name="appointmentPerson" placeholder="Name">')}${field('Follow-up Date','followUpDate','<input id="followUpDate" name="followUpDate" type="date">')}
       ${field('Outcome','outcome','<input id="outcome" name="outcome" placeholder="Outcome">')}${field('Remarks','remarks','<textarea id="remarks" name="remarks" rows="2" placeholder="Additional remarks"></textarea>',true)}
       ${field('Attachment Notes','attachmentNotes','<input id="attachmentNotes" name="attachmentNotes" placeholder="Optional photo/document details">',true)}</div>
-      <div style="margin-top:12px"><label style="display:flex;align-items:center;gap:8px"><input id="isSensitive" name="isSensitive" type="checkbox" value="true"> Sensitive Activity</label></div>
+      <div class="activity-sensitive-line"><label for="isSensitive"><input id="isSensitive" name="isSensitive" type="checkbox" value="true"> Sensitive</label></div>
       <div id="activityStatus" class="expense-status" role="status" aria-live="polite"></div><div class="expense-actions"><button type="submit" id="activitySaveBtn" class="expense-primary">Save</button><button type="reset" id="activityResetBtn" class="expense-secondary">Reset</button><button type="button" id="activityModuleBack" class="expense-secondary">← Back</button></div>
     </form></div>`;
     page(shell('Add Activity',inner,true));bindBack();
@@ -109,15 +109,16 @@
     function updateCat(){const old=val('category');const custom=$('categoryCustom');if(custom){custom.value='';custom.hidden=true;custom.required=false}cat.innerHTML=dropdown(categoryKeys(val('activityType')),'Select Category');if(categoryKeys(val('activityType')).includes(old))cat.value=old;updateSub()}
     function isDaily(t){return t==='Daily Activity'}
     function show(id,yes){const el=document.querySelector(`[data-field="${id}"]`);if(el)el.hidden=!yes}
-    function updateVisibility(){const t=val('activityType'),task=t==='Task',event=t==='Event',rem=t==='Reminder',meeting=t==='Meeting',appt=t==='Appointment',daily=isDaily(t);
+    function updateVisibility(){const t=val('activityType'),task=t==='Task',event=t==='Event',rem=t==='Reminder',meeting=t==='Meeting',appt=t==='Appointment',daily=isDaily(t),reminderOn=val('reminderEnabled')==='true';
       show('startTime',event||meeting||appt||rem);show('endDate',event||meeting);show('endTime',event||meeting);show('dueDate',task||rem);show('dueTime',task||rem);
       show('repeatType',task||rem||event||daily);show('repeatUntil',task||rem||event||daily);show('assignedTo',task);show('priority',task);show('status',task||daily);show('progressPercent',task);show('completedDate',task);
       document.querySelectorAll('[data-section="reminder"]').forEach(e=>e.hidden=!(rem||task||daily));document.querySelectorAll('[data-section="additional"]').forEach(e=>e.hidden=!(event||meeting||appt));
+      show('reminderDate',reminderOn);show('reminderTime',reminderOn);show('reminderRepeat',reminderOn);
       show('venue',event);show('organiser',event);show('participants',event||meeting);show('meetingWith',meeting);show('locationLink',meeting||appt);show('agenda',meeting);show('appointmentPerson',appt);show('followUpDate',appt);}
     [type,cat,sub,$('priority'),$('status'),$('repeatType'),$('reminderRepeat'),$('reminderEnabled')].forEach(el=>{if(el)customToggle(el.id)});
-    type.addEventListener('change',()=>{updateCat();updateVisibility()});cat.addEventListener('change',()=>{updateSub();updateVisibility()});sub.addEventListener('change',()=>{});
+    type.addEventListener('change',()=>{updateCat();updateVisibility()});cat.addEventListener('change',()=>{updateSub();updateVisibility()});sub.addEventListener('change',()=>{});$('reminderEnabled').addEventListener('change',updateVisibility);
     updateCat();updateVisibility();$('status').value='Pending';$('priority').value='Normal';
-    function resetForm(){form.reset();$('startDate').value=today();$('status').value='Pending';$('priority').value='Normal';$('progressPercent').value='0';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();updateVisibility();status('')}
+    function resetForm(){form.reset();$('startDate').value=today();$('status').value='Pending';$('priority').value='Normal';$('reminderEnabled').value='false';$('progressPercent').value='0';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();updateVisibility();status('')}
     form.onsubmit=async ev=>{ev.preventDefault();if(!family().familyId){status('Current family was not found. Please open your family and try again.','error');return}if(!token()){status('Login session expired. Please login again.','error');return}
       const activityType=val('activityType'),category=val('category'),subCategory=val('subCategory');if(!activityType||!category||!subCategory){status('Activity Type, Category and Sub Category are required.','error');return}if(!val('title')){status('Activity Title is required.','error');return}
       const btn=$('activitySaveBtn');btn.disabled=true;btn.textContent='Saving…';status('Saving activity…');try{const fd=new FormData(form),fields={};for(const [k,v] of fd.entries())fields[k]=String(v);
