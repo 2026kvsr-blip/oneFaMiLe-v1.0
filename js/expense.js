@@ -1,6 +1,4 @@
 
-
-
 /* oneFaMiLe Activities module — report page structure follows expense.js */
 (function(){
   'use strict';
@@ -23,13 +21,21 @@
  ,
     'Others': {'Others':['Others']}
   };
+  // Compatibility map for report controls that use the same category-map name as Expenses.
+  // Build it from the existing activity configuration so Activity reports never depend on expense.js.
+  const CATEGORIES = Object.fromEntries(
+    [...new Set(Object.values(ACTIVITY_CONFIG).flatMap(group => Object.keys(group)))].map(category => [
+      category,
+      [...new Set(Object.values(ACTIVITY_CONFIG).flatMap(group => group[category] || []))]
+    ])
+  );
   const statusOptions=['Pending','In Progress','On Hold','Completed','Cancelled'];
   const priorityOptions=['Low','Normal','High','Urgent'];
   const repeatOptions=['Does not repeat','Daily','Weekly','Monthly','Yearly','Custom'];
   const categoryKeys = type => Object.keys(ACTIVITY_CONFIG[type] || {'Others':['Other']});
   const subCategoryKeys = (type,category) => (ACTIVITY_CONFIG[type] || {'Others':['Other']})[category] || [];
-  const reportCategoryKeys = () => [...new Set(Object.values(ACTIVITY_CONFIG).flatMap(categories => Object.keys(categories)))].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'}));
-  const reportSubCategoryKeys = category => [...new Set(Object.values(ACTIVITY_CONFIG).flatMap(categories => category ? (categories[category] || []) : Object.values(categories).flat()))].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'}));
+  const reportCategoryKeys = () => Object.keys(CATEGORIES).sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'}));
+  const reportSubCategoryKeys = category => [...new Set(category ? (CATEGORIES[category] || []) : Object.values(CATEGORIES).flat())].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'}));
   const sensitiveFlag = value => value === true || ['true','yes','1','sensitive'].includes(String(value == null ? '' : value).trim().toLowerCase());
   const customChoice = '＋ Custom text…';
   function dropdown(items,placeholder,allowCustom=true){return `<option value="">${esc(placeholder)}</option>${items.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}${allowCustom?`<option value="__custom__">${esc(customChoice)}</option>`:''}`}
