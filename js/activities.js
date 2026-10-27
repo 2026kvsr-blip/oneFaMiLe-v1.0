@@ -122,7 +122,7 @@
       ${field('Scheduled Date *','startDate','<input id="startDate" name="startDate" type="date" value="'+today()+'" required>')}</div>
       <div class="expense-filter-grid">
       
-      ${field('Start Time','startTime','<input id="startTime" name="startTime" type="time">')}
+      ${field('Schedule Time','startTime','<input id="startTime" name="startTime" type="time">')}
       ${field('End Date','endDate','<input id="endDate" name="endDate" type="date">')}
       ${field('End Time','endTime','<input id="endTime" name="endTime" type="time">')}
       ${field('Due Date','dueDate','<input id="dueDate" name="dueDate" type="date">')}
@@ -157,11 +157,13 @@
     function show(id,yes){const el=document.querySelector(`[data-field="${id}"]`);if(el)el.hidden=!yes}
     function syncRepeatUntil(){const repeat=$('repeatType'),until=$('repeatUntil');if(!repeat||!until)return;const noRepeat=repeat.value==='Does not repeat';until.disabled=noRepeat;if(noRepeat){until.value='';until.setAttribute('aria-disabled','true')}else{until.removeAttribute('aria-disabled')}}
     function updateVisibility(){const t=val('activityType'),task=t==='Task',event=t==='Event',rem=t==='Reminder',meeting=t==='Meeting',appt=t==='Appointment',daily=isDaily(t),reminderOn=val('reminderEnabled')==='true';
-      show('startTime',event||meeting||appt||rem);show('endDate',event||meeting);show('endTime',event||meeting);show('dueDate',task||rem);show('dueTime',task||rem);
-      show('repeatType',task||rem||event||daily);show('repeatUntil',task||rem||event||daily);syncRepeatUntil();show('assignedTo',task);show('priority',task);show('status',true);show('completedDate',val('status')==='Completed');
+      // Schedule time is used only for Appointments.
+      show('startTime',appt);show('endDate',false);show('endTime',false);show('dueDate',false);show('dueTime',false);
+      // Repeat and Repeat Until are not needed for the requested Activity Types.
+      show('repeatType',false);show('repeatUntil',false);syncRepeatUntil();show('assignedTo',task);show('priority',task);show('status',true);show('completedDate',val('status')==='Completed');
       document.querySelectorAll('[data-section="additional"]').forEach(e=>e.hidden=!(event||meeting||appt));
       const reminderGrid=document.querySelector('.activity-reminder-grid');if(reminderGrid)reminderGrid.hidden=!reminderOn;
-      show('venue',event);show('organiser',event);show('participants',event||meeting);show('meetingWith',meeting);show('locationLink',meeting||appt);show('agenda',meeting);show('appointmentPerson',appt);show('followUpDate',appt);}
+      show('venue',event);show('organiser',false);show('participants',false);show('meetingWith',false);show('locationLink',meeting||appt);show('agenda',false);show('appointmentPerson',appt);show('followUpDate',appt);}
     [type,cat,sub,$('priority'),$('status')].forEach(el=>{if(el)customToggle(el.id)});
     type.addEventListener('change',()=>{updateCat();updateVisibility()});cat.addEventListener('change',()=>{updateSub();updateVisibility()});sub.addEventListener('change',()=>{});$('reminderEnabled').addEventListener('change',()=>{updateVisibility()});$('status').addEventListener('change',updateVisibility);$('repeatType').addEventListener('change',syncRepeatUntil);
     updateCat();$('reminderEnabled').value='false';updateVisibility();$('status').value='Pending';$('priority').value='Normal';
