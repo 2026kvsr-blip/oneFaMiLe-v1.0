@@ -102,8 +102,9 @@
       box-sizing:border-box!important;border:1px solid #9bb9d4!important;
       border-radius:8px!important;background:#fff!important;font:inherit!important;
     }
-    .activity-page .activity-reminder-grid{row-gap:14px!important;column-gap:10px!important}
+    .activity-page .activity-reminder-grid{row-gap:10px!important;column-gap:10px!important;margin-top:0!important;align-items:start!important}
     .activity-page .activity-reminder-grid>.expense-field{margin:0!important}
+    .activity-page .activity-fields-grid>[data-field="reminderFields"]{margin-top:0!important;align-items:start!important}
 
   `;document.head.appendChild(st)}
   function openMenu(){const btn=$('activitiesBtn');if(!btn)return;if(typeof window.updateMenuIcon==='function')window.updateMenuIcon();if(typeof window.setActiveButton==='function')window.setActiveButton(btn);page(title('Activities')+`<div class="grid-3x2">
@@ -182,11 +183,11 @@
         arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','startTime','followUpDate','locationLink','appointmentPerson','completedDate','assignedTo','priority','reminderEnabled','reminderFields']);
       }else if(event){
         // Venue first; Reminder begins on the next row at normal field width.
-        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','venue','reminderEnabled','reminderFields','completedDate']);
+        arrangeActivityFields(['activityType','venue','startDate','startTime','category','subCategory','description','status','reminderEnabled','reminderFields','completedDate']);
         if(reminderField)reminderField.style.gridColumn='1';
       }else if(meeting){
         // Location / Link first; Reminder begins on the next row at normal field width.
-        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','locationLink','reminderEnabled','reminderFields','completedDate']);
+        arrangeActivityFields(['activityType','locationLink','startDate','startTime','category','subCategory','description','status','reminderEnabled','reminderFields','completedDate']);
         if(reminderField)reminderField.style.gridColumn='1';
       }else if(daily){
         // Keep Reminder and Reminder Repeat side by side, with Date and Time beneath.
