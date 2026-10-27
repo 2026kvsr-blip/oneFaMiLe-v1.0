@@ -1,5 +1,4 @@
 
-
 /* oneFaMiLe Activities module — report page structure follows expense.js */
 (function(){
   'use strict';
@@ -206,7 +205,35 @@
       if($('title'))$('title').value=val('subCategory')||val('category')||t||'Activity';
     }
     [type,cat,sub,$('priority'),$('status')].forEach(el=>{if(el)customToggle(el.id)});
-    type.addEventListener('change',()=>{updateCat();updateVisibility()});cat.addEventListener('change',()=>{updateSub();updateVisibility()});sub.addEventListener('change',()=>{});$('reminderEnabled').addEventListener('change',()=>{updateVisibility()});$('status').addEventListener('change',updateVisibility);$('repeatType').addEventListener('change',syncRepeatUntil);
+    // Cascade refresh: changing a parent selection clears every field after it,
+    // while preserving the parent selections that the user just made.
+    const cascadeOrder=['activityType','category','subCategory','startDate','startTime','description','status','reminderEnabled','reminderRepeat','reminderDate','reminderTime','venue','locationLink','appointmentPerson','followUpDate','assignedTo','priority','completedDate','endDate','endTime','dueDate','dueTime','repeatType','repeatUntil','organiser','participants','meetingWith','agenda'];
+    function clearFieldValue(id){
+      const el=$(id);if(!el)return;
+      if(el.type==='checkbox'||el.type==='radio')el.checked=false;
+      else if(el.tagName==='SELECT'){
+        el.value='';
+        const custom=$(id+'Custom');if(custom){custom.value='';custom.hidden=true;custom.required=false}
+      }else if(id==='startDate')el.value=today();
+      else el.value='';
+    }
+    function refreshFieldsAfter(id){
+      const index=cascadeOrder.indexOf(id);if(index<0)return;
+      cascadeOrder.slice(index+1).forEach(clearFieldValue);
+      // Restore the form's normal default values after clearing dependent fields.
+      if($('status'))$('status').value='Pending';
+      if($('reminderEnabled'))$('reminderEnabled').value='false';
+      if($('reminderRepeat'))$('reminderRepeat').value='Once';
+      if($('priority'))$('priority').value='Normal';
+      if($('repeatType'))$('repeatType').value='Does not repeat';
+      if($('startDate')&&!$('startDate').value)$('startDate').value=today();
+      if($('isSensitive'))$('isSensitive').checked=false;
+      syncRepeatUntil();
+    }
+    type.addEventListener('change',()=>{refreshFieldsAfter('activityType');updateCat();updateVisibility()});
+    cat.addEventListener('change',()=>{refreshFieldsAfter('category');updateSub();updateVisibility()});
+    sub.addEventListener('change',()=>{refreshFieldsAfter('subCategory');updateVisibility()});
+    $('reminderEnabled').addEventListener('change',()=>{updateVisibility()});$('status').addEventListener('change',updateVisibility);$('repeatType').addEventListener('change',syncRepeatUntil);
     updateCat();$('reminderEnabled').value='false';$('status').value='Pending';$('priority').value='Normal';updateVisibility();
     function resetForm(){form.reset();$('startDate').value=today();$('status').value='Pending';$('priority').value='Normal';$('reminderEnabled').value='false';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();updateVisibility();status('')}
     form.onsubmit=async ev=>{ev.preventDefault();if(!family().familyId){status('Current family was not found. Please open your family and try again.','error');return}if(!token()){status('Login session expired. Please login again.','error');return}
