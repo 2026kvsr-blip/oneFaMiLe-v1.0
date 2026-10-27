@@ -1,5 +1,4 @@
 
-
 /* oneFaMiLe Activities module — report page structure follows expense.js */
 (function(){
   'use strict';
@@ -41,21 +40,11 @@
     .activity-page{max-width:1100px;margin:0 auto}.activity-page .expense-panel{padding:12px;background:#f0f7ff;border:1px solid #c4d4ff;border-radius:14px;box-sizing:border-box}
     .activity-page .expense-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
     .activity-page .activity-fields-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;align-items:start}
-    .activity-page .activity-fields-grid>[data-field="activityType"]{grid-column:1/-1!important}
+    .activity-page .activity-fields-grid>[data-field="activityType"]{grid-column:auto!important}
     .activity-page .activity-fields-grid>[data-field="reminderFields"]{display:contents!important;grid-column:1/-1!important;width:100%;min-width:0}.activity-page .activity-fields-grid>[data-field="reminderFields"][hidden]{display:none!important}
     .activity-page .activity-fields-grid>[data-field="reminderFields"] .activity-reminder-grid{margin:0!important}
     .activity-page .activity-fields-grid>.expense-field{min-width:0;width:100%;max-width:100%;box-sizing:border-box}
     .activity-page .activity-fields-grid>.expense-field input,.activity-page .activity-fields-grid>.expense-field select,.activity-page .activity-fields-grid>.expense-field textarea{width:100%;min-width:0;max-width:100%;box-sizing:border-box}
-    .activity-page .activity-fields-grid>.expense-field{min-width:0;width:100%;max-width:100%;box-sizing:border-box}
-    .activity-page .activity-fields-grid>.expense-field input,
-    .activity-page .activity-fields-grid>.expense-field select,
-    .activity-page .activity-fields-grid>.expense-field textarea,
-    .activity-page .activity-reminder-grid input,
-    .activity-page .activity-reminder-grid select{display:block;width:100%;min-width:0;max-width:100%;height:40px;min-height:40px;max-height:40px;box-sizing:border-box}
-    .activity-page .activity-fields-grid>.expense-field textarea{height:auto;min-height:40px;max-height:none}
-    .activity-page .activity-reminder-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;min-width:0;width:100%;box-sizing:border-box}
-    .activity-page .activity-reminder-grid>.expense-field{min-width:0;width:100%;max-width:100%;box-sizing:border-box}
-
 
     .activity-page .activity-description-date-row{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start;width:100%;min-width:0;box-sizing:border-box;margin-top:10px}.activity-page .activity-description-date-row>.expense-field{min-width:0;width:100%;max-width:100%;box-sizing:border-box}.activity-page .activity-description-date-row textarea{min-height:40px}.activity-page .activity-schedule-date-row{grid-column:auto;width:100%;margin-top:0}.activity-page .activity-schedule-date-row .expense-field{max-width:100%}.activity-page .activity-id-line{display:flex!important;flex-direction:row!important;align-items:center!important;gap:5px!important;white-space:nowrap!important;overflow:visible;grid-column:1 / -1!important;justify-self:start!important;align-self:start!important;width:100%;min-height:28px;color:#888!important;font-weight:500!important;text-align:left!important;line-height:28px}.activity-page .activity-reminder-toggle-wrap{display:block;min-width:0;width:100%;box-sizing:border-box}.activity-page .activity-sensitive-line{display:flex!important;justify-content:flex-start!important;align-items:center!important;width:100%;text-align:left!important;margin:4px 0!important;padding:0!important}.activity-page .activity-sensitive-line label{display:inline-flex!important;justify-content:flex-start!important;align-items:center!important;gap:0!important;margin:0!important;padding:0!important;text-align:left!important;width:auto!important}.activity-page .activity-sensitive-line input{margin:0!important;flex:0 0 auto}.activity-page .activity-reminder-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;grid-column:1/-1;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-reminder-grid>.expense-field{grid-column:auto!important;min-width:0!important;width:100%!important;max-width:100%!important;box-sizing:border-box}.activity-page .activity-reminder-grid input,.activity-page .activity-reminder-grid select{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box}.activity-page .activity-section-title{font-size:16px;color:#2477c8;border-bottom:1px solid #c4d4ff;padding:8px 0 5px;margin:12px 0 8px}.activity-page .activity-custom-input{margin-top:5px}.activity-page [hidden]{display:none!important}.activity-page .expense-field{min-width:0;display:flex;flex-direction:column;gap:5px}.activity-page .expense-label{font-weight:600;color:#2d5274;display:block;white-space:normal}
     .activity-page .expense-field input,.activity-page .expense-field select,.activity-page .expense-field textarea{width:100%;min-width:0;max-width:100%;box-sizing:border-box;min-height:40px;padding:8px 10px;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#222;font:inherit}
@@ -131,9 +120,10 @@
     const inner=`<div class="expense-panel"><form id="activityForm" class="expense-form" autocomplete="off">
       <div class="expense-filter-grid activity-fields-grid" id="activityFieldsGrid">
       ${selectField('activityType','Activity Type',typeItems,'Select Type',true)}
-      ${field('Scheduled Date *','startDate','<input id="startDate" name="startDate" type="date" value="'+today()+'" required>')}
       ${selectField('category','Category',[],'Select Activity Type first',true)}
       ${selectField('subCategory','Sub Category',[],'Select Category first',true)}
+      ${field('Scheduled Date *','startDate','<input id="startDate" name="startDate" type="date" value="'+today()+'" required>')}
+      ${field('Schedule Time','startTime','<input id="startTime" name="startTime" type="time">')}
       ${field('Description','description','<textarea id="description" name="description" rows="2" maxlength="2000" placeholder="Enter details"></textarea>')}
       ${field('Status','status','<select id="status" name="status"><option value="Pending">Pending</option><option value="In Progress">In Progress</option><option value="On Hold">On Hold</option><option value="Completed">Completed</option><option value="Cancelled">Cancelled</option><option value="Not Necessary">Not Necessary</option></select>')}
       ${field('Reminder','reminderEnabled','<select id="reminderEnabled" name="reminderEnabled"><option value="false" selected>No</option><option value="true">Yes</option></select>')}
@@ -187,18 +177,18 @@
       if(reminderField)reminderField.style.gridColumn=(appt|| (daily&&reminderOn))?'1 / -1':'auto';
       const follow=$('[data-field="followUpDate"]');if(follow)follow.style.gridColumn='auto';
       if(appt){
-        arrangeActivityFields(['activityType','category','subCategory','startDate','startTime','description','locationLink','appointmentPerson','status','reminderEnabled','reminderFields','followUpDate','completedDate','assignedTo','priority']);
+        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','startTime','reminderEnabled','reminderFields','locationLink','appointmentPerson','followUpDate','completedDate','assignedTo','priority']);
       }else if(event){
-        arrangeActivityFields(['activityType','category','subCategory','startDate','description','status','venue','reminderEnabled','reminderFields','completedDate']);
+        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','reminderEnabled','reminderFields','venue','completedDate']);
         if(reminderField)reminderField.style.gridColumn='1 / -1';
       }else if(meeting){
-        arrangeActivityFields(['activityType','category','subCategory','startDate','description','status','locationLink','reminderEnabled','reminderFields','completedDate']);
+        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','reminderEnabled','reminderFields','locationLink','completedDate']);
         if(reminderField)reminderField.style.gridColumn='1 / -1';
       }else if(daily){
         arrangeActivityFields(['activityType','category','subCategory','startDate','description','status','reminderEnabled','reminderFields','completedDate']);
         if(reminderField)reminderField.style.gridColumn=reminderOn?'1 / -1':'auto';
       }else{
-        arrangeActivityFields(['activityType','category','subCategory','startDate','description','status','reminderEnabled','reminderFields','assignedTo','priority','completedDate']);
+        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','reminderEnabled','reminderFields','assignedTo','priority','completedDate']);
       }
       // Title is intentionally not shown; keep the backend field populated for compatibility.
       if($('title'))$('title').value=val('subCategory')||val('category')||t||'Activity';
