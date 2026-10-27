@@ -170,7 +170,7 @@
     }
     function updateVisibility(){
       const t=val('activityType'),task=t==='Task',event=t==='Event',meeting=t==='Meeting',appt=t==='Appointment',daily=isDaily(t),reminderOn=val('reminderEnabled')==='true';
-      show('startTime',appt);show('endDate',false);show('endTime',false);show('dueDate',false);show('dueTime',false);
+      show('startTime',appt||event||meeting);show('endDate',false);show('endTime',false);show('dueDate',false);show('dueTime',false);
       show('repeatType',false);show('repeatUntil',false);syncRepeatUntil();
       show('assignedTo',task);show('priority',task);show('status',true);show('completedDate',val('status')==='Completed');
       show('venue',event);show('organiser',false);show('participants',false);show('meetingWith',false);show('locationLink',meeting||appt);show('agenda',false);show('appointmentPerson',appt);show('followUpDate',appt);
