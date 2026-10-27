@@ -81,8 +81,9 @@
     }
     .activity-page .activity-reminder-grid .expense-label{
       text-align:left!important;align-self:stretch!important;width:100%!important;
-      margin:0!important;justify-self:start!important;
+      margin:0 0 5px 0!important;justify-self:start!important;
     }
+    .activity-page .activity-reminder-grid .expense-field{gap:5px!important;align-items:stretch!important}
     .activity-page .activity-sensitive-line{
       margin-top:18px!important;margin-bottom:8px!important;
     }
