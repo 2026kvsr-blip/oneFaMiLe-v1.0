@@ -174,21 +174,28 @@
       show('venue',event);show('organiser',false);show('participants',false);show('meetingWith',false);show('locationLink',meeting||appt);show('agenda',false);show('appointmentPerson',appt);show('followUpDate',appt);
       const reminderGrid=document.querySelector('[data-field="reminderFields"]');if(reminderGrid)reminderGrid.hidden=!reminderOn;
       const reminderField=document.querySelector('[data-field="reminderEnabled"]');
-      if(reminderField)reminderField.style.gridColumn=(appt|| (daily&&reminderOn))?'1 / -1':'auto';
+      // Reminder stays the same width as other fields; never stretch it full width.
+      if(reminderField)reminderField.style.gridColumn='auto';
       const follow=$('[data-field="followUpDate"]');if(follow)follow.style.gridColumn='auto';
       if(appt){
-        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','startTime','reminderEnabled','reminderFields','locationLink','appointmentPerson','followUpDate','completedDate','assignedTo','priority']);
+        // Schedule Time and Follow-up Date share one row; Reminder is placed last.
+        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','startTime','followUpDate','locationLink','appointmentPerson','completedDate','assignedTo','priority','reminderEnabled','reminderFields']);
       }else if(event){
-        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','reminderEnabled','reminderFields','venue','completedDate']);
-        if(reminderField)reminderField.style.gridColumn='1 / -1';
+        // Venue first; Reminder begins on the next row at normal field width.
+        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','venue','reminderEnabled','reminderFields','completedDate']);
+        if(reminderField)reminderField.style.gridColumn='1';
       }else if(meeting){
-        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','reminderEnabled','reminderFields','locationLink','completedDate']);
-        if(reminderField)reminderField.style.gridColumn='1 / -1';
+        // Location / Link first; Reminder begins on the next row at normal field width.
+        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','locationLink','reminderEnabled','reminderFields','completedDate']);
+        if(reminderField)reminderField.style.gridColumn='1';
       }else if(daily){
-        arrangeActivityFields(['activityType','category','subCategory','startDate','description','status','reminderEnabled','reminderFields','completedDate']);
-        if(reminderField)reminderField.style.gridColumn=reminderOn?'1 / -1':'auto';
+        // Keep Reminder and Reminder Repeat side by side, with Date and Time beneath.
+        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','reminderEnabled','reminderFields','completedDate']);
+      }else if(task){
+        // Assigned To and Priority share one row; Reminder follows below them.
+        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','assignedTo','priority','reminderEnabled','reminderFields','completedDate']);
       }else{
-        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','reminderEnabled','reminderFields','assignedTo','priority','completedDate']);
+        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','reminderEnabled','reminderFields','completedDate','assignedTo','priority']);
       }
       // Title is intentionally not shown; keep the backend field populated for compatibility.
       if($('title'))$('title').value=val('subCategory')||val('category')||t||'Activity';
