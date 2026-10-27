@@ -41,18 +41,11 @@
     .activity-page .expense-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
     .activity-page .activity-description-date-row{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start;width:100%;min-width:0;box-sizing:border-box;margin-top:10px}.activity-page .activity-description-date-row>.expense-field{min-width:0;width:100%;max-width:100%;box-sizing:border-box}.activity-page .activity-description-date-row textarea{min-height:40px}.activity-page .activity-schedule-date-row{grid-column:auto;width:100%;margin-top:0}.activity-page .activity-schedule-date-row .expense-field{max-width:100%}.activity-page .activity-id-line{display:flex!important;flex-direction:row!important;align-items:center!important;gap:5px!important;white-space:nowrap!important;overflow:visible;grid-column:1 / -1!important;justify-self:start!important;align-self:start!important;width:100%;min-height:28px;color:#888!important;font-weight:500!important;text-align:left!important;line-height:28px}.activity-page .activity-reminder-toggle-wrap{display:block;min-width:0;width:100%;box-sizing:border-box}.activity-page .activity-sensitive-line{display:flex!important;justify-content:flex-start!important;align-items:center!important;width:100%;text-align:left!important;margin:4px 0!important;padding:0!important}.activity-page .activity-sensitive-line label{display:inline-flex!important;justify-content:flex-start!important;align-items:center!important;gap:0!important;margin:0!important;padding:0!important;text-align:left!important;width:auto!important}.activity-page .activity-sensitive-line input{margin:0!important;flex:0 0 auto}.activity-page .activity-reminder-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;grid-column:1/-1;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-reminder-grid>.expense-field{grid-column:auto!important;min-width:0!important;width:100%!important;max-width:100%!important;box-sizing:border-box}.activity-page .activity-reminder-grid input,.activity-page .activity-reminder-grid select{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box}.activity-page .activity-section-title{font-size:16px;color:#2477c8;border-bottom:1px solid #c4d4ff;padding:8px 0 5px;margin:12px 0 8px}.activity-page .activity-custom-input{margin-top:5px}.activity-page [hidden]{display:none!important}.activity-page .expense-field{min-width:0;display:flex;flex-direction:column;gap:5px}.activity-page .expense-label{font-weight:600;color:#2d5274;display:block;white-space:normal}
     .activity-page .expense-field input,.activity-page .expense-field select,.activity-page .expense-field textarea{width:100%;min-width:0;max-width:100%;box-sizing:border-box;min-height:40px;padding:8px 10px;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#222;font:inherit}
-    .activity-page .expense-filter-grid>.expense-field,
+    .activity-page .expense-filter-grid>.expense-field{min-width:0;width:100%;max-width:100%;box-sizing:border-box}
     .activity-page .expense-filter-grid>.expense-field input,
-    .activity-page .expense-filter-grid>.expense-field select,
-    .activity-page .expense-filter-grid>.expense-field textarea{min-width:0;width:100%;max-width:100%;box-sizing:border-box}
-    .activity-page .expense-filter-grid>.expense-field input,
-    .activity-page .expense-filter-grid>.expense-field select{height:40px;min-height:40px;max-height:40px}
-    .activity-page .expense-filter-grid>.expense-field textarea{min-height:40px;height:auto;max-height:none}
-    .activity-page .activity-reminder-grid{row-gap:14px!important;column-gap:10px!important}
-    .activity-page .activity-reminder-grid .expense-label{margin-bottom:3px!important}
-    .activity-page .activity-reminder-grid input[type="time"]{-webkit-appearance:none;appearance:none;height:40px!important;min-height:40px!important;max-height:40px!important;line-height:22px;box-sizing:border-box;padding:8px 10px}
-    .activity-page .activity-sensitive-line{margin-top:18px!important}
-    .activity-page [data-field="assignedTo"],.activity-page [data-field="priority"]{margin-top:4px}
+    .activity-page .expense-filter-grid>.expense-field select{display:block;width:100%;min-width:0;max-width:100%;height:40px;min-height:40px;max-height:40px;box-sizing:border-box}
+    .activity-page .expense-filter-grid>.expense-field textarea{width:100%;min-width:0;max-width:100%;min-height:40px;box-sizing:border-box}
+    .activity-page .expense-filter-grid>.expense-field input[type="time"]{-webkit-appearance:none;appearance:none;height:40px!important;min-height:40px!important;max-height:40px!important;line-height:22px;box-sizing:border-box;padding:8px 10px}
 
     .activity-page .expense-report-inline{display:flex;flex-direction:column;gap:5px}.activity-page .expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap;margin:12px 0}
     .activity-page .expense-report-actions>button,.activity-page .expense-download-wrap>button{white-space:nowrap}.activity-page .expense-download-wrap{position:relative}
@@ -119,6 +112,7 @@
     const typeItems=Object.keys(ACTIVITY_CONFIG);
     const inner=`<div class="expense-panel"><form id="activityForm" class="expense-form" autocomplete="off">
       <div class="expense-filter-grid">
+      <div class="activity-id-line"><span>Activity ID:</span> <span>Auto-generated</span></div>
       ${selectField('activityType','Activity Type',typeItems,'Select Type',true)}
       ${field('Title *','title','<input id="title" name="title" maxlength="150" required placeholder="Enter activity title">')}
       ${selectField('category','Category',[],'Select Activity Type first',true)}
@@ -133,13 +127,12 @@
       ${field('End Time','endTime','<input id="endTime" name="endTime" type="time">')}
       ${field('Due Date','dueDate','<input id="dueDate" name="dueDate" type="date">')}
       ${field('Due Time','dueTime','<input id="dueTime" name="dueTime" type="time">')}
-      ${selectField('repeatType','Repeat',repeatOptions,'Does not repeat')}
+      ${field('Repeat','repeatType','<select id="repeatType" name="repeatType"><option value="Does not repeat" selected>Does not repeat</option><option value="Daily">Daily</option><option value="Weekly">Weekly</option><option value="Monthly">Monthly</option><option value="Yearly">Yearly</option></select>')}
       ${field('Repeat Until','repeatUntil','<input id="repeatUntil" name="repeatUntil" type="date">')}</div>
       <div class="expense-filter-grid">
       ${field('Assigned To','assignedTo','<input id="assignedTo" name="assignedTo" placeholder="Family member / Self">')}
       ${selectField('priority','Priority',priorityOptions,'Select Priority')}${field('Status','status','<select id="status" name="status"><option value="Pending">Pending</option><option value="In Progress">In Progress</option><option value="On Hold">On Hold</option><option value="Completed">Completed</option><option value="Cancelled">Cancelled</option><option value="Not Necessary">Not Necessary</option></select>')}
       ${field('Reminder','reminderEnabled','<select id="reminderEnabled" name="reminderEnabled"><option value="false" selected>No</option><option value="true">Yes</option></select>')}
-      ${field('Progress (%)','progressPercent','<input id="progressPercent" name="progressPercent" type="number" min="0" max="100" value="0">')}
       ${field('Completed Date','completedDate','<input id="completedDate" name="completedDate" type="date">')}</div>
       <div class="expense-filter-grid activity-reminder-grid" hidden>
       ${field('Reminder Date  ','reminderDate','<input id="reminderDate" name="reminderDate" type="date">')}
@@ -150,8 +143,7 @@
       ${field('Participants','participants','<input id="participants" name="participants" placeholder="Names / family members">')}${field('Meeting With','meetingWith','<input id="meetingWith" name="meetingWith" placeholder="Person / team">')}
       ${field('Location / Link','locationLink','<input id="locationLink" name="locationLink" placeholder="Address or meeting link">')}${field('Agenda','agenda','<input id="agenda" name="agenda" placeholder="Meeting agenda">')}
       ${field('Person / Doctor / Office','appointmentPerson','<input id="appointmentPerson" name="appointmentPerson" placeholder="Name">')}${field('Follow-up Date','followUpDate','<input id="followUpDate" name="followUpDate" type="date">')}
-      ${field('Outcome','outcome','<input id="outcome" name="outcome" placeholder="Outcome">')}${field('Remarks','remarks','<textarea id="remarks" name="remarks" rows="2" placeholder="Additional remarks"></textarea>',true)}
-      ${field('Attachment Notes','attachmentNotes','<input id="attachmentNotes" name="attachmentNotes" placeholder="Optional photo/document details">',true)}</div>
+</div>
       <div class="activity-sensitive-line"><label for="isSensitive"><input id="isSensitive" name="isSensitive" type="checkbox" value="true"> Sensitive</label></div>
       <div id="activityStatus" class="expense-status" role="status" aria-live="polite"></div><div class="expense-actions"><button type="submit" id="activitySaveBtn" class="expense-primary">Save</button><button type="reset" id="activityResetBtn" class="expense-secondary">Reset</button><button type="button" id="activityModuleBack" class="expense-secondary">← Back</button></div>
     </form></div>`;
@@ -163,18 +155,17 @@
     function updateCat(){const old=val('category');const custom=$('categoryCustom');if(custom){custom.value='';custom.hidden=true;custom.required=false}cat.innerHTML=dropdown(categoryKeys(val('activityType')),'Select Category');if(categoryKeys(val('activityType')).includes(old))cat.value=old;updateSub()}
     function isDaily(t){return t==='Daily Activity'}
     function show(id,yes){const el=document.querySelector(`[data-field="${id}"]`);if(el)el.hidden=!yes}
-    function syncRepeatUntil(){const repeat=$('repeatType'),until=$('repeatUntil');if(!repeat||!until)return;const noRepeat=!repeat.value||repeat.value==='Does not repeat';until.disabled=noRepeat;if(noRepeat){until.value='';until.setAttribute('aria-disabled','true')}else{until.removeAttribute('aria-disabled')}}
+    function syncRepeatUntil(){const repeat=$('repeatType'),until=$('repeatUntil');if(!repeat||!until)return;const noRepeat=repeat.value==='Does not repeat';until.disabled=noRepeat;if(noRepeat){until.value='';until.setAttribute('aria-disabled','true')}else{until.removeAttribute('aria-disabled')}}
     function updateVisibility(){const t=val('activityType'),task=t==='Task',event=t==='Event',rem=t==='Reminder',meeting=t==='Meeting',appt=t==='Appointment',daily=isDaily(t),reminderOn=val('reminderEnabled')==='true';
       show('startTime',event||meeting||appt||rem);show('endDate',event||meeting);show('endTime',event||meeting);show('dueDate',task||rem);show('dueTime',task||rem);
-      show('repeatType',task||rem||event||daily);show('repeatUntil',task||rem||event||daily);show('assignedTo',task);show('priority',task);show('status',true);show('progressPercent',task);show('completedDate',task);
-      syncRepeatUntil();
+      show('repeatType',task||rem||event||daily);show('repeatUntil',task||rem||event||daily);syncRepeatUntil();show('assignedTo',task);show('priority',task);show('status',true);show('completedDate',val('status')==='Completed');
       document.querySelectorAll('[data-section="additional"]').forEach(e=>e.hidden=!(event||meeting||appt));
       const reminderGrid=document.querySelector('.activity-reminder-grid');if(reminderGrid)reminderGrid.hidden=!reminderOn;
       show('venue',event);show('organiser',event);show('participants',event||meeting);show('meetingWith',meeting);show('locationLink',meeting||appt);show('agenda',meeting);show('appointmentPerson',appt);show('followUpDate',appt);}
-    [type,cat,sub,$('priority'),$('status'),$('repeatType')].forEach(el=>{if(el)customToggle(el.id)});
-    type.addEventListener('change',()=>{updateCat();updateVisibility()});cat.addEventListener('change',()=>{updateSub();updateVisibility()});sub.addEventListener('change',()=>{});$('reminderEnabled').addEventListener('change',()=>{updateVisibility()});$('repeatType').addEventListener('change',syncRepeatUntil);
+    [type,cat,sub,$('priority'),$('status')].forEach(el=>{if(el)customToggle(el.id)});
+    type.addEventListener('change',()=>{updateCat();updateVisibility()});cat.addEventListener('change',()=>{updateSub();updateVisibility()});sub.addEventListener('change',()=>{});$('reminderEnabled').addEventListener('change',()=>{updateVisibility()});$('status').addEventListener('change',updateVisibility);$('repeatType').addEventListener('change',syncRepeatUntil);
     updateCat();$('reminderEnabled').value='false';updateVisibility();$('status').value='Pending';$('priority').value='Normal';
-    function resetForm(){form.reset();$('startDate').value=today();$('status').value='Pending';$('priority').value='Normal';$('reminderEnabled').value='false';$('progressPercent').value='0';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();updateVisibility();status('')}
+    function resetForm(){form.reset();$('startDate').value=today();$('status').value='Pending';$('priority').value='Normal';$('reminderEnabled').value='false';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();updateVisibility();status('')}
     form.onsubmit=async ev=>{ev.preventDefault();if(!family().familyId){status('Current family was not found. Please open your family and try again.','error');return}if(!token()){status('Login session expired. Please login again.','error');return}
       const activityType=val('activityType'),category=val('category'),subCategory=val('subCategory');if(!activityType||!category||!subCategory){status('Activity Type, Category and Sub Category are required.','error');return}if(!val('title')){status('Activity Title is required.','error');return}
       const btn=$('activitySaveBtn');btn.disabled=true;btn.textContent='Saving…';status('Saving activity…');try{const fd=new FormData(form),fields={};for(const [k,v] of fd.entries())fields[k]=String(v);
