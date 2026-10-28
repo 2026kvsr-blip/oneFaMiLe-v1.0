@@ -25,6 +25,7 @@
   let cachedExpenses = [];
   let dateSortAscending = true;
   let lastReportRows = [];
+  let lastExpenseReportContext = null;
   const $ = id => document.getElementById(id);
   const esc = value => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   function family(){ try{return JSON.parse(localStorage.getItem('currentFamily')||'{}')}catch(_){return {}} }
@@ -412,6 +413,7 @@ ${field('Photos',`
     return `<style>.expense-report-inline{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:5px;grid-column:auto!important;width:100%;box-sizing:border-box}.expense-report-inline .expense-label{display:block!important;flex:0 0 auto;align-items:center;justify-content:flex-start;white-space:nowrap;min-width:0;width:100%;margin:0!important}.expense-report-inline .expense-label:after{content:':'}.expense-report-inline select{display:block!important;flex:1 1 auto;min-width:0;width:100%;max-width:none;box-sizing:border-box}.expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap}.expense-report-actions>button,.expense-download-wrap>button{white-space:nowrap}.expense-download-wrap{position:relative}.expense-download-menu{position:absolute;right:0;top:100%;z-index:9999;display:flex;flex-direction:column;min-width:100px;background:#fff;border:1px solid #9ab;border-radius:8px;box-shadow:0 4px 12px #0002}.expense-download-menu.hidden{display:none}.expense-download-menu button{background:#fff;border:0;padding:9px 14px;text-align:left;color:#222}.expense-report-subheading th{background:#fff!important;text-align:left;border-top:1px solid #c4d4ff;border-bottom:1px solid #c4d4ff;color:#2d5274}.expense-report-year th{font-size:24px!important;font-weight:700;padding:10px 8px;background:#fff!important;color:#218838!important}.expense-report-month th{font-size:20px!important;font-weight:700;padding:8px;background:#fff!important;color:#e67e22!important}.expense-report-subheading.expense-report-month th{color:#e67e22!important}.expense-report-total td{font-weight:700;background:#fff!important;border-top:1px solid #c4d4ff}.expense-report-date th{font-size:13px!important;font-weight:600;background:#fff!important}.expense-report-actions .expense-secondary,.expense-report-actions .expense-primary{padding:8px 12px}.expense-date-sort-field{align-self:end}.expense-date-sort{width:100%;min-height:42px;border:1px solid #8baec8;border-radius:8px;background:#fff;color:#2d5274;font-weight:700;padding:8px;cursor:pointer}.expense-date-sort:active{background:#e5f3ff}.expense-payment-filter{grid-column:1!important}.expense-spentby-filter{grid-column:2!important}.expense-custom-filter-grid .expense-field:has(#exFilterCategory),.expense-custom-filter-grid .expense-field:has(#exFilterSub){grid-row:2!important}.expense-custom-filter-grid .expense-payment-filter,.expense-custom-filter-grid .expense-spentby-filter{grid-row:3!important}.expense-custom-filter-grid .expense-field:has(#exMinAmount),.expense-custom-filter-grid .expense-field:has(#exMaxAmount){grid-row:4!important}.expense-custom-filter-grid .expense-field:has(#exFromDate),.expense-custom-filter-grid .expense-field:has(#exToDate){grid-row:5!important}.expense-custom-filter-grid .expense-payment-filter{grid-column:1!important}.expense-custom-filter-grid .expense-spentby-filter{grid-column:2!important}.expense-custom-filter-grid .expense-search-text-filter{grid-row:6!important;grid-column:1!important}.expense-custom-filter-grid .expense-amount-sort-field{grid-row:6!important;grid-column:2!important}.expense-custom-filter-grid #exFromDate,.expense-custom-filter-grid #exToDate{height:42px!important;min-height:42px!important;max-height:42px!important;padding:8px 10px!important;box-sizing:border-box!important;line-height:normal!important}.expense-custom-filter-grid #exVehicleTypeWrap,.expense-custom-filter-grid #exMtcTypeWrap{grid-row:7!important;grid-column:auto!important}.expense-filter-grid .expense-field.hidden{display:none!important}.expense-filter-grid #exVehicleTypeWrap,.expense-filter-grid #exMtcTypeWrap{grid-column:auto!important}.expense-filter-grid #exVehicleTypeWrap.hidden,.expense-filter-grid #exMtcTypeWrap.hidden{display:none!important}.expense-report-actions #exDownloadBtn,.expense-report-actions #expenseReportBack{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}.expense-report-actions #exDownloadBtn:disabled{opacity:1!important;color:#2477c8!important;background:transparent!important;border-color:#2477c8!important;cursor:not-allowed}.expense-summary{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 14px;box-sizing:border-box;flex-wrap:nowrap}.expense-summary-card{display:flex;align-items:center;justify-content:flex-start;gap:5px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px;flex:1 1 50%;width:50%}.expense-summary-card small{display:inline;font-size:clamp(9px,2.6vw,12px);white-space:nowrap}.expense-summary-card strong{display:inline;font-size:clamp(10px,2.9vw,14px);white-space:nowrap}@media(max-width:600px){.expense-filter-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:10px!important;row-gap:10px!important}.expense-filter-grid>.expense-field{grid-column:auto!important;min-width:0!important;width:100%!important;box-sizing:border-box!important}.expense-filter-grid>.expense-report-inline{grid-column:auto!important}.expense-filter-grid>.expense-field label{display:block!important;white-space:normal!important;max-width:100%!important;margin-bottom:5px!important}.expense-filter-grid>.expense-field input,.expense-filter-grid>.expense-field select{width:100%!important;min-width:0!important;box-sizing:border-box!important}.expense-report-inline .expense-label{flex:0 0 auto!important;width:100%!important;white-space:nowrap!important;margin-bottom:0!important}.expense-report-inline select{flex:1 1 auto!important;width:100%!important}.expense-report-actions{gap:6px!important}.expense-report-actions button{min-width:0!important;flex:1 1 0!important;padding:8px 4px!important;font-size:12px!important}}@media(min-width:601px){.expense-filter-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}.expense-filter-grid>.expense-report-inline{grid-column:auto!important}}</style><div class="expense-panel"><div class="expense-filter-grid ${custom?'expense-custom-filter-grid':''}">
       <div class="expense-field expense-report-inline"><label class="expense-label" for="exReportType"><span class="expense-label-text">Report Type</span></label><select id="exReportType">${selectOptions(types,'Select Type')}</select></div>
       <div class="expense-field expense-report-inline"><label class="expense-label" for="exReportPeriod"><span class="expense-label-text">Report Period</span></label><select id="exReportPeriod">${selectOptions(periods,'Select Period',true)}</select></div>
+      <div class="expense-field expense-report-inline" id="exShowColumnsWrap" style="display:none"><label class="expense-label" for="exShowColumns"><span class="expense-label-text">Show Columns</span></label><select id="exShowColumns"><option value="all">All</option><option value="limited" selected>Limited</option></select></div>
       <div class="expense-field"><label class="expense-label" for="exFilterCategory"><span class="expense-label-text">Category</span></label><select id="exFilterCategory">${selectOptions(Object.keys(CATEGORIES),'All Categories')}</select></div>
       <div class="expense-field"><label class="expense-label" for="exFilterSub"><span class="expense-label-text">Sub-Category</span></label><select id="exFilterSub">${selectOptions([],'All Subcategories')}</select></div>
       <div class="expense-field"><label class="expense-label" for="exMinAmount"><span class="expense-label-text">Amount &gt;</span></label><input id="exMinAmount" type="number" min="0" step="0.01" placeholder="Any"></div>
@@ -453,7 +455,7 @@ ${field('Photos',`
     const detailedPeriods=['Today','This Week','This Month','This Year','All'];
     const abstractPeriods=['Today','This Week','This Month','This Year','All','Daily','Weekly','Monthly','Yearly'];
     const syncPeriodOptions=()=>{const previous=period.value;const choices=typeSelect.value==='Abstract'?abstractPeriods:detailedPeriods;period.innerHTML=selectOptions(choices,'Select Period',true);period.value=choices.includes(previous)?previous:'This Month';};
-    const toggle=()=>{$('exSelectedDateWrap').classList.add('hidden');const p=period.value;const isAbstract=typeSelect.value==='Abstract';const hideDateOrder=isAbstract&&['All','Today','This Week','This Month','This Year'].includes(p);const sortField=$('exDateSortBtn')?.closest('.expense-field');if(sortField)sortField.classList.toggle('hidden',hideDateOrder);};
+    const toggle=()=>{$('exSelectedDateWrap').classList.add('hidden');const showCols=$('exShowColumnsWrap');if(showCols)showCols.style.display=typeSelect.value==='Detailed'?'flex':'none';const p=period.value;const isAbstract=typeSelect.value==='Abstract';const hideDateOrder=isAbstract&&['All','Today','This Week','This Month','This Year'].includes(p);const sortField=$('exDateSortBtn')?.closest('.expense-field');if(sortField)sortField.classList.toggle('hidden',hideDateOrder);};
     typeSelect.onchange=()=>{syncPeriodOptions();toggle();};
     syncPeriodOptions();
     period.onchange=toggle;
@@ -472,7 +474,7 @@ ${field('Photos',`
       let rows=cachedExpenses;
       let access=kind;
       if(!rows.length){$('exRunReport').disabled=true;status('Loading expenses…');try{const fields={reportAccess:access};const res=await request('getExpenses',fields);if(res.status!=='success')throw new Error(res.message||'Unable to load expenses');rows=res.expenses||[];cachedExpenses=rows;if(custom)updateExpenseByOptions(rows)}catch(e){status(e.message,'error');$('exRunReport').disabled=false;return}finally{$('exRunReport').disabled=false}}
-      const filtered=filterRows(rows,custom,kind);lastReportRows=filtered.slice();renderResults(filtered,$('exReportType').value||'Abstract');if(downloadBtn)downloadBtn.disabled=false;status(`${filtered.length} expense record(s) found.`,'success');
+      const filtered=filterRows(rows,custom,kind);lastReportRows=filtered.slice();const filters=captureExpenseReportFilters();renderResults(filtered,$('exReportType').value||'Abstract');openExpenseReportPage(kind,custom,filters,filtered,$('exReportType').value||'Abstract');
     };
     if(!custom){$('exReportType').value='Abstract';syncPeriodOptions();period.value='This Month';toggle()}
     if(custom){$('exReportType').value='Detailed';syncPeriodOptions();period.value='This Month';toggle()}
@@ -566,7 +568,24 @@ ${field('Photos',`
       const reportPeriod=$('exReportPeriod')?.value||'Detailed';
       const sortedRows=rows.slice().sort((a,b)=>{const diff=String(a.expenseDate||'').slice(0,10).localeCompare(String(b.expenseDate||'').slice(0,10));return dateSortAscending?diff:-diff;});
       const hasVehicle=sortedRows.some(r=>String(r.mainCategory||'').toLowerCase()==='vehicle maintenance');
-      const headers=['Date','Category','Sub-Category','Amount Rs:','Payment Type','Expense by','Sensitive','No of photos','Photos'];
+      const allColumns=[
+        {key:'date',label:'Date',center:true,value:r=>formatReportDate(r.expenseDate)},
+        {key:'category',label:'Category',value:r=>r.mainCategory||''},
+        {key:'subcategory',label:'Sub-Category',value:r=>r.subCategory || (String(r.mainCategory||'').toLowerCase()==='vehicle maintenance' ? r.vehicleType : '') || ''},
+        {key:'description',label:'Description',value:r=>r.description||''},
+        {key:'maintenanceType',label:'Maintenance Type',value:r=>r.maintenanceType||''},
+        {key:'vehicleNumber',label:'Vehicle Number',value:r=>r.vehicleNumber||''},
+        {key:'amount',label:'Amount Rs:',center:true,value:r=>money(r.amount),html:true},
+        {key:'paymentMode',label:'Payment Type',center:true,value:r=>r.paymentMode||''},
+        {key:'sensitive',label:'Sensitive',center:true,value:r=>r.sensitive||'No'},
+        {key:'spentBy',label:'Expense by',value:r=>r.spentBy||''},
+        {key:'photoCount',label:'No of photos',center:true,value:(r,photos)=>String(photos.length)},
+        {key:'photos',label:'Photos',value:(r,photos)=>photos.length?photos.map((url,i)=>`<button type="button" class="expense-photo-preview-btn" data-expense-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 40px;width:40px;height:40px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;cursor:pointer"><img src="${esc(url)}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:38px;height:38px;object-fit:cover;border:1px solid #c4d4ff;border-radius:5px" onerror="this.style.display='none';this.parentElement.textContent='Open'"></button>`).join(''):'—',html:true}
+      ];
+      const limitedKeys=['date','category','subcategory','amount','paymentMode','sensitive','description'];
+      const selectedMode=$('exShowColumns')?.value||'limited';
+      const visibleColumns=selectedMode==='all'?allColumns:allColumns.filter(c=>limitedKeys.includes(c.key));
+      const headers=visibleColumns.map(c=>`<th${c.center?' class="expense-center-cell"':''}>${c.label}</th>`);
       const colCount=headers.length;
       // Each uploaded photo may be returned under more than one alias
       // (for example photo1Url and photo1). Select only one value per slot.
@@ -593,8 +612,9 @@ ${field('Photos',`
       let groupedRows='';
       let currentYear='', currentMonth='', currentDay='', monthTotal=0, monthCount=0, yearTotal=0, yearCount=0;
       const monthName=ds=>ds?new Date(ds+'T12:00:00').toLocaleString('en-US',{month:'long'}):'Unknown';
-      const addMonthTotal=()=>{if(currentMonth)groupedRows+=`<tr class="expense-report-total"><td colspan="3">${esc(currentMonth)} Total (${monthCount} records)</td><td>${money(monthTotal)}</td><td colspan="5"></td></tr>`;};
-      const addYearTotal=()=>{if(currentYear)groupedRows+=`<tr class="expense-report-total"><td colspan="3">${esc(currentYear)} Total (${yearCount} records)</td><td>${money(yearTotal)}</td><td colspan="5"></td></tr>`;};
+      const amountIndex=visibleColumns.findIndex(c=>c.key==='amount');
+      const addMonthTotal=()=>{if(currentMonth)groupedRows+=`<tr class="expense-report-total"><td colspan="${Math.max(1,amountIndex)}">${esc(currentMonth)} Total (${monthCount} records)</td><td>${money(monthTotal)}</td><td colspan="${Math.max(0,colCount-amountIndex-1)}"></td></tr>`;};
+      const addYearTotal=()=>{if(currentYear)groupedRows+=`<tr class="expense-report-total"><td colspan="${Math.max(1,amountIndex)}">${esc(currentYear)} Total (${yearCount} records)</td><td>${money(yearTotal)}</td><td colspan="${Math.max(0,colCount-amountIndex-1)}"></td></tr>`;};
       sortedRows.forEach(r=>{
         const ds=String(r.expenseDate||'').slice(0,10);
         const yr=ds.slice(0,4)||'Unknown';
@@ -617,23 +637,15 @@ ${field('Photos',`
           if(/drive\.google\.com/i.test(String(url||'')) && match) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w180`;
           return String(url||'');
         };
-        const photosHtml=photos.length?`<div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;white-space:nowrap">${photos.map((url,i)=>`<button type="button" class="expense-photo-preview-btn" data-expense-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 48px;width:48px;height:48px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;cursor:pointer"><img src="${esc(photoThumbUrl(url))}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:46px;height:46px;object-fit:cover;border:1px solid #c4d4ff;border-radius:5px" onerror="this.style.display='none';this.parentElement.textContent='Open';this.parentElement.style.border='1px solid #c4d4ff';this.parentElement.style.borderRadius='5px';this.parentElement.style.color='#2477c8';this.parentElement.style.fontSize='11px'"></button>`).join('')}</div>`:'—';
-        const cells=[
-          `<td>${esc(formatReportDate(r.expenseDate))}</td>`,
-          `<td>${esc(r.mainCategory||'')}</td>`,
-          `<td>${esc(r.subCategory || (String(r.mainCategory||'').toLowerCase()==='vehicle maintenance' ? r.vehicleType : '') || '')}</td>`,
-          `<td>${money(r.amount)}</td>`,
-          `<td>${esc(r.paymentMode||'')}</td>`,
-          `<td>${esc(r.spentBy||'')}</td>`,
-          `<td class="expense-center-cell">${esc(r.sensitive||'No')}</td>`,
-          `<td class="expense-center-cell">${photos.length}</td>`,
-          `<td>${photosHtml}</td>`
-        ];
+        const cells=visibleColumns.map(col=>{
+          const value=col.value(r,photos);
+          return `<td${col.center?' class="expense-center-cell"':''}>${col.html?value:esc(value)}</td>`;
+        });
         groupedRows+=`<tr>${cells.join('')}</tr>`;
         if(['This Year','All','Monthly','Yearly'].includes(reportPeriod)){const amount=Number(r.amount)||0;monthTotal+=amount;monthCount++;yearTotal+=amount;yearCount++;}
       });
       if(['This Year','All','Monthly','Yearly'].includes(reportPeriod)){addMonthTotal();addYearTotal();}
-      table=`<div class="expense-results"><table><thead><tr>${headers.map((h,i)=>`<th${i===6||i===7?' class="expense-center-cell"':''}>${h}</th>`).join('')}</tr></thead><tbody>${groupedRows||`<tr><td colspan="${colCount}">No records found.</td></tr>`}</tbody></table></div>`;
+      table=`<div class="expense-results"><table><thead><tr>${headers.join('')}</tr></thead><tbody>${groupedRows||`<tr><td colspan="${colCount}">No records found.</td></tr>`}</tbody></table></div>`;
     }
     const reportPeriodTitle=$('exReportPeriod')?.value||'';
     const reportHeading=`${esc(reportPeriodTitle||'All')} - ${type==='Detailed'?'Detailed Report':'Abstract'}`;
@@ -648,7 +660,7 @@ ${field('Photos',`
       else if(reportPeriodTitle==='All') abstractPeriodHeading=dates.length?`${new Date(dates[dates.length-1]+'T12:00:00').toLocaleString('en-US',{month:'long',year:'numeric'})} - All Periods`:'All Periods';
     }
     const abstractHeadingHtml=abstractPeriodHeading?`<div class="expense-abstract-heading">${esc(abstractPeriodHeading)}</div>`:'';
-    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${reportHeading}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}.expense-report-subheading.expense-report-year th{color:#2e8b57!important}.expense-report-subheading.expense-report-month th{font-size:14px!important}.expense-abstract-category-row:focus{outline:2px solid #4a9fe8;outline-offset:-2px}.expense-abstract-subrow td{background:#f4f9ff!important;color:#2d5274}.expense-abstract-toggle{display:inline-block;width:16px;font-weight:700;color:#2477c8}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table th.expense-center-cell,.expense-results table td.expense-center-cell{text-align:center!important;vertical-align:middle!important}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
+    $('exReportOutput').innerHTML=`<h2 class="expense-abstract-title">${reportHeading}</h2><style>.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}.expense-report-subheading.expense-report-year th{color:#2e8b57!important}.expense-report-subheading.expense-report-month th{font-size:14px!important}.expense-abstract-category-row:focus{outline:2px solid #4a9fe8;outline-offset:-2px}.expense-abstract-subrow td{background:#f4f9ff!important;color:#2d5274}.expense-abstract-toggle{display:inline-block;width:16px;font-weight:700;color:#2477c8}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table th.expense-center-cell,.expense-results table td.expense-center-cell{text-align:center!important;vertical-align:middle!important;width:1%;min-width:58px;max-width:110px;padding:6px 4px;white-space:normal;overflow-wrap:anywhere}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
     // Photo thumbnails open in an in-app preview; the report remains open underneath.
     const reportOutput = $('exReportOutput');
     if (reportOutput) {
@@ -693,6 +705,45 @@ ${field('Photos',`
     });
   }
 
+  function captureExpenseReportFilters(){
+    const ids=['exReportType','exReportPeriod','exFilterCategory','exFilterSub','exMinAmount','exMaxAmount','exFilterPayment','exFilterSpentBy','exSearchText','exFromDate','exToDate','exFilterVehicleType','exFilterMtcType','exShowColumns','exDateSortBtn'];
+    const values={};ids.forEach(id=>{const el=$(id);if(el)values[id]=el.tagName==='BUTTON'?{text:el.textContent,ascending:dateSortAscending}:el.value;});
+    return values;
+  }
+  function restoreExpenseReportFilters(values){
+    if(!values)return;
+    Object.entries(values).forEach(([id,value])=>{const el=$(id);if(!el)return;if(id==='exDateSortBtn'){dateSortAscending=!!value.ascending;el.textContent=value.text;el.setAttribute('aria-label',dateSortAscending?'Sort date ascending':'Sort date descending');el.title=dateSortAscending?'Sort date ascending':'Sort date descending';}else el.value=value;});
+    $('exFilterCategory')?.dispatchEvent(new Event('change'));
+    if(values.exFilterSub!==undefined&&$('exFilterSub'))$('exFilterSub').value=values.exFilterSub;
+    $('exReportType')?.dispatchEvent(new Event('change'));
+    if(values.exReportPeriod!==undefined&&$('exReportPeriod'))$('exReportPeriod').value=values.exReportPeriod;
+    if($('exShowColumnsWrap'))$('exShowColumnsWrap').style.display=$('exReportType')?.value==='Detailed'?'flex':'none';
+  }
+  function openExpenseReportPage(kind,custom,filters,rows,type){
+    const output=$('exReportOutput');
+    const reportHtml=output?output.innerHTML:'';
+    const titleText=$('expenseReportTitle')?.textContent||'Expenses - Report';
+    lastExpenseReportContext={kind,custom,filters,rows:rows.slice(),type};
+    showPage(`<div class="expense-page"><h2 class="expense-title" id="expenseReportTitle">${esc(titleText)}</h2><div class="expense-actions expense-report-actions"><div class="expense-download-wrap"><button type="button" id="exDownloadBtn" class="expense-secondary">Download ▾</button><div id="exDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div><button type="button" id="expenseReportBack" class="expense-secondary">← Back</button></div><div id="exReportOutput">${reportHtml}</div></div>`);
+    const downloadBtn=$('exDownloadBtn'),menu=$('exDownloadMenu');
+    downloadBtn.onclick=()=>menu.classList.toggle('hidden');
+    menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportExpenseReport(b.dataset.export)});
+    $('exReportOutput')?.querySelectorAll('.expense-photo-preview-btn').forEach(photoBtn=>photoBtn.addEventListener('click',()=>{
+      const rawUrl=photoBtn.getAttribute('data-expense-photo')||'';
+      const match=rawUrl.match(/[?&]id=([^&]+)/i)||rawUrl.match(/\/d\/([^/?]+)/i);
+      const displayUrl=/drive\.google\.com/i.test(rawUrl)&&match?`https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`:rawUrl;
+      let modal=document.getElementById('expensePhotoPreviewModal');
+      if(!modal){modal=document.createElement('div');modal.id='expensePhotoPreviewModal';modal.style.cssText='position:fixed;inset:0;z-index:1000000;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;';modal.innerHTML='<button type="button" aria-label="Close photo preview" style="position:absolute;top:12px;right:16px;width:42px;height:42px;border:0;border-radius:50%;background:#fff;color:#222;font-size:30px;line-height:1;cursor:pointer;z-index:1">×</button><img alt="Expense photo preview" style="display:block;max-width:100%;max-height:88vh;object-fit:contain;border-radius:6px;box-shadow:0 4px 20px #0008">';document.body.appendChild(modal);const close=()=>modal.style.display='none';modal.querySelector('button').addEventListener('click',close);modal.addEventListener('click',ev=>{if(ev.target===modal)close()});}
+      modal.querySelector('img').src=displayUrl;modal.style.display='flex';
+    }));
+    $('expenseReportBack').onclick=()=>{
+      const ctx=lastExpenseReportContext;
+      renderReports(ctx?.kind||kind,ctx?.kind==='normal'?cachedExpenses:cachedExpenses,ctx?.custom||custom);
+      restoreExpenseReportFilters(ctx?.filters||filters);
+      if(ctx?.rows)lastReportRows=ctx.rows.slice();
+    };
+  }
+
   function exportExpenseReport(format){
     const output=$('exReportOutput');
     if(!output || !output.innerHTML.trim()){status('மుందుగా Show Report నొక్కండి.','error');return;}
@@ -704,9 +755,9 @@ ${field('Photos',`
     const blob=new Blob([html],{type:mime+';charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='oneFaMiLe_Expense_Report.'+extension;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
 
-  function renderReports(kind='normal',prefetched=null){
-    activeReport=kind;cachedExpenses=prefetched||[];const title=kind==='sensitive'?'Sensitive Expenses Reports':kind==='all'?'All Expenses Reports':'Expenses Reports';
-    showPage(shell(title,reportControls(false),true));const reportTitle=document.querySelector('.expense-title');if(reportTitle)reportTitle.id='expenseReportTitle';setupReportControls(false,kind);
+  function renderReports(kind='normal',prefetched=null,custom=false){
+    activeReport=kind;if(prefetched)cachedExpenses=prefetched;const title=kind==='sensitive'?'Sensitive Expenses - Report':kind==='all'?'All Expenses - Report':custom?'Expenses — Custom Search':'Expenses - Report';
+    showPage(shell(title,reportControls(!!custom),true));const reportTitle=document.querySelector('.expense-title');if(reportTitle)reportTitle.id='expenseReportTitle';setupReportControls(!!custom,kind);
   }
   function renderCustomSearch(){
     activeReport='normal';cachedExpenses=[];
