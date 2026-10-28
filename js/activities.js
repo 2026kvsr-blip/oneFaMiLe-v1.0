@@ -9,7 +9,7 @@
   const today = () => {const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
   const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   const showDate = v => {const s=String(v||'').slice(0,10);const m=s.match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?`${m[3]}-${m[2]}-${m[1].slice(2)}`:s};
-  function family(){try{return JSON.parse(localStorage.getItem('currentFamily')||'{}')}catch(_){return {}}}
+  function family(){try{returna JSON.parse(localStorage.getItem('currentFamily')||'{}')}catch(_){return {}}}
   function token(){return sessionStorage.getItem('sessionToken')||''}
   function request(action,fields={}){const f=family();const body=new URLSearchParams({action,sessionToken:token(),familyId:String(f.familyId||''),...fields});return fetch(API,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body}).then(r=>r.json())}
   const ACTIVITY_CONFIG = {
@@ -186,37 +186,41 @@
     function updateCat(){const old=val('category');const custom=$('categoryCustom');if(custom){custom.value='';custom.hidden=true;custom.required=false}cat.innerHTML=dropdown(categoryKeys(val('activityType')),'Select Category',false);if(categoryKeys(val('activityType')).includes(old))cat.value=old;updateSub()}
     function isDaily(t){return t==='Daily Activity'}
     function show(id,yes){const el=document.querySelector(`[data-field="${id}"]`);if(el)el.hidden=!yes}
+    // Reorder direct form fields safely. This helper was missing, which caused
+    // updateVisibility() to throw before the Save handler could be attached.
+    function arrangeActivityFields(order){
+      const grid=$('activityFieldsGrid');
+      if(!grid)return;
+      const children=Array.from(grid.children);
+      const fields=children.filter(el=>el.hasAttribute('data-field'));
+      const byName=new Map(fields.map(el=>[el.getAttribute('data-field'),el]));
+      order.forEach(name=>{
+        const el=byName.get(name);
+        if(el){grid.appendChild(el);byName.delete(name);}
+      });
+      // Keep any additional fields in their original order after the requested ones.
+      fields.forEach(el=>{if(byName.has(el.getAttribute('data-field'))){grid.appendChild(el);byName.delete(el.getAttribute('data-field'));}});
+    }
     function updateVisibility(){
-      const t=val('activityType'),task=t==='Task',event=t==='Event',meeting=t==='Meeting',appt=t==='Appointment',daily=isDaily(t),reminderOn=val('reminderEnabled')==='true';
-      show('startTime',appt||event||meeting);
+      const t=val('activityType'),task=t==='Task',event=t==='Event',meeting=t==='Meeting',appt=t==='Appointment',reminderOn=val('reminderEnabled')==='true';
+      // These six fields are common to every activity type and always occupy
+      // the first three rows: Type + Description, Category + Sub Category,
+      // Scheduled Date + Scheduled Time.
+      show('startTime',true);
       show('assignedTo',task);show('priority',task);show('status',true);show('completedDate',val('status')==='Completed');
       show('venue',event);show('locationLink',meeting||appt);show('appointmentPerson',appt);show('followUpDate',appt);
       const reminderGrid=document.querySelector('[data-field="reminderFields"]');if(reminderGrid)reminderGrid.hidden=!reminderOn;
       const reminderField=document.querySelector('[data-field="reminderEnabled"]');
-      // Reminder stays the same width as other fields; never stretch it full width.
       if(reminderField)reminderField.style.gridColumn='auto';
       const follow=$('[data-field="followUpDate"]');if(follow)follow.style.gridColumn='auto';
-      if(appt){
-        // Schedule Time and Follow-up Date share one row; Reminder is placed last.
-        arrangeActivityFields(['activityType','description','category','subCategory','startDate','startTime','status','followUpDate','locationLink','appointmentPerson','completedDate','assignedTo','priority','reminderEnabled','reminderFields']);
-      }else if(event){
-        // Venue first; Reminder begins on the next row at normal field width.
-        arrangeActivityFields(['activityType','venue','startDate','startTime','category','subCategory','description','status','reminderEnabled','reminderFields','completedDate']);
-        if(reminderField)reminderField.style.gridColumn='1';
-      }else if(meeting){
-        // Location / Link first; Reminder begins on the next row at normal field width.
-        arrangeActivityFields(['activityType','locationLink','startDate','startTime','category','subCategory','description','status','reminderEnabled','reminderFields','completedDate']);
-        if(reminderField)reminderField.style.gridColumn='1';
-      }else if(daily){
-        // Keep Reminder and Reminder Repeat side by side, with Date and Time beneath.
-        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','reminderEnabled','reminderFields','completedDate']);
-      }else if(task){
-        // Assigned To and Priority share one row; Reminder follows below them.
-        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','assignedTo','priority','reminderEnabled','reminderFields','completedDate']);
-      }else{
-        arrangeActivityFields(['activityType','startDate','category','subCategory','description','status','reminderEnabled','reminderFields','completedDate','assignedTo','priority']);
-      }
-      // Title is intentionally not shown; keep the backend field populated for compatibility.
+      const extraOrder=[];
+      if(event)extraOrder.push('venue');
+      if(meeting||appt)extraOrder.push('locationLink');
+      if(appt)extraOrder.push('appointmentPerson','followUpDate');
+      if(task)extraOrder.push('assignedTo','priority');
+      extraOrder.push('status','completedDate','reminderEnabled','reminderFields');
+      arrangeActivityFields(['activityType','description','category','subCategory','startDate','startTime',...extraOrder]);
+      // Keep the backend title field populated for compatibility.
       if($('title'))$('title').value=val('subCategory')||val('category')||t||'Activity';
     }
     [type,cat,sub,$('priority'),$('status')].forEach(el=>{if(el)customToggle(el.id)});
