@@ -44,6 +44,17 @@
   function backToMenu(){try{openMenu();return}catch(e){console.warn('Activities menu navigation failed',e)}const b=$('activitiesBtn');if(b)b.click();else if(typeof window.showHome==='function')window.showHome()}
   function bindBack(){const b=$('activityModuleBack');if(b)b.onclick=backToMenu}
   function status(message,type=''){const el=$('activityStatus');if(el){el.textContent=message||'';el.className='expense-status '+type}}
+  // Fixed toast for Add Activity save/validation messages. It overlays the page
+  // instead of taking layout space, so the Save / Reset / Back buttons do not move.
+  function activityToast(message,type='info',duration=3200){
+    let el=$('activityToast');
+    if(!el){el=document.createElement('div');el.id='activityToast';el.setAttribute('role','status');el.setAttribute('aria-live','polite');document.body.appendChild(el);}
+    clearTimeout(window.activityToastTimer);
+    const bg=type==='success'?'#218838':type==='error'?'#b42318':type==='warning'?'#9a6700':'#2d5274';
+    el.textContent=message||'';
+    el.style.cssText=`position:fixed;top:calc(env(safe-area-inset-top, 0px) + 16px);left:50%;transform:translateX(-50%);z-index:2147483647;max-width:calc(100vw - 28px);width:max-content;box-sizing:border-box;padding:11px 17px;border-radius:10px;background:${bg};color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.22);font-size:14px;font-weight:600;text-align:center;line-height:1.35;white-space:normal;opacity:1;display:block;pointer-events:none;transition:opacity .25s ease`;
+    window.activityToastTimer=setTimeout(()=>{if(el){el.style.opacity='0';setTimeout(()=>{if(el.style.opacity==='0')el.style.display='none'},260)}},duration);
+  }
   function styleOnce(){if($('activityReportStyles'))return;const st=document.createElement('style');st.id='activityReportStyles';st.textContent=`
     .activity-page{max-width:1100px;margin:0 auto}.activity-page .expense-panel{padding:12px;background:#f0f7ff;border:1px solid #c4d4ff;border-radius:14px;box-sizing:border-box}
     .activity-page .expense-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
@@ -140,6 +151,16 @@
     .activity-page .expense-panel:has(#activityReportDateSort) .expense-report-actions>button{flex:1 1 0!important;width:0!important;min-width:0!important;max-width:none!important;box-sizing:border-box!important}
     .activity-page .expense-panel:has(#activityReportDateSort) .expense-report-actions>.expense-download-wrap>button{display:block!important;width:100%!important;min-width:0!important;box-sizing:border-box!important}
     .activity-page #activityReportDateSort{margin:0!important;min-width:0!important;max-width:none!important;box-sizing:border-box!important;white-space:nowrap!important;padding:8px 4px!important;font-size:12px!important;flex:1 1 0!important}
+    /* Add Activity: keep Save, Reset and Back equal-width inside the form panel. */
+    .activity-page #activityForm{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+    .activity-page #activityForm .expense-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important;justify-content:stretch!important;gap:8px!important;width:100%!important;min-width:0!important;max-width:100%!important;margin:12px 0 0!important;padding:0!important;position:static!important;box-sizing:border-box!important}
+    .activity-page #activityForm .expense-actions>button{display:flex!important;align-items:center!important;justify-content:center!important;flex:initial!important;width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;padding:10px 3px!important;white-space:nowrap!important;box-sizing:border-box!important;font-size:clamp(12px,3.2vw,16px)!important}
+    /* Compact the three report summary cards and remove excess top gap. */
+    .activity-page .expense-summary{margin:2px 0 9px!important;gap:6px!important}
+    .activity-page #actReportOutput>.expense-summary{margin-top:0!important}
+    .activity-page .expense-summary-card{height:auto!important;min-height:38px!important;padding:5px 4px!important;gap:3px!important;line-height:1.1!important}
+    .activity-page .expense-summary-card small{font-size:clamp(8px,2.4vw,11px)!important;white-space:nowrap!important}
+    .activity-page .expense-summary-card strong{font-size:clamp(10px,2.7vw,13px)!important;white-space:nowrap!important}
   `;document.head.appendChild(st)}
   function openMenu(){const btn=$('activitiesBtn');if(!btn)return;if(typeof window.updateMenuIcon==='function')window.updateMenuIcon();if(typeof window.setActiveButton==='function')window.setActiveButton(btn);page(title('Activities')+`<div class="grid-3x2">
     <button class="grid-btn" id="activityAddBtn"><img src="images/colorbtns/Add1.png" class="btn-icon"><span>Add Activity</span></button>
@@ -255,11 +276,11 @@
     updateCat();$('reminderEnabled').value='false';$('status').value='Pending';$('priority').value='Normal';syncReminderRequired();updateVisibility();
     function resetForm(){form.reset();$('startDate').value=today();$('status').value='Pending';$('priority').value='Normal';$('reminderEnabled').value='false';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();syncReminderRequired();updateVisibility();status('')}
     form.onsubmit=async ev=>{ev.preventDefault();if(!family().familyId){status('Current family was not found. Please open your family and try again.','error');return}if(!token()){status('Login session expired. Please login again.','error');return}
-      const activityType=val('activityType'),category=val('category'),subCategory=val('subCategory');if(!activityType||!category||!subCategory){status('Activity Type, Category and Sub Category are required.','error');return}if(!$('startDate').value){status('Scheduled Date is required.','error');$('startDate').focus();return}if($('reminderEnabled').value==='true'&&(!$('reminderDate').value||!$('reminderTime').value)){status('Reminder Date and Reminder Time are required when Reminder is Yes.','error');const missing=!$('reminderDate').value?$('reminderDate'):$('reminderTime');missing.focus();return}if($('title'))$('title').value=val('subCategory')||val('category')||activityType||'Activity';
-      const btn=$('activitySaveBtn');btn.disabled=true;btn.textContent='Saving…';status('Saving activity…');try{const fd=new FormData(form),fields={};for(const [k,v] of fd.entries())fields[k]=String(v);
+      const activityType=val('activityType'),category=val('category'),subCategory=val('subCategory');if(!activityType||!category||!subCategory){activityToast('Activity Type, Category and Sub Category are required.','error');return}if(!$('startDate').value){activityToast('Scheduled Date is required.','error');$('startDate').focus();return}if($('reminderEnabled').value==='true'&&(!$('reminderDate').value||!$('reminderTime').value)){activityToast('Reminder Date and Reminder Time are required when Reminder is Yes.','error');const missing=!$('reminderDate').value?$('reminderDate'):$('reminderTime');missing.focus();return}if($('title'))$('title').value=val('subCategory')||val('category')||activityType||'Activity';
+      const btn=$('activitySaveBtn');btn.disabled=true;btn.textContent='Saving…';activityToast('Saving activity…','info',15000);try{const fd=new FormData(form),fields={};for(const [k,v] of fd.entries())fields[k]=String(v);
         ['activityType','category','subCategory','status','priority','reminderRepeat','reminderEnabled'].forEach(id=>{if($(id))fields[id]=val(id)});fields.activityType=activityType;fields.category=category;fields.subCategory=subCategory;fields.isSensitive=$('isSensitive').checked?'true':'false';
-        const res=await request('saveActivity',fields);if(res.status!=='success')throw new Error(res.message||'Unable to save activity.');status('Activity saved successfully. Activity ID: '+(res.activityId||''),'success');cached=[];resetForm();
-      }catch(e){status(e.message||'Unable to save activity.','error')}finally{btn.disabled=false;btn.textContent='Save'}};
+        const res=await request('saveActivity',fields);if(res.status!=='success')throw new Error(res.message||'Unable to save activity.');activityToast('Activity saved successfully. Activity ID: '+(res.activityId||''),'success',4000);cached=[];resetForm();
+      }catch(e){activityToast(e.message||'Unable to save activity.','error',5000)}finally{btn.disabled=false;btn.textContent='Save'}};
     $('activityResetBtn').onclick=()=>setTimeout(resetForm,0);
   }
   function sensitiveGate(kind){styleOnce();const label=kind==='sensitive'?'Sensitive Activities - Report':'All Activities - Report';const inner=`<div class="expense-panel"><div class="expense-field"><label class="expense-label" for="activityPassCode">Pass Code</label><input id="activityPassCode" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Enter Pass Code"></div><div id="activityStatus" class="expense-status" role="status"></div><div class="expense-actions" style="display:flex;align-items:center;justify-content:center;align-items:center;gap:16px;margin-top:32px;flex-wrap:nowrap;width:100%"><button type="button" id="activityVerifyPass" class="expense-primary" style="margin:0">Verify</button><button type="button" id="activityModuleBack" class="expense-secondary" style="margin:0">← Back</button></div></div>`;page(shell(label,inner,true));bindBack();$('activityVerifyPass').onclick=async()=>{const pass=$('activityPassCode').value.trim();if(!pass){status('Enter Pass Code.','error');return}const btn=$('activityVerifyPass');btn.disabled=true;status('Verifying…');try{const res=await request('getActivities',{includeSensitive:'true',passCode:pass});if(res.status!=='success')throw new Error(res.message||'Pass Code verification failed.');cached=res.activities||[];activeAccess=kind;renderReports(kind,false,cached)}catch(e){status(e.message||'Verification failed.','error');btn.disabled=false}}}
