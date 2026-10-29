@@ -77,10 +77,16 @@
     let el=$('activityToast');
     if(!el){el=document.createElement('div');el.id='activityToast';el.setAttribute('role','status');el.setAttribute('aria-live','polite');document.body.appendChild(el);}
     clearTimeout(window.activityToastTimer);
+    clearTimeout(window.activityToastHideTimer);
     const bg=type==='success'?'#218838':type==='error'?'#b42318':type==='warning'?'#9a6700':'#2d5274';
     el.textContent=message||'';
     el.style.cssText=`position:fixed;top:calc(env(safe-area-inset-top, 0px) + 16px);left:50%;transform:translateX(-50%);z-index:2147483647;max-width:calc(100vw - 28px);width:max-content;box-sizing:border-box;padding:11px 17px;border-radius:10px;background:${bg};color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.22);font-size:14px;font-weight:600;text-align:center;line-height:1.35;white-space:normal;opacity:1;display:block;pointer-events:none;transition:opacity .25s ease`;
-    window.activityToastTimer=setTimeout(()=>{if(el){el.style.opacity='0';setTimeout(()=>{if(el.style.opacity==='0')el.style.display='none'},260)}},duration);
+         window.activityToastTimer=setTimeout(()=>{
+       if(el){
+         el.style.opacity='0';
+         window.activityToastHideTimer=setTimeout(()=>{if(el.style.opacity==='0')el.style.display='none'},260);
+       }
+     },duration);
   }
   function styleOnce(){if($('activityReportStyles'))return;const st=document.createElement('style');st.id='activityReportStyles';st.textContent=`
     .activity-page{max-width:1100px;margin:0 auto}.activity-page .expense-panel{padding:12px;background:#f0f7ff;border:1px solid #c4d4ff;border-radius:14px;box-sizing:border-box}
@@ -387,14 +393,19 @@
         if(!Number.isFinite(reminderDateTime.getTime())||reminderDateTime.getTime()<=Date.now()){activityToast('Reminder time must be in the future. Please select a later date or time.','error');reminderTimeInput?.focus();return}
       }
       if($('title'))$('title').value=val('subCategory')||val('category')||activityType||'Activity';
-      const btn=$('activitySaveBtn');btn.disabled=true;btn.textContent='Saving…';activityToast('Saving activity…','info',15000);try{const fd=new FormData(form),fields={};for(const [k,v] of fd.entries())fields[k]=String(v);
+      const btn=$('activitySaveBtn');btn.disabled=true;btn.textContent='Saving…';try{const fd=new FormData(form),fields={};for(const [k,v] of fd.entries())fields[k]=String(v);
         ['activityType','category','subCategory','status','priority','reminderRepeat','reminderEnabled'].forEach(id=>{if($(id))fields[id]=val(id)});fields.activityType=activityType;fields.category=category;fields.subCategory=subCategory;fields.isSensitive=$('isSensitive').checked?'true':'false';
         for(let i=0;i<3;i++)fields['photo'+(i+1)+'Data']=selectedActivityPhotos[i]?await compressActivityPhoto(selectedActivityPhotos[i]):'';
         if(editRecord)fields.activityId=String(editRecord.activityId||'');
         const res=await request(editRecord?'updateActivity':'saveActivity',fields);if(res.status!=='success')throw new Error(res.message||'Unable to save activity.');
-        if(editRecord){activityToast('Activity updated successfully. Activity ID: '+(res.activityId||editRecord.activityId||''),'success',4000);cached=[];backToMenu();return;}
-        activityToast('Activity saved successfully. Activity ID: '+(res.activityId||''),'success',4000);cached=[];resetForm();
-      }catch(e){activityToast(e.message||'Unable to save activity.','error',5000)}finally{btn.disabled=false;btn.textContent=editRecord?'Update':'Save'}};
+        if(editRecord){
+          btn.disabled=false;btn.textContent='Update';
+          activityToast('Activity updated successfully. Activity ID: '+(res.activityId||editRecord.activityId||''),'success',2600);
+          cached=[];backToMenu();return;
+        }
+        btn.disabled=false;btn.textContent='Save';
+        activityToast('Activity saved successfully. Activity ID: '+(res.activityId||''),'success',2600);cached=[];resetForm();
+      }catch(e){activityToast(e.message||'Unable to save activity.','error',5000)}finally{if(btn.isConnected){btn.disabled=false;btn.textContent=editRecord?'Update':'Save'}}};
     $('activityResetBtn').onclick=()=>setTimeout(resetForm,0);
   }
   function sensitiveGate(kind){styleOnce();const label=kind==='sensitive'?'Sensitive Activities - Report':'All Activities - Report';const inner=`<div class="expense-panel"><div class="expense-field"><label class="expense-label" for="activityPassCode">Pass Code</label><input id="activityPassCode" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Enter Pass Code"></div><div id="activityStatus" class="expense-status" role="status"></div><div class="expense-actions" style="display:flex;align-items:center;justify-content:center;align-items:center;gap:16px;margin-top:32px;flex-wrap:nowrap;width:100%"><button type="button" id="activityVerifyPass" class="expense-primary" style="margin:0">Verify</button><button type="button" id="activityModuleBack" class="expense-secondary" style="margin:0">← Back</button></div></div>`;page(shell(label,inner,true));bindBack();$('activityVerifyPass').onclick=async()=>{const pass=$('activityPassCode').value.trim();if(!pass){status('Enter Pass Code.','error');return}const btn=$('activityVerifyPass');btn.disabled=true;status('Verifying…');try{const res=await request('getActivities',{includeSensitive:'true',passCode:pass});if(res.status!=='success')throw new Error(res.message||'Pass Code verification failed.');cached=res.activities||[];activeAccess=kind;renderReports(kind,false,cached)}catch(e){status(e.message||'Verification failed.','error');btn.disabled=false}}}
@@ -510,6 +521,16 @@
       table=`<div class="expense-results"><table><thead><tr><th class="report-center">S.No</th>${columns.map(c=>`<th class="${centerNames.includes(c[0])?'report-center':''}">${esc(c[0])}</th>`).join('')}</tr></thead><tbody>${grouped||`<tr><td colspan="${columns.length+1}">No records found.</td></tr>`}</tbody></table></div>`;
     }
     $('actReportOutput').innerHTML=`<div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${total}</strong></div><div class="expense-summary-card"><small>Completed :</small><strong>${completed}</strong></div><div class="expense-summary-card"><small>Pending :</small><strong>${pending}</strong></div></div>${table}`;
+    // If an older renderer escaped the Edit HTML into visible text, convert only that
+    // specific cell back into a real button. This is safe for normal rendered buttons too.
+    $('actReportOutput').querySelectorAll('td').forEach(td=>{
+      const shown=td.textContent||'';
+      if(shown.includes('<button') && shown.includes('data-edit-activity')){
+        const holder=document.createElement('div');holder.innerHTML=shown;
+        const parsed=holder.querySelector('button[data-edit-activity]');
+        if(parsed)td.replaceChildren(parsed);
+      }
+    });
     // Clickable photo thumbnails use the same Drive-preview pattern as Expenses reports.
     $('actReportOutput').querySelectorAll('.activity-photo-preview-btn').forEach(photoBtn=>photoBtn.addEventListener('click',()=>{
       const rawUrl=photoBtn.getAttribute('data-activity-photo')||'';
