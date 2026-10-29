@@ -1,4 +1,5 @@
 
+
 /* oneFaMiLe Activities module — report page structure follows expense.js */
 (function(){
   'use strict';
@@ -88,9 +89,9 @@
     .activity-page .activity-fields-grid>[data-field="activityType"]{grid-column:auto!important}
     .activity-page .activity-fields-grid>[data-field="activityPhotos"]{grid-column:1/-1!important;min-width:0;width:100%;box-sizing:border-box}
     .activity-page .activity-photo-picker{display:flex;align-items:center;gap:7px;flex-wrap:nowrap;width:100%;min-width:0;box-sizing:border-box}
-    .activity-page .activity-photo-picker button{height:48px;min-height:48px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:0 8px;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#2477c8;font-weight:600;flex:0 0 auto}
+    .activity-page .activity-photo-picker button{height:40px;min-height:40px;max-height:40px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:0 8px;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#2477c8;font-weight:600;flex:0 0 auto}
     .activity-page .activity-photo-picker #activityPhotoChooseBtn{width:72px;min-width:72px}
-    .activity-page .activity-photo-picker .activity-photo-slot{width:46px;min-width:46px;height:48px}
+    .activity-page .activity-photo-picker .activity-photo-slot{width:46px;min-width:46px;height:40px;min-height:40px;max-height:40px}
     .activity-page .activity-photo-picker .activity-photo-slot.has-photo{background:#d9f2df;border-color:#218838;color:#218838}
     .activity-page .activity-photo-count{display:block;margin-top:4px;color:#526b80;font-size:12px;line-height:1.3;white-space:normal}
     .activity-page .activity-fields-grid>[data-field="reminderFields"]{display:contents!important;grid-column:1/-1!important;width:100%;min-width:0}.activity-page .activity-fields-grid>[data-field="reminderFields"][hidden]{display:none!important}
