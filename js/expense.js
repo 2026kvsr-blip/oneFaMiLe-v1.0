@@ -687,7 +687,7 @@ ${field('Photos',`
       else if(reportPeriodTitle==='All') abstractPeriodHeading=dates.length?`${new Date(dates[dates.length-1]+'T12:00:00').toLocaleString('en-US',{month:'long',year:'numeric'})} - All Periods`:'All Periods';
     }
     const abstractHeadingHtml=abstractPeriodHeading?`<div class="expense-abstract-heading">${esc(abstractPeriodHeading)}</div>`:'';
-    $('exReportOutput').innerHTML=`<style>.expense-results{height:55vh!important;max-height:55vh!important;overflow:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.expense-results table{width:max-content;min-width:100%;border-collapse:collapse}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table thead th{height:50px!important;min-height:50px!important;padding:5px 5px!important;box-sizing:border-box;text-align:center;line-height:1.1;white-space:normal;overflow-wrap:normal;word-break:normal}.expense-results table .expense-report-subheading.expense-report-month th{height:38px!important;min-height:38px!important;padding:4px 8px!important;font-size:14px!important;line-height:1.1!important}.expense-results table .expense-report-subheading.expense-report-year th{height:42px!important;min-height:42px!important;padding:4px 8px!important;font-size:18px!important;line-height:1.1!important}.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}.expense-report-subheading.expense-report-year th{color:#2e8b57!important}.expense-report-subheading.expense-report-month th{font-size:14px!important}.expense-abstract-category-row:focus{outline:2px solid #4a9fe8;outline-offset:-2px}.expense-abstract-subrow td{background:#f4f9ff!important;color:#2d5274}.expense-abstract-toggle{display:inline-block;width:16px;font-weight:700;color:#2477c8}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table th.expense-center-cell,.expense-results table td.expense-center-cell{text-align:center!important;vertical-align:middle!important;width:1%;min-width:58px;max-width:110px;padding:6px 4px;white-space:normal;overflow-wrap:anywhere}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
+    $('exReportOutput').innerHTML=`<style>.expense-results{height:55vh!important;max-height:55vh!important;overflow:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.expense-results table{width:max-content;min-width:100%;border-collapse:collapse}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table thead th{height:50px!important;min-height:50px!important;padding:5px 5px!important;box-sizing:border-box;text-align:center;line-height:1.1;white-space:normal;overflow-wrap:normal;word-break:normal}.expense-results table .expense-report-subheading.expense-report-month th{height:38px!important;min-height:38px!important;padding:4px 8px!important;font-size:14px!important;line-height:1.1!important}.expense-results table .expense-report-subheading.expense-report-year th{height:42px!important;min-height:42px!important;padding:4px 8px!important;font-size:18px!important;line-height:1.1!important}.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}.expense-report-subheading.expense-report-year th{color:#2e8b57!important}.expense-report-subheading.expense-report-month th{font-size:14px!important}.expense-abstract-category-row:focus{outline:2px solid #4a9fe8;outline-offset:-2px}.expense-abstract-subrow[hidden]{display:none!important}.expense-abstract-subrow td{background:#f4f9ff!important;color:#2d5274}.expense-abstract-toggle{display:inline-block;width:16px;font-weight:700;color:#2477c8}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table th.expense-center-cell,.expense-results table td.expense-center-cell{text-align:center!important;vertical-align:middle!important;width:1%;min-width:58px;max-width:110px;padding:6px 4px;white-space:normal;overflow-wrap:anywhere}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
     // Photo thumbnails open in an in-app preview; the report remains open underneath.
     const reportOutput = $('exReportOutput');
     if (reportOutput) {
@@ -798,6 +798,42 @@ ${field('Photos',`
         </div>
       </div>
     </div>`);
+    // The report HTML is copied into a new report page above, so listeners
+    // originally attached by renderResults() do not survive that page swap.
+    // Bind abstract expand/collapse and Edit actions to the visible report DOM.
+    const visibleReportOutput=$('exReportOutput');
+    if(visibleReportOutput){
+      visibleReportOutput.querySelectorAll('.expense-abstract-category-row').forEach(row=>{
+        const toggle=()=>{
+          const index=row.getAttribute('data-toggle-index');
+          const subRows=visibleReportOutput.querySelectorAll(`.expense-abstract-subrow[data-parent-index="${index}"]`);
+          const opening=row.getAttribute('aria-expanded')!=='true';
+          subRows.forEach(subRow=>{subRow.hidden=!opening;});
+          row.setAttribute('aria-expanded',String(opening));
+          const mark=row.querySelector('.expense-abstract-toggle');
+          if(mark)mark.textContent=opening?'－':'＋';
+        };
+        row.addEventListener('click',event=>{
+          if(event.target && event.target.closest && event.target.closest('button,a,input,select,textarea')) return;
+          toggle();
+        });
+        row.addEventListener('keydown',event=>{
+          if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle();}
+        });
+      });
+      visibleReportOutput.querySelectorAll('[data-expense-edit]').forEach(editBtn=>{
+        editBtn.addEventListener('click',event=>{
+          event.preventDefault();
+          event.stopPropagation();
+          const id=editBtn.getAttribute('data-expense-edit')||'';
+          const record=(rows||[]).find(item=>String(item.expenseId||'')===id)||
+            (cachedExpenses||[]).find(item=>String(item.expenseId||'')===id);
+          if(record)renderForm(record);
+          else status('This expense record could not be found. Please run the report again.','error');
+        });
+      });
+    }
+
     const downloadBtn=$('exDownloadBtn'),menu=$('exDownloadMenu');
     if(downloadBtn&&menu){downloadBtn.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportExpenseReport(b.dataset.export)});}
     const reportSort=$('expenseReportDateSort');
