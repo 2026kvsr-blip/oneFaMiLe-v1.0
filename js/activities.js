@@ -378,8 +378,7 @@
       ['startDate','startTime','description','status','reminderRepeat','reminderDate','reminderTime','venue','locationLink','appointmentPerson','followUpDate','assignedTo','priority','completedDate'].forEach(id=>put(id,editRecord[id]||''));
       put('reminderEnabled',editRecord.reminderEnabled?'true':'false');
       $('isSensitive').checked=sensitiveFlag(editRecord.isSensitive);
-      const oldPhotos=[editRecord.photo1Url||editRecord.photo1,editRecord.photo2Url||editRecord.photo2,editRecord.photo3Url||editRecord.photo3].filter(Boolean).length;
-      const photoCountLabel=$('activityPhotoCount');if(photoCountLabel)photoCountLabel.innerHTML='<span>'+oldPhotos+' saved photo(s) will be kept</span><span>New selections replace matching slots</span>';
+      // Preserve the original "0 photos selected / (Maximum 3)" message while editing.
       syncReminderRequired();updateVisibility();
     }
     form.onsubmit=async ev=>{ev.preventDefault();if(!family().familyId){activityToast('Current family was not found. Please open your family and try again.','error');return}if(!token()){activityToast('Login session expired. Please login again.','error');return}
@@ -510,7 +509,7 @@
         ['Venue',r=>r.venue||''],['Location / Link',r=>r.locationLink||''],['Person / Doctor / Office',r=>r.appointmentPerson||''],
         ['Follow-up Date',r=>showDate(r.followUpDate)],['Assigned To',r=>r.assignedTo||''],['Priority',r=>r.priority||''],
         ['Completed Date',r=>showDate(r.completedDate)],['No of photos',r=>String(photoValues(r).length)],['Photos',photoHtml],
-        ['Edit',r=>`<button type="button" class="expense-secondary activity-edit-record-btn" data-edit-activity="${esc(r.activityId||'')}" style="min-width:54px;padding:6px 10px;white-space:nowrap">Edit</button>`]
+        ['Edit',r=>`<button type="button" class="expense-secondary activity-edit-record-btn activity-edit-text" data-edit-activity="${esc(r.activityId||'')}" aria-label="Edit activity" style="appearance:none;-webkit-appearance:none;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;min-width:0!important;min-height:0!important;width:auto!important;height:auto!important;max-width:none!important;color:#2477c8!important;cursor:pointer;font:inherit!important;font-weight:600!important;text-decoration:none!important;display:inline!important;line-height:normal!important">Edit</button>`]
       ];
       // Show Columns=Limited retains the required activity summary fields, photo columns and Edit action.
       const limitedNames=['Activity Type','Category','Sub Category','Scheduled Date','Status','Sensitive','Reminder','Venue','No of photos','Photos','Edit'];
