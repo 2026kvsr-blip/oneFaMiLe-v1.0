@@ -12,6 +12,33 @@
   function family(){try{return JSON.parse(localStorage.getItem('currentFamily')||'{}')}catch(_){return {}}}
   function token(){return sessionStorage.getItem('sessionToken')||''}
   function request(action,fields={}){const f=family();const body=new URLSearchParams({action,sessionToken:token(),familyId:String(f.familyId||''),...fields});return fetch(API,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body}).then(r=>r.json())}
+  async function compressActivityPhoto(file){
+    const dataUrl = await new Promise((resolve,reject)=>{
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result||''));
+      reader.onerror = () => reject(new Error('Unable to read selected photo.'));
+      reader.readAsDataURL(file);
+    });
+    const img = await new Promise((resolve,reject)=>{
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = () => reject(new Error('Invalid photo selected.'));
+      image.src = dataUrl;
+    });
+    const maxDimension=1400;
+    const scale=Math.min(1,maxDimension/Math.max(img.width,img.height));
+    const canvas=document.createElement('canvas');
+    canvas.width=Math.max(1,Math.round(img.width*scale));
+    canvas.height=Math.max(1,Math.round(img.height*scale));
+    const ctx=canvas.getContext('2d');
+    if(!ctx)throw new Error('Unable to process selected photo.');
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    let quality=0.75;
+    let result=canvas.toDataURL('image/jpeg',quality);
+    while(result.length*0.75>250*1024&&quality>0.3){quality-=0.1;result=canvas.toDataURL('image/jpeg',quality)}
+    if(result.length*0.75>700*1024)throw new Error('Photo is too large. Please choose a smaller photo.');
+    return result;
+  }
   const ACTIVITY_CONFIG = {
     'Daily Activity': {'Personal':['Morning Routine','Exercise','Reading','Shopping','Personal Work','Rest','Others'],'Family':['Family Time','Family Care','Family Discussion','Visiting Relatives','Others'],'Household':['Cooking','Cleaning','Groceries','Repairs','Home Maintenance','Others'],'Health':['Medicine','Walking','Yoga','Health Check-up','Diet','Others'],'Friends':['Phone Call','Meeting Friends','Visiting Friends','Get-together','Others'],'Office':['Office Work','Meeting','Field Visit','Official Call','Meet Officials','Others'],'Others':['General Work','Other Activity','Others']},
     'Task': {'Personal':['Personal Work','Shopping','Learning','Follow-up','Others'],'Family':['Family Work','Family Responsibilities','Relatives Work','Others'],'Household':['Cleaning','Repairs','Maintenance','Groceries','Others'],'Health':['Medicine','Health Check-up','Exercise','Follow-up','Others'],'Friends':['Contact Friend','Visit','Help Friend','Others'],'Office':['Office Work','File Work','Field Work','Meet Officials','Follow-up','Others'],'Education':['Study','Exam Preparation','Assignment','Application','Others'],'Official':['Official Work','Documentation','Inspection','Report Submission','Others'],'Social':['Social Service','Community Work','Function Arrangements','Others'],'Others':['General Task','Other Work','Others']},
@@ -60,6 +87,13 @@
     .activity-page .expense-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
     .activity-page .activity-fields-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;align-items:start}
     .activity-page .activity-fields-grid>[data-field="activityType"]{grid-column:auto!important}
+    .activity-page .activity-fields-grid>[data-field="activityPhotos"]{grid-column:1/-1!important;min-width:0;width:100%;box-sizing:border-box}
+    .activity-page .activity-photo-picker{display:flex;align-items:center;gap:7px;flex-wrap:nowrap;width:100%;min-width:0;box-sizing:border-box}
+    .activity-page .activity-photo-picker button{height:48px;min-height:48px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:0 8px;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#2477c8;font-weight:600;flex:0 0 auto}
+    .activity-page .activity-photo-picker #activityPhotoChooseBtn{width:72px;min-width:72px}
+    .activity-page .activity-photo-picker .activity-photo-slot{width:46px;min-width:46px;height:48px}
+    .activity-page .activity-photo-picker .activity-photo-slot.has-photo{background:#d9f2df;border-color:#218838;color:#218838}
+    .activity-page .activity-photo-count{display:block;margin-top:4px;color:#526b80;font-size:12px;line-height:1.3;white-space:normal}
     .activity-page .activity-fields-grid>[data-field="reminderFields"]{display:contents!important;grid-column:1/-1!important;width:100%;min-width:0}.activity-page .activity-fields-grid>[data-field="reminderFields"][hidden]{display:none!important}
     .activity-page .activity-fields-grid>[data-field="reminderFields"] .activity-reminder-grid{margin:0!important}
     .activity-page .activity-fields-grid>.expense-field{min-width:0;width:100%;max-width:100%;box-sizing:border-box}
@@ -184,6 +218,7 @@
       ${selectField('subCategory','Sub Category',[],'Select Category first',true,false,false)}
       ${field('Scheduled Date *','startDate','<input id="startDate" name="startDate" type="date" value="'+today()+'" required>')}
       ${field('Schedule Time','startTime','<input id="startTime" name="startTime" type="time">')}
+      ${field('Photos','activityPhotos',`<div class="activity-photo-picker"><button type="button" id="activityPhotoChooseBtn" class="expense-secondary">Photo</button><button type="button" class="activity-photo-slot" id="activityPhotoSlot1" aria-label="Choose photo 1">1</button><button type="button" class="activity-photo-slot" id="activityPhotoSlot2" aria-label="Choose photo 2">2</button><button type="button" class="activity-photo-slot" id="activityPhotoSlot3" aria-label="Choose photo 3">3</button><input id="activityPhotosFile" type="file" accept="image/*" multiple hidden></div><small id="activityPhotoCount" class="activity-photo-count">0 photos selected (Maximum 3)</small>`,true)}
       ${field('Description','description','<textarea id="description" name="description" rows="2" maxlength="2000" placeholder="Enter details"></textarea>')}
       ${field('Status','status','<select id="status" name="status"><option value="Pending">Pending</option><option value="In Progress">In Progress</option><option value="On Hold">On Hold</option><option value="Completed">Completed</option><option value="Cancelled">Cancelled</option><option value="Not Necessary">Not Necessary</option></select>')}
       ${field('Reminder','reminderEnabled','<select id="reminderEnabled" name="reminderEnabled"><option value="false" selected>No</option><option value="true">Yes</option></select>')}
@@ -205,6 +240,44 @@
     </form></div>`;
     page(shell('Add Activity',inner,true));bindBack();
     const form=$('activityForm'),type=$('activityType'),cat=$('category'),sub=$('subCategory');
+    const activityPhotoInput=$('activityPhotosFile');
+    let selectedActivityPhotos=[null,null,null];
+    let activeActivityPhotoSlot=0;
+    function updateActivityPhotoSlots(){
+      let count=0;
+      selectedActivityPhotos.forEach((file,index)=>{
+        const slot=$('activityPhotoSlot'+(index+1));
+        if(!slot)return;
+        if(file){count++;slot.textContent='✓';slot.title=file.name;slot.classList.add('has-photo')}
+        else{slot.textContent=String(index+1);slot.title='Choose photo '+(index+1);slot.classList.remove('has-photo')}
+      });
+      const countLabel=$('activityPhotoCount');
+      if(countLabel)countLabel.textContent=count+' photo(s) selected (Maximum 3)';
+    }
+    function openActivityPhotoPicker(slotIndex){
+      activeActivityPhotoSlot=slotIndex;
+      if(activityPhotoInput){activityPhotoInput.value='';activityPhotoInput.click()}
+    }
+    $('activityPhotoChooseBtn').onclick=()=>{
+      const nextSlot=selectedActivityPhotos.findIndex(file=>!file);
+      if(nextSlot<0){activityToast('Maximum 3 photos can be selected.','warning');return}
+      openActivityPhotoPicker(nextSlot);
+    };
+    [1,2,3].forEach(number=>{
+      const slot=$('activityPhotoSlot'+number);
+      if(slot)slot.onclick=()=>openActivityPhotoPicker(number-1);
+    });
+    if(activityPhotoInput){
+      activityPhotoInput.addEventListener('change',()=>{
+        const files=Array.from(activityPhotoInput.files||[]);
+        if(!files.length)return;
+        if(files.some(file=>!file.type||!file.type.startsWith('image/'))){activityToast('Please select image files only.','error');activityPhotoInput.value='';return}
+        if(files.length>3-activeActivityPhotoSlot){activityToast('You can select up to 3 photos.','warning');activityPhotoInput.value='';return}
+        files.forEach((file,index)=>{selectedActivityPhotos[activeActivityPhotoSlot+index]=file});
+        updateActivityPhotoSlots();activityPhotoInput.value='';
+      });
+    }
+    updateActivityPhotoSlots();
     function val(id){const el=$(id);if(!el)return '';if(el.value==='__custom__')return ($(`${id}Custom`)?.value||'').trim();return el.value}
     function customToggle(id){const sel=$(id),inp=$(id+'Custom');if(!sel||!inp)return;const sync=()=>{inp.hidden=sel.value!=='__custom__';inp.required=sel.value==='__custom__';if(!inp.hidden)inp.focus()};sel.addEventListener('change',sync);sync()}
     function updateSub(){const old=val('subCategory');const custom=$('subCategoryCustom');if(custom){custom.value='';custom.hidden=true;custom.required=false}sub.innerHTML=dropdown(subCategoryKeys(val('activityType'),val('category')),'Select Sub Category',false);if(subCategoryKeys(val('activityType'),val('category')).includes(old))sub.value=old;}
@@ -244,7 +317,7 @@
       if(appt)extraOrder.push('appointmentPerson','followUpDate');
       if(task)extraOrder.push('assignedTo','priority');
       extraOrder.push('completedDate');
-      arrangeActivityFields(['activityType','description','category','subCategory','startDate','startTime',...extraOrder]);
+      arrangeActivityFields(['activityType','description','category','subCategory','startDate','startTime','activityPhotos',...extraOrder]);
       // Keep the backend title field populated for compatibility.
       if($('title'))$('title').value=val('subCategory')||val('category')||t||'Activity';
     }
@@ -291,7 +364,7 @@
     if(reminderDateInput){reminderDateInput.addEventListener('input',syncReminderConstraints);reminderDateInput.addEventListener('change',syncReminderConstraints)}
     if(reminderTimeInput){reminderTimeInput.addEventListener('input',syncReminderConstraints);reminderTimeInput.addEventListener('change',syncReminderConstraints)}
     updateCat();$('reminderEnabled').value='false';$('status').value='Pending';$('priority').value='Normal';syncReminderRequired();updateVisibility();
-    function resetForm(){form.reset();$('startDate').value=today();$('status').value='Pending';$('priority').value='Normal';$('reminderEnabled').value='false';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();syncReminderRequired();updateVisibility();status('')}
+    function resetForm(){form.reset();selectedActivityPhotos=[null,null,null];if(activityPhotoInput)activityPhotoInput.value='';updateActivityPhotoSlots();$('startDate').value=today();$('status').value='Pending';$('priority').value='Normal';$('reminderEnabled').value='false';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();syncReminderRequired();updateVisibility();status('')}
     form.onsubmit=async ev=>{ev.preventDefault();if(!family().familyId){activityToast('Current family was not found. Please open your family and try again.','error');return}if(!token()){activityToast('Login session expired. Please login again.','error');return}
       const activityType=val('activityType'),category=val('category'),subCategory=val('subCategory');if(!activityType||!category||!subCategory){activityToast('Activity Type, Category and Sub Category are required.','error');return}if(!$('startDate').value){activityToast('Scheduled Date is required.','error');$('startDate').focus();return}
       if($('reminderEnabled').value==='true'){
@@ -304,6 +377,7 @@
       if($('title'))$('title').value=val('subCategory')||val('category')||activityType||'Activity';
       const btn=$('activitySaveBtn');btn.disabled=true;btn.textContent='Saving…';activityToast('Saving activity…','info',15000);try{const fd=new FormData(form),fields={};for(const [k,v] of fd.entries())fields[k]=String(v);
         ['activityType','category','subCategory','status','priority','reminderRepeat','reminderEnabled'].forEach(id=>{if($(id))fields[id]=val(id)});fields.activityType=activityType;fields.category=category;fields.subCategory=subCategory;fields.isSensitive=$('isSensitive').checked?'true':'false';
+        for(let i=0;i<3;i++)fields['photo'+(i+1)+'Data']=selectedActivityPhotos[i]?await compressActivityPhoto(selectedActivityPhotos[i]):'';
         const res=await request('saveActivity',fields);if(res.status!=='success')throw new Error(res.message||'Unable to save activity.');activityToast('Activity saved successfully. Activity ID: '+(res.activityId||''),'success',4000);cached=[];resetForm();
       }catch(e){activityToast(e.message||'Unable to save activity.','error',5000)}finally{btn.disabled=false;btn.textContent='Save'}};
     $('activityResetBtn').onclick=()=>setTimeout(resetForm,0);
