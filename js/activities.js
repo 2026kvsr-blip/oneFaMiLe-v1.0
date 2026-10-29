@@ -506,7 +506,7 @@
       const limitedNames=['Activity Type','Category','Sub Category','Scheduled Date','Status','Sensitive','Reminder','Venue','No of photos','Photos','Edit'];
       const selectedMode=$('actShowColumns')?.value||reportSettings?.showColumns||'all';
       const columns=selectedMode==='limited'?allColumns.filter(c=>limitedNames.includes(c[0])):allColumns;
-      const grouped=rows.map((r,i)=>`<tr><td class="report-center">${i+1}</td>${columns.map(c=>{const value=c[1](r);return `<td class="${centerNames.includes(c[0])?'report-center':''}">${c[0]==='Photos'?value:esc(value)}</td>`}).join('')}</tr>`).join('');
+      const grouped=rows.map((r,i)=>`<tr><td class="report-center">${i+1}</td>${columns.map(c=>{const value=c[1](r);return `<td class="${centerNames.includes(c[0])?'report-center':''}">${(c[0]==='Photos'||c[0]==='Edit')?value:esc(value)}</td>`}).join('')}</tr>`).join('');
       table=`<div class="expense-results"><table><thead><tr><th class="report-center">S.No</th>${columns.map(c=>`<th class="${centerNames.includes(c[0])?'report-center':''}">${esc(c[0])}</th>`).join('')}</tr></thead><tbody>${grouped||`<tr><td colspan="${columns.length+1}">No records found.</td></tr>`}</tbody></table></div>`;
     }
     $('actReportOutput').innerHTML=`<div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${total}</strong></div><div class="expense-summary-card"><small>Completed :</small><strong>${completed}</strong></div><div class="expense-summary-card"><small>Pending :</small><strong>${pending}</strong></div></div>${table}`;
@@ -520,7 +520,8 @@
       modal.querySelector('img').src=displayUrl;modal.style.display='flex';
     }));
     $('actReportOutput').querySelectorAll('.activity-abstract-parent').forEach(row=>{const toggle=()=>{const idx=row.dataset.index,opening=row.getAttribute('aria-expanded')!=='true';$('actReportOutput').querySelectorAll(`.activity-abstract-subrow[data-parent="${idx}"]`).forEach(r=>r.hidden=!opening);row.setAttribute('aria-expanded',String(opening));const mark=row.querySelector('.activity-toggle');if(mark)mark.textContent=opening?'－':'＋'};row.onclick=toggle;row.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}}});
-    $('actReportOutput').querySelectorAll('[data-edit-activity]').forEach(editBtn=>editBtn.addEventListener('click',()=>{
+    $('actReportOutput').querySelectorAll('[data-edit-activity]').forEach(editBtn=>editBtn.addEventListener('click',event=>{
+      event.preventDefault();event.stopPropagation();
       const id=editBtn.getAttribute('data-edit-activity')||'';
       const record=rows.find(item=>String(item.activityId||'')===id)||cached.find(item=>String(item.activityId||'')===id);
       if(record)openForm(record);else activityToast('This activity record could not be found. Please run the report again.','error',5000);
