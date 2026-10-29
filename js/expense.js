@@ -180,7 +180,7 @@ function status(message, type = '') {
     const f=family(); if(!f.familyId||!token())return;
     try{const res=await request('getFamilyMembers');if(res&&res.status==='success')members=(res.members||[]).map(m=>String(m.name||'').trim()).filter(Boolean)}catch(e){console.warn('Expense members load failed',e)}
   }
-  function renderForm(){
+  function renderForm(editRecord=null){
     const defaultName=loginName();
     const memberNames=[...new Set([defaultName,...members].filter(Boolean))];
     const inner=`<form id="expenseForm" class="expense-form" autocomplete="off">
@@ -216,7 +216,8 @@ ${field('Photos',`
 <div id="expenseStatus" class="expense-status" role="status"></div>
       <div class="expense-actions"><button class="expense-primary" type="submit" id="expenseSaveBtn">Save</button><button class="expense-secondary" type="reset" id="expenseResetBtn">Reset</button><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>
     </form>`;
-    showPage(shell('Add Expense',inner,true));
+    showPage(shell(editRecord?'Edit Expense':'Add Expense',inner,true));
+    if($('expenseSaveBtn'))$('expenseSaveBtn').textContent=editRecord?'Update':'Save';
     // Disabled Amount / Expense by remain white while preserving disabled state.
     const expenseWhiteStyle = document.createElement('style');
     expenseWhiteStyle.textContent = '#expenseForm #exAmount:disabled, #expenseForm #exSpentBySearch:disabled { background:#fff !important; color:#333 !important; opacity:1 !important; -webkit-text-fill-color:#333 !important; } #expenseForm .expense-photo-picker { max-width:100%; flex-wrap:nowrap !important; gap:6px; } #expenseForm .expense-photo-picker button { flex-shrink:0 !important; } #expenseForm .expense-photo-picker #exPhotoChooseBtn { min-width:62px!important;width:62px!important;max-width:62px!important;height:52px!important;min-height:52px!important;max-height:52px!important;flex:0 0 62px!important;background:#fff!important;background-color:#fff!important;color:#2477c8!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;padding:0!important;box-sizing:border-box!important; } #expenseForm .expense-photo-picker .expense-photo-slot { width:42px!important; min-width:42px!important; max-width:42px!important; height:52px!important; min-height:52px!important; max-height:52px!important; flex:0 0 42px!important; display:flex!important; align-items:center!important; justify-content:center!important; text-align:center!important; padding:0!important; line-height:1!important; box-sizing:border-box!important; } #expenseForm .expense-field{align-items:center} #expenseForm .expense-label{display:grid!important;grid-template-columns:minmax(0,1fr) 10px!important;align-items:center!important;align-self:center;margin-top:0!important;justify-self:stretch!important;text-align:left!important;width:100%!important;box-sizing:border-box!important} #expenseForm .expense-label-text{text-align:left!important;min-width:0!important} #expenseForm .expense-colon{text-align:center!important;display:block!important;width:10px!important} .expense-page:has(#expenseForm)>.expense-title{margin-top:-70px!important;margin-bottom:10px!important;padding-top:0!important}';
@@ -340,6 +341,29 @@ ${field('Photos',`
     };
     sub.addEventListener('change',()=>{amountInput.value='';expenseByInput.value='';syncEntrySequence()});
     syncEntrySequence();
+    if(editRecord){
+      $('exDate').value=String(editRecord.expenseDate||'').slice(0,10);
+      cat.value=String(editRecord.mainCategory||'');
+      cat.dispatchEvent(new Event('change'));
+      const savedSub=String(editRecord.subCategory||editRecord.vehicleType||'');
+      if(savedSub && !Array.from(sub.options).some(o=>o.value===savedSub)) sub.add(new Option(savedSub,savedSub));
+      sub.value=savedSub;
+      sub.dispatchEvent(new Event('change'));
+      $('exDate').value=String(editRecord.expenseDate||'').slice(0,10);
+      $('exMaintenanceType').value=String(editRecord.maintenanceType||'');
+      $('exVehicleNumber').value=String(editRecord.vehicleNumber||'');
+      $('exAmount').value=String(editRecord.amount==null?'':editRecord.amount);
+      $('exPaymentMode').value=String(editRecord.paymentMode||'');
+      $('exSensitive').value=String(editRecord.sensitive||'No');
+      $('exSpentBySearch').value=String(editRecord.spentBy||defaultName||'');
+      if(cat.value==='Vehicle Maintenance') $('exVehicleDescription').value=String(editRecord.description||'');
+      else $('exDescription').value=String(editRecord.description||'');
+      syncEntrySequence();
+      $('exSpentBySearch').value=String(editRecord.spentBy||defaultName||'');
+      const existingPhotoCount=[editRecord.photo1Url||editRecord.photo1,editRecord.photo2Url||editRecord.photo2,editRecord.photo3Url||editRecord.photo3].filter(Boolean).length;
+      const photoCountLabel=$('exPhotoCount');
+      if(photoCountLabel)photoCountLabel.textContent=existingPhotoCount+' saved photo(s) will be kept; selecting a photo replaces that slot (maximum 3).';
+    }
     $('expenseForm').onsubmit=async ev=>{
       ev.preventDefault();
       const amount=Number($('exAmount').value);
@@ -372,14 +396,16 @@ ${field('Photos',`
       photoFiles[i] ? await compressExpensePhoto(photoFiles[i]) : '';
   }
 
-  const res = await request('saveExpense', payload);
+  if(editRecord)payload.expenseId=String(editRecord.expenseId||'');
+  const res = await request(editRecord?'updateExpense':'saveExpense', payload);
 
   if (res.status !== 'success') {
     throw new Error(res.message || 'Could not save expense.');
   }
 
-  status('Expense saved successfully.', 'success');
+  status(editRecord?'Expense updated successfully.':'Expense saved successfully.', 'success');
   selectedExpensePhotos = [null, null, null];
+  if(editRecord){cachedExpenses=[];goBack();return;}
   updateExpensePhotoSlots();
 
   $('expenseForm').reset();
@@ -396,7 +422,7 @@ ${field('Photos',`
   syncEntrySequence();
 
 } catch(err){status(err.message||'Unable to save expense. Please try again.','error')}
-      finally{btn.disabled=false;btn.textContent='Save'}
+      finally{btn.disabled=false;btn.textContent=editRecord?'Update':'Save'}
     };
     $('expenseResetBtn').onclick=()=>setTimeout(()=>{ selectedExpensePhotos=[null,null,null];updateExpensePhotoSlots();$('exDate').value=dateToday();$('exSpentBySearch').value='';$('exSpentBySearch').disabled=true;$('exAmount').value='';$('exAmount').disabled=true;setPhotoSelectionEnabled(false);vehicleFields.classList.add('hidden');$('exNormalDescription').classList.remove('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');subRow.classList.remove('hidden');sub.required=true;syncEntrySequence();status('');},0);
   }
@@ -580,9 +606,10 @@ ${field('Photos',`
         {key:'sensitive',label:'Sensitive',center:true,value:r=>r.sensitive||'No'},
         {key:'spentBy',label:'Expense by',value:r=>r.spentBy||''},
         {key:'photoCount',label:'No of photos',center:true,value:(r,photos)=>String(photos.length)},
-        {key:'photos',label:'Photos',value:(r,photos)=>photos.length?photos.map((url,i)=>`<button type="button" class="expense-photo-preview-btn" data-expense-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 40px;width:40px;height:40px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;cursor:pointer"><img src="${esc(url)}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:38px;height:38px;object-fit:cover;border:1px solid #c4d4ff;border-radius:5px" onerror="this.style.display='none';this.parentElement.textContent='Open'"></button>`).join(''):'—',html:true}
+        {key:'photos',label:'Photos',value:(r,photos)=>photos.length?photos.map((url,i)=>`<button type="button" class="expense-photo-preview-btn" data-expense-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 40px;width:40px;height:40px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;cursor:pointer"><img src="${esc(url)}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:38px;height:38px;object-fit:cover;border:1px solid #c4d4ff;border-radius:5px" onerror="this.style.display='none';this.parentElement.textContent='Open'"></button>`).join(''):'—',html:true},
+        {key:'edit',label:'Edit',center:true,value:r=>`<button type="button" class="expense-secondary expense-edit-record-btn" data-expense-edit="${esc(r.expenseId||'')}" style="min-width:54px;padding:6px 10px;white-space:nowrap">Edit</button>`,html:true}
       ];
-      const limitedKeys=['date','category','subcategory','amount','paymentMode','sensitive','description'];
+      const limitedKeys=['date','category','subcategory','amount','paymentMode','sensitive','description','edit'];
       const selectedMode=$('exShowColumns')?.value||'limited';
       const visibleColumns=selectedMode==='all'?allColumns:allColumns.filter(c=>limitedKeys.includes(c.key));
       const headers=[`<th class="expense-center-cell">S.No</th>`,...visibleColumns.map(c=>`<th${c.center?' class="expense-center-cell"':''}>${c.label}</th>`)];
@@ -688,6 +715,11 @@ ${field('Photos',`
         });
       });
     }
+    $('exReportOutput')?.querySelectorAll('[data-expense-edit]').forEach(editBtn=>editBtn.addEventListener('click',()=>{
+      const id=editBtn.getAttribute('data-expense-edit')||'';
+      const record=rows.find(item=>String(item.expenseId||'')===id)||cachedExpenses.find(item=>String(item.expenseId||'')===id);
+      if(record)renderForm(record);else status('This expense record could not be found. Please run the report again.','error');
+    }));
     // Abstract category rows expand/collapse their own subcategory totals. Keep this
     // behavior scoped to the current report output; no global navigation or filters change.
     $('exReportOutput').querySelectorAll('.expense-abstract-category-row').forEach(row=>{
