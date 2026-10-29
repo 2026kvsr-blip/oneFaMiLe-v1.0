@@ -1,4 +1,5 @@
 
+
 /* oneFaMiLe Activities module — report page structure follows expense.js */
 (function(){
   'use strict';
@@ -207,7 +208,7 @@
     <button class="grid-btn" id="activityCustomBtn"><img src="images/colorbtns/CustomSearch1.png" class="btn-icon"><span>Custom Search</span></button>
     <button class="grid-btn" id="activityAboutBtn"><img src="images/colorbtns/About1.png" class="btn-icon"><span>About</span></button></div><div style="text-align:center"><button class="back-btn" id="activityHomeBack">← Back</button></div>`);
     $('activityAddBtn').onclick=openForm;$('activityReportsBtn').onclick=()=>renderReports('normal',false);$('activitySensitiveBtn').onclick=()=>sensitiveGate('sensitive');$('activityAllBtn').onclick=()=>sensitiveGate('all');$('activityCustomBtn').onclick=()=>renderReports('normal',true);$('activityAboutBtn').onclick=openAbout;$('activityHomeBack').onclick=()=>{const b=$('homeBtn');if(b)b.click();else if(typeof window.showHome==='function')window.showHome()};}
-  function openForm(){
+  function openForm(editRecord=null){
     styleOnce();
     const typeItems=Object.keys(ACTIVITY_CONFIG).filter(x=>x!=='Reminder');
     const inner=`<div class="expense-panel"><form id="activityForm" class="expense-form" autocomplete="off">
@@ -237,7 +238,8 @@
       <div class="activity-sensitive-line"><label for="isSensitive"><input id="isSensitive" name="isSensitive" type="checkbox" value="true"> Sensitive</label></div>
       <div id="activityStatus" class="expense-status" role="status" aria-live="polite"></div><div class="expense-actions"><button type="submit" id="activitySaveBtn" class="expense-primary">Save</button><button type="reset" id="activityResetBtn" class="expense-secondary">Reset</button><button type="button" id="activityModuleBack" class="expense-secondary">← Back</button></div>
     </form></div>`;
-    page(shell('Add Activity',inner,true));bindBack();
+    page(shell(editRecord?'Edit Activity':'Add Activity',inner,true));bindBack();
+    if($('activitySaveBtn'))$('activitySaveBtn').textContent=editRecord?'Update':'Save';
     const form=$('activityForm'),type=$('activityType'),cat=$('category'),sub=$('subCategory');
     const activityPhotoInput=$('activityPhotosFile');
     let selectedActivityPhotos=[null,null,null];
@@ -364,6 +366,17 @@
     if(reminderTimeInput){reminderTimeInput.addEventListener('input',syncReminderConstraints);reminderTimeInput.addEventListener('change',syncReminderConstraints)}
     updateCat();$('reminderEnabled').value='false';$('status').value='Pending';$('priority').value='Normal';syncReminderRequired();updateVisibility();
     function resetForm(){form.reset();selectedActivityPhotos=[null,null,null];if(activityPhotoInput)activityPhotoInput.value='';updateActivityPhotoSlots();$('startDate').value=today();$('status').value='Pending';$('priority').value='Normal';$('reminderEnabled').value='false';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();syncReminderRequired();updateVisibility();status('')}
+    if(editRecord){
+      const put=(id,value)=>{const el=$(id);if(!el)return;const text=String(value==null?'':value);if(el.tagName==='SELECT'&&text&&!Array.from(el.options).some(o=>o.value===text))el.add(new Option(text,text));el.value=text;};
+      put('activityType',editRecord.activityType||'General');updateCat();
+      put('category',editRecord.category||'Others');updateSub();put('subCategory',editRecord.subCategory||'Others');
+      ['startDate','startTime','description','status','reminderRepeat','reminderDate','reminderTime','venue','locationLink','appointmentPerson','followUpDate','assignedTo','priority','completedDate'].forEach(id=>put(id,editRecord[id]||''));
+      put('reminderEnabled',editRecord.reminderEnabled?'true':'false');
+      $('isSensitive').checked=sensitiveFlag(editRecord.isSensitive);
+      const oldPhotos=[editRecord.photo1Url||editRecord.photo1,editRecord.photo2Url||editRecord.photo2,editRecord.photo3Url||editRecord.photo3].filter(Boolean).length;
+      const photoCountLabel=$('activityPhotoCount');if(photoCountLabel)photoCountLabel.innerHTML='<span>'+oldPhotos+' saved photo(s) will be kept</span><span>New selections replace matching slots</span>';
+      syncReminderRequired();updateVisibility();
+    }
     form.onsubmit=async ev=>{ev.preventDefault();if(!family().familyId){activityToast('Current family was not found. Please open your family and try again.','error');return}if(!token()){activityToast('Login session expired. Please login again.','error');return}
       const activityType=val('activityType'),category=val('category'),subCategory=val('subCategory');if(!activityType||!category||!subCategory){activityToast('Activity Type, Category and Sub Category are required.','error');return}if(!$('startDate').value){activityToast('Scheduled Date is required.','error');$('startDate').focus();return}
       if($('reminderEnabled').value==='true'){
@@ -377,8 +390,11 @@
       const btn=$('activitySaveBtn');btn.disabled=true;btn.textContent='Saving…';activityToast('Saving activity…','info',15000);try{const fd=new FormData(form),fields={};for(const [k,v] of fd.entries())fields[k]=String(v);
         ['activityType','category','subCategory','status','priority','reminderRepeat','reminderEnabled'].forEach(id=>{if($(id))fields[id]=val(id)});fields.activityType=activityType;fields.category=category;fields.subCategory=subCategory;fields.isSensitive=$('isSensitive').checked?'true':'false';
         for(let i=0;i<3;i++)fields['photo'+(i+1)+'Data']=selectedActivityPhotos[i]?await compressActivityPhoto(selectedActivityPhotos[i]):'';
-        const res=await request('saveActivity',fields);if(res.status!=='success')throw new Error(res.message||'Unable to save activity.');activityToast('Activity saved successfully. Activity ID: '+(res.activityId||''),'success',4000);cached=[];resetForm();
-      }catch(e){activityToast(e.message||'Unable to save activity.','error',5000)}finally{btn.disabled=false;btn.textContent='Save'}};
+        if(editRecord)fields.activityId=String(editRecord.activityId||'');
+        const res=await request(editRecord?'updateActivity':'saveActivity',fields);if(res.status!=='success')throw new Error(res.message||'Unable to save activity.');
+        if(editRecord){activityToast('Activity updated successfully. Activity ID: '+(res.activityId||editRecord.activityId||''),'success',4000);cached=[];backToMenu();return;}
+        activityToast('Activity saved successfully. Activity ID: '+(res.activityId||''),'success',4000);cached=[];resetForm();
+      }catch(e){activityToast(e.message||'Unable to save activity.','error',5000)}finally{btn.disabled=false;btn.textContent=editRecord?'Update':'Save'}};
     $('activityResetBtn').onclick=()=>setTimeout(resetForm,0);
   }
   function sensitiveGate(kind){styleOnce();const label=kind==='sensitive'?'Sensitive Activities - Report':'All Activities - Report';const inner=`<div class="expense-panel"><div class="expense-field"><label class="expense-label" for="activityPassCode">Pass Code</label><input id="activityPassCode" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Enter Pass Code"></div><div id="activityStatus" class="expense-status" role="status"></div><div class="expense-actions" style="display:flex;align-items:center;justify-content:center;align-items:center;gap:16px;margin-top:32px;flex-wrap:nowrap;width:100%"><button type="button" id="activityVerifyPass" class="expense-primary" style="margin:0">Verify</button><button type="button" id="activityModuleBack" class="expense-secondary" style="margin:0">← Back</button></div></div>`;page(shell(label,inner,true));bindBack();$('activityVerifyPass').onclick=async()=>{const pass=$('activityPassCode').value.trim();if(!pass){status('Enter Pass Code.','error');return}const btn=$('activityVerifyPass');btn.disabled=true;status('Verifying…');try{const res=await request('getActivities',{includeSensitive:'true',passCode:pass});if(res.status!=='success')throw new Error(res.message||'Pass Code verification failed.');cached=res.activities||[];activeAccess=kind;renderReports(kind,false,cached)}catch(e){status(e.message||'Verification failed.','error');btn.disabled=false}}}
@@ -483,10 +499,11 @@
         ['Reminder Date',r=>showDate(r.reminderDate)],['Reminder Time',r=>timeOnly(r.reminderTime)],
         ['Venue',r=>r.venue||''],['Location / Link',r=>r.locationLink||''],['Person / Doctor / Office',r=>r.appointmentPerson||''],
         ['Follow-up Date',r=>showDate(r.followUpDate)],['Assigned To',r=>r.assignedTo||''],['Priority',r=>r.priority||''],
-        ['Completed Date',r=>showDate(r.completedDate)],['No of photos',r=>String(photoValues(r).length)],['Photos',photoHtml]
+        ['Completed Date',r=>showDate(r.completedDate)],['No of photos',r=>String(photoValues(r).length)],['Photos',photoHtml],
+        ['Edit',r=>`<button type="button" class="expense-secondary activity-edit-record-btn" data-edit-activity="${esc(r.activityId||'')}" style="min-width:54px;padding:6px 10px;white-space:nowrap">Edit</button>`]
       ];
-      // Show Columns=Limited retains the required activity summary fields and photo columns.
-      const limitedNames=['Activity Type','Category','Sub Category','Scheduled Date','Status','Sensitive','Reminder','Venue','No of photos','Photos'];
+      // Show Columns=Limited retains the required activity summary fields, photo columns and Edit action.
+      const limitedNames=['Activity Type','Category','Sub Category','Scheduled Date','Status','Sensitive','Reminder','Venue','No of photos','Photos','Edit'];
       const selectedMode=$('actShowColumns')?.value||reportSettings?.showColumns||'all';
       const columns=selectedMode==='limited'?allColumns.filter(c=>limitedNames.includes(c[0])):allColumns;
       const grouped=rows.map((r,i)=>`<tr><td class="report-center">${i+1}</td>${columns.map(c=>{const value=c[1](r);return `<td class="${centerNames.includes(c[0])?'report-center':''}">${c[0]==='Photos'?value:esc(value)}</td>`}).join('')}</tr>`).join('');
@@ -502,7 +519,12 @@
       if(!modal){modal=document.createElement('div');modal.id='activityPhotoPreviewModal';modal.style.cssText='position:fixed;inset:0;z-index:1000000;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;';modal.innerHTML='<button type="button" aria-label="Close photo preview" style="position:absolute;top:12px;right:16px;width:42px;height:42px;border:0;border-radius:50%;background:#fff;color:#222;font-size:30px;line-height:1;cursor:pointer;z-index:1">×</button><img alt="Activity photo preview" style="display:block;max-width:100%;max-height:88vh;object-fit:contain;border-radius:6px;box-shadow:0 4px 20px #0008">';document.body.appendChild(modal);const close=()=>modal.style.display='none';modal.querySelector('button').addEventListener('click',close);modal.addEventListener('click',ev=>{if(ev.target===modal)close()});document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&modal.style.display!=='none')close()});}
       modal.querySelector('img').src=displayUrl;modal.style.display='flex';
     }));
-    $('actReportOutput').querySelectorAll('.activity-abstract-parent').forEach(row=>{const toggle=()=>{const idx=row.dataset.index,opening=row.getAttribute('aria-expanded')!=='true';$('actReportOutput').querySelectorAll(`.activity-abstract-subrow[data-parent="${idx}"]`).forEach(r=>r.hidden=!opening);row.setAttribute('aria-expanded',String(opening));const mark=row.querySelector('.activity-toggle');if(mark)mark.textContent=opening?'－':'＋'};row.onclick=toggle;row.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}}});}
+    $('actReportOutput').querySelectorAll('.activity-abstract-parent').forEach(row=>{const toggle=()=>{const idx=row.dataset.index,opening=row.getAttribute('aria-expanded')!=='true';$('actReportOutput').querySelectorAll(`.activity-abstract-subrow[data-parent="${idx}"]`).forEach(r=>r.hidden=!opening);row.setAttribute('aria-expanded',String(opening));const mark=row.querySelector('.activity-toggle');if(mark)mark.textContent=opening?'－':'＋'};row.onclick=toggle;row.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}}});
+    $('actReportOutput').querySelectorAll('[data-edit-activity]').forEach(editBtn=>editBtn.addEventListener('click',()=>{
+      const id=editBtn.getAttribute('data-edit-activity')||'';
+      const record=rows.find(item=>String(item.activityId||'')===id)||cached.find(item=>String(item.activityId||'')===id);
+      if(record)openForm(record);else activityToast('This activity record could not be found. Please run the report again.','error',5000);
+    }));}
   function exportReport(format){const output=$('actReportOutput');if(!output||!output.innerHTML.trim()){status('Press Show Report first.','error');return}const heading=document.querySelector('.activity-page .expense-title')?.textContent||'oneFaMiLe Activities Report';const html=`<!doctype html><html><head><meta charset="utf-8"><title>${esc(heading)}</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#222}table{border-collapse:collapse;width:100%}th,td{border:1px solid #888;padding:6px;text-align:left}.expense-summary{display:flex;gap:12px;margin-bottom:16px}.expense-summary-card{border:1px solid #aaa;padding:10px}</style></head><body><h2>${esc(heading)}</h2>${output.innerHTML}</body></html>`;if(format==='pdf'){const w=window.open('','_blank');if(!w){status('Popup blocked. Allow popups to print/save PDF.','error');return}w.document.open();w.document.write(html);w.document.close();w.focus();setTimeout(()=>w.print(),300);return}const word=format==='word',blob=new Blob([html],{type:(word?'application/msword':'application/vnd.ms-excel')+';charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='oneFaMiLe_Activities_Report.'+(word?'doc':'xls');document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
   function openAbout(){styleOnce();const html=`<div class="expense-panel"><h3 style="margin-top:0;color:#2477c8">About oneFaMiLe Activities</h3><h4>1. Add Activity</h4><p>Record activities with Activity Date, Activity Type, Title, Category, SubCategory, Description, status, priority, due date and optional tags.</p><h4>2. Reports</h4><p>Abstract reports summarize records by Category and SubCategory or by Daily, Weekly, Monthly and Yearly periods. Detailed reports list each activity and its dates, status and priority.</p><h4>3. Custom Search</h4><p>Filter activities by date range, category, subcategory, status, priority, assigned person and search text. Reports can be printed/saved as PDF or downloaded in Word/Excel-compatible format.</p><h4>4. Sensitive Activities</h4><p>Sensitive Reports and All Reports require the Sensitive Pass Code. Ordinary Activities Reports exclude sensitive records.</p><h4>5. Family data</h4><p>Activity records are associated with the selected family and current login session. Check the activity details before saving.</p></div>`;page(shell('About Activities',html));bindBack()}
   function install(){const b=$('activitiesBtn');if(!b){setTimeout(install,250);return}b.onclick=openMenu}
