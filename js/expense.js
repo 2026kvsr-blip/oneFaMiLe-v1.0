@@ -607,7 +607,7 @@ ${field('Photos',`
         {key:'spentBy',label:'Expense by',value:r=>r.spentBy||''},
         {key:'photoCount',label:'No of photos',center:true,value:(r,photos)=>String(photos.length)},
         {key:'photos',label:'Photos',value:(r,photos)=>photos.length?photos.map((url,i)=>`<button type="button" class="expense-photo-preview-btn" data-expense-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 40px;width:40px;height:40px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;cursor:pointer"><img src="${esc(url)}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:38px;height:38px;object-fit:cover;border:1px solid #c4d4ff;border-radius:5px" onerror="this.style.display='none';this.parentElement.textContent='Open'"></button>`).join(''):'—',html:true},
-        {key:'edit',label:'Edit',center:true,value:r=>`<button type="button" class="expense-secondary expense-edit-record-btn" data-expense-edit="${esc(r.expenseId||'')}" style="min-width:54px;padding:6px 10px;white-space:nowrap">Edit</button>`,html:true}
+        {key:'edit',label:'Edit',center:true,value:(r,photos,rowIndex)=>`<button type="button" class="expense-secondary expense-edit-record-btn" data-expense-edit="${esc(r.expenseId||'')}" data-expense-row-index="${rowIndex}" style="min-width:54px;padding:6px 10px;white-space:nowrap;cursor:pointer">Edit</button>`,html:true}
       ];
       const limitedKeys=['date','category','subcategory','amount','paymentMode','sensitive','description','edit'];
       const selectedMode=$('exShowColumns')?.value||'limited';
@@ -665,7 +665,7 @@ ${field('Photos',`
           return String(url||'');
         };
         const cells=[`<td class="expense-center-cell">${rowIndex+1}</td>`,...visibleColumns.map(col=>{
-          const value=col.value(r,photos);
+          const value=col.value(r,photos,rowIndex);
           return `<td${col.center?' class="expense-center-cell"':''}>${col.html?value:esc(value)}</td>`;
         })];
         groupedRows+=`<tr>${cells.join('')}</tr>`;
@@ -715,26 +715,7 @@ ${field('Photos',`
         });
       });
     }
-    $('exReportOutput')?.querySelectorAll('[data-expense-edit]').forEach(editBtn=>editBtn.addEventListener('click',()=>{
-      const id=editBtn.getAttribute('data-expense-edit')||'';
-      const record=rows.find(item=>String(item.expenseId||'')===id)||cachedExpenses.find(item=>String(item.expenseId||'')===id);
-      if(record)renderForm(record);else status('This expense record could not be found. Please run the report again.','error');
-    }));
-    // Abstract category rows expand/collapse their own subcategory totals. Keep this
-    // behavior scoped to the current report output; no global navigation or filters change.
-    $('exReportOutput').querySelectorAll('.expense-abstract-category-row').forEach(row=>{
-      const toggle=()=>{
-        const index=row.getAttribute('data-toggle-index');
-        const subRows=$('exReportOutput').querySelectorAll(`.expense-abstract-subrow[data-parent-index="${index}"]`);
-        const opening=row.getAttribute('aria-expanded')!=='true';
-        subRows.forEach(subRow=>{subRow.hidden=!opening;});
-        row.setAttribute('aria-expanded',String(opening));
-        const mark=row.querySelector('.expense-abstract-toggle');
-        if(mark)mark.textContent=opening?'－':'＋';
-      };
-      row.addEventListener('click',toggle);
-      row.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();toggle();}});
-    });
+    // Report interactions are rebound by openExpenseReportPage() after its page swap.
   }
 
   function captureExpenseReportFilters(){
@@ -798,39 +779,49 @@ ${field('Photos',`
         </div>
       </div>
     </div>`);
-    // The report HTML is copied into a new report page above, so listeners
-    // originally attached by renderResults() do not survive that page swap.
-    // Bind abstract expand/collapse and Edit actions to the visible report DOM.
+    // The report HTML is copied into the final report page; use event delegation
+    // on the visible output so Edit and Abstract + controls remain functional.
     const visibleReportOutput=$('exReportOutput');
     if(visibleReportOutput){
-      visibleReportOutput.querySelectorAll('.expense-abstract-category-row').forEach(row=>{
-        const toggle=()=>{
-          const index=row.getAttribute('data-toggle-index');
-          const subRows=visibleReportOutput.querySelectorAll(`.expense-abstract-subrow[data-parent-index="${index}"]`);
-          const opening=row.getAttribute('aria-expanded')!=='true';
-          subRows.forEach(subRow=>{subRow.hidden=!opening;});
-          row.setAttribute('aria-expanded',String(opening));
-          const mark=row.querySelector('.expense-abstract-toggle');
-          if(mark)mark.textContent=opening?'－':'＋';
-        };
-        row.addEventListener('click',event=>{
-          if(event.target && event.target.closest && event.target.closest('button,a,input,select,textarea')) return;
-          toggle();
-        });
-        row.addEventListener('keydown',event=>{
-          if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle();}
-        });
+      const toggleAbstractRow=row=>{
+        const index=row.getAttribute('data-toggle-index');
+        const subRows=visibleReportOutput.querySelectorAll(`.expense-abstract-subrow[data-parent-index="${index}"]`);
+        const opening=row.getAttribute('aria-expanded')!=='true';
+        subRows.forEach(subRow=>{subRow.hidden=!opening;});
+        row.setAttribute('aria-expanded',String(opening));
+        const mark=row.querySelector('.expense-abstract-toggle');
+        if(mark)mark.textContent=opening?'－':'＋';
+      };
+      visibleReportOutput.addEventListener('click',event=>{
+        const editBtn=event.target && event.target.closest ? event.target.closest('[data-expense-edit]') : null;
+        if(editBtn && visibleReportOutput.contains(editBtn)){
+          event.preventDefault(); event.stopPropagation();
+          const id=String(editBtn.getAttribute('data-expense-edit')||'').trim();
+          const rawIndex=editBtn.getAttribute('data-expense-row-index');
+          const numericIndex=rawIndex!==null && rawIndex!=='' ? Number(rawIndex) : -1;
+          const sortedForFallback=(rows||[]).slice().sort((a,b)=>{
+            const diff=String(a.expenseDate||'').slice(0,10).localeCompare(String(b.expenseDate||'').slice(0,10));
+            return dateSortAscending?diff:-diff;
+          });
+          const record=(rows||[]).find(item=>String(item.expenseId||'').trim()===id && id) ||
+            (cachedExpenses||[]).find(item=>String(item.expenseId||'').trim()===id && id) ||
+            (Number.isInteger(numericIndex) && numericIndex>=0 ? sortedForFallback[numericIndex] : null);
+          if(record){renderForm(record);}
+          else{
+            let notice=document.getElementById('expenseEditNotice');
+            if(!notice){notice=document.createElement('div');notice.id='expenseEditNotice';notice.style.cssText='position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:2147483647;background:#b42318;color:#fff;padding:10px 16px;border-radius:8px;max-width:90vw';document.body.appendChild(notice);}
+            notice.textContent='Expense record could not be identified. Please refresh the report and try again.';
+            setTimeout(()=>{if(notice)notice.remove();},3500);
+          }
+          return;
+        }
+        const row=event.target && event.target.closest ? event.target.closest('.expense-abstract-category-row') : null;
+        if(row && visibleReportOutput.contains(row)) toggleAbstractRow(row);
       });
-      visibleReportOutput.querySelectorAll('[data-expense-edit]').forEach(editBtn=>{
-        editBtn.addEventListener('click',event=>{
-          event.preventDefault();
-          event.stopPropagation();
-          const id=editBtn.getAttribute('data-expense-edit')||'';
-          const record=(rows||[]).find(item=>String(item.expenseId||'')===id)||
-            (cachedExpenses||[]).find(item=>String(item.expenseId||'')===id);
-          if(record)renderForm(record);
-          else status('This expense record could not be found. Please run the report again.','error');
-        });
+      visibleReportOutput.addEventListener('keydown',event=>{
+        if(event.key!=='Enter' && event.key!==' ') return;
+        const row=event.target && event.target.closest ? event.target.closest('.expense-abstract-category-row') : null;
+        if(row && visibleReportOutput.contains(row)){event.preventDefault();toggleAbstractRow(row);}
       });
     }
 
