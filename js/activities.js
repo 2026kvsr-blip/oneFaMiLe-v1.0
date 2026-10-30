@@ -430,7 +430,7 @@
     $('activityResetBtn').onclick=()=>setTimeout(resetForm,0);
   }
   function sensitiveGate(kind){styleOnce();const label=kind==='sensitive'?'Sensitive Activities - Report':'All Activities - Report';const inner=`<div class="expense-panel"><div class="expense-field"><label class="expense-label" for="activityPassCode">Pass Code</label><input id="activityPassCode" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Enter Pass Code"></div><div id="activityStatus" class="expense-status" role="status"></div><div class="expense-actions" style="display:flex;align-items:center;justify-content:center;align-items:center;gap:16px;margin-top:32px;flex-wrap:nowrap;width:100%"><button type="button" id="activityVerifyPass" class="expense-primary" style="margin:0">Verify</button><button type="button" id="activityModuleBack" class="expense-secondary" style="margin:0">← Back</button></div></div>`;page(shell(label,inner,true));bindBack();$('activityVerifyPass').onclick=async()=>{const pass=$('activityPassCode').value.trim();if(!pass){status('Enter Pass Code.','error');return}const btn=$('activityVerifyPass');btn.disabled=true;status('Verifying…');try{const res=await request('getActivities',{includeSensitive:'true',passCode:pass});if(res.status!=='success')throw new Error(res.message||'Pass Code verification failed.');cached=res.activities||[];activeAccess=kind;renderReports(kind,false,cached)}catch(e){status(e.message||'Verification failed.','error');btn.disabled=false}}}
-  function reportControls(custom){return `<style>.activity-page .expense-filter-grid .expense-field.hidden{display:none!important}.activity-page .expense-report-inline{display:flex;flex-direction:column;gap:5px}.activity-page .expense-report-inline .expense-label{white-space:nowrap;width:100%;margin:0!important}.activity-page .expense-report-inline select{display:block;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-custom-grid .expense-field{min-width:0}.activity-page .activity-custom-grid>.expense-field:has(#actFromDate){grid-row:4!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actToDate){grid-row:4!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actSearchText){grid-row:5!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actAssignedTo){grid-row:5!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actPersonDoctorOffice){grid-row:6!important;grid-column:1!important}.activity-page .activity-custom-grid #actShowColumnsField{grid-row:6!important;grid-column:2!important}.activity-page .expense-panel>.expense-report-actions{margin-top:24px!important;padding-top:2px!important}</style><div class="expense-panel"><div class="expense-filter-grid ${custom?'activity-custom-grid':''}">
+  function reportControls(custom){return `<style>.activity-page .expense-filter-grid .expense-field.hidden{display:none!important}.activity-page .expense-report-inline{display:flex;flex-direction:column;gap:5px}.activity-page .expense-report-inline .expense-label{white-space:nowrap;width:100%;margin:0!important}.activity-page .expense-report-inline select{display:block;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-custom-grid .expense-field{min-width:0}.activity-page .activity-custom-grid>.expense-field:has(#actFromDate){grid-row:4!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actToDate){grid-row:4!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actSearchText){grid-row:5!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actAssignedTo){grid-row:5!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actPersonDoctorOffice){grid-row:6!important;grid-column:1!important}.activity-page .activity-custom-grid #actShowColumnsField{grid-row:6!important;grid-column:2!important}.activity-page .expense-panel>.expense-report-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;justify-content:stretch!important;gap:8px!important;width:100%!important;margin-top:24px!important;padding-top:2px!important;box-sizing:border-box!important}.activity-page:not(.activity-report-view) .expense-panel>.expense-report-actions>button{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;flex:none!important;box-sizing:border-box!important}</style><div class="expense-panel"><div class="expense-filter-grid ${custom?'activity-custom-grid':''}">
     <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportType">Report Type</label><select id="actReportType">${options(['Abstract','Detailed'],'Select Type',true)}</select></div>
     <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportPeriod">Report Period</label><select id="actReportPeriod">${options(['Today','This Week','This Month','This Year','All'],'Select Period',true)}</select></div>
     <div class="expense-field"><label class="expense-label" for="actFilterCategory">Category</label><select id="actFilterCategory">${options(reportCategoryKeys(),'All Categories')}</select></div>
@@ -615,7 +615,7 @@
             const weekStart=new Date(key+'T12:00:00');
             const weekEnd=new Date(weekStart);
             weekEnd.setDate(weekEnd.getDate()+6);
-            groups[key].week=`${showDate(fmt(weekStart))} - ${showDate(fmt(weekEnd))}`;
+            groups[key].week=`${showDate(fmt(weekStart))}\u00a0to\u00a0${showDate(fmt(weekEnd))}`;
           }
           groups[key].count++;
           if(String(record.status||'').toLowerCase()==='completed')groups[key].completed++;
@@ -652,7 +652,7 @@
           weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
           const weekEnd=new Date(weekStart);
           weekEnd.setDate(weekEnd.getDate()+6);
-          periodHeading=`Week: ${showDate(fmt(weekStart))} - ${showDate(fmt(weekEnd))}`;
+          periodHeading=`Week: ${showDate(fmt(weekStart))}\u00a0to\u00a0${showDate(fmt(weekEnd))}`;
         }else if(p==='This Month'){
           periodHeading=`Month: ${now.toLocaleString('en-US',{month:'long',year:'numeric'})}`;
         }else{
@@ -718,7 +718,7 @@
       };
       const photoHtml=r=>{
         const photos=photoValues(r);
-        return photos.length?photos.map((url,i)=>`<button type="button" class="activity-photo-preview-btn" data-activity-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 40px;width:40px;height:40px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;cursor:pointer"><img src="${esc(photoThumbUrl(url))}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:38px;height:38px;object-fit:cover;border:1px solid #c4d4ff;border-radius:5px" onerror="this.style.display='none';this.parentElement.textContent='Open'"></button>`).join(''):'—';
+        return photos.length?photos.map((url,i)=>`<button type="button" class="activity-photo-preview-btn" data-activity-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 28px;width:28px;height:28px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;cursor:pointer"><img src="${esc(photoThumbUrl(url))}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:26px;height:26px;object-fit:cover;border:1px solid #c4d4ff;border-radius:4px" onerror="this.style.display='none';this.parentElement.textContent='Open'"></button>`).join(''):'—';
       };
       const centerNames=['Scheduled Date','Scheduled Time','Status','Sensitive','Reminder','Reminder Repeat','Reminder Date','Reminder Time','Priority','No of photos'];
       const allColumns=[
@@ -753,6 +753,9 @@
       // labels use a fixed two-column layout so every "Records :" starts
       // at the same horizontal position, regardless of the month name.
       const monthRecordCounts=new Map();
+      if(reportPeriod==='All'){
+        grouped+=`<tr class="expense-report-subheading expense-report-month activity-all-records-heading"><th colspan="${reportColCount}">All Records</th></tr>`;
+      }
       if(['This Year','All'].includes(reportPeriod)){
         rows.forEach(record=>{
           const recordDate=dateKey(record);
@@ -785,7 +788,7 @@
           weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
           const weekEnd=new Date(weekStart);
           weekEnd.setDate(weekEnd.getDate()+6);
-          const weekLabel=`${showDate(fmt(weekStart))} - ${showDate(fmt(weekEnd))}`;
+          const weekLabel=`${showDate(fmt(weekStart))}\u00a0to\u00a0${showDate(fmt(weekEnd))}`;
           if(weekLabel!==currentWeekHeading){
             currentWeekHeading=weekLabel;
             grouped+=`<tr class="expense-report-subheading"><th colspan="${reportColCount}">${esc(weekLabel)}</th></tr>`;
@@ -798,6 +801,26 @@
         }).join('');
         grouped+=`<tr><td class="report-center report-sno">${i+1}</td>${cells}</tr>`;
       });
+      if(!rows.length){
+        let emptyHeading='',emptyHeadingClass='expense-report-month';
+        if(reportPeriod==='Today'){
+          emptyHeading=showDate(today());
+          emptyHeadingClass='expense-report-date';
+        }else if(reportPeriod==='This Week'){
+          const weekStart=new Date();weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
+          const weekEnd=new Date(weekStart);weekEnd.setDate(weekEnd.getDate()+6);
+          emptyHeading=`${showDate(fmt(weekStart))}\u00a0to\u00a0${showDate(fmt(weekEnd))}`;
+        }else if(reportPeriod==='This Month'){
+          emptyHeading=new Date().toLocaleString('en-US',{month:'long',year:'numeric'});
+        }else if(reportPeriod==='This Year'){
+          emptyHeading=String(new Date().getFullYear());
+          emptyHeadingClass='expense-report-year';
+        }
+        if(emptyHeading){
+          grouped+=`<tr class="expense-report-subheading ${emptyHeadingClass}"><th colspan="${reportColCount}">${esc(emptyHeading)}</th></tr>`;
+        }
+        grouped+=`<tr><td colspan="${reportColCount}">No records found.</td></tr>`;
+      }
       table=`<div class="expense-results"><table><thead><tr><th class="report-center report-sno">S.No</th>${columns.map(c=>{const cls=reportColClass[c[0]]||'';const label=c[0]==='Scheduled Time'?'Scheduled<br>Time':esc(c[0]);return `<th class="${centerNames.includes(c[0])?'report-center ':''}${cls}">${label}</th>`}).join('')}</tr></thead><tbody>${grouped||`<tr><td colspan="${reportColCount}">No records found.</td></tr>`}</tbody></table></div>`;
     }
     $('actReportOutput').innerHTML=`<div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${total}</strong></div><div class="expense-summary-card"><small>Completed :</small><strong>${completed}</strong></div><div class="expense-summary-card"><small>Pending :</small><strong>${pending}</strong></div></div>${table}`;
