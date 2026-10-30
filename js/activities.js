@@ -755,7 +755,7 @@
         'Status':'report-status',
         'Edit':'report-edit-cell'
       };
-      const reportPeriod=$('actReportPeriod')?.value||'All';
+      const reportPeriod=selectedPeriodArg||reportSettings?.period||$('actReportPeriod')?.value||'All';
       const reportColCount=columns.length+1;
       let grouped='';
       // Always render the selected period as the first subheading, including
