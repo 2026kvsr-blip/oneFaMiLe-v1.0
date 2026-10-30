@@ -187,6 +187,11 @@
     .activity-page .expense-results th.report-center,.activity-page .expense-results td.report-center{vertical-align:middle!important}
     .activity-page .expense-results td.report-vcenter{vertical-align:middle!important}
     .activity-page .expense-results .activity-abstract-center{text-align:center!important;vertical-align:middle!important}
+    /* Abstract date-grouped reports: compact S.No, Year, Month and No columns. */
+    .activity-page.activity-report-abstract .expense-results th.activity-abstract-col-sno,.activity-page.activity-report-abstract .expense-results td.activity-abstract-col-sno{width:1%!important;min-width:42px!important;max-width:50px!important;padding-left:4px!important;padding-right:4px!important;white-space:nowrap!important}
+    .activity-page.activity-report-abstract .expense-results th.activity-abstract-col-year,.activity-page.activity-report-abstract .expense-results td.activity-abstract-col-year{width:1%!important;min-width:56px!important;max-width:66px!important;padding-left:5px!important;padding-right:5px!important;white-space:nowrap!important}
+    .activity-page.activity-report-abstract .expense-results th.activity-abstract-col-month,.activity-page.activity-report-abstract .expense-results td.activity-abstract-col-month{width:1%!important;min-width:78px!important;max-width:100px!important;padding-left:5px!important;padding-right:5px!important;white-space:nowrap!important}
+    .activity-page.activity-report-abstract .expense-results th.activity-abstract-col-no,.activity-page.activity-report-abstract .expense-results td.activity-abstract-col-no{width:1%!important;min-width:48px!important;max-width:58px!important;padding-left:4px!important;padding-right:4px!important;white-space:nowrap!important}
     /* Detailed report column widths: compact S.No/Edit, readable Status and two-line Scheduled Time. */
     .activity-page .expense-results th.report-sno,.activity-page .expense-results td.report-sno{width:36px!important;min-width:36px!important;max-width:36px!important;padding:4px 2px!important;white-space:nowrap!important;text-align:center!important;overflow-wrap:normal!important}
     .activity-page .expense-results th.report-status,.activity-page .expense-results td.report-status{width:96px!important;min-width:96px!important;max-width:108px!important;white-space:nowrap!important;text-align:center!important;overflow-wrap:normal!important}
@@ -468,10 +473,11 @@
       if(custom)return `Activities Custom Search - Abstract - ${periodLabel}`;
       return `Activities Abstract - ${periodLabel}`;
     }
-    if(kind==='sensitive')return 'Sensitive Activities - Detailed';
-    if(kind==='all')return 'All Activities - Detailed Report';
-    if(custom)return 'Activities Custom Search - Detailed';
-    return 'Activities Reports - Detailed';
+    const periodLabel=period==='This Week'?'This week':String(period||'All');
+    if(kind==='sensitive')return `Sensitive Activities Detailed - ${periodLabel}`;
+    if(kind==='all')return `All Activities Detailed - ${periodLabel}`;
+    if(custom)return `Activities Custom Search - Detailed - ${periodLabel}`;
+    return `Activities Detailed - ${periodLabel}`;
   }
   function renderReportPage(rows,type,kind,custom){
     styleOnce();
@@ -621,21 +627,27 @@
           if(String(record.status||'').toLowerCase()==='completed')groups[key].completed++;
         });
         const keys=Object.keys(groups).sort((a,b)=>dateAscending?a.localeCompare(b):b.localeCompare(a));
-        const centeredHeader=label=>`<th class="activity-abstract-center">${label}</th>`;
+        const abstractColumnClass=name=>({
+          'S.No':'activity-abstract-col-sno',
+          'Year':'activity-abstract-col-year',
+          'Month':'activity-abstract-col-month',
+          'No':'activity-abstract-col-no'
+        }[name]||'');
+        const centeredHeader=label=>`<th class="activity-abstract-center ${abstractColumnClass(label)}">${label}</th>`;
         let headers='';
         if(p==='Daily')headers=['S.No','Year','Month','Date','No','Completed'].map(centeredHeader).join('');
         else if(p==='Weekly')headers=['S.No','Year','Week','No','Completed'].map(centeredHeader).join('');
         else if(p==='Monthly')headers=['S.No','Year','Month','No','Completed'].map(centeredHeader).join('');
         else headers=['S.No','Year','No','Completed'].map(centeredHeader).join('');
-        const td=value=>`<td class="activity-abstract-center">${value}</td>`;
+        const td=(value,column='')=>`<td class="activity-abstract-center ${abstractColumnClass(column)}">${value}</td>`;
         const cells=(key,g,i)=>{
-          if(p==='Daily')return `${td(i+1)}${td(esc(g.year))}${td(esc(g.month))}${td(esc(g.date))}${td(g.count)}${td(g.completed)}`;
+          if(p==='Daily')return `${td(i+1,'S.No')}${td(esc(g.year),'Year')}${td(esc(g.month),'Month')}${td(esc(g.date),'Date')}${td(g.count,'No')}${td(g.completed,'Completed')}`;
           if(p==='Weekly'){
             const weekYear=key==='Unknown'?'—':String(new Date(key+'T12:00:00').getFullYear());
-            return `${td(i+1)}${td(esc(weekYear))}${td(esc(g.week))}${td(g.count)}${td(g.completed)}`;
+            return `${td(i+1,'S.No')}${td(esc(weekYear),'Year')}${td(esc(g.week),'Week')}${td(g.count,'No')}${td(g.completed,'Completed')}`;
           }
-          if(p==='Monthly')return `${td(i+1)}${td(esc(g.year))}${td(esc(g.month))}${td(g.count)}${td(g.completed)}`;
-          return `${td(i+1)}${td(esc(g.year))}${td(g.count)}${td(g.completed)}`;
+          if(p==='Monthly')return `${td(i+1,'S.No')}${td(esc(g.year),'Year')}${td(esc(g.month),'Month')}${td(g.count,'No')}${td(g.completed,'Completed')}`;
+          return `${td(i+1,'S.No')}${td(esc(g.year),'Year')}${td(g.count,'No')}${td(g.completed,'Completed')}`;
         };
         const colspan=p==='Daily'?6:(p==='Weekly'||p==='Monthly'?5:4);
         table=`<div class="expense-results"><table><thead><tr>${headers}</tr></thead><tbody>${keys.map((key,i)=>`<tr>${cells(key,groups[key],i)}</tr>`).join('')||`<tr><td class="activity-abstract-center" colspan="${colspan}">No records found.</td></tr>`}</tbody></table></div>`;
@@ -748,52 +760,29 @@
       const reportPeriod=$('actReportPeriod')?.value||'All';
       const reportColCount=columns.length+1;
       let grouped='';
-      let currentMonthHeading='',currentDayHeading='',currentWeekHeading='';
-      // Count records per month before rendering headings. The month/count
-      // labels use a fixed two-column layout so every "Records :" starts
-      // at the same horizontal position, regardless of the month name.
-      const monthRecordCounts=new Map();
-      if(reportPeriod==='All'){
-        grouped+=`<tr class="expense-report-subheading expense-report-month activity-all-records-heading"><th colspan="${reportColCount}">All Records</th></tr>`;
+      // Always render the selected period as the first subheading, including
+      // empty reports. Only the All period is labelled "All Records".
+      let periodHeading='';
+      if(reportPeriod==='Today'){
+        periodHeading=showDate(today());
+      }else if(reportPeriod==='This Week'){
+        const weekStart=new Date();
+        weekStart.setHours(12,0,0,0);
+        weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
+        const weekEnd=new Date(weekStart);
+        weekEnd.setDate(weekEnd.getDate()+6);
+        periodHeading=`${showDate(fmt(weekStart))}  to  ${showDate(fmt(weekEnd))}`;
+      }else if(reportPeriod==='This Month'){
+        periodHeading=new Date().toLocaleString('en-US',{month:'long',year:'numeric'});
+      }else if(reportPeriod==='This Year'){
+        periodHeading=String(new Date().getFullYear());
+      }else if(reportPeriod==='All'){
+        periodHeading='All Records';
       }
-      if(['This Year','All'].includes(reportPeriod)){
-        rows.forEach(record=>{
-          const recordDate=dateKey(record);
-          if(!recordDate)return;
-          const recordDateObj=new Date(recordDate+'T12:00:00');
-          const recordMonth=Number.isNaN(recordDateObj.getTime())
-            ? 'Unknown'
-            : recordDateObj.toLocaleString('en-US',{month:'long',year:'numeric'});
-          monthRecordCounts.set(recordMonth,(monthRecordCounts.get(recordMonth)||0)+1);
-        });
+      if(periodHeading){
+        grouped+=`<tr class="expense-report-subheading expense-report-month activity-period-heading ${reportPeriod==='All'?'activity-all-records-heading':''}"><th colspan="${reportColCount}">${esc(periodHeading)}</th></tr>`;
       }
       rows.forEach((r,i)=>{
-        const ds=dateKey(r);
-        if(ds && ['This Month','This Year','All'].includes(reportPeriod)){
-          const dateObj=new Date(ds+'T12:00:00');
-          const monthYear=Number.isNaN(dateObj.getTime())?'Unknown':dateObj.toLocaleString('en-US',{month:'long',year:'numeric'});
-          if(monthYear!==currentMonthHeading){
-            currentMonthHeading=monthYear;
-            const monthCount=monthRecordCounts.get(monthYear)||0;
-            const monthCountHtml=['This Year','All'].includes(reportPeriod)
-              ? `<span class="activity-month-records">Records : ${monthCount}</span>`
-              : '';
-            grouped+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${reportColCount}"><div class="activity-month-heading-content"><span class="activity-month-name">${esc(monthYear)}</span>${monthCountHtml}</div></th></tr>`;
-          }
-        }else if(ds && reportPeriod==='Today' && ds!==currentDayHeading){
-          currentDayHeading=ds;
-          grouped+=`<tr class="expense-report-subheading expense-report-date"><th colspan="${reportColCount}">${esc(showDate(ds))}</th></tr>`;
-        }else if(ds && reportPeriod==='This Week'){
-          const weekStart=new Date(ds+'T12:00:00');
-          weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
-          const weekEnd=new Date(weekStart);
-          weekEnd.setDate(weekEnd.getDate()+6);
-          const weekLabel=`${showDate(fmt(weekStart))}\u00a0to\u00a0${showDate(fmt(weekEnd))}`;
-          if(weekLabel!==currentWeekHeading){
-            currentWeekHeading=weekLabel;
-            grouped+=`<tr class="expense-report-subheading"><th colspan="${reportColCount}">${esc(weekLabel)}</th></tr>`;
-          }
-        }
         const cells=columns.map(c=>{
           const value=c[1](r);
           const cls=reportColClass[c[0]]||'';
@@ -802,24 +791,7 @@
         grouped+=`<tr><td class="report-center report-sno">${i+1}</td>${cells}</tr>`;
       });
       if(!rows.length){
-        let emptyHeading='',emptyHeadingClass='expense-report-month';
-        if(reportPeriod==='Today'){
-          emptyHeading=showDate(today());
-          emptyHeadingClass='expense-report-date';
-        }else if(reportPeriod==='This Week'){
-          const weekStart=new Date();weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
-          const weekEnd=new Date(weekStart);weekEnd.setDate(weekEnd.getDate()+6);
-          emptyHeading=`${showDate(fmt(weekStart))}\u00a0to\u00a0${showDate(fmt(weekEnd))}`;
-        }else if(reportPeriod==='This Month'){
-          emptyHeading=new Date().toLocaleString('en-US',{month:'long',year:'numeric'});
-        }else if(reportPeriod==='This Year'){
-          emptyHeading=String(new Date().getFullYear());
-          emptyHeadingClass='expense-report-year';
-        }
-        if(emptyHeading){
-          grouped+=`<tr class="expense-report-subheading ${emptyHeadingClass}"><th colspan="${reportColCount}">${esc(emptyHeading)}</th></tr>`;
-        }
-        grouped+=`<tr><td colspan="${reportColCount}">No records found.</td></tr>`;
+        grouped+=`<tr class="activity-report-empty"><td colspan="${reportColCount}">No records found.</td></tr>`;
       }
       table=`<div class="expense-results"><table><thead><tr><th class="report-center report-sno">S.No</th>${columns.map(c=>{const cls=reportColClass[c[0]]||'';const label=c[0]==='Scheduled Time'?'Scheduled<br>Time':esc(c[0]);return `<th class="${centerNames.includes(c[0])?'report-center ':''}${cls}">${label}</th>`}).join('')}</tr></thead><tbody>${grouped||`<tr><td colspan="${reportColCount}">No records found.</td></tr>`}</tbody></table></div>`;
     }
