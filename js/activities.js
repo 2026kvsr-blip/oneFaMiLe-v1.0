@@ -456,15 +456,24 @@
     type.value=custom?'Detailed':'Abstract';syncPeriodOptions();period.value='This Month';syncDateSortVisibility();syncShowColumnsVisibility();
     if(reportSettings){type.value=reportSettings.type;syncPeriodOptions();period.value=reportSettings.period;cat.value=reportSettings.category;syncSub();sub.value=reportSettings.subCategory;$('actFilterStatus').value=reportSettings.status;$('actFilterPriority').value=reportSettings.priority;if($('actShowColumns'))$('actShowColumns').value=reportSettings.showColumns;if($('actFromDate'))$('actFromDate').value=reportSettings.from;if($('actToDate'))$('actToDate').value=reportSettings.to;if($('actSearchText'))$('actSearchText').value=reportSettings.search;if($('actAssignedTo'))$('actAssignedTo').value=reportSettings.assigned;if($('actPersonDoctorOffice'))$('actPersonDoctorOffice').value=reportSettings.personDoctorOffice||'';dateAscending=reportSettings.dateAscending;syncDateSortVisibility();syncShowColumnsVisibility();reportSettings=null;}
   }
-  function reportPageTitle(type,kind,custom){
+  function reportPageTitle(type,kind,custom,period='All'){
     const detail=type==='Detailed';
-    if(kind==='sensitive')return `Sensitive Activities - ${detail?'Detailed':'Abstract'}`;
-    if(kind==='all')return detail?'All Activities - Detailed Report':'All Activities - Abstract Report';
-    if(custom)return `Activities Custom Search - ${detail?'Detailed':'Abstract'}`;
-    return `Activities Reports - ${detail?'Detailed':'Abstract'}`;
+    if(!detail){
+      const periodLabel=period==='This Week'?'This week':String(period||'All');
+      if(kind==='sensitive')return `Sensitive Activities Abstract - ${periodLabel}`;
+      if(kind==='all')return `All Activities Abstract - ${periodLabel}`;
+      if(custom)return `Activities Custom Search - Abstract - ${periodLabel}`;
+      return `Activities Abstract - ${periodLabel}`;
+    }
+    if(kind==='sensitive')return 'Sensitive Activities - Detailed';
+    if(kind==='all')return 'All Activities - Detailed Report';
+    if(custom)return 'Activities Custom Search - Detailed';
+    return 'Activities Reports - Detailed';
   }
   function renderReportPage(rows,type,kind,custom){
-    styleOnce();const label=reportPageTitle(type,kind,custom);
+    styleOnce();
+    const selectedPeriod=$('actReportPeriod')?.value||reportSettings?.period||'All';
+    const label=reportPageTitle(type,kind,custom,selectedPeriod);
     // Detailed report uses normal block flow: summary cards occupy their own
     // fixed-height row, and the report scroll viewport starts immediately below.
     // Separate table borders avoid Chrome's collapsed-border bleed-through on sticky TH cells.
@@ -573,8 +582,77 @@
       if(ra!==rb)return ra-rb;
       return String(a.activityType||'').localeCompare(String(b.activityType||''),undefined,{sensitivity:'base'});
     });
-    const total=rows.length,completed=rows.filter(r=>String(r.status).toLowerCase()==='completed').length,pending=rows.filter(r=>String(r.status).toLowerCase()==='pending').length;let table='';const p=$('actReportPeriod')?.value||'All';
-    if(type==='Abstract'){if(['Daily','Weekly','Monthly','Yearly'].includes(p)){const groups={};rows.forEach(r=>{const ds=String(r.startDate||r.dueDate||r.createdAt||'').slice(0,10);let key='Unknown';if(/^\d{4}-\d{2}-\d{2}$/.test(ds)){const d=new Date(ds+'T12:00:00');if(p==='Daily')key=ds;else if(p==='Weekly'){d.setDate(d.getDate()-((d.getDay()+6)%7));key=fmt(d)}else if(p==='Monthly')key=ds.slice(0,7);else key=ds.slice(0,4)}if(!groups[key])groups[key]={count:0,completed:0};groups[key].count++;if(String(r.status).toLowerCase()==='completed')groups[key].completed++});const keys=Object.keys(groups).sort((a,b)=>dateAscending?a.localeCompare(b):b.localeCompare(a));table=`<div class="expense-results"><table><thead><tr><th>S.No</th><th>${esc(p==='Daily'?'Date':p==='Weekly'?'Week Starting':p==='Monthly'?'Month':'Year')}</th><th>Activities</th><th>Completed</th></tr></thead><tbody>${keys.map((k,i)=>`<tr><td>${i+1}</td><td>${esc(k)}</td><td>${groups[k].count}</td><td>${groups[k].completed}</td></tr>`).join('')||'<tr><td colspan="4">No records found.</td></tr>'}</tbody></table></div>`}else{const groups={};rows.forEach(r=>{const c=String(r.category||'Other'),s=String(r.subCategory||'Other');if(!groups[c])groups[c]={count:0,completed:0,subs:{}};groups[c].count++;if(String(r.status).toLowerCase()==='completed')groups[c].completed++;if(!groups[c].subs[s])groups[c].subs[s]=0;groups[c].subs[s]++});let i=0;const body=Object.keys(groups).sort().map(c=>{const idx=i++,g=groups[c],subRows=Object.keys(g.subs).sort().map(s=>`<tr class="activity-abstract-subrow" data-parent="${idx}" hidden><td style="padding-left:28px">↳ ${esc(s)}</td><td>${g.subs[s]}</td><td>—</td></tr>`).join('');return `<tr class="activity-abstract-parent" data-index="${idx}" tabindex="0" role="button" aria-expanded="false" style="cursor:pointer"><td><span class="activity-toggle">＋</span> ${esc(c)}</td><td>${g.count}</td><td>${g.completed}</td></tr>${subRows}`}).join('');table=`<div class="expense-results"><table><thead><tr><th>Category / SubCategory</th><th>Activities</th><th>Completed</th></tr></thead><tbody>${body||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`}}
+    const total=rows.length,completed=rows.filter(r=>String(r.status).toLowerCase()==='completed').length,pending=rows.filter(r=>String(r.status).toLowerCase()==='pending').length;let table='';const p=$('actReportPeriod')?.value||reportSettings?.period||'All';
+    if(type==='Abstract'){
+      if(['Daily','Weekly','Monthly','Yearly'].includes(p)){
+        // Match the Expenses Abstract date-grouping layouts, using activity
+        // record counts in place of expense amounts.
+        const groups={};
+        rows.forEach(record=>{
+          const ds=dateKey(record);
+          const parts=ds.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+          let key='Unknown';
+          if(parts){
+            const year=parts[1],month=parts[2];
+            if(p==='Daily')key=`${year}-${month}-${parts[3]}`;
+            else if(p==='Weekly'){
+              const weekStart=new Date(ds+'T12:00:00');
+              weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
+              key=fmt(weekStart);
+            }else if(p==='Monthly')key=`${year}-${month}`;
+            else key=year;
+          }
+          if(!groups[key])groups[key]={year:'—',month:'—',date:'—',week:'—',count:0,completed:0};
+          if(parts){
+            groups[key].year=parts[1];
+            groups[key].month=new Date(Number(parts[1]),Number(parts[2])-1,1).toLocaleString('en-US',{month:'long'});
+            groups[key].date=showDate(ds);
+          }
+          if(p==='Weekly'&&key!=='Unknown'){
+            const weekStart=new Date(key+'T12:00:00');
+            const weekEnd=new Date(weekStart);
+            weekEnd.setDate(weekEnd.getDate()+6);
+            groups[key].week=`${showDate(fmt(weekStart))} - ${showDate(fmt(weekEnd))}`;
+          }
+          groups[key].count++;
+          if(String(record.status||'').toLowerCase()==='completed')groups[key].completed++;
+        });
+        const keys=Object.keys(groups).sort((a,b)=>dateAscending?a.localeCompare(b):b.localeCompare(a));
+        let headers='';
+        if(p==='Daily')headers='<th>S.No</th><th>Year</th><th>Month</th><th>Date</th><th>No</th><th>Completed</th>';
+        else if(p==='Weekly')headers='<th>S.No</th><th>Year</th><th>Week</th><th>No</th><th>Completed</th>';
+        else if(p==='Monthly')headers='<th>S.No</th><th>Year</th><th>Month</th><th>No</th><th>Completed</th>';
+        else headers='<th>S.No</th><th>Year</th><th>No</th><th>Completed</th>';
+        const cells=(key,g,i)=>{
+          if(p==='Daily')return `<td>${i+1}</td><td>${esc(g.year)}</td><td>${esc(g.month)}</td><td>${esc(g.date)}</td><td>${g.count}</td><td>${g.completed}</td>`;
+          if(p==='Weekly'){
+            const weekYear=key==='Unknown'?'—':String(new Date(key+'T12:00:00').getFullYear());
+            return `<td>${i+1}</td><td>${esc(weekYear)}</td><td>${esc(g.week)}</td><td>${g.count}</td><td>${g.completed}</td>`;
+          }
+          if(p==='Monthly')return `<td>${i+1}</td><td>${esc(g.year)}</td><td>${esc(g.month)}</td><td>${g.count}</td><td>${g.completed}</td>`;
+          return `<td>${i+1}</td><td>${esc(g.year)}</td><td>${g.count}</td><td>${g.completed}</td>`;
+        };
+        const colspan=p==='Daily'?6:(p==='Weekly'||p==='Monthly'?5:4);
+        table=`<div class="expense-results"><table><thead><tr>${headers}</tr></thead><tbody>${keys.map((key,i)=>`<tr>${cells(key,groups[key],i)}</tr>`).join('')||`<tr><td colspan="${colspan}">No records found.</td></tr>`}</tbody></table></div>`;
+      }else{
+        const groups={};
+        rows.forEach(r=>{
+          const c=String(r.category||'Other'),subCategory=String(r.subCategory||'Other');
+          if(!groups[c])groups[c]={count:0,completed:0,subs:{}};
+          groups[c].count++;
+          if(String(r.status).toLowerCase()==='completed')groups[c].completed++;
+          if(!groups[c].subs[subCategory])groups[c].subs[subCategory]=0;
+          groups[c].subs[subCategory]++;
+        });
+        let i=0;
+        const body=Object.keys(groups).sort().map(c=>{
+          const idx=i++,g=groups[c];
+          const subRows=Object.keys(g.subs).sort().map(subCategory=>`<tr class="activity-abstract-subrow" data-parent="${idx}" hidden><td style="padding-left:28px">↳ ${esc(subCategory)}</td><td>${g.subs[subCategory]}</td><td>—</td></tr>`).join('');
+          return `<tr class="activity-abstract-parent" data-index="${idx}" tabindex="0" role="button" aria-expanded="false" style="cursor:pointer"><td><span class="activity-toggle">＋</span> ${esc(c)}</td><td>${g.count}</td><td>${g.completed}</td></tr>${subRows}`;
+        }).join('');
+        table=`<div class="expense-results"><table><thead><tr><th>Category / SubCategory</th><th>Activities</th><th>Completed</th></tr></thead><tbody>${body||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
+      }
+    }
     else{
       const yesNo=v=>v===true||['true','yes','1','on'].includes(String(v==null?'':v).trim().toLowerCase())?'Yes':'No';
       const timeOnly=v=>{const x=String(v==null?'':v).trim();if(!x)return '';const m=x.match(/(?:T|\s)(\d{1,2}:\d{2})(?::\d{2})?/);if(m)return m[1].padStart(5,'0');const n=x.match(/^(\d{1,2}:\d{2})(?::\d{2})?$/);return n?n[1].padStart(5,'0'):x};
