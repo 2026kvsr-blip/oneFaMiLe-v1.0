@@ -463,9 +463,10 @@
     // Keep Detailed Report spacing and grouped month headings self-contained on
     // this final report page, so earlier page styles cannot reopen the top gap.
     const detailedReportStyles=type==='Detailed'?`<style id="activityDetailedReportOverrides">
-      .activity-page.activity-report-detailed #actReportOutput{display:block!important;margin:0!important;padding:0!important;line-height:normal!important}
-      .activity-page.activity-report-detailed #actReportOutput>.expense-summary{display:flex!important;margin:0!important;padding:0!important;border:0!important;}
-      .activity-page.activity-report-detailed #actReportOutput>.expense-results{display:block!important;position:relative!important;top:0!important;margin:-2px 0 0!important;padding:0!important;border:0!important;overflow-x:auto!important;overflow-y:auto!important;}
+      /* Keep a visible 8px separation between summary cards and the report scroll area. */
+      .activity-page.activity-report-detailed #actReportOutput{display:flex!important;flex-direction:column!important;row-gap:8px!important;margin:0!important;padding:0!important;line-height:normal!important}
+      .activity-page.activity-report-detailed #actReportOutput>.expense-summary{display:flex!important;flex:0 0 auto!important;margin:0!important;padding:0!important;border:0!important;}
+      .activity-page.activity-report-detailed #actReportOutput>.expense-results{display:block!important;flex:0 0 auto!important;position:relative!important;top:0!important;margin:0!important;padding:0!important;border:0!important;overflow-x:auto!important;overflow-y:auto!important;}
       .activity-page.activity-report-detailed #actReportOutput>.expense-results table{display:table!important;margin:0!important;padding:0!important;border-spacing:0!important;border-collapse:collapse!important;}
       .activity-page.activity-report-detailed #actReportOutput>.expense-results table>thead>tr>th{position:sticky!important;top:0!important;z-index:100!important;background:#dce7ff!important;background-color:#dce7ff!important;background-clip:border-box!important;}
       .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.expense-report-month{height:26px!important;min-height:26px!important;}
