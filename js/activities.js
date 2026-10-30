@@ -460,7 +460,7 @@
     
     const dateSortBtn=$('actDateSortBtn');if(dateSortBtn)dateSortBtn.onclick=()=>{dateAscending=!dateAscending;dateSortBtn.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';dateSortBtn.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');dateSortBtn.title=dateAscending?'Sort date ascending':'Sort date descending';if(lastRows.length)renderReportResults(lastRows,type.value)};
     const showColumns=$('actShowColumns');if(showColumns)showColumns.onchange=()=>{if(lastRows.length)renderReportResults(lastRows,type.value)};
-    run.onclick=async()=>{run.disabled=true;status('Loading activities…');try{let rows=cached;if(!rows.length){const fields={};if(kind==='sensitive'||kind==='all'){fields.includeSensitive='true';const pass=$('activityPassCode')?.value?.trim();if(pass)fields.passCode=pass;}const res=await request('getActivities',fields);if(res.status!=='success')throw new Error(res.message||'Unable to load activities.');rows=res.activities||[];cached=rows;}const filtered=filterRows(rows,custom,kind);lastRows=filtered.slice();reportSettings={type:type.value,period:period.value,category:cat.value,subCategory:sub.value,status:$('actFilterStatus').value,priority:$('actFilterPriority').value,showColumns:$('actShowColumns')?.value||'limited',dateAscending,from:$('actFromDate')?.value||'',to:$('actToDate')?.value||'',search:$('actSearchText')?.value||'',assigned:$('actAssignedTo')?.value||'',personDoctorOffice:$('actPersonDoctorOffice')?.value||''};renderReportPage(filtered,type.value,kind,custom);}catch(e){status(e.message||'Unable to load activities.','error')}finally{run.disabled=false}};
+    run.onclick=async()=>{run.disabled=true;status('Loading activities…');try{let rows=cached;if(!rows.length){const fields={};if(kind==='sensitive'||kind==='all'){fields.includeSensitive='true';const pass=$('activityPassCode')?.value?.trim();if(pass)fields.passCode=pass;}const res=await request('getActivities',fields);if(res.status!=='success')throw new Error(res.message||'Unable to load activities.');rows=res.activities||[];cached=rows;}const filtered=filterRows(rows,custom,kind);lastRows=filtered.slice();reportSettings={type:type.value,period:period.value,category:cat.value,subCategory:sub.value,status:$('actFilterStatus').value,priority:$('actFilterPriority').value,showColumns:$('actShowColumns')?.value||'limited',dateAscending,from:$('actFromDate')?.value||'',to:$('actToDate')?.value||'',search:$('actSearchText')?.value||'',assigned:$('actAssignedTo')?.value||'',personDoctorOffice:$('actPersonDoctorOffice')?.value||''};renderReportPage(filtered,type.value,kind,custom,period.value);}catch(e){status(e.message||'Unable to load activities.','error')}finally{run.disabled=false}};
     type.value=custom?'Detailed':'Abstract';syncPeriodOptions();period.value='This Month';syncDateSortVisibility();syncShowColumnsVisibility();
     if(reportSettings){type.value=reportSettings.type;syncPeriodOptions();period.value=reportSettings.period;cat.value=reportSettings.category;syncSub();sub.value=reportSettings.subCategory;$('actFilterStatus').value=reportSettings.status;$('actFilterPriority').value=reportSettings.priority;if($('actShowColumns'))$('actShowColumns').value=reportSettings.showColumns;if($('actFromDate'))$('actFromDate').value=reportSettings.from;if($('actToDate'))$('actToDate').value=reportSettings.to;if($('actSearchText'))$('actSearchText').value=reportSettings.search;if($('actAssignedTo'))$('actAssignedTo').value=reportSettings.assigned;if($('actPersonDoctorOffice'))$('actPersonDoctorOffice').value=reportSettings.personDoctorOffice||'';dateAscending=reportSettings.dateAscending;syncDateSortVisibility();syncShowColumnsVisibility();reportSettings=null;}
   }
@@ -479,9 +479,9 @@
     if(custom)return `Activities Custom Search - Detailed - ${periodLabel}`;
     return `Activities Detailed - ${periodLabel}`;
   }
-  function renderReportPage(rows,type,kind,custom){
+  function renderReportPage(rows,type,kind,custom,selectedPeriodArg){
     styleOnce();
-    const selectedPeriod=$('actReportPeriod')?.value||reportSettings?.period||'All';
+    const selectedPeriod=selectedPeriodArg||$('actReportPeriod')?.value||reportSettings?.period||'All';
     const label=reportPageTitle(type,kind,custom,selectedPeriod);
     // Detailed report uses normal block flow: summary cards occupy their own
     // fixed-height row, and the report scroll viewport starts immediately below.
@@ -556,7 +556,7 @@
       }
     </style>`:'';
     const inner=`${detailedReportStyles}<div class="expense-panel"><div id="actReportOutput"></div><div class="expense-report-actions"><div class="expense-download-wrap"><button type="button" id="activityDownloadBtn" class="expense-secondary">Download ▾</button><div id="activityDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div><button type="button" id="activityReportDateSort" class="expense-date-sort">${dateAscending?'↑ Date Ascending':'↓ Date Descending'}</button><button type="button" id="activityReportBack" class="expense-secondary">← Back</button></div></div>`;
-    page(shell(label,inner,true));const reportPage=document.querySelector('.activity-page');if(reportPage){reportPage.classList.add('activity-report-view');if(type==='Detailed')reportPage.classList.add('activity-report-detailed');else reportPage.classList.add('activity-report-abstract');}renderReportResults(rows,type);const reportSort=$('activityReportDateSort');if(reportSort)reportSort.onclick=()=>{dateAscending=!dateAscending;reportSort.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';reportSort.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');reportSort.title=dateAscending?'Sort date ascending':'Sort date descending';renderReportResults(lastRows,type)};const dl=$('activityDownloadBtn'),menu=$('activityDownloadMenu');if(dl&&menu){dl.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportReport(b.dataset.export)});}const back=$('activityReportBack');if(back)back.onclick=()=>renderReports(kind,custom,cached);
+    page(shell(label,inner,true));const reportPage=document.querySelector('.activity-page');if(reportPage){reportPage.classList.add('activity-report-view');if(type==='Detailed')reportPage.classList.add('activity-report-detailed');else reportPage.classList.add('activity-report-abstract');}renderReportResults(rows,type,selectedPeriod);const reportSort=$('activityReportDateSort');if(reportSort)reportSort.onclick=()=>{dateAscending=!dateAscending;reportSort.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';reportSort.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');reportSort.title=dateAscending?'Sort date ascending':'Sort date descending';renderReportResults(lastRows,type,selectedPeriod)};const dl=$('activityDownloadBtn'),menu=$('activityDownloadMenu');if(dl&&menu){dl.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportReport(b.dataset.export)});}const back=$('activityReportBack');if(back)back.onclick=()=>renderReports(kind,custom,cached);
   }
   function filterRows(rows,custom,kind){
     let from=custom?($('actFromDate')?.value||''):'',to=custom?($('actToDate')?.value||''):'';const p=$('actReportPeriod').value,now=new Date();
@@ -564,7 +564,7 @@
     const start=from?new Date(from+'T00:00:00').getTime():null,end=to?new Date(to+'T23:59:59').getTime():null;const c=$('actFilterCategory').value,s=$('actFilterSub').value,st=$('actFilterStatus').value,pr=$('actFilterPriority').value,q=custom?($('actSearchText')?.value||'').trim().toLowerCase():'',assigned=custom?($('actAssignedTo')?.value||'').trim().toLowerCase():'',personDoctorOffice=custom?($('actPersonDoctorOffice')?.value||'').trim().toLowerCase():'';
     return rows.filter(r=>{const date=String(r.startDate||r.dueDate||r.createdAt||'').slice(0,10);const time=date?new Date(date+'T12:00:00').getTime():0;if(start!==null&&time<start)return false;if(end!==null&&time>end)return false;if(c&&String(r.category||'')!==c)return false;if(s&&String(r.subCategory||'')!==s)return false;if(st&&String(r.status||'')!==st)return false;if(pr&&String(r.priority||'')!==pr)return false;if(assigned&&!String(r.assignedTo||'').toLowerCase().includes(assigned))return false;if(personDoctorOffice&&!`${r.appointmentPerson||''} ${r.person||''} ${r.doctor||''} ${r.office||''}`.toLowerCase().includes(personDoctorOffice))return false;if(q&&!`${r.title||''} ${r.category||''} ${r.subCategory||''} ${r.description||''} ${r.tags||''} ${r.status||''} ${r.activityType||''} ${r.assignedTo||''}`.toLowerCase().includes(q))return false;if(kind==='normal'&&sensitiveFlag(r.isSensitive))return false;if(kind==='sensitive'&&!sensitiveFlag(r.isSensitive))return false;return true})
   }
-  function renderReportResults(rows,type){
+  function renderReportResults(rows,type,selectedPeriodArg){
     const typeOrder=Object.keys(ACTIVITY_CONFIG).filter(name=>name!=='Reminder');
     const typeRank=new Map(typeOrder.map((name,index)=>[name,index]));
     const dateKey=row=>String(row.startDate||row.dueDate||row.createdAt||'').slice(0,10);
@@ -591,7 +591,7 @@
       if(ra!==rb)return ra-rb;
       return String(a.activityType||'').localeCompare(String(b.activityType||''),undefined,{sensitivity:'base'});
     });
-    const total=rows.length,completed=rows.filter(r=>String(r.status).toLowerCase()==='completed').length,pending=rows.filter(r=>String(r.status).toLowerCase()==='pending').length;let table='';const p=$('actReportPeriod')?.value||reportSettings?.period||'All';
+    const total=rows.length,completed=rows.filter(r=>String(r.status).toLowerCase()==='completed').length,pending=rows.filter(r=>String(r.status).toLowerCase()==='pending').length;let table='';const p=selectedPeriodArg||$('actReportPeriod')?.value||reportSettings?.period||'All';
     if(type==='Abstract'){
       if(['Daily','Weekly','Monthly','Yearly'].includes(p)){
         // Date-grouped Abstract reports mirror the Expenses layout.
@@ -726,11 +726,11 @@
       const photoThumbUrl=url=>{
         const raw=String(url||'');
         const match=raw.match(/[?&]id=([^&]+)/i)||raw.match(/\/d\/([^/?]+)/i);
-        return /drive\.google\.com/i.test(raw)&&match?`https://drive.google.com/thumbnail?id=${match[1]}&sz=w180`:raw;
+        return /drive\.google\.com/i.test(raw)&&match?`https://drive.google.com/thumbnail?id=${match[1]}&sz=w100`:raw;
       };
       const photoHtml=r=>{
         const photos=photoValues(r);
-        return photos.length?photos.map((url,i)=>`<button type="button" class="activity-photo-preview-btn" data-activity-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 28px;width:28px;height:28px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;cursor:pointer"><img src="${esc(photoThumbUrl(url))}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:26px;height:26px;object-fit:cover;border:1px solid #c4d4ff;border-radius:4px" onerror="this.style.display='none';this.parentElement.textContent='Open'"></button>`).join(''):'—';
+        return photos.length?photos.map((url,i)=>`<button type="button" class="activity-photo-preview-btn" data-activity-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 20px;width:20px;height:20px;align-items:center;justify-content:center;padding:0;margin:0 1px;border:0;background:transparent;cursor:pointer"><img src="${esc(photoThumbUrl(url))}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:18px;height:18px;object-fit:cover;border:1px solid #c4d4ff;border-radius:3px" onerror="this.style.display='none';this.parentElement.textContent='Open'"></button>`).join(''):'—';
       };
       const centerNames=['Scheduled Date','Scheduled Time','Status','Sensitive','Reminder','Reminder Repeat','Reminder Date','Reminder Time','Priority','No of photos'];
       const allColumns=[
