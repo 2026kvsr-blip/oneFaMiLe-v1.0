@@ -185,6 +185,7 @@
     .activity-page .expense-results table th{height:58px;box-sizing:border-box;vertical-align:middle!important;text-align:center!important;line-height:1.15;overflow-wrap:normal;word-break:normal;min-width:76px;max-width:112px;padding:6px 5px}.activity-page .expense-results table th:nth-child(11){min-width:92px;max-width:96px}.activity-page .expense-results table th:nth-child(12),.activity-page .expense-results table th:nth-child(13){min-width:82px;max-width:92px}
     .activity-page .expense-results th.report-center,.activity-page .expense-results td.report-center{vertical-align:middle!important}
     .activity-page .expense-results td.report-vcenter{vertical-align:middle!important}
+    .activity-page .expense-results .activity-abstract-center{text-align:center!important;vertical-align:middle!important}
     /* Detailed report column widths: compact S.No/Edit, readable Status and two-line Scheduled Time. */
     .activity-page .expense-results th.report-sno,.activity-page .expense-results td.report-sno{width:36px!important;min-width:36px!important;max-width:36px!important;padding:4px 2px!important;white-space:nowrap!important;text-align:center!important;overflow-wrap:normal!important}
     .activity-page .expense-results th.report-status,.activity-page .expense-results td.report-status{width:96px!important;min-width:96px!important;max-width:108px!important;white-space:nowrap!important;text-align:center!important;overflow-wrap:normal!important}
@@ -585,8 +586,8 @@
     const total=rows.length,completed=rows.filter(r=>String(r.status).toLowerCase()==='completed').length,pending=rows.filter(r=>String(r.status).toLowerCase()==='pending').length;let table='';const p=$('actReportPeriod')?.value||reportSettings?.period||'All';
     if(type==='Abstract'){
       if(['Daily','Weekly','Monthly','Yearly'].includes(p)){
-        // Match the Expenses Abstract date-grouping layouts, using activity
-        // record counts in place of expense amounts.
+        // Date-grouped Abstract reports mirror the Expenses layout.
+        // Every column is horizontally centered in these four grouped views.
         const groups={};
         rows.forEach(record=>{
           const ds=dateKey(record);
@@ -618,23 +619,52 @@
           if(String(record.status||'').toLowerCase()==='completed')groups[key].completed++;
         });
         const keys=Object.keys(groups).sort((a,b)=>dateAscending?a.localeCompare(b):b.localeCompare(a));
+        const centeredHeader=label=>`<th class="activity-abstract-center">${label}</th>`;
         let headers='';
-        if(p==='Daily')headers='<th>S.No</th><th>Year</th><th>Month</th><th>Date</th><th>No</th><th>Completed</th>';
-        else if(p==='Weekly')headers='<th>S.No</th><th>Year</th><th>Week</th><th>No</th><th>Completed</th>';
-        else if(p==='Monthly')headers='<th>S.No</th><th>Year</th><th>Month</th><th>No</th><th>Completed</th>';
-        else headers='<th>S.No</th><th>Year</th><th>No</th><th>Completed</th>';
+        if(p==='Daily')headers=['S.No','Year','Month','Date','No','Completed'].map(centeredHeader).join('');
+        else if(p==='Weekly')headers=['S.No','Year','Week','No','Completed'].map(centeredHeader).join('');
+        else if(p==='Monthly')headers=['S.No','Year','Month','No','Completed'].map(centeredHeader).join('');
+        else headers=['S.No','Year','No','Completed'].map(centeredHeader).join('');
+        const td=value=>`<td class="activity-abstract-center">${value}</td>`;
         const cells=(key,g,i)=>{
-          if(p==='Daily')return `<td>${i+1}</td><td>${esc(g.year)}</td><td>${esc(g.month)}</td><td>${esc(g.date)}</td><td>${g.count}</td><td>${g.completed}</td>`;
+          if(p==='Daily')return `${td(i+1)}${td(esc(g.year))}${td(esc(g.month))}${td(esc(g.date))}${td(g.count)}${td(g.completed)}`;
           if(p==='Weekly'){
             const weekYear=key==='Unknown'?'—':String(new Date(key+'T12:00:00').getFullYear());
-            return `<td>${i+1}</td><td>${esc(weekYear)}</td><td>${esc(g.week)}</td><td>${g.count}</td><td>${g.completed}</td>`;
+            return `${td(i+1)}${td(esc(weekYear))}${td(esc(g.week))}${td(g.count)}${td(g.completed)}`;
           }
-          if(p==='Monthly')return `<td>${i+1}</td><td>${esc(g.year)}</td><td>${esc(g.month)}</td><td>${g.count}</td><td>${g.completed}</td>`;
-          return `<td>${i+1}</td><td>${esc(g.year)}</td><td>${g.count}</td><td>${g.completed}</td>`;
+          if(p==='Monthly')return `${td(i+1)}${td(esc(g.year))}${td(esc(g.month))}${td(g.count)}${td(g.completed)}`;
+          return `${td(i+1)}${td(esc(g.year))}${td(g.count)}${td(g.completed)}`;
         };
         const colspan=p==='Daily'?6:(p==='Weekly'||p==='Monthly'?5:4);
-        table=`<div class="expense-results"><table><thead><tr>${headers}</tr></thead><tbody>${keys.map((key,i)=>`<tr>${cells(key,groups[key],i)}</tr>`).join('')||`<tr><td colspan="${colspan}">No records found.</td></tr>`}</tbody></table></div>`;
+        table=`<div class="expense-results"><table><thead><tr>${headers}</tr></thead><tbody>${keys.map((key,i)=>`<tr>${cells(key,groups[key],i)}</tr>`).join('')||`<tr><td class="activity-abstract-center" colspan="${colspan}">No records found.</td></tr>`}</tbody></table></div>`;
+      }else if(['Today','This Week','This Month','This Year'].includes(p)){
+        // A single period-summary row for Today / This Week / This Month / This Year.
+        // The first column names the selected period and its corresponding date range.
+        const now=new Date();
+        const todayValue=today();
+        let periodHeader='',periodValue='';
+        if(p==='Today'){
+          periodHeader='Date';
+          periodValue=showDate(todayValue);
+        }else if(p==='This Week'){
+          periodHeader='Week';
+          const start=new Date(todayValue+'T12:00:00');
+          start.setDate(start.getDate()-((start.getDay()+6)%7));
+          const finish=new Date(start);
+          finish.setDate(finish.getDate()+6);
+          periodValue=`${showDate(fmt(start))} - ${showDate(fmt(finish))}`;
+        }else if(p==='This Month'){
+          periodHeader='Month';
+          periodValue=now.toLocaleString('en-US',{month:'long',year:'numeric'});
+        }else{
+          periodHeader='Year';
+          periodValue=String(now.getFullYear());
+        }
+        const periodCount=rows.length;
+        const periodCompleted=rows.filter(record=>String(record.status||'').toLowerCase()==='completed').length;
+        table=`<div class="expense-results"><table><thead><tr><th>${periodHeader}</th><th class="activity-abstract-center">Activities</th><th class="activity-abstract-center">Completed</th></tr></thead><tbody><tr><td>${esc(periodValue)}</td><td class="activity-abstract-center">${periodCount}</td><td class="activity-abstract-center">${periodCompleted}</td></tr></tbody></table></div>`;
       }else{
+        // "All" retains the existing expandable Category / SubCategory summary.
         const groups={};
         rows.forEach(r=>{
           const c=String(r.category||'Other'),subCategory=String(r.subCategory||'Other');
@@ -647,10 +677,10 @@
         let i=0;
         const body=Object.keys(groups).sort().map(c=>{
           const idx=i++,g=groups[c];
-          const subRows=Object.keys(g.subs).sort().map(subCategory=>`<tr class="activity-abstract-subrow" data-parent="${idx}" hidden><td style="padding-left:28px">↳ ${esc(subCategory)}</td><td>${g.subs[subCategory]}</td><td>—</td></tr>`).join('');
-          return `<tr class="activity-abstract-parent" data-index="${idx}" tabindex="0" role="button" aria-expanded="false" style="cursor:pointer"><td><span class="activity-toggle">＋</span> ${esc(c)}</td><td>${g.count}</td><td>${g.completed}</td></tr>${subRows}`;
+          const subRows=Object.keys(g.subs).sort().map(subCategory=>`<tr class="activity-abstract-subrow" data-parent="${idx}" hidden><td style="padding-left:28px">↳ ${esc(subCategory)}</td><td class="activity-abstract-center">${g.subs[subCategory]}</td><td class="activity-abstract-center">—</td></tr>`).join('');
+          return `<tr class="activity-abstract-parent" data-index="${idx}" tabindex="0" role="button" aria-expanded="false" style="cursor:pointer"><td><span class="activity-toggle">＋</span> ${esc(c)}</td><td class="activity-abstract-center">${g.count}</td><td class="activity-abstract-center">${g.completed}</td></tr>${subRows}`;
         }).join('');
-        table=`<div class="expense-results"><table><thead><tr><th>Category / SubCategory</th><th>Activities</th><th>Completed</th></tr></thead><tbody>${body||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
+        table=`<div class="expense-results"><table><thead><tr><th>Category / SubCategory</th><th class="activity-abstract-center">Activities</th><th class="activity-abstract-center">Completed</th></tr></thead><tbody>${body||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
       }
     }
     else{
