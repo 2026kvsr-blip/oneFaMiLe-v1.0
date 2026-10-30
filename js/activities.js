@@ -175,9 +175,14 @@
 
     /* Report refinements: fixed scroll viewport, centered two-line headers, and report-page date sort */
     .activity-page .expense-results{max-height:55vh!important;overflow:auto!important;overscroll-behavior:contain}
-    /* Detailed Activities: close the top gap and keep an opaque heading row above scrolling records. */
+    /* Detailed Activities: let the sticky heading cover the small strip above the table. */
     .activity-page.activity-report-detailed .expense-results{margin-top:0!important;overflow-x:auto!important;overflow-y:auto!important;position:relative!important;isolation:isolate!important}
     .activity-page.activity-report-detailed .expense-results table thead th{position:sticky!important;top:0!important;z-index:30!important;background:#dce7ff!important}
+    /* The summary has a 9px bottom margin. Pull the Detailed table into that gap
+       so scrolling rows cannot appear in a strip above the column headings. */
+    .activity-page.activity-report-detailed #actReportOutput>.expense-results{margin-top:-9px!important}
+    .activity-page.activity-report-detailed #actReportOutput>.expense-results table{margin:0!important;border-spacing:0!important}
+    .activity-page.activity-report-detailed #actReportOutput>.expense-results table thead th{position:sticky!important;top:0!important;z-index:100!important;background-color:#dce7ff!important;background-clip:border-box!important}
     .activity-page .expense-results table th{height:58px;box-sizing:border-box;vertical-align:middle!important;text-align:center!important;line-height:1.15;overflow-wrap:normal;word-break:normal;min-width:76px;max-width:112px;padding:6px 5px}.activity-page .expense-results table th:nth-child(11){min-width:92px;max-width:96px}.activity-page .expense-results table th:nth-child(12),.activity-page .expense-results table th:nth-child(13){min-width:82px;max-width:92px}
     .activity-page .expense-results th.report-center,.activity-page .expense-results td.report-center{vertical-align:middle!important}
     /* Detailed report column widths: compact S.No/Edit, readable Status and two-line Scheduled Time. */
