@@ -781,14 +781,41 @@
       if(periodHeading){
         grouped+=`<tr class="expense-report-subheading expense-report-month activity-period-heading ${reportPeriod==='All'?'activity-all-records-heading':''}"><th colspan="${reportColCount}">${esc(periodHeading)}</th></tr>`;
       }
-      rows.forEach((r,i)=>{
+      // Build each detailed record row once so All can be grouped month-wise
+      // without changing the row layout, photo buttons, edit action, or S.No order.
+      let activitySerial=0;
+      const renderActivityRecordRow=r=>{
+        activitySerial++;
         const cells=columns.map(c=>{
           const value=c[1](r);
           const cls=reportColClass[c[0]]||'';
           return `<td class="${centerNames.includes(c[0])?'report-center ':''}${cls}">${(c[0]==='Photos'||c[0]==='Edit')?value:esc(value)}</td>`;
         }).join('');
-        grouped+=`<tr><td class="report-center report-sno">${i+1}</td>${cells}</tr>`;
-      });
+        return `<tr><td class="report-center report-sno">${activitySerial}</td>${cells}</tr>`;
+      };
+      if(reportPeriod==='All'){
+        // All Records is followed by one Month - Year heading for every month.
+        // The already-sorted rows keep their current ascending/descending order.
+        const monthGroups=new Map();
+        rows.forEach(r=>{
+          const ds=dateKey(r);
+          const match=ds.match(/^(\d{4})-(\d{2})-/);
+          const key=match?`${match[1]}-${match[2]}`:'Unknown';
+          if(!monthGroups.has(key)){
+            const monthLabel=match
+              ? `${new Date(Number(match[1]),Number(match[2])-1,1).toLocaleString('en-US',{month:'long'})} - ${match[1]}`
+              : 'Date Not Available';
+            monthGroups.set(key,{label:monthLabel,records:[]});
+          }
+          monthGroups.get(key).records.push(r);
+        });
+        monthGroups.forEach(group=>{
+          grouped+=`<tr class="expense-report-subheading expense-report-month activity-month-group-heading"><th colspan="${reportColCount}">${esc(group.label)}</th></tr>`;
+          group.records.forEach(r=>{grouped+=renderActivityRecordRow(r)});
+        });
+      }else{
+        rows.forEach(r=>{grouped+=renderActivityRecordRow(r)});
+      }
       if(!rows.length){
         grouped+=`<tr class="activity-report-empty"><td colspan="${reportColCount}">No records found.</td></tr>`;
       }
