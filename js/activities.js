@@ -460,17 +460,63 @@
   }
   function renderReportPage(rows,type,kind,custom){
     styleOnce();const label=reportPageTitle(type,kind,custom);
-    // Keep Detailed Report spacing and grouped month headings self-contained on
-    // this final report page, so earlier page styles cannot reopen the top gap.
+    // Detailed report uses normal block flow: summary cards occupy their own
+    // fixed-height row, and the report scroll viewport starts immediately below.
+    // Separate table borders avoid Chrome's collapsed-border bleed-through on sticky TH cells.
     const detailedReportStyles=type==='Detailed'?`<style id="activityDetailedReportOverrides">
-      /* No blank strip between summary cards and the Detailed Report heading row. */
-      .activity-page.activity-report-detailed #actReportOutput{display:flex!important;flex-direction:column!important;gap:0!important;row-gap:0!important;margin:0!important;padding:0!important;line-height:normal!important;}
-      .activity-page.activity-report-detailed #actReportOutput>.expense-summary{display:flex!important;flex:0 0 auto!important;margin:0!important;padding:0!important;border:0!important;}
-      .activity-page.activity-report-detailed #actReportOutput>.expense-results{display:block!important;flex:0 0 auto!important;position:relative!important;top:0!important;margin:0!important;padding:0!important;border:0!important;overflow-x:auto!important;overflow-y:auto!important;}
-      .activity-page.activity-report-detailed #actReportOutput>.expense-results table{display:table!important;margin:0!important;padding:0!important;border-spacing:0!important;border-collapse:collapse!important;}
-      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>thead>tr>th{position:sticky!important;top:0!important;z-index:100!important;background:#dce7ff!important;background-color:#dce7ff!important;background-clip:border-box!important;}
-      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.expense-report-month{height:26px!important;min-height:26px!important;}
-      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.expense-report-month>th{position:static!important;top:auto!important;z-index:auto!important;display:table-cell!important;height:26px!important;min-height:26px!important;max-height:26px!important;padding:2px 9px!important;line-height:1.1!important;vertical-align:middle!important;text-align:left!important;white-space:nowrap!important;font-size:14px!important;font-weight:700!important;color:#e67e22!important;background:#fff1d9!important;background-color:#fff1d9!important;border-top:1px solid #e8cda6!important;border-bottom:1px solid #e8cda6!important;}
+      .activity-page.activity-report-detailed #actReportOutput{
+        display:block!important;position:relative!important;overflow:visible!important;
+        margin:0!important;padding:0!important;line-height:normal!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput>.expense-summary{
+        display:flex!important;position:relative!important;z-index:5!important;
+        width:100%!important;height:40px!important;min-height:40px!important;
+        margin:0!important;padding:0!important;border:0!important;
+        box-sizing:border-box!important;background:#f0f7ff!important;
+        opacity:1!important;isolation:isolate!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput>.expense-summary>.expense-summary-card{
+        position:relative!important;z-index:6!important;flex:1 1 0!important;
+        height:40px!important;min-height:40px!important;margin:0!important;
+        box-sizing:border-box!important;background:#f0f7ff!important;
+        background-color:#f0f7ff!important;opacity:1!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput>.expense-results{
+        display:block!important;position:relative!important;z-index:1!important;
+        clear:both!important;float:none!important;top:auto!important;
+        width:100%!important;height:55vh!important;min-height:55vh!important;max-height:55vh!important;
+        margin:0!important;padding:0!important;border:0!important;
+        overflow:auto!important;overscroll-behavior:contain!important;
+        -webkit-overflow-scrolling:touch!important;background:#fff!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput>.expense-results table{
+        display:table!important;width:max-content!important;min-width:100%!important;
+        margin:0!important;padding:0!important;border-spacing:0!important;
+        border-collapse:separate!important;background:#fff!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>thead>tr>th{
+        position:sticky!important;top:0!important;z-index:20!important;
+        background:#dce7ff!important;background-color:#dce7ff!important;
+        background-image:none!important;background-clip:padding-box!important;
+        opacity:1!important;border:1px solid #aebfe0!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr>td{
+        border-right:1px solid #c4d4ff!important;border-bottom:1px solid #c4d4ff!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr>td:first-child{
+        border-left:1px solid #c4d4ff!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.expense-report-month{
+        height:26px!important;min-height:26px!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.expense-report-month>th{
+        position:static!important;top:auto!important;z-index:auto!important;display:table-cell!important;
+        height:26px!important;min-height:26px!important;max-height:26px!important;
+        padding:2px 9px!important;line-height:1.1!important;vertical-align:middle!important;
+        text-align:left!important;white-space:nowrap!important;font-size:14px!important;font-weight:700!important;
+        color:#e67e22!important;background:#fff1d9!important;background-color:#fff1d9!important;
+        border:1px solid #e8cda6!important;
+      }
     </style>`:'';
     const inner=`${detailedReportStyles}<div class="expense-panel"><div id="actReportOutput"></div><div class="expense-report-actions"><div class="expense-download-wrap"><button type="button" id="activityDownloadBtn" class="expense-secondary">Download ▾</button><div id="activityDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div><button type="button" id="activityReportDateSort" class="expense-date-sort">${dateAscending?'↑ Date Ascending':'↓ Date Descending'}</button><button type="button" id="activityReportBack" class="expense-secondary">← Back</button></div></div>`;
     page(shell(label,inner,true));const reportPage=document.querySelector('.activity-page');if(reportPage){reportPage.classList.add('activity-report-view');if(type==='Detailed')reportPage.classList.add('activity-report-detailed');}renderReportResults(rows,type);const reportSort=$('activityReportDateSort');if(reportSort)reportSort.onclick=()=>{dateAscending=!dateAscending;reportSort.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';reportSort.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');reportSort.title=dateAscending?'Sort date ascending':'Sort date descending';renderReportResults(lastRows,type)};const dl=$('activityDownloadBtn'),menu=$('activityDownloadMenu');if(dl&&menu){dl.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportReport(b.dataset.export)});}const back=$('activityReportBack');if(back)back.onclick=()=>renderReports(kind,custom,cached);
