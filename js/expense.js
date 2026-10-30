@@ -731,17 +731,25 @@ ${field('Photos',`
     if(values.exReportPeriod!==undefined&&$('exReportPeriod'))$('exReportPeriod').value=values.exReportPeriod;
     if($('exShowColumnsWrap')){const detailed=$('exReportType')?.value==='Detailed';$('exShowColumnsWrap').classList.toggle('hidden',!detailed);$('exShowColumnsWrap').style.setProperty('display',detailed?'flex':'none','important');}
   }
-  function expenseReportPageTitle(kind,custom,type){
+  function expenseReportPageTitle(kind,custom,type,period='All'){
     const mode=type==='Detailed'?'Detailed':'Abstract';
-    if(kind==='sensitive')return `Sensitive Expenses - ${mode}`;
-    if(kind==='all')return `All Expenses - ${mode} Report`;
-    if(custom)return `Expenses Custom Search - ${mode}`;
-    return `Expenses Reports - ${mode}`;
+    if(mode==='Abstract'){
+      const periodLabel=period==='This Week'?'This week':String(period||'All');
+      if(kind==='sensitive')return `Sensitive Expenses Abstract - ${periodLabel}`;
+      if(kind==='all')return `All Expenses Abstract - ${periodLabel}`;
+      if(custom)return `Expenses Custom Search - Abstract - ${periodLabel}`;
+      return `Expenses Abstract - ${periodLabel}`;
+    }
+    if(kind==='sensitive')return 'Sensitive Expenses - Detailed';
+    if(kind==='all')return 'All Expenses - Detailed Report';
+    if(custom)return 'Expenses Custom Search - Detailed';
+    return 'Expenses Reports - Detailed';
   }
   function openExpenseReportPage(kind,custom,filters,rows,type){
     const output=$('exReportOutput');
     const reportHtml=output?output.innerHTML:'';
-    const titleText=expenseReportPageTitle(kind,custom,type);
+    const selectedPeriod=filters?.exReportPeriod||$('exReportPeriod')?.value||'All';
+    const titleText=expenseReportPageTitle(kind,custom,type,selectedPeriod);
     lastExpenseReportContext={kind,custom,filters,rows:rows.slice(),type};
     showPage(`<style>
       .expense-page.expense-report-view{max-width:1100px;margin:0 auto}
