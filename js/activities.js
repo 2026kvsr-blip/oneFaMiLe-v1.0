@@ -198,6 +198,7 @@
     .activity-page .expense-summary-card small,.activity-page .expense-summary-card strong{white-space:nowrap!important}
     .activity-page .activity-date-sort-field{display:none!important}
     .activity-page #activityReportDateSort{width:100%;margin:0 0 10px;padding:8px 10px;border:1.5px solid #2477c8;border-radius:8px;background:transparent;color:#2477c8;font-weight:700}
+    .activity-page.activity-report-abstract #activityReportDateSort{display:none!important}
 
     /* Report page only: reduce the large gap before the single report title. */
     .activity-page.activity-report-view>.expense-title{margin-top:-70px!important;margin-bottom:12px!important;padding-top:0!important}
@@ -548,7 +549,7 @@
       }
     </style>`:'';
     const inner=`${detailedReportStyles}<div class="expense-panel"><div id="actReportOutput"></div><div class="expense-report-actions"><div class="expense-download-wrap"><button type="button" id="activityDownloadBtn" class="expense-secondary">Download ▾</button><div id="activityDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div><button type="button" id="activityReportDateSort" class="expense-date-sort">${dateAscending?'↑ Date Ascending':'↓ Date Descending'}</button><button type="button" id="activityReportBack" class="expense-secondary">← Back</button></div></div>`;
-    page(shell(label,inner,true));const reportPage=document.querySelector('.activity-page');if(reportPage){reportPage.classList.add('activity-report-view');if(type==='Detailed')reportPage.classList.add('activity-report-detailed');}renderReportResults(rows,type);const reportSort=$('activityReportDateSort');if(reportSort)reportSort.onclick=()=>{dateAscending=!dateAscending;reportSort.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';reportSort.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');reportSort.title=dateAscending?'Sort date ascending':'Sort date descending';renderReportResults(lastRows,type)};const dl=$('activityDownloadBtn'),menu=$('activityDownloadMenu');if(dl&&menu){dl.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportReport(b.dataset.export)});}const back=$('activityReportBack');if(back)back.onclick=()=>renderReports(kind,custom,cached);
+    page(shell(label,inner,true));const reportPage=document.querySelector('.activity-page');if(reportPage){reportPage.classList.add('activity-report-view');if(type==='Detailed')reportPage.classList.add('activity-report-detailed');else reportPage.classList.add('activity-report-abstract');}renderReportResults(rows,type);const reportSort=$('activityReportDateSort');if(reportSort)reportSort.onclick=()=>{dateAscending=!dateAscending;reportSort.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';reportSort.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');reportSort.title=dateAscending?'Sort date ascending':'Sort date descending';renderReportResults(lastRows,type)};const dl=$('activityDownloadBtn'),menu=$('activityDownloadMenu');if(dl&&menu){dl.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportReport(b.dataset.export)});}const back=$('activityReportBack');if(back)back.onclick=()=>renderReports(kind,custom,cached);
   }
   function filterRows(rows,custom,kind){
     let from=custom?($('actFromDate')?.value||''):'',to=custom?($('actToDate')?.value||''):'';const p=$('actReportPeriod').value,now=new Date();
@@ -638,31 +639,50 @@
         const colspan=p==='Daily'?6:(p==='Weekly'||p==='Monthly'?5:4);
         table=`<div class="expense-results"><table><thead><tr>${headers}</tr></thead><tbody>${keys.map((key,i)=>`<tr>${cells(key,groups[key],i)}</tr>`).join('')||`<tr><td class="activity-abstract-center" colspan="${colspan}">No records found.</td></tr>`}</tbody></table></div>`;
       }else if(['Today','This Week','This Month','This Year'].includes(p)){
-        // A single period-summary row for Today / This Week / This Month / This Year.
-        // The first column names the selected period and its corresponding date range.
+        // Period Abstract: show the selected period as a subheading, followed by
+        // expandable Category / Sub Category rows with record and completed counts.
         const now=new Date();
         const todayValue=today();
-        let periodHeader='',periodValue='';
+        let periodHeading='';
         if(p==='Today'){
-          periodHeader='Date';
-          periodValue=showDate(todayValue);
+          periodHeading=`Date: ${showDate(todayValue)}`;
         }else if(p==='This Week'){
-          periodHeader='Week';
-          const start=new Date(todayValue+'T12:00:00');
-          start.setDate(start.getDate()-((start.getDay()+6)%7));
-          const finish=new Date(start);
-          finish.setDate(finish.getDate()+6);
-          periodValue=`${showDate(fmt(start))} - ${showDate(fmt(finish))}`;
+          const weekStart=new Date(todayValue+'T12:00:00');
+          weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
+          const weekEnd=new Date(weekStart);
+          weekEnd.setDate(weekEnd.getDate()+6);
+          periodHeading=`Week: ${showDate(fmt(weekStart))} - ${showDate(fmt(weekEnd))}`;
         }else if(p==='This Month'){
-          periodHeader='Month';
-          periodValue=now.toLocaleString('en-US',{month:'long',year:'numeric'});
+          periodHeading=`Month: ${now.toLocaleString('en-US',{month:'long',year:'numeric'})}`;
         }else{
-          periodHeader='Year';
-          periodValue=String(now.getFullYear());
+          periodHeading=`Year: ${now.getFullYear()}`;
         }
-        const periodCount=rows.length;
-        const periodCompleted=rows.filter(record=>String(record.status||'').toLowerCase()==='completed').length;
-        table=`<div class="expense-results"><table><thead><tr><th>${periodHeader}</th><th class="activity-abstract-center">Activities</th><th class="activity-abstract-center">Completed</th></tr></thead><tbody><tr><td>${esc(periodValue)}</td><td class="activity-abstract-center">${periodCount}</td><td class="activity-abstract-center">${periodCompleted}</td></tr></tbody></table></div>`;
+
+        const groups={};
+        rows.forEach(record=>{
+          const category=String(record.category||'Other');
+          const subCategory=String(record.subCategory||'Other');
+          const isCompleted=String(record.status||'').toLowerCase()==='completed';
+          if(!groups[category])groups[category]={count:0,completed:0,subs:{}};
+          groups[category].count++;
+          if(isCompleted)groups[category].completed++;
+          if(!groups[category].subs[subCategory])groups[category].subs[subCategory]={count:0,completed:0};
+          groups[category].subs[subCategory].count++;
+          if(isCompleted)groups[category].subs[subCategory].completed++;
+        });
+
+        let categoryIndex=0;
+        const categoryRows=Object.keys(groups).sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'})).map(category=>{
+          const index=categoryIndex++;
+          const group=groups[category];
+          const subRows=Object.keys(group.subs).sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'})).map(subCategory=>{
+            const detail=group.subs[subCategory];
+            return `<tr class="activity-abstract-subrow" data-parent="${index}" hidden><td style="padding-left:28px">↳ ${esc(subCategory)}</td><td class="activity-abstract-center">${detail.count}</td><td class="activity-abstract-center">${detail.completed}</td></tr>`;
+          }).join('');
+          return `<tr class="activity-abstract-parent" data-index="${index}" tabindex="0" role="button" aria-expanded="false" style="cursor:pointer"><td><span class="activity-toggle">＋</span> ${esc(category)}</td><td class="activity-abstract-center">${group.count}</td><td class="activity-abstract-center">${group.completed}</td></tr>${subRows}`;
+        }).join('');
+
+        table=`<div class="expense-abstract-heading activity-abstract-period-subheading">${esc(periodHeading)}</div><div class="expense-results"><table><thead><tr><th>+ Category</th><th class="activity-abstract-center">No</th><th class="activity-abstract-center">Completed</th></tr></thead><tbody>${categoryRows||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
       }else{
         // "All" retains the existing expandable Category / SubCategory summary.
         const groups={};
