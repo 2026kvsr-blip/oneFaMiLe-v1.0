@@ -522,6 +522,20 @@
         color:#e67e22!important;background:#fff1d9!important;background-color:#fff1d9!important;
         border:1px solid #e8cda6!important;
       }
+      .activity-page.activity-report-detailed .activity-month-heading-content{
+        display:grid!important;grid-template-columns:170px 150px!important;
+        grid-auto-flow:column!important;justify-content:start!important;align-items:center!important;
+        width:100%!important;min-width:0!important;height:20px!important;
+        box-sizing:border-box!important;white-space:nowrap!important;
+      }
+      .activity-page.activity-report-detailed .activity-month-name{
+        display:block!important;min-width:0!important;text-align:left!important;
+        color:#e67e22!important;font-weight:700!important;
+      }
+      .activity-page.activity-report-detailed .activity-month-records{
+        display:block!important;min-width:0!important;text-align:left!important;
+        color:#9a5b12!important;font-weight:700!important;
+      }
     </style>`:'';
     const inner=`${detailedReportStyles}<div class="expense-panel"><div id="actReportOutput"></div><div class="expense-report-actions"><div class="expense-download-wrap"><button type="button" id="activityDownloadBtn" class="expense-secondary">Download ▾</button><div id="activityDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div><button type="button" id="activityReportDateSort" class="expense-date-sort">${dateAscending?'↑ Date Ascending':'↓ Date Descending'}</button><button type="button" id="activityReportBack" class="expense-secondary">← Back</button></div></div>`;
     page(shell(label,inner,true));const reportPage=document.querySelector('.activity-page');if(reportPage){reportPage.classList.add('activity-report-view');if(type==='Detailed')reportPage.classList.add('activity-report-detailed');}renderReportResults(rows,type);const reportSort=$('activityReportDateSort');if(reportSort)reportSort.onclick=()=>{dateAscending=!dateAscending;reportSort.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';reportSort.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');reportSort.title=dateAscending?'Sort date ascending':'Sort date descending';renderReportResults(lastRows,type)};const dl=$('activityDownloadBtn'),menu=$('activityDownloadMenu');if(dl&&menu){dl.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportReport(b.dataset.export)});}const back=$('activityReportBack');if(back)back.onclick=()=>renderReports(kind,custom,cached);
@@ -606,6 +620,21 @@
       const reportColCount=columns.length+1;
       let grouped='';
       let currentMonthHeading='',currentDayHeading='',currentWeekHeading='';
+      // Count records per month before rendering headings. The month/count
+      // labels use a fixed two-column layout so every "Records :" starts
+      // at the same horizontal position, regardless of the month name.
+      const monthRecordCounts=new Map();
+      if(['This Year','All'].includes(reportPeriod)){
+        rows.forEach(record=>{
+          const recordDate=dateKey(record);
+          if(!recordDate)return;
+          const recordDateObj=new Date(recordDate+'T12:00:00');
+          const recordMonth=Number.isNaN(recordDateObj.getTime())
+            ? 'Unknown'
+            : recordDateObj.toLocaleString('en-US',{month:'long',year:'numeric'});
+          monthRecordCounts.set(recordMonth,(monthRecordCounts.get(recordMonth)||0)+1);
+        });
+      }
       rows.forEach((r,i)=>{
         const ds=dateKey(r);
         if(ds && ['This Month','This Year','All'].includes(reportPeriod)){
@@ -613,7 +642,11 @@
           const monthYear=Number.isNaN(dateObj.getTime())?'Unknown':dateObj.toLocaleString('en-US',{month:'long',year:'numeric'});
           if(monthYear!==currentMonthHeading){
             currentMonthHeading=monthYear;
-            grouped+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${reportColCount}">${esc(monthYear)}</th></tr>`;
+            const monthCount=monthRecordCounts.get(monthYear)||0;
+            const monthCountHtml=['This Year','All'].includes(reportPeriod)
+              ? `<span class="activity-month-records">Records : ${monthCount}</span>`
+              : '';
+            grouped+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${reportColCount}"><div class="activity-month-heading-content"><span class="activity-month-name">${esc(monthYear)}</span>${monthCountHtml}</div></th></tr>`;
           }
         }else if(ds && reportPeriod==='Today' && ds!==currentDayHeading){
           currentDayHeading=ds;
