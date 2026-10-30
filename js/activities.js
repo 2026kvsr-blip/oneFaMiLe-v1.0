@@ -463,8 +463,8 @@
     // Keep Detailed Report spacing and grouped month headings self-contained on
     // this final report page, so earlier page styles cannot reopen the top gap.
     const detailedReportStyles=type==='Detailed'?`<style id="activityDetailedReportOverrides">
-      /* Keep a visible 8px separation between summary cards and the report scroll area. */
-      .activity-page.activity-report-detailed #actReportOutput{display:flex!important;flex-direction:column!important;row-gap:8px!important;margin:0!important;padding:0!important;line-height:normal!important}
+      /* No blank strip between summary cards and the Detailed Report heading row. */
+      .activity-page.activity-report-detailed #actReportOutput{display:flex!important;flex-direction:column!important;gap:0!important;row-gap:0!important;margin:0!important;padding:0!important;line-height:normal!important;}
       .activity-page.activity-report-detailed #actReportOutput>.expense-summary{display:flex!important;flex:0 0 auto!important;margin:0!important;padding:0!important;border:0!important;}
       .activity-page.activity-report-detailed #actReportOutput>.expense-results{display:block!important;flex:0 0 auto!important;position:relative!important;top:0!important;margin:0!important;padding:0!important;border:0!important;overflow-x:auto!important;overflow-y:auto!important;}
       .activity-page.activity-report-detailed #actReportOutput>.expense-results table{display:table!important;margin:0!important;padding:0!important;border-spacing:0!important;border-collapse:collapse!important;}
