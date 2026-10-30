@@ -538,6 +538,12 @@
         color:#e67e22!important;background:#fff1d9!important;background-color:#fff1d9!important;
         border:1px solid #e8cda6!important;
       }
+      /* Give All-records Month - Year group rows a separate light colour. */
+      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-month-group-heading>th{
+        color:#466b83!important;
+        background:#e8f1f8!important;background-color:#e8f1f8!important;
+        border:1px solid #c5d9e6!important;
+      }
       .activity-page.activity-report-detailed .activity-month-heading-content{
         display:grid!important;grid-template-columns:170px 150px!important;
         grid-auto-flow:column!important;justify-content:start!important;align-items:center!important;
