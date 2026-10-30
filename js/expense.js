@@ -453,7 +453,7 @@ ${field('Photos',`
       <div class="expense-field expense-search-text-filter"><label class="expense-label" for="exSearchText"><span class="expense-label-text">Search Text</span></label><input id="exSearchText" type="search" placeholder="Description, category, spent by…"></div>
       <div class="expense-field hidden" id="exVehicleTypeWrap"><label class="expense-label" for="exFilterVehicleType"><span class="expense-label-text">Vehicle Type</span></label><select id="exFilterVehicleType">${selectOptions(VEHICLE_TYPES,'All Vehicle Types')}</select></div>
       <div class="expense-field hidden" id="exMtcTypeWrap"><label class="expense-label" for="exFilterMtcType"><span class="expense-label-text">Mtc Type</span></label><select id="exFilterMtcType">${selectOptions(MAINTENANCE_TYPES,'All Maintenance Types')}</select></div>`:''}
-      </div><div class="expense-actions expense-report-actions"><button type="button" id="exRunReport" class="expense-primary">Show Report</button><div class="expense-download-wrap"><button type="button" id="exDownloadBtn" class="expense-secondary" disabled>Download ▾</button><div id="exDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div><button type="button" id="expenseReportBack" class="expense-secondary">← Back</button></div><div id="expenseStatus" class="expense-status" role="status"></div></div><div id="exReportOutput"></div>`;
+      </div><div class="expense-actions expense-report-actions"><button type="button" id="exRunReport" class="expense-primary">Show Report</button><button type="button" id="expenseReportBack" class="expense-secondary">← Back</button></div><div id="expenseStatus" class="expense-status" role="status"></div></div><div id="exReportOutput"></div>`;
   }
   function updateExpenseByOptions(rows){
     const list=$('exSearchMembers');
@@ -740,10 +740,11 @@ ${field('Photos',`
       if(custom)return `Expenses Custom Search - Abstract - ${periodLabel}`;
       return `Expenses Abstract - ${periodLabel}`;
     }
-    if(kind==='sensitive')return 'Sensitive Expenses - Detailed';
-    if(kind==='all')return 'All Expenses - Detailed Report';
-    if(custom)return 'Expenses Custom Search - Detailed';
-    return 'Expenses Reports - Detailed';
+    const periodLabel=period==='This Week'?'This week':String(period||'All');
+    if(kind==='sensitive')return `Sensitive Expenses Detailed - ${periodLabel}`;
+    if(kind==='all')return `All Expenses Detailed - ${periodLabel}`;
+    if(custom)return `Expenses Custom Search - Detailed - ${periodLabel}`;
+    return `Expenses Detailed - ${periodLabel}`;
   }
   function openExpenseReportPage(kind,custom,filters,rows,type){
     const output=$('exReportOutput');
