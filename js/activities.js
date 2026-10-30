@@ -175,14 +175,12 @@
 
     /* Report refinements: fixed scroll viewport, centered two-line headers, and report-page date sort */
     .activity-page .expense-results{max-height:55vh!important;overflow:auto!important;overscroll-behavior:contain}
-    /* Detailed Activities: let the sticky heading cover the small strip above the table. */
+    /* Detailed Activities: remove the real gap above the table; do not overlap margins. */
     .activity-page.activity-report-detailed .expense-results{margin-top:0!important;overflow-x:auto!important;overflow-y:auto!important;position:relative!important;isolation:isolate!important}
-    .activity-page.activity-report-detailed .expense-results table thead th{position:sticky!important;top:0!important;z-index:30!important;background:#dce7ff!important}
-    /* The summary has a 9px bottom margin. Pull the Detailed table into that gap
-       so scrolling rows cannot appear in a strip above the column headings. */
-    .activity-page.activity-report-detailed #actReportOutput>.expense-results{margin-top:-9px!important}
+    .activity-page.activity-report-detailed #actReportOutput>.expense-summary{margin-bottom:0!important;padding-bottom:0!important}
+    .activity-page.activity-report-detailed #actReportOutput>.expense-results{margin-top:0!important;padding-top:0!important}
     .activity-page.activity-report-detailed #actReportOutput>.expense-results table{margin:0!important;border-spacing:0!important}
-    .activity-page.activity-report-detailed #actReportOutput>.expense-results table thead th{position:sticky!important;top:0!important;z-index:100!important;background-color:#dce7ff!important;background-clip:border-box!important}
+    .activity-page.activity-report-detailed #actReportOutput>.expense-results table thead th{position:sticky!important;top:0!important;z-index:100!important;background:#dce7ff!important;background-color:#dce7ff!important;background-clip:border-box!important}
     .activity-page .expense-results table th{height:58px;box-sizing:border-box;vertical-align:middle!important;text-align:center!important;line-height:1.15;overflow-wrap:normal;word-break:normal;min-width:76px;max-width:112px;padding:6px 5px}.activity-page .expense-results table th:nth-child(11){min-width:92px;max-width:96px}.activity-page .expense-results table th:nth-child(12),.activity-page .expense-results table th:nth-child(13){min-width:82px;max-width:92px}
     .activity-page .expense-results th.report-center,.activity-page .expense-results td.report-center{vertical-align:middle!important}
     /* Detailed report column widths: compact S.No/Edit, readable Status and two-line Scheduled Time. */
@@ -538,8 +536,41 @@
         'Status':'report-status',
         'Edit':'report-edit-cell'
       };
-      const grouped=rows.map((r,i)=>`<tr><td class="report-center report-sno">${i+1}</td>${columns.map(c=>{const value=c[1](r);const cls=reportColClass[c[0]]||'';return `<td class="${centerNames.includes(c[0])?'report-center ':''}${cls}">${(c[0]==='Photos'||c[0]==='Edit')?value:esc(value)}</td>`}).join('')}</tr>`).join('');
-      table=`<div class="expense-results"><table><thead><tr><th class="report-center report-sno">S.No</th>${columns.map(c=>{const cls=reportColClass[c[0]]||'';const label=c[0]==='Scheduled Time'?'Scheduled<br>Time':esc(c[0]);return `<th class="${centerNames.includes(c[0])?'report-center ':''}${cls}">${label}</th>`}).join('')}</tr></thead><tbody>${grouped||`<tr><td colspan="${columns.length+1}">No records found.</td></tr>`}</tbody></table></div>`;
+      const reportPeriod=$('actReportPeriod')?.value||'All';
+      const reportColCount=columns.length+1;
+      let grouped='';
+      let currentMonthHeading='',currentDayHeading='',currentWeekHeading='';
+      rows.forEach((r,i)=>{
+        const ds=dateKey(r);
+        if(ds && ['This Month','This Year','All'].includes(reportPeriod)){
+          const dateObj=new Date(ds+'T12:00:00');
+          const monthYear=Number.isNaN(dateObj.getTime())?'Unknown':dateObj.toLocaleString('en-US',{month:'long',year:'numeric'});
+          if(monthYear!==currentMonthHeading){
+            currentMonthHeading=monthYear;
+            grouped+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${reportColCount}">${esc(monthYear)}</th></tr>`;
+          }
+        }else if(ds && reportPeriod==='Today' && ds!==currentDayHeading){
+          currentDayHeading=ds;
+          grouped+=`<tr class="expense-report-subheading expense-report-date"><th colspan="${reportColCount}">${esc(showDate(ds))}</th></tr>`;
+        }else if(ds && reportPeriod==='This Week'){
+          const weekStart=new Date(ds+'T12:00:00');
+          weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
+          const weekEnd=new Date(weekStart);
+          weekEnd.setDate(weekEnd.getDate()+6);
+          const weekLabel=`${showDate(fmt(weekStart))} - ${showDate(fmt(weekEnd))}`;
+          if(weekLabel!==currentWeekHeading){
+            currentWeekHeading=weekLabel;
+            grouped+=`<tr class="expense-report-subheading"><th colspan="${reportColCount}">${esc(weekLabel)}</th></tr>`;
+          }
+        }
+        const cells=columns.map(c=>{
+          const value=c[1](r);
+          const cls=reportColClass[c[0]]||'';
+          return `<td class="${centerNames.includes(c[0])?'report-center ':''}${cls}">${(c[0]==='Photos'||c[0]==='Edit')?value:esc(value)}</td>`;
+        }).join('');
+        grouped+=`<tr><td class="report-center report-sno">${i+1}</td>${cells}</tr>`;
+      });
+      table=`<div class="expense-results"><table><thead><tr><th class="report-center report-sno">S.No</th>${columns.map(c=>{const cls=reportColClass[c[0]]||'';const label=c[0]==='Scheduled Time'?'Scheduled<br>Time':esc(c[0]);return `<th class="${centerNames.includes(c[0])?'report-center ':''}${cls}">${label}</th>`}).join('')}</tr></thead><tbody>${grouped||`<tr><td colspan="${reportColCount}">No records found.</td></tr>`}</tbody></table></div>`;
     }
     $('actReportOutput').innerHTML=`<div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${total}</strong></div><div class="expense-summary-card"><small>Completed :</small><strong>${completed}</strong></div><div class="expense-summary-card"><small>Pending :</small><strong>${pending}</strong></div></div>${table}`;
     // If an older renderer escaped the Edit HTML into visible text, convert only that
