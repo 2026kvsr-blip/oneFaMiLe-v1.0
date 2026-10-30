@@ -548,7 +548,7 @@ ${field('Photos',`
           if(parts){groups[key].year=parts[1];groups[key].month=new Date(Number(parts[1]),Number(parts[2])-1,1).toLocaleString('en-US',{month:'long'});groups[key].date=formatReportDate(ds);}
           if(selectedPeriod==='Weekly'&&key!=='Unknown'){
             const start=new Date(key+'T12:00:00');const finish=new Date(start);finish.setDate(finish.getDate()+6);
-            groups[key].week=`${formatReportDate(fmt(start))} - ${formatReportDate(fmt(finish))}`;
+            groups[key].week=`${formatReportDate(fmt(start))}\u00a0to\u00a0${formatReportDate(fmt(finish))}`;
           }
           groups[key].amount+=Number(r.amount||0);groups[key].count++;
         });
@@ -606,7 +606,7 @@ ${field('Photos',`
         {key:'sensitive',label:'Sensitive',center:true,value:r=>r.sensitive||'No'},
         {key:'spentBy',label:'Expense by',value:r=>r.spentBy||''},
         {key:'photoCount',label:'No of photos',center:true,value:(r,photos)=>String(photos.length)},
-        {key:'photos',label:'Photos',value:(r,photos)=>photos.length?photos.map((url,i)=>`<button type="button" class="expense-photo-preview-btn" data-expense-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 40px;width:40px;height:40px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;cursor:pointer"><img src="${esc(url)}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:38px;height:38px;object-fit:cover;border:1px solid #c4d4ff;border-radius:5px" onerror="this.style.display='none';this.parentElement.textContent='Open'"></button>`).join(''):'—',html:true},
+        {key:'photos',label:'Photos',value:(r,photos)=>photos.length?photos.map((url,i)=>`<button type="button" class="expense-photo-preview-btn" data-expense-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 28px;width:28px;height:28px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;cursor:pointer"><img src="${esc(url)}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:26px;height:26px;object-fit:cover;border:1px solid #c4d4ff;border-radius:4px" onerror="this.style.display='none';this.parentElement.textContent='Open'"></button>`).join(''):'—',html:true},
         {key:'edit',label:'Edit',center:true,value:(r,photos,rowIndex)=>`<button type="button" class="expense-edit-text" data-expense-edit="${esc(r.expenseId||'')}" data-expense-row-index="${rowIndex}" aria-label="Edit expense">Edit</button>`,html:true}
       ];
       const limitedKeys=['date','category','subcategory','amount','paymentMode','sensitive','description','edit'];
@@ -648,7 +648,7 @@ ${field('Photos',`
         const mon=monthName(ds);
         const wantsYearMonthGrouping=['This Year','All','Monthly','Yearly'].includes(reportPeriod);
         if(reportPeriod==='Today' && ds && ds!==currentDay){currentDay=ds;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(formatReportDate(ds))}</th></tr>`;}
-        else if(reportPeriod==='This Week' && ds){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));const end=new Date(d);end.setDate(end.getDate()+6);const weekLabel=`${formatReportDate(fmt(d))} - ${formatReportDate(fmt(end))}`;if(weekLabel!==currentMonth){currentMonth=weekLabel;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(weekLabel)}</th></tr>`;}}
+        else if(reportPeriod==='This Week' && ds){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));const end=new Date(d);end.setDate(end.getDate()+6);const weekLabel=`${formatReportDate(fmt(d))}\u00a0to\u00a0${formatReportDate(fmt(end))}`;if(weekLabel!==currentMonth){currentMonth=weekLabel;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(weekLabel)}</th></tr>`;}}
         else if(reportPeriod==='This Month' && !currentMonth){currentMonth=mon+' '+yr;groupedRows+=`<tr class="expense-report-subheading expense-report-month"><th colspan="${colCount}">${esc(mon)} ${esc(yr)}</th></tr>`;}
         else if(reportPeriod==='This Year' && !currentYear){currentYear=yr;groupedRows+=`<tr class="expense-report-subheading expense-report-year"><th colspan="${colCount}">${esc(yr)}</th></tr>`;}
         if(wantsYearMonthGrouping){
@@ -672,6 +672,24 @@ ${field('Photos',`
         if(['This Year','All','Monthly','Yearly'].includes(reportPeriod)){const amount=Number(r.amount)||0;monthTotal+=amount;monthCount++;yearTotal+=amount;yearCount++;}
       });
       if(['This Year','All','Monthly','Yearly'].includes(reportPeriod)){addMonthTotal();addYearTotal();}
+      if(!sortedRows.length && ['Today','This Week','This Month','This Year'].includes(reportPeriod)){
+        const now=new Date();
+        let emptyHeading='',emptyHeadingClass='expense-report-month';
+        if(reportPeriod==='Today'){
+          emptyHeading=formatReportDate(dateToday());
+          emptyHeadingClass='expense-report-date';
+        }else if(reportPeriod==='This Week'){
+          const start=new Date();start.setDate(start.getDate()-((start.getDay()+6)%7));
+          const end=new Date(start);end.setDate(end.getDate()+6);
+          emptyHeading=`${formatReportDate(fmt(start))}\u00a0to\u00a0${formatReportDate(fmt(end))}`;
+        }else if(reportPeriod==='This Month'){
+          emptyHeading=now.toLocaleString('en-US',{month:'long',year:'numeric'});
+        }else{
+          emptyHeading=String(now.getFullYear());
+          emptyHeadingClass='expense-report-year';
+        }
+        groupedRows+=`<tr class="expense-report-subheading ${emptyHeadingClass}"><th colspan="${colCount}">${esc(emptyHeading)}</th></tr><tr><td colspan="${colCount}">No records found.</td></tr>`;
+      }
       table=`<div class="expense-results"><table><thead><tr>${headers.join('')}</tr></thead><tbody>${groupedRows||`<tr><td colspan="${colCount}">No records found.</td></tr>`}</tbody></table></div>`;
     }
     const reportPeriodTitle=$('exReportPeriod')?.value||'';
@@ -681,10 +699,10 @@ ${field('Photos',`
       const dates=rows.map(r=>String(r.expenseDate||'').slice(0,10)).filter(Boolean).sort();
       const today=dateToday();
       if(reportPeriodTitle==='Today') abstractPeriodHeading=formatReportDate(today);
-      else if(reportPeriodTitle==='This Week'){const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));const e=new Date(d);e.setDate(e.getDate()+6);abstractPeriodHeading=`${formatReportDate(fmt(d))} - ${formatReportDate(fmt(e))}`;}
+      else if(reportPeriodTitle==='This Week'){const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));const e=new Date(d);e.setDate(e.getDate()+6);abstractPeriodHeading=`${formatReportDate(fmt(d))}\u00a0to\u00a0${formatReportDate(fmt(e))}`;}
       else if(reportPeriodTitle==='This Month'){const d=new Date();abstractPeriodHeading=d.toLocaleString('en-US',{month:'long',year:'numeric'});}
       else if(reportPeriodTitle==='This Year') abstractPeriodHeading=String(new Date().getFullYear());
-      else if(reportPeriodTitle==='All') abstractPeriodHeading=dates.length?`${new Date(dates[dates.length-1]+'T12:00:00').toLocaleString('en-US',{month:'long',year:'numeric'})} - All Periods`:'All Periods';
+      else if(reportPeriodTitle==='All') abstractPeriodHeading='All Periods';
     }
     const abstractHeadingHtml=abstractPeriodHeading?`<div class="expense-abstract-heading">${esc(abstractPeriodHeading)}</div>`:'';
     $('exReportOutput').innerHTML=`<style>.expense-results{height:55vh!important;max-height:55vh!important;overflow:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.expense-results table{width:max-content;min-width:100%;border-collapse:collapse}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table thead th{height:50px!important;min-height:50px!important;padding:5px 5px!important;box-sizing:border-box;text-align:center;line-height:1.1;white-space:normal;overflow-wrap:normal;word-break:normal}.expense-results table .expense-report-subheading.expense-report-month th{height:38px!important;min-height:38px!important;padding:4px 8px!important;font-size:14px!important;line-height:1.1!important}.expense-results table .expense-report-subheading.expense-report-year th{height:42px!important;min-height:42px!important;padding:4px 8px!important;font-size:18px!important;line-height:1.1!important}.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}.expense-report-subheading.expense-report-year th{color:#2e8b57!important}.expense-report-subheading.expense-report-month th{font-size:14px!important}.expense-abstract-category-row:focus{outline:2px solid #4a9fe8;outline-offset:-2px}.expense-abstract-subrow[hidden]{display:none!important}.expense-abstract-subrow td{background:#f4f9ff!important;color:#2d5274}.expense-abstract-toggle{display:inline-block;width:16px;font-weight:700;color:#2477c8}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table th.expense-center-cell,.expense-results table td.expense-center-cell{text-align:center!important;vertical-align:middle!important;width:1%;min-width:58px;max-width:110px;padding:6px 4px;white-space:normal;overflow-wrap:anywhere}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
