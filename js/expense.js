@@ -760,6 +760,8 @@ ${field('Photos',`
       .expense-page .expense-report-panel .expense-summary-card strong{font-size:clamp(9px,2.65vw,13px)!important}
       .expense-page .expense-report-panel .expense-results{width:100%!important;max-width:100%!important;height:55vh!important;max-height:55vh!important;overflow:auto!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;margin-top:8px!important}
       .expense-page .expense-report-panel .expense-results table{width:max-content!important;min-width:100%!important;border-collapse:collapse!important}
+      /* Detailed Expenses: keep the column-heading row fixed while the report rows scroll. */
+      .expense-page.expense-report-detailed .expense-report-panel .expense-results table thead th{position:sticky!important;top:0!important;z-index:30!important;background:#dce7ff!important}
       .expense-page .expense-report-panel .expense-results table thead th{height:50px!important;min-height:50px!important;padding:5px 5px!important;line-height:1.1!important;vertical-align:middle!important}
       .expense-page.expense-report-abstract .expense-report-panel .expense-results{height:40vh!important;max-height:40vh!important;margin-top:4px!important}
       .expense-page.expense-report-abstract .expense-report-panel .expense-results table thead th{height:36px!important;min-height:36px!important;padding:3px 5px!important;line-height:1.05!important}
@@ -775,7 +777,7 @@ ${field('Photos',`
       .expense-page .expense-report-panel #exDownloadBtn,.expense-page .expense-report-panel #expenseReportDateSort,.expense-page .expense-report-panel #expenseReportBack{display:flex!important;align-items:center!important;justify-content:center!important;background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;border-radius:8px!important;box-shadow:none!important;min-height:42px!important;padding:8px 4px!important;font-size:clamp(11px,3vw,14px)!important;white-space:nowrap!important;box-sizing:border-box!important}
       .expense-page .expense-report-panel #expenseReportDateSort{width:100%!important;min-width:0!important;flex:1 1 0!important;border-radius:8px!important}
     </style>
-    <div class="expense-page expense-report-view ${type==='Abstract'?'expense-report-abstract':''}"><h2 class="expense-title" id="expenseReportTitle">${esc(titleText)}</h2>
+    <div class="expense-page expense-report-view ${type==='Abstract'?'expense-report-abstract':'expense-report-detailed'}"><h2 class="expense-title" id="expenseReportTitle">${esc(titleText)}</h2>
       <div class="expense-panel expense-report-panel"><div id="exReportOutput">${reportHtml}</div>
         <div class="expense-actions expense-report-actions">
           <div class="expense-download-wrap"><button type="button" id="exDownloadBtn" class="expense-secondary">Download ▾</button><div id="exDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div>
