@@ -183,6 +183,7 @@
     .activity-page.activity-report-detailed #actReportOutput>.expense-results table thead th{position:sticky!important;top:0!important;z-index:100!important;background:#dce7ff!important;background-color:#dce7ff!important;background-clip:border-box!important}
     .activity-page .expense-results table th{height:58px;box-sizing:border-box;vertical-align:middle!important;text-align:center!important;line-height:1.15;overflow-wrap:normal;word-break:normal;min-width:76px;max-width:112px;padding:6px 5px}.activity-page .expense-results table th:nth-child(11){min-width:92px;max-width:96px}.activity-page .expense-results table th:nth-child(12),.activity-page .expense-results table th:nth-child(13){min-width:82px;max-width:92px}
     .activity-page .expense-results th.report-center,.activity-page .expense-results td.report-center{vertical-align:middle!important}
+    .activity-page .expense-results td.report-vcenter{vertical-align:middle!important}
     /* Detailed report column widths: compact S.No/Edit, readable Status and two-line Scheduled Time. */
     .activity-page .expense-results th.report-sno,.activity-page .expense-results td.report-sno{width:36px!important;min-width:36px!important;max-width:36px!important;padding:4px 2px!important;white-space:nowrap!important;text-align:center!important;overflow-wrap:normal!important}
     .activity-page .expense-results th.report-status,.activity-page .expense-results td.report-status{width:96px!important;min-width:96px!important;max-width:108px!important;white-space:nowrap!important;text-align:center!important;overflow-wrap:normal!important}
@@ -331,12 +332,15 @@
       const reminderField=document.querySelector('[data-field="reminderEnabled"]');
       if(reminderField)reminderField.style.gridColumn='1';
       const follow=$('[data-field="followUpDate"]');if(follow)follow.style.gridColumn='auto';
-      const extraOrder=['status','reminderEnabled','reminderFields'];
+      const extraOrder=['status'];
+      // When an activity is completed, place Completed Date in the second
+      // grid column directly to the right of Status.
+      if(val('status')==='Completed')extraOrder.push('completedDate');
+      extraOrder.push('reminderEnabled','reminderFields');
       if(event)extraOrder.push('venue');
       if(meeting||appt)extraOrder.push('locationLink');
       if(appt)extraOrder.push('appointmentPerson','followUpDate');
       if(task)extraOrder.push('assignedTo','priority');
-      extraOrder.push('completedDate');
       arrangeActivityFields(['activityType','description','category','subCategory','startDate','startTime','activityPhotos',...extraOrder]);
       // Keep the backend title field populated for compatibility.
       if($('title'))$('title').value=val('subCategory')||val('category')||t||'Activity';
@@ -589,6 +593,9 @@
       const selectedMode=$('actShowColumns')?.value||reportSettings?.showColumns||'all';
       const columns=selectedMode==='limited'?allColumns.filter(c=>limitedNames.includes(c[0])):allColumns;
       const reportColClass={
+        'Activity Type':'report-vcenter',
+        'Category':'report-vcenter',
+        'Sub Category':'report-vcenter',
         'Scheduled Date':'report-scheduled-date',
         'Scheduled Time':'report-scheduled-time',
         'Status':'report-status',
