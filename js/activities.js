@@ -63,7 +63,7 @@
   function dropdown(items,placeholder,allowCustom=true){return `<option value="">${esc(placeholder)}</option>${items.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}${allowCustom?`<option value="__custom__">${esc(customChoice)}</option>`:''}`}
   function field(label,id,control,wide=false){return `<div class="expense-field${wide?' wide':''}" data-field="${esc(id)}"><label class="expense-label" for="${esc(id)}">${esc(label)}</label>${control}</div>`}
   function selectField(id,label,items,placeholder,required=false,wide=false,allowCustom=true){return field(label,id,`<select id="${id}" name="${id}"${required?' required':''}>${dropdown(items,placeholder,allowCustom)}</select>${allowCustom?`<input id="${id}Custom" class="activity-custom-input" type="text" placeholder="Type a custom value" aria-label="Custom ${esc(label)}" hidden>`:''}`,wide)}
-  let cached=[], lastRows=[], dateAscending=true, activeAccess='normal', reportSettings=null;
+  let cached=[], lastRows=[], dateAscending=true, activeAccess='normal', reportSettings=null, currentReportContext=null;
   function options(items,placeholder='Select',preserve=false){const list=preserve?items.slice():items.slice().sort((a,b)=>String(a).localeCompare(String(b),undefined,{sensitivity:'base'}));return `<option value="">${esc(placeholder)}</option>`+list.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
   // Report Type and Report Period are mandatory selections, so do not show a blank placeholder option.
   function reportChoiceOptions(items,selected=''){return items.map(x=>`<option value="${esc(x)}"${x===selected?' selected':''}>${esc(x)}</option>`).join('')}
@@ -382,7 +382,14 @@
     type.addEventListener('change',()=>{refreshFieldsAfter('activityType');updateCat();updateVisibility()});
     cat.addEventListener('change',()=>{refreshFieldsAfter('category');updateSub();updateVisibility()});
     sub.addEventListener('change',()=>{refreshFieldsAfter('subCategory');updateVisibility()});
-    $('reminderEnabled').addEventListener('change',()=>{syncReminderRequired();updateVisibility()});$('status').addEventListener('change',updateVisibility);
+    $('reminderEnabled').addEventListener('change',()=>{
+      // Switching Reminder from Yes to No must remove the old date and time.
+      if($('reminderEnabled').value!=='true'){
+        if(reminderDateInput)reminderDateInput.value='';
+        if(reminderTimeInput)reminderTimeInput.value='';
+      }
+      syncReminderRequired();updateVisibility();
+    });$('status').addEventListener('change',updateVisibility);
     const reminderDateInput=$('reminderDate'),reminderTimeInput=$('reminderTime');
     function syncReminderConstraints(){
       const todayValue=today();
@@ -420,15 +427,38 @@
         if(!Number.isFinite(reminderDateTime.getTime())||reminderDateTime.getTime()<=Date.now()){activityToast('Reminder time must be in the future. Please select a later date or time.','error');reminderTimeInput?.focus();return}
       }
       if($('title'))$('title').value=val('subCategory')||val('category')||activityType||'Activity';
-      const btn=$('activitySaveBtn');btn.disabled=true;btn.textContent='Saving…';try{const fd=new FormData(form),fields={};for(const [k,v] of fd.entries())fields[k]=String(v);
+      const btn=$('activitySaveBtn');btn.disabled=true;btn.textContent='Saving…';try{
+        // Send empty reminder date/time when Reminder is No, including edits.
+        if($('reminderEnabled').value!=='true'){
+          if(reminderDateInput)reminderDateInput.value='';
+          if(reminderTimeInput)reminderTimeInput.value='';
+        }
+        const fd=new FormData(form),fields={};for(const [k,v] of fd.entries())fields[k]=String(v);
         ['activityType','category','subCategory','status','priority','reminderRepeat','reminderEnabled'].forEach(id=>{if($(id))fields[id]=val(id)});fields.activityType=activityType;fields.category=category;fields.subCategory=subCategory;fields.isSensitive=$('isSensitive').checked?'true':'false';
         for(let i=0;i<3;i++)fields['photo'+(i+1)+'Data']=selectedActivityPhotos[i]?await compressActivityPhoto(selectedActivityPhotos[i]):'';
         if(editRecord)fields.activityId=String(editRecord.activityId||'');
         const res=await request(editRecord?'updateActivity':'saveActivity',fields);if(res.status!=='success')throw new Error(res.message||'Unable to save activity.');
         if(editRecord){
           btn.disabled=false;btn.textContent='Update';
-          activityToast('Activity updated successfully. Activity ID: '+(res.activityId||editRecord.activityId||''),'success',2600);
-          cached=[];backToMenu();return;
+          const updatedId=String(res.activityId||editRecord.activityId||'');
+          // Keep the local report data in sync so the updated record is shown
+          // immediately when returning to the same report page.
+          const updatedValues={...fields};
+          delete updatedValues.photo1Data;delete updatedValues.photo2Data;delete updatedValues.photo3Data;
+          const updateRecordInList=list=>{
+            if(!Array.isArray(list))return;
+            const existing=list.find(item=>String(item.activityId||'')===updatedId);
+            if(existing)Object.assign(existing,updatedValues);
+          };
+          updateRecordInList(cached);
+          updateRecordInList(lastRows);
+          if(currentReportContext)updateRecordInList(currentReportContext.rows);
+          if(currentReportContext){
+            const context=currentReportContext;
+            renderReportPage(context.rows,context.type,context.kind,context.custom,context.period);
+          }
+          activityToast('Activity updated successfully. Activity ID: '+updatedId,'success',2600);
+          return;
         }
         btn.disabled=false;btn.textContent='Save';
         activityToast('Activity saved successfully. Activity ID: '+(res.activityId||''),'success',2600);cached=[];resetForm();
@@ -480,9 +510,10 @@
     if(custom)return `Activities Custom Search - Detailed - ${periodLabel}`;
     return `Activities Detailed - ${periodLabel}`;
   }
-  function renderReportPage(rows,type,kind,custom){
+  function renderReportPage(rows,type,kind,custom,periodOverride=null){
     styleOnce();
-    const selectedPeriod=$('actReportPeriod')?.value||reportSettings?.period||'All';
+    const selectedPeriod=periodOverride||$('actReportPeriod')?.value||reportSettings?.period||'All';
+    currentReportContext={rows:rows.slice(),type,kind,custom,period:selectedPeriod};
     const label=reportPageTitle(type,kind,custom,selectedPeriod);
     // Detailed report uses normal block flow: summary cards occupy their own
     // fixed-height row, and the report scroll viewport starts immediately below.
