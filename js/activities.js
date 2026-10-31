@@ -224,8 +224,8 @@
     .activity-page .expense-summary{margin:2px 0 9px!important;gap:6px!important}
     .activity-page #actReportOutput>.expense-summary{margin-top:0!important}
     .activity-page .expense-summary-card{height:auto!important;min-height:38px!important;padding:5px 4px!important;gap:3px!important;line-height:1.1!important}
-    .activity-page .expense-summary-card small{font-size:clamp(8px,2.4vw,11px)!important;white-space:nowrap!important}
-    .activity-page .expense-summary-card strong{font-size:clamp(10px,2.7vw,13px)!important;white-space:nowrap!important}
+    .activity-page .expense-summary-card small{font-size:clamp(11px,3vw,14px)!important;white-space:nowrap!important}
+    .activity-page .expense-summary-card strong{font-size:clamp(13px,3.6vw,17px)!important;white-space:nowrap!important}
     /* Reset remains transparent with a blue outline, matching the secondary action style. */
     .activity-page #activityResetBtn{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}
     /* Place the Reminder selector below Status, in the left column. */
@@ -681,7 +681,7 @@
           return `${td(i+1,'S.No')}${td(esc(g.year),'Year')}${td(g.count,'No')}${td(g.completed,'Completed')}`;
         };
         const colspan=p==='Daily'?6:(p==='Weekly'||p==='Monthly'?5:4);
-        const groupedPeriodHeading=p==='Daily'?'Daily Records':p==='Monthly'?'Monthly Records':p==='Yearly'?'Yearly Records':'';
+        const groupedPeriodHeading=p==='Daily'?'Daily Records':p==='Weekly'?'Weekly Records':p==='Monthly'?'Monthly Records':p==='Yearly'?'Yearly Records':'';
         table=`${groupedPeriodHeading?`<div class="expense-abstract-heading activity-abstract-period-subheading">${groupedPeriodHeading}</div>`:''}<div class="expense-results"><table><thead><tr>${headers}</tr></thead><tbody>${keys.map((key,i)=>`<tr>${cells(key,groups[key],i)}</tr>`).join('')||`<tr><td class="activity-abstract-center" colspan="${colspan}">No records found.</td></tr>`}</tbody></table></div>`;
       }else if(['Today','This Week','This Month','This Year'].includes(p)){
         // Period Abstract: show the selected period as a subheading, followed by
@@ -795,8 +795,14 @@
       // Detailed report period headings include their own Total Records and Completed counts.
       // This Year and All additionally show month-wise count rows before each month's records.
       const completedIn = list => list.filter(record=>String(record.status||'').toLowerCase()==='completed').length;
-      const summaryRow = (label, recordCount, completedCount) =>
-        `<tr class="expense-report-subheading activity-report-summary-row"><th colspan="${reportColCount}"><div class="activity-report-summary-content"><span>${esc(label)}</span><span>Total Records : ${recordCount}</span><span>Completed : ${completedCount}</span></div></th></tr>`;
+      // Period row repeats only the selected period label; the record totals are
+      // already displayed in the two summary cards above the table.
+      const summaryRow = label =>
+        `<tr class="expense-report-subheading activity-report-summary-row"><th colspan="${reportColCount}"><div class="activity-report-summary-content"><span>${esc(label)}</span></div></th></tr>`;
+      // Month groups stay visually distinct in light orange. Their counts remain
+      // useful in the month-by-month breakdown for This Year and All.
+      const monthSummaryRow = (label, recordCount, completedCount) =>
+        `<tr class="expense-report-month"><th colspan="${reportColCount}"><div class="activity-month-heading-content"><span class="activity-month-name">${esc(label)}</span><span class="activity-month-records">Total Records : ${recordCount}</span><span class="activity-month-completed">Completed : ${completedCount}</span></div></th></tr>`;
       const selectedDate=today();
       let periodLabel='';
       if(reportPeriod==='Today'){
@@ -827,7 +833,7 @@
         });
       }
       if(periodLabel){
-        grouped+=summaryRow(periodLabel,total,completed);
+        grouped+=summaryRow(periodLabel);
       }
 
       const appendDetailedActivityRow=(record,rowIndex)=>{
@@ -853,7 +859,7 @@
               const monthName=new Date(year,month-1,1).toLocaleString('en-US',{month:'long'});
               monthLabel=reportPeriod==='All'?`${monthName} - ${year}`:monthName;
             }
-            grouped+=summaryRow(monthLabel,stats.count,stats.completed);
+            grouped+=monthSummaryRow(monthLabel,stats.count,stats.completed);
           }
           appendDetailedActivityRow(record,rowIndex);
         });
