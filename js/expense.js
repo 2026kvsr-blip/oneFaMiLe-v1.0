@@ -659,7 +659,7 @@ ${field('Photos',`
       const limitedKeys=['date','category','subcategory','amount','paymentMode','sensitive','description','edit'];
       const selectedMode=$('exShowColumns')?.value||'limited';
       const visibleColumns=selectedMode==='all'?allColumns:allColumns.filter(c=>limitedKeys.includes(c.key));
-      const headers=[`<th class="expense-center-cell">S.No</th>`,...visibleColumns.map(c=>`<th class="${c.center?'expense-center-cell ':''}${c.key==='edit'?'expense-edit-cell':''}">${c.label}</th>`)];
+      const headers=[`<th class="expense-center-cell">S.No</th>`,...visibleColumns.map(c=>`<th class="expense-col-${c.key} ${c.center?'expense-center-cell ':''}${c.key==='edit'?'expense-edit-cell':''}">${c.label}</th>`)];
       const colCount=headers.length;
       // Each uploaded photo may be returned under more than one alias
       // (for example photo1Url and photo1). Select only one value per slot.
@@ -718,7 +718,7 @@ ${field('Photos',`
         };
         const cells=[`<td class="expense-center-cell">${rowIndex+1}</td>`,...visibleColumns.map(col=>{
           const value=col.value(r,photos,rowIndex);
-          return `<td class="${col.center?'expense-center-cell ':''}${col.key==='edit'?'expense-edit-cell':''}">${col.html?value:esc(value)}</td>`;
+          return `<td class="expense-col-${col.key} ${col.center?'expense-center-cell ':''}${col.key==='edit'?'expense-edit-cell':''}">${col.html?value:esc(value)}</td>`;
         })];
         groupedRows+=`<tr class="${amountRowClass(r)}">${cells.join('')}</tr>`;
         if(['This Year','All','Monthly','Yearly'].includes(reportPeriod)){const amount=Number(r.amount)||0;monthTotal+=amount;monthCount++;yearTotal+=amount;yearCount++;}
@@ -847,6 +847,13 @@ ${field('Photos',`
       .expense-page.expense-report-abstract .expense-report-panel .expense-results table thead th{height:36px!important;min-height:36px!important;padding:3px 5px!important;line-height:1.05!important}
       .expense-page.expense-report-abstract .expense-report-panel .expense-summary{margin:0 0 6px!important;gap:5px!important}
       .expense-page.expense-report-abstract .expense-report-panel .expense-summary-card{min-height:34px!important;height:34px!important;padding:3px 4px!important}
+      /* Detailed Expenses: slightly wider Date, slightly narrower Category and Sub-Category. */
+      .expense-page.expense-report-detailed .expense-report-panel .expense-results th.expense-col-date,
+      .expense-page.expense-report-detailed .expense-report-panel .expense-results td.expense-col-date{width:86px!important;min-width:86px!important;max-width:92px!important;padding-left:5px!important;padding-right:5px!important;text-align:center!important;white-space:nowrap!important}
+      .expense-page.expense-report-detailed .expense-report-panel .expense-results th.expense-col-category,
+      .expense-page.expense-report-detailed .expense-report-panel .expense-results td.expense-col-category{width:112px!important;min-width:105px!important;max-width:118px!important}
+      .expense-page.expense-report-detailed .expense-report-panel .expense-results th.expense-col-subcategory,
+      .expense-page.expense-report-detailed .expense-report-panel .expense-results td.expense-col-subcategory{width:120px!important;min-width:112px!important;max-width:126px!important}
       .expense-page .expense-report-panel .expense-edit-cell{width:48px!important;min-width:48px!important;max-width:48px!important;padding:4px 2px!important;text-align:center!important;vertical-align:middle!important;white-space:nowrap!important}
       .expense-page .expense-report-panel .expense-edit-text{display:inline-block!important;width:100%!important;min-width:0!important;padding:2px 0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;color:#2477c8!important;box-shadow:none!important;font:inherit!important;font-weight:600!important;text-align:center!important;text-decoration:none!important;white-space:nowrap!important;cursor:pointer!important}
       .expense-page .expense-report-panel .expense-results table .expense-report-subheading.expense-report-month th{height:32px!important;min-height:32px!important;padding:3px 8px!important;line-height:1.05!important;font-size:14px!important;vertical-align:middle!important}
