@@ -791,7 +791,7 @@
         'Status':'report-status',
         'Edit':'report-edit-cell'
       };
-      const reportPeriod=$('actReportPeriod')?.value||'All';
+      const reportPeriod=periodOverride||$('actReportPeriod')?.value||reportSettings?.period||'All';
       const reportColCount=columns.length+1;
       let grouped='';
       // All and This Year use a green heading row. Today, This Week and
