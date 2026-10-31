@@ -608,6 +608,43 @@
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-overdue>td *{
         color:#fff!important;font-weight:700!important;
       }
+      /* Deadline message strip uses the same deadline color as its source row.
+         Message text remains normal-weight for easy reading. */
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-row>td{
+        padding:0!important;
+        background:transparent!important;
+        border-top:0!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-row .activity-deadline-inline-message{
+        display:block!important;
+        width:100%!important;
+        box-sizing:border-box!important;
+        padding:8px 10px!important;
+        border:1px solid transparent!important;
+        border-radius:6px!important;
+        font-size:13px!important;
+        font-weight:400!important;
+        font-style:normal!important;
+        line-height:1.35!important;
+        white-space:normal!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-2days .activity-deadline-inline-message{
+        background:#1b5e20!important;background-color:#1b5e20!important;border-color:#1b5e20!important;color:#fff!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-1day .activity-deadline-inline-message{
+        background:#e68a00!important;background-color:#e68a00!important;border-color:#e68a00!important;color:#fff!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-today .activity-deadline-inline-message{
+        background:#b71c1c!important;background-color:#b71c1c!important;border-color:#b71c1c!important;color:#fff!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-overdue .activity-deadline-inline-message{
+        background:#d32f2f!important;background-color:#d32f2f!important;border-color:#d32f2f!important;color:#fff!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-row .activity-deadline-inline-message *{
+        color:inherit!important;
+        font-weight:400!important;
+        font-style:normal!important;
+      }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-row{
         cursor:pointer!important;
       }
@@ -986,13 +1023,35 @@
         if(parsed)td.replaceChildren(parsed);
       }
     });
-    // Tapping the body of an urgency-highlighted row shows its deadline message.
+    // Show the deadline message in a light-blue strip attached to the clicked row.
+    // A second click on the same row closes it; opening another row replaces it.
     // Edit and photo controls inside the row keep their existing actions.
     $('actReportOutput').querySelectorAll('tr.activity-deadline-row').forEach(deadlineRow=>{
       deadlineRow.addEventListener('click',event=>{
         if(event.target.closest('button,a,input,select,textarea'))return;
         const message=deadlineRow.getAttribute('data-deadline-message')||'';
-        if(message)activityToast(message,'warning',2600);
+        if(!message)return;
+
+        const nextRow=deadlineRow.nextElementSibling;
+        if(nextRow&&nextRow.classList.contains('activity-deadline-message-row')){
+          nextRow.remove();
+          return;
+        }
+
+        $('actReportOutput').querySelectorAll('tr.activity-deadline-message-row').forEach(row=>row.remove());
+
+        const messageRow=document.createElement('tr');
+        const deadlineType=['2days','1day','today','overdue'].find(type=>deadlineRow.classList.contains('activity-deadline-'+type));
+        messageRow.className='activity-deadline-message-row'+(deadlineType?' activity-deadline-message-'+deadlineType:'');
+        const messageCell=document.createElement('td');
+        messageCell.colSpan=deadlineRow.cells.length||1;
+        const messageBox=document.createElement('div');
+        messageBox.className='activity-deadline-inline-message';
+        messageBox.textContent=message;
+        messageBox.setAttribute('role','status');
+        messageCell.appendChild(messageBox);
+        messageRow.appendChild(messageCell);
+        deadlineRow.insertAdjacentElement('afterend',messageRow);
       });
     });
     // Clickable photo thumbnails use the same Drive-preview pattern as Expenses reports.
