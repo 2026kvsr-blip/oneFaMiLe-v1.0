@@ -146,6 +146,28 @@ function status(message, type = '') {
     el.textContent = message || '';
   }
 }
+  // Show a short explanation when the user taps a highlighted minimum/maximum row.
+  function showExpenseHighlightToast(message, kind){
+    let toast=document.getElementById('expenseHighlightToast');
+    if(!toast){
+      toast=document.createElement('div');
+      toast.id='expenseHighlightToast';
+      toast.setAttribute('role','status');
+      toast.setAttribute('aria-live','polite');
+      document.body.appendChild(toast);
+    }
+    clearTimeout(window.expenseHighlightToastTimer);
+    clearTimeout(window.expenseHighlightToastHideTimer);
+    const isHigh=kind==='high';
+    toast.textContent=message;
+    toast.style.cssText=`position:fixed;top:calc(env(safe-area-inset-top, 0px) + 16px);left:50%;transform:translateX(-50%);z-index:2147483647;max-width:calc(100vw - 28px);width:max-content;box-sizing:border-box;padding:10px 17px;border-radius:10px;background:${isHigh?'#fff0df':'#e8f5e9'};color:${isHigh?'#8a4b12':'#2e6b43'};border:1px solid ${isHigh?'#e9b77f':'#a6d5ad'};box-shadow:0 4px 14px rgba(0,0,0,.18);font-size:14px;font-weight:700;text-align:center;line-height:1.3;white-space:normal;opacity:1;display:block;pointer-events:none;transition:opacity .2s ease`;
+    window.expenseHighlightToastTimer=setTimeout(()=>{
+      toast.style.opacity='0';
+      window.expenseHighlightToastHideTimer=setTimeout(()=>{
+        if(toast)toast.style.display='none';
+      },200);
+    },1800);
+  }
   function field(label, control, id){return `<div class="expense-field"><label class="expense-label" for="${id||''}"><span class="expense-label-text">${label}</span><span class="expense-colon">:</span></label>${control}</div>`}
   function selectOptions(items,placeholder='Select',preserveOrder=false) {const list=preserveOrder?items.slice():items.slice().sort((a,b)=>String(a).localeCompare(String(b),undefined,{sensitivity:'base'}));return `<option value="">${placeholder}</option>`+list.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
   function shell(title,inner,backInside=false){return `<div class="expense-page"><h2 class="expense-title">${esc(title)}</h2>${inner}${backInside?'':`<div class="expense-actions"><button type="button" class="expense-secondary" id="expenseModuleBack">← Back</button></div>`}</div>`}
@@ -838,6 +860,14 @@ ${field('Photos',`
     // losing handlers when the report HTML is copied into its final display page.
     const visibleReportOutput=$('exReportOutput');
     if(visibleReportOutput){
+      // A tap/click on a highlighted row explains whether it is the minimum
+      // or maximum expense/group. The row's normal action (such as expand) remains intact.
+      visibleReportOutput.querySelectorAll('tr.expense-amount-high-row, tr.expense-amount-low-row').forEach(row=>{
+        row.addEventListener('click',()=>{
+          const isMaximum=row.classList.contains('expense-amount-high-row');
+          showExpenseHighlightToast(isMaximum?'Maximum expenses':'Minimum expenses',isMaximum?'high':'low');
+        });
+      });
       visibleReportOutput.querySelectorAll('.expense-abstract-category-row').forEach(row=>{
         const toggle=()=>{
           const index=row.getAttribute('data-toggle-index');
