@@ -681,7 +681,8 @@
           return `${td(i+1,'S.No')}${td(esc(g.year),'Year')}${td(g.count,'No')}${td(g.completed,'Completed')}`;
         };
         const colspan=p==='Daily'?6:(p==='Weekly'||p==='Monthly'?5:4);
-        table=`<div class="expense-results"><table><thead><tr>${headers}</tr></thead><tbody>${keys.map((key,i)=>`<tr>${cells(key,groups[key],i)}</tr>`).join('')||`<tr><td class="activity-abstract-center" colspan="${colspan}">No records found.</td></tr>`}</tbody></table></div>`;
+        const groupedPeriodHeading=p==='Daily'?'Daily Records':p==='Monthly'?'Monthly Records':p==='Yearly'?'Yearly Records':'';
+        table=`${groupedPeriodHeading?`<div class="expense-abstract-heading activity-abstract-period-subheading">${groupedPeriodHeading}</div>`:''}<div class="expense-results"><table><thead><tr>${headers}</tr></thead><tbody>${keys.map((key,i)=>`<tr>${cells(key,groups[key],i)}</tr>`).join('')||`<tr><td class="activity-abstract-center" colspan="${colspan}">No records found.</td></tr>`}</tbody></table></div>`;
       }else if(['Today','This Week','This Month','This Year'].includes(p)){
         // Period Abstract: show the selected period as a subheading, followed by
         // expandable Category / Sub Category rows with record and completed counts.
@@ -744,7 +745,7 @@
           const subRows=Object.keys(g.subs).sort().map(subCategory=>`<tr class="activity-abstract-subrow" data-parent="${idx}" hidden><td style="padding-left:28px">↳ ${esc(subCategory)}</td><td class="activity-abstract-center">${g.subs[subCategory]}</td><td class="activity-abstract-center">—</td></tr>`).join('');
           return `<tr class="activity-abstract-parent" data-index="${idx}" tabindex="0" role="button" aria-expanded="false" style="cursor:pointer"><td><span class="activity-toggle">＋</span> ${esc(c)}</td><td class="activity-abstract-center">${g.count}</td><td class="activity-abstract-center">${g.completed}</td></tr>${subRows}`;
         }).join('');
-        table=`<div class="expense-results"><table><thead><tr><th>Category / SubCategory</th><th class="activity-abstract-center">Activities</th><th class="activity-abstract-center">Completed</th></tr></thead><tbody>${body||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
+        table=`<div class="expense-abstract-heading activity-abstract-period-subheading">All Records</div><div class="expense-results"><table><thead><tr><th>Category / SubCategory</th><th class="activity-abstract-center">Activities</th><th class="activity-abstract-center">Completed</th></tr></thead><tbody>${body||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
       }
     }
     else{
