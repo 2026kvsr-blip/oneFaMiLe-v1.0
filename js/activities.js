@@ -1,4 +1,6 @@
 
+
+
 /* oneFaMiLe Activities module — report page structure follows expense.js */
 (function(){
   'use strict';
@@ -64,6 +66,8 @@
   function selectField(id,label,items,placeholder,required=false,wide=false,allowCustom=true){return field(label,id,`<select id="${id}" name="${id}"${required?' required':''}>${dropdown(items,placeholder,allowCustom)}</select>${allowCustom?`<input id="${id}Custom" class="activity-custom-input" type="text" placeholder="Type a custom value" aria-label="Custom ${esc(label)}" hidden>`:''}`,wide)}
   let cached=[], lastRows=[], dateAscending=true, activeAccess='normal', reportSettings=null;
   function options(items,placeholder='Select',preserve=false){const list=preserve?items.slice():items.slice().sort((a,b)=>String(a).localeCompare(String(b),undefined,{sensitivity:'base'}));return `<option value="">${esc(placeholder)}</option>`+list.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
+  // Report Type and Report Period are mandatory selections, so do not show a blank placeholder option.
+  function reportChoiceOptions(items,selected=''){return items.map(x=>`<option value="${esc(x)}"${x===selected?' selected':''}>${esc(x)}</option>`).join('')}
   function page(html){if(typeof window.showPage==='function')window.showPage(html);else{const el=$('homeContent')||$('pageContent')||$('mainContent');if(el)el.innerHTML=html}}
   function title(text){return typeof window.pageTitle==='function'?window.pageTitle(text,'images/colorbtns/Activities1.png'):`<h2 class="page-title">${esc(text)}</h2>`}
   function shell(text,inner,inside=false){return `<div class="expense-page activity-page"><h2 class="expense-title">${esc(text)}</h2>${inner}${inside?'':'<div class="expense-actions"><button type="button" class="expense-secondary" id="activityModuleBack">← Back</button></div>'}</div>`}
@@ -124,7 +128,7 @@
     .activity-page .expense-report-year th{font-size:22px!important;font-weight:700;padding:10px 8px;background:#fff!important;color:#218838!important}.activity-page .expense-report-month th{font-size:16px!important;font-weight:700;padding:8px;background:#fff!important;color:#e67e22!important}
     .activity-page .expense-report-total td{font-weight:700;background:#fff!important;border-top:1px solid #c4d4ff}.activity-page .expense-abstract-title{font-size:23px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}
     .activity-page .expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}
-    .activity-page .expense-summary{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 14px;box-sizing:border-box;flex-wrap:nowrap}.activity-page .expense-summary-card{display:flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;min-width:0;min-height:44px;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px;flex:1 1 33%;width:33%;line-height:1.2}.activity-page .expense-summary.activity-summary-two>.expense-summary-card{flex:1 1 50%!important;width:50%!important;max-width:50%!important}.activity-page .expense-summary-card small,.activity-page .expense-summary-card strong{display:inline-flex;align-items:center;line-height:1.2}.activity-page .expense-summary-card small{font-size:clamp(9px,2.6vw,12px)}.activity-page .expense-summary-card strong{font-size:clamp(10px,2.9vw,14px)}
+    .activity-page .expense-summary{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 14px;box-sizing:border-box;flex-wrap:nowrap}.activity-page .expense-summary-card{display:flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;min-width:0;min-height:44px;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px;flex:1 1 33%;width:33%;line-height:1.2}.activity-page .expense-summary-card small,.activity-page .expense-summary-card strong{display:inline-flex;align-items:center;line-height:1.2}.activity-page .expense-summary-card small{font-size:clamp(9px,2.6vw,12px)}.activity-page .expense-summary-card strong{font-size:clamp(10px,2.9vw,14px)}
     .activity-page .activity-date-sort-field .expense-date-sort{display:flex;align-items:center;justify-content:center;width:100%;min-width:0;max-width:100%;height:40px;min-height:40px;max-height:40px;box-sizing:border-box;padding:8px 10px;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#222;font:inherit;white-space:nowrap;box-shadow:none}
     .activity-page #activityDownloadBtn,.activity-page #activityReportBack,.activity-page #activityModuleBack{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}
 .activity-page .expense-panel:has(#activityDownloadBtn) .expense-report-actions{display:flex!important;align-items:stretch!important;gap:8px!important;width:100%!important;box-sizing:border-box!important}
@@ -434,12 +438,12 @@
   }
   function sensitiveGate(kind){styleOnce();const label=kind==='sensitive'?'Sensitive Activities - Report':'All Activities - Report';const inner=`<div class="expense-panel"><div class="expense-field"><label class="expense-label" for="activityPassCode">Pass Code</label><input id="activityPassCode" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Enter Pass Code"></div><div id="activityStatus" class="expense-status" role="status"></div><div class="expense-actions" style="display:flex;align-items:center;justify-content:center;align-items:center;gap:16px;margin-top:32px;flex-wrap:nowrap;width:100%"><button type="button" id="activityVerifyPass" class="expense-primary" style="margin:0">Verify</button><button type="button" id="activityModuleBack" class="expense-secondary" style="margin:0">← Back</button></div></div>`;page(shell(label,inner,true));bindBack();$('activityVerifyPass').onclick=async()=>{const pass=$('activityPassCode').value.trim();if(!pass){status('Enter Pass Code.','error');return}const btn=$('activityVerifyPass');btn.disabled=true;status('Verifying…');try{const res=await request('getActivities',{includeSensitive:'true',passCode:pass});if(res.status!=='success')throw new Error(res.message||'Pass Code verification failed.');cached=res.activities||[];activeAccess=kind;renderReports(kind,false,cached)}catch(e){status(e.message||'Verification failed.','error');btn.disabled=false}}}
   function reportControls(custom){return `<style>.activity-page .expense-filter-grid .expense-field.hidden{display:none!important}.activity-page .expense-report-inline{display:flex;flex-direction:column;gap:5px}.activity-page .expense-report-inline .expense-label{white-space:nowrap;width:100%;margin:0!important}.activity-page .expense-report-inline select{display:block;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-custom-grid .expense-field{min-width:0}.activity-page .activity-custom-grid>.expense-field:has(#actFromDate){grid-row:4!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actToDate){grid-row:4!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actSearchText){grid-row:5!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actAssignedTo){grid-row:5!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actPersonDoctorOffice){grid-row:6!important;grid-column:1!important}.activity-page .activity-custom-grid #actShowColumnsField{grid-row:6!important;grid-column:2!important}.activity-page .expense-panel>.expense-report-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;justify-content:stretch!important;gap:8px!important;width:100%!important;margin-top:24px!important;padding-top:2px!important;box-sizing:border-box!important}.activity-page:not(.activity-report-view) .expense-panel>.expense-report-actions>button{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;flex:none!important;box-sizing:border-box!important}</style><div class="expense-panel"><div class="expense-filter-grid ${custom?'activity-custom-grid':''}">
-    <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportType">Report Type</label><select id="actReportType">${options(['Abstract','Detailed'],'Select Type',true)}</select></div>
-    <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportPeriod">Report Period</label><select id="actReportPeriod">${options(['Today','This Week','This Month','This Year','All'],'Select Period',true)}</select></div>
-    <div class="expense-field"><label class="expense-label" for="actFilterCategory">Category</label><select id="actFilterCategory">${options(reportCategoryKeys(),'All Categories')}</select></div>
-    <div class="expense-field"><label class="expense-label" for="actFilterSub">Sub Category</label><select id="actFilterSub">${options(reportSubCategoryKeys(''),'All Sub Categories')}</select></div>
-    <div class="expense-field"><label class="expense-label" for="actFilterStatus">Status</label><select id="actFilterStatus">${options(statusOptions,'All Statuses',true)}</select></div>
-    <div class="expense-field"><label class="expense-label" for="actFilterPriority">Priority</label><select id="actFilterPriority">${options(priorityOptions,'All Priorities',true)}</select></div>
+    <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportType">Report Type</label><select id="actReportType">${reportChoiceOptions(['Abstract','Detailed'],'Abstract')}</select></div>
+    <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportPeriod">Report Period</label><select id="actReportPeriod">${reportChoiceOptions(['Today','This Week','This Month','This Year','All'],'Today')}</select></div>
+    <div class="expense-field"><label class="expense-label" for="actFilterCategory">Category</label><select id="actFilterCategory">${options(reportCategoryKeys(),'All')}</select></div>
+    <div class="expense-field"><label class="expense-label" for="actFilterSub">Sub Category</label><select id="actFilterSub">${options(reportSubCategoryKeys(''),'All')}</select></div>
+    <div class="expense-field"><label class="expense-label" for="actFilterStatus">Status</label><select id="actFilterStatus">${options(statusOptions,'All',true)}</select></div>
+    <div class="expense-field"><label class="expense-label" for="actFilterPriority">Priority</label><select id="actFilterPriority">${options(priorityOptions,'All',true)}</select></div>
     <div class="expense-field activity-date-sort-field"><label class="expense-label" for="actDateSortBtn">Date order</label><button type="button" id="actDateSortBtn" class="expense-date-sort" aria-label="Sort date ascending" title="Sort date ascending">↑ Date Ascending</button></div>
     <div class="expense-field hidden" id="actShowColumnsField"><label class="expense-label" for="actShowColumns">Show Columns</label><select id="actShowColumns"><option value="limited" selected>Limited</option><option value="all">All</option></select></div>
     ${custom?`<div class="expense-field"><label class="expense-label" for="actFromDate">From Date</label><input id="actFromDate" type="date"></div><div class="expense-field"><label class="expense-label" for="actToDate">To Date</label><input id="actToDate" type="date"></div><div class="expense-field"><label class="expense-label" for="actSearchText">Search Text</label><input id="actSearchText" type="search" placeholder="Activity, description, category…"></div><div class="expense-field"><label class="expense-label" for="actAssignedTo">Assigned To</label><input id="actAssignedTo" placeholder="Any member/person"></div><div class="expense-field"><label class="expense-label" for="actPersonDoctorOffice">Person / Doctor / Office</label><input id="actPersonDoctorOffice" placeholder="Any person / doctor / office"></div>`:''}
@@ -449,17 +453,17 @@
     const type=$('actReportType'),period=$('actReportPeriod'),cat=$('actFilterCategory'),sub=$('actFilterSub'),run=$('actRunReport');
     const abstractPeriods=['Today','This Week','This Month','This Year','All','Daily','Weekly','Monthly','Yearly'];
     const detailedPeriods=['Today','This Week','This Month','This Year','All'];
-    const syncPeriodOptions=()=>{const previous=period.value;const choices=type.value==='Abstract'?abstractPeriods:detailedPeriods;period.innerHTML=options(choices,'Select Period',true);period.value=choices.includes(previous)?previous:'This Month';};
+    const syncPeriodOptions=()=>{const previous=period.value;const choices=type.value==='Abstract'?abstractPeriods:detailedPeriods;const selected=choices.includes(previous)?previous:'Today';period.innerHTML=reportChoiceOptions(choices,selected);period.value=selected;};
     const syncDateSortVisibility=()=>{const p=period.value,isAbstract=type.value==='Abstract';const hide=isAbstract&&['All','Today','This Week','This Month','This Year'].includes(p);const sortField=$('actDateSortBtn')?.closest('.expense-field');if(sortField)sortField.classList.toggle('hidden',hide);};
     const syncShowColumnsVisibility=()=>{const field=$('actShowColumnsField');if(field)field.classList.toggle('hidden',type.value!=='Detailed');};
     type.onchange=()=>{syncPeriodOptions();syncDateSortVisibility();syncShowColumnsVisibility();if(lastRows.length)renderReportResults(lastRows,type.value)};syncPeriodOptions();period.onchange=syncDateSortVisibility;
-    const syncSub=()=>{const previous=sub.value;sub.innerHTML=options(cat.value?reportSubCategoryKeys(cat.value):reportSubCategoryKeys(''),'All Sub Categories');if([...sub.options].some(o=>o.value===previous))sub.value=previous;};cat.onchange=syncSub;syncSub();
+    const syncSub=()=>{const previous=sub.value;sub.innerHTML=options(cat.value?reportSubCategoryKeys(cat.value):reportSubCategoryKeys(''),'All');if([...sub.options].some(o=>o.value===previous))sub.value=previous;};cat.onchange=syncSub;syncSub();
     const back=$('activityReportBack');if(back)back.onclick=event=>{event.preventDefault();event.stopPropagation();backToMenu()};
     
     const dateSortBtn=$('actDateSortBtn');if(dateSortBtn)dateSortBtn.onclick=()=>{dateAscending=!dateAscending;dateSortBtn.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';dateSortBtn.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');dateSortBtn.title=dateAscending?'Sort date ascending':'Sort date descending';if(lastRows.length)renderReportResults(lastRows,type.value)};
     const showColumns=$('actShowColumns');if(showColumns)showColumns.onchange=()=>{if(lastRows.length)renderReportResults(lastRows,type.value)};
-    run.onclick=async()=>{run.disabled=true;status('Loading activities…');try{let rows=cached;if(!rows.length){const fields={};if(kind==='sensitive'||kind==='all'){fields.includeSensitive='true';const pass=$('activityPassCode')?.value?.trim();if(pass)fields.passCode=pass;}const res=await request('getActivities',fields);if(res.status!=='success')throw new Error(res.message||'Unable to load activities.');rows=res.activities||[];cached=rows;}const filtered=filterRows(rows,custom,kind);lastRows=filtered.slice();reportSettings={type:type.value,period:period.value,category:cat.value,subCategory:sub.value,status:$('actFilterStatus').value,priority:$('actFilterPriority').value,showColumns:$('actShowColumns')?.value||'limited',dateAscending,from:$('actFromDate')?.value||'',to:$('actToDate')?.value||'',search:$('actSearchText')?.value||'',assigned:$('actAssignedTo')?.value||'',personDoctorOffice:$('actPersonDoctorOffice')?.value||''};renderReportPage(filtered,type.value,kind,custom,period.value);}catch(e){status(e.message||'Unable to load activities.','error')}finally{run.disabled=false}};
-    type.value=custom?'Detailed':'Abstract';syncPeriodOptions();period.value='This Month';syncDateSortVisibility();syncShowColumnsVisibility();
+    run.onclick=async()=>{run.disabled=true;status('Loading activities…');try{let rows=cached;if(!rows.length){const fields={};if(kind==='sensitive'||kind==='all'){fields.includeSensitive='true';const pass=$('activityPassCode')?.value?.trim();if(pass)fields.passCode=pass;}const res=await request('getActivities',fields);if(res.status!=='success')throw new Error(res.message||'Unable to load activities.');rows=res.activities||[];cached=rows;}const filtered=filterRows(rows,custom,kind);lastRows=filtered.slice();reportSettings={type:type.value,period:period.value,category:cat.value,subCategory:sub.value,status:$('actFilterStatus').value,priority:$('actFilterPriority').value,showColumns:$('actShowColumns')?.value||'limited',dateAscending,from:$('actFromDate')?.value||'',to:$('actToDate')?.value||'',search:$('actSearchText')?.value||'',assigned:$('actAssignedTo')?.value||'',personDoctorOffice:$('actPersonDoctorOffice')?.value||''};renderReportPage(filtered,type.value,kind,custom);}catch(e){status(e.message||'Unable to load activities.','error')}finally{run.disabled=false}};
+    type.value='Abstract';syncPeriodOptions();period.value='Today';syncDateSortVisibility();syncShowColumnsVisibility();
     if(reportSettings){type.value=reportSettings.type;syncPeriodOptions();period.value=reportSettings.period;cat.value=reportSettings.category;syncSub();sub.value=reportSettings.subCategory;$('actFilterStatus').value=reportSettings.status;$('actFilterPriority').value=reportSettings.priority;if($('actShowColumns'))$('actShowColumns').value=reportSettings.showColumns;if($('actFromDate'))$('actFromDate').value=reportSettings.from;if($('actToDate'))$('actToDate').value=reportSettings.to;if($('actSearchText'))$('actSearchText').value=reportSettings.search;if($('actAssignedTo'))$('actAssignedTo').value=reportSettings.assigned;if($('actPersonDoctorOffice'))$('actPersonDoctorOffice').value=reportSettings.personDoctorOffice||'';dateAscending=reportSettings.dateAscending;syncDateSortVisibility();syncShowColumnsVisibility();reportSettings=null;}
   }
   function reportPageTitle(type,kind,custom,period='All'){
@@ -477,9 +481,9 @@
     if(custom)return `Activities Custom Search - Detailed - ${periodLabel}`;
     return `Activities Detailed - ${periodLabel}`;
   }
-  function renderReportPage(rows,type,kind,custom,selectedPeriodArg){
+  function renderReportPage(rows,type,kind,custom){
     styleOnce();
-    const selectedPeriod=selectedPeriodArg||$('actReportPeriod')?.value||reportSettings?.period||'All';
+    const selectedPeriod=$('actReportPeriod')?.value||reportSettings?.period||'All';
     const label=reportPageTitle(type,kind,custom,selectedPeriod);
     // Detailed report uses normal block flow: summary cards occupy their own
     // fixed-height row, and the report scroll viewport starts immediately below.
@@ -538,12 +542,6 @@
         color:#e67e22!important;background:#fff1d9!important;background-color:#fff1d9!important;
         border:1px solid #e8cda6!important;
       }
-      /* Give All-records Month - Year group rows a distinct soft mint colour. */
-      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-month-group-heading>th{
-        color:#2e6b43!important;
-        background:#e8f5e9!important;background-color:#e8f5e9!important;
-        border:1px solid #b9d8c1!important;
-      }
       .activity-page.activity-report-detailed .activity-month-heading-content{
         display:grid!important;grid-template-columns:170px 150px!important;
         grid-auto-flow:column!important;justify-content:start!important;align-items:center!important;
@@ -560,7 +558,7 @@
       }
     </style>`:'';
     const inner=`${detailedReportStyles}<div class="expense-panel"><div id="actReportOutput"></div><div class="expense-report-actions"><div class="expense-download-wrap"><button type="button" id="activityDownloadBtn" class="expense-secondary">Download ▾</button><div id="activityDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div><button type="button" id="activityReportDateSort" class="expense-date-sort">${dateAscending?'↑ Date Ascending':'↓ Date Descending'}</button><button type="button" id="activityReportBack" class="expense-secondary">← Back</button></div></div>`;
-    page(shell(label,inner,true));const reportPage=document.querySelector('.activity-page');if(reportPage){reportPage.classList.add('activity-report-view');if(type==='Detailed')reportPage.classList.add('activity-report-detailed');else reportPage.classList.add('activity-report-abstract');}renderReportResults(rows,type,selectedPeriod);const reportSort=$('activityReportDateSort');if(reportSort)reportSort.onclick=()=>{dateAscending=!dateAscending;reportSort.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';reportSort.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');reportSort.title=dateAscending?'Sort date ascending':'Sort date descending';renderReportResults(lastRows,type,selectedPeriod)};const dl=$('activityDownloadBtn'),menu=$('activityDownloadMenu');if(dl&&menu){dl.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportReport(b.dataset.export)});}const back=$('activityReportBack');if(back)back.onclick=()=>renderReports(kind,custom,cached);
+    page(shell(label,inner,true));const reportPage=document.querySelector('.activity-page');if(reportPage){reportPage.classList.add('activity-report-view');if(type==='Detailed')reportPage.classList.add('activity-report-detailed');else reportPage.classList.add('activity-report-abstract');}renderReportResults(rows,type);const reportSort=$('activityReportDateSort');if(reportSort)reportSort.onclick=()=>{dateAscending=!dateAscending;reportSort.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';reportSort.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');reportSort.title=dateAscending?'Sort date ascending':'Sort date descending';renderReportResults(lastRows,type)};const dl=$('activityDownloadBtn'),menu=$('activityDownloadMenu');if(dl&&menu){dl.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportReport(b.dataset.export)});}const back=$('activityReportBack');if(back)back.onclick=()=>renderReports(kind,custom,cached);
   }
   function filterRows(rows,custom,kind){
     let from=custom?($('actFromDate')?.value||''):'',to=custom?($('actToDate')?.value||''):'';const p=$('actReportPeriod').value,now=new Date();
@@ -568,7 +566,7 @@
     const start=from?new Date(from+'T00:00:00').getTime():null,end=to?new Date(to+'T23:59:59').getTime():null;const c=$('actFilterCategory').value,s=$('actFilterSub').value,st=$('actFilterStatus').value,pr=$('actFilterPriority').value,q=custom?($('actSearchText')?.value||'').trim().toLowerCase():'',assigned=custom?($('actAssignedTo')?.value||'').trim().toLowerCase():'',personDoctorOffice=custom?($('actPersonDoctorOffice')?.value||'').trim().toLowerCase():'';
     return rows.filter(r=>{const date=String(r.startDate||r.dueDate||r.createdAt||'').slice(0,10);const time=date?new Date(date+'T12:00:00').getTime():0;if(start!==null&&time<start)return false;if(end!==null&&time>end)return false;if(c&&String(r.category||'')!==c)return false;if(s&&String(r.subCategory||'')!==s)return false;if(st&&String(r.status||'')!==st)return false;if(pr&&String(r.priority||'')!==pr)return false;if(assigned&&!String(r.assignedTo||'').toLowerCase().includes(assigned))return false;if(personDoctorOffice&&!`${r.appointmentPerson||''} ${r.person||''} ${r.doctor||''} ${r.office||''}`.toLowerCase().includes(personDoctorOffice))return false;if(q&&!`${r.title||''} ${r.category||''} ${r.subCategory||''} ${r.description||''} ${r.tags||''} ${r.status||''} ${r.activityType||''} ${r.assignedTo||''}`.toLowerCase().includes(q))return false;if(kind==='normal'&&sensitiveFlag(r.isSensitive))return false;if(kind==='sensitive'&&!sensitiveFlag(r.isSensitive))return false;return true})
   }
-  function renderReportResults(rows,type,selectedPeriodArg){
+  function renderReportResults(rows,type){
     const typeOrder=Object.keys(ACTIVITY_CONFIG).filter(name=>name!=='Reminder');
     const typeRank=new Map(typeOrder.map((name,index)=>[name,index]));
     const dateKey=row=>String(row.startDate||row.dueDate||row.createdAt||'').slice(0,10);
@@ -595,7 +593,7 @@
       if(ra!==rb)return ra-rb;
       return String(a.activityType||'').localeCompare(String(b.activityType||''),undefined,{sensitivity:'base'});
     });
-    const total=rows.length,completed=rows.filter(r=>String(r.status).toLowerCase()==='completed').length;let table='';const p=selectedPeriodArg||$('actReportPeriod')?.value||reportSettings?.period||'All';
+    const total=rows.length,completed=rows.filter(r=>String(r.status).toLowerCase()==='completed').length,pending=rows.filter(r=>String(r.status).toLowerCase()==='pending').length;let table='';const p=$('actReportPeriod')?.value||reportSettings?.period||'All';
     if(type==='Abstract'){
       if(['Daily','Weekly','Monthly','Yearly'].includes(p)){
         // Date-grouped Abstract reports mirror the Expenses layout.
@@ -730,11 +728,11 @@
       const photoThumbUrl=url=>{
         const raw=String(url||'');
         const match=raw.match(/[?&]id=([^&]+)/i)||raw.match(/\/d\/([^/?]+)/i);
-        return /drive\.google\.com/i.test(raw)&&match?`https://drive.google.com/thumbnail?id=${match[1]}&sz=w100`:raw;
+        return /drive\.google\.com/i.test(raw)&&match?`https://drive.google.com/thumbnail?id=${match[1]}&sz=w180`:raw;
       };
       const photoHtml=r=>{
         const photos=photoValues(r);
-        return photos.length?photos.map((url,i)=>`<button type="button" class="activity-photo-preview-btn" data-activity-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 20px;width:20px;height:20px;align-items:center;justify-content:center;padding:0;margin:0 1px;border:0;background:transparent;cursor:pointer"><img src="${esc(photoThumbUrl(url))}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:18px;height:18px;object-fit:cover;border:1px solid #c4d4ff;border-radius:3px" onerror="this.style.display='none';this.parentElement.textContent='Open'"></button>`).join(''):'—';
+        return photos.length?photos.map((url,i)=>`<button type="button" class="activity-photo-preview-btn" data-activity-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 28px;width:28px;height:28px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;cursor:pointer"><img src="${esc(photoThumbUrl(url))}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:26px;height:26px;object-fit:cover;border:1px solid #c4d4ff;border-radius:4px" onerror="this.style.display='none';this.parentElement.textContent='Open'"></button>`).join(''):'—';
       };
       const centerNames=['Scheduled Date','Scheduled Time','Status','Sensitive','Reminder','Reminder Repeat','Reminder Date','Reminder Time','Priority','No of photos'];
       const allColumns=[
@@ -761,7 +759,7 @@
         'Status':'report-status',
         'Edit':'report-edit-cell'
       };
-      const reportPeriod=selectedPeriodArg||reportSettings?.period||$('actReportPeriod')?.value||'All';
+      const reportPeriod=$('actReportPeriod')?.value||'All';
       const reportColCount=columns.length+1;
       let grouped='';
       // Always render the selected period as the first subheading, including
@@ -786,47 +784,20 @@
       if(periodHeading){
         grouped+=`<tr class="expense-report-subheading expense-report-month activity-period-heading ${reportPeriod==='All'?'activity-all-records-heading':''}"><th colspan="${reportColCount}">${esc(periodHeading)}</th></tr>`;
       }
-      // Build each detailed record row once so All can be grouped month-wise
-      // without changing the row layout, photo buttons, edit action, or S.No order.
-      let activitySerial=0;
-      const renderActivityRecordRow=r=>{
-        activitySerial++;
+      rows.forEach((r,i)=>{
         const cells=columns.map(c=>{
           const value=c[1](r);
           const cls=reportColClass[c[0]]||'';
           return `<td class="${centerNames.includes(c[0])?'report-center ':''}${cls}">${(c[0]==='Photos'||c[0]==='Edit')?value:esc(value)}</td>`;
         }).join('');
-        return `<tr><td class="report-center report-sno">${activitySerial}</td>${cells}</tr>`;
-      };
-      if(reportPeriod==='All'){
-        // All Records is followed by one Month - Year heading for every month.
-        // The already-sorted rows keep their current ascending/descending order.
-        const monthGroups=new Map();
-        rows.forEach(r=>{
-          const ds=dateKey(r);
-          const match=ds.match(/^(\d{4})-(\d{2})-/);
-          const key=match?`${match[1]}-${match[2]}`:'Unknown';
-          if(!monthGroups.has(key)){
-            const monthLabel=match
-              ? `${new Date(Number(match[1]),Number(match[2])-1,1).toLocaleString('en-US',{month:'long'})} - ${match[1]}`
-              : 'Date Not Available';
-            monthGroups.set(key,{label:monthLabel,records:[]});
-          }
-          monthGroups.get(key).records.push(r);
-        });
-        monthGroups.forEach(group=>{
-          grouped+=`<tr class="expense-report-subheading expense-report-month activity-month-group-heading"><th colspan="${reportColCount}">${esc(group.label)}</th></tr>`;
-          group.records.forEach(r=>{grouped+=renderActivityRecordRow(r)});
-        });
-      }else{
-        rows.forEach(r=>{grouped+=renderActivityRecordRow(r)});
-      }
+        grouped+=`<tr><td class="report-center report-sno">${i+1}</td>${cells}</tr>`;
+      });
       if(!rows.length){
         grouped+=`<tr class="activity-report-empty"><td colspan="${reportColCount}">No records found.</td></tr>`;
       }
       table=`<div class="expense-results"><table><thead><tr><th class="report-center report-sno">S.No</th>${columns.map(c=>{const cls=reportColClass[c[0]]||'';const label=c[0]==='Scheduled Time'?'Scheduled<br>Time':esc(c[0]);return `<th class="${centerNames.includes(c[0])?'report-center ':''}${cls}">${label}</th>`}).join('')}</tr></thead><tbody>${grouped||`<tr><td colspan="${reportColCount}">No records found.</td></tr>`}</tbody></table></div>`;
     }
-    $('actReportOutput').innerHTML=`<div class="expense-summary activity-summary-two"><div class="expense-summary-card"><small>Total Records :</small><strong>${total}</strong></div><div class="expense-summary-card"><small>Completed :</small><strong>${completed}</strong></div></div>${table}`;
+    $('actReportOutput').innerHTML=`<div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${total}</strong></div><div class="expense-summary-card"><small>Completed :</small><strong>${completed}</strong></div><div class="expense-summary-card"><small>Pending :</small><strong>${pending}</strong></div></div>${table}`;
     // If an older renderer escaped the Edit HTML into visible text, convert only that
     // specific cell back into a real button. This is safe for normal rendered buttons too.
     $('actReportOutput').querySelectorAll('td').forEach(td=>{
