@@ -269,6 +269,21 @@
       <div id="activityStatus" class="expense-status" role="status" aria-live="polite"></div><div class="expense-actions"><button type="submit" id="activitySaveBtn" class="expense-primary">Save</button><button type="reset" id="activityResetBtn" class="expense-secondary">Reset</button><button type="button" id="activityModuleBack" class="expense-secondary">← Back</button></div>
     </form></div>`;
     page(shell(editRecord?'Edit Activity':'Add Activity',inner,true));bindBack();
+    // When Edit Activity was opened from a report, Back returns directly to
+    // that same report output instead of navigating to the Activities menu.
+    if(editRecord){
+      const editBack=$('activityModuleBack');
+      if(editBack)editBack.onclick=event=>{
+        event.preventDefault();
+        event.stopPropagation();
+        const context=currentReportContext;
+        if(context){
+          renderReportPage(context.rows,context.type,context.kind,context.custom,context.period);
+        }else{
+          backToMenu();
+        }
+      };
+    }
     if($('activitySaveBtn'))$('activitySaveBtn').textContent=editRecord?'Update':'Save';
     const form=$('activityForm'),type=$('activityType'),cat=$('category'),sub=$('subCategory');
     const activityPhotoInput=$('activityPhotosFile');
