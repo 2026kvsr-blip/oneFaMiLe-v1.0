@@ -587,6 +587,25 @@
         color:#e67e22!important;background:#fff1d9!important;background-color:#fff1d9!important;
         border:1px solid #e8cda6!important;
       }
+      /* Deadline urgency colors apply only to active detailed-report records. */
+      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-deadline-2days>td{
+         background:#e8f5e9!important;background-color:#e8f5e9!important;
+       }
+       .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-deadline-1day>td{
+         background:#fff1d9!important;background-color:#fff1d9!important;
+       }
+       .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-deadline-today>td{
+         background:#ffebee!important;background-color:#ffebee!important;
+       }
+       .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-deadline-overdue>td{
+         background:#b71c1c!important;background-color:#b71c1c!important;color:#fff!important;
+       }
+       .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-deadline-row{
+         cursor:pointer!important;
+       }
+       .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-deadline-row:active>td{
+         filter:brightness(.96);
+       }
       .activity-page.activity-report-detailed .activity-month-heading-content{
         display:grid!important;
         grid-template-columns:minmax(160px,1.25fr) minmax(145px,1fr) minmax(115px,1fr)!important;
@@ -894,7 +913,32 @@
           const cls=reportColClass[c[0]]||'';
           return `<td class="${centerNames.includes(c[0])?'report-center ':''}${cls}">${(c[0]==='Photos'||c[0]==='Edit')?value:esc(value)}</td>`;
         }).join('');
-        grouped+=`<tr><td class="report-center report-sno">${rowIndex+1}</td>${cells}</tr>`;
+
+        // Highlight approaching / overdue scheduled dates only for active work.
+        const activeStatus=['pending','in progress','on hold'].includes(String(record.status||'').trim().toLowerCase());
+        let deadlineClass='',deadlineMessage='';
+        if(activeStatus){
+          const scheduledDate=String(record.startDate||record.createdAt||'').slice(0,10);
+          const dateMatch=scheduledDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+          if(dateMatch){
+            const scheduledDay=Date.UTC(Number(dateMatch[1]),Number(dateMatch[2])-1,Number(dateMatch[3]));
+            const todayParts=today().split('-').map(Number);
+            const todayDay=Date.UTC(todayParts[0],todayParts[1]-1,todayParts[2]);
+            const daysLeft=Math.round((scheduledDay-todayDay)/86400000);
+            if(daysLeft===2){
+              deadlineClass='activity-deadline-2days';deadlineMessage='Only 2 days left to complete task';
+            }else if(daysLeft===1){
+              deadlineClass='activity-deadline-1day';deadlineMessage='Only 1 day left to complete task';
+            }else if(daysLeft===0){
+              deadlineClass='activity-deadline-today';deadlineMessage='Today is the last day to complete task';
+            }else if(daysLeft<0){
+              deadlineClass='activity-deadline-overdue';deadlineMessage='Scheduled date over to complete task';
+            }
+          }
+        }
+        const rowClass=deadlineClass?`activity-deadline-row ${deadlineClass}`:'';
+        const messageAttr=deadlineMessage?` data-deadline-message="${esc(deadlineMessage)}" title="Tap for task deadline status"`:'';
+        grouped+=`<tr class="${rowClass}"${messageAttr}><td class="report-center report-sno">${rowIndex+1}</td>${cells}</tr>`;
       };
 
       if(reportPeriod==='This Year'||reportPeriod==='All'){
@@ -933,6 +977,15 @@
         const parsed=holder.querySelector('button[data-edit-activity]');
         if(parsed)td.replaceChildren(parsed);
       }
+    });
+    // Tapping the body of an urgency-highlighted row shows its deadline message.
+    // Edit and photo controls inside the row keep their existing actions.
+    $('actReportOutput').querySelectorAll('tr.activity-deadline-row').forEach(deadlineRow=>{
+      deadlineRow.addEventListener('click',event=>{
+        if(event.target.closest('button,a,input,select,textarea'))return;
+        const message=deadlineRow.getAttribute('data-deadline-message')||'';
+        if(message)activityToast(message,'warning',2600);
+      });
     });
     // Clickable photo thumbnails use the same Drive-preview pattern as Expenses reports.
     $('actReportOutput').querySelectorAll('.activity-photo-preview-btn').forEach(photoBtn=>photoBtn.addEventListener('click',()=>{
