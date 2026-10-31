@@ -146,8 +146,8 @@ function status(message, type = '') {
     el.textContent = message || '';
   }
 }
-  // Show a short explanation when the user taps a highlighted minimum/maximum row.
-  function showExpenseHighlightToast(message, kind){
+  // Show a short explanation immediately above the highlighted row the user taps.
+  function showExpenseHighlightToast(message, kind, anchorRow){
     let toast=document.getElementById('expenseHighlightToast');
     if(!toast){
       toast=document.createElement('div');
@@ -160,13 +160,26 @@ function status(message, type = '') {
     clearTimeout(window.expenseHighlightToastHideTimer);
     const isHigh=kind==='high';
     toast.textContent=message;
-    toast.style.cssText=`position:fixed;top:calc(env(safe-area-inset-top, 0px) + 16px);left:50%;transform:translateX(-50%);z-index:2147483647;max-width:calc(100vw - 28px);width:max-content;box-sizing:border-box;padding:10px 17px;border-radius:10px;background:${isHigh?'#fff0df':'#e8f5e9'};color:${isHigh?'#8a4b12':'#2e6b43'};border:1px solid ${isHigh?'#e9b77f':'#a6d5ad'};box-shadow:0 4px 14px rgba(0,0,0,.18);font-size:14px;font-weight:700;text-align:center;line-height:1.3;white-space:normal;opacity:1;display:block;pointer-events:none;transition:opacity .2s ease`;
+    toast.style.cssText=`position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:2147483647;max-width:calc(100vw - 28px);width:max-content;box-sizing:border-box;padding:10px 17px;border-radius:10px;background:${isHigh?'#fff0df':'#e8f5e9'};color:${isHigh?'#8a4b12':'#2e6b43'};border:1px solid ${isHigh?'#e9b77f':'#a6d5ad'};box-shadow:0 4px 14px rgba(0,0,0,.18);font-size:14px;font-weight:700;text-align:center;line-height:1.3;white-space:normal;opacity:1;display:block;pointer-events:none;transition:opacity .2s ease`;
+    // Anchor the message to the selected table row, not to the top of the screen.
+    if(anchorRow && anchorRow.isConnected){
+      const rowRect=anchorRow.getBoundingClientRect();
+      const toastRect=toast.getBoundingClientRect();
+      const halfWidth=toastRect.width/2;
+      const leftLimit=halfWidth+8;
+      const rightLimit=Math.max(leftLimit,window.innerWidth-halfWidth-8);
+      const left=Math.min(Math.max(rowRect.left+rowRect.width/2,leftLimit),rightLimit);
+      const top=Math.max(8,rowRect.top-toastRect.height-8);
+      toast.style.left=left+'px';
+      toast.style.top=top+'px';
+      toast.style.transform='translateX(-50%)';
+    }
     window.expenseHighlightToastTimer=setTimeout(()=>{
       toast.style.opacity='0';
       window.expenseHighlightToastHideTimer=setTimeout(()=>{
         if(toast)toast.style.display='none';
       },200);
-    },1800);
+    },2000);
   }
   function field(label, control, id){return `<div class="expense-field"><label class="expense-label" for="${id||''}"><span class="expense-label-text">${label}</span><span class="expense-colon">:</span></label>${control}</div>`}
   function selectOptions(items,placeholder='Select',preserveOrder=false) {const list=preserveOrder?items.slice():items.slice().sort((a,b)=>String(a).localeCompare(String(b),undefined,{sensitivity:'base'}));return `<option value="">${placeholder}</option>`+list.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
@@ -865,7 +878,7 @@ ${field('Photos',`
       visibleReportOutput.querySelectorAll('tr.expense-amount-high-row, tr.expense-amount-low-row').forEach(row=>{
         row.addEventListener('click',()=>{
           const isMaximum=row.classList.contains('expense-amount-high-row');
-          showExpenseHighlightToast(isMaximum?'Maximum expenses':'Minimum expenses',isMaximum?'high':'low');
+          showExpenseHighlightToast(isMaximum?'Maximum expenses':'Minimum expenses',isMaximum?'high':'low',row);
         });
       });
       visibleReportOutput.querySelectorAll('.expense-abstract-category-row').forEach(row=>{
