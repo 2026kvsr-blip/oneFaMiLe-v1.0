@@ -595,7 +595,7 @@
       }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-1day>td,
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-1day>td *{
-        color:#b45309!important;font-weight:700!important;
+        color:#e68a00!important;font-weight:700!important;
       }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-today>td,
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-today>td *{
