@@ -124,7 +124,7 @@
     .activity-page .expense-report-year th{font-size:22px!important;font-weight:700;padding:10px 8px;background:#fff!important;color:#218838!important}.activity-page .expense-report-month th{font-size:16px!important;font-weight:700;padding:8px;background:#fff!important;color:#e67e22!important}
     .activity-page .expense-report-total td{font-weight:700;background:#fff!important;border-top:1px solid #c4d4ff}.activity-page .expense-abstract-title{font-size:23px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}
     .activity-page .expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}
-    .activity-page .expense-summary{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 14px;box-sizing:border-box;flex-wrap:nowrap}.activity-page .expense-summary-card{display:flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;min-width:0;min-height:44px;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px;flex:1 1 33%;width:33%;line-height:1.2}.activity-page .expense-summary-card small,.activity-page .expense-summary-card strong{display:inline-flex;align-items:center;line-height:1.2}.activity-page .expense-summary-card small{font-size:clamp(9px,2.6vw,12px)}.activity-page .expense-summary-card strong{font-size:clamp(10px,2.9vw,14px)}
+    .activity-page .expense-summary{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 14px;box-sizing:border-box;flex-wrap:nowrap}.activity-page .expense-summary-card{display:flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;min-width:0;min-height:44px;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px;flex:1 1 33%;width:33%;line-height:1.2}.activity-page .expense-summary.activity-summary-two>.expense-summary-card{flex:1 1 50%!important;width:50%!important;max-width:50%!important}.activity-page .expense-summary-card small,.activity-page .expense-summary-card strong{display:inline-flex;align-items:center;line-height:1.2}.activity-page .expense-summary-card small{font-size:clamp(9px,2.6vw,12px)}.activity-page .expense-summary-card strong{font-size:clamp(10px,2.9vw,14px)}
     .activity-page .activity-date-sort-field .expense-date-sort{display:flex;align-items:center;justify-content:center;width:100%;min-width:0;max-width:100%;height:40px;min-height:40px;max-height:40px;box-sizing:border-box;padding:8px 10px;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#222;font:inherit;white-space:nowrap;box-shadow:none}
     .activity-page #activityDownloadBtn,.activity-page #activityReportBack,.activity-page #activityModuleBack{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}
 .activity-page .expense-panel:has(#activityDownloadBtn) .expense-report-actions{display:flex!important;align-items:stretch!important;gap:8px!important;width:100%!important;box-sizing:border-box!important}
@@ -595,7 +595,7 @@
       if(ra!==rb)return ra-rb;
       return String(a.activityType||'').localeCompare(String(b.activityType||''),undefined,{sensitivity:'base'});
     });
-    const total=rows.length,completed=rows.filter(r=>String(r.status).toLowerCase()==='completed').length,pending=rows.filter(r=>String(r.status).toLowerCase()==='pending').length;let table='';const p=selectedPeriodArg||$('actReportPeriod')?.value||reportSettings?.period||'All';
+    const total=rows.length,completed=rows.filter(r=>String(r.status).toLowerCase()==='completed').length;let table='';const p=selectedPeriodArg||$('actReportPeriod')?.value||reportSettings?.period||'All';
     if(type==='Abstract'){
       if(['Daily','Weekly','Monthly','Yearly'].includes(p)){
         // Date-grouped Abstract reports mirror the Expenses layout.
@@ -826,7 +826,7 @@
       }
       table=`<div class="expense-results"><table><thead><tr><th class="report-center report-sno">S.No</th>${columns.map(c=>{const cls=reportColClass[c[0]]||'';const label=c[0]==='Scheduled Time'?'Scheduled<br>Time':esc(c[0]);return `<th class="${centerNames.includes(c[0])?'report-center ':''}${cls}">${label}</th>`}).join('')}</tr></thead><tbody>${grouped||`<tr><td colspan="${reportColCount}">No records found.</td></tr>`}</tbody></table></div>`;
     }
-    $('actReportOutput').innerHTML=`<div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${total}</strong></div><div class="expense-summary-card"><small>Completed :</small><strong>${completed}</strong></div><div class="expense-summary-card"><small>Pending :</small><strong>${pending}</strong></div></div>${table}`;
+    $('actReportOutput').innerHTML=`<div class="expense-summary activity-summary-two"><div class="expense-summary-card"><small>Total Records :</small><strong>${total}</strong></div><div class="expense-summary-card"><small>Completed :</small><strong>${completed}</strong></div></div>${table}`;
     // If an older renderer escaped the Edit HTML into visible text, convert only that
     // specific cell back into a real button. This is safe for normal rendered buttons too.
     $('actReportOutput').querySelectorAll('td').forEach(td=>{
