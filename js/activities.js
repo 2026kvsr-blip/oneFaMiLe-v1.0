@@ -578,6 +578,9 @@
         display:block!important;min-width:0!important;text-align:left!important;
         color:#2e6b43!important;font-size:13px!important;font-weight:700!important;
       }
+      .activity-page.activity-report-detailed .activity-period-heading-content{
+        grid-template-columns:minmax(0,1fr)!important;
+      }
       @media(max-width:600px){
         .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-report-summary-row>th{
           font-size:12px!important;padding-left:6px!important;padding-right:6px!important;
@@ -791,15 +794,12 @@
       const reportPeriod=$('actReportPeriod')?.value||'All';
       const reportColCount=columns.length+1;
       let grouped='';
-      // Detailed report period headings include their own Total Records and Completed counts.
-      // This Year and All additionally show month-wise count rows before each month's records.
-      const completedIn = list => list.filter(record=>String(record.status||'').toLowerCase()==='completed').length;
-      // Period row repeats only the selected period label; the record totals are
-      // already displayed in the two summary cards above the table.
-      // The first row below the column headings contains only the selected
-      // period label. Totals are already shown in the two summary cards above.
+      // All and This Year use a green heading row. Today, This Week and
+      // This Month use only an orange period heading row (no extra green row).
       const summaryRow = label =>
         `<tr class="expense-report-subheading activity-report-summary-row"><th colspan="${reportColCount}"><div class="activity-report-summary-content"><span class="activity-report-period-label">${esc(label)}</span></div></th></tr>`;
+      const orangePeriodRow = label =>
+        `<tr class="expense-report-month activity-report-period-row"><th colspan="${reportColCount}"><div class="activity-month-heading-content activity-period-heading-content"><span class="activity-month-name">${esc(label)}</span></div></th></tr>`;
       // All and This Year retain month-wise rows, highlighted in light orange.
       // Month-level counts are intentionally kept in these breakdown rows.
       const monthSummaryRow = (label, recordCount, completedCount) =>
@@ -833,8 +833,12 @@
           if(String(record.status||'').toLowerCase()==='completed')stats.completed++;
         });
       }
-      if(periodLabel){
+      if(reportPeriod==='All'){
+        grouped+=summaryRow('All Records');
+      }else if(reportPeriod==='This Year'){
         grouped+=summaryRow(periodLabel);
+      }else if(['Today','This Week','This Month'].includes(reportPeriod)){
+        grouped+=orangePeriodRow(periodLabel);
       }
 
       const appendDetailedActivityRow=(record,rowIndex)=>{
