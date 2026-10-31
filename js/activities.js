@@ -541,8 +541,9 @@
         border:1px solid #e8cda6!important;
       }
       .activity-page.activity-report-detailed .activity-month-heading-content{
-        display:grid!important;grid-template-columns:170px 150px!important;
-        grid-auto-flow:column!important;justify-content:start!important;align-items:center!important;
+        display:grid!important;
+        grid-template-columns:minmax(160px,1.25fr) minmax(145px,1fr) minmax(115px,1fr)!important;
+        grid-auto-flow:row!important;justify-content:start!important;align-items:center!important;
         width:100%!important;min-width:0!important;height:20px!important;
         box-sizing:border-box!important;white-space:nowrap!important;
       }
@@ -550,9 +551,15 @@
         display:block!important;min-width:0!important;text-align:left!important;
         color:#e67e22!important;font-weight:700!important;
       }
-      .activity-page.activity-report-detailed .activity-month-records{
+      .activity-page.activity-report-detailed .activity-month-records,
+      .activity-page.activity-report-detailed .activity-month-completed{
         display:block!important;min-width:0!important;text-align:left!important;
         color:#9a5b12!important;font-weight:700!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.expense-report-month>th{
+        background:#fff1d9!important;background-color:#fff1d9!important;
+        background-image:none!important;color:#e67e22!important;
+        border-color:#e8cda6!important;
       }
       /* Detailed report: green period totals and month-wise totals. */
       .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-report-summary-row>th{
@@ -564,20 +571,14 @@
         border:1px solid #b7d8bd!important;
       }
       .activity-page.activity-report-detailed .activity-report-summary-content{
-        display:grid!important;grid-template-columns:minmax(145px,1.2fr) minmax(130px,1fr) minmax(105px,1fr)!important;
-        align-items:center!important;justify-content:start!important;column-gap:12px!important;
-        width:100%!important;min-width:0!important;min-height:22px!important;
-        box-sizing:border-box!important;white-space:nowrap!important;
+        display:block!important;width:100%!important;min-width:0!important;
+        min-height:22px!important;box-sizing:border-box!important;white-space:nowrap!important;
       }
       .activity-page.activity-report-detailed .activity-report-summary-content>span{
         display:block!important;min-width:0!important;text-align:left!important;
         color:#2e6b43!important;font-size:13px!important;font-weight:700!important;
       }
       @media(max-width:600px){
-        .activity-page.activity-report-detailed .activity-report-summary-content{
-          grid-template-columns:minmax(125px,1.1fr) minmax(125px,1fr) minmax(105px,1fr)!important;
-          column-gap:7px!important;
-        }
         .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-report-summary-row>th{
           font-size:12px!important;padding-left:6px!important;padding-right:6px!important;
         }
@@ -795,12 +796,14 @@
       const completedIn = list => list.filter(record=>String(record.status||'').toLowerCase()==='completed').length;
       // Period row repeats only the selected period label; the record totals are
       // already displayed in the two summary cards above the table.
+      // The first row below the column headings contains only the selected
+      // period label. Totals are already shown in the two summary cards above.
       const summaryRow = label =>
-        `<tr class="expense-report-subheading activity-report-summary-row"><th colspan="${reportColCount}"><div class="activity-report-summary-content"><span>${esc(label)}</span></div></th></tr>`;
-      // Month groups stay visually distinct in light orange. Their counts remain
-      // useful in the month-by-month breakdown for This Year and All.
+        `<tr class="expense-report-subheading activity-report-summary-row"><th colspan="${reportColCount}"><div class="activity-report-summary-content"><span class="activity-report-period-label">${esc(label)}</span></div></th></tr>`;
+      // All and This Year retain month-wise rows, highlighted in light orange.
+      // Month-level counts are intentionally kept in these breakdown rows.
       const monthSummaryRow = (label, recordCount, completedCount) =>
-        `<tr class="expense-report-month"><th colspan="${reportColCount}"><div class="activity-month-heading-content"><span class="activity-month-name">${esc(label)}</span><span class="activity-month-records">Total Records : ${recordCount}</span><span class="activity-month-completed">Completed : ${completedCount}</span></div></th></tr>`;
+        `<tr class="expense-report-month activity-report-month-row"><th colspan="${reportColCount}"><div class="activity-month-heading-content"><span class="activity-month-name">${esc(label)}</span><span class="activity-month-records">Total Records : ${recordCount}</span><span class="activity-month-completed">Completed : ${completedCount}</span></div></th></tr>`;
       const selectedDate=today();
       let periodLabel='';
       if(reportPeriod==='Today'){
