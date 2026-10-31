@@ -128,7 +128,7 @@
     .activity-page .expense-report-year th{font-size:22px!important;font-weight:700;padding:10px 8px;background:#fff!important;color:#218838!important}.activity-page .expense-report-month th{font-size:16px!important;font-weight:700;padding:8px;background:#fff!important;color:#e67e22!important}
     .activity-page .expense-report-total td{font-weight:700;background:#fff!important;border-top:1px solid #c4d4ff}.activity-page .expense-abstract-title{font-size:23px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}
     .activity-page .expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}
-    .activity-page .expense-summary{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 14px;box-sizing:border-box;flex-wrap:nowrap}.activity-page .expense-summary-card{display:flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;min-width:0;min-height:44px;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px;flex:1 1 33%;width:33%;line-height:1.2}.activity-page .expense-summary-card small,.activity-page .expense-summary-card strong{display:inline-flex;align-items:center;line-height:1.2}.activity-page .expense-summary-card small{font-size:clamp(9px,2.6vw,12px)}.activity-page .expense-summary-card strong{font-size:clamp(10px,2.9vw,14px)}
+    .activity-page .expense-summary{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 14px;box-sizing:border-box;flex-wrap:nowrap}.activity-page .expense-summary-card{display:flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;min-width:0;min-height:44px;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px;flex:1 1 50%;width:50%;line-height:1.2}.activity-page .expense-summary-card small,.activity-page .expense-summary-card strong{display:inline-flex;align-items:center;line-height:1.2}.activity-page .expense-summary-card small{font-size:clamp(9px,2.6vw,12px)}.activity-page .expense-summary-card strong{font-size:clamp(10px,2.9vw,14px)}
     .activity-page .activity-date-sort-field .expense-date-sort{display:flex;align-items:center;justify-content:center;width:100%;min-width:0;max-width:100%;height:40px;min-height:40px;max-height:40px;box-sizing:border-box;padding:8px 10px;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#222;font:inherit;white-space:nowrap;box-shadow:none}
     .activity-page #activityDownloadBtn,.activity-page #activityReportBack,.activity-page #activityModuleBack{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}
 .activity-page .expense-panel:has(#activityDownloadBtn) .expense-report-actions{display:flex!important;align-items:stretch!important;gap:8px!important;width:100%!important;box-sizing:border-box!important}
@@ -556,6 +556,35 @@
         display:block!important;min-width:0!important;text-align:left!important;
         color:#9a5b12!important;font-weight:700!important;
       }
+      /* Detailed report: green period totals and month-wise totals. */
+      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-report-summary-row>th{
+        position:static!important;top:auto!important;z-index:auto!important;display:table-cell!important;
+        height:32px!important;min-height:32px!important;padding:4px 9px!important;
+        line-height:1.1!important;vertical-align:middle!important;text-align:left!important;
+        white-space:nowrap!important;font-size:13px!important;font-weight:700!important;
+        color:#2e6b43!important;background:#e8f5e9!important;background-color:#e8f5e9!important;
+        border:1px solid #b7d8bd!important;
+      }
+      .activity-page.activity-report-detailed .activity-report-summary-content{
+        display:grid!important;grid-template-columns:minmax(145px,1.2fr) minmax(130px,1fr) minmax(105px,1fr)!important;
+        align-items:center!important;justify-content:start!important;column-gap:12px!important;
+        width:100%!important;min-width:0!important;min-height:22px!important;
+        box-sizing:border-box!important;white-space:nowrap!important;
+      }
+      .activity-page.activity-report-detailed .activity-report-summary-content>span{
+        display:block!important;min-width:0!important;text-align:left!important;
+        color:#2e6b43!important;font-size:13px!important;font-weight:700!important;
+      }
+      @media(max-width:600px){
+        .activity-page.activity-report-detailed .activity-report-summary-content{
+          grid-template-columns:minmax(125px,1.1fr) minmax(125px,1fr) minmax(105px,1fr)!important;
+          column-gap:7px!important;
+        }
+        .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-report-summary-row>th{
+          font-size:12px!important;padding-left:6px!important;padding-right:6px!important;
+        }
+        .activity-page.activity-report-detailed .activity-report-summary-content>span{font-size:12px!important}
+      }
     </style>`:'';
     const inner=`${detailedReportStyles}<div class="expense-panel"><div id="actReportOutput"></div><div class="expense-report-actions"><div class="expense-download-wrap"><button type="button" id="activityDownloadBtn" class="expense-secondary">Download ▾</button><div id="activityDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div><button type="button" id="activityReportDateSort" class="expense-date-sort">${dateAscending?'↑ Date Ascending':'↓ Date Descending'}</button><button type="button" id="activityReportBack" class="expense-secondary">← Back</button></div></div>`;
     page(shell(label,inner,true));const reportPage=document.querySelector('.activity-page');if(reportPage){reportPage.classList.add('activity-report-view');if(type==='Detailed')reportPage.classList.add('activity-report-detailed');else reportPage.classList.add('activity-report-abstract');}renderReportResults(rows,type);const reportSort=$('activityReportDateSort');if(reportSort)reportSort.onclick=()=>{dateAscending=!dateAscending;reportSort.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';reportSort.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');reportSort.title=dateAscending?'Sort date ascending':'Sort date descending';renderReportResults(lastRows,type)};const dl=$('activityDownloadBtn'),menu=$('activityDownloadMenu');if(dl&&menu){dl.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportReport(b.dataset.export)});}const back=$('activityReportBack');if(back)back.onclick=()=>renderReports(kind,custom,cached);
@@ -762,42 +791,80 @@
       const reportPeriod=$('actReportPeriod')?.value||'All';
       const reportColCount=columns.length+1;
       let grouped='';
-      // Always render the selected period as the first subheading, including
-      // empty reports. Only the All period is labelled "All Records".
-      let periodHeading='';
+      // Detailed report period headings include their own Total Records and Completed counts.
+      // This Year and All additionally show month-wise count rows before each month's records.
+      const completedIn = list => list.filter(record=>String(record.status||'').toLowerCase()==='completed').length;
+      const summaryRow = (label, recordCount, completedCount) =>
+        `<tr class="expense-report-subheading activity-report-summary-row"><th colspan="${reportColCount}"><div class="activity-report-summary-content"><span>${esc(label)}</span><span>Total Records : ${recordCount}</span><span>Completed : ${completedCount}</span></div></th></tr>`;
+      const selectedDate=today();
+      let periodLabel='';
       if(reportPeriod==='Today'){
-        periodHeading=showDate(today());
+        periodLabel=`Date : ${showDate(selectedDate)}`;
       }else if(reportPeriod==='This Week'){
-        const weekStart=new Date();
-        weekStart.setHours(12,0,0,0);
+        const weekStart=new Date(selectedDate+'T12:00:00');
         weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
         const weekEnd=new Date(weekStart);
         weekEnd.setDate(weekEnd.getDate()+6);
-        periodHeading=`${showDate(fmt(weekStart))}  to  ${showDate(fmt(weekEnd))}`;
+        periodLabel=`Week : ${showDate(fmt(weekStart))} to ${showDate(fmt(weekEnd))}`;
       }else if(reportPeriod==='This Month'){
-        periodHeading=new Date().toLocaleString('en-US',{month:'long',year:'numeric'});
+        periodLabel=`Month : ${new Date().toLocaleString('en-US',{month:'long',year:'numeric'})}`;
       }else if(reportPeriod==='This Year'){
-        periodHeading=String(new Date().getFullYear());
+        periodLabel=`Year : ${new Date().getFullYear()}`;
       }else if(reportPeriod==='All'){
-        periodHeading='All Records';
+        periodLabel='All Records';
       }
-      if(periodHeading){
-        grouped+=`<tr class="expense-report-subheading expense-report-month activity-period-heading ${reportPeriod==='All'?'activity-all-records-heading':''}"><th colspan="${reportColCount}">${esc(periodHeading)}</th></tr>`;
+
+      const monthStats=new Map();
+      if(reportPeriod==='This Year'||reportPeriod==='All'){
+        rows.forEach(record=>{
+          const ds=dateKey(record);
+          const monthKey=/^\d{4}-\d{2}-\d{2}$/.test(ds)?ds.slice(0,7):'Unknown';
+          if(!monthStats.has(monthKey))monthStats.set(monthKey,{count:0,completed:0});
+          const stats=monthStats.get(monthKey);
+          stats.count++;
+          if(String(record.status||'').toLowerCase()==='completed')stats.completed++;
+        });
       }
-      rows.forEach((r,i)=>{
+      if(periodLabel){
+        grouped+=summaryRow(periodLabel,total,completed);
+      }
+
+      const appendDetailedActivityRow=(record,rowIndex)=>{
         const cells=columns.map(c=>{
-          const value=c[1](r);
+          const value=c[1](record);
           const cls=reportColClass[c[0]]||'';
           return `<td class="${centerNames.includes(c[0])?'report-center ':''}${cls}">${(c[0]==='Photos'||c[0]==='Edit')?value:esc(value)}</td>`;
         }).join('');
-        grouped+=`<tr><td class="report-center report-sno">${i+1}</td>${cells}</tr>`;
-      });
+        grouped+=`<tr><td class="report-center report-sno">${rowIndex+1}</td>${cells}</tr>`;
+      };
+
+      if(reportPeriod==='This Year'||reportPeriod==='All'){
+        let currentMonthKey=null;
+        rows.forEach((record,rowIndex)=>{
+          const ds=dateKey(record);
+          const monthKey=/^\d{4}-\d{2}-\d{2}$/.test(ds)?ds.slice(0,7):'Unknown';
+          if(monthKey!==currentMonthKey){
+            currentMonthKey=monthKey;
+            const stats=monthStats.get(monthKey)||{count:0,completed:0};
+            let monthLabel='Unknown Date';
+            if(monthKey!=='Unknown'){
+              const [year,month]=monthKey.split('-').map(Number);
+              const monthName=new Date(year,month-1,1).toLocaleString('en-US',{month:'long'});
+              monthLabel=reportPeriod==='All'?`${monthName} - ${year}`:monthName;
+            }
+            grouped+=summaryRow(monthLabel,stats.count,stats.completed);
+          }
+          appendDetailedActivityRow(record,rowIndex);
+        });
+      }else{
+        rows.forEach(appendDetailedActivityRow);
+      }
       if(!rows.length){
         grouped+=`<tr class="activity-report-empty"><td colspan="${reportColCount}">No records found.</td></tr>`;
       }
       table=`<div class="expense-results"><table><thead><tr><th class="report-center report-sno">S.No</th>${columns.map(c=>{const cls=reportColClass[c[0]]||'';const label=c[0]==='Scheduled Time'?'Scheduled<br>Time':esc(c[0]);return `<th class="${centerNames.includes(c[0])?'report-center ':''}${cls}">${label}</th>`}).join('')}</tr></thead><tbody>${grouped||`<tr><td colspan="${reportColCount}">No records found.</td></tr>`}</tbody></table></div>`;
     }
-    $('actReportOutput').innerHTML=`<div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${total}</strong></div><div class="expense-summary-card"><small>Completed :</small><strong>${completed}</strong></div><div class="expense-summary-card"><small>Pending :</small><strong>${pending}</strong></div></div>${table}`;
+    $('actReportOutput').innerHTML=`<div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${total}</strong></div><div class="expense-summary-card"><small>Completed :</small><strong>${completed}</strong></div></div>${table}`;
     // If an older renderer escaped the Edit HTML into visible text, convert only that
     // specific cell back into a real button. This is safe for normal rendered buttons too.
     $('actReportOutput').querySelectorAll('td').forEach(td=>{
