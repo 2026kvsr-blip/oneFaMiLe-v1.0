@@ -595,7 +595,7 @@
       }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-1day>td,
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-1day>td *{
-        color:#e68a00!important;font-weight:700!important;
+        color:#c2185b!important;font-weight:700!important;
       }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-today>td,
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-today>td *{
@@ -611,28 +611,32 @@
       /* Deadline message strip uses the same deadline color as its source row.
          Message text remains normal-weight for easy reading. */
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-row>td{
-        padding:0!important;
+        padding:0 4px 2px!important;
         background:transparent!important;
-        border-top:0!important;
+        border:0!important;
+        text-align:left!important;
       }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-row .activity-deadline-inline-message{
-        display:block!important;
-        width:100%!important;
+        display:inline-block!important;
+        width:auto!important;
+        max-width:calc(100vw - 48px)!important;
         box-sizing:border-box!important;
-        padding:8px 10px!important;
+        padding:5px 9px!important;
+        margin:0!important;
         border:1px solid transparent!important;
-        border-radius:6px!important;
-        font-size:13px!important;
+        border-radius:5px!important;
+        font-size:12px!important;
         font-weight:400!important;
         font-style:normal!important;
-        line-height:1.35!important;
+        line-height:1.25!important;
         white-space:normal!important;
+        overflow-wrap:anywhere!important;
       }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-2days .activity-deadline-inline-message{
         background:#1b5e20!important;background-color:#1b5e20!important;border-color:#1b5e20!important;color:#fff!important;
       }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-1day .activity-deadline-inline-message{
-        background:#e68a00!important;background-color:#e68a00!important;border-color:#e68a00!important;color:#fff!important;
+        background:#c2185b!important;background-color:#c2185b!important;border-color:#c2185b!important;color:#fff!important;
       }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-today .activity-deadline-inline-message{
         background:#b71c1c!important;background-color:#b71c1c!important;border-color:#b71c1c!important;color:#fff!important;
@@ -1023,22 +1027,26 @@
         if(parsed)td.replaceChildren(parsed);
       }
     });
-    // Show the deadline message in a light-blue strip attached to the clicked row.
-    // A second click on the same row closes it; opening another row replaces it.
+    // Show a compact deadline message immediately ABOVE the clicked row.
+    // It disappears automatically after 2 seconds; clicking another row replaces it.
     // Edit and photo controls inside the row keep their existing actions.
-    $('actReportOutput').querySelectorAll('tr.activity-deadline-row').forEach(deadlineRow=>{
+    let deadlineMessageTimer=null;
+    const deadlineReportOutput=$('actReportOutput');
+    deadlineReportOutput.querySelectorAll('tr.activity-deadline-row').forEach(deadlineRow=>{
       deadlineRow.addEventListener('click',event=>{
         if(event.target.closest('button,a,input,select,textarea'))return;
         const message=deadlineRow.getAttribute('data-deadline-message')||'';
         if(!message)return;
 
-        const nextRow=deadlineRow.nextElementSibling;
-        if(nextRow&&nextRow.classList.contains('activity-deadline-message-row')){
-          nextRow.remove();
+        const previousRow=deadlineRow.previousElementSibling;
+        if(previousRow&&previousRow.classList.contains('activity-deadline-message-row')){
+          clearTimeout(deadlineMessageTimer);
+          previousRow.remove();
           return;
         }
 
-        $('actReportOutput').querySelectorAll('tr.activity-deadline-message-row').forEach(row=>row.remove());
+        clearTimeout(deadlineMessageTimer);
+        deadlineReportOutput.querySelectorAll('tr.activity-deadline-message-row').forEach(row=>row.remove());
 
         const messageRow=document.createElement('tr');
         const deadlineType=['2days','1day','today','overdue'].find(type=>deadlineRow.classList.contains('activity-deadline-'+type));
@@ -1051,7 +1059,12 @@
         messageBox.setAttribute('role','status');
         messageCell.appendChild(messageBox);
         messageRow.appendChild(messageCell);
-        deadlineRow.insertAdjacentElement('afterend',messageRow);
+        deadlineRow.insertAdjacentElement('beforebegin',messageRow);
+
+        deadlineMessageTimer=setTimeout(()=>{
+          if(messageRow.isConnected)messageRow.remove();
+          deadlineMessageTimer=null;
+        },2000);
       });
     });
     // Clickable photo thumbnails use the same Drive-preview pattern as Expenses reports.
