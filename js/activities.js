@@ -587,23 +587,31 @@
         color:#e67e22!important;background:#fff1d9!important;background-color:#fff1d9!important;
         border:1px solid #e8cda6!important;
       }
-      /* Deadline indication: text colors for upcoming dates; red row for overdue records. */
-      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-deadline-2days>td{
-        background:transparent!important;background-color:transparent!important;color:#1b5e20!important;
+      /* Deadline indication: force bold text colors on every cell and its contents.
+         This higher-specificity rule also overrides colors set on inner buttons/spans. */
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-2days>td,
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-2days>td *{
+        color:#1b5e20!important;font-weight:700!important;
       }
-      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-deadline-1day>td{
-        background:transparent!important;background-color:transparent!important;color:#6a1b9a!important;
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-1day>td,
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-1day>td *{
+        color:#b45309!important;font-weight:700!important;
       }
-      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-deadline-today>td{
-        background:transparent!important;background-color:transparent!important;color:#b71c1c!important;
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-today>td,
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-today>td *{
+        color:#b71c1c!important;font-weight:700!important;
       }
-      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-deadline-overdue>td{
-        background:#d32f2f!important;background-color:#d32f2f!important;color:#fff!important;
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-overdue>td{
+        background:#d32f2f!important;background-color:#d32f2f!important;
+        color:#fff!important;font-weight:700!important;
       }
-      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-deadline-row{
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-overdue>td *{
+        color:#fff!important;font-weight:700!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-row{
         cursor:pointer!important;
       }
-      .activity-page.activity-report-detailed #actReportOutput>.expense-results table>tbody>tr.activity-deadline-row:active>td{
+      .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-row:active>td{
         filter:brightness(.96);
       }
       .activity-page.activity-report-detailed .activity-month-heading-content{
