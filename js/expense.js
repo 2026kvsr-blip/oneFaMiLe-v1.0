@@ -560,13 +560,18 @@ ${field('Photos',`
         else headers='<th>S.No</th><th>Year</th><th>No</th><th>Amount</th>';
         const cells=(key,g,i)=>selectedPeriod==='Daily'?`<td>${i+1}</td><td>${esc(g.year)}</td><td>${esc(g.month)}</td><td>${esc(g.date)}</td><td>${g.count}</td><td>${money(g.amount)}</td>`:selectedPeriod==='Weekly'?`<td>${i+1}</td><td>${esc(g.year==='—'?'—':String(new Date(key+'T12:00:00').getFullYear()))}</td><td>${esc(g.week)}</td><td>${g.count}</td><td>${money(g.amount)}</td>`:selectedPeriod==='Monthly'?`<td>${i+1}</td><td>${esc(g.year)}</td><td>${esc(g.month)}</td><td>${g.count}</td><td>${money(g.amount)}</td>`:`<td>${i+1}</td><td>${esc(g.year)}</td><td>${g.count}</td><td>${money(g.amount)}</td>`;
         const colspan=selectedPeriod==='Daily'?6:selectedPeriod==='Weekly'||selectedPeriod==='Monthly'?5:4;
-        table=`<div class="expense-results"><table><thead><tr>${headers}</tr></thead><tbody>${keys.map((key,i)=>`<tr>${cells(key,groups[key],i)}</tr>`).join('')||`<tr><td colspan="${colspan}">No records found.</td></tr>`}</tbody></table></div>`;
+        const groupedAmounts=keys.map(key=>Number(groups[key].amount)||0);
+        const minGroupedAmount=groupedAmounts.length?Math.min(...groupedAmounts):0;
+        const maxGroupedAmount=groupedAmounts.length?Math.max(...groupedAmounts):0;
+        const highlightGrouped=groupedAmounts.length>1&&maxGroupedAmount!==minGroupedAmount;
+        table=`<div class="expense-results"><table><thead><tr>${headers}</tr></thead><tbody>${keys.map((key,i)=>{const amount=Number(groups[key].amount)||0;const rowClass=highlightGrouped?(amount===maxGroupedAmount?'expense-amount-high-row':amount===minGroupedAmount?'expense-amount-low-row':''):'';return `<tr class="${rowClass}">${cells(key,groups[key],i)}</tr>`;}).join('')||`<tr><td colspan="${colspan}">No records found.</td></tr>`}</tbody></table></div>`;
       } else {
       const selectedCategory=$('exFilterCategory')?.value||'';
       if(selectedCategory){
         const sums={};
         rows.forEach(r=>{const k=r.subCategory || (String(r.mainCategory||'').toLowerCase()==='vehicle maintenance' ? r.vehicleType : '') || 'Other';if(!sums[k])sums[k]={amount:0,count:0};sums[k].amount+=Number(r.amount||0);sums[k].count++});
-        table=`<div class="expense-abstract-heading">Category: ${esc(selectedCategory)}</div><div class="expense-results"><table><thead><tr><th>Sub-Category</th><th>Records</th><th>Total Amount</th></tr></thead><tbody>${Object.keys(sums).sort().map(k=>`<tr><td>${esc(k)}</td><td>${sums[k].count}</td><td>${money(sums[k].amount)}</td></tr>`).join('')||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
+        const subKeys=Object.keys(sums).sort(),subAmounts=subKeys.map(k=>Number(sums[k].amount)||0),minSubAmount=subAmounts.length?Math.min(...subAmounts):0,maxSubAmount=subAmounts.length?Math.max(...subAmounts):0,highlightSubGroups=subAmounts.length>1&&maxSubAmount!==minSubAmount;
+        table=`<div class="expense-abstract-heading">Category: ${esc(selectedCategory)}</div><div class="expense-results"><table><thead><tr><th>Sub-Category</th><th>Records</th><th>Total Amount</th></tr></thead><tbody>${subKeys.map(k=>{const amount=Number(sums[k].amount)||0;const cls=highlightSubGroups?(amount===maxSubAmount?'expense-amount-high-row':amount===minSubAmount?'expense-amount-low-row':''):'';return `<tr class="${cls}"><td>${esc(k)}</td><td>${sums[k].count}</td><td>${money(sums[k].amount)}</td></tr>`;}).join('')||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
       } else {
         const sums={};
         rows.forEach(r=>{
@@ -578,14 +583,21 @@ ${field('Photos',`
           sums[main].subs[sub].amount+=Number(r.amount||0);sums[main].subs[sub].count++;
         });
         let categoryIndex=0;
-        const categoryRows=Object.keys(sums).sort().map(main=>{
+        const mainKeys=Object.keys(sums).sort();
+        const mainAmounts=mainKeys.map(main=>Number(sums[main].amount)||0);
+        const minMainAmount=mainAmounts.length?Math.min(...mainAmounts):0;
+        const maxMainAmount=mainAmounts.length?Math.max(...mainAmounts):0;
+        const highlightMainGroups=mainAmounts.length>1&&maxMainAmount!==minMainAmount;
+        const categoryRows=mainKeys.map(main=>{
           const index=categoryIndex++;
           const group=sums[main];
+          const mainAmount=Number(group.amount)||0;
+          const mainRowClass=highlightMainGroups?(mainAmount===maxMainAmount?'expense-amount-high-row':mainAmount===minMainAmount?'expense-amount-low-row':''):'';
           const subRows=Object.keys(group.subs).sort().map(sub=>{
             const detail=group.subs[sub];
             return `<tr class="expense-abstract-subrow" data-parent-index="${index}" hidden><td style="padding-left:28px">↳ ${esc(sub)}</td><td>${detail.count}</td><td>${money(detail.amount)}</td></tr>`;
           }).join('');
-          return `<tr class="expense-abstract-category-row" data-toggle-index="${index}" tabindex="0" role="button" aria-expanded="false" style="cursor:pointer"><td><span class="expense-abstract-toggle" aria-hidden="true">＋</span> ${esc(main)}</td><td>${group.count}</td><td>${money(group.amount)}</td></tr>${subRows}`;
+          return `<tr class="expense-abstract-category-row ${mainRowClass}" data-toggle-index="${index}" tabindex="0" role="button" aria-expanded="false" style="cursor:pointer"><td><span class="expense-abstract-toggle" aria-hidden="true">＋</span> ${esc(main)}</td><td>${group.count}</td><td>${money(group.amount)}</td></tr>${subRows}`;
         }).join('');
         table=`<div class="expense-results"><table class="expense-abstract-category-table"><thead><tr><th>Main Category</th><th>Records</th><th>Total Amount</th></tr></thead><tbody>${categoryRows||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
       }
@@ -640,6 +652,11 @@ ${field('Photos',`
       let currentYear='', currentMonth='', currentDay='', monthTotal=0, monthCount=0, yearTotal=0, yearCount=0;
       const monthName=ds=>ds?new Date(ds+'T12:00:00').toLocaleString('en-US',{month:'long'}):'Unknown';
       const amountIndex=visibleColumns.findIndex(c=>c.key==='amount')+1;
+      const reportAmounts=sortedRows.map(r=>Number(r.amount)||0);
+      const minReportAmount=reportAmounts.length?Math.min(...reportAmounts):0;
+      const maxReportAmount=reportAmounts.length?Math.max(...reportAmounts):0;
+      const highlightAmountRows=reportAmounts.length>1&&maxReportAmount!==minReportAmount;
+      const amountRowClass=r=>{if(!highlightAmountRows)return '';const amount=Number(r.amount)||0;return amount===maxReportAmount?'expense-amount-high-row':amount===minReportAmount?'expense-amount-low-row':'';};
       const addMonthTotal=()=>{if(currentMonth)groupedRows+=`<tr class="expense-report-total"><td colspan="${Math.max(1,amountIndex)}">${esc(currentMonth)} Total (${monthCount} records)</td><td>${money(monthTotal)}</td><td colspan="${Math.max(0,colCount-amountIndex-1)}"></td></tr>`;};
       const addYearTotal=()=>{if(currentYear)groupedRows+=`<tr class="expense-report-total"><td colspan="${Math.max(1,amountIndex)}">${esc(currentYear)} Total (${yearCount} records)</td><td>${money(yearTotal)}</td><td colspan="${Math.max(0,colCount-amountIndex-1)}"></td></tr>`;};
       sortedRows.forEach((r,rowIndex)=>{
@@ -668,7 +685,7 @@ ${field('Photos',`
           const value=col.value(r,photos,rowIndex);
           return `<td class="${col.center?'expense-center-cell ':''}${col.key==='edit'?'expense-edit-cell':''}">${col.html?value:esc(value)}</td>`;
         })];
-        groupedRows+=`<tr>${cells.join('')}</tr>`;
+        groupedRows+=`<tr class="${amountRowClass(r)}">${cells.join('')}</tr>`;
         if(['This Year','All','Monthly','Yearly'].includes(reportPeriod)){const amount=Number(r.amount)||0;monthTotal+=amount;monthCount++;yearTotal+=amount;yearCount++;}
       });
       if(['This Year','All','Monthly','Yearly'].includes(reportPeriod)){addMonthTotal();addYearTotal();}
@@ -705,7 +722,7 @@ ${field('Photos',`
       else if(reportPeriodTitle==='All') abstractPeriodHeading='All Periods';
     }
     const abstractHeadingHtml=abstractPeriodHeading?`<div class="expense-abstract-heading">${esc(abstractPeriodHeading)}</div>`:'';
-    $('exReportOutput').innerHTML=`<style>.expense-results{height:55vh!important;max-height:55vh!important;overflow:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.expense-results table{width:max-content;min-width:100%;border-collapse:collapse}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table thead th{height:50px!important;min-height:50px!important;padding:5px 5px!important;box-sizing:border-box;text-align:center;line-height:1.1;white-space:normal;overflow-wrap:normal;word-break:normal}.expense-results table .expense-report-subheading.expense-report-month th{height:38px!important;min-height:38px!important;padding:4px 8px!important;font-size:14px!important;line-height:1.1!important}.expense-results table .expense-report-subheading.expense-report-year th{height:42px!important;min-height:42px!important;padding:4px 8px!important;font-size:18px!important;line-height:1.1!important}.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}.expense-report-subheading.expense-report-year th{color:#2e8b57!important}.expense-report-subheading.expense-report-month th{font-size:14px!important}.expense-abstract-category-row:focus{outline:2px solid #4a9fe8;outline-offset:-2px}.expense-abstract-subrow[hidden]{display:none!important}.expense-abstract-subrow td{background:#f4f9ff!important;color:#2d5274}.expense-abstract-toggle{display:inline-block;width:16px;font-weight:700;color:#2477c8}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table th.expense-center-cell,.expense-results table td.expense-center-cell{text-align:center!important;vertical-align:middle!important;width:1%;min-width:58px;max-width:110px;padding:6px 4px;white-space:normal;overflow-wrap:anywhere}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
+    $('exReportOutput').innerHTML=`<style>.expense-results{height:55vh!important;max-height:55vh!important;overflow:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.expense-results table{width:max-content;min-width:100%;border-collapse:collapse}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table thead th{height:50px!important;min-height:50px!important;padding:5px 5px!important;box-sizing:border-box;text-align:center;line-height:1.1;white-space:normal;overflow-wrap:normal;word-break:normal}.expense-results table .expense-report-subheading.expense-report-month th{height:32px!important;min-height:32px!important;padding:3px 8px!important;font-size:14px!important;line-height:1.05!important}.expense-results table .expense-report-subheading.expense-report-year th{height:34px!important;min-height:34px!important;padding:3px 8px!important;font-size:17px!important;line-height:1.05!important;background:#e7eaf0!important;background-color:#e7eaf0!important;border-color:#c7ceda!important;color:#37624a!important}.expense-results table tr.expense-amount-high-row>td{background:#fff0df!important}.expense-results table tr.expense-amount-low-row>td{background:#e8f5e9!important}.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}.expense-report-subheading.expense-report-year th{color:#2e8b57!important}.expense-report-subheading.expense-report-month th{font-size:14px!important}.expense-abstract-category-row:focus{outline:2px solid #4a9fe8;outline-offset:-2px}.expense-abstract-subrow[hidden]{display:none!important}.expense-abstract-subrow td{background:#f4f9ff!important;color:#2d5274}.expense-abstract-toggle{display:inline-block;width:16px;font-weight:700;color:#2477c8}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table th.expense-center-cell,.expense-results table td.expense-center-cell{text-align:center!important;vertical-align:middle!important;width:1%;min-width:58px;max-width:110px;padding:6px 4px;white-space:normal;overflow-wrap:anywhere}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
     // Photo thumbnails open in an in-app preview; the report remains open underneath.
     const reportOutput = $('exReportOutput');
     if (reportOutput) {
@@ -759,7 +776,7 @@ ${field('Photos',`
       if(custom)return `Expenses Custom Search - Abstract - ${periodLabel}`;
       return `Expenses Abstract - ${periodLabel}`;
     }
-    const periodLabel=period==='This Week'?'This week':String(period||'All');
+    const periodLabel=period==='All'?'All Records':period==='This Week'?'This week':String(period||'All');
     if(kind==='sensitive')return `Sensitive Expenses Detailed - ${periodLabel}`;
     if(kind==='all')return `All Expenses Detailed - ${periodLabel}`;
     if(custom)return `Expenses Custom Search - Detailed - ${periodLabel}`;
@@ -797,8 +814,10 @@ ${field('Photos',`
       .expense-page.expense-report-abstract .expense-report-panel .expense-summary-card{min-height:34px!important;height:34px!important;padding:3px 4px!important}
       .expense-page .expense-report-panel .expense-edit-cell{width:48px!important;min-width:48px!important;max-width:48px!important;padding:4px 2px!important;text-align:center!important;vertical-align:middle!important;white-space:nowrap!important}
       .expense-page .expense-report-panel .expense-edit-text{display:inline-block!important;width:100%!important;min-width:0!important;padding:2px 0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;color:#2477c8!important;box-shadow:none!important;font:inherit!important;font-weight:600!important;text-align:center!important;text-decoration:none!important;white-space:nowrap!important;cursor:pointer!important}
-      .expense-page .expense-report-panel .expense-results table .expense-report-subheading.expense-report-month th{height:38px!important;min-height:38px!important;padding:4px 8px!important;line-height:1.1!important;font-size:14px!important;vertical-align:middle!important}
-      .expense-page .expense-report-panel .expense-results table .expense-report-subheading.expense-report-year th{height:42px!important;min-height:42px!important;padding:4px 8px!important;line-height:1.1!important;font-size:18px!important;vertical-align:middle!important}
+      .expense-page .expense-report-panel .expense-results table .expense-report-subheading.expense-report-month th{height:32px!important;min-height:32px!important;padding:3px 8px!important;line-height:1.05!important;font-size:14px!important;vertical-align:middle!important}
+      .expense-page .expense-report-panel .expense-results table .expense-report-subheading.expense-report-year th{height:34px!important;min-height:34px!important;padding:3px 8px!important;line-height:1.05!important;font-size:17px!important;vertical-align:middle!important;background:#e7eaf0!important;background-color:#e7eaf0!important;border-color:#c7ceda!important;color:#37624a!important}
+      .expense-page .expense-report-panel .expense-results table tr.expense-amount-high-row>td{background:#fff0df!important}
+      .expense-page .expense-report-panel .expense-results table tr.expense-amount-low-row>td{background:#e8f5e9!important}
       .expense-page .expense-report-panel .expense-report-actions{display:flex!important;align-items:stretch!important;justify-content:space-between!important;gap:8px!important;flex-wrap:nowrap!important;width:100%!important;margin:12px 0 0!important;box-sizing:border-box!important}
       .expense-page .expense-report-panel .expense-report-actions>.expense-download-wrap,.expense-page .expense-report-panel .expense-report-actions>button{flex:1 1 0!important;width:0!important;min-width:0!important;max-width:none!important;box-sizing:border-box!important}
       .expense-page .expense-report-panel .expense-report-actions>.expense-download-wrap>button{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;box-sizing:border-box!important}
