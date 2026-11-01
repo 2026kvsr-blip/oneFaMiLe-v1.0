@@ -535,6 +535,26 @@
       if(periodPicker)periodPicker.hidden=true;
       if(periodDisplay)periodDisplay.setAttribute('aria-expanded','false');
     };
+    const resetPeriodSelectionToCurrent=()=>{
+      const p=period.value;
+      const current=today();
+      const currentDate=new Date();
+      if(p==='Date'){
+        const input=$('actPeriodDate');
+        if(input)input.value=current;
+      }else if(p==='Week'){
+        const input=$('actPeriodWeek');
+        if(input)input.value=current;
+        pickerMonth=parseLocalDate(current);
+      }else if(p==='Month'){
+        const input=$('actPeriodMonth');
+        if(input)input.value=current.slice(0,7);
+        if(periodPicker)periodPicker.dataset.year=String(currentDate.getFullYear());
+      }else if(p==='Year'){
+        const input=$('actPeriodYear');
+        if(input)input.value=String(currentDate.getFullYear());
+      }
+    };
     const updatePeriodDisplay=()=>{
       const p=period.value;
       const now=today();
@@ -702,9 +722,19 @@
       if(sortField)sortField.classList.toggle('hidden',hide);
     };
     const syncShowColumnsVisibility=()=>{const field=$('actShowColumnsField');if(field)field.classList.toggle('hidden',type.value!=='Detailed');};
-    type.onchange=()=>{syncPeriodOptions();syncPeriodPickers();syncDateSortVisibility();syncShowColumnsVisibility();};
-    period.onchange=()=>{syncPeriodPickers();syncDateSortVisibility();};
-    type.value='Abstract';syncPeriodOptions();period.value='Date';syncPeriodPickers();syncDateSortVisibility();syncShowColumnsVisibility();
+    type.onchange=()=>{
+      syncPeriodOptions();
+      resetPeriodSelectionToCurrent();
+      syncPeriodPickers();
+      syncDateSortVisibility();
+      syncShowColumnsVisibility();
+    };
+    period.onchange=()=>{
+      resetPeriodSelectionToCurrent();
+      syncPeriodPickers();
+      syncDateSortVisibility();
+    };
+    type.value='Abstract';syncPeriodOptions();period.value='Date';resetPeriodSelectionToCurrent();syncPeriodPickers();syncDateSortVisibility();syncShowColumnsVisibility();
     const syncSub=(preserveSelection=false)=>{
       const previous=preserveSelection?sub.value:'';
       const relatedSubCategories=cat.value?reportSubCategoryKeys(cat.value):[];
