@@ -53,7 +53,7 @@
   // Do not depend on the separate Expenses module or a global CATEGORIES variable.
   const reportCategoryKeys = () => [...new Set(Object.values(ACTIVITY_CONFIG).flatMap(group => Object.keys(group)))].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'}));
   const reportSubCategoryKeys = category => [...new Set(Object.values(ACTIVITY_CONFIG).flatMap(group => category ? (group[category] || []) : Object.values(group).flat()))].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'}));
-  const statusOptions=['Pending','In Progress','On Hold','Completed','Cancelled'];
+  const statusOptions=['Pending','In Progress','On Hold','Completed','Cancelled','Not Necessary'];
   const priorityOptions=['Low','Normal','High','Urgent'];
   const repeatOptions=['Does not repeat','Daily','Weekly','Monthly','Yearly','Custom'];
   const categoryKeys = type => Object.keys(ACTIVITY_CONFIG[type] || {'Others':['Other']});
@@ -481,9 +481,14 @@
     $('activityResetBtn').onclick=()=>setTimeout(resetForm,0);
   }
   function sensitiveGate(kind){styleOnce();const label=kind==='sensitive'?'Sensitive Activities - Report':'All Activities - Report';const inner=`<div class="expense-panel"><div class="expense-field"><label class="expense-label" for="activityPassCode">Pass Code</label><input id="activityPassCode" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Enter Pass Code"></div><div id="activityStatus" class="expense-status" role="status"></div><div class="expense-actions" style="display:flex;align-items:center;justify-content:center;align-items:center;gap:16px;margin-top:32px;flex-wrap:nowrap;width:100%"><button type="button" id="activityVerifyPass" class="expense-primary" style="margin:0">Verify</button><button type="button" id="activityModuleBack" class="expense-secondary" style="margin:0">← Back</button></div></div>`;page(shell(label,inner,true));bindBack();$('activityVerifyPass').onclick=async()=>{const pass=$('activityPassCode').value.trim();if(!pass){status('Enter Pass Code.','error');return}const btn=$('activityVerifyPass');btn.disabled=true;status('Verifying…');try{const res=await request('getActivities',{includeSensitive:'true',passCode:pass});if(res.status!=='success')throw new Error(res.message||'Pass Code verification failed.');cached=res.activities||[];activeAccess=kind;renderReports(kind,false,cached)}catch(e){status(e.message||'Verification failed.','error');btn.disabled=false}}}
-  function reportControls(custom){return `<style>.activity-page .expense-filter-grid .expense-field.hidden{display:none!important}.activity-page .expense-report-inline{display:flex;flex-direction:column;gap:5px}.activity-page .expense-report-inline .expense-label{white-space:nowrap;width:100%;margin:0!important}.activity-page .expense-report-inline select{display:block;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-custom-grid .expense-field{min-width:0}.activity-page .activity-custom-grid>.expense-field:has(#actFromDate){grid-row:4!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actToDate){grid-row:4!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actSearchText){grid-row:5!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actAssignedTo){grid-row:5!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actPersonDoctorOffice){grid-row:6!important;grid-column:1!important}.activity-page .activity-custom-grid #actShowColumnsField{grid-row:6!important;grid-column:2!important}.activity-page .expense-panel>.expense-report-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;justify-content:stretch!important;gap:8px!important;width:100%!important;margin-top:24px!important;padding-top:2px!important;box-sizing:border-box!important}.activity-page:not(.activity-report-view) .expense-panel>.expense-report-actions>button{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;flex:none!important;box-sizing:border-box!important}</style><div class="expense-panel"><div class="expense-filter-grid ${custom?'activity-custom-grid':''}">
+  function reportControls(custom){return `<style>.activity-page .expense-filter-grid .expense-field.hidden{display:none!important}.activity-page .expense-report-inline{display:flex;flex-direction:column;gap:5px}.activity-page .expense-report-inline .expense-label{white-space:nowrap;width:100%;margin:0!important}.activity-page .expense-report-inline select{display:block;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-period-subfield{display:flex;flex-direction:column;gap:5px;margin-top:5px}.activity-page .activity-period-subfield[hidden]{display:none!important}.activity-page .activity-period-subfield input{display:block;width:100%;min-width:0;max-width:100%;height:40px;min-height:40px;box-sizing:border-box}.activity-page .activity-custom-grid .expense-field{min-width:0}.activity-page .activity-custom-grid>.expense-field:has(#actFromDate){grid-row:4!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actToDate){grid-row:4!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actSearchText){grid-row:5!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actAssignedTo){grid-row:5!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actPersonDoctorOffice){grid-row:6!important;grid-column:1!important}.activity-page .activity-custom-grid #actShowColumnsField{grid-row:6!important;grid-column:2!important}.activity-page .expense-panel>.expense-report-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;justify-content:stretch!important;gap:8px!important;width:100%!important;margin-top:24px!important;padding-top:2px!important;box-sizing:border-box!important}.activity-page:not(.activity-report-view) .expense-panel>.expense-report-actions>button{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;flex:none!important;box-sizing:border-box!important}</style><div class="expense-panel"><div class="expense-filter-grid ${custom?'activity-custom-grid':''}">
     <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportType">Report Type</label><select id="actReportType">${reportChoiceOptions(['Abstract','Detailed'],'Abstract')}</select></div>
-    <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportPeriod">Report Period</label><select id="actReportPeriod">${reportChoiceOptions(['Today','This Week','This Month','This Year','All'],'Today')}</select></div>
+    <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportPeriod">Report Period</label><select id="actReportPeriod">${reportChoiceOptions(['Date','Week','Month','Year','All'],'Date')}</select>
+      <div class="activity-period-subfield" id="actPeriodDateField" hidden><label class="expense-label" for="actPeriodDate">Select Date</label><input id="actPeriodDate" type="date" value="${today()}"></div>
+      <div class="activity-period-subfield" id="actPeriodWeekField" hidden><label class="expense-label" for="actPeriodWeek">Select a Date in Week</label><input id="actPeriodWeek" type="date" value="${today()}"></div>
+      <div class="activity-period-subfield" id="actPeriodMonthField" hidden><label class="expense-label" for="actPeriodMonth">Select Month</label><input id="actPeriodMonth" type="month" value="${today().slice(0,7)}"></div>
+      <div class="activity-period-subfield" id="actPeriodYearField" hidden><label class="expense-label" for="actPeriodYear">Select Year</label><input id="actPeriodYear" type="number" min="1900" max="2100" step="1" value="${new Date().getFullYear()}"></div>
+    </div>
     <div class="expense-field"><label class="expense-label" for="actFilterCategory">Category</label><select id="actFilterCategory">${options(reportCategoryKeys(),'All')}</select></div>
     <div class="expense-field"><label class="expense-label" for="actFilterSub">Sub Category</label><select id="actFilterSub">${options(reportSubCategoryKeys(''),'All')}</select></div>
     <div class="expense-field"><label class="expense-label" for="actFilterStatus">Status</label><select id="actFilterStatus">${options(statusOptions,'All',true)}</select></div>
@@ -495,31 +500,135 @@
   function renderReports(kind='normal',custom=false,prefetched=null){styleOnce();activeAccess=kind;cached=prefetched||[];const label=kind==='sensitive'?'Sensitive Activities Reports':kind==='all'?'All Activities Reports':custom?'Activities — Custom Search':'Activities Reports';page(shell(label,reportControls(custom),true));bindBack();setupReportControls(kind,custom);}
   function setupReportControls(kind,custom){
     const type=$('actReportType'),period=$('actReportPeriod'),cat=$('actFilterCategory'),sub=$('actFilterSub'),run=$('actRunReport');
-    const abstractPeriods=['Today','This Week','This Month','This Year','All','Daily','Weekly','Monthly','Yearly'];
-    const detailedPeriods=['Today','This Week','This Month','This Year','All'];
-    const syncPeriodOptions=()=>{const previous=period.value;const choices=type.value==='Abstract'?abstractPeriods:detailedPeriods;const selected=choices.includes(previous)?previous:'Today';period.innerHTML=reportChoiceOptions(choices,selected);period.value=selected;};
-    const syncDateSortVisibility=()=>{const p=period.value,isAbstract=type.value==='Abstract';const hide=isAbstract&&['All','Today','This Week','This Month','This Year'].includes(p);const sortField=$('actDateSortBtn')?.closest('.expense-field');if(sortField)sortField.classList.toggle('hidden',hide);};
+    const abstractPeriods=['Date','Week','Month','Year','All','Daily','Weekly','Monthly','Yearly'];
+    const detailedPeriods=['Date','Week','Month','Year','All'];
+    const syncPeriodOptions=()=>{
+      const previous=period.value;
+      const choices=type.value==='Abstract'?abstractPeriods:detailedPeriods;
+      const selected=choices.includes(previous)?previous:'Date';
+      period.innerHTML=reportChoiceOptions(choices,selected);
+      period.value=selected;
+    };
+    const syncPeriodPickers=()=>{
+      const p=period.value;
+      [['Date','actPeriodDateField'],['Week','actPeriodWeekField'],['Month','actPeriodMonthField'],['Year','actPeriodYearField']].forEach(([name,id])=>{
+        const field=$(id);if(field)field.hidden=p!==name;
+      });
+    };
+    const syncDateSortVisibility=()=>{
+      const p=period.value,isAbstract=type.value==='Abstract';
+      const hide=isAbstract&&['All','Date','Week','Month','Year'].includes(p);
+      const sortField=$('actDateSortBtn')?.closest('.expense-field');
+      if(sortField)sortField.classList.toggle('hidden',hide);
+    };
     const syncShowColumnsVisibility=()=>{const field=$('actShowColumnsField');if(field)field.classList.toggle('hidden',type.value!=='Detailed');};
-    type.onchange=()=>{syncPeriodOptions();syncDateSortVisibility();syncShowColumnsVisibility();if(lastRows.length)renderReportResults(lastRows,type.value,period.value)};syncPeriodOptions();period.onchange=syncDateSortVisibility;
-    const syncSub=(preserveSelection=false)=>{const previous=preserveSelection?sub.value:'';const relatedSubCategories=cat.value?reportSubCategoryKeys(cat.value):[];sub.innerHTML=options(relatedSubCategories,'All');if(previous&&relatedSubCategories.includes(previous))sub.value=previous;else sub.value='';};cat.onchange=()=>syncSub(false);syncSub(false);
+    type.onchange=()=>{syncPeriodOptions();syncPeriodPickers();syncDateSortVisibility();syncShowColumnsVisibility();};
+    period.onchange=()=>{syncPeriodPickers();syncDateSortVisibility();};
+    type.value='Abstract';syncPeriodOptions();period.value='Date';syncPeriodPickers();syncDateSortVisibility();syncShowColumnsVisibility();
+    const syncSub=(preserveSelection=false)=>{
+      const previous=preserveSelection?sub.value:'';
+      const relatedSubCategories=cat.value?reportSubCategoryKeys(cat.value):[];
+      sub.innerHTML=options(relatedSubCategories,'All');
+      if(previous&&relatedSubCategories.includes(previous))sub.value=previous;else sub.value='';
+    };
+    cat.onchange=()=>syncSub(false);syncSub(false);
     const back=$('activityReportBack');if(back)back.onclick=event=>{event.preventDefault();event.stopPropagation();backToMenu()};
-    
-    const dateSortBtn=$('actDateSortBtn');if(dateSortBtn)dateSortBtn.onclick=()=>{dateAscending=!dateAscending;dateSortBtn.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';dateSortBtn.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');dateSortBtn.title=dateAscending?'Sort date ascending':'Sort date descending';if(lastRows.length)renderReportResults(lastRows,type.value)};
-    const showColumns=$('actShowColumns');if(showColumns)showColumns.onchange=()=>{if(lastRows.length)renderReportResults(lastRows,type.value,period.value)};
-    run.onclick=async()=>{run.disabled=true;status('Loading activities…');try{let rows=cached;if(!rows.length){const fields={};if(kind==='sensitive'||kind==='all'){fields.includeSensitive='true';const pass=$('activityPassCode')?.value?.trim();if(pass)fields.passCode=pass;}const res=await request('getActivities',fields);if(res.status!=='success')throw new Error(res.message||'Unable to load activities.');rows=res.activities||[];cached=rows;}const filtered=filterRows(rows,custom,kind);lastRows=filtered.slice();reportSettings={type:type.value,period:period.value,category:cat.value,subCategory:sub.value,status:$('actFilterStatus').value,priority:$('actFilterPriority').value,showColumns:$('actShowColumns')?.value||'limited',dateAscending,from:$('actFromDate')?.value||'',to:$('actToDate')?.value||'',search:$('actSearchText')?.value||'',assigned:$('actAssignedTo')?.value||'',personDoctorOffice:$('actPersonDoctorOffice')?.value||''};renderReportPage(filtered,type.value,kind,custom);}catch(e){status(e.message||'Unable to load activities.','error')}finally{run.disabled=false}};
-    type.value='Abstract';syncPeriodOptions();period.value='Today';syncDateSortVisibility();syncShowColumnsVisibility();
-    if(reportSettings){type.value=reportSettings.type;syncPeriodOptions();period.value=reportSettings.period;cat.value=reportSettings.category;syncSub(true);if(Array.from(sub.options).some(option=>option.value===reportSettings.subCategory))sub.value=reportSettings.subCategory;$('actFilterStatus').value=reportSettings.status;$('actFilterPriority').value=reportSettings.priority;if($('actShowColumns'))$('actShowColumns').value=reportSettings.showColumns;if($('actFromDate'))$('actFromDate').value=reportSettings.from;if($('actToDate'))$('actToDate').value=reportSettings.to;if($('actSearchText'))$('actSearchText').value=reportSettings.search;if($('actAssignedTo'))$('actAssignedTo').value=reportSettings.assigned;if($('actPersonDoctorOffice'))$('actPersonDoctorOffice').value=reportSettings.personDoctorOffice||'';dateAscending=reportSettings.dateAscending;syncDateSortVisibility();syncShowColumnsVisibility();reportSettings=null;}
+    const dateSortBtn=$('actDateSortBtn');
+    if(dateSortBtn)dateSortBtn.onclick=()=>{
+      dateAscending=!dateAscending;
+      dateSortBtn.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';
+      dateSortBtn.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');
+      dateSortBtn.title=dateAscending?'Sort date ascending':'Sort date descending';
+    };
+    run.onclick=async()=>{
+      run.disabled=true;status('Loading activities…');
+      try{
+        let rows=cached;
+        if(!rows.length){
+          const fields={};
+          if(kind==='sensitive'||kind==='all'){
+            fields.includeSensitive='true';
+            const pass=$('activityPassCode')?.value?.trim();if(pass)fields.passCode=pass;
+          }
+          const res=await request('getActivities',fields);
+          if(res.status!=='success')throw new Error(res.message||'Unable to load activities.');
+          rows=res.activities||[];cached=rows;
+        }
+        const filtered=filterRows(rows,custom,kind);lastRows=filtered.slice();
+        reportSettings={
+          type:type.value,period:period.value,category:cat.value,subCategory:sub.value,
+          status:$('actFilterStatus').value,priority:$('actFilterPriority').value,
+          showColumns:$('actShowColumns')?.value||'limited',dateAscending,
+          from:$('actFromDate')?.value||'',to:$('actToDate')?.value||'',
+          periodDate:$('actPeriodDate')?.value||today(),
+          periodWeek:$('actPeriodWeek')?.value||today(),
+          periodMonth:$('actPeriodMonth')?.value||today().slice(0,7),
+          periodYear:$('actPeriodYear')?.value||String(new Date().getFullYear()),
+          search:$('actSearchText')?.value||'',assigned:$('actAssignedTo')?.value||'',
+          personDoctorOffice:$('actPersonDoctorOffice')?.value||''
+        };
+        renderReportPage(filtered,type.value,kind,custom,period.value);
+      }catch(e){status(e.message||'Unable to load activities.','error')}
+      finally{run.disabled=false;}
+    };
+    if(reportSettings){
+      type.value=reportSettings.type;syncPeriodOptions();period.value=reportSettings.period;
+      cat.value=reportSettings.category;syncSub(true);
+      if(Array.from(sub.options).some(option=>option.value===reportSettings.subCategory))sub.value=reportSettings.subCategory;
+      $('actFilterStatus').value=reportSettings.status;$('actFilterPriority').value=reportSettings.priority;
+      if($('actShowColumns'))$('actShowColumns').value=reportSettings.showColumns;
+      if($('actFromDate'))$('actFromDate').value=reportSettings.from;
+      if($('actToDate'))$('actToDate').value=reportSettings.to;
+      if($('actPeriodDate'))$('actPeriodDate').value=reportSettings.periodDate||today();
+      if($('actPeriodWeek'))$('actPeriodWeek').value=reportSettings.periodWeek||today();
+      if($('actPeriodMonth'))$('actPeriodMonth').value=reportSettings.periodMonth||today().slice(0,7);
+      if($('actPeriodYear'))$('actPeriodYear').value=reportSettings.periodYear||String(new Date().getFullYear());
+      if($('actSearchText'))$('actSearchText').value=reportSettings.search;
+      if($('actAssignedTo'))$('actAssignedTo').value=reportSettings.assigned;
+      if($('actPersonDoctorOffice'))$('actPersonDoctorOffice').value=reportSettings.personDoctorOffice||'';
+      dateAscending=reportSettings.dateAscending;
+      syncPeriodPickers();syncDateSortVisibility();syncShowColumnsVisibility();reportSettings=null;
+    }
+  }
+  function reportPeriodDetails(period,settings=reportSettings){
+    const current=today();
+    const readValue=(settingName,elementId,fallback)=>settings?.[settingName]||$(elementId)?.value||fallback;
+    if(period==='Date'){
+      const date=readValue('periodDate','actPeriodDate',current);
+      return {from:date,to:date,label:`Date : ${showDate(date)}`};
+    }
+    if(period==='Week'){
+      const reference=readValue('periodWeek','actPeriodWeek',current);
+      const start=new Date(reference+'T12:00:00');
+      start.setDate(start.getDate()-((start.getDay()+6)%7));
+      const end=new Date(start);end.setDate(end.getDate()+6);
+      const from=fmt(start),to=fmt(end);
+      return {from,to,label:`Week : ${showDate(from)} to ${showDate(to)}`};
+    }
+    if(period==='Month'){
+      let month=readValue('periodMonth','actPeriodMonth',current.slice(0,7));
+      if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(month))month=current.slice(0,7);
+      const [year,monthNumber]=month.split('-').map(Number);
+      const from=`${month}-01`,to=fmt(new Date(year,monthNumber,0));
+      const labelDate=new Date(year,monthNumber-1,1);
+      return {from,to,label:`Month : ${labelDate.toLocaleString('en-US',{month:'long',year:'numeric'})}`};
+    }
+    if(period==='Year'){
+      let year=readValue('periodYear','actPeriodYear',String(new Date().getFullYear()));
+      if(!/^\d{4}$/.test(String(year))||Number(year)<1900||Number(year)>2100)year=String(new Date().getFullYear());
+      return {from:`${year}-01-01`,to:`${year}-12-31`,label:`Year : ${year}`};
+    }
+    return {from:'',to:'',label:period==='All'?'All Records':String(period||'All')};
   }
   function reportPageTitle(type,kind,custom,period='All'){
     const detail=type==='Detailed';
+    const periodLabel=['Date','Week','Month','Year'].includes(period)?reportPeriodDetails(period).label.replace(' : ',' - '):String(period||'All');
     if(!detail){
-      const periodLabel=period==='This Week'?'This week':String(period||'All');
       if(kind==='sensitive')return `Sensitive Activities Abstract - ${periodLabel}`;
       if(kind==='all')return `All Activities Abstract - ${periodLabel}`;
       if(custom)return `Activities Custom Search - Abstract - ${periodLabel}`;
       return `Activities Abstract - ${periodLabel}`;
     }
-    const periodLabel=period==='This Week'?'This week':String(period||'All');
     if(kind==='sensitive')return `Sensitive Activities Detailed - ${periodLabel}`;
     if(kind==='all')return `All Activities Detailed - ${periodLabel}`;
     if(custom)return `Activities Custom Search - Detailed - ${periodLabel}`;
@@ -707,10 +816,36 @@
     page(shell(label,inner,true));const reportPage=document.querySelector('.activity-page');if(reportPage){reportPage.classList.add('activity-report-view');if(type==='Detailed')reportPage.classList.add('activity-report-detailed');else reportPage.classList.add('activity-report-abstract');}renderReportResults(rows,type,selectedPeriod);const reportSort=$('activityReportDateSort');if(reportSort)reportSort.onclick=()=>{dateAscending=!dateAscending;reportSort.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';reportSort.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');reportSort.title=dateAscending?'Sort date ascending':'Sort date descending';renderReportResults(lastRows,type,selectedPeriod)};const dl=$('activityDownloadBtn'),menu=$('activityDownloadMenu');if(dl&&menu){dl.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportReport(b.dataset.export)});}const back=$('activityReportBack');if(back)back.onclick=()=>renderReports(kind,custom,cached);
   }
   function filterRows(rows,custom,kind){
-    let from=custom?($('actFromDate')?.value||''):'',to=custom?($('actToDate')?.value||''):'';const p=$('actReportPeriod').value,now=new Date();
-    if(!custom||(!from&&!to)){if(p==='Today')from=to=today();else if(p==='This Week'){const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));from=fmt(d);const e=new Date(d);e.setDate(e.getDate()+6);to=fmt(e)}else if(p==='This Month'){from=today().slice(0,7)+'-01';to=today()}else if(p==='This Year'){from=now.getFullYear()+'-01-01';to=now.getFullYear()+'-12-31'}}
-    const start=from?new Date(from+'T00:00:00').getTime():null,end=to?new Date(to+'T23:59:59').getTime():null;const c=$('actFilterCategory').value,s=$('actFilterSub').value,st=$('actFilterStatus').value,pr=$('actFilterPriority').value,q=custom?($('actSearchText')?.value||'').trim().toLowerCase():'',assigned=custom?($('actAssignedTo')?.value||'').trim().toLowerCase():'',personDoctorOffice=custom?($('actPersonDoctorOffice')?.value||'').trim().toLowerCase():'';
-    return rows.filter(r=>{const date=String(r.startDate||r.dueDate||r.createdAt||'').slice(0,10);const time=date?new Date(date+'T12:00:00').getTime():0;if(start!==null&&time<start)return false;if(end!==null&&time>end)return false;if(c&&String(r.category||'')!==c)return false;if(s&&String(r.subCategory||'')!==s)return false;if(st&&String(r.status||'')!==st)return false;if(pr&&String(r.priority||'')!==pr)return false;if(assigned&&!String(r.assignedTo||'').toLowerCase().includes(assigned))return false;if(personDoctorOffice&&!`${r.appointmentPerson||''} ${r.person||''} ${r.doctor||''} ${r.office||''}`.toLowerCase().includes(personDoctorOffice))return false;if(q&&!`${r.title||''} ${r.category||''} ${r.subCategory||''} ${r.description||''} ${r.tags||''} ${r.status||''} ${r.activityType||''} ${r.assignedTo||''}`.toLowerCase().includes(q))return false;if(kind==='normal'&&sensitiveFlag(r.isSensitive))return false;if(kind==='sensitive'&&!sensitiveFlag(r.isSensitive))return false;return true})
+    let from=custom?($('actFromDate')?.value||''):'',to=custom?($('actToDate')?.value||''):'';
+    const p=$('actReportPeriod').value;
+    // In Custom Search, explicit From / To dates take precedence. When they are
+    // empty, the common Date / Week / Month / Year selector supplies the range.
+    if(!custom||(!from&&!to)){
+      const periodRange=reportPeriodDetails(p,null);
+      from=periodRange.from;to=periodRange.to;
+    }
+    const start=from?new Date(from+'T00:00:00').getTime():null;
+    const end=to?new Date(to+'T23:59:59').getTime():null;
+    const c=$('actFilterCategory').value,s=$('actFilterSub').value,st=$('actFilterStatus').value,pr=$('actFilterPriority').value;
+    const q=custom?($('actSearchText')?.value||'').trim().toLowerCase():'';
+    const assigned=custom?($('actAssignedTo')?.value||'').trim().toLowerCase():'';
+    const personDoctorOffice=custom?($('actPersonDoctorOffice')?.value||'').trim().toLowerCase():'';
+    return rows.filter(r=>{
+      const date=String(r.startDate||r.dueDate||r.createdAt||'').slice(0,10);
+      const time=date?new Date(date+'T12:00:00').getTime():0;
+      if(start!==null&&time<start)return false;
+      if(end!==null&&time>end)return false;
+      if(c&&String(r.category||'')!==c)return false;
+      if(s&&String(r.subCategory||'')!==s)return false;
+      if(st&&String(r.status||'')!==st)return false;
+      if(pr&&String(r.priority||'')!==pr)return false;
+      if(assigned&&!String(r.assignedTo||'').toLowerCase().includes(assigned))return false;
+      if(personDoctorOffice&&!`${r.appointmentPerson||''} ${r.person||''} ${r.doctor||''} ${r.office||''}`.toLowerCase().includes(personDoctorOffice))return false;
+      if(q&&!`${r.title||''} ${r.category||''} ${r.subCategory||''} ${r.description||''} ${r.tags||''} ${r.status||''} ${r.activityType||''} ${r.assignedTo||''}`.toLowerCase().includes(q))return false;
+      if(kind==='normal'&&sensitiveFlag(r.isSensitive))return false;
+      if(kind==='sensitive'&&!sensitiveFlag(r.isSensitive))return false;
+      return true;
+    });
   }
   function renderReportResults(rows,type,periodOverride=null){
     const typeOrder=Object.keys(ACTIVITY_CONFIG).filter(name=>name!=='Reminder');
@@ -740,10 +875,37 @@
       return String(a.activityType||'').localeCompare(String(b.activityType||''),undefined,{sensitivity:'base'});
     });
     const total=rows.length,completed=rows.filter(r=>String(r.status).toLowerCase()==='completed').length,pending=rows.filter(r=>String(r.status).toLowerCase()==='pending').length;let table='';const p=periodOverride||$('actReportPeriod')?.value||reportSettings?.period||'All';
+    const abstractExtraColumns=[
+      ['dueIn2Days','Due in 2 Days'],['dueTomorrow','Due Tomorrow'],['dueToday','Due Today'],
+      ['overdue','Overdue'],['cancelled','Cancelled'],['notNecessary','Not Necessary']
+    ];
+    const newAbstractCounts=()=>({dueIn2Days:0,dueTomorrow:0,dueToday:0,overdue:0,cancelled:0,notNecessary:0});
+    const addAbstractCounts=(counts,record)=>{
+      const state=String(record.status||'').trim().toLowerCase();
+      if(state==='cancelled'){counts.cancelled++;return;}
+      if(state==='not necessary'){counts.notNecessary++;return;}
+      if(!['pending','in progress','on hold'].includes(state))return;
+      const scheduled=String(record.startDate||record.createdAt||'').slice(0,10);
+      const parts=scheduled.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if(!parts)return;
+      const scheduledDay=Date.UTC(Number(parts[1]),Number(parts[2])-1,Number(parts[3]));
+      const todayParts=today().split('-').map(Number);
+      const todayDay=Date.UTC(todayParts[0],todayParts[1]-1,todayParts[2]);
+      const daysLeft=Math.round((scheduledDay-todayDay)/86400000);
+      if(daysLeft===2)counts.dueIn2Days++;
+      else if(daysLeft===1)counts.dueTomorrow++;
+      else if(daysLeft===0)counts.dueToday++;
+      else if(daysLeft<0)counts.overdue++;
+    };
+    const abstractCountHeaders=abstractExtraColumns.map(([,label])=>`<th class="activity-abstract-center">${label}</th>`).join('');
+    const abstractCountCells=counts=>abstractExtraColumns.map(([key])=>`<td class="activity-abstract-center">${counts[key]||0}</td>`).join('');
+    const addRecordToAbstractGroup=(group,record)=>{
+      group.count++;if(String(record.status||'').trim().toLowerCase()==='completed')group.completed++;
+      addAbstractCounts(group,record);
+    };
     if(type==='Abstract'){
       if(['Daily','Weekly','Monthly','Yearly'].includes(p)){
-        // Date-grouped Abstract reports mirror the Expenses layout.
-        // Every column is horizontally centered in these four grouped views.
+        // Date-grouped Abstract reports preserve the existing aggregation views.
         const groups={};
         rows.forEach(record=>{
           const ds=dateKey(record);
@@ -759,7 +921,7 @@
             }else if(p==='Monthly')key=`${year}-${month}`;
             else key=year;
           }
-          if(!groups[key])groups[key]={year:'—',month:'—',date:'—',week:'—',count:0,completed:0};
+          if(!groups[key])groups[key]={year:'—',month:'—',date:'—',week:'—',count:0,completed:0,...newAbstractCounts()};
           if(parts){
             groups[key].year=parts[1];
             groups[key].month=new Date(Number(parts[1]),Number(parts[2])-1,1).toLocaleString('en-US',{month:'long'});
@@ -767,102 +929,80 @@
           }
           if(p==='Weekly'&&key!=='Unknown'){
             const weekStart=new Date(key+'T12:00:00');
-            const weekEnd=new Date(weekStart);
-            weekEnd.setDate(weekEnd.getDate()+6);
+            const weekEnd=new Date(weekStart);weekEnd.setDate(weekEnd.getDate()+6);
             groups[key].week=`${showDate(fmt(weekStart))}\u00a0to\u00a0${showDate(fmt(weekEnd))}`;
           }
-          groups[key].count++;
-          if(String(record.status||'').toLowerCase()==='completed')groups[key].completed++;
+          addRecordToAbstractGroup(groups[key],record);
         });
         const keys=Object.keys(groups).sort((a,b)=>dateAscending?a.localeCompare(b):b.localeCompare(a));
-        const abstractColumnClass=name=>({
-          'S.No':'activity-abstract-col-sno',
-          'Year':'activity-abstract-col-year',
-          'Month':'activity-abstract-col-month',
-          'No':'activity-abstract-col-no'
-        }[name]||'');
+        const abstractColumnClass=name=>(
+          {'S.No':'activity-abstract-col-sno','Year':'activity-abstract-col-year','Month':'activity-abstract-col-month','Total Activities':'activity-abstract-col-no'}[name]||''
+        );
         const centeredHeader=label=>`<th class="activity-abstract-center ${abstractColumnClass(label)}">${label}</th>`;
-        let headers='';
-        if(p==='Daily')headers=['S.No','Year','Month','Date','No','Completed'].map(centeredHeader).join('');
-        else if(p==='Weekly')headers=['S.No','Year','Week','No','Completed'].map(centeredHeader).join('');
-        else if(p==='Monthly')headers=['S.No','Year','Month','No','Completed'].map(centeredHeader).join('');
-        else headers=['S.No','Year','No','Completed'].map(centeredHeader).join('');
         const td=(value,column='')=>`<td class="activity-abstract-center ${abstractColumnClass(column)}">${value}</td>`;
-        const cells=(key,g,i)=>{
-          if(p==='Daily')return `${td(i+1,'S.No')}${td(esc(g.year),'Year')}${td(esc(g.month),'Month')}${td(esc(g.date),'Date')}${td(g.count,'No')}${td(g.completed,'Completed')}`;
-          if(p==='Weekly'){
+        let baseHeaders=[],baseCells=()=>'';
+        if(p==='Daily'){
+          baseHeaders=['S.No','Year','Month','Date'].map(centeredHeader);
+          baseCells=(key,g,i)=>`${td(i+1,'S.No')}${td(esc(g.year),'Year')}${td(esc(g.month),'Month')}${td(esc(g.date),'Date')}`;
+        }else if(p==='Weekly'){
+          baseHeaders=['S.No','Year','Week'].map(centeredHeader);
+          baseCells=(key,g,i)=>{
             const weekYear=key==='Unknown'?'—':String(new Date(key+'T12:00:00').getFullYear());
-            return `${td(i+1,'S.No')}${td(esc(weekYear),'Year')}${td(esc(g.week),'Week')}${td(g.count,'No')}${td(g.completed,'Completed')}`;
-          }
-          if(p==='Monthly')return `${td(i+1,'S.No')}${td(esc(g.year),'Year')}${td(esc(g.month),'Month')}${td(g.count,'No')}${td(g.completed,'Completed')}`;
-          return `${td(i+1,'S.No')}${td(esc(g.year),'Year')}${td(g.count,'No')}${td(g.completed,'Completed')}`;
-        };
-        const colspan=p==='Daily'?6:(p==='Weekly'||p==='Monthly'?5:4);
-        const groupedPeriodHeading=p==='Daily'?'Daily Records':p==='Weekly'?'Weekly Records':p==='Monthly'?'Monthly Records':p==='Yearly'?'Yearly Records':'';
-        table=`${groupedPeriodHeading?`<div class="expense-abstract-heading activity-abstract-period-subheading">${groupedPeriodHeading}</div>`:''}<div class="expense-results"><table><thead><tr>${headers}</tr></thead><tbody>${keys.map((key,i)=>`<tr>${cells(key,groups[key],i)}</tr>`).join('')||`<tr><td class="activity-abstract-center" colspan="${colspan}">No records found.</td></tr>`}</tbody></table></div>`;
-      }else if(['Today','This Week','This Month','This Year'].includes(p)){
-        // Period Abstract: show the selected period as a subheading, followed by
-        // expandable Category / Sub Category rows with record and completed counts.
-        const now=new Date();
-        const todayValue=today();
-        let periodHeading='';
-        if(p==='Today'){
-          periodHeading=`Date: ${showDate(todayValue)}`;
-        }else if(p==='This Week'){
-          const weekStart=new Date(todayValue+'T12:00:00');
-          weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
-          const weekEnd=new Date(weekStart);
-          weekEnd.setDate(weekEnd.getDate()+6);
-          periodHeading=`Week: ${showDate(fmt(weekStart))}\u00a0to\u00a0${showDate(fmt(weekEnd))}`;
-        }else if(p==='This Month'){
-          periodHeading=`Month: ${now.toLocaleString('en-US',{month:'long',year:'numeric'})}`;
+            return `${td(i+1,'S.No')}${td(esc(weekYear),'Year')}${td(esc(g.week),'Week')}`;
+          };
+        }else if(p==='Monthly'){
+          baseHeaders=['S.No','Year','Month'].map(centeredHeader);
+          baseCells=(key,g,i)=>`${td(i+1,'S.No')}${td(esc(g.year),'Year')}${td(esc(g.month),'Month')}`;
         }else{
-          periodHeading=`Year: ${now.getFullYear()}`;
+          baseHeaders=['S.No','Year'].map(centeredHeader);
+          baseCells=(key,g,i)=>`${td(i+1,'S.No')}${td(esc(g.year),'Year')}`;
         }
-
+        const headers=[...baseHeaders,centeredHeader('Total Activities'),centeredHeader('Completed'),abstractCountHeaders].join('');
+        const colspan=baseHeaders.length+8;
+        const groupedPeriodHeading=p==='Daily'?'Daily Records':p==='Weekly'?'Weekly Records':p==='Monthly'?'Monthly Records':'Yearly Records';
+        table=`<div class="expense-abstract-heading activity-abstract-period-subheading">${groupedPeriodHeading}</div><div class="expense-results"><table><thead><tr>${headers}</tr></thead><tbody>${keys.map((key,i)=>{const g=groups[key];return `<tr>${baseCells(key,g,i)}${td(g.count,'Total Activities')}${td(g.completed,'Completed')}${abstractCountCells(g)}</tr>`}).join('')||`<tr><td class="activity-abstract-center" colspan="${colspan}">No records found.</td></tr>`}</tbody></table></div>`;
+      }else if(['Date','Week','Month','Year'].includes(p)){
+        // Selected-period Abstract: category / subcategory totals with deadline and status counts.
+        const periodInfo=reportPeriodDetails(p);
         const groups={};
         rows.forEach(record=>{
           const category=String(record.category||'Other');
           const subCategory=String(record.subCategory||'Other');
-          const isCompleted=String(record.status||'').toLowerCase()==='completed';
-          if(!groups[category])groups[category]={count:0,completed:0,subs:{}};
-          groups[category].count++;
-          if(isCompleted)groups[category].completed++;
-          if(!groups[category].subs[subCategory])groups[category].subs[subCategory]={count:0,completed:0};
-          groups[category].subs[subCategory].count++;
-          if(isCompleted)groups[category].subs[subCategory].completed++;
+          if(!groups[category])groups[category]={count:0,completed:0,...newAbstractCounts(),subs:{}};
+          if(!groups[category].subs[subCategory])groups[category].subs[subCategory]={count:0,completed:0,...newAbstractCounts()};
+          addRecordToAbstractGroup(groups[category],record);
+          addRecordToAbstractGroup(groups[category].subs[subCategory],record);
         });
-
         let categoryIndex=0;
         const categoryRows=Object.keys(groups).sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'})).map(category=>{
-          const index=categoryIndex++;
-          const group=groups[category];
+          const index=categoryIndex++,group=groups[category];
           const subRows=Object.keys(group.subs).sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'})).map(subCategory=>{
             const detail=group.subs[subCategory];
-            return `<tr class="activity-abstract-subrow" data-parent="${index}" hidden><td style="padding-left:28px">↳ ${esc(subCategory)}</td><td class="activity-abstract-center">${detail.count}</td><td class="activity-abstract-center">${detail.completed}</td></tr>`;
+            return `<tr class="activity-abstract-subrow" data-parent="${index}" hidden><td style="padding-left:28px">↳ ${esc(subCategory)}</td><td class="activity-abstract-center">${detail.count}</td><td class="activity-abstract-center">${detail.completed}</td>${abstractCountCells(detail)}</tr>`;
           }).join('');
-          return `<tr class="activity-abstract-parent" data-index="${index}" tabindex="0" role="button" aria-expanded="false" style="cursor:pointer"><td><span class="activity-toggle">＋</span> ${esc(category)}</td><td class="activity-abstract-center">${group.count}</td><td class="activity-abstract-center">${group.completed}</td></tr>${subRows}`;
+          return `<tr class="activity-abstract-parent" data-index="${index}" tabindex="0" role="button" aria-expanded="false" style="cursor:pointer"><td><span class="activity-toggle">＋</span> ${esc(category)}</td><td class="activity-abstract-center">${group.count}</td><td class="activity-abstract-center">${group.completed}</td>${abstractCountCells(group)}</tr>${subRows}`;
         }).join('');
-
-        table=`<div class="expense-abstract-heading activity-abstract-period-subheading">${esc(periodHeading)}</div><div class="expense-results"><table><thead><tr><th>+ Category</th><th class="activity-abstract-center">No</th><th class="activity-abstract-center">Completed</th></tr></thead><tbody>${categoryRows||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
+        table=`<div class="expense-abstract-heading activity-abstract-period-subheading">${esc(periodInfo.label)}</div><div class="expense-results"><table><thead><tr><th>+ Category</th><th class="activity-abstract-center">Total Activities</th><th class="activity-abstract-center">Completed</th>${abstractCountHeaders}</tr></thead><tbody>${categoryRows||'<tr><td colspan="9">No records found.</td></tr>'}</tbody></table></div>`;
       }else{
-        // "All" retains the existing expandable Category / SubCategory summary.
+        // All retains its expandable Category / SubCategory summary, now with status counts.
         const groups={};
-        rows.forEach(r=>{
-          const c=String(r.category||'Other'),subCategory=String(r.subCategory||'Other');
-          if(!groups[c])groups[c]={count:0,completed:0,subs:{}};
-          groups[c].count++;
-          if(String(r.status).toLowerCase()==='completed')groups[c].completed++;
-          if(!groups[c].subs[subCategory])groups[c].subs[subCategory]=0;
-          groups[c].subs[subCategory]++;
+        rows.forEach(record=>{
+          const category=String(record.category||'Other'),subCategory=String(record.subCategory||'Other');
+          if(!groups[category])groups[category]={count:0,completed:0,...newAbstractCounts(),subs:{}};
+          if(!groups[category].subs[subCategory])groups[category].subs[subCategory]={count:0,completed:0,...newAbstractCounts()};
+          addRecordToAbstractGroup(groups[category],record);
+          addRecordToAbstractGroup(groups[category].subs[subCategory],record);
         });
-        let i=0;
-        const body=Object.keys(groups).sort().map(c=>{
-          const idx=i++,g=groups[c];
-          const subRows=Object.keys(g.subs).sort().map(subCategory=>`<tr class="activity-abstract-subrow" data-parent="${idx}" hidden><td style="padding-left:28px">↳ ${esc(subCategory)}</td><td class="activity-abstract-center">${g.subs[subCategory]}</td><td class="activity-abstract-center">—</td></tr>`).join('');
-          return `<tr class="activity-abstract-parent" data-index="${idx}" tabindex="0" role="button" aria-expanded="false" style="cursor:pointer"><td><span class="activity-toggle">＋</span> ${esc(c)}</td><td class="activity-abstract-center">${g.count}</td><td class="activity-abstract-center">${g.completed}</td></tr>${subRows}`;
+        let index=0;
+        const body=Object.keys(groups).sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'})).map(category=>{
+          const rowIndex=index++,group=groups[category];
+          const subRows=Object.keys(group.subs).sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'})).map(subCategory=>{
+            const detail=group.subs[subCategory];
+            return `<tr class="activity-abstract-subrow" data-parent="${rowIndex}" hidden><td style="padding-left:28px">↳ ${esc(subCategory)}</td><td class="activity-abstract-center">${detail.count}</td><td class="activity-abstract-center">${detail.completed}</td>${abstractCountCells(detail)}</tr>`;
+          }).join('');
+          return `<tr class="activity-abstract-parent" data-index="${rowIndex}" tabindex="0" role="button" aria-expanded="false" style="cursor:pointer"><td><span class="activity-toggle">＋</span> ${esc(category)}</td><td class="activity-abstract-center">${group.count}</td><td class="activity-abstract-center">${group.completed}</td>${abstractCountCells(group)}</tr>${subRows}`;
         }).join('');
-        table=`<div class="expense-abstract-heading activity-abstract-period-subheading">All Records</div><div class="expense-results"><table><thead><tr><th>Category / SubCategory</th><th class="activity-abstract-center">Activities</th><th class="activity-abstract-center">Completed</th></tr></thead><tbody>${body||'<tr><td colspan="3">No records found.</td></tr>'}</tbody></table></div>`;
+        table=`<div class="expense-abstract-heading activity-abstract-period-subheading">All Records</div><div class="expense-results"><table><thead><tr><th>Category / SubCategory</th><th class="activity-abstract-center">Total Activities</th><th class="activity-abstract-center">Completed</th>${abstractCountHeaders}</tr></thead><tbody>${body||'<tr><td colspan="9">No records found.</td></tr>'}</tbody></table></div>`;
       }
     }
     else{
@@ -909,36 +1049,20 @@
       const reportPeriod=periodOverride||$('actReportPeriod')?.value||reportSettings?.period||'All';
       const reportColCount=columns.length+1;
       let grouped='';
-      // All and This Year use a green heading row. Today, This Week and
-      // This Month use only an orange period heading row (no extra green row).
+      // All and Year use a green heading row. Date, Week and Month use an orange period heading row.
       const summaryRow = label =>
         `<tr class="expense-report-subheading activity-report-summary-row"><th colspan="${reportColCount}"><div class="activity-report-summary-content"><span class="activity-report-period-label">${esc(label)}</span></div></th></tr>`;
       const orangePeriodRow = label =>
         `<tr class="expense-report-month activity-report-period-row"><th colspan="${reportColCount}"><div class="activity-month-heading-content activity-period-heading-content"><span class="activity-month-name">${esc(label)}</span></div></th></tr>`;
-      // All and This Year retain month-wise rows, highlighted in light orange.
+      // All and Year retain month-wise rows, highlighted in light orange.
       // Month-level counts are intentionally kept in these breakdown rows.
       const monthSummaryRow = (label, recordCount, completedCount) =>
         `<tr class="expense-report-month activity-report-month-row"><th colspan="${reportColCount}"><div class="activity-month-heading-content"><span class="activity-month-name">${esc(label)}</span><span class="activity-month-records">Total Records : ${recordCount}</span><span class="activity-month-completed">Completed : ${completedCount}</span></div></th></tr>`;
-      const selectedDate=today();
-      let periodLabel='';
-      if(reportPeriod==='Today'){
-        periodLabel=`Date : ${showDate(selectedDate)}`;
-      }else if(reportPeriod==='This Week'){
-        const weekStart=new Date(selectedDate+'T12:00:00');
-        weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
-        const weekEnd=new Date(weekStart);
-        weekEnd.setDate(weekEnd.getDate()+6);
-        periodLabel=`Week : ${showDate(fmt(weekStart))} to ${showDate(fmt(weekEnd))}`;
-      }else if(reportPeriod==='This Month'){
-        periodLabel=`Month : ${new Date().toLocaleString('en-US',{month:'long',year:'numeric'})}`;
-      }else if(reportPeriod==='This Year'){
-        periodLabel=`Year : ${new Date().getFullYear()}`;
-      }else if(reportPeriod==='All'){
-        periodLabel='All Records';
-      }
+      const periodDetails=reportPeriodDetails(reportPeriod);
+      const periodLabel=periodDetails.label;
 
       const monthStats=new Map();
-      if(reportPeriod==='This Year'||reportPeriod==='All'){
+      if(reportPeriod==='Year'||reportPeriod==='All'){
         rows.forEach(record=>{
           const ds=dateKey(record);
           const monthKey=/^\d{4}-\d{2}-\d{2}$/.test(ds)?ds.slice(0,7):'Unknown';
@@ -950,9 +1074,9 @@
       }
       if(reportPeriod==='All'){
         grouped+=summaryRow('All Records');
-      }else if(reportPeriod==='This Year'){
+      }else if(reportPeriod==='Year'){
         grouped+=summaryRow(periodLabel);
-      }else if(['Today','This Week','This Month'].includes(reportPeriod)){
+      }else if(['Date','Week','Month'].includes(reportPeriod)){
         grouped+=orangePeriodRow(periodLabel);
       }
 
@@ -990,7 +1114,7 @@
         grouped+=`<tr class="${rowClass}"${messageAttr}><td class="report-center report-sno">${rowIndex+1}</td>${cells}</tr>`;
       };
 
-      if(reportPeriod==='This Year'||reportPeriod==='All'){
+      if(reportPeriod==='Year'||reportPeriod==='All'){
         let currentMonthKey=null;
         rows.forEach((record,rowIndex)=>{
           const ds=dateKey(record);
