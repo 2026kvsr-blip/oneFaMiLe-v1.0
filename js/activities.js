@@ -481,7 +481,7 @@
     $('activityResetBtn').onclick=()=>setTimeout(resetForm,0);
   }
   function sensitiveGate(kind){styleOnce();const label=kind==='sensitive'?'Sensitive Activities - Report':'All Activities - Report';const inner=`<div class="expense-panel"><div class="expense-field"><label class="expense-label" for="activityPassCode">Pass Code</label><input id="activityPassCode" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Enter Pass Code"></div><div id="activityStatus" class="expense-status" role="status"></div><div class="expense-actions" style="display:flex;align-items:center;justify-content:center;align-items:center;gap:16px;margin-top:32px;flex-wrap:nowrap;width:100%"><button type="button" id="activityVerifyPass" class="expense-primary" style="margin:0">Verify</button><button type="button" id="activityModuleBack" class="expense-secondary" style="margin:0">← Back</button></div></div>`;page(shell(label,inner,true));bindBack();$('activityVerifyPass').onclick=async()=>{const pass=$('activityPassCode').value.trim();if(!pass){status('Enter Pass Code.','error');return}const btn=$('activityVerifyPass');btn.disabled=true;status('Verifying…');try{const res=await request('getActivities',{includeSensitive:'true',passCode:pass});if(res.status!=='success')throw new Error(res.message||'Pass Code verification failed.');cached=res.activities||[];activeAccess=kind;renderReports(kind,false,cached)}catch(e){status(e.message||'Verification failed.','error');btn.disabled=false}}}
-  function reportControls(custom){return `<style>.activity-page .expense-filter-grid .expense-field.hidden{display:none!important}.activity-page .expense-report-inline{display:flex;flex-direction:column;gap:5px;min-width:0}.activity-page .expense-report-inline .expense-label{white-space:nowrap;width:100%;margin:0!important}.activity-page .expense-report-inline select{display:block;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-period-controls{display:grid;grid-template-columns:minmax(82px,.68fr) minmax(0,1.32fr);align-items:center;gap:6px;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-period-controls.is-full{grid-template-columns:minmax(0,1fr)}.activity-page .activity-period-controls>#actReportPeriod{display:block;width:100%!important;min-width:0!important;max-width:100%;height:40px;min-height:40px;box-sizing:border-box;font-size:13px!important;padding:6px 22px 6px 7px!important}.activity-page .activity-period-value{display:block;min-width:0;width:100%;box-sizing:border-box}.activity-page .activity-period-value input{display:block;width:100%;min-width:0;max-width:100%;height:40px;min-height:40px;margin:0;padding:6px 5px;box-sizing:border-box;font-size:13px!important}.activity-page .activity-period-value input[hidden]{display:none!important}.activity-page .activity-period-value input[type="date"],.activity-page .activity-period-value input[type="number"]{-webkit-appearance:none;appearance:none}.activity-page .activity-month-picker{position:relative;display:flex;align-items:center;justify-content:space-between;gap:5px;width:100%;min-width:0;height:40px;min-height:40px;padding:0 8px;box-sizing:border-box;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#222;font-size:13px;line-height:1.2;white-space:nowrap;overflow:hidden}.activity-page .activity-month-picker[hidden]{display:none!important}.activity-page .activity-month-picker-label{display:block;min-width:0;overflow:hidden;text-overflow:clip;white-space:nowrap}.activity-page .activity-month-picker-arrow{flex:0 0 auto;color:#526b80;font-size:12px}.activity-page .activity-month-picker input[type="month"]{position:absolute!important;inset:0!important;z-index:2!important;display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:100%!important;min-height:100%!important;margin:0!important;padding:0!important;border:0!important;border-radius:8px!important;opacity:0!important;cursor:pointer!important;box-sizing:border-box!important}.activity-page .activity-custom-grid .expense-field{min-width:0}.activity-page .activity-custom-grid>.expense-field:has(#actFromDate){grid-row:4!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actToDate){grid-row:4!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actSearchText){grid-row:5!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actAssignedTo){grid-row:5!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actPersonDoctorOffice){grid-row:6!important;grid-column:1!important}.activity-page .activity-custom-grid #actShowColumnsField{grid-row:6!important;grid-column:2!important}.activity-page .expense-panel>.expense-report-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;justify-content:stretch!important;gap:8px!important;width:100%!important;margin-top:24px!important;padding-top:2px!important;box-sizing:border-box!important}.activity-page:not(.activity-report-view) .expense-panel>.expense-report-actions>button{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;flex:none!important;box-sizing:border-box!important}</style><div class="expense-panel"><div class="expense-filter-grid ${custom?'activity-custom-grid':''}">
+  function reportControls(custom){return `<style>.activity-page .expense-filter-grid .expense-field.hidden{display:none!important}.activity-page .expense-report-inline{display:flex;flex-direction:column;gap:5px;min-width:0}.activity-page .expense-report-inline .expense-label{white-space:nowrap;width:100%;margin:0!important}.activity-page .expense-report-inline select{display:block;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-period-controls{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:center;gap:6px;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-period-controls.is-full{grid-template-columns:minmax(0,1fr)}.activity-page .activity-period-controls>#actReportPeriod{display:block;width:100%!important;min-width:0!important;max-width:100%;height:40px;min-height:40px;box-sizing:border-box;font-size:inherit!important;padding:6px 5px!important;-webkit-appearance:none!important;appearance:none!important;background-image:none!important;text-align:center!important;text-align-last:center!important}.activity-page .activity-period-controls.has-value>#actReportPeriod,.activity-page .activity-period-controls.has-value .activity-period-value input,.activity-page .activity-period-controls.has-value .activity-month-picker{font-size:12px!important}.activity-page .activity-period-controls.is-full>#actReportPeriod{font-size:inherit!important;padding:6px 10px!important}.activity-page .activity-period-value{display:block;min-width:0;width:100%;box-sizing:border-box}.activity-page .activity-period-value input{display:block;width:100%;min-width:0;max-width:100%;height:40px;min-height:40px;margin:0;padding:6px 5px;box-sizing:border-box;font-size:13px!important}.activity-page .activity-period-value input[hidden]{display:none!important}.activity-page .activity-period-value input[type="date"],.activity-page .activity-period-value input[type="number"]{-webkit-appearance:none;appearance:none}.activity-page .activity-month-picker{position:relative;display:flex;align-items:center;justify-content:space-between;gap:5px;width:100%;min-width:0;height:40px;min-height:40px;padding:0 8px;box-sizing:border-box;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#222;font-size:13px;line-height:1.2;white-space:nowrap;overflow:hidden}.activity-page .activity-month-picker[hidden]{display:none!important}.activity-page .activity-month-picker-label{display:block;min-width:0;overflow:hidden;text-overflow:clip;white-space:nowrap}.activity-page .activity-month-picker-arrow{flex:0 0 auto;color:#526b80;font-size:12px}.activity-page .activity-month-picker input[type="month"]{position:absolute!important;inset:0!important;z-index:2!important;display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:100%!important;min-height:100%!important;margin:0!important;padding:0!important;border:0!important;border-radius:8px!important;opacity:0!important;cursor:pointer!important;box-sizing:border-box!important}.activity-page .activity-custom-grid .expense-field{min-width:0}.activity-page .activity-custom-grid>.expense-field:has(#actFromDate){grid-row:4!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actToDate){grid-row:4!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actSearchText){grid-row:5!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actAssignedTo){grid-row:5!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actPersonDoctorOffice){grid-row:6!important;grid-column:1!important}.activity-page .activity-custom-grid #actShowColumnsField{grid-row:6!important;grid-column:2!important}.activity-page .expense-panel>.expense-report-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;justify-content:stretch!important;gap:8px!important;width:100%!important;margin-top:24px!important;padding-top:2px!important;box-sizing:border-box!important}.activity-page:not(.activity-report-view) .expense-panel>.expense-report-actions>button{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;flex:none!important;box-sizing:border-box!important}</style><div class="expense-panel"><div class="expense-filter-grid ${custom?'activity-custom-grid':''}">
     <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportType">Report Type</label><select id="actReportType">${reportChoiceOptions(['Abstract','Detailed'],'Abstract')}</select></div>
     <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportPeriod">Report Period</label><div class="activity-period-controls" id="activityPeriodControls"><select id="actReportPeriod">${reportChoiceOptions(['Date','Week','Month','Year','All'],'Date')}</select><div class="activity-period-value" id="activityPeriodValue"><input id="actPeriodDate" type="date" value="${today()}" aria-label="Select report date" title="Select report date"><input id="actPeriodWeek" type="date" value="${today()}" aria-label="Select a date in the report week" title="Select a date in the report week" hidden><div class="activity-month-picker" id="actPeriodMonthPicker" hidden><span class="activity-month-picker-label" id="actPeriodMonthLabel">${new Date().toLocaleString('en-US',{month:'short'})} ${String(new Date().getFullYear())}</span><span class="activity-month-picker-arrow">▾</span><input id="actPeriodMonth" type="month" value="${today().slice(0,7)}" aria-label="Select report month" title="Select report month"></div><input id="actPeriodYear" type="number" min="1900" max="2100" step="1" value="${new Date().getFullYear()}" aria-label="Select report year" title="Select report year" hidden></div></div></div>
     <div class="expense-field"><label class="expense-label" for="actFilterCategory">Category</label><select id="actFilterCategory">${options(reportCategoryKeys(),'All')}</select></div>
@@ -519,7 +519,7 @@
     const syncPeriodPickers=()=>{
       const p=period.value;
       const controls=$('activityPeriodControls');
-      if(controls)controls.classList.toggle('is-full',!['Date','Week','Month','Year'].includes(p));
+      if(controls){const hasValue=['Date','Week','Month','Year'].includes(p);controls.classList.toggle('is-full',!hasValue);controls.classList.toggle('has-value',hasValue);}
       [['Date','actPeriodDate'],['Week','actPeriodWeek'],['Year','actPeriodYear']].forEach(([name,id])=>{
         const input=$(id);if(input)input.hidden=p!==name;
       });
@@ -712,11 +712,11 @@
          This higher-specificity rule also overrides colors set on inner buttons/spans. */
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-2days>td,
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-2days>td *{
-        color:#1b5e20!important;font-weight:700!important;
+        color:#1565c0!important;font-weight:700!important;
       }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-1day>td,
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-1day>td *{
-        color:#c2185b!important;font-weight:700!important;
+        color:#1b5e20!important;font-weight:700!important;
       }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-today>td,
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-today>td *{
@@ -754,10 +754,10 @@
         overflow-wrap:anywhere!important;
       }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-2days .activity-deadline-inline-message{
-        background:#1b5e20!important;background-color:#1b5e20!important;border-color:#1b5e20!important;color:#fff!important;
+        background:#1565c0!important;background-color:#1565c0!important;border-color:#1565c0!important;color:#fff!important;
       }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-1day .activity-deadline-inline-message{
-        background:#c2185b!important;background-color:#c2185b!important;border-color:#c2185b!important;color:#fff!important;
+        background:#1b5e20!important;background-color:#1b5e20!important;border-color:#1b5e20!important;color:#fff!important;
       }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-message-today .activity-deadline-inline-message{
         background:#b71c1c!important;background-color:#b71c1c!important;border-color:#b71c1c!important;color:#fff!important;
@@ -770,12 +770,30 @@
         font-weight:400!important;
         font-style:normal!important;
       }
+      /* Floating deadline message overlays the table; it never inserts a row or shifts data. */
+      .activity-page.activity-report-detailed #actReportOutput .activity-deadline-floating-message{
+        position:absolute!important;z-index:500!important;display:block!important;width:max-content!important;
+        max-width:min(340px,calc(100vw - 48px))!important;box-sizing:border-box!important;
+        padding:6px 10px!important;margin:0!important;border:1px solid transparent!important;
+        border-radius:6px!important;box-shadow:0 2px 8px rgba(0,0,0,.22)!important;
+        color:#fff!important;font-size:12px!important;font-weight:400!important;line-height:1.25!important;
+        white-space:normal!important;overflow-wrap:anywhere!important;pointer-events:none!important;
+      }
+      .activity-page.activity-report-detailed #actReportOutput .activity-deadline-floating-message-2days{background:#1565c0!important;border-color:#1565c0!important}
+      .activity-page.activity-report-detailed #actReportOutput .activity-deadline-floating-message-1day{background:#1b5e20!important;border-color:#1b5e20!important}
+      .activity-page.activity-report-detailed #actReportOutput .activity-deadline-floating-message-today{background:#b71c1c!important;border-color:#b71c1c!important}
+      .activity-page.activity-report-detailed #actReportOutput .activity-deadline-floating-message-overdue{background:#d32f2f!important;border-color:#d32f2f!important}
+      .activity-page.activity-report-detailed #actReportOutput .activity-deadline-floating-message *{color:#fff!important;font-weight:400!important}
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-row{
         cursor:pointer!important;
       }
       .activity-page.activity-report-detailed #actReportOutput .expense-results table tbody tr.activity-deadline-row:active>td{
         filter:brightness(.96);
       }
+      .activity-page.activity-report-detailed #actReportOutput .expense-results th.report-priority,
+      .activity-page.activity-report-detailed #actReportOutput .expense-results td.report-priority{min-width:72px!important;max-width:82px!important;text-align:center!important;vertical-align:middle!important}
+      .activity-page.activity-report-detailed #actReportOutput .expense-results th.report-days-left,
+      .activity-page.activity-report-detailed #actReportOutput .expense-results td.report-days-left{min-width:64px!important;max-width:76px!important;text-align:center!important;vertical-align:middle!important;white-space:normal!important}
       .activity-page.activity-report-detailed .activity-month-heading-content{
         display:grid!important;
         grid-template-columns:minmax(160px,1.25fr) minmax(145px,1fr) minmax(115px,1fr)!important;
@@ -1033,7 +1051,23 @@
         const photos=photoValues(r);
         return photos.length?photos.map((url,i)=>`<button type="button" class="activity-photo-preview-btn" data-activity-photo="${esc(url)}" title="View photo ${i+1}" aria-label="View photo ${i+1}" style="display:inline-flex;flex:0 0 28px;width:28px;height:28px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;cursor:pointer"><img src="${esc(photoThumbUrl(url))}" alt="Photo ${i+1}" loading="lazy" style="display:block;width:26px;height:26px;object-fit:cover;border:1px solid #c4d4ff;border-radius:4px" onerror="this.style.display='none';this.parentElement.textContent='Open'"></button>`).join(''):'—';
       };
-      const centerNames=['Scheduled Date','Scheduled Time','Status','Sensitive','Reminder','Reminder Repeat','Reminder Date','Reminder Time','Priority','No of photos'];
+      const activeDeadlineStatuses=['pending','in progress','on hold'];
+      const getDaysLeft=record=>{
+        if(!activeDeadlineStatuses.includes(String(record.status||'').trim().toLowerCase()))return null;
+        const scheduledDate=String(record.startDate||record.createdAt||'').slice(0,10);
+        const match=scheduledDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if(!match)return null;
+        const scheduledDay=Date.UTC(Number(match[1]),Number(match[2])-1,Number(match[3]));
+        const todayParts=today().split('-').map(Number);
+        const todayDay=Date.UTC(todayParts[0],todayParts[1]-1,todayParts[2]);
+        return Math.round((scheduledDay-todayDay)/86400000);
+      };
+      const daysLeftText=record=>{
+        const days=getDaysLeft(record);
+        if(days===null)return '';
+        return days<0?`Overdue ${Math.abs(days)}`:String(days);
+      };
+      const centerNames=['Scheduled Date','Scheduled Time','Status','Sensitive','Reminder','Reminder Repeat','Reminder Date','Reminder Time','Priority','Days Left','No of photos'];
       const allColumns=[
         ['Activity Type',r=>r.activityType||''],['Category',r=>r.category||''],['Sub Category',r=>r.subCategory||''],
         ['Scheduled Date',r=>showDate(r.startDate||r.createdAt)],['Scheduled Time',r=>timeOnly(r.startTime)],
@@ -1045,10 +1079,10 @@
         ['Completed Date',r=>showDate(r.completedDate)],['No of photos',r=>String(photoValues(r).length)],['Photos',photoHtml],
         ['Edit',r=>`<button type="button" class="activity-edit-text" data-edit-activity="${esc(r.activityId||'')}" aria-label="Edit activity">Edit</button>`]
       ];
-      // Show Columns=Limited retains the required activity summary fields, photo columns and Edit action.
-      const limitedNames=['Activity Type','Category','Sub Category','Scheduled Date','Status','Sensitive','Reminder','Venue','No of photos','Photos','Edit'];
+      // Limited view replaces Sensitive / Reminder with Priority / Days Left.
+      const limitedNames=['Activity Type','Category','Sub Category','Scheduled Date','Status','Priority','Days Left','Venue','No of photos','Photos','Edit'];
       const selectedMode=$('actShowColumns')?.value||reportSettings?.showColumns||'limited';
-      const columns=selectedMode==='limited'?allColumns.filter(c=>limitedNames.includes(c[0])):allColumns;
+      const columns=selectedMode==='limited'?limitedNames.map(name=>name==='Days Left'?['Days Left',r=>daysLeftText(r)]:allColumns.find(column=>column[0]===name)).filter(Boolean):allColumns;
       const reportColClass={
         'Activity Type':'report-vcenter',
         'Category':'report-vcenter',
@@ -1056,6 +1090,8 @@
         'Scheduled Date':'report-scheduled-date',
         'Scheduled Time':'report-scheduled-time',
         'Status':'report-status',
+        'Priority':'report-priority',
+        'Days Left':'report-days-left',
         'Edit':'report-edit-cell'
       };
       const reportPeriod=periodOverride||$('actReportPeriod')?.value||reportSettings?.period||'All';
@@ -1100,25 +1136,17 @@
         }).join('');
 
         // Highlight approaching / overdue scheduled dates only for active work.
-        const activeStatus=['pending','in progress','on hold'].includes(String(record.status||'').trim().toLowerCase());
+        const daysLeft=getDaysLeft(record);
         let deadlineClass='',deadlineMessage='';
-        if(activeStatus){
-          const scheduledDate=String(record.startDate||record.createdAt||'').slice(0,10);
-          const dateMatch=scheduledDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-          if(dateMatch){
-            const scheduledDay=Date.UTC(Number(dateMatch[1]),Number(dateMatch[2])-1,Number(dateMatch[3]));
-            const todayParts=today().split('-').map(Number);
-            const todayDay=Date.UTC(todayParts[0],todayParts[1]-1,todayParts[2]);
-            const daysLeft=Math.round((scheduledDay-todayDay)/86400000);
-            if(daysLeft===2){
-              deadlineClass='activity-deadline-2days';deadlineMessage='Only 2 days left to complete task';
-            }else if(daysLeft===1){
-              deadlineClass='activity-deadline-1day';deadlineMessage='Only 1 day left to complete task';
-            }else if(daysLeft===0){
-              deadlineClass='activity-deadline-today';deadlineMessage='Today is the last day to complete task';
-            }else if(daysLeft<0){
-              deadlineClass='activity-deadline-overdue';deadlineMessage='Scheduled date over to complete task';
-            }
+        if(daysLeft!==null){
+          if(daysLeft===2){
+            deadlineClass='activity-deadline-2days';deadlineMessage='Only 2 days left to complete task';
+          }else if(daysLeft===1){
+            deadlineClass='activity-deadline-1day';deadlineMessage='Only 1 day left to complete task';
+          }else if(daysLeft===0){
+            deadlineClass='activity-deadline-today';deadlineMessage='Today is the last day to complete task';
+          }else if(daysLeft<0){
+            deadlineClass='activity-deadline-overdue';deadlineMessage='Scheduled date over to complete task';
           }
         }
         const rowClass=deadlineClass?`activity-deadline-row ${deadlineClass}`:'';
@@ -1163,42 +1191,45 @@
         if(parsed)td.replaceChildren(parsed);
       }
     });
-    // Show a compact deadline message immediately ABOVE the clicked row.
-    // It disappears automatically after 2 seconds; clicking another row replaces it.
-    // Edit and photo controls inside the row keep their existing actions.
+    // Show a temporary message above the exact cell clicked, without inserting a table row.
+    // The overlay is positioned inside the scroll viewport, so no report rows move.
     let deadlineMessageTimer=null;
+    let activeDeadlineMessage=null;
     const deadlineReportOutput=$('actReportOutput');
     deadlineReportOutput.querySelectorAll('tr.activity-deadline-row').forEach(deadlineRow=>{
       deadlineRow.addEventListener('click',event=>{
         if(event.target.closest('button,a,input,select,textarea'))return;
         const message=deadlineRow.getAttribute('data-deadline-message')||'';
         if(!message)return;
-
-        const previousRow=deadlineRow.previousElementSibling;
-        if(previousRow&&previousRow.classList.contains('activity-deadline-message-row')){
-          clearTimeout(deadlineMessageTimer);
-          previousRow.remove();
-          return;
-        }
-
         clearTimeout(deadlineMessageTimer);
-        deadlineReportOutput.querySelectorAll('tr.activity-deadline-message-row').forEach(row=>row.remove());
+        if(activeDeadlineMessage){activeDeadlineMessage.remove();activeDeadlineMessage=null;}
 
-        const messageRow=document.createElement('tr');
+        const clickedCell=event.target.closest('td')||deadlineRow.cells[0];
+        const resultsBox=deadlineRow.closest('.expense-results');
+        if(!clickedCell||!resultsBox)return;
         const deadlineType=['2days','1day','today','overdue'].find(type=>deadlineRow.classList.contains('activity-deadline-'+type));
-        messageRow.className='activity-deadline-message-row'+(deadlineType?' activity-deadline-message-'+deadlineType:'');
-        const messageCell=document.createElement('td');
-        messageCell.colSpan=deadlineRow.cells.length||1;
         const messageBox=document.createElement('div');
-        messageBox.className='activity-deadline-inline-message';
+        messageBox.className='activity-deadline-floating-message'+(deadlineType?' activity-deadline-floating-message-'+deadlineType:'');
         messageBox.textContent=message;
         messageBox.setAttribute('role','status');
-        messageCell.appendChild(messageBox);
-        messageRow.appendChild(messageCell);
-        deadlineRow.insertAdjacentElement('beforebegin',messageRow);
+        resultsBox.appendChild(messageBox);
+        activeDeadlineMessage=messageBox;
+
+        const containerRect=resultsBox.getBoundingClientRect();
+        const cellRect=clickedCell.getBoundingClientRect();
+        const boxRect=messageBox.getBoundingClientRect();
+        const visibleLeft=resultsBox.scrollLeft+6;
+        const visibleRight=resultsBox.scrollLeft+resultsBox.clientWidth-boxRect.width-6;
+        let left=cellRect.left-containerRect.left+resultsBox.scrollLeft;
+        left=Math.max(visibleLeft,Math.min(left,Math.max(visibleLeft,visibleRight)));
+        const cellTop=cellRect.top-containerRect.top+resultsBox.scrollTop;
+        let top=cellTop-boxRect.height-4;
+        if(top<resultsBox.scrollTop+2)top=resultsBox.scrollTop+2;
+        messageBox.style.left=left+'px';
+        messageBox.style.top=top+'px';
 
         deadlineMessageTimer=setTimeout(()=>{
-          if(messageRow.isConnected)messageRow.remove();
+          if(activeDeadlineMessage===messageBox){messageBox.remove();activeDeadlineMessage=null;}
           deadlineMessageTimer=null;
         },2000);
       });
