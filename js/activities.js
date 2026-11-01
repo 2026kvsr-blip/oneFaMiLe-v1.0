@@ -485,9 +485,9 @@
     $('activityResetBtn').onclick=()=>setTimeout(resetForm,0);
   }
   function sensitiveGate(kind){styleOnce();const label=kind==='sensitive'?'Sensitive Activities - Report':'All Activities - Report';const inner=`<div class="expense-panel"><div class="expense-field"><label class="expense-label" for="activityPassCode">Pass Code</label><input id="activityPassCode" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Enter Pass Code"></div><div id="activityStatus" class="expense-status" role="status"></div><div class="expense-actions" style="display:flex;align-items:center;justify-content:center;align-items:center;gap:16px;margin-top:32px;flex-wrap:nowrap;width:100%"><button type="button" id="activityVerifyPass" class="expense-primary" style="margin:0">Verify</button><button type="button" id="activityModuleBack" class="expense-secondary" style="margin:0">← Back</button></div></div>`;page(shell(label,inner,true));bindBack();$('activityVerifyPass').onclick=async()=>{const pass=$('activityPassCode').value.trim();if(!pass){status('Enter Pass Code.','error');return}const btn=$('activityVerifyPass');btn.disabled=true;status('Verifying…');try{const res=await request('getActivities',{includeSensitive:'true',passCode:pass});if(res.status!=='success')throw new Error(res.message||'Pass Code verification failed.');cached=res.activities||[];activeAccess=kind;renderReports(kind,false,cached)}catch(e){status(e.message||'Verification failed.','error');btn.disabled=false}}}
-  function reportControls(custom){return `<style>.activity-page .expense-filter-grid .expense-field.hidden{display:none!important}.activity-page .expense-report-inline{display:flex;flex-direction:column;gap:7px!important;min-width:0}.activity-page .activity-report-filter-grid{row-gap:10px!important;align-content:start!important}.activity-page .activity-report-filter-grid>.expense-field{margin:0!important}.activity-page .expense-report-inline .expense-label{white-space:nowrap;width:100%;margin:0!important}.activity-page .expense-report-inline select{display:block;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-period-controls{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:center;gap:6px;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-period-controls.is-full{grid-template-columns:minmax(0,1fr)}.activity-page .activity-period-controls>#actReportPeriod{display:block;width:100%!important;min-width:0!important;max-width:100%;height:40px;min-height:40px;box-sizing:border-box;font-size:inherit!important;padding:0 1px!important;line-height:1.15!important;-webkit-appearance:none!important;appearance:none!important;background-image:none!important;text-align:center!important;text-align-last:center!important}.activity-page .activity-period-controls.has-value>#actReportPeriod,.activity-page .activity-period-controls.has-value .activity-period-value input,.activity-page .activity-period-controls.has-value .activity-month-picker{font-size:16px!important}.activity-page .activity-period-controls.is-full>#actReportPeriod{font-size:inherit!important;padding:0 10px!important;text-align:left!important;text-align-last:left!important;line-height:normal!important}.activity-page .activity-period-value{display:flex;align-items:center;justify-content:center;min-width:0;width:100%;height:40px;min-height:40px;box-sizing:border-box}.activity-page .activity-period-value[hidden]{display:none!important}.activity-page .activity-period-value input{display:block;align-self:center;width:100%;min-width:0;max-width:100%;height:40px;min-height:40px;margin:0;padding:0 2px;box-sizing:border-box;font-size:13px!important;line-height:40px!important;vertical-align:middle;text-align:center!important;text-align-last:center!important}.activity-page .activity-period-value input[hidden]{display:none!important}.activity-page .activity-period-value input[type="date"],.activity-page .activity-period-value input[type="number"]{-webkit-appearance:none;appearance:none}.activity-page .activity-period-value input[type="number"]{text-align:center!important}.activity-page .activity-month-picker{position:relative;display:flex;align-items:center;justify-content:center;gap:5px;width:100%;min-width:0;height:40px;min-height:40px;padding:0 8px;box-sizing:border-box;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#222;font-size:16px;line-height:40px;white-space:nowrap;overflow:hidden;text-align:center}.activity-page .activity-month-picker[hidden]{display:none!important}.activity-page .activity-month-picker-label{display:block;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:clip;white-space:nowrap;text-align:center;line-height:40px}.activity-page .activity-month-picker-arrow{position:absolute;right:8px;top:50%;transform:translateY(-50%);color:#526b80;font-size:12px;line-height:1}.activity-page .activity-month-picker input[type="month"]{position:absolute!important;inset:0!important;z-index:2!important;display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:100%!important;min-height:100%!important;margin:0!important;padding:0!important;border:0!important;border-radius:8px!important;opacity:0!important;pointer-events:none!important;cursor:pointer!important;box-sizing:border-box!important}.activity-page .activity-custom-grid .expense-field{min-width:0}.activity-page .activity-custom-grid>.expense-field:has(#actFromDate){grid-row:4!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actToDate){grid-row:4!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actSearchText){grid-row:5!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actAssignedTo){grid-row:5!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actPersonDoctorOffice){grid-row:6!important;grid-column:1!important}.activity-page .activity-custom-grid #actShowColumnsField{grid-row:6!important;grid-column:2!important}.activity-page .expense-panel>.expense-report-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;justify-content:stretch!important;gap:8px!important;width:100%!important;margin-top:24px!important;padding-top:2px!important;box-sizing:border-box!important}.activity-page:not(.activity-report-view) .expense-panel>.expense-report-actions>button{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;flex:none!important;box-sizing:border-box!important}</style><div class="expense-panel"><div class="expense-filter-grid activity-report-filter-grid ${custom?'activity-custom-grid':''}">
+  function reportControls(custom){return `<style>.activity-page .expense-filter-grid .expense-field.hidden{display:none!important}.activity-page .expense-report-inline{display:flex;flex-direction:column;gap:7px!important;min-width:0}.activity-page .activity-report-filter-grid{row-gap:10px!important;align-content:start!important}.activity-page .activity-report-filter-grid>.expense-field{margin:0!important}.activity-page .expense-report-inline .expense-label{white-space:nowrap;width:100%;margin:0!important}.activity-page .expense-report-inline select{display:block;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-period-controls{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:center;gap:6px;width:100%;min-width:0;box-sizing:border-box}.activity-page .activity-period-controls.is-full{grid-template-columns:minmax(0,1fr)}.activity-page .activity-period-controls>#actReportPeriod{display:block;width:100%!important;min-width:0!important;max-width:100%;height:40px;min-height:40px;box-sizing:border-box;font-size:inherit!important;padding:0 1px!important;line-height:1.15!important;-webkit-appearance:none!important;appearance:none!important;background-image:none!important;text-align:center!important;text-align-last:center!important}.activity-page .activity-period-controls.has-value>#actReportPeriod,.activity-page .activity-period-controls.has-value .activity-period-value input,.activity-page .activity-period-controls.has-value .activity-month-picker{font-size:16px!important}.activity-page .activity-period-controls.is-full>#actReportPeriod{font-size:inherit!important;padding:0 10px!important;text-align:left!important;text-align-last:left!important;line-height:normal!important}.activity-page .activity-period-value{display:flex;align-items:center;justify-content:center;min-width:0;width:100%;height:40px;min-height:40px;box-sizing:border-box}.activity-page .activity-period-value[hidden]{display:none!important}.activity-page .activity-period-value input{display:block;align-self:center;width:100%;min-width:0;max-width:100%;height:40px;min-height:40px;margin:0;padding:0 2px;box-sizing:border-box;font-size:13px!important;line-height:40px!important;vertical-align:middle;text-align:center!important;text-align-last:center!important}.activity-page .activity-period-value input[hidden]{display:none!important}.activity-page .activity-period-value input[type="date"],.activity-page .activity-period-value input[type="number"]{-webkit-appearance:none;appearance:none}.activity-page .activity-period-value input[type="number"]{text-align:center!important}.activity-page .activity-month-picker{position:relative;display:flex;align-items:center;justify-content:center;gap:5px;width:100%;min-width:0;height:40px;min-height:40px;padding:0 8px;box-sizing:border-box;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#222;font-size:16px;line-height:40px;white-space:nowrap;overflow:hidden;text-align:center}.activity-page .activity-month-picker[hidden]{display:none!important}.activity-page .activity-month-picker-label{display:block;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:clip;white-space:nowrap;text-align:center;line-height:40px}.activity-page .activity-month-picker-arrow{position:absolute;right:8px;top:50%;transform:translateY(-50%);color:#526b80;font-size:12px;line-height:1}.activity-page .activity-month-picker input[type="month"]{position:absolute!important;inset:0!important;z-index:2!important;display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:100%!important;min-height:100%!important;margin:0!important;padding:0!important;border:0!important;border-radius:8px!important;opacity:0!important;pointer-events:none!important;cursor:pointer!important;box-sizing:border-box!important}.activity-page .activity-period-label-row{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:6px;align-items:center;width:100%;min-width:0}.activity-page .activity-period-label-row .expense-label{display:block;min-width:0;margin:0!important;white-space:nowrap}.activity-page .activity-period-context-label{text-align:left}.activity-page .activity-period-value{position:relative;z-index:5}.activity-page .activity-period-trigger{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;max-width:100%!important;height:40px!important;min-height:40px!important;margin:0!important;padding:0 4px!important;box-sizing:border-box!important;border:1px solid #9bb9d4!important;border-radius:8px!important;background:#fff!important;color:#222!important;font:inherit!important;font-size:16px!important;font-weight:400!important;line-height:1!important;white-space:nowrap!important;box-shadow:none!important;cursor:pointer!important}.activity-page .activity-period-trigger[hidden]{display:none!important}.activity-page #actPeriodYear{width:100%;min-width:0;height:40px;min-height:40px;box-sizing:border-box;padding:0 4px;text-align:center;font-size:16px}.activity-page .activity-period-picker{position:absolute;top:calc(100% + 6px);right:0;z-index:100000;width:290px;max-width:calc(100vw - 32px);padding:10px;box-sizing:border-box;border:1px solid #9bb9d4;border-radius:9px;background:#fff;color:#222;box-shadow:0 5px 18px rgba(0,0,0,.22);font-size:14px;text-align:center}.activity-page .activity-period-picker[hidden]{display:none!important}.activity-page .activity-picker-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.activity-page .activity-picker-header strong{flex:1;text-align:center;font-size:15px}.activity-page .activity-picker-nav{width:32px;height:30px;padding:0;border:1px solid #c4d4ff;border-radius:6px;background:#f0f7ff;color:#2d5274;font-size:18px;line-height:1;box-shadow:none}.activity-page .activity-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}.activity-page .activity-calendar-weekday{padding:5px 0;color:#526b80;font-weight:700;font-size:12px}.activity-page .activity-calendar-day{min-width:0;height:31px;padding:0;border:0;border-radius:5px;background:#fff;color:#222;font-size:13px;box-shadow:none}.activity-page .activity-calendar-day.outside-month{color:#a4acb5}.activity-page .activity-calendar-day.today{outline:1px solid #2477c8}.activity-page .activity-calendar-day.selected{background:#2477c8;color:#fff;font-weight:700}.activity-page .activity-picker-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px;padding-top:7px;border-top:1px solid #e2e8f0}.activity-page .activity-picker-action{padding:5px 8px;border:0;border-radius:5px;background:transparent;color:#2477c8;font-size:13px;font-weight:600;box-shadow:none}.activity-page .activity-month-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.activity-page .activity-month-choice{height:34px;padding:0 4px;border:1px solid #e2e8f0;border-radius:6px;background:#fff;color:#222;font-size:13px;box-shadow:none}.activity-page .activity-month-choice.selected{background:#2477c8;border-color:#2477c8;color:#fff;font-weight:700}.activity-page .activity-picker-close{margin-top:8px;text-align:right}.activity-page .activity-period-controls{align-items:end!important}.activity-page .activity-period-controls>#actReportPeriod{align-self:end}.activity-page .activity-period-value input[type="hidden"]{display:none!important}@media(max-width:600px){.activity-page .activity-period-picker{width:290px;max-width:calc(100vw - 28px);right:0;padding:9px}.activity-page .activity-calendar-day{height:34px}.activity-page .activity-period-label-row{gap:6px}}.activity-page .activity-custom-grid .expense-field{min-width:0}.activity-page .activity-custom-grid>.expense-field:has(#actFromDate){grid-row:4!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actToDate){grid-row:4!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actSearchText){grid-row:5!important;grid-column:1!important}.activity-page .activity-custom-grid>.expense-field:has(#actAssignedTo){grid-row:5!important;grid-column:2!important}.activity-page .activity-custom-grid>.expense-field:has(#actPersonDoctorOffice){grid-row:6!important;grid-column:1!important}.activity-page .activity-custom-grid #actShowColumnsField{grid-row:6!important;grid-column:2!important}.activity-page .expense-panel>.expense-report-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;justify-content:stretch!important;gap:8px!important;width:100%!important;margin-top:24px!important;padding-top:2px!important;box-sizing:border-box!important}.activity-page:not(.activity-report-view) .expense-panel>.expense-report-actions>button{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;flex:none!important;box-sizing:border-box!important}</style><div class="expense-panel"><div class="expense-filter-grid activity-report-filter-grid ${custom?'activity-custom-grid':''}">
     <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportType">Report Type</label><select id="actReportType">${reportChoiceOptions(['Abstract','Detailed'],'Abstract')}</select></div>
-    <div class="expense-field expense-report-inline"><label class="expense-label" for="actReportPeriod">Report Period</label><div class="activity-period-controls" id="activityPeriodControls"><select id="actReportPeriod">${reportChoiceOptions(['Date','Week','Month','Year','All'],'Date')}</select><div class="activity-period-value" id="activityPeriodValue"><input id="actPeriodDate" type="date" value="${today()}" aria-label="Select report date" title="Select report date"><input id="actPeriodWeek" type="date" value="${today()}" aria-label="Select a date in the report week" title="Select a date in the report week" hidden><div class="activity-month-picker" id="actPeriodMonthPicker" hidden><span class="activity-month-picker-label" id="actPeriodMonthLabel">${new Date().toLocaleString('en-US',{month:'short'})} ${String(new Date().getFullYear())}</span><input id="actPeriodMonth" type="month" value="${today().slice(0,7)}" aria-label="Select report month" title="Select report month"></div><input id="actPeriodYear" type="number" min="1900" max="2100" step="1" value="${new Date().getFullYear()}" aria-label="Select report year" title="Select report year" hidden></div></div></div>
+    <div class="expense-field expense-report-inline"><div class="activity-period-label-row"><label class="expense-label" for="actReportPeriod">Report Period</label><label class="expense-label activity-period-context-label" id="actPeriodContextLabel" for="actPeriodDisplay">Today</label></div><div class="activity-period-controls" id="activityPeriodControls"><select id="actReportPeriod">${reportChoiceOptions(['Date','Week','Month','Year','All'],'Date')}</select><div class="activity-period-value" id="activityPeriodValue"><button type="button" class="activity-period-trigger" id="actPeriodDisplay" aria-haspopup="dialog" aria-expanded="false">01-11-2026</button><input id="actPeriodDate" type="hidden" value="${today()}" aria-label="Selected report date"><input id="actPeriodWeek" type="hidden" value="${today()}" aria-label="Selected report week date"><input id="actPeriodMonth" type="hidden" value="${today().slice(0,7)}" aria-label="Selected report month"><input id="actPeriodYear" type="number" min="1900" max="2100" step="1" value="${new Date().getFullYear()}" aria-label="Select report year" title="Select report year" hidden><div class="activity-period-picker" id="actPeriodPicker" role="dialog" aria-label="Choose report period" hidden></div></div></div></div>
     <div class="expense-field"><label class="expense-label" for="actFilterCategory">Category</label><select id="actFilterCategory">${options(reportCategoryKeys(),'All')}</select></div>
     <div class="expense-field"><label class="expense-label" for="actFilterSub">Sub Category</label><select id="actFilterSub">${options(reportSubCategoryKeys(''),'All')}</select></div>
     <div class="expense-field"><label class="expense-label" for="actFilterStatus">Status</label><select id="actFilterStatus">${options(statusOptions,'All',true)}</select></div>
@@ -508,54 +508,174 @@
       period.innerHTML=reportChoiceOptions(choices,selected);
       period.value=selected;
     };
-    const syncMonthPickerLabel=()=>{
-      const value=$('actPeriodMonth')?.value||today().slice(0,7);
-      const match=value.match(/^(\d{4})-(0[1-9]|1[0-2])$/);
-      if(!match)return;
-      const label=$('actPeriodMonthLabel');
-      if(label){
-        const monthName=new Date(Number(match[1]),Number(match[2])-1,1).toLocaleString('en-US',{month:'short'});
-        label.textContent=`${monthName} ${match[1]}`;
-      }
+    const periodPicker=$('actPeriodPicker');
+    const periodDisplay=$('actPeriodDisplay');
+    const periodContextLabel=$('actPeriodContextLabel');
+    let pickerMonth=new Date();
+    const parseLocalDate=value=>{
+      const match=String(value||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      return match?new Date(Number(match[1]),Number(match[2])-1,Number(match[3])):new Date();
     };
-    const monthInput=$('actPeriodMonth');
-    const monthPickerControl=$('actPeriodMonthPicker');
-    if(monthInput){
-      monthInput.addEventListener('input',syncMonthPickerLabel);
-      monthInput.addEventListener('change',syncMonthPickerLabel);
-    }
-    // Open the native month/year picker when the visible month box is tapped.
-    // The transparent input does not intercept the tap; this keeps the whole box clickable on mobile Safari.
-    if(monthPickerControl && monthInput){
-      const openMonthPicker=event=>{
-        if(event.target===monthInput)return;
-        try{
-          if(typeof monthInput.showPicker==='function')monthInput.showPicker();
-          else monthInput.click();
-        }catch(_){
-          try{monthInput.click()}catch(__){}
-        }
-      };
-      monthPickerControl.addEventListener('click',openMonthPicker);
-      monthPickerControl.setAttribute('role','button');
-      monthPickerControl.setAttribute('tabindex','0');
-      monthPickerControl.setAttribute('aria-label','Choose month and year');
-      monthPickerControl.addEventListener('keydown',event=>{
-        if(event.key==='Enter'||event.key===' '){event.preventDefault();openMonthPicker(event);}
+    const toIsoDate=date=>`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+    const displayDate=value=>{
+      const match=String(value||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      return match?`${match[3]}-${match[2]}-${match[1]}`:'';
+    };
+    const weekStart=value=>{
+      const date=parseLocalDate(value);
+      date.setDate(date.getDate()-((date.getDay()+6)%7));
+      date.setHours(0,0,0,0);
+      return date;
+    };
+    const closePeriodPicker=()=>{
+      if(periodPicker)periodPicker.hidden=true;
+      if(periodDisplay)periodDisplay.setAttribute('aria-expanded','false');
+    };
+    const updatePeriodDisplay=()=>{
+      const p=period.value;
+      const now=today();
+      let text='',caption='';
+      if(p==='Date'){
+        const value=$('actPeriodDate')?.value||now;
+        text=displayDate(value);
+        caption=value===now?'Today':'Date';
+      }else if(p==='Week'){
+        const value=$('actPeriodWeek')?.value||now;
+        text=displayDate(value);
+        caption=toIsoDate(weekStart(value))===toIsoDate(weekStart(now))?'This Week':'Week';
+      }else if(p==='Month'){
+        const value=$('actPeriodMonth')?.value||now.slice(0,7);
+        const match=value.match(/^(\d{4})-(\d{2})$/);
+        text=match?`${new Date(Number(match[1]),Number(match[2])-1,1).toLocaleString('en-US',{month:'short'})} ${match[1]}`:value;
+        caption=value===now.slice(0,7)?'This Month':'Month';
+      }else if(p==='Year'){
+        const value=$('actPeriodYear')?.value||String(new Date().getFullYear());
+        text=value;
+        caption=Number(value)===new Date().getFullYear()?'This Year':'Year';
+      }
+      if(periodDisplay)periodDisplay.textContent=text;
+      if(periodContextLabel)periodContextLabel.textContent=caption;
+    };
+    const renderPeriodPicker=()=>{
+      if(!periodPicker)return;
+      const p=period.value;
+      if(p==='Month'){
+        const current=$('actPeriodMonth')?.value||today().slice(0,7);
+        const match=current.match(/^(\d{4})-(\d{2})$/);
+        const year=match?Number(match[1]):new Date().getFullYear();
+        const selectedMonth=match?Number(match[2])-1:new Date().getMonth();
+        const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        periodPicker.innerHTML=`<div class="activity-picker-header"><button type="button" class="activity-picker-nav" data-month-year="-1" aria-label="Previous year">‹</button><strong>${year}</strong><button type="button" class="activity-picker-nav" data-month-year="1" aria-label="Next year">›</button></div><div class="activity-month-grid">${months.map((name,index)=>`<button type="button" class="activity-month-choice${index===selectedMonth?' selected':''}" data-pick-month="${String(index+1).padStart(2,'0')}">${name}</button>`).join('')}</div><div class="activity-picker-footer"><button type="button" class="activity-picker-action" data-picker-close>Close</button><button type="button" class="activity-picker-action" data-current-month>This month</button></div>`;
+        periodPicker.dataset.year=String(year);
+        return;
+      }
+      const value=p==='Week'?($('actPeriodWeek')?.value||today()):($('actPeriodDate')?.value||today());
+      const selected=parseLocalDate(value);
+      const year=pickerMonth.getFullYear(),month=pickerMonth.getMonth();
+      const first=new Date(year,month,1);
+      const start=new Date(year,month,1-((first.getDay()+6)%7));
+      const monthName=pickerMonth.toLocaleString('en-US',{month:'long'});
+      const weekdays=['Mo','Tu','We','Th','Fr','Sa','Su'];
+      const selectedWeekStart=toIsoDate(weekStart(value));
+      const nowDate=today();
+      const days=Array.from({length:42},(_,i)=>{
+        const date=new Date(start);date.setDate(start.getDate()+i);
+        const iso=toIsoDate(date);
+        const classes=['activity-calendar-day'];
+        if(date.getMonth()!==month)classes.push('outside-month');
+        if(iso===nowDate)classes.push('today');
+        if(p==='Week'&&toIsoDate(weekStart(iso))===selectedWeekStart)classes.push('selected');
+        else if(p==='Date'&&iso===value)classes.push('selected');
+        return `<button type="button" class="${classes.join(' ')}" data-pick-date="${iso}" aria-label="${iso}">${date.getDate()}</button>`;
+      });
+      const quick=p==='Week'?'This Week':'Today';
+      periodPicker.innerHTML=`<div class="activity-picker-header"><button type="button" class="activity-picker-nav" data-calendar-month="-1" aria-label="Previous month">‹</button><strong>${monthName} ${year}</strong><button type="button" class="activity-picker-nav" data-calendar-month="1" aria-label="Next month">›</button></div><div class="activity-calendar-grid">${weekdays.map(day=>`<span class="activity-calendar-weekday">${day}</span>`).join('')}${days.join('')}</div><div class="activity-picker-footer"><button type="button" class="activity-picker-action" data-picker-close>Close</button><button type="button" class="activity-picker-action" data-current-period>${quick}</button></div>`;
+    };
+    const openPeriodPicker=()=>{
+      if(!periodPicker||!['Date','Week','Month'].includes(period.value))return;
+      const p=period.value;
+      if(p==='Month'){
+        const value=$('actPeriodMonth')?.value||today().slice(0,7);
+        const match=value.match(/^(\d{4})-(\d{2})$/);
+        periodPicker.dataset.year=match?match[1]:String(new Date().getFullYear());
+      }else{
+        const value=p==='Week'?($('actPeriodWeek')?.value||today()):($('actPeriodDate')?.value||today());
+        pickerMonth=parseLocalDate(value);
+      }
+      renderPeriodPicker();
+      periodPicker.hidden=false;
+      if(periodDisplay)periodDisplay.setAttribute('aria-expanded','true');
+    };
+    if(periodDisplay){
+      periodDisplay.addEventListener('click',event=>{
+        event.preventDefault();
+        if(periodPicker?.hidden)openPeriodPicker();else closePeriodPicker();
       });
     }
+    if(periodPicker){
+      periodPicker.addEventListener('click',event=>{
+        const button=event.target.closest('button');
+        if(!button)return;
+        if(button.hasAttribute('data-picker-close')){closePeriodPicker();return;}
+        if(button.hasAttribute('data-calendar-month')){
+          pickerMonth.setMonth(pickerMonth.getMonth()+Number(button.dataset.calendarMonth));
+          renderPeriodPicker();return;
+        }
+        if(button.hasAttribute('data-month-year')){
+          const year=Number(periodPicker.dataset.year||new Date().getFullYear())+Number(button.dataset.monthYear);
+          periodPicker.dataset.year=String(year);
+          const current=$('actPeriodMonth')?.value||today().slice(0,7);
+          const selected=Number(current.slice(5,7))-1;
+          const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          periodPicker.innerHTML=`<div class="activity-picker-header"><button type="button" class="activity-picker-nav" data-month-year="-1" aria-label="Previous year">‹</button><strong>${year}</strong><button type="button" class="activity-picker-nav" data-month-year="1" aria-label="Next year">›</button></div><div class="activity-month-grid">${months.map((name,index)=>`<button type="button" class="activity-month-choice${index===selected?' selected':''}" data-pick-month="${String(index+1).padStart(2,'0')}">${name}</button>`).join('')}</div><div class="activity-picker-footer"><button type="button" class="activity-picker-action" data-picker-close>Close</button><button type="button" class="activity-picker-action" data-current-month>This month</button></div>`;
+          return;
+        }
+        if(button.hasAttribute('data-pick-date')){
+          const target=period.value==='Week'?'actPeriodWeek':'actPeriodDate';
+          $(target).value=button.dataset.pickDate;
+          updatePeriodDisplay();closePeriodPicker();return;
+        }
+        if(button.hasAttribute('data-current-period')){
+          const target=period.value==='Week'?'actPeriodWeek':'actPeriodDate';
+          $(target).value=today();
+          updatePeriodDisplay();closePeriodPicker();return;
+        }
+        if(button.hasAttribute('data-pick-month')){
+          const year=periodPicker.dataset.year||String(new Date().getFullYear());
+          $('actPeriodMonth').value=`${year}-${button.dataset.pickMonth}`;
+          updatePeriodDisplay();closePeriodPicker();return;
+        }
+        if(button.hasAttribute('data-current-month')){
+          $('actPeriodMonth').value=today().slice(0,7);
+          updatePeriodDisplay();closePeriodPicker();return;
+        }
+      });
+      periodPicker.addEventListener('keydown',event=>{
+        if(event.key==='Escape'){event.preventDefault();closePeriodPicker();periodDisplay?.focus();}
+      });
+    }
+    const reportFilterPanel=$('activityPeriodControls')?.closest('.expense-panel');
+    if(reportFilterPanel){
+      reportFilterPanel.addEventListener('click',event=>{
+        if(!event.target.closest('#activityPeriodValue'))closePeriodPicker();
+      });
+    }
+    const yearInput=$('actPeriodYear');
+    if(yearInput)yearInput.addEventListener('input',updatePeriodDisplay);
     const syncPeriodPickers=()=>{
       const p=period.value;
       const controls=$('activityPeriodControls');
       if(controls){const hasValue=['Date','Week','Month','Year'].includes(p);controls.classList.toggle('is-full',!hasValue);controls.classList.toggle('has-value',hasValue);}
-      [['Date','actPeriodDate'],['Week','actPeriodWeek'],['Year','actPeriodYear']].forEach(([name,id])=>{
-        const input=$(id);if(input)input.hidden=p!==name;
-      });
-      const monthPicker=$('actPeriodMonthPicker');
-      if(monthPicker)monthPicker.hidden=p!=='Month';
+      const showValue=['Date','Week','Month','Year'].includes(p);
       const valueWrap=$('activityPeriodValue');
-      if(valueWrap)valueWrap.hidden=!['Date','Week','Month','Year'].includes(p);
-      syncMonthPickerLabel();
+      if(valueWrap)valueWrap.hidden=!showValue;
+      if(periodContextLabel)periodContextLabel.hidden=!showValue;
+      const display=$('actPeriodDisplay');
+      if(display)display.hidden=p==='Year';
+      const year=$('actPeriodYear');
+      if(year)year.hidden=p!=='Year';
+      closePeriodPicker();
+      updatePeriodDisplay();
     };
     const syncDateSortVisibility=()=>{
       const p=period.value,isAbstract=type.value==='Abstract';
