@@ -5,6 +5,25 @@
   'use strict';
   const API = 'https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec';
   const $ = id => document.getElementById(id);
+  // Close the Activities download menu on any tap outside the menu wrapper.
+  // Use capture-phase pointer/touch events for consistent iPhone Safari behavior.
+  function installActivityDownloadMenuDismiss(){
+    const key='__oneFaMiLeActivityDownloadOutsideHandler';
+    const previous=window[key];
+    if(previous){
+      document.removeEventListener('pointerdown',previous,true);
+      document.removeEventListener('touchstart',previous,true);
+    }
+    const handler=event=>{
+      const target=event.target;
+      if(target && typeof target.closest==='function' && target.closest('.expense-download-wrap')) return;
+      const menu=$('activityDownloadMenu');
+      if(menu) menu.classList.add('hidden');
+    };
+    window[key]=handler;
+    document.addEventListener('pointerdown',handler,true);
+    document.addEventListener('touchstart',handler,true);
+  }
   const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const today = () => {const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
   const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -1216,7 +1235,7 @@
       }
     </style>`:'';
     const inner=`${detailedReportStyles}<div class="expense-panel"><div id="actReportOutput"></div><div class="expense-report-actions"><div class="expense-download-wrap"><button type="button" id="activityDownloadBtn" class="expense-secondary">Download ▾</button><div id="activityDownloadMenu" class="expense-download-menu hidden"><button type="button" data-export="pdf">PDF</button><button type="button" data-export="word">Word</button><button type="button" data-export="excel">Excel</button></div></div><button type="button" id="activityReportDateSort" class="expense-date-sort">${dateAscending?'↑ Date Ascending':'↓ Date Descending'}</button><button type="button" id="activityReportBack" class="expense-secondary">← Back</button></div></div>`;
-    page(shell(label,inner,true));const reportPage=document.querySelector('.activity-page');if(reportPage){reportPage.classList.add('activity-report-view');if(type==='Detailed')reportPage.classList.add('activity-report-detailed');else reportPage.classList.add('activity-report-abstract');}renderReportResults(rows,type,selectedPeriod);const reportSort=$('activityReportDateSort');if(reportSort)reportSort.onclick=()=>{dateAscending=!dateAscending;reportSort.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';reportSort.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');reportSort.title=dateAscending?'Sort date ascending':'Sort date descending';renderReportResults(lastRows,type,selectedPeriod)};const dl=$('activityDownloadBtn'),menu=$('activityDownloadMenu');if(dl&&menu){dl.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportReport(b.dataset.export)});}const back=$('activityReportBack');if(back)back.onclick=()=>renderReports(kind,custom,cached);
+    page(shell(label,inner,true));const reportPage=document.querySelector('.activity-page');if(reportPage){reportPage.classList.add('activity-report-view');if(type==='Detailed')reportPage.classList.add('activity-report-detailed');else reportPage.classList.add('activity-report-abstract');}renderReportResults(rows,type,selectedPeriod);const reportSort=$('activityReportDateSort');if(reportSort)reportSort.onclick=()=>{dateAscending=!dateAscending;reportSort.textContent=dateAscending?'↑ Date Ascending':'↓ Date Descending';reportSort.setAttribute('aria-label',dateAscending?'Sort date ascending':'Sort date descending');reportSort.title=dateAscending?'Sort date ascending':'Sort date descending';renderReportResults(lastRows,type,selectedPeriod)};const dl=$('activityDownloadBtn'),menu=$('activityDownloadMenu');if(dl&&menu){installActivityDownloadMenuDismiss();dl.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportReport(b.dataset.export)});}const back=$('activityReportBack');if(back)back.onclick=()=>renderReports(kind,custom,cached);
   }
   function filterRows(rows,custom,kind){
     let from=custom?($('actFromDate')?.value||''):'',to=custom?($('actToDate')?.value||''):'';
