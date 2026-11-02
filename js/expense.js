@@ -698,6 +698,8 @@ ${field('Photos',`
     }
     if(periodPicker){
       periodPicker.addEventListener('click',event=>{
+        // Keep calendar navigation clicks inside the picker; do not trigger the document outside-click closer.
+        event.stopPropagation();
         const button=event.target.closest('button');
         if(!button)return;
         if(button.hasAttribute('data-period-action')){
