@@ -27,6 +27,25 @@
   let lastReportRows = [];
   let lastExpenseReportContext = null;
   const $ = id => document.getElementById(id);
+  // Close the Expenses download menu when the user taps anywhere outside it.
+  // Capture-phase pointer/touch handling works reliably on mobile Safari too.
+  function installExpenseDownloadMenuDismiss(){
+    const key='__oneFaMiLeExpenseDownloadOutsideHandler';
+    const previous=window[key];
+    if(previous){
+      document.removeEventListener('pointerdown',previous,true);
+      document.removeEventListener('touchstart',previous,true);
+    }
+    const handler=event=>{
+      const target=event.target;
+      if(target && typeof target.closest==='function' && target.closest('.expense-download-wrap')) return;
+      const menu=$('exDownloadMenu');
+      if(menu) menu.classList.add('hidden');
+    };
+    window[key]=handler;
+    document.addEventListener('pointerdown',handler,true);
+    document.addEventListener('touchstart',handler,true);
+  }
   const esc = value => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   function family(){ try{return JSON.parse(localStorage.getItem('currentFamily')||'{}')}catch(_){return {}} }
   function user(){ try{return JSON.parse(sessionStorage.getItem('user')||'{}')}catch(_){return {}} }
@@ -475,9 +494,9 @@ ${field('Photos',`
 .expense-page:has(#expenseReportTitle) .expense-report-actions>.expense-download-wrap,.expense-page:has(#expenseReportTitle) .expense-report-actions>button{flex:1 1 0!important;width:0!important;min-width:0!important;max-width:none!important;box-sizing:border-box!important}
 .expense-page:has(#expenseReportTitle) .expense-report-actions>.expense-download-wrap>button{display:block!important;width:100%!important;min-width:0!important;box-sizing:border-box!important}.expense-date-sort-field{display:none!important;align-self:end}.expense-date-sort{width:100%;min-height:42px;border:1px solid #8baec8;border-radius:8px;background:#fff;color:#2d5274;font-weight:700;padding:8px;cursor:pointer}.expense-date-sort:active{background:#e5f3ff}.expense-payment-filter{grid-column:1!important}.expense-filter-grid #exShowColumnsWrap{grid-column:2!important;grid-row:4!important}.expense-filter-grid .expense-amount-sort-field{grid-column:1!important;grid-row:5!important}.expense-custom-filter-grid #exShowColumnsWrap{grid-column:2!important;grid-row:6!important}.expense-custom-filter-grid .expense-amount-sort-field{grid-column:2!important;grid-row:6!important}.expense-spentby-filter{grid-column:2!important}.expense-custom-filter-grid .expense-field:has(#exFilterCategory),.expense-custom-filter-grid .expense-field:has(#exFilterSub){grid-row:2!important}.expense-custom-filter-grid .expense-payment-filter,.expense-custom-filter-grid .expense-spentby-filter{grid-row:3!important}.expense-custom-filter-grid .expense-field:has(#exMinAmount),.expense-custom-filter-grid .expense-field:has(#exMaxAmount){grid-row:4!important}.expense-custom-filter-grid .expense-field:has(#exFromDate),.expense-custom-filter-grid .expense-field:has(#exToDate){grid-row:5!important}.expense-custom-filter-grid .expense-payment-filter{grid-column:1!important}.expense-custom-filter-grid .expense-spentby-filter{grid-column:2!important}.expense-custom-filter-grid .expense-search-text-filter{grid-row:6!important;grid-column:1!important}.expense-custom-filter-grid .expense-amount-sort-field{grid-row:6!important;grid-column:2!important}.expense-custom-filter-grid #exFromDate,.expense-custom-filter-grid #exToDate{height:40px!important;min-height:40px!important;max-height:40px!important;padding:7px 10px!important;box-sizing:border-box!important;line-height:normal!important}.expense-custom-filter-grid #exVehicleTypeWrap,.expense-custom-filter-grid #exMtcTypeWrap{grid-row:7!important;grid-column:auto!important}.expense-filter-grid .expense-field.hidden{display:none!important}.expense-filter-grid #exVehicleTypeWrap,.expense-filter-grid #exMtcTypeWrap{grid-column:auto!important}.expense-filter-grid #exVehicleTypeWrap.hidden,.expense-filter-grid #exMtcTypeWrap.hidden{display:none!important}.expense-report-actions #exDownloadBtn,.expense-report-actions #expenseReportBack{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}
 .expense-page:not(.expense-report-view) .expense-report-actions #exDownloadBtn{display:none!important}.expense-report-actions #exDownloadBtn:disabled{opacity:1!important;color:#2477c8!important;background:transparent!important;border-color:#2477c8!important;cursor:not-allowed}.expense-summary{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 14px;box-sizing:border-box;flex-wrap:nowrap}.expense-summary-card{display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px;flex:1 1 50%;width:50%}.expense-summary-card small{display:inline;font-size:clamp(8px,2.4vw,12px);white-space:nowrap}.expense-summary-card strong{display:inline;font-size:clamp(9px,2.7vw,14px);white-space:nowrap}@media(max-width:600px){.expense-filter-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:10px!important;row-gap:10px!important}.expense-filter-grid>.expense-field{grid-column:auto!important;min-width:0!important;width:100%!important;box-sizing:border-box!important}.expense-filter-grid>.expense-report-inline{grid-column:auto!important}.expense-filter-grid>.expense-field label{display:block!important;white-space:normal!important;max-width:100%!important;margin-bottom:5px!important}.expense-filter-grid>.expense-field input,.expense-filter-grid>.expense-field select{width:100%!important;min-width:0!important;box-sizing:border-box!important}.expense-report-inline .expense-label{flex:0 0 auto!important;width:100%!important;white-space:nowrap!important;margin-bottom:0!important}.expense-report-inline select{flex:1 1 auto!important;width:100%!important}.expense-report-actions{gap:6px!important}.expense-report-actions button{min-width:0!important;flex:1 1 0!important;padding:8px 4px!important;font-size:12px!important}}@media(min-width:601px){.expense-filter-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}.expense-filter-grid>.expense-report-inline{grid-column:auto!important}}
-.expense-period-label-row{display:grid;grid-template-columns:minmax(0,45fr) minmax(0,55fr);gap:0;align-items:center;width:100%;min-width:0}
-.expense-period-label-row .expense-label{display:block;min-width:0;margin:0!important;white-space:nowrap}
-.expense-period-context-label{text-align:right!important;justify-self:end!important}
+.expense-period-label-row{display:grid;grid-template-columns:max-content minmax(0,1fr);column-gap:6px;align-items:center;width:100%;min-width:0}
+.expense-period-label-row .expense-label{display:block;width:max-content!important;min-width:max-content!important;margin:0!important;white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important}
+.expense-period-context-label{text-align:right!important;justify-self:end!important;width:auto!important;min-width:0!important}
 .expense-period-controls{display:grid;grid-template-columns:minmax(0,45fr) minmax(0,55fr);align-items:center;gap:0;width:100%;min-width:0;box-sizing:border-box}
 .expense-period-controls.is-full{grid-template-columns:minmax(0,1fr)}
 .expense-period-controls>#exReportPeriod{display:block;width:100%!important;min-width:0!important;max-width:100%;height:40px;min-height:40px;box-sizing:border-box;font-size:16px!important;padding:0 1px!important;line-height:1.15!important;-webkit-appearance:none!important;appearance:none!important;background-image:none!important;text-align:center!important;text-align-last:center!important}
@@ -784,6 +803,7 @@ ${field('Photos',`
     const back=$('expenseReportBack'); if(back) { back.type='button'; const returnToMenu=(event)=>{event.preventDefault();event.stopPropagation();goBack();}; back.onclick=returnToMenu; back.addEventListener('pointerup',returnToMenu,{once:false}); }
     const downloadBtn=$('exDownloadBtn'), downloadMenu=$('exDownloadMenu');
     if(downloadBtn&&downloadMenu){
+      installExpenseDownloadMenuDismiss();
       downloadBtn.disabled=true;
       downloadBtn.onclick=()=>{if(!downloadBtn.disabled)downloadMenu.classList.toggle('hidden')};
       downloadMenu.querySelectorAll('[data-export]').forEach(item=>item.onclick=()=>{downloadMenu.classList.add('hidden');exportExpenseReport(item.dataset.export);});
@@ -1393,7 +1413,7 @@ function expenseReportPageTitle(kind,custom,type,period='All',filters=null){
     }
 
     const downloadBtn=$('exDownloadBtn'),menu=$('exDownloadMenu');
-    if(downloadBtn&&menu){downloadBtn.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportExpenseReport(b.dataset.export)});}
+    if(downloadBtn&&menu){installExpenseDownloadMenuDismiss();downloadBtn.onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-export]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');exportExpenseReport(b.dataset.export)});}
     const reportSort=$('expenseReportDateSort');
     if(reportSort)reportSort.onclick=()=>{
       dateSortAscending=!dateSortAscending;
