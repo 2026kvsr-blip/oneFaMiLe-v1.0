@@ -1,5 +1,4 @@
 
-
 /* oneFaMiLe Expense module. Loaded after app.js; overrides only Expenses navigation. */
 (function(){
   'use strict';
@@ -1060,21 +1059,187 @@ ${field('Photos',`
     ['exPeriodDate','exPeriodWeek','exPeriodMonth','exPeriodYear'].forEach(id=>{if(values[id]!==undefined&&$(id))$(id).value=values[id]});
     if($('exShowColumnsWrap')){const detailed=$('exReportType')?.value==='Detailed';$('exShowColumnsWrap').classList.toggle('hidden',!detailed);$('exShowColumnsWrap').style.setProperty('display',detailed?'flex':'none','important');}
   }
-  function expenseReportPageTitle(kind,custom,type,period='All'){
-    const mode=type==='Detailed'?'Detailed':'Abstract';
-    if(mode==='Abstract'){
-      const periodLabel=period==='Date'?'Date':period==='Week'?'Week':period==='Month'?'Month':period==='Year'?'Year':String(period||'All');
-      if(kind==='sensitive')return `Sensitive Expenses Abstract - ${periodLabel}`;
-      if(kind==='all')return `All Expenses Abstract - ${periodLabel}`;
-      if(custom)return `Expenses Custom Search - Abstract - ${periodLabel}`;
-      return `Expenses Abstract - ${periodLabel}`;
-    }
-    const periodLabel=period==='All'?'All Records':String(period||'All');
-    if(kind==='sensitive')return `Sensitive Expenses Detailed - ${periodLabel}`;
-    if(kind==='all')return `All Expenses Detailed - ${periodLabel}`;
-    if(custom)return `Expenses Custom Search - Detailed - ${periodLabel}`;
-    return `Expenses Detailed - ${periodLabel}`;
+ 
+function expenseReportPageTitle(kind,custom,type,period='All',filters=null){
+
+  const mode=type==='Detailed'?'Detailed':'Abstract';
+
+  const readValue=(id,fallback)=>
+    (filters && filters[id]) ||
+    $(id)?.value ||
+    fallback;
+
+  const current=dateToday();
+
+  // DD-MM-YYYY
+  const fullDate=value=>{
+    const m=String(value||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return m ? `${m[3]}-${m[2]}-${m[1]}` : value;
+  };
+
+  const shiftDate=(value,days)=>{
+    const d=new Date(value+'T12:00:00');
+    d.setDate(d.getDate()+days);
+    return fmt(d);
+  };
+
+  let suffix='';
+
+  // DATE
+  if(period==='Date'){
+
+    const selected=readValue('exPeriodDate',current);
+
+    if(selected===current)
+      suffix='- Today';
+
+    else if(selected===shiftDate(current,-1))
+      suffix='- Yesterday';
+
+    else if(selected===shiftDate(current,1))
+      suffix='- Tomorrow';
+
+    else
+      suffix=`on ${fullDate(selected)}`;
   }
+
+  // WEEK
+  else if(period==='Week'){
+
+    const selected=readValue('exPeriodWeek',current);
+
+    const weekStart=value=>{
+      const d=new Date(value+'T12:00:00');
+      d.setDate(d.getDate()-((d.getDay()+6)%7));
+      return fmt(d);
+    };
+
+    const selectedWeek=weekStart(selected);
+    const currentWeek=weekStart(current);
+
+    if(selectedWeek===currentWeek)
+      suffix='- This Week';
+
+    else if(selectedWeek===shiftDate(currentWeek,-7))
+      suffix='- Last Week';
+
+    else if(selectedWeek===shiftDate(currentWeek,7))
+      suffix='- Next Week';
+
+    else{
+
+      const d=new Date(selected+'T12:00:00');
+
+      const utc=new Date(Date.UTC(
+        d.getFullYear(),d.getMonth(),d.getDate()
+      ));
+
+      utc.setUTCDate(
+        utc.getUTCDate()+3-((utc.getUTCDay()+6)%7)
+      );
+
+      const year=utc.getUTCFullYear();
+
+      const jan4=new Date(Date.UTC(year,0,4));
+
+      const firstThursday=new Date(jan4);
+
+      firstThursday.setUTCDate(
+        firstThursday.getUTCDate()+3-((firstThursday.getUTCDay()+6)%7)
+      );
+
+      const week=1+Math.round(
+        (utc-firstThursday)/604800000
+      );
+
+      const ordinal=
+        week%10===1&&week%100!==11?'st':
+        week%10===2&&week%100!==12?'nd':
+        week%10===3&&week%100!==13?'rd':'th';
+
+      suffix=`on ${week}${ordinal} Week of ${year}`;
+    }
+  }
+
+  // MONTH
+  else if(period==='Month'){
+
+    const selected=readValue(
+      'exPeriodMonth',
+      current.slice(0,7)
+    );
+
+    const match=String(selected).match(
+      /^(\d{4})-(0[1-9]|1[0-2])$/
+    );
+
+    if(match){
+
+      const selectedIndex=
+        Number(match[1])*12+Number(match[2])-1;
+
+      const now=new Date();
+
+      const currentIndex=
+        now.getFullYear()*12+now.getMonth();
+
+      if(selectedIndex===currentIndex)
+        suffix='- This Month';
+
+      else if(selectedIndex===currentIndex-1)
+        suffix='- Last Month';
+
+      else if(selectedIndex===currentIndex+1)
+        suffix='- Next Month';
+
+      else{
+        const monthName=new Date(
+          Number(match[1]),
+          Number(match[2])-1,
+          1
+        ).toLocaleString('en-US',{month:'short'});
+
+        suffix=`on ${monthName} ${match[1]}`;
+      }
+    }
+  }
+
+  // YEAR
+  else if(period==='Year'){
+
+    const year=readValue(
+      'exPeriodYear',
+      String(new Date().getFullYear())
+    );
+
+    suffix=`on ${year}`;
+  }
+
+  // ALL / OTHER PERIODS
+  else if(period==='All'){
+
+    suffix=mode==='Abstract' ? '- All' : '- All Records';
+  }
+
+  else{
+    suffix=`- ${String(period||'All')}`;
+  }
+
+  // REPORT NAME
+  let baseTitle='Expenses';
+
+  if(kind==='sensitive')
+    baseTitle='Sensitive Expenses';
+
+  else if(kind==='all')
+    baseTitle='All Expenses';
+
+  else if(custom)
+    baseTitle='Expenses Custom Search';
+
+  return `${baseTitle} ${mode} ${suffix}`;
+}
+
   function openExpenseReportPage(kind,custom,filters,rows,type){
     const output=$('exReportOutput');
     const reportHtml=output?output.innerHTML:'';
