@@ -975,11 +975,21 @@
 
     // YEAR
     if(period === 'Year'){
-      return `on ${readValue(
+      const selectedYear=Number(readValue(
         'periodYear',
         'actPeriodYear',
         String(new Date().getFullYear())
-      )}`;
+      ));
+      const currentYear=new Date().getFullYear();
+
+      if(selectedYear===currentYear)
+        return '- This year';
+      if(selectedYear===currentYear-1)
+        return '- Last year';
+      if(selectedYear===currentYear+1)
+        return '- Next year';
+
+      return `on ${selectedYear}`;
     }
 
     return '- All Records';
