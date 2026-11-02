@@ -943,6 +943,27 @@ ${field('Photos',`
       }).filter(Boolean);
       let groupedRows='';
       let currentYear='', currentMonth='', currentDay='', monthTotal=0, monthCount=0, yearTotal=0, yearCount=0;
+      if(['Date','Week','Month','Year'].includes(reportPeriod)){
+        const selectedDate=$('exPeriodDate')?.value||dateToday();
+        const selectedWeek=$('exPeriodWeek')?.value||dateToday();
+        const selectedMonth=$('exPeriodMonth')?.value||dateToday().slice(0,7);
+        const selectedYear=String($('exPeriodYear')?.value||new Date().getFullYear());
+        let selectedLabel='';
+        let headingClass='expense-report-month';
+        if(reportPeriod==='Date') selectedLabel=`Date : ${formatReportDate(selectedDate)}`;
+        else if(reportPeriod==='Week'){
+          const d=new Date(selectedWeek+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));
+          const e=new Date(d);e.setDate(e.getDate()+6);
+          selectedLabel=`Week : ${formatReportDate(fmt(d))} to ${formatReportDate(fmt(e))}`;
+        }else if(reportPeriod==='Month'){
+          const [y,m]=selectedMonth.split('-').map(Number);
+          selectedLabel=`Month : ${new Date(y,m-1,1).toLocaleString('en-US',{month:'long',year:'numeric'})}`;
+        }else{
+          selectedLabel=`Year : ${selectedYear}`;
+          headingClass='expense-report-year';
+        }
+        groupedRows+=`<tr class="expense-report-subheading ${headingClass}"><th colspan="${colCount}">${esc(selectedLabel)}</th></tr>`;
+      }
       const monthName=ds=>ds?new Date(ds+'T12:00:00').toLocaleString('en-US',{month:'long'}):'Unknown';
       const amountIndex=visibleColumns.findIndex(c=>c.key==='amount')+1;
       const reportAmounts=sortedRows.map(r=>Number(r.amount)||0);
@@ -1006,13 +1027,25 @@ ${field('Photos',`
     const reportHeading=`${esc(reportPeriodTitle||'All')} - ${type==='Detailed'?'Detailed Report':'Abstract'}`;
     let abstractPeriodHeading='';
     if(type==='Abstract'){
-      const dates=rows.map(r=>String(r.expenseDate||'').slice(0,10)).filter(Boolean).sort();
       const today=dateToday();
-      if(reportPeriodTitle==='Today') abstractPeriodHeading=formatReportDate(today);
-      else if(reportPeriodTitle==='This Week'){const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));const e=new Date(d);e.setDate(e.getDate()+6);abstractPeriodHeading=`${formatReportDate(fmt(d))}\u00a0to\u00a0${formatReportDate(fmt(e))}`;}
-      else if(reportPeriodTitle==='This Month'){const d=new Date();abstractPeriodHeading=d.toLocaleString('en-US',{month:'long',year:'numeric'});}
-      else if(reportPeriodTitle==='This Year') abstractPeriodHeading=String(new Date().getFullYear());
-      else if(reportPeriodTitle==='All') abstractPeriodHeading='All Periods';
+      const selectedDate=$('exPeriodDate')?.value||today;
+      const selectedWeek=$('exPeriodWeek')?.value||today;
+      const selectedMonth=$('exPeriodMonth')?.value||today.slice(0,7);
+      const selectedYear=String($('exPeriodYear')?.value||new Date().getFullYear());
+      const weekStart=value=>{const d=new Date(value+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));return d;};
+      if(reportPeriodTitle==='Date') abstractPeriodHeading=`Date : ${formatReportDate(selectedDate)}`;
+      else if(reportPeriodTitle==='Week'){const d=weekStart(selectedWeek);const e=new Date(d);e.setDate(e.getDate()+6);abstractPeriodHeading=`Week : ${formatReportDate(fmt(d))} to ${formatReportDate(fmt(e))}`;}
+      else if(reportPeriodTitle==='Month'){const [y,m]=selectedMonth.split('-').map(Number);abstractPeriodHeading=`Month : ${new Date(y,m-1,1).toLocaleString('en-US',{month:'long',year:'numeric'})}`;}
+      else if(reportPeriodTitle==='Year') abstractPeriodHeading=`Year : ${selectedYear}`;
+      else if(reportPeriodTitle==='Today') abstractPeriodHeading=`Date : ${formatReportDate(today)}`;
+      else if(reportPeriodTitle==='This Week'){const d=weekStart(today);const e=new Date(d);e.setDate(e.getDate()+6);abstractPeriodHeading=`Week : ${formatReportDate(fmt(d))} to ${formatReportDate(fmt(e))}`;}
+      else if(reportPeriodTitle==='This Month'){const d=new Date();abstractPeriodHeading=`Month : ${d.toLocaleString('en-US',{month:'long',year:'numeric'})}`;}
+      else if(reportPeriodTitle==='This Year') abstractPeriodHeading=`Year : ${new Date().getFullYear()}`;
+      else if(reportPeriodTitle==='Daily') abstractPeriodHeading='Daily Records';
+      else if(reportPeriodTitle==='Weekly') abstractPeriodHeading='Weekly Records';
+      else if(reportPeriodTitle==='Monthly') abstractPeriodHeading='Monthly Records';
+      else if(reportPeriodTitle==='Yearly') abstractPeriodHeading='Yearly Records';
+      else if(reportPeriodTitle==='All') abstractPeriodHeading='All Records';
     }
     const abstractHeadingHtml=abstractPeriodHeading?`<div class="expense-abstract-heading">${esc(abstractPeriodHeading)}</div>`:'';
     $('exReportOutput').innerHTML=`<style>.expense-results{height:55vh!important;max-height:55vh!important;overflow:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.expense-results table{width:max-content;min-width:100%;border-collapse:collapse}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table thead th{height:50px!important;min-height:50px!important;padding:5px 5px!important;box-sizing:border-box;text-align:center;line-height:1.1;white-space:normal;overflow-wrap:normal;word-break:normal}.expense-results table .expense-report-subheading.expense-report-month th{height:32px!important;min-height:32px!important;padding:3px 8px!important;font-size:14px!important;line-height:1.05!important}.expense-results table .expense-report-subheading.expense-report-year th{height:34px!important;min-height:34px!important;padding:3px 8px!important;font-size:17px!important;line-height:1.05!important;background:#e7eaf0!important;background-color:#e7eaf0!important;border-color:#c7ceda!important;color:#37624a!important}.expense-results table tr.expense-amount-high-row>td{background:#fff0df!important}.expense-results table tr.expense-amount-low-row>td{background:#e8f5e9!important}.expense-abstract-title{font-size:24px;text-align:center;color:#3477b7;margin:10px 0 8px;font-weight:700}.expense-abstract-heading{font-size:18px;font-weight:700;color:#e67e22;margin:8px 0;padding:8px;border-bottom:1px solid #c4d4ff}.expense-report-subheading th{color:#e67e22!important}.expense-report-subheading.expense-report-year th{color:#2e8b57!important}.expense-report-subheading.expense-report-month th{font-size:14px!important}.expense-abstract-category-row:focus{outline:2px solid #4a9fe8;outline-offset:-2px}.expense-abstract-subrow[hidden]{display:none!important}.expense-abstract-subrow td{background:#f4f9ff!important;color:#2d5274}.expense-abstract-toggle{display:inline-block;width:16px;font-weight:700;color:#2477c8}.expense-results table th,.expense-results table td{vertical-align:middle!important}.expense-results table th.expense-center-cell,.expense-results table td.expense-center-cell{text-align:center!important;vertical-align:middle!important;width:1%;min-width:58px;max-width:110px;padding:6px 4px;white-space:normal;overflow-wrap:anywhere}</style><div class="expense-summary"><div class="expense-summary-card"><small>Total Records :</small><strong>${counts}</strong></div><div class="expense-summary-card"><small>Total Expense :</small><strong>${money(total)}</strong></div></div>${abstractHeadingHtml}${table}`;
@@ -1209,12 +1242,21 @@ function expenseReportPageTitle(kind,custom,type,period='All',filters=null){
   // YEAR
   else if(period==='Year'){
 
-    const year=readValue(
+    const year=String(readValue(
       'exPeriodYear',
       String(new Date().getFullYear())
-    );
+    ));
+    const currentYear=new Date().getFullYear();
+    const selectedYear=Number(year);
 
-    suffix=`on ${year}`;
+    if(selectedYear===currentYear)
+      suffix='- This year';
+    else if(selectedYear===currentYear-1)
+      suffix='- Last year';
+    else if(selectedYear===currentYear+1)
+      suffix='- Next year';
+    else
+      suffix=`on ${year}`;
   }
 
   // ALL / OTHER PERIODS
