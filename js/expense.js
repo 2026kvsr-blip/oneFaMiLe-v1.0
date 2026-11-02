@@ -471,14 +471,45 @@ ${field('Photos',`
   }
   function reportControls(custom=false){
     const types=['Abstract','Detailed'];
-    const periods=['Today','This Week','This Month','This Year','All'];
     return `<style>.expense-report-inline{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:5px;grid-column:auto!important;width:100%;box-sizing:border-box}.expense-report-inline .expense-label{display:block!important;flex:0 0 auto;align-items:center;justify-content:flex-start;white-space:nowrap;min-width:0;width:100%;margin:0!important}.expense-report-inline .expense-label:after{content:':'}.expense-report-inline select{display:block!important;flex:1 1 auto;min-width:0;width:100%;max-width:none;box-sizing:border-box}.expense-report-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap}.expense-report-actions>button,.expense-download-wrap>button{white-space:nowrap}.expense-download-wrap{position:relative}.expense-download-menu{position:absolute;right:0;top:100%;z-index:9999;display:flex;flex-direction:column;min-width:100px;background:#fff;border:1px solid #9ab;border-radius:8px;box-shadow:0 4px 12px #0002}.expense-download-menu.hidden{display:none}.expense-download-menu button{background:#fff;border:0;padding:9px 14px;text-align:left;color:#222}.expense-report-subheading th{background:#fff!important;text-align:left;border-top:1px solid #c4d4ff;border-bottom:1px solid #c4d4ff;color:#2d5274}.expense-report-year th{font-size:24px!important;font-weight:700;padding:10px 8px;background:#fff!important;color:#218838!important}.expense-report-month th{font-size:20px!important;font-weight:700;padding:8px;background:#fff!important;color:#e67e22!important}.expense-report-subheading.expense-report-month th{color:#e67e22!important}.expense-report-total td{font-weight:700;background:#fff!important;border-top:1px solid #c4d4ff}.expense-report-date th{font-size:13px!important;font-weight:600;background:#fff!important}.expense-report-actions .expense-secondary,.expense-report-actions .expense-primary{padding:8px 12px}
 .expense-page:has(#expenseReportTitle) .expense-report-actions{display:flex!important;align-items:stretch!important;gap:8px!important;width:100%!important;box-sizing:border-box!important}
 .expense-page:has(#expenseReportTitle) .expense-report-actions>.expense-download-wrap,.expense-page:has(#expenseReportTitle) .expense-report-actions>button{flex:1 1 0!important;width:0!important;min-width:0!important;max-width:none!important;box-sizing:border-box!important}
 .expense-page:has(#expenseReportTitle) .expense-report-actions>.expense-download-wrap>button{display:block!important;width:100%!important;min-width:0!important;box-sizing:border-box!important}.expense-date-sort-field{display:none!important;align-self:end}.expense-date-sort{width:100%;min-height:42px;border:1px solid #8baec8;border-radius:8px;background:#fff;color:#2d5274;font-weight:700;padding:8px;cursor:pointer}.expense-date-sort:active{background:#e5f3ff}.expense-payment-filter{grid-column:1!important}.expense-filter-grid #exShowColumnsWrap{grid-column:2!important;grid-row:4!important}.expense-filter-grid .expense-amount-sort-field{grid-column:1!important;grid-row:5!important}.expense-custom-filter-grid #exShowColumnsWrap{grid-column:2!important;grid-row:6!important}.expense-custom-filter-grid .expense-amount-sort-field{grid-column:2!important;grid-row:6!important}.expense-spentby-filter{grid-column:2!important}.expense-custom-filter-grid .expense-field:has(#exFilterCategory),.expense-custom-filter-grid .expense-field:has(#exFilterSub){grid-row:2!important}.expense-custom-filter-grid .expense-payment-filter,.expense-custom-filter-grid .expense-spentby-filter{grid-row:3!important}.expense-custom-filter-grid .expense-field:has(#exMinAmount),.expense-custom-filter-grid .expense-field:has(#exMaxAmount){grid-row:4!important}.expense-custom-filter-grid .expense-field:has(#exFromDate),.expense-custom-filter-grid .expense-field:has(#exToDate){grid-row:5!important}.expense-custom-filter-grid .expense-payment-filter{grid-column:1!important}.expense-custom-filter-grid .expense-spentby-filter{grid-column:2!important}.expense-custom-filter-grid .expense-search-text-filter{grid-row:6!important;grid-column:1!important}.expense-custom-filter-grid .expense-amount-sort-field{grid-row:6!important;grid-column:2!important}.expense-custom-filter-grid #exFromDate,.expense-custom-filter-grid #exToDate{height:40px!important;min-height:40px!important;max-height:40px!important;padding:7px 10px!important;box-sizing:border-box!important;line-height:normal!important}.expense-custom-filter-grid #exVehicleTypeWrap,.expense-custom-filter-grid #exMtcTypeWrap{grid-row:7!important;grid-column:auto!important}.expense-filter-grid .expense-field.hidden{display:none!important}.expense-filter-grid #exVehicleTypeWrap,.expense-filter-grid #exMtcTypeWrap{grid-column:auto!important}.expense-filter-grid #exVehicleTypeWrap.hidden,.expense-filter-grid #exMtcTypeWrap.hidden{display:none!important}.expense-report-actions #exDownloadBtn,.expense-report-actions #expenseReportBack{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}
-.expense-page:not(.expense-report-view) .expense-report-actions #exDownloadBtn{display:none!important}.expense-report-actions #exDownloadBtn:disabled{opacity:1!important;color:#2477c8!important;background:transparent!important;border-color:#2477c8!important;cursor:not-allowed}.expense-summary{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 14px;box-sizing:border-box;flex-wrap:nowrap}.expense-summary-card{display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px;flex:1 1 50%;width:50%}.expense-summary-card small{display:inline;font-size:clamp(8px,2.4vw,12px);white-space:nowrap}.expense-summary-card strong{display:inline;font-size:clamp(9px,2.7vw,14px);white-space:nowrap}@media(max-width:600px){.expense-filter-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:10px!important;row-gap:10px!important}.expense-filter-grid>.expense-field{grid-column:auto!important;min-width:0!important;width:100%!important;box-sizing:border-box!important}.expense-filter-grid>.expense-report-inline{grid-column:auto!important}.expense-filter-grid>.expense-field label{display:block!important;white-space:normal!important;max-width:100%!important;margin-bottom:5px!important}.expense-filter-grid>.expense-field input,.expense-filter-grid>.expense-field select{width:100%!important;min-width:0!important;box-sizing:border-box!important}.expense-report-inline .expense-label{flex:0 0 auto!important;width:100%!important;white-space:nowrap!important;margin-bottom:0!important}.expense-report-inline select{flex:1 1 auto!important;width:100%!important}.expense-report-actions{gap:6px!important}.expense-report-actions button{min-width:0!important;flex:1 1 0!important;padding:8px 4px!important;font-size:12px!important}}@media(min-width:601px){.expense-filter-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}.expense-filter-grid>.expense-report-inline{grid-column:auto!important}}</style><div class="expense-panel"><div class="expense-filter-grid ${custom?'expense-custom-filter-grid':''}">
+.expense-page:not(.expense-report-view) .expense-report-actions #exDownloadBtn{display:none!important}.expense-report-actions #exDownloadBtn:disabled{opacity:1!important;color:#2477c8!important;background:transparent!important;border-color:#2477c8!important;cursor:not-allowed}.expense-summary{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 14px;box-sizing:border-box;flex-wrap:nowrap}.expense-summary-card{display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;min-width:0;box-sizing:border-box;padding:9px 8px;border:1px solid #c4d4ff;border-radius:8px;flex:1 1 50%;width:50%}.expense-summary-card small{display:inline;font-size:clamp(8px,2.4vw,12px);white-space:nowrap}.expense-summary-card strong{display:inline;font-size:clamp(9px,2.7vw,14px);white-space:nowrap}@media(max-width:600px){.expense-filter-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:10px!important;row-gap:10px!important}.expense-filter-grid>.expense-field{grid-column:auto!important;min-width:0!important;width:100%!important;box-sizing:border-box!important}.expense-filter-grid>.expense-report-inline{grid-column:auto!important}.expense-filter-grid>.expense-field label{display:block!important;white-space:normal!important;max-width:100%!important;margin-bottom:5px!important}.expense-filter-grid>.expense-field input,.expense-filter-grid>.expense-field select{width:100%!important;min-width:0!important;box-sizing:border-box!important}.expense-report-inline .expense-label{flex:0 0 auto!important;width:100%!important;white-space:nowrap!important;margin-bottom:0!important}.expense-report-inline select{flex:1 1 auto!important;width:100%!important}.expense-report-actions{gap:6px!important}.expense-report-actions button{min-width:0!important;flex:1 1 0!important;padding:8px 4px!important;font-size:12px!important}}@media(min-width:601px){.expense-filter-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}.expense-filter-grid>.expense-report-inline{grid-column:auto!important}}
+.expense-period-label-row{display:grid;grid-template-columns:minmax(0,45fr) minmax(0,55fr);gap:0;align-items:center;width:100%;min-width:0}
+.expense-period-label-row .expense-label{display:block;min-width:0;margin:0!important;white-space:nowrap}
+.expense-period-context-label{text-align:right!important;justify-self:end!important}
+.expense-period-controls{display:grid;grid-template-columns:minmax(0,45fr) minmax(0,55fr);align-items:center;gap:0;width:100%;min-width:0;box-sizing:border-box}
+.expense-period-controls.is-full{grid-template-columns:minmax(0,1fr)}
+.expense-period-controls>#exReportPeriod{display:block;width:100%!important;min-width:0!important;max-width:100%;height:40px;min-height:40px;box-sizing:border-box;font-size:16px!important;padding:0 1px!important;line-height:1.15!important;-webkit-appearance:none!important;appearance:none!important;background-image:none!important;text-align:center!important;text-align-last:center!important}
+.expense-period-controls.has-value>#exReportPeriod{border-radius:8px 0 0 8px!important;border-right:0!important}
+.expense-period-controls.has-value .expense-period-trigger,.expense-period-controls.has-value #exPeriodYear{border-radius:0 8px 8px 0!important;border-left:1px solid #9bb9d4!important}
+.expense-period-controls.is-full>#exReportPeriod{font-size:inherit!important;padding:0 10px!important;text-align:left!important;text-align-last:left!important;line-height:normal!important}
+.expense-period-value{position:relative;z-index:5;display:flex;align-items:center;justify-content:center;min-width:0;width:100%;height:40px;min-height:40px;box-sizing:border-box}
+.expense-period-value[hidden]{display:none!important}
+.expense-period-trigger{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;max-width:100%!important;height:40px!important;min-height:40px!important;margin:0!important;padding:0 4px!important;box-sizing:border-box!important;border:1px solid #9bb9d4!important;border-radius:8px!important;background:#fff!important;color:#222!important;font:inherit!important;font-size:16px!important;font-weight:400!important;line-height:1!important;white-space:nowrap!important;box-shadow:none!important;cursor:pointer!important}
+.expense-period-trigger[hidden]{display:none!important}
+.expense-period-value input[type=number]{width:100%;min-width:0;height:40px;min-height:40px;box-sizing:border-box;padding:0 4px;text-align:center;font-size:16px}
+.expense-period-picker{position:absolute;top:calc(100% + 6px);right:0;z-index:100000;width:290px;max-width:calc(100vw - 32px);padding:10px;box-sizing:border-box;border:1px solid #9bb9d4;border-radius:9px;background:#fff;color:#222;box-shadow:0 5px 18px rgba(0,0,0,.22);font-size:14px;text-align:center}
+.expense-period-picker[hidden]{display:none!important}
+.expense-picker-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.expense-picker-header strong{flex:1;text-align:center;font-size:15px}
+.expense-picker-nav{width:32px;height:30px;padding:0;border:1px solid #c4d4ff;border-radius:6px;background:#f0f7ff;color:#2d5274;font-size:18px;line-height:1;box-shadow:none}
+.expense-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.expense-calendar-weekday{padding:5px 0;color:#526b80;font-weight:700;font-size:12px}
+.expense-calendar-day{min-width:0;height:31px;padding:0;border:0;border-radius:5px;background:#fff;color:#222;font-size:13px;box-shadow:none}
+.expense-calendar-day.outside-month{color:#a4acb5}
+.expense-calendar-day.today{outline:1px solid #2477c8}
+.expense-calendar-day.selected{background:#2477c8;color:#fff;font-weight:700}
+.expense-picker-footer{display:flex;align-items:center;justify-content:space-between;gap:4px;margin-top:9px;padding-top:7px;border-top:1px solid #e2e8f0}
+.expense-picker-action{flex:1 1 0;min-width:0;padding:5px 2px;border:0;border-radius:5px;background:transparent;color:#2477c8;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:none}
+.expense-month-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.expense-month-choice{height:34px;padding:0 4px;border:1px solid #e2e8f0;border-radius:6px;background:#fff;color:#222;font-size:13px;box-shadow:none}
+.expense-month-choice.selected{background:#2477c8;border-color:#2477c8;color:#fff;font-weight:700}
+@media(max-width:600px){.expense-period-picker{width:290px;max-width:calc(100vw - 28px);right:0;padding:9px}.expense-calendar-day{height:34px}}
+</style><div class="expense-panel"><div class="expense-filter-grid ${custom?'expense-custom-filter-grid':''}">
       <div class="expense-field expense-report-inline"><label class="expense-label" for="exReportType"><span class="expense-label-text">Report Type</span></label><select id="exReportType">${reportChoiceOptions(types,'Abstract')}</select></div>
-      <div class="expense-field expense-report-inline"><label class="expense-label" for="exReportPeriod"><span class="expense-label-text">Report Period</span></label><select id="exReportPeriod">${reportChoiceOptions(periods,'Today')}</select></div>
+      <div class="expense-field expense-report-inline"><div class="expense-period-label-row"><label class="expense-label" for="exReportPeriod"><span class="expense-label-text">Report Period</span></label><label class="expense-label expense-period-context-label" id="exPeriodContextLabel" for="exPeriodDisplay">Today</label></div><div class="expense-period-controls" id="expensePeriodControls"><select id="exReportPeriod">${reportChoiceOptions(['Date','Week','Month','Year','All'],'Date')}</select><div class="expense-period-value" id="expensePeriodValue"><button type="button" class="expense-period-trigger" id="exPeriodDisplay" aria-haspopup="dialog" aria-expanded="false">${dateToday().slice(8,10)}-${dateToday().slice(5,7)}-${dateToday().slice(0,4)}</button><input id="exPeriodDate" type="hidden" value="${dateToday()}" aria-label="Selected report date"><input id="exPeriodWeek" type="hidden" value="${dateToday()}" aria-label="Selected report week date"><input id="exPeriodMonth" type="hidden" value="${dateToday().slice(0,7)}" aria-label="Selected report month"><input id="exPeriodYear" type="number" min="1900" max="2100" step="1" value="${new Date().getFullYear()}" aria-label="Select report year" title="Select report year" hidden><div class="expense-period-picker" id="exPeriodPicker" role="dialog" aria-label="Choose report period" hidden></div></div></div></div>
       <div class="expense-field"><label class="expense-label" for="exFilterCategory"><span class="expense-label-text">Category</span></label><select id="exFilterCategory">${selectOptions(Object.keys(CATEGORIES),'All')}</select></div>
       <div class="expense-field"><label class="expense-label" for="exFilterSub"><span class="expense-label-text">Sub-Category</span></label><select id="exFilterSub">${selectOptions([],'All')}</select></div>
       <div class="expense-field"><label class="expense-label" for="exMinAmount"><span class="expense-label-text">Amount &gt;</span></label><input id="exMinAmount" type="number" min="0" step="0.01" placeholder="Any"></div>
@@ -516,14 +547,237 @@ ${field('Photos',`
     }
     const period=$('exReportPeriod');
     const typeSelect=$('exReportType');
-    const allPeriods=['Today','This Week','This Month','This Year','All'];
-    const detailedPeriods=['Today','This Week','This Month','This Year','All'];
-    const abstractPeriods=['Today','This Week','This Month','This Year','All','Daily','Weekly','Monthly','Yearly'];
-    const syncPeriodOptions=()=>{const previous=period.value;const choices=typeSelect.value==='Abstract'?abstractPeriods:detailedPeriods;period.innerHTML=reportChoiceOptions(choices,'Today');period.value=choices.includes(previous)?previous:'Today';};
+    const abstractPeriods=['Date','Week','Month','Year','All','Daily','Weekly','Monthly','Yearly'];
+    const detailedPeriods=['Date','Week','Month','Year','All'];
+    const syncPeriodOptions=()=>{const previous=period.value;const choices=typeSelect.value==='Abstract'?abstractPeriods:detailedPeriods;const selected=choices.includes(previous)?previous:'Date';period.innerHTML=reportChoiceOptions(choices,selected);period.value=selected;};
     const toggle=()=>{$('exSelectedDateWrap').classList.add('hidden');const showCols=$('exShowColumnsWrap');const detailed=typeSelect.value==='Detailed';if(showCols){showCols.classList.toggle('hidden',!detailed);showCols.style.setProperty('display',detailed?'flex':'none','important');}};
-    typeSelect.onchange=()=>{syncPeriodOptions();toggle();};
+    const periodPicker=$('exPeriodPicker');
+    const periodDisplay=$('exPeriodDisplay');
+    const periodContextLabel=$('exPeriodContextLabel');
+    let pickerMonth=new Date();
+    const parseLocalDate=value=>{
+      const match=String(value||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      return match?new Date(Number(match[1]),Number(match[2])-1,Number(match[3])):new Date();
+    };
+    const toIsoDate=date=>`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+    const displayDate=value=>{
+      const match=String(value||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      return match?`${match[3]}-${match[2]}-${match[1]}`:'';
+    };
+    const weekStart=value=>{
+      const date=parseLocalDate(value);
+      date.setDate(date.getDate()-((date.getDay()+6)%7));
+      date.setHours(0,0,0,0);
+      return date;
+    };
+    const dayOrdinal=value=>{
+      const date=parseLocalDate(value);
+      return Math.round(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate())/86400000);
+    };
+    const closePeriodPicker=()=>{
+      if(periodPicker)periodPicker.hidden=true;
+      if(periodDisplay)periodDisplay.setAttribute('aria-expanded','false');
+    };
+    const resetPeriodSelectionToCurrent=()=>{
+      const p=period.value;
+      const current=dateToday();
+      const currentDate=new Date();
+      if(p==='Date'){
+        const input=$('exPeriodDate');
+        if(input)input.value=current;
+      }else if(p==='Week'){
+        const input=$('exPeriodWeek');
+        if(input)input.value=current;
+        pickerMonth=parseLocalDate(current);
+      }else if(p==='Month'){
+        const input=$('exPeriodMonth');
+        if(input)input.value=current.slice(0,7);
+        if(periodPicker)periodPicker.dataset.year=String(currentDate.getFullYear());
+      }else if(p==='Year'){
+        const input=$('exPeriodYear');
+        if(input)input.value=String(currentDate.getFullYear());
+      }
+    };
+    const updatePeriodDisplay=()=>{
+      const p=period.value;
+      const now=dateToday();
+      const currentDate=new Date();
+      let text='',caption='';
+      if(p==='Date'){
+        const value=$('exPeriodDate')?.value||now;
+        text=displayDate(value);
+        const offset=dayOrdinal(value)-dayOrdinal(now);
+        caption=offset===0?'Today':offset===-1?'Yesterday':offset===1?'Tomorrow':'';
+      }else if(p==='Week'){
+        const value=$('exPeriodWeek')?.value||now;
+        text=displayDate(value);
+        const selectedWeek=dayOrdinal(toIsoDate(weekStart(value)));
+        const currentWeek=dayOrdinal(toIsoDate(weekStart(now)));
+        const offset=Math.round((selectedWeek-currentWeek)/7);
+        caption=offset===0?'This Week':offset===-1?'Last Week':offset===1?'Next Week':'';
+      }else if(p==='Month'){
+        const value=$('exPeriodMonth')?.value||now.slice(0,7);
+        const match=value.match(/^(\d{4})-(\d{2})$/);
+        text=match?`${new Date(Number(match[1]),Number(match[2])-1,1).toLocaleString('en-US',{month:'short'})} ${match[1]}`:value;
+        if(match){
+          const selectedMonth=Number(match[1])*12+Number(match[2])-1;
+          const currentMonth=currentDate.getFullYear()*12+currentDate.getMonth();
+          const offset=selectedMonth-currentMonth;
+          caption=offset===0?'This Month':offset===-1?'Last Month':offset===1?'Next Month':'';
+        }
+      }else if(p==='Year'){
+        const value=$('exPeriodYear')?.value||String(currentDate.getFullYear());
+        text=value;
+        const offset=Number(value)-currentDate.getFullYear();
+        caption=offset===0?'This Year':offset===-1?'Last Year':offset===1?'Next Year':'';
+      }
+      if(periodDisplay)periodDisplay.textContent=text;
+      if(periodContextLabel){
+        periodContextLabel.textContent=caption;
+        periodContextLabel.hidden=!caption;
+      }
+    };
+    const renderPeriodPicker=()=>{
+      if(!periodPicker)return;
+      const p=period.value;
+      if(p==='Month'){
+        const current=$('exPeriodMonth')?.value||dateToday().slice(0,7);
+        const match=current.match(/^(\d{4})-(\d{2})$/);
+        const year=match?Number(match[1]):new Date().getFullYear();
+        const selectedMonth=match?Number(match[2])-1:new Date().getMonth();
+        const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        periodPicker.innerHTML=`<div class="expense-picker-header"><button type="button" class="expense-picker-nav" data-month-year="-1" aria-label="Previous year">‹</button><strong>${year}</strong><button type="button" class="expense-picker-nav" data-month-year="1" aria-label="Next year">›</button></div><div class="expense-month-grid">${months.map((name,index)=>`<button type="button" class="expense-month-choice${index===selectedMonth?' selected':''}" data-pick-month="${String(index+1).padStart(2,'0')}">${name}</button>`).join('')}</div><div class="expense-picker-footer"><button type="button" class="expense-picker-action" data-picker-close>Close</button><button type="button" class="expense-picker-action" data-period-action data-period-unit="month" data-period-offset="0">This month</button></div>`;
+        periodPicker.dataset.year=String(year);
+        return;
+      }
+      const value=p==='Week'?($('exPeriodWeek')?.value||dateToday()):($('exPeriodDate')?.value||dateToday());
+      const selected=parseLocalDate(value);
+      const year=pickerMonth.getFullYear(),month=pickerMonth.getMonth();
+      const first=new Date(year,month,1);
+      const start=new Date(year,month,1-((first.getDay()+6)%7));
+      const monthName=pickerMonth.toLocaleString('en-US',{month:'long'});
+      const weekdays=['Mo','Tu','We','Th','Fr','Sa','Su'];
+      const selectedWeekStart=toIsoDate(weekStart(value));
+      const nowDate=dateToday();
+      const days=Array.from({length:42},(_,i)=>{
+        const date=new Date(start);date.setDate(start.getDate()+i);
+        const iso=toIsoDate(date);
+        const classes=['expense-calendar-day'];
+        if(date.getMonth()!==month)classes.push('outside-month');
+        if(iso===nowDate)classes.push('today');
+        if(p==='Week'&&toIsoDate(weekStart(iso))===selectedWeekStart)classes.push('selected');
+        else if(p==='Date'&&iso===value)classes.push('selected');
+        return `<button type="button" class="${classes.join(' ')}" data-pick-date="${iso}" aria-label="${iso}">${date.getDate()}</button>`;
+      });
+      const quickAction=p==='Week'
+        ?{label:'This Week',unit:'week',offset:0}
+        :{label:'Today',unit:'day',offset:0};
+      periodPicker.innerHTML=`<div class="expense-picker-header"><button type="button" class="expense-picker-nav" data-calendar-month="-1" aria-label="Previous month">‹</button><strong>${monthName} ${year}</strong><button type="button" class="expense-picker-nav" data-calendar-month="1" aria-label="Next month">›</button></div><div class="expense-calendar-grid">${weekdays.map(day=>`<span class="expense-calendar-weekday">${day}</span>`).join('')}${days.join('')}</div><div class="expense-picker-footer"><button type="button" class="expense-picker-action" data-picker-close>Close</button><button type="button" class="expense-picker-action" data-period-action data-period-unit="${quickAction.unit}" data-period-offset="${quickAction.offset}">${quickAction.label}</button></div>`;
+    };
+    const openPeriodPicker=()=>{
+      if(!periodPicker||!['Date','Week','Month'].includes(period.value))return;
+      const p=period.value;
+      if(p==='Month'){
+        const value=$('exPeriodMonth')?.value||dateToday().slice(0,7);
+        const match=value.match(/^(\d{4})-(\d{2})$/);
+        periodPicker.dataset.year=match?match[1]:String(new Date().getFullYear());
+      }else{
+        const value=p==='Week'?($('exPeriodWeek')?.value||dateToday()):($('exPeriodDate')?.value||dateToday());
+        pickerMonth=parseLocalDate(value);
+      }
+      renderPeriodPicker();
+      periodPicker.hidden=false;
+      if(periodDisplay)periodDisplay.setAttribute('aria-expanded','true');
+    };
+    if(periodDisplay){
+      periodDisplay.addEventListener('click',event=>{
+        event.preventDefault();
+        if(periodPicker?.hidden)openPeriodPicker();else closePeriodPicker();
+      });
+    }
+    if(periodPicker){
+      periodPicker.addEventListener('click',event=>{
+        const button=event.target.closest('button');
+        if(!button)return;
+        if(button.hasAttribute('data-period-action')){
+          const unit=button.dataset.periodUnit||'';
+          const offset=Number(button.dataset.periodOffset||0);
+          if(unit==='day'||unit==='week'){
+            const selectedDate=parseLocalDate(dateToday());
+            selectedDate.setDate(selectedDate.getDate()+offset*(unit==='week'?7:1));
+            const target=unit==='week'?'exPeriodWeek':'exPeriodDate';
+            $(target).value=toIsoDate(selectedDate);
+            if(unit==='week')pickerMonth=new Date(selectedDate.getFullYear(),selectedDate.getMonth(),1);
+          }else if(unit==='month'){
+            const selectedMonth=new Date();
+            selectedMonth.setDate(1);
+            selectedMonth.setMonth(selectedMonth.getMonth()+offset);
+            $('exPeriodMonth').value=`${selectedMonth.getFullYear()}-${String(selectedMonth.getMonth()+1).padStart(2,'0')}`;
+            periodPicker.dataset.year=String(selectedMonth.getFullYear());
+          }
+          updatePeriodDisplay();closePeriodPicker();return;
+        }
+        if(button.hasAttribute('data-picker-close')){closePeriodPicker();return;}
+        if(button.hasAttribute('data-calendar-month')){
+          pickerMonth.setMonth(pickerMonth.getMonth()+Number(button.dataset.calendarMonth));
+          renderPeriodPicker();return;
+        }
+        if(button.hasAttribute('data-month-year')){
+          const year=Number(periodPicker.dataset.year||new Date().getFullYear())+Number(button.dataset.monthYear);
+          periodPicker.dataset.year=String(year);
+          const current=$('exPeriodMonth')?.value||dateToday().slice(0,7);
+          const selected=Number(current.slice(5,7))-1;
+          const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          periodPicker.innerHTML=`<div class="expense-picker-header"><button type="button" class="expense-picker-nav" data-month-year="-1" aria-label="Previous year">‹</button><strong>${year}</strong><button type="button" class="expense-picker-nav" data-month-year="1" aria-label="Next year">›</button></div><div class="expense-month-grid">${months.map((name,index)=>`<button type="button" class="expense-month-choice${index===selected?' selected':''}" data-pick-month="${String(index+1).padStart(2,'0')}">${name}</button>`).join('')}</div><div class="expense-picker-footer"><button type="button" class="expense-picker-action" data-picker-close>Close</button><button type="button" class="expense-picker-action" data-period-action data-period-unit="month" data-period-offset="0">This month</button></div>`;
+          return;
+        }
+        if(button.hasAttribute('data-pick-date')){
+          const target=period.value==='Week'?'exPeriodWeek':'exPeriodDate';
+          $(target).value=button.dataset.pickDate;
+          updatePeriodDisplay();closePeriodPicker();return;
+        }
+        if(button.hasAttribute('data-pick-month')){
+          const year=periodPicker.dataset.year||String(new Date().getFullYear());
+          $('exPeriodMonth').value=`${year}-${button.dataset.pickMonth}`;
+          updatePeriodDisplay();closePeriodPicker();return;
+        }
+      });
+      periodPicker.addEventListener('keydown',event=>{
+        if(event.key==='Escape'){event.preventDefault();closePeriodPicker();periodDisplay?.focus();}
+      });
+    }
+    // Close the open calendar whenever the user taps/clicks anywhere outside it.
+    // Replace the previous page handler so repeated report openings do not stack listeners.
+    if(window.expensePeriodOutsideHandler){
+      document.removeEventListener('click',window.expensePeriodOutsideHandler);
+    }
+    window.expensePeriodOutsideHandler=event=>{
+      if(!periodPicker||periodPicker.hidden)return;
+      const target=event.target;
+      if(target&&typeof target.closest==='function'&&target.closest('#expensePeriodValue'))return;
+      closePeriodPicker();
+    };
+    document.addEventListener('click',window.expensePeriodOutsideHandler);
+    const yearInput=$('exPeriodYear');
+    if(yearInput)yearInput.addEventListener('input',updatePeriodDisplay);
+    const syncPeriodPickers=()=>{
+      const p=period.value;
+      const controls=$('expensePeriodControls');
+      if(controls){const hasValue=['Date','Week','Month','Year'].includes(p);controls.classList.toggle('is-full',!hasValue);controls.classList.toggle('has-value',hasValue);}
+      const showValue=['Date','Week','Month','Year'].includes(p);
+      const valueWrap=$('expensePeriodValue');
+      if(valueWrap)valueWrap.hidden=!showValue;
+      if(periodContextLabel)periodContextLabel.hidden=!showValue;
+      const display=$('exPeriodDisplay');
+      if(display)display.hidden=p==='Year';
+      const year=$('exPeriodYear');
+      if(year)year.hidden=p!=='Year';
+      closePeriodPicker();
+      updatePeriodDisplay();
+    };
+    typeSelect.onchange=()=>{syncPeriodOptions();resetPeriodSelectionToCurrent();syncPeriodPickers();toggle();};
     syncPeriodOptions();
-    period.onchange=toggle;
+    period.onchange=()=>{resetPeriodSelectionToCurrent();syncPeriodPickers();};
     const back=$('expenseReportBack'); if(back) { back.type='button'; const returnToMenu=(event)=>{event.preventDefault();event.stopPropagation();goBack();}; back.onclick=returnToMenu; back.addEventListener('pointerup',returnToMenu,{once:false}); }
     const downloadBtn=$('exDownloadBtn'), downloadMenu=$('exDownloadMenu');
     if(downloadBtn&&downloadMenu){
@@ -539,15 +793,15 @@ ${field('Photos',`
       if(!rows.length){$('exRunReport').disabled=true;status('Loading expenses…');try{const fields={reportAccess:access};const res=await request('getExpenses',fields);if(res.status!=='success')throw new Error(res.message||'Unable to load expenses');rows=res.expenses||[];cachedExpenses=rows;if(custom)updateExpenseByOptions(rows)}catch(e){status(e.message,'error');$('exRunReport').disabled=false;return}finally{$('exRunReport').disabled=false}}
       const filtered=filterRows(rows,custom,kind);lastReportRows=filtered.slice();const filters=captureExpenseReportFilters();renderResults(filtered,$('exReportType').value||'Abstract');openExpenseReportPage(kind,custom,filters,filtered,$('exReportType').value||'Abstract');
     };
-    $('exReportType').value='Abstract';syncPeriodOptions();period.value='Today';toggle();
+    $('exReportType').value='Abstract';syncPeriodOptions();period.value='Date';resetPeriodSelectionToCurrent();syncPeriodPickers();toggle();
   }
   function filterRows(rows,custom,kind){
     const p=$('exReportPeriod').value;const type=$('exReportType').value;let from='',to='';const now=new Date();
     if(custom){from=$('exFromDate').value;to=$('exToDate').value}
-    if((!custom || (!from && !to)) && p==='Today'){from=to=dateToday()}
-    else if((!custom || (!from && !to)) && p==='This Week'){const d=new Date();const day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);from=fmt(d);const end=new Date(d);end.setDate(end.getDate()+6);to=fmt(end)}
-    else if((!custom || (!from && !to)) && p==='This Month'){from=dateToday().slice(0,7)+'-01';to=dateToday()}
-    else if((!custom || (!from && !to)) && p==='This Year'){from=now.getFullYear()+'-01-01';to=dateToday()}
+    if((!custom || (!from && !to)) && p==='Date'){from=to=$('exPeriodDate')?.value||dateToday()}
+    else if((!custom || (!from && !to)) && p==='Week'){const reference=$('exPeriodWeek')?.value||dateToday();const d=new Date(reference+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));from=fmt(d);const end=new Date(d);end.setDate(end.getDate()+6);to=fmt(end)}
+    else if((!custom || (!from && !to)) && p==='Month'){const month=$('exPeriodMonth')?.value||dateToday().slice(0,7);const [y,m]=month.split('-').map(Number);from=month+'-01';to=fmt(new Date(y,m,0))}
+    else if((!custom || (!from && !to)) && p==='Year'){const year=Number($('exPeriodYear')?.value)||now.getFullYear();from=year+'-01-01';to=year+'-12-31'}
     const start=from?new Date(from+'T00:00:00').getTime():null;const end=to?new Date(to+'T23:59:59').getTime():null;
     return rows.filter(r=>{
       const d=String(r.expenseDate||'').slice(0,10);const dt=d?new Date(d+'T12:00:00').getTime():0;
@@ -790,7 +1044,7 @@ ${field('Photos',`
   }
 
   function captureExpenseReportFilters(){
-    const ids=['exReportType','exReportPeriod','exFilterCategory','exFilterSub','exMinAmount','exMaxAmount','exFilterPayment','exFilterSpentBy','exSearchText','exFromDate','exToDate','exFilterVehicleType','exFilterMtcType','exShowColumns'];
+    const ids=['exReportType','exReportPeriod','exPeriodDate','exPeriodWeek','exPeriodMonth','exPeriodYear','exFilterCategory','exFilterSub','exMinAmount','exMaxAmount','exFilterPayment','exFilterSpentBy','exSearchText','exFromDate','exToDate','exFilterVehicleType','exFilterMtcType','exShowColumns'];
     const values={};ids.forEach(id=>{const el=$(id);if(el)values[id]=el.tagName==='BUTTON'?{text:el.textContent,ascending:dateSortAscending}:el.value;});
     return values;
   }
@@ -801,18 +1055,19 @@ ${field('Photos',`
     if(values.exFilterSub!==undefined&&$('exFilterSub'))$('exFilterSub').value=values.exFilterSub;
     $('exReportType')?.dispatchEvent(new Event('change'));
     if(values.exReportPeriod!==undefined&&$('exReportPeriod'))$('exReportPeriod').value=values.exReportPeriod;
+    ['exPeriodDate','exPeriodWeek','exPeriodMonth','exPeriodYear'].forEach(id=>{if(values[id]!==undefined&&$(id))$(id).value=values[id]});
     if($('exShowColumnsWrap')){const detailed=$('exReportType')?.value==='Detailed';$('exShowColumnsWrap').classList.toggle('hidden',!detailed);$('exShowColumnsWrap').style.setProperty('display',detailed?'flex':'none','important');}
   }
   function expenseReportPageTitle(kind,custom,type,period='All'){
     const mode=type==='Detailed'?'Detailed':'Abstract';
     if(mode==='Abstract'){
-      const periodLabel=period==='This Week'?'This week':String(period||'All');
+      const periodLabel=period==='Date'?'Date':period==='Week'?'Week':period==='Month'?'Month':period==='Year'?'Year':String(period||'All');
       if(kind==='sensitive')return `Sensitive Expenses Abstract - ${periodLabel}`;
       if(kind==='all')return `All Expenses Abstract - ${periodLabel}`;
       if(custom)return `Expenses Custom Search - Abstract - ${periodLabel}`;
       return `Expenses Abstract - ${periodLabel}`;
     }
-    const periodLabel=period==='All'?'All Records':period==='This Week'?'This week':String(period||'All');
+    const periodLabel=period==='All'?'All Records':String(period||'All');
     if(kind==='sensitive')return `Sensitive Expenses Detailed - ${periodLabel}`;
     if(kind==='all')return `All Expenses Detailed - ${periodLabel}`;
     if(custom)return `Expenses Custom Search - Detailed - ${periodLabel}`;
