@@ -490,8 +490,10 @@ ${field('Photos',`
 .expense-period-trigger{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;max-width:100%!important;height:40px!important;min-height:40px!important;margin:0!important;padding:0 4px!important;box-sizing:border-box!important;border:1px solid #9bb9d4!important;border-radius:8px!important;background:#fff!important;color:#222!important;font:inherit!important;font-size:16px!important;font-weight:400!important;line-height:1!important;white-space:nowrap!important;box-shadow:none!important;cursor:pointer!important}
 .expense-period-trigger[hidden]{display:none!important}
 .expense-period-value input[type=number]{width:100%;min-width:0;height:40px;min-height:40px;box-sizing:border-box;padding:0 4px;text-align:center;font-size:16px}
+.expense-period-value input[hidden]{display:none!important}
 .expense-period-picker{position:absolute;top:calc(100% + 6px);right:0;z-index:100000;width:290px;max-width:calc(100vw - 32px);padding:10px;box-sizing:border-box;border:1px solid #9bb9d4;border-radius:9px;background:#fff;color:#222;box-shadow:0 5px 18px rgba(0,0,0,.22);font-size:14px;text-align:center}
 .expense-period-picker[hidden]{display:none!important}
+.expense-period-value #exPeriodYear[hidden]{display:none!important}
 .expense-picker-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
 .expense-picker-header strong{flex:1;text-align:center;font-size:15px}
 .expense-picker-nav{width:32px;height:30px;padding:0;border:1px solid #c4d4ff;border-radius:6px;background:#f0f7ff;color:#2d5274;font-size:18px;line-height:1;box-shadow:none}
@@ -646,7 +648,7 @@ ${field('Photos',`
         const year=match?Number(match[1]):new Date().getFullYear();
         const selectedMonth=match?Number(match[2])-1:new Date().getMonth();
         const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        periodPicker.innerHTML=`<div class="expense-picker-header"><button type="button" class="expense-picker-nav" data-month-year="-1" aria-label="Previous year">‹</button><strong>${year}</strong><button type="button" class="expense-picker-nav" data-month-year="1" aria-label="Next year">›</button></div><div class="expense-month-grid">${months.map((name,index)=>`<button type="button" class="expense-month-choice${index===selectedMonth?' selected':''}" data-pick-month="${String(index+1).padStart(2,'0')}">${name}</button>`).join('')}</div><div class="expense-picker-footer"><button type="button" class="expense-picker-action" data-picker-close>Close</button><button type="button" class="expense-picker-action" data-period-action data-period-unit="month" data-period-offset="0">This month</button></div>`;
+        periodPicker.innerHTML=`<div class="expense-picker-header"><button type="button" class="expense-picker-nav" data-month-year="-1" aria-label="Previous year">‹</button><strong>${year}</strong><button type="button" class="expense-picker-nav" data-month-year="1" aria-label="Next year">›</button></div><div class="expense-month-grid">${months.map((name,index)=>`<button type="button" class="expense-month-choice${index===selectedMonth?' selected':''}" data-pick-month="${String(index+1).padStart(2,'0')}">${name}</button>`).join('')}</div><div class="expense-picker-footer"><button type="button" class="expense-picker-action" data-period-action data-period-unit="month" data-period-offset="-1">Last Month</button><button type="button" class="expense-picker-action" data-period-action data-period-unit="month" data-period-offset="0">This Month</button><button type="button" class="expense-picker-action" data-period-action data-period-unit="month" data-period-offset="1">Next Month</button></div>`;
         periodPicker.dataset.year=String(year);
         return;
       }
@@ -669,10 +671,10 @@ ${field('Photos',`
         else if(p==='Date'&&iso===value)classes.push('selected');
         return `<button type="button" class="${classes.join(' ')}" data-pick-date="${iso}" aria-label="${iso}">${date.getDate()}</button>`;
       });
-      const quickAction=p==='Week'
-        ?{label:'This Week',unit:'week',offset:0}
-        :{label:'Today',unit:'day',offset:0};
-      periodPicker.innerHTML=`<div class="expense-picker-header"><button type="button" class="expense-picker-nav" data-calendar-month="-1" aria-label="Previous month">‹</button><strong>${monthName} ${year}</strong><button type="button" class="expense-picker-nav" data-calendar-month="1" aria-label="Next month">›</button></div><div class="expense-calendar-grid">${weekdays.map(day=>`<span class="expense-calendar-weekday">${day}</span>`).join('')}${days.join('')}</div><div class="expense-picker-footer"><button type="button" class="expense-picker-action" data-picker-close>Close</button><button type="button" class="expense-picker-action" data-period-action data-period-unit="${quickAction.unit}" data-period-offset="${quickAction.offset}">${quickAction.label}</button></div>`;
+      const quickActions=p==='Week'
+        ?[{label:'Last Week',unit:'week',offset:-1},{label:'This Week',unit:'week',offset:0},{label:'Next Week',unit:'week',offset:1}]
+        :[{label:'Yesterday',unit:'day',offset:-1},{label:'Today',unit:'day',offset:0},{label:'Tomorrow',unit:'day',offset:1}];
+      periodPicker.innerHTML=`<div class="expense-picker-header"><button type="button" class="expense-picker-nav" data-calendar-month="-1" aria-label="Previous month">‹</button><strong>${monthName} ${year}</strong><button type="button" class="expense-picker-nav" data-calendar-month="1" aria-label="Next month">›</button></div><div class="expense-calendar-grid">${weekdays.map(day=>`<span class="expense-calendar-weekday">${day}</span>`).join('')}${days.join('')}</div><div class="expense-picker-footer">${quickActions.map(action=>`<button type="button" class="expense-picker-action" data-period-action data-period-unit="${action.unit}" data-period-offset="${action.offset}">${action.label}</button>`).join('')}</div>`;
     };
     const openPeriodPicker=()=>{
       if(!periodPicker||!['Date','Week','Month'].includes(period.value))return;
@@ -728,7 +730,7 @@ ${field('Photos',`
           const current=$('exPeriodMonth')?.value||dateToday().slice(0,7);
           const selected=Number(current.slice(5,7))-1;
           const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-          periodPicker.innerHTML=`<div class="expense-picker-header"><button type="button" class="expense-picker-nav" data-month-year="-1" aria-label="Previous year">‹</button><strong>${year}</strong><button type="button" class="expense-picker-nav" data-month-year="1" aria-label="Next year">›</button></div><div class="expense-month-grid">${months.map((name,index)=>`<button type="button" class="expense-month-choice${index===selected?' selected':''}" data-pick-month="${String(index+1).padStart(2,'0')}">${name}</button>`).join('')}</div><div class="expense-picker-footer"><button type="button" class="expense-picker-action" data-picker-close>Close</button><button type="button" class="expense-picker-action" data-period-action data-period-unit="month" data-period-offset="0">This month</button></div>`;
+          periodPicker.innerHTML=`<div class="expense-picker-header"><button type="button" class="expense-picker-nav" data-month-year="-1" aria-label="Previous year">‹</button><strong>${year}</strong><button type="button" class="expense-picker-nav" data-month-year="1" aria-label="Next year">›</button></div><div class="expense-month-grid">${months.map((name,index)=>`<button type="button" class="expense-month-choice${index===selected?' selected':''}" data-pick-month="${String(index+1).padStart(2,'0')}">${name}</button>`).join('')}</div><div class="expense-picker-footer"><button type="button" class="expense-picker-action" data-period-action data-period-unit="month" data-period-offset="-1">Last Month</button><button type="button" class="expense-picker-action" data-period-action data-period-unit="month" data-period-offset="0">This Month</button><button type="button" class="expense-picker-action" data-period-action data-period-unit="month" data-period-offset="1">Next Month</button></div>`;
           return;
         }
         if(button.hasAttribute('data-pick-date')){
