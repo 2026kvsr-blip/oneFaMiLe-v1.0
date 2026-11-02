@@ -848,45 +848,165 @@
     return {from:'',to:'',label:period==='All'?'All Records':String(period||'All')};
   }
   function reportTitlePeriodSuffix(period){
-    const current=today();
-    const readValue=(settingName,elementId,fallback)=>reportSettings?.[settingName]||$(elementId)?.value||fallback;
-    if(period==='Date'){
-      return `on ${showDate(readValue('periodDate','actPeriodDate',current))}`;
+    const current = today();
+
+    const readValue = (settingName, elementId, fallback) =>
+      reportSettings?.[settingName] ||
+      $(elementId)?.value ||
+      fallback;
+
+    // Date formatting: DD-MM-YYYY
+    const fullDate = value => {
+      const m = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      return m ? `${m[3]}-${m[2]}-${m[1]}` : value;
+    };
+
+    // Date comparison
+    const shiftDate = (value, days) => {
+      const d = new Date(value + 'T12:00:00');
+      d.setDate(d.getDate() + days);
+      return fmt(d);
+    };
+
+    // DATE
+    if(period === 'Date'){
+      const selected = readValue('periodDate','actPeriodDate',current);
+
+      if(selected === current)
+        return '- Today';
+
+      if(selected === shiftDate(current,-1))
+        return '- Yesterday';
+
+      if(selected === shiftDate(current,1))
+        return '- Tomorrow';
+
+      return `on ${fullDate(selected)}`;
     }
-    if(period==='Week'){
-      const selected=readValue('periodWeek','actPeriodWeek',current);
-      const parsed=new Date(selected+'T12:00:00');
-      if(!Number.isFinite(parsed.getTime()))return '- Week';
-      // ISO week number: Monday is the first day; week 1 contains January 4.
-      const dateUTC=new Date(Date.UTC(parsed.getFullYear(),parsed.getMonth(),parsed.getDate()));
-      const dayNumber=(dateUTC.getUTCDay()+6)%7;
-      dateUTC.setUTCDate(dateUTC.getUTCDate()-dayNumber+3);
-      const firstThursday=new Date(Date.UTC(dateUTC.getUTCFullYear(),0,4));
-      const week=1+Math.round((dateUTC-firstThursday)/604800000);
-      const suffix=week%10===1&&week%100!==11?'st':week%10===2&&week%100!==12?'nd':week%10===3&&week%100!==13?'rd':'th';
-      return `- ${week}${suffix} Week`;
+
+    // WEEK
+    if(period === 'Week'){
+      const selected = readValue('periodWeek','actPeriodWeek',current);
+
+      const getWeekStart = value => {
+        const d = new Date(value + 'T12:00:00');
+        d.setDate(d.getDate() - ((d.getDay()+6)%7));
+        return fmt(d);
+      };
+
+      const selectedWeek = getWeekStart(selected);
+      const currentWeek = getWeekStart(current);
+
+      if(selectedWeek === currentWeek)
+        return '- This Week';
+
+      if(selectedWeek === shiftDate(currentWeek,-7))
+        return '- Last Week';
+
+      if(selectedWeek === shiftDate(currentWeek,7))
+        return '- Next Week';
+
+      // ISO week number for other selected weeks
+      const d = new Date(selected + 'T12:00:00');
+      const utc = new Date(Date.UTC(
+        d.getFullYear(),d.getMonth(),d.getDate()
+      ));
+
+      utc.setUTCDate(
+        utc.getUTCDate()+3-((utc.getUTCDay()+6)%7)
+      );
+
+      const year = utc.getUTCFullYear();
+      const jan4 = new Date(Date.UTC(year,0,4));
+      const firstThursday = new Date(jan4);
+
+      firstThursday.setUTCDate(
+        firstThursday.getUTCDate()+3-((firstThursday.getUTCDay()+6)%7)
+      );
+
+      const week = 1+Math.round(
+        (utc-firstThursday)/604800000
+      );
+
+      const suffix =
+        week%10===1&&week%100!==11?'st':
+        week%10===2&&week%100!==12?'nd':
+        week%10===3&&week%100!==13?'rd':'th';
+
+      return `on ${week}${suffix} Week of ${year}`;
     }
-    if(period==='Month'){
-      const selected=readValue('periodMonth','actPeriodMonth',current.slice(0,7));
-      const match=String(selected).match(/^(\d{4})-(0[1-9]|1[0-2])$/);
-      if(!match)return '- '+new Date().toLocaleString('en-US',{month:'short',year:'numeric'});
-      const monthName=new Date(Number(match[1]),Number(match[2])-1,1).toLocaleString('en-US',{month:'short'});
-      return `- ${monthName} ${match[1]}`;
+
+    // MONTH
+    if(period === 'Month'){
+      const selected = readValue(
+        'periodMonth','actPeriodMonth',current.slice(0,7)
+      );
+
+      const match = String(selected).match(
+        /^(\d{4})-(0[1-9]|1[0-2])$/
+      );
+
+      if(!match) return '';
+
+      const selectedIndex =
+        Number(match[1])*12 + Number(match[2])-1;
+
+      const now = new Date();
+      const currentIndex =
+        now.getFullYear()*12 + now.getMonth();
+
+      if(selectedIndex === currentIndex)
+        return '- This Month';
+
+      if(selectedIndex === currentIndex-1)
+        return '- Last Month';
+
+      if(selectedIndex === currentIndex+1)
+        return '- Next Month';
+
+      const monthName = new Date(
+        Number(match[1]),Number(match[2])-1,1
+      ).toLocaleString('en-US',{month:'short'});
+
+      return `on ${monthName} ${match[1]}`;
     }
-    if(period==='Year'){
-      return `- ${readValue('periodYear','actPeriodYear',String(new Date().getFullYear()))}`;
+
+    // YEAR
+    if(period === 'Year'){
+      return `on ${readValue(
+        'periodYear',
+        'actPeriodYear',
+        String(new Date().getFullYear())
+      )}`;
     }
-    return `- ${String(period||'All')}`;
+
+    return '- All Records';
   }
+
+
   function reportPageTitle(type,kind,custom,period='All'){
-    const detail=type==='Detailed';
-    const suffix=reportTitlePeriodSuffix(period);
-    const reportName=detail?'Detailed':'Abstract';
-    if(kind==='sensitive')return `Sensitive Activities ${reportName} ${suffix}`;
-    if(kind==='all')return `All Activities ${reportName} ${suffix}`;
-    if(custom)return `Activities Custom Search - ${reportName} ${suffix}`;
-    return `Activities ${reportName} ${suffix}`;
+
+    const detail = type === 'Detailed';
+
+    const reportName = detail ? 'Detailed' : 'Abstract';
+
+    const suffix = reportTitlePeriodSuffix(period);
+
+    let baseTitle = 'Activities';
+
+    if(kind === 'sensitive'){
+      baseTitle = 'Sensitive Activities';
+    }
+    else if(kind === 'all'){
+      baseTitle = 'All Activities';
+    }
+    else if(custom){
+      baseTitle = 'Activities Custom Search';
+    }
+
+    return `${baseTitle} ${reportName} ${suffix}`;
   }
+
   function renderReportPage(rows,type,kind,custom,periodOverride=null){
     styleOnce();
     const selectedPeriod=periodOverride||$('actReportPeriod')?.value||reportSettings?.period||'All';
