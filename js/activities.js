@@ -277,7 +277,8 @@
       ${field('Reminder','reminderEnabled','<select id="reminderEnabled" name="reminderEnabled"><option value="false" selected>No</option><option value="true">Yes</option></select>')}
       <div class="expense-filter-grid activity-reminder-grid" data-field="reminderFields" hidden>
       ${field('Reminder Repeat','reminderRepeat','<select id="reminderRepeat" name="reminderRepeat"><option value="Once" selected>Once</option><option value="Daily">Daily</option><option value="Weekly">Weekly</option><option value="Monthly">Monthly</option><option value="Yearly">Yearly</option></select>')}
-      ${field('Reminder Date *','reminderDate','<input id="reminderDate" name="reminderDate" type="date">')}
+      ${field('Reminder Date','reminderDate','<input id="reminderDate" name="reminderDate" type="date">')}
+      ${field('Reminder Week','reminderWeek','<select id="reminderWeek" name="reminderWeek"><option value="">Select Weekday</option><option value="Monday">Monday</option><option value="Tuesday">Tuesday</option><option value="Wednesday">Wednesday</option><option value="Thursday">Thursday</option><option value="Friday">Friday</option><option value="Saturday">Saturday</option><option value="Sunday">Sunday</option></select>')}
       ${field('Reminder Time *','reminderTime','<input id="reminderTime" name="reminderTime" type="time">')}</div>
       ${field('Venue','venue','<input id="venue" name="venue" placeholder="Venue">')}
       ${field('Location / Link','locationLink','<input id="locationLink" name="locationLink" placeholder="Address or meeting link">')}
@@ -396,7 +397,7 @@
     [type,cat,sub,$('priority'),$('status')].forEach(el=>{if(el)customToggle(el.id)});
     // Cascade refresh: changing a parent selection clears every field after it,
     // while preserving the parent selections that the user just made.
-    const cascadeOrder=['activityType','category','subCategory','startDate','startTime','description','status','reminderEnabled','reminderRepeat','reminderDate','reminderTime','venue','locationLink','appointmentPerson','followUpDate','assignedTo','priority','completedDate'];
+    const cascadeOrder=['activityType','category','subCategory','startDate','startTime','description','status','reminderEnabled','reminderRepeat','reminderDate','reminderWeek','reminderTime','venue','locationLink','appointmentPerson','followUpDate','assignedTo','priority','completedDate'];
     function clearFieldValue(id){
       const el=$(id);if(!el)return;
       if(el.type==='checkbox'||el.type==='radio')el.checked=false;
@@ -412,7 +413,7 @@
       // Restore the form's normal default values after clearing dependent fields.
       if($('status'))$('status').value='Pending';
       if($('reminderEnabled'))$('reminderEnabled').value='false';
-      if($('reminderRepeat'))$('reminderRepeat').value='Once';
+      if($('reminderRepeat'))$('reminderRepeat').value='Once';if($('reminderWeek'))$('reminderWeek').value='';
       if($('priority'))$('priority').value='Normal';
       if($('startDate')&&!$('startDate').value)$('startDate').value=today();
       if($('isSensitive'))$('isSensitive').checked=false;
@@ -425,6 +426,7 @@
       if($('reminderEnabled').value!=='true'){
         if(reminderDateInput)reminderDateInput.value='';
         if(reminderTimeInput)reminderTimeInput.value='';
+        if($('reminderWeek'))$('reminderWeek').value='';
       }
       syncReminderRequired();updateVisibility();
     });$('status').addEventListener('change',updateVisibility);
@@ -439,16 +441,17 @@
         }else reminderTimeInput.removeAttribute('min');
       }
     }
-    function syncReminderRequired(){const enabled=$('reminderEnabled').value==='true';['reminderDate','reminderTime'].forEach(id=>{const el=$(id);if(el)el.required=enabled});const dateLabel=document.querySelector('[data-field="reminderDate"] .expense-label');const timeLabel=document.querySelector('[data-field="reminderTime"] .expense-label');if(dateLabel)dateLabel.textContent=enabled?'Reminder Date *':'Reminder Date';if(timeLabel)timeLabel.textContent=enabled?'Reminder Time *':'Reminder Time';syncReminderConstraints()}
+    function syncReminderRequired(){const enabled=$('reminderEnabled').value==='true';const repeat=String($('reminderRepeat').value||'Once').toLowerCase();const once=repeat==='once';const weekly=repeat==='weekly';if(reminderDateInput)reminderDateInput.required=enabled&&once;if(reminderTimeInput)reminderTimeInput.required=enabled;const weekSelect=$('reminderWeek');if(weekSelect)weekSelect.required=enabled&&weekly;const dateField=document.querySelector('[data-field="reminderDate"]');const weekField=document.querySelector('[data-field="reminderWeek"]');if(dateField)dateField.hidden=enabled&&weekly;if(weekField)weekField.hidden=!(enabled&&weekly);const dateLabel=document.querySelector('[data-field="reminderDate"] .expense-label');const timeLabel=document.querySelector('[data-field="reminderTime"] .expense-label');const weekLabel=document.querySelector('[data-field="reminderWeek"] .expense-label');if(dateLabel)dateLabel.textContent=enabled&&once?'Reminder Date *':'Reminder Date';if(timeLabel)timeLabel.textContent=enabled?'Reminder Time *':'Reminder Time';if(weekLabel)weekLabel.textContent=enabled&&weekly?'Reminder Week *':'Reminder Week';syncReminderConstraints()}
     if(reminderDateInput){reminderDateInput.addEventListener('input',syncReminderConstraints);reminderDateInput.addEventListener('change',syncReminderConstraints)}
     if(reminderTimeInput){reminderTimeInput.addEventListener('input',syncReminderConstraints);reminderTimeInput.addEventListener('change',syncReminderConstraints)}
+    if($('reminderRepeat'))$('reminderRepeat').addEventListener('change',()=>{const repeat=$('reminderRepeat').value;if(repeat!=='Once'&&reminderDateInput)reminderDateInput.value='';if(repeat!=='Weekly'&&$('reminderWeek'))$('reminderWeek').value='';syncReminderRequired()});
     updateCat();$('reminderEnabled').value='false';$('status').value='Pending';$('priority').value='Normal';syncReminderRequired();updateVisibility();
-    function resetForm(){form.reset();selectedActivityPhotos=[null,null,null];if(activityPhotoInput)activityPhotoInput.value='';updateActivityPhotoSlots();$('startDate').value=today();$('status').value='Pending';$('priority').value='Normal';$('reminderEnabled').value='false';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();syncReminderRequired();updateVisibility();status('')}
+    function resetForm(){form.reset();selectedActivityPhotos=[null,null,null];if(activityPhotoInput)activityPhotoInput.value='';updateActivityPhotoSlots();$('startDate').value=today();$('status').value='Pending';$('priority').value='Normal';$('reminderEnabled').value='false';if($('reminderWeek'))$('reminderWeek').value='';document.querySelectorAll('.activity-custom-input').forEach(e=>{e.value='';e.hidden=true;e.required=false});updateCat();syncReminderRequired();updateVisibility();status('')}
     if(editRecord){
       const put=(id,value)=>{const el=$(id);if(!el)return;const text=String(value==null?'':value);if(el.tagName==='SELECT'&&text&&!Array.from(el.options).some(o=>o.value===text))el.add(new Option(text,text));el.value=text;};
       put('activityType',editRecord.activityType||'General');updateCat();
       put('category',editRecord.category||'Others');updateSub();put('subCategory',editRecord.subCategory||'Others');
-      ['startDate','startTime','description','status','reminderRepeat','reminderDate','reminderTime','venue','locationLink','appointmentPerson','followUpDate','assignedTo','priority','completedDate'].forEach(id=>put(id,editRecord[id]||''));
+      ['startDate','startTime','description','status','reminderRepeat','reminderDate','reminderWeek','reminderTime','venue','locationLink','appointmentPerson','followUpDate','assignedTo','priority','completedDate'].forEach(id=>put(id,editRecord[id]||''));
       put('reminderEnabled',editRecord.reminderEnabled?'true':'false');
       $('isSensitive').checked=sensitiveFlag(editRecord.isSensitive);
       // Keep the original photo selection counter wording while editing.
@@ -458,11 +461,15 @@
     form.onsubmit=async ev=>{ev.preventDefault();if(!family().familyId){activityToast('Current family was not found. Please open your family and try again.','error');return}if(!token()){activityToast('Login session expired. Please login again.','error');return}
       const activityType=val('activityType'),category=val('category'),subCategory=val('subCategory');if(!activityType||!category||!subCategory){activityToast('Activity Type, Category and Sub Category are required.','error');return}if(!$('startDate').value){activityToast('Scheduled Date is required.','error');$('startDate').focus();return}
       if($('reminderEnabled').value==='true'){
-        const reminderDateValue=reminderDateInput?.value||'',reminderTimeValue=reminderTimeInput?.value||'';
-        if(!reminderDateValue||!reminderTimeValue){activityToast('Reminder Date and Reminder Time are required when Reminder is Yes.','error');const missing=!reminderDateValue?reminderDateInput:reminderTimeInput;missing?.focus();return}
-        if(reminderDateValue<today()){activityToast('Reminder Date must be today or a future date.','error');reminderDateInput?.focus();return}
-        const reminderDateTime=new Date(reminderDateValue+'T'+reminderTimeValue+':00');
-        if(!Number.isFinite(reminderDateTime.getTime())||reminderDateTime.getTime()<=Date.now()){activityToast('Reminder time must be in the future. Please select a later date or time.','error');reminderTimeInput?.focus();return}
+        const repeat=String($('reminderRepeat').value||'Once').toLowerCase();
+        const reminderDateValue=reminderDateInput?.value||'',reminderTimeValue=reminderTimeInput?.value||'',reminderWeekValue=$('reminderWeek')?.value||'';
+        if(!reminderTimeValue){activityToast('Reminder Time is required when Reminder is Yes.','error');reminderTimeInput?.focus();return}
+        if(repeat==='once'){
+          if(!reminderDateValue){activityToast('Reminder Date is required for Once reminder.','error');reminderDateInput?.focus();return}
+          if(reminderDateValue<today()){activityToast('Reminder Date must be today or a future date.','error');reminderDateInput?.focus();return}
+          const reminderDateTime=new Date(reminderDateValue+'T'+reminderTimeValue+':00');
+          if(!Number.isFinite(reminderDateTime.getTime())||reminderDateTime.getTime()<=Date.now()){activityToast('Reminder time must be in the future. Please select a later date or time.','error');reminderTimeInput?.focus();return}
+        }else if(repeat==='weekly'&&!reminderWeekValue){activityToast('Please select Reminder Weekday.','error');$('reminderWeek')?.focus();return}
       }
       if($('title'))$('title').value=val('subCategory')||val('category')||activityType||'Activity';
       const btn=$('activitySaveBtn');btn.disabled=true;btn.textContent='Saving…';try{
@@ -472,7 +479,10 @@
           if(reminderTimeInput)reminderTimeInput.value='';
         }
         const fd=new FormData(form),fields={};for(const [k,v] of fd.entries())fields[k]=String(v);
-        ['activityType','category','subCategory','status','priority','reminderRepeat','reminderEnabled'].forEach(id=>{if($(id))fields[id]=val(id)});fields.activityType=activityType;fields.category=category;fields.subCategory=subCategory;fields.isSensitive=$('isSensitive').checked?'true':'false';
+        ['activityType','category','subCategory','status','priority','reminderRepeat','reminderEnabled','reminderWeek'].forEach(id=>{if($(id))fields[id]=val(id)});
+        if(fields.reminderRepeat!=='Once')fields.reminderDate='';
+        if(fields.reminderRepeat!=='Weekly')fields.reminderWeek='';
+        fields.activityType=activityType;fields.category=category;fields.subCategory=subCategory;fields.isSensitive=$('isSensitive').checked?'true':'false';
         for(let i=0;i<3;i++)fields['photo'+(i+1)+'Data']=selectedActivityPhotos[i]?await compressActivityPhoto(selectedActivityPhotos[i]):'';
         if(editRecord)fields.activityId=String(editRecord.activityId||'');
         const res=await request(editRecord?'updateActivity':'saveActivity',fields);if(res.status!=='success')throw new Error(res.message||'Unable to save activity.');
