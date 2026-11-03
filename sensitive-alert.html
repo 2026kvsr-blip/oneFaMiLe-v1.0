@@ -20,7 +20,7 @@ button{margin-top:18px;width:100%;padding:14px;border:0;border-radius:9px;backgr
 <label for="passCode">Sensitive Pass Code</label>
 <input id="passCode" name="passCode" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" minlength="6" autocomplete="current-password" placeholder="••••••" required>
 <button type="submit">Unlock Alert</button></form>
-<p class="note">For security, this link expires in 7 days. Do not share this link or your pass code.</p>
+<p class="note">For security, this link expires in 2 days. Do not share this link or your pass code.</p>
 <p id="error" class="error" hidden>Secure link token is missing. Please open the latest reminder email.</p>
 </main><script>
 (function(){var params=new URLSearchParams(window.location.search);var token=params.get("sensitiveAlert")||"";document.getElementById("token").value=token;if(!token){document.getElementById("unlockForm").hidden=true;document.getElementById("error").hidden=false;}})();
