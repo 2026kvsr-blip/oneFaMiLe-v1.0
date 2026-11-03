@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>oneFaMiLe – Secure Sensitive Alert</title>
+<style>
+*{box-sizing:border-box}body{font-family:Arial,sans-serif;background:#eaf8ff;margin:0;padding:22px;color:#263746}
+.card{max-width:520px;margin:30px auto;background:#fff;border-radius:16px;padding:24px;box-shadow:0 4px 18px #0001}
+h2{color:#3477b7;margin:0 0 18px}p{line-height:1.5}label{display:block;margin:20px 0 8px;font-weight:bold}
+input{width:100%;padding:14px;font-size:22px;letter-spacing:6px;text-align:center;border:1px solid #9bb8d0;border-radius:9px}
+button{margin-top:18px;width:100%;padding:14px;border:0;border-radius:9px;background:#287fbd;color:#fff;font-size:17px;font-weight:bold}
+.note{font-size:12px;color:#667788;margin-top:18px}.error{color:#b42318}
+</style></head>
+<body><main class="card">
+<h2>oneFaMiLe</h2><h3>Unlock Sensitive Activity Alert</h3>
+<p>This sensitive activity alert is protected. Enter your 6-digit Sensitive Pass Code to view the alert details.</p>
+<form id="unlockForm" method="post" action="https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec" target="_top">
+<input type="hidden" name="action" value="openSensitiveAlert">
+<input type="hidden" id="token" name="token" value="">
+<label for="passCode">Sensitive Pass Code</label>
+<input id="passCode" name="passCode" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" minlength="6" autocomplete="current-password" placeholder="••••••" required>
+<button type="submit">Unlock Alert</button></form>
+<p class="note">For security, this link expires in 7 days. Do not share this link or your pass code.</p>
+<p id="error" class="error" hidden>Secure link token is missing. Please open the latest reminder email.</p>
+</main><script>
+(function(){var params=new URLSearchParams(window.location.search);var token=params.get("sensitiveAlert")||"";document.getElementById("token").value=token;if(!token){document.getElementById("unlockForm").hidden=true;document.getElementById("error").hidden=false;}})();
+</script></body></html>
