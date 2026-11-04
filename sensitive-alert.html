@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -269,9 +270,27 @@ window.addEventListener("message",function(event){
 
 });
 
+
 function renderDetails(rows){
 
+  const heading = document.createElement("div");
+
+  heading.style.background = "#fff8df";
+  heading.style.border = "3px solid #dca400";
+  heading.style.borderRadius = "14px";
+  heading.style.padding = "18px";
+  heading.style.marginBottom = "22px";
+  heading.style.color = "#79500b";
+
+  heading.innerHTML =
+    '<div style="font-size:22px;font-weight:bold;margin-bottom:8px;">' +
+    'Sensitive Activity</div>' +
+    '<div style="font-size:17px;font-weight:normal;">' +
+    'Your sensitive activity details are shown below.</div>';
+
   const table = document.createElement("table");
+  table.style.width = "100%";
+  table.style.borderCollapse = "collapse";
 
   rows.forEach(function(row){
 
@@ -284,23 +303,29 @@ function renderDetails(rows){
     td1.textContent = row[0];
     td2.textContent = row[1];
 
+    td1.style.fontWeight = "bold";
+    td1.style.width = "45%";
+    td1.style.padding = "10px 8px";
+    td1.style.borderBottom = "1px solid #ddd";
+    td1.style.verticalAlign = "top";
+
+    td2.style.padding = "10px 8px";
+    td2.style.borderBottom = "1px solid #ddd";
+    td2.style.verticalAlign = "top";
+
     tr.appendChild(td1);
     tr.appendChild(td2);
     table.appendChild(tr);
 
   });
 
- const heading = document.createElement("h3");
-
-heading.innerHTML =
-  '<span style="font-weight:normal; color:green;">Alert Message</span><br>' +
-  '<span style="font-weight:bold; color:blue;">Sensitive Activity</span>';
-
-heading.style.textAlign = "center";
-heading.style.lineHeight = "1.5";
+  const note = document.createElement("p");
+  note.textContent = "Sensitive details unlocked for the recipient of this email.";
+  note.style.color = "#667788";
+  note.style.fontSize = "13px";
+  note.style.marginTop = "20px";
 
   const closeBtn = document.createElement("button");
-
   closeBtn.type = "button";
   closeBtn.textContent = "Close Alert";
 
@@ -308,9 +333,10 @@ heading.style.lineHeight = "1.5";
     goBackToMail();
   });
 
-  result.replaceChildren(heading,table,closeBtn);
+  result.replaceChildren(heading,table,note,closeBtn);
 
 }
+
 
 })();
 
