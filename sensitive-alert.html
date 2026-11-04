@@ -167,14 +167,17 @@ window.addEventListener("message",function(event){
   button.disabled = false;
   button.textContent = "Unlock Alert";
 
-  message.className = data.status === "success" ? "success" : "error";
-  message.textContent = data.message || "";
-
   if(data.status === "success"){
-    form.hidden = true;
-    document.getElementById("intro").hidden = true;
-    renderDetails(data.rows || []);
-  } else if(data.status === "locked" || data.status === "expired"){
+  message.textContent = "";
+  message.hidden = true;
+  form.hidden = true;
+  document.getElementById("intro").hidden = true;
+  renderDetails(data.rows || []);
+} else {
+  message.hidden = false;
+  message.className = "error";
+  message.textContent = data.message || "";
+} else if(data.status === "locked" || data.status === "expired"){
     form.hidden = true;
   } else {
     passCode.value = "";
