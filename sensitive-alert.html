@@ -1,280 +1,143 @@
-
-
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>oneFaMiLe – Secure Sensitive Alert</title>
-
+<title>oneFaMiLe – Sensitive Activity Message Alert</title>
 <style>
 *{box-sizing:border-box}
-body{
-  font-family:Arial,sans-serif;
-  background:#eaf8ff;
-  margin:0;
-  padding:22px;
-  color:#263746
-}
-.card{
-  max-width:520px;
-  margin:30px auto;
-  background:#fff;
-  border-radius:16px;
-  padding:24px;
-  box-shadow:0 4px 18px #0001
-}
-h2{color:#3477b7;margin:0 0 18px}
+body{font-family:Arial,sans-serif;background:#eaf8ff;margin:0;padding:22px;color:#263746}
+.card{position:relative;max-width:520px;margin:30px auto;background:#fff;border-radius:16px;padding:24px;box-shadow:0 4px 18px #0001}
+h2{color:#3477b7;margin:0 0 18px;padding-right:38px}
 p{line-height:1.5}
 label{display:block;margin:20px 0 8px;font-weight:bold}
-input{
-  width:100%;
-  padding:14px;
-  font-size:22px;
-  letter-spacing:6px;
-  text-align:center;
-  border:1px solid #9bb8d0;
-  border-radius:9px
-}
-button{
-  margin-top:18px;
-  width:100%;
-  padding:14px;
-  border:0;
-  border-radius:9px;
-  background:#287fbd;
-  color:#fff;
-  font-size:17px;
-  font-weight:bold
-}
+input{width:100%;padding:14px;font-size:22px;letter-spacing:6px;text-align:center;border:1px solid #9bb8d0;border-radius:9px}
+button{margin-top:18px;width:100%;padding:14px;border:0;border-radius:9px;background:#287fbd;color:#fff;font-size:17px;font-weight:bold;cursor:pointer}
 button:disabled{opacity:.6}
+.close-x{position:absolute;top:14px;right:16px;width:38px;height:38px;margin:0;padding:0;border:0;border-radius:50%;background:transparent;color:#526575;font-size:30px;line-height:38px}
 .note{font-size:12px;color:#667788;margin-top:18px}
 .error{color:#b42318}
-.success{color:#16803c}
 #result{margin-top:18px}
 #result table{width:100%;border-collapse:collapse}
 #result td{padding:9px;border-bottom:1px solid #ddd;vertical-align:top}
 #result td:first-child{font-weight:bold;width:38%}
 </style>
 </head>
-
 <body>
 <main class="card">
+<button id="closePageBtn" class="close-x" type="button" aria-label="Close page" title="Close">×</button>
 <h2>oneFaMiLe</h2>
-
-<p id="intro">
-This sensitive activity alert is protected.
-Enter your 6-digit Sensitive Pass Code to view the alert details.
-</p>
-
-<form id="unlockForm" method="POST">
+<form id="unlockForm">
 <input type="hidden" name="action" value="openSensitiveAlert">
 <input type="hidden" id="token" name="token">
-
-<label for="passCode">Sensitive Pass Code</label>
-<input
-  id="passCode"
-  name="passCode"
-  type="password"
-  inputmode="numeric"
-  pattern="[0-9]{6}"
-  maxlength="6"
-  minlength="6"
-  autocomplete="current-password"
-  placeholder="••••••"
-  required>
-
+<label for="passCode">Enter Sensitive Pass Code</label>
+<input id="passCode" name="passCode" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" minlength="6" autocomplete="current-password" placeholder="••••••" required>
 <button id="unlockBtn" type="submit">Unlock Alert</button>
 </form>
-
 <p id="message" role="status"></p>
 <div id="result"></div>
-
-<p class="note">
-For security, this link expires in 2 days.
-Do not share this link or your pass code.
-</p>
-
-<iframe name="secureResponseFrame" id="secureResponseFrame"
-        style="display:none"></iframe>
+<p class="note">For security, this link expires in 2 days. Do not share this link or your pass code.</p>
+<iframe name="secureResponseFrame" id="secureResponseFrame" style="display:none"></iframe>
 </main>
-
 <script>
-
 (function(){
-
-const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
-
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
+const RESPONSE_TIMEOUT_MS = 30000;
 const params = new URLSearchParams(window.location.search);
 const token = params.get("sensitiveAlert") || "";
-
 const form = document.getElementById("unlockForm");
 const passCode = document.getElementById("passCode");
 const button = document.getElementById("unlockBtn");
 const message = document.getElementById("message");
 const result = document.getElementById("result");
-const frame = document.getElementById("secureResponseFrame");
-
+const closePageBtn = document.getElementById("closePageBtn");
 document.getElementById("token").value = token;
-
 form.action = SCRIPT_URL;
-form.method = "POST";
 form.target = "secureResponseFrame";
-
 let requestId = "";
-
+let responseTimer = null;
+function goBackToMail(){
+  if(window.history.length > 1) window.history.back();
+  else window.close();
+}
+closePageBtn.addEventListener("click", goBackToMail);
+function stopWaiting(){
+  if(responseTimer !== null){clearTimeout(responseTimer);responseTimer = null;}
+  button.disabled = false;
+  button.textContent = "Unlock Alert";
+}
 if(!token){
   form.hidden = true;
   message.className = "error";
-  message.textContent =
-    "Secure link token is missing. Please open the latest reminder email.";
+  message.textContent = "Secure link token is missing. Please open the latest reminder email.";
   return;
 }
-
-form.addEventListener("submit", function(e){
-
+form.addEventListener("submit",function(e){
   e.preventDefault();
-
   if(!/^[0-9]{6}$/.test(passCode.value)){
     message.className = "error";
     message.textContent = "Enter a valid 6-digit Pass Code.";
     return;
   }
-
-  requestId = String(Date.now()) +
-    Math.random().toString(36).slice(2);
-
-  const oldRequest =
-    form.querySelector('input[name="requestId"]');
-
+  stopWaiting();
+  requestId = String(Date.now()) + Math.random().toString(36).slice(2);
+  let oldRequest = form.querySelector('input[name="requestId"]');
   if(oldRequest) oldRequest.remove();
-
   const hidden = document.createElement("input");
-  hidden.type = "hidden";
-  hidden.name = "requestId";
-  hidden.value = requestId;
+  hidden.type = "hidden"; hidden.name = "requestId"; hidden.value = requestId;
   form.appendChild(hidden);
-
   button.disabled = true;
   button.textContent = "Verifying...";
-  message.hidden = false;
-  message.className = "";
-  message.textContent = "Please wait. Verifying Pass Code...";
+  message.className = ""; message.textContent = "Please wait. Verifying Pass Code...";
   result.replaceChildren();
-
-  try{
-    HTMLFormElement.prototype.submit.call(form);
-  }catch(err){
-
-    button.disabled = false;
-    button.textContent = "Unlock Alert";
-
-    message.className = "error";
-    message.textContent =
-      "Unable to send verification request. Please try again.";
-
-    console.error(err);
+  responseTimer = setTimeout(function(){
+    stopWaiting(); message.className = "error";
+    message.textContent = "The server did not respond. Please check your internet connection and try again.";
+  }, RESPONSE_TIMEOUT_MS);
+  try{form.submit();}
+  catch(err){
+    stopWaiting(); message.className = "error";
+    message.textContent = "Unable to send the verification request. Please try again.";
   }
-
 });
-
 window.addEventListener("message",function(event){
-
-  // Accept messages only from Google Apps Script response origins
-  const allowedOrigin =
-    event.origin === "https://script.google.com" ||
-    event.origin.endsWith(".googleusercontent.com");
-
+  const allowedOrigin = event.origin === "https://script.google.com" || event.origin.endsWith(".googleusercontent.com");
   if(!allowedOrigin) return;
-
   const data = event.data;
   if(!data || data.type !== "oneFaMiLeSensitiveAlert") return;
   if(data.requestId !== requestId) return;
-
-  button.disabled = false;
-  button.textContent = "Unlock Alert";
-
+  stopWaiting();
   if(data.status === "success"){
-
-    message.hidden = true;
     form.hidden = true;
-    document.getElementById("intro").hidden = true;
-
+    closePageBtn.hidden = true;
+    message.hidden = true;
     renderDetails(data.rows || []);
-
   }else{
-
     message.hidden = false;
     message.className = "error";
-    message.textContent = data.message || "";
-
-    if(data.status === "locked" || data.status === "expired"){
-
-      form.hidden = true;
-
-    }else{
-
-      passCode.value = "";
-      passCode.focus();
-
-    }
+    message.textContent = data.message || "Unable to verify the alert.";
+    if(data.status === "locked" || data.status === "expired") form.hidden = true;
+    else{passCode.value = "";passCode.focus();}
   }
-
 });
-
 function renderDetails(rows){
-
   const table = document.createElement("table");
-
   rows.forEach(function(row){
-
     if(!row || !row[1]) return;
-
     const tr = document.createElement("tr");
     const td1 = document.createElement("td");
     const td2 = document.createElement("td");
-
-    td1.textContent = row[0];
-    td2.textContent = row[1];
-
-    tr.appendChild(td1);
-    tr.appendChild(td2);
-    table.appendChild(tr);
-
+    td1.textContent = row[0]; td2.textContent = row[1];
+    tr.appendChild(td1); tr.appendChild(td2); table.appendChild(tr);
   });
-
   const heading = document.createElement("h3");
-  heading.textContent = "Sensitive Activity Details";
-
-  const closeBtn = document.createElement("button");
-  closeBtn.type = "button";
-  closeBtn.textContent = "Close Alert";
-
-  closeBtn.addEventListener("click", function(){
-
-    if(window.history.length > 1){
-      window.history.back();
-    }else{
-      window.close();
-
-      result.replaceChildren();
-
-      const msg = document.createElement("p");
-      msg.textContent =
-        "Alert closed. You may now close this browser tab.";
-
-      result.appendChild(msg);
-    }
-
-  });
-
-  result.replaceChildren(heading, table, closeBtn);
-
+  heading.textContent = "Sensitive Activity - Message Alert";
+  const closeButton = document.createElement("button");
+  closeButton.type = "button"; closeButton.textContent = "Close Alert";
+  closeButton.addEventListener("click", goBackToMail);
+  result.replaceChildren(heading,table,closeButton);
 }
-
 })();
-
 </script>
 </body>
 </html>
