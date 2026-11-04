@@ -158,9 +158,11 @@ form.addEventListener("submit",function(e){
   form.submit();
 });
 
+
 window.addEventListener("message",function(event){
 
   const data = event.data;
+
   if(!data || data.type !== "oneFaMiLeSensitiveAlert") return;
   if(data.requestId !== requestId) return;
 
@@ -168,21 +170,37 @@ window.addEventListener("message",function(event){
   button.textContent = "Unlock Alert";
 
   if(data.status === "success"){
-  message.textContent = "";
-  message.hidden = true;
-  form.hidden = true;
-  document.getElementById("intro").hidden = true;
-  renderDetails(data.rows || []);
-} else {
-  message.hidden = false;
-  message.className = "error";
-  message.textContent = data.message || "";
-} else if(data.status === "locked" || data.status === "expired"){
+
+    // Hide success message
+    message.textContent = "";
+    message.hidden = true;
+
+    // Hide unnecessary sections
     form.hidden = true;
+    document.getElementById("intro").hidden = true;
+
+    // Display Sensitive Activity Details
+    renderDetails(data.rows || []);
+
   } else {
-    passCode.value = "";
-    passCode.focus();
+
+    // Show error message
+    message.hidden = false;
+    message.className = "error";
+    message.textContent = data.message || "";
+
+    if(data.status === "locked" || data.status === "expired"){
+
+      form.hidden = true;
+
+    } else {
+
+      passCode.value = "";
+      passCode.focus();
+
+    }
   }
+
 });
 
 function renderDetails(rows){
