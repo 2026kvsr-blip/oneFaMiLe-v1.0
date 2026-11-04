@@ -290,10 +290,13 @@ function renderDetails(rows){
 
   });
 
-  const heading = document.createElement("h3");
+ const heading = document.createElement("h3");
 
-  heading.textContent =
-    "Sensitive Activity - Message Alert";
+heading.innerHTML =
+  "Alert Message<br>Sensitive Activity";
+
+heading.style.textAlign = "center";
+heading.style.lineHeight = "1.5";
 
   const closeBtn = document.createElement("button");
 
