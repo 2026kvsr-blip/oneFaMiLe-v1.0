@@ -161,8 +161,6 @@ form.addEventListener("submit",function(e){
 
 window.addEventListener("message",function(event){
 
-  if(event.source !== frame.contentWindow) return;
-
   const data = event.data;
   if(!data || data.type !== "oneFaMiLeSensitiveAlert") return;
   if(data.requestId !== requestId) return;
