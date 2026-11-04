@@ -100,6 +100,7 @@ Do not share this link or your pass code.
 </main>
 
 <script>
+
 (function(){
 
 const SCRIPT_URL =
@@ -116,8 +117,12 @@ const result = document.getElementById("result");
 const frame = document.getElementById("secureResponseFrame");
 
 document.getElementById("token").value = token;
+
 form.action = SCRIPT_URL;
+form.method = "POST";
 form.target = "secureResponseFrame";
+
+let requestId = "";
 
 if(!token){
   form.hidden = true;
@@ -127,9 +132,8 @@ if(!token){
   return;
 }
 
-let requestId = "";
+form.addEventListener("submit", function(e){
 
-form.addEventListener("submit",function(e){
   e.preventDefault();
 
   if(!/^[0-9]{6}$/.test(passCode.value)){
@@ -138,9 +142,12 @@ form.addEventListener("submit",function(e){
     return;
   }
 
-  requestId = String(Date.now()) + Math.random().toString(36).slice(2);
+  requestId = String(Date.now()) +
+    Math.random().toString(36).slice(2);
 
-  let oldRequest = form.querySelector('input[name="requestId"]');
+  const oldRequest =
+    form.querySelector('input[name="requestId"]');
+
   if(oldRequest) oldRequest.remove();
 
   const hidden = document.createElement("input");
@@ -151,15 +158,30 @@ form.addEventListener("submit",function(e){
 
   button.disabled = true;
   button.textContent = "Verifying...";
+  message.hidden = false;
   message.className = "";
   message.textContent = "Please wait. Verifying Pass Code...";
-  result.innerHTML = "";
+  result.replaceChildren();
 
-  form.submit();
+  try{
+    HTMLFormElement.prototype.submit.call(form);
+  }catch(err){
+
+    button.disabled = false;
+    button.textContent = "Unlock Alert";
+
+    message.className = "error";
+    message.textContent =
+      "Unable to send verification request. Please try again.";
+
+    console.error(err);
+  }
+
 });
 
+window.addEventListener("message", function(event){
 
-window.addEventListener("message",function(event){
+  if(event.source !== frame.contentWindow) return;
 
   const data = event.data;
 
@@ -171,20 +193,14 @@ window.addEventListener("message",function(event){
 
   if(data.status === "success"){
 
-    // Hide success message
-    message.textContent = "";
     message.hidden = true;
-
-    // Hide unnecessary sections
     form.hidden = true;
     document.getElementById("intro").hidden = true;
 
-    // Display Sensitive Activity Details
     renderDetails(data.rows || []);
 
-  } else {
+  }else{
 
-    // Show error message
     message.hidden = false;
     message.className = "error";
     message.textContent = data.message || "";
@@ -193,7 +209,7 @@ window.addEventListener("message",function(event){
 
       form.hidden = true;
 
-    } else {
+    }else{
 
       passCode.value = "";
       passCode.focus();
@@ -202,7 +218,6 @@ window.addEventListener("message",function(event){
   }
 
 });
-
 
 function renderDetails(rows){
 
@@ -221,14 +236,13 @@ function renderDetails(rows){
 
     tr.appendChild(td1);
     tr.appendChild(td2);
-
     table.appendChild(tr);
+
   });
 
   const heading = document.createElement("h3");
   heading.textContent = "Sensitive Activity Details";
 
-  // Close Alert button
   const closeBtn = document.createElement("button");
   closeBtn.type = "button";
   closeBtn.textContent = "Close Alert";
@@ -236,66 +250,27 @@ function renderDetails(rows){
   closeBtn.addEventListener("click", function(){
 
     if(window.history.length > 1){
-
       window.history.back();
-
-    } else {
-
+    }else{
       window.close();
 
-      setTimeout(function(){
+      result.replaceChildren();
 
-        result.replaceChildren();
+      const msg = document.createElement("p");
+      msg.textContent =
+        "Alert closed. You may now close this browser tab.";
 
-        const msg = document.createElement("p");
-        msg.textContent =
-          "Alert closed. You may now close this browser tab.";
-
-        result.appendChild(msg);
-
-      }, 300);
-
+      result.appendChild(msg);
     }
 
   });
 
   result.replaceChildren(heading, table, closeBtn);
-}
 
-  const table = document.createElement("table");
-
-  rows.forEach(function(row){
-
-    if(!row || !row[1]) return;
-
-    const tr = document.createElement("tr");
-    const td1 = document.createElement("td");
-    const td2 = document.createElement("td");
-
-    td1.textContent = row[0];
-
-    let value = String(row[1]).trim();
-
-    // Format all date fields
-    if(String(row[0]).toLowerCase().includes("date")){
-      value = formatAlertDate(value);
-    }
-
-    td2.textContent = value;
-
-    tr.appendChild(td1);
-    tr.appendChild(td2);
-
-    table.appendChild(tr);
-  });
-
-  const heading = document.createElement("h3");
-  heading.textContent = "Sensitive Activity Alert";
-
-  result.replaceChildren(heading,table);
 }
 
 })();
+
 </script>
 </body>
 </html>
