@@ -206,45 +206,61 @@ window.addEventListener("message",function(event){
 
 function renderDetails(rows){
 
-  // Convert dates to dd-mm-yyyy
-  function formatAlertDate(value){
+  const table = document.createElement("table");
 
-    let text = String(value || "").trim();
+  rows.forEach(function(row){
 
-    if(!text) return "";
+    if(!row || !row[1]) return;
 
-    // yyyy-mm-dd or yyyy/mm/dd
-    let match = text.match(
-      /^(\d{4})[-/](\d{1,2})[-/](\d{1,2})(.*)$/
-    );
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td");
+    const td2 = document.createElement("td");
 
-    if(match){
+    td1.textContent = row[0];
+    td2.textContent = row[1];
 
-      return (
-        String(match[3]).padStart(2,"0") + "-" +
-        String(match[2]).padStart(2,"0") + "-" +
-        match[1] +
-        match[4]
-      );
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+
+    table.appendChild(tr);
+  });
+
+  const heading = document.createElement("h3");
+  heading.textContent = "Sensitive Activity Details";
+
+  // Close Alert button
+  const closeBtn = document.createElement("button");
+  closeBtn.type = "button";
+  closeBtn.textContent = "Close Alert";
+
+  closeBtn.addEventListener("click", function(){
+
+    if(window.history.length > 1){
+
+      window.history.back();
+
+    } else {
+
+      window.close();
+
+      setTimeout(function(){
+
+        result.replaceChildren();
+
+        const msg = document.createElement("p");
+        msg.textContent =
+          "Alert closed. You may now close this browser tab.";
+
+        result.appendChild(msg);
+
+      }, 300);
+
     }
 
-    // dd-mm-yyyy or dd/mm/yyyy
-    match = text.match(
-      /^(\d{1,2})[-/](\d{1,2})[-/](\d{4})(.*)$/
-    );
+  });
 
-    if(match){
-
-      return (
-        String(match[1]).padStart(2,"0") + "-" +
-        String(match[2]).padStart(2,"0") + "-" +
-        match[3] +
-        match[4]
-      );
-    }
-
-    return text;
-  }
+  result.replaceChildren(heading, table, closeBtn);
+}
 
   const table = document.createElement("table");
 
