@@ -386,9 +386,9 @@
       // grid column directly to the right of Status.
       if(val('status')==='Completed')extraOrder.push('completedDate');
       extraOrder.push('reminderEnabled','reminderFields');
-      if(task)extraOrder.push('priority','assignedTo');
-      else if(event||meeting)extraOrder.push('priority','venue');
-      else if(appt)extraOrder.push('appointmentPerson','followUpDate','locationLink');
+      if(task)extraOrder.push('assignedTo','priority');
+      else if(event||meeting)extraOrder.push('venue','priority');
+      else if(appt)extraOrder.push('appointmentPerson','locationLink','followUpDate');
       arrangeActivityFields(['activityType','description','category','subCategory','startDate','startTime',...extraOrder,'activityPhotos']);
       // Keep the backend title field populated for compatibility.
       if($('title'))$('title').value=val('subCategory')||val('category')||t||'Activity';
