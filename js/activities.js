@@ -250,8 +250,21 @@
     .activity-page .expense-summary-card strong{font-size:clamp(13px,3.6vw,17px)!important;white-space:nowrap!important}
     /* Reset remains transparent with a blue outline, matching the secondary action style. */
     .activity-page #activityResetBtn{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}
-    /* Place the Reminder selector below Status, in the left column. */
+    /* Place the Reminder selector on its own row; then pair the type-specific fields. */
     .activity-page .activity-fields-grid>[data-field="reminderEnabled"]{grid-column:1!important}
+    .activity-page.activity-form-view>.expense-title{
+      margin-top:-110px!important;margin-bottom:12px!important;padding-top:0!important;
+    }
+    /* Keep the Sensitive checkbox immediately beside its text on mobile Safari. */
+    .activity-page .activity-sensitive-line label{
+      display:inline-flex!important;align-items:center!important;justify-content:flex-start!important;
+      gap:8px!important;width:auto!important;max-width:max-content!important;
+    }
+    .activity-page .activity-sensitive-line input[type="checkbox"]{
+      display:inline-block!important;width:18px!important;min-width:18px!important;max-width:18px!important;
+      height:18px!important;min-height:18px!important;padding:0!important;margin:0!important;
+      flex:0 0 18px!important;
+    }
   `;document.head.appendChild(st)}
   function openMenu(){const btn=$('activitiesBtn');if(!btn)return;if(typeof window.updateMenuIcon==='function')window.updateMenuIcon();if(typeof window.setActiveButton==='function')window.setActiveButton(btn);page(title('Activities')+`<div class="grid-3x2">
     <button class="grid-btn" id="activityAddBtn"><img src="images/colorbtns/Add1.png" class="btn-icon"><span>Add Activity</span></button>
@@ -292,7 +305,9 @@
       <div class="activity-sensitive-line"><label for="isSensitive"><input id="isSensitive" name="isSensitive" type="checkbox" value="true"> Sensitive</label></div>
       <div id="activityStatus" class="expense-status" role="status" aria-live="polite"></div><div class="expense-actions"><button type="submit" id="activitySaveBtn" class="expense-primary">Save</button><button type="reset" id="activityResetBtn" class="expense-secondary">Reset</button><button type="button" id="activityModuleBack" class="expense-secondary">← Back</button></div>
     </form></div>`;
-    page(shell(editRecord?'Edit Activity':'Add Activity',inner,true));bindBack();
+    page(shell(editRecord?'Edit Activity':'Add Activity',inner,true));
+    document.querySelector('.activity-page')?.classList.add('activity-form-view');
+    bindBack();
     // When Edit Activity was opened from a report, Back returns directly to
     // that same report output instead of navigating to the Activities menu.
     if(editRecord){
@@ -386,11 +401,22 @@
       // grid column directly to the right of Status.
       if(val('status')==='Completed')extraOrder.push('completedDate');
       extraOrder.push('reminderEnabled','reminderFields');
-      // The fields below Reminder must be ordered left-to-right for the
-      // two-column CSS grid. Keep the user's requested order explicitly.
-      if(task)extraOrder.push('assignedTo','priority');
-      else if(event||meeting)extraOrder.push('venue','priority');
-      else if(appt)extraOrder.push('appointmentPerson','locationLink','followUpDate');
+      // Reset old type-specific placement before applying the current type.
+      const setColumn=(id,column)=>{
+        const el=document.querySelector(`[data-field="${id}"]`);
+        if(el)el.style.setProperty('grid-column',column||'auto','important');
+      };
+      ['assignedTo','priority','venue','appointmentPerson','locationLink','followUpDate'].forEach(id=>setColumn(id,'auto'));
+      if(task){
+        extraOrder.push('assignedTo','priority');
+        setColumn('assignedTo','1');setColumn('priority','2');
+      }else if(event||meeting){
+        extraOrder.push('venue','priority');
+        setColumn('venue','1');setColumn('priority','2');
+      }else if(appt){
+        extraOrder.push('appointmentPerson','locationLink','followUpDate');
+        setColumn('appointmentPerson','1');setColumn('locationLink','2');setColumn('followUpDate','1 / -1');
+      }
       arrangeActivityFields(['activityType','description','category','subCategory','startDate','startTime',...extraOrder,'activityPhotos']);
       // Keep the backend title field populated for compatibility.
       if($('title'))$('title').value=val('subCategory')||val('category')||t||'Activity';
