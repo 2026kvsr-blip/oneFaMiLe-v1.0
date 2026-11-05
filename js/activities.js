@@ -386,6 +386,9 @@
       // grid column directly to the right of Status.
       if(val('status')==='Completed')extraOrder.push('completedDate');
       extraOrder.push('reminderEnabled','reminderFields');
+      // Keep each activity-specific pair in the requested left-to-right order
+      // immediately below Reminder. The two-column grid places the next field
+      // on the following row when the current pair is complete.
       if(task)extraOrder.push('assignedTo','priority');
       else if(event||meeting)extraOrder.push('venue','priority');
       else if(appt)extraOrder.push('appointmentPerson','locationLink','followUpDate');
