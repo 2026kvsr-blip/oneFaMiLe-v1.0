@@ -255,7 +255,7 @@
     /* Add Activity title: place it just below the fixed oneFaMiLe header. */
     .activity-page.activity-form-view>.expense-title{
       /* Pull the title and form upward to sit close below the fixed header. */
-      margin-top:-105px!important;margin-bottom:10px!important;padding-top:0!important;
+      margin-top:12px!important;margin-bottom:10px!important;padding-top:0!important;
       position:relative!important;z-index:1!important;
     }
     /* Keep Add Activity actions fixed at the bottom of the visible screen. */
@@ -435,7 +435,10 @@
       // When an activity is completed, place Completed Date in the second
       // grid column directly to the right of Status.
       if(val('status')==='Completed')extraOrder.push('completedDate');
-      extraOrder.push('reminderEnabled','reminderFields');
+      extraOrder.push('reminderEnabled');
+      // Appointment fields go directly below Reminder: Follow-up Date + Location/Link, then Contact Person.
+      if(appt)extraOrder.push('followUpDate','locationLink','appointmentPerson','reminderFields');
+      else extraOrder.push('reminderFields');
       // Reset old type-specific placement before applying the current type.
       const setColumn=(id,column)=>{
         const el=document.querySelector(`[data-field="${id}"]`);
@@ -449,8 +452,7 @@
         extraOrder.push('venue','priority');
         setColumn('venue','1');setColumn('priority','2');
       }else if(appt){
-        extraOrder.push('appointmentPerson','locationLink','followUpDate');
-        setColumn('appointmentPerson','1');setColumn('locationLink','2');setColumn('followUpDate','1 / -1');
+        setColumn('followUpDate','1');setColumn('locationLink','2');setColumn('appointmentPerson','1 / -1');
       }
       arrangeActivityFields(['activityType','description','category','subCategory','startDate','startTime',...extraOrder,'activityPhotos']);
       // Keep the backend title field populated for compatibility.
