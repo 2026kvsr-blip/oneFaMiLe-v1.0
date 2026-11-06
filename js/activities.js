@@ -255,7 +255,7 @@
     /* Add Activity title: place it just below the fixed oneFaMiLe header. */
     .activity-page.activity-form-view>.expense-title{
       /* Pull the title and form upward to sit close below the fixed header. */
-      margin-top:-100px!important;margin-bottom:10px!important;padding-top:0!important;
+      margin-top:-105px!important;margin-bottom:10px!important;padding-top:0!important;
       position:relative!important;z-index:1!important;
     }
     /* Keep Add Activity actions fixed at the bottom of the visible screen. */
