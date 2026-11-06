@@ -254,7 +254,7 @@
     .activity-page .activity-fields-grid>[data-field="reminderEnabled"]{grid-column:1!important}
     /* Add Activity title: place it just below the fixed oneFaMiLe header. */
     .activity-page.activity-form-view>.expense-title{
-      margin-top:12px!important;margin-bottom:10px!important;padding-top:0!important;
+      margin-top:28px!important;margin-bottom:10px!important;padding-top:0!important;
       position:relative!important;z-index:1!important;
     }
     /* Keep Add Activity actions fixed at the bottom of the visible screen. */
@@ -434,7 +434,10 @@
       // When an activity is completed, place Completed Date in the second
       // grid column directly to the right of Status.
       if(val('status')==='Completed')extraOrder.push('completedDate');
-      extraOrder.push('reminderEnabled','reminderFields');
+      extraOrder.push('reminderEnabled');
+      // Appointment details must appear immediately below the Reminder selector.
+      if(appt)extraOrder.push('appointmentPerson','locationLink','followUpDate','reminderFields');
+      else extraOrder.push('reminderFields');
       // Reset old type-specific placement before applying the current type.
       const setColumn=(id,column)=>{
         const el=document.querySelector(`[data-field="${id}"]`);
