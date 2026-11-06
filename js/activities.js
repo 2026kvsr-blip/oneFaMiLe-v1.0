@@ -252,8 +252,42 @@
     .activity-page #activityResetBtn{background:transparent!important;background-color:transparent!important;color:#2477c8!important;border:1.5px solid #2477c8!important;box-shadow:none!important}
     /* Place the Reminder selector on its own row; then pair the type-specific fields. */
     .activity-page .activity-fields-grid>[data-field="reminderEnabled"]{grid-column:1!important}
+    /* Add Activity title: place it just below the fixed oneFaMiLe header. */
     .activity-page.activity-form-view>.expense-title{
-      margin-top:-110px!important;margin-bottom:12px!important;padding-top:0!important;
+      margin-top:12px!important;margin-bottom:10px!important;padding-top:0!important;
+      position:relative!important;z-index:1!important;
+    }
+    /* Keep Add Activity actions fixed at the bottom of the visible screen. */
+    .activity-page.activity-form-view #activityForm{
+      padding-bottom:78px!important;
+    }
+    .activity-page.activity-form-view #activityForm .expense-actions{
+      position:fixed!important;left:50%!important;bottom:calc(env(safe-area-inset-bottom, 0px) + 8px)!important;
+      transform:translateX(-50%)!important;width:calc(100% - 24px)!important;
+      max-width:1076px!important;margin:0!important;padding:8px!important;
+      background:rgba(240,247,255,.97)!important;border:1px solid #c4d4ff!important;
+      border-radius:14px!important;box-shadow:0 -3px 12px rgba(45,82,116,.12)!important;
+      z-index:99999!important;
+    }
+    /* Reduce form control heights by about 10 percent (40px to 36px). */
+    .activity-page.activity-form-view #activityForm .activity-fields-grid input:not([type="hidden"]):not([type="checkbox"]),
+    .activity-page.activity-form-view #activityForm .activity-fields-grid select,
+    .activity-page.activity-form-view #activityForm .activity-fields-grid textarea,
+    .activity-page.activity-form-view #activityForm .activity-reminder-grid input,
+    .activity-page.activity-form-view #activityForm .activity-reminder-grid select{
+      height:36px!important;min-height:36px!important;max-height:36px!important;
+      padding:6px 9px!important;box-sizing:border-box!important;
+    }
+    .activity-page.activity-form-view #activityForm .activity-photo-picker button,
+    .activity-page.activity-form-view #activityForm .activity-photo-picker .activity-photo-slot{
+      height:36px!important;min-height:36px!important;max-height:36px!important;
+    }
+    /* Reduce vertical space between each field label and its input box. */
+    .activity-page.activity-form-view #activityForm .expense-field{
+      gap:2px!important;
+    }
+    .activity-page.activity-form-view #activityForm .expense-label{
+      margin:0!important;padding:0!important;line-height:1.15!important;
     }
     /* Keep the Sensitive checkbox immediately beside its text on mobile Safari. */
     .activity-page .activity-sensitive-line label{
