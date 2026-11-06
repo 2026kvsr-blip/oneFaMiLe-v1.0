@@ -254,7 +254,8 @@
     .activity-page .activity-fields-grid>[data-field="reminderEnabled"]{grid-column:1!important}
     /* Add Activity title: place it just below the fixed oneFaMiLe header. */
     .activity-page.activity-form-view>.expense-title{
-      margin-top:4px!important;margin-bottom:10px!important;padding-top:0!important;
+      /* Pull the title and form upward to sit close below the fixed header. */
+      margin-top:-100px!important;margin-bottom:10px!important;padding-top:0!important;
       position:relative!important;z-index:1!important;
     }
     /* Keep Add Activity actions fixed at the bottom of the visible screen. */
@@ -262,7 +263,7 @@
       padding-bottom:78px!important;
     }
     .activity-page.activity-form-view #activityForm .expense-actions{
-      position:fixed!important;left:50%!important;bottom:0!important;
+      position:fixed!important;left:50%!important;bottom:calc(env(safe-area-inset-bottom, 0px) + 8px)!important;
       transform:translateX(-50%)!important;width:calc(100% - 24px)!important;
       max-width:1076px!important;margin:0!important;padding:8px!important;
       background:rgba(240,247,255,.97)!important;border:1px solid #c4d4ff!important;
@@ -434,10 +435,7 @@
       // When an activity is completed, place Completed Date in the second
       // grid column directly to the right of Status.
       if(val('status')==='Completed')extraOrder.push('completedDate');
-      extraOrder.push('reminderEnabled');
-      // Appointment details must appear immediately below the Reminder selector.
-      if(appt)extraOrder.push('appointmentPerson','locationLink','followUpDate','reminderFields');
-      else extraOrder.push('reminderFields');
+      extraOrder.push('reminderEnabled','reminderFields');
       // Reset old type-specific placement before applying the current type.
       const setColumn=(id,column)=>{
         const el=document.querySelector(`[data-field="${id}"]`);
