@@ -192,7 +192,7 @@ function openAddMemoryScreen() {
                         <div class="expense-field">
                             <label class="expense-label">Title *</label>
                             <input type="text" id="memoryTitle"
-                                placeholder="Enter memory title" required>
+                                placeholder="Memory title" required>
                         </div>
 
                         <div class="expense-field">
@@ -203,7 +203,7 @@ function openAddMemoryScreen() {
                         <div class="expense-field">
                             <label class="expense-label">Memory Type *</label>
                             <select id="memoryType" required>
-                                <option value="">Select Memory Type</option>
+                                <option value="">Memory Type</option>
                                 <option>Text</option>
                                 <option>Photo</option>
                                 <option>Video</option>
@@ -215,7 +215,7 @@ function openAddMemoryScreen() {
                         <div class="expense-field">
                             <label class="expense-label">Category</label>
                             <select id="memoryCategory">
-                                <option value="">Select Category</option>
+                                <option value="">Category</option>
                                 <option>Family</option>
                                 <option>Childhood</option>
                                 <option>Birthdays</option>
