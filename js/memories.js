@@ -173,6 +173,64 @@ function memoryStyleOnce() {
     color: #2d5274 !important;
     box-shadow: none !important;
 }
+       .memory-page .memory-photo-slots {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.memory-page .memory-photo-slot {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    min-width: 0;
+    border: 1px dashed #7fa6cc;
+    border-radius: 9px;
+    background: #fff;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.memory-page .memory-photo-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.memory-page .memory-photo-slot .memory-photo-add {
+    color: #245b91;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.memory-page .memory-photo-remove {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 23px;
+    height: 23px;
+    border: none;
+    border-radius: 50%;
+    background: #d93025;
+    color: white;
+    font-size: 17px;
+    line-height: 20px;
+    padding: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+@media (max-width: 600px) {
+    .memory-page .memory-photo-slots {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 5px;
+    }
+}
         @media (max-width: 600px) {
             .memory-page .memory-fields-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -246,10 +304,14 @@ function openAddMemoryScreen() {
     placeholder="About Memory"></textarea>
                         </div>
 
-                     <div class="expense-field">
+                  <div class="expense-field memory-photo-field">
     <label class="expense-label">Photos (Max 5)</label>
+
     <input type="file" id="memoryPhotos"
-        accept="image/*" multiple>
+        accept="image/*" multiple hidden>
+
+    <div id="memoryPhotoSlots" class="memory-photo-slots"></div>
+
     <small id="memoryPhotosCount">0 photos selected</small>
 </div>
 
@@ -301,8 +363,101 @@ function openAddMemoryScreen() {
   
 
 
+// PHOTO SELECTION - MAX 5
+const memoryPhotosInput = document.getElementById('memoryPhotos');
+const memoryPhotoSlots = document.getElementById('memoryPhotoSlots');
+const memoryPhotosCount = document.getElementById('memoryPhotosCount');
+
+let selectedMemoryPhotos = [];
+
+function updateMemoryPhotoSlots() {
+    memoryPhotoSlots.innerHTML = '';
+
+    for (let i = 0; i < 5; i++) {
+        const photo = selectedMemoryPhotos[i];
+        const slot = document.createElement('div');
+
+        slot.className = 'memory-photo-slot';
+
+        if (photo) {
+            slot.innerHTML = `
+                <img src="${photo.url}" alt="Selected photo">
+                <button type="button"
+                    class="memory-photo-remove"
+                    data-remove-photo="${i}">×</button>
+            `;
+        } else {
+            slot.innerHTML = `<span class="memory-photo-add">+</span>`;
+            slot.dataset.empty = 'true';
+        }
+
+        memoryPhotoSlots.appendChild(slot);
+    }
+
+    memoryPhotosCount.textContent =
+        `${selectedMemoryPhotos.length} photos selected`;
+
+    const transfer = new DataTransfer();
+
+    selectedMemoryPhotos.forEach(photo => {
+        transfer.items.add(photo.file);
+    });
+
+    memoryPhotosInput.files = transfer.files;
+}
+
+memoryPhotoSlots.addEventListener('click', event => {
+    const removeButton = event.target.closest('[data-remove-photo]');
+
+    if (removeButton) {
+        const index = Number(removeButton.dataset.removePhoto);
+
+        URL.revokeObjectURL(selectedMemoryPhotos[index].url);
+        selectedMemoryPhotos.splice(index, 1);
+
+        updateMemoryPhotoSlots();
+        return;
+    }
+
+    const emptySlot = event.target.closest('[data-empty="true"]');
+
+    if (emptySlot) {
+        memoryPhotosInput.click();
+    }
+});
+
+memoryPhotosInput.addEventListener('change', () => {
+    const newFiles = Array.from(memoryPhotosInput.files);
+    const remaining = 5 - selectedMemoryPhotos.length;
+
+    if (newFiles.length > remaining) {
+        alert(`You can select only ${remaining} more photos.`);
+    }
+
+    newFiles.slice(0, remaining).forEach(file => {
+        selectedMemoryPhotos.push({
+            file: file,
+            url: URL.createObjectURL(file)
+        });
+    });
+
+    updateMemoryPhotoSlots();
+});
+
+updateMemoryPhotoSlots();
+document.getElementById('memoryForm').addEventListener('reset', () => {
+    selectedMemoryPhotos.forEach(photo => {
+        URL.revokeObjectURL(photo.url);
+    });
+
+    selectedMemoryPhotos = [];
+    memoryPhotosInput.value = '';
+
+    updateMemoryPhotoSlots();
+});
+
+// VIDEO AND VOICE FILE COUNT
 const memoryFileCounts = [
-    ['memoryPhotos', 'memoryPhotosCount', 'photos', 5],
     ['memoryVideos', 'memoryVideosCount', 'videos', 3],
     ['memoryVoice', 'memoryVoiceCount', 'voice messages', 3]
 ];
