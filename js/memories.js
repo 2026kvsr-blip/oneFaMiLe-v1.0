@@ -101,7 +101,23 @@ function memoryStyleOnce() {
             color: #52677b;
             line-height: 1.25;
         }
+.memory-page .memory-sensitive-line label {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 7px !important;
+    width: auto !important;
+}
 
+.memory-page .memory-sensitive-line input[type="checkbox"] {
+    display: inline-block !important;
+    width: 18px !important;
+    height: 18px !important;
+    min-height: 18px !important;
+    margin: 0 !important;
+    flex: 0 0 18px !important;
+}
         .memory-page.memory-form-view > .expense-title {
             margin-top: -50px !important;
             margin-bottom: 10px !important;
