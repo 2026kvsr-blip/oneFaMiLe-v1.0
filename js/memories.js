@@ -3,8 +3,138 @@
    oneFaMiLe - MEMORIES FRONTEND
 ===================================== */
 
+function memoryStyleOnce() {
+    if (document.getElementById('memoryPageStyles')) return;
+
+    const style = document.createElement('style');
+    style.id = 'memoryPageStyles';
+
+    style.textContent = `
+        .memory-page {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .memory-page .expense-panel {
+            padding: 12px;
+            background: #f0f7ff;
+            border: 1px solid #c4d4ff;
+            border-radius: 14px;
+            box-sizing: border-box;
+        }
+
+        .memory-page .memory-fields-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 10px !important;
+            align-items: start;
+        }
+
+        .memory-page .expense-field {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px !important;
+        }
+
+        .memory-page .expense-label {
+            font-weight: 600;
+            color: #2d5274;
+            display: block;
+            white-space: normal;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1.15 !important;
+        }
+
+        .memory-page .expense-field input,
+        .memory-page .expense-field select,
+        .memory-page .expense-field textarea {
+            width: 100%;
+            min-width: 0;
+            max-width: 100%;
+            height: 36px !important;
+            min-height: 36px !important;
+            max-height: 36px !important;
+            padding: 6px 9px !important;
+            box-sizing: border-box;
+            border: 1px solid #9bb9d4;
+            border-radius: 8px;
+            background: #fff;
+            color: #222;
+            font: inherit;
+        }
+
+        .memory-page .expense-field input[type="file"] {
+            padding: 4px !important;
+            font-size: 12px;
+        }
+
+        .memory-page .expense-field small {
+            font-size: 11px;
+            color: #52677b;
+            line-height: 1.25;
+        }
+
+        .memory-page.memory-form-view > .expense-title {
+            margin-top: -50px !important;
+            margin-bottom: 10px !important;
+            padding-top: 0 !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+
+        .memory-page.memory-form-view #memoryForm {
+            padding-bottom: 78px !important;
+        }
+
+        .memory-page.memory-form-view #memoryForm .expense-actions {
+            position: fixed !important;
+            left: 50% !important;
+            bottom: calc(env(safe-area-inset-bottom, 0px) + 8px) !important;
+            transform: translateX(-50%) !important;
+            width: calc(100% - 24px) !important;
+            max-width: 1076px !important;
+            margin: 0 !important;
+            padding: 8px !important;
+            background: rgba(240,247,255,.97) !important;
+            border: 1px solid #c4d4ff !important;
+            border-radius: 14px !important;
+            box-shadow: 0 -3px 12px rgba(45,82,116,.12) !important;
+            z-index: 99999 !important;
+            display: grid !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            align-items: stretch !important;
+            gap: 8px !important;
+        }
+
+        .memory-page.memory-form-view #memoryForm .expense-actions > button {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            height: 40px !important;
+            margin: 0 !important;
+            padding: 10px 3px !important;
+            white-space: nowrap !important;
+            box-sizing: border-box !important;
+        }
+
+        @media (max-width: 600px) {
+            .memory-page .memory-fields-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+        }
+    `;
+
+    document.head.appendChild(style);
+}
+
 
 function openAddMemoryScreen() {
+   memoryStyleOnce();
     showPage(`
         <div class="expense-page memory-page">
             <h2 class="expense-title">Add Memory</h2>
