@@ -1,0 +1,26 @@
+/* MEMORIES FORM ALIGNMENT */
+
+.memory-fields-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.memory-fields-grid .expense-field {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    align-items: center;
+    gap: 12px;
+}
+
+.memory-fields-grid .expense-label {
+    text-align: right;
+    margin: 0;
+}
+
+.memory-fields-grid input,
+.memory-fields-grid select,
+.memory-fields-grid textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
