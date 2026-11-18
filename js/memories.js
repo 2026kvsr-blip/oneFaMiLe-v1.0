@@ -233,7 +233,61 @@ function memoryStyleOnce() {
     cursor: pointer;
     z-index: 2;
 }
+.memory-delete-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000000;
+}
 
+.memory-delete-box {
+    width: calc(100% - 40px);
+    max-width: 320px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #c4d4ff;
+    border-radius: 14px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.memory-delete-box h3 {
+    margin: 0 0 10px;
+    color: #2d5274;
+}
+
+.memory-delete-box p {
+    margin: 0 0 18px;
+    color: #52677b;
+}
+
+.memory-delete-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.memory-delete-actions button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.memory-delete-cancel {
+    background: #fff;
+    border: 1px solid #4a90d9;
+    color: #2d5274;
+}
+
+.memory-delete-confirm {
+    background: #d93025;
+    border: 1px solid #d93025;
+    color: #fff;
+}
 @media (max-width: 600px) {
     .memory-page .memory-photo-slots {
         grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -421,16 +475,46 @@ memoryPhotoSlots.addEventListener('click', event => {
     if (removeButton) {
         const index = Number(removeButton.dataset.removePhoto);
 
-        const confirmDelete = confirm(
-            'Do you want to delete this photo?'
-        );
+        const overlay = document.createElement('div');
+        overlay.className = 'memory-delete-overlay';
 
-        if (!confirmDelete) return;
+        overlay.innerHTML = `
+            <div class="memory-delete-box">
+                <h3>Delete Photo?</h3>
+                <p>Are you sure you want to delete this photo?</p>
 
-        URL.revokeObjectURL(selectedMemoryPhotos[index].url);
-        selectedMemoryPhotos.splice(index, 1);
+                <div class="memory-delete-actions">
+                    <button type="button"
+                        class="memory-delete-cancel">Cancel</button>
 
-        updateMemoryPhotoSlots();
+                    <button type="button"
+                        class="memory-delete-confirm">Delete</button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        overlay.querySelector('.memory-delete-cancel').onclick = () => {
+            overlay.remove();
+        };
+
+        overlay.querySelector('.memory-delete-confirm').onclick = () => {
+            if (selectedMemoryPhotos[index]) {
+                URL.revokeObjectURL(selectedMemoryPhotos[index].url);
+                selectedMemoryPhotos.splice(index, 1);
+                updateMemoryPhotoSlots();
+            }
+
+            overlay.remove();
+        };
+
+        overlay.addEventListener('click', event => {
+            if (event.target === overlay) {
+                overlay.remove();
+            }
+        });
+
         return;
     }
 
