@@ -166,7 +166,13 @@ function memoryStyleOnce() {
             white-space: nowrap !important;
             box-sizing: border-box !important;
         }
-
+.memory-page.memory-form-view #memoryForm .expense-actions > button.expense-secondary {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: 1px solid #4a90d9 !important;
+    color: #2d5274 !important;
+    box-shadow: none !important;
+}
         @media (max-width: 600px) {
             .memory-page .memory-fields-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
