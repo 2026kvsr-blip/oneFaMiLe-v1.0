@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe - MEMORIES FRONTEND
 ===================================== */
@@ -244,6 +245,15 @@ function memoryStyleOnce() {
     align-items: center;
     justify-content: center;
     z-index: 2;
+}
+.memory-page .memory-photo-slot:has(img) {
+    background: #dff3e3 !important;
+    border: 2px solid #2e8b57 !important;
+}
+
+.memory-page .memory-photo-remove {
+    background: #d93025 !important;
+    color: #ffffff !important;
 }
 .memory-delete-overlay {
     position: fixed;
