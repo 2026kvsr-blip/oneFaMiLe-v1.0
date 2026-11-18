@@ -76,9 +76,9 @@ function memoryStyleOnce() {
 
 .memory-page .expense-field input[type="file"]::file-selector-button {
     font-size: 13px !important;
+    padding: 0 !important;
     border: none !important;
     background: transparent !important;
-    padding: 5px 0 !important;
     color: #245b91 !important;
     cursor: pointer;
 }
