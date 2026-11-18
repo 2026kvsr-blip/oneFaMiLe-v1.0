@@ -540,8 +540,7 @@ const btn = $('activitySaveBtn');
 
 // Activity Form లోని అన్ని interactive fields తీసుకోవాలి
 const formControls = Array.from(
-  form.querySelectorAll('button, input, select, textarea')
-);
+form.querySelectorAll('button, input:not([type="hidden"]), select, textarea'));
 
 // ప్రతి control యొక్క పాత disabled status గుర్తుంచుకోవాలి
 const previousControlStates = formControls.map(control => ({
