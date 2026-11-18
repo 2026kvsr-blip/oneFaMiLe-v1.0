@@ -18,8 +18,7 @@ function openAddMemoryScreen() {
 
         <form id="memoryForm" class="expense-form">
 
-            <div class="expense-filter-grid">
-
+<div class="memory-fields-grid">
                 <div class="expense-field">
                     <label class="expense-label">Title *</label>
                     <input type="text" id="memoryTitle"
