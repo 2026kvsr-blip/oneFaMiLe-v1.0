@@ -173,16 +173,17 @@ function memoryStyleOnce() {
     color: #2d5274 !important;
     box-shadow: none !important;
 }
-      .memory-page .memory-photo-slots {
+     .memory-page .memory-photo-slots {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 8px;
-    margin-top: 5px;
-    padding: 10px;
+    gap: 5px;
+    margin: 2px 0;
+    padding: 5px;
     border: 1px solid #9bb9d4;
-    border-radius: 10px;
-    background: #ffffff;
+    border-radius: 8px;
+    background: #fff;
     box-sizing: border-box;
+    align-items: center;
 }
 
 .memory-page .memory-photo-field input[type="file"] {
@@ -195,7 +196,7 @@ function memoryStyleOnce() {
     aspect-ratio: 1 / 1;
     min-width: 0;
     border: 1px dashed #7fa6cc;
-    border-radius: 9px;
+    border-radius: 7px;
     background: #fff;
     overflow: hidden;
     display: flex;
@@ -205,10 +206,14 @@ function memoryStyleOnce() {
     box-sizing: border-box;
 }
 
+
 .memory-page .memory-photo-slot img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
 .memory-page .memory-photo-slot .memory-photo-add {
@@ -219,18 +224,25 @@ function memoryStyleOnce() {
 
 .memory-page .memory-photo-remove {
     position: absolute;
-    top: 3px;
-    right: 3px;
-    width: 23px;
-    height: 23px;
+    top: 2px;
+    right: 2px;
+    width: 19px !important;
+    min-width: 19px !important;
+    max-width: 19px !important;
+    height: 19px !important;
+    min-height: 19px !important;
+    max-height: 19px !important;
+    padding: 0 !important;
+    margin: 0 !important;
     border: none;
     border-radius: 50%;
     background: #d93025;
     color: white;
-    font-size: 17px;
-    line-height: 20px;
-    padding: 0;
-    cursor: pointer;
+    font-size: 15px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 2;
 }
 .memory-delete-overlay {
