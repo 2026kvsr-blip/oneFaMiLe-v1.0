@@ -195,36 +195,35 @@ function openAddMemoryScreen() {
     placeholder="About Memory"></textarea>
                         </div>
 
-                        <div class="expense-field">
-                            <label class="expense-label">Photos (Max 5)</label>
-                            <input type="file" id="memoryPhotos"
-                                accept="image/*" multiple>
-                            <small>Max 5 photos</small>
-                        </div>
+                     <div class="expense-field">
+    <label class="expense-label">Photos (Max 5)</label>
+    <input type="file" id="memoryPhotos"
+        accept="image/*" multiple>
+    <small id="memoryPhotosCount">0 photos selected</small>
+</div>
 
-                        <div class="expense-field">
-                            <label class="expense-label">Videos (Max 3)</label>
-                            <input type="file" id="memoryVideos"
-                                accept="video/*" multiple>
-                            <small>Each max 10min, Total 20min</small>
-                        </div>
+                     <div class="expense-field">
+    <label class="expense-label">Videos (Max 3)</label>
+    <input type="file" id="memoryVideos"
+        accept="video/*" multiple>
+    <small id="memoryVideosCount">0 videos selected</small>
+</div>
 
-                        <div class="expense-field">
-                            <label class="expense-label">Voice Messages (Max 3)</label>
-                            <input type="file" id="memoryVoice"
-                                accept="audio/*" multiple>
-                            <small>Each max 10min</small>
-                        </div>
+                      <div class="expense-field">
+    <label class="expense-label">Voice Messages (Max 3)</label>
+    <input type="file" id="memoryVoice"
+        accept="audio/*" multiple>
+    <small id="memoryVoiceCount">0 voice messages selected</small>
+</div>
 
                     </div>
 
-                    <div style="margin:12px 0;">
-                        <label>
-                            <input type="checkbox" id="memorySensitive">
-                            Sensitive Memory
-                        </label>
-                    </div>
-
+                    <div class="memory-sensitive-line">
+    <label>
+        <input type="checkbox" id="memorySensitive">
+        Sensitive
+    </label>
+</div>
                     <div class="expense-actions">
                         <button type="button" class="expense-primary"
                             id="memorySaveBtn">Save</button>
