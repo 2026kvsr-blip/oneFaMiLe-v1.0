@@ -1,14 +1,16 @@
-/* MEMORIES FORM ALIGNMENT */
+/* =====================================
+   oneFaMiLe - MEMORIES PAGE STYLES
+===================================== */
 
 .memory-fields-grid {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
 }
 
 .memory-fields-grid .expense-field {
     display: grid;
-    grid-template-columns: 220px 1fr;
+    grid-template-columns: 220px minmax(0, 1fr);
     align-items: center;
     gap: 12px;
 }
@@ -23,4 +25,20 @@
 .memory-fields-grid textarea {
     width: 100%;
     box-sizing: border-box;
+}
+
+.memory-fields-grid small {
+    grid-column: 2;
+    margin-top: -8px;
+}
+
+/* Mobile Responsive */
+
+@media (max-width: 600px) {
+
+    .memory-fields-grid .expense-field {
+        grid-template-columns: 125px minmax(0, 1fr);
+        gap: 8px;
+    }
+
 }
