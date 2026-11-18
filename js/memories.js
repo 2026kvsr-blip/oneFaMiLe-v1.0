@@ -255,10 +255,52 @@ function memoryStyleOnce() {
     border: 2px solid #2e8b57 !important;
 }
 
+
+
+
 .memory-page .memory-video-remove {
     background: #d93025 !important;
     color: #fff !important;
 }
+
+/* VOICE 3 EQUAL SIZE BOXES */
+.memory-page .memory-voice-slots {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+    margin: 2px 0;
+    padding: 5px;
+    border: 1px solid #9bb9d4;
+    border-radius: 8px;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.memory-page .memory-voice-slot {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    min-width: 0;
+    border: 1px dashed #9bb9d4;
+    border-radius: 6px;
+    background: #f7faff;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.memory-page .memory-voice-slot:has(audio) {
+    background: #dff3e3 !important;
+    border: 2px solid #2e8b57 !important;
+}
+
+.memory-page .memory-voice-remove {
+    background: #d93025 !important;
+    color: #fff !important;
+}
+
 .memory-page .memory-photo-remove {
     position: absolute;
     top: 2px;
@@ -444,10 +486,14 @@ function openAddMemoryScreen() {
     <small id="memoryVideosCount">0 videos selected</small>
 </div>
 
-                      <div class="expense-field">
+                     <div class="expense-field memory-voice-field">
     <label class="expense-label">Voice Messages (Max 3)</label>
+
     <input type="file" id="memoryVoice"
-        accept="audio/*" multiple>
+        accept="audio/*" multiple hidden>
+
+    <div id="memoryVoiceSlots" class="memory-voice-slots"></div>
+
     <small id="memoryVoiceCount">0 voice messages selected</small>
 </div>
 
@@ -759,6 +805,7 @@ memoryVoiceInput.addEventListener('change', () => {
 });
 const memoryVideosInput = document.getElementById('memoryVideos');
 
+// VIDEO DURATION VALIDATION
 memoryVideosInput.addEventListener('change', async () => {
     const files = Array.from(memoryVideosInput.files);
 
@@ -789,15 +836,13 @@ memoryVideosInput.addEventListener('change', async () => {
 
         if (!Number.isFinite(duration)) {
             alert('Unable to read video duration. Please select a valid video.');
-            memoryVideosInput.value = '';
-            document.getElementById('memoryVideosCount').textContent = '0 videos selected';
+            clearMemoryVideos();
             return;
         }
 
         if (duration > 600) {
             alert('Each video must not exceed 10 minutes.');
-            memoryVideosInput.value = '';
-            document.getElementById('memoryVideosCount').textContent = '0 videos selected';
+            clearMemoryVideos();
             return;
         }
 
@@ -806,11 +851,21 @@ memoryVideosInput.addEventListener('change', async () => {
 
     if (totalDuration > 1200) {
         alert('Total duration of all videos must not exceed 20 minutes.');
-        memoryVideosInput.value = '';
-        document.getElementById('memoryVideosCount').textContent = '0 videos selected';
+        clearMemoryVideos();
+        return;
     }
 });
-   const memoryVoiceInput = document.getElementById('memoryVoice');
+
+function clearMemoryVideos() {
+    selectedMemoryVideos.forEach(video => {
+        URL.revokeObjectURL(video.url);
+    });
+
+    selectedMemoryVideos = [];
+    memoryVideosInput.value = '';
+
+    updateMemoryVideoSlots();
+}   const memoryVoiceInput = document.getElementById('memoryVoice');
 
 memoryVoiceInput.addEventListener('change', async () => {
     const files = Array.from(memoryVoiceInput.files);
