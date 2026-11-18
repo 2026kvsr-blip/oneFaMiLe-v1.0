@@ -101,6 +101,9 @@ function memoryStyleOnce() {
             color: #52677b;
             line-height: 1.25;
         }
+        .memory-page .memory-sensitive-line {
+    margin-top: 22px !important;
+}
 .memory-page .memory-sensitive-line label {
     display: inline-flex !important;
     flex-direction: row !important;
