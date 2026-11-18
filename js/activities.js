@@ -600,6 +600,7 @@ previousControlStates.forEach(item => {
   }
 });
 
+  
         // Save button text తిరిగి మార్చాలి
         if (btn.isConnected) {
           btn.textContent = editRecord ? 'Update' : 'Save';
