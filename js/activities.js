@@ -538,18 +538,20 @@
       if($('title'))$('title').value=val('subCategory')||val('category')||activityType||'Activity';
 const btn = $('activitySaveBtn');
 
-// Activity Form లో ఉన్న అన్ని buttons తీసుకోవాలి
-const formButtons = Array.from(form.querySelectorAll('button'));
+// Activity Form లోని అన్ని interactive fields తీసుకోవాలి
+const formControls = Array.from(
+  form.querySelectorAll('button, input, select, textarea')
+);
 
-// ప్రతి button యొక్క పాత disabled status గుర్తుంచుకోవాలి
-const previousButtonStates = formButtons.map(button => ({
-  button: button,
-  disabled: button.disabled
+// ప్రతి control యొక్క పాత disabled status గుర్తుంచుకోవాలి
+const previousControlStates = formControls.map(control => ({
+  control: control,
+  disabled: control.disabled
 }));
 
-// Save ప్రారంభమైనప్పుడు అన్ని buttons Disable చేయాలి
-formButtons.forEach(button => {
-  button.disabled = true;
+// Save ప్రారంభమైనప్పుడు అన్ని controls Disable చేయాలి
+formControls.forEach(control => {
+  control.disabled = true;
 });
 
 // Save button text మార్చాలి
@@ -592,13 +594,12 @@ try {        // Send empty reminder date/time when Reminder is No, including edi
       } catch(e) {
         activityToast(e.message||'Unable to save activity.','error',5000);
       } finally {
-
-        // Save పూర్తయిన తర్వాత అన్ని buttons పాత స్థితికి రావాలి
-        previousButtonStates.forEach(item => {
-          if (item.button.isConnected) {
-            item.button.disabled = item.disabled;
-          }
-        });
+// Save పూర్తయిన తర్వాత అన్ని controls పాత స్థితికి రావాలి
+previousControlStates.forEach(item => {
+  if (item.control.isConnected) {
+    item.control.disabled = item.disabled;
+  }
+});
 
         // Save button text తిరిగి మార్చాలి
         if (btn.isConnected) {
