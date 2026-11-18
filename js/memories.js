@@ -65,13 +65,26 @@ function memoryStyleOnce() {
             font: inherit;
         }
 
-        .memory-page .expense-field input[type="file"] {
+       .memory-page .expense-field input[type="file"] {
+    width: 100% !important;
     font-size: 0 !important;
+    border: 1px solid #9bb9d4 !important;
+    background: #fff !important;
+    padding: 4px 8px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    border-radius: 8px !important;
+    box-sizing: border-box !important;
+}
+
+.memory-page .expense-field input[type="file"]::file-selector-button {
+    font-size: 13px !important;
+    padding: 0 !important;
+    margin-right: 8px !important;
     border: none !important;
     background: transparent !important;
-    padding: 0 !important;
-    height: 30px !important;
-    min-height: 30px !important;
+    color: #245b91 !important;
+    cursor: pointer;
 }
 
 .memory-page .expense-field input[type="file"]::file-selector-button {
