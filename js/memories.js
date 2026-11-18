@@ -66,9 +66,22 @@ function memoryStyleOnce() {
         }
 
         .memory-page .expense-field input[type="file"] {
-            padding: 4px !important;
-            font-size: 12px;
-        }
+    font-size: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    height: 30px !important;
+    min-height: 30px !important;
+}
+
+.memory-page .expense-field input[type="file"]::file-selector-button {
+    font-size: 13px !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 5px 0 !important;
+    color: #245b91 !important;
+    cursor: pointer;
+}
 
         .memory-page .expense-field small {
             font-size: 11px;
