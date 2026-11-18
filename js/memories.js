@@ -173,11 +173,20 @@ function memoryStyleOnce() {
     color: #2d5274 !important;
     box-shadow: none !important;
 }
-       .memory-page .memory-photo-slots {
+      .memory-page .memory-photo-slots {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 8px;
     margin-top: 5px;
+    padding: 10px;
+    border: 1px solid #9bb9d4;
+    border-radius: 10px;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+
+.memory-page .memory-photo-field input[type="file"] {
+    display: none !important;
 }
 
 .memory-page .memory-photo-slot {
