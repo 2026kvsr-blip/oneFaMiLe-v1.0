@@ -222,7 +222,43 @@ function memoryStyleOnce() {
     font-size: 25px;
     font-weight: bold;
 }
+/* VIDEO 3 EQUAL SIZE BOXES */
+.memory-page .memory-video-slots {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+    margin: 2px 0;
+    padding: 5px;
+    border: 1px solid #9bb9d4;
+    border-radius: 8px;
+    background: #fff;
+    box-sizing: border-box;
+}
 
+.memory-page .memory-video-slot {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    min-width: 0;
+    border: 1px dashed #9bb9d4;
+    border-radius: 6px;
+    background: #f7faff;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.memory-page .memory-video-slot:has(video) {
+    background: #dff3e3 !important;
+    border: 2px solid #2e8b57 !important;
+}
+
+.memory-page .memory-video-remove {
+    background: #d93025 !important;
+    color: #fff !important;
+}
 .memory-page .memory-photo-remove {
     position: absolute;
     top: 2px;
@@ -400,10 +436,11 @@ function openAddMemoryScreen() {
     <small id="memoryPhotosCount">0 photos selected</small>
 </div>
 
-                     <div class="expense-field">
+                    <div class="expense-field memory-video-field">
     <label class="expense-label">Videos (Max 3)</label>
     <input type="file" id="memoryVideos"
-        accept="video/*" multiple>
+        accept="video/*" multiple hidden>
+    <div id="memoryVideoSlots" class="memory-video-slots"></div>
     <small id="memoryVideosCount">0 videos selected</small>
 </div>
 
@@ -577,26 +614,148 @@ document.getElementById('memoryForm').addEventListener('reset', () => {
     updateMemoryPhotoSlots();
 });
 
-// VIDEO AND VOICE FILE COUNT
-const memoryFileCounts = [
-    ['memoryVideos', 'memoryVideosCount', 'videos', 3],
-    ['memoryVoice', 'memoryVoiceCount', 'voice messages', 3]
-];
+// VIDEO SELECTION - MAX 3
+const memoryVideosInput = document.getElementById('memoryVideos');
+const memoryVideoSlots = document.getElementById('memoryVideoSlots');
+const memoryVideosCount = document.getElementById('memoryVideosCount');
 
-memoryFileCounts.forEach(([inputId, countId, label, max]) => {
-    const input = document.getElementById(inputId);
-    const count = document.getElementById(countId);
+let selectedMemoryVideos = [];
 
-    input.addEventListener('change', () => {
-        if (input.files.length > max) {
-            alert(`Maximum ${max} ${label} only allowed.`);
-            input.value = '';
-            count.textContent = `0 ${label} selected`;
-            return;
+function updateMemoryVideoSlots() {
+    memoryVideoSlots.innerHTML = '';
+
+    for (let i = 0; i < 3; i++) {
+        const video = selectedMemoryVideos[i];
+        const slot = document.createElement('div');
+
+        slot.className = 'memory-video-slot';
+
+        if (video) {
+            slot.innerHTML = `
+                <video src="${video.url}" muted playsinline></video>
+                <button type="button"
+                    class="memory-photo-remove"
+                    data-remove-video="${i}">×</button>
+            `;
+        } else {
+            slot.innerHTML = `<span class="memory-photo-add">+</span>`;
+            slot.dataset.empty = 'true';
         }
 
-        count.textContent = `${input.files.length} ${label} selected`;
+        memoryVideoSlots.appendChild(slot);
+    }
+
+    memoryVideosCount.textContent =
+        `${selectedMemoryVideos.length} videos selected`;
+
+    const transfer = new DataTransfer();
+
+    selectedMemoryVideos.forEach(video => {
+        transfer.items.add(video.file);
     });
+
+    memoryVideosInput.files = transfer.files;
+}
+
+memoryVideoSlots.addEventListener('click', event => {
+    const removeButton = event.target.closest('[data-remove-video]');
+
+    if (removeButton) {
+        const index = Number(removeButton.dataset.removeVideo);
+
+        const overlay = document.createElement('div');
+        overlay.className = 'memory-delete-overlay';
+
+        overlay.innerHTML = `
+            <div class="memory-delete-box">
+                <h3>Delete Video?</h3>
+                <p>Are you sure you want to delete this video?</p>
+                <div class="memory-delete-actions">
+                    <button type="button"
+                        class="memory-delete-cancel">Cancel</button>
+                    <button type="button"
+                        class="memory-delete-confirm">Delete</button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        overlay.querySelector('.memory-delete-cancel').onclick = () => {
+            overlay.remove();
+        };
+
+        overlay.querySelector('.memory-delete-confirm').onclick = () => {
+            if (selectedMemoryVideos[index]) {
+                URL.revokeObjectURL(selectedMemoryVideos[index].url);
+                selectedMemoryVideos.splice(index, 1);
+                updateMemoryVideoSlots();
+            }
+
+            overlay.remove();
+        };
+
+        overlay.addEventListener('click', event => {
+            if (event.target === overlay) {
+                overlay.remove();
+            }
+        });
+
+        return;
+    }
+
+    const emptySlot = event.target.closest('[data-empty="true"]');
+
+    if (emptySlot) {
+        memoryVideosInput.click();
+    }
+});
+
+memoryVideosInput.addEventListener('change', () => {
+    const newFiles = Array.from(memoryVideosInput.files);
+    const remaining = 3 - selectedMemoryVideos.length;
+
+    if (newFiles.length > remaining) {
+        alert(`You can select only ${remaining} more videos.`);
+    }
+
+    newFiles.slice(0, remaining).forEach(file => {
+        selectedMemoryVideos.push({
+            file: file,
+            url: URL.createObjectURL(file)
+        });
+    });
+
+    updateMemoryVideoSlots();
+});
+
+updateMemoryVideoSlots();
+
+document.getElementById('memoryForm').addEventListener('reset', () => {
+    selectedMemoryVideos.forEach(video => {
+        URL.revokeObjectURL(video.url);
+    });
+
+    selectedMemoryVideos = [];
+    memoryVideosInput.value = '';
+
+    updateMemoryVideoSlots();
+});
+
+// VOICE FILE COUNT
+const memoryVoiceInput = document.getElementById('memoryVoice');
+const memoryVoiceCount = document.getElementById('memoryVoiceCount');
+
+memoryVoiceInput.addEventListener('change', () => {
+    if (memoryVoiceInput.files.length > 3) {
+        alert('Maximum 3 voice messages only allowed.');
+        memoryVoiceInput.value = '';
+        memoryVoiceCount.textContent = '0 voice messages selected';
+        return;
+    }
+
+    memoryVoiceCount.textContent =
+        `${memoryVoiceInput.files.length} voice messages selected`;
 });
 const memoryVideosInput = document.getElementById('memoryVideos');
 
