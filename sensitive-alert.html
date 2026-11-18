@@ -247,8 +247,10 @@ window.addEventListener("message",function(event){
     form.hidden = true;
     closePageBtn.hidden = true;
 
-    renderDetails(data.rows || []);
-
+renderDetails(
+  data.rows || [],
+  data.alertMeta
+);
   }else{
 
     message.hidden = false;
@@ -271,22 +273,38 @@ window.addEventListener("message",function(event){
 });
 
 
-function renderDetails(rows){
+function renderDetails(rows, alertMeta){
+  
+const meta = alertMeta || {
+  color: "#d69e00",
+  background: "#fff8e1",
+  textColor: "#805500",
+  heading: "Sensitive Activity",
+  message: "Sensitive activity details unlocked."
+};
 
-  const heading = document.createElement("div");
+const heading = document.createElement("div");
 
-  heading.style.background = "#fff8df";
-  heading.style.border = "3px solid #dca400";
-  heading.style.borderRadius = "14px";
-  heading.style.padding = "18px";
-  heading.style.marginBottom = "22px";
-  heading.style.color = "#79500b";
+heading.style.background = meta.background;
+heading.style.borderLeft = "6px solid " + meta.color;
+heading.style.borderRadius = "10px";
+heading.style.padding = "18px";
+heading.style.marginBottom = "22px";
+heading.style.color = meta.textColor;
 
-  heading.innerHTML =
-    '<div style="font-size:22px;font-weight:bold;margin-bottom:8px;">' +
-    'Sensitive Activity</div>' +
-    '<div style="font-size:17px;font-weight:normal;">' +
-    'Your sensitive activity details are shown below.</div>';
+const title = document.createElement("div");
+
+title.textContent = meta.heading;
+title.style.fontSize = "22px";
+title.style.fontWeight = "bold";
+title.style.marginBottom = "8px";
+
+const description = document.createElement("div");
+
+description.textContent = meta.message;
+description.style.fontSize = "16px";
+
+heading.replaceChildren(title, description);
 
   const table = document.createElement("table");
   table.style.width = "100%";
