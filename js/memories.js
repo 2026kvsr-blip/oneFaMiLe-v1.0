@@ -247,6 +247,21 @@ function openAddMemoryScreen() {
     document.getElementById("memoryBackBtn").onclick = () => {
         memoriesBtn.click();
     };
+   const memoryFileCounts = [
+    ['memoryPhotos', 'memoryPhotosCount', 'photos'],
+    ['memoryVideos', 'memoryVideosCount', 'videos'],
+    ['memoryVoice', 'memoryVoiceCount', 'voice messages']
+];
+
+memoryFileCounts.forEach(([inputId, countId, label]) => {
+    const input = document.getElementById(inputId);
+    const count = document.getElementById(countId);
+
+    input.addEventListener('change', () => {
+        const total = input.files.length;
+        count.textContent = `${total} ${label} selected`;
+    });
+});
 }
 
 
