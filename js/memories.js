@@ -421,6 +421,12 @@ memoryPhotoSlots.addEventListener('click', event => {
     if (removeButton) {
         const index = Number(removeButton.dataset.removePhoto);
 
+        const confirmDelete = confirm(
+            'Do you want to delete this photo?'
+        );
+
+        if (!confirmDelete) return;
+
         URL.revokeObjectURL(selectedMemoryPhotos[index].url);
         selectedMemoryPhotos.splice(index, 1);
 
