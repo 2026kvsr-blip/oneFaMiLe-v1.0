@@ -427,8 +427,29 @@ ${field('Photos',`
       if(!$('exDate').value){status('Expense Date is required.','error');$('exDate').focus();return}
       if(!cat.value){status('Main Category is required.','error');cat.focus();return}
       if(!sub.value){status('Sub Category is required.','error');sub.focus();return}
-      const btn=$('expenseSaveBtn');btn.disabled=true;btn.textContent='Saving…';
-     try {
+const btn = $('expenseSaveBtn');
+
+// Expense Form లోని అన్ని interactive controls తీసుకోవాలి
+const form = $('expenseForm');
+
+const formControls = Array.from(
+  form.querySelectorAll('button, input:not([type="hidden"]), select, textarea')
+);
+
+// ప్రతి control యొక్క పాత disabled status గుర్తుంచుకోవాలి
+const previousControlStates = formControls.map(control => ({
+  control: control,
+  disabled: control.disabled
+}));
+
+// Save ప్రారంభమైనప్పుడు అన్ని controls Disable చేయాలి
+formControls.forEach(control => {
+  control.disabled = true;
+});
+
+// Save Button text మార్చాలి
+btn.textContent = 'Saving…';
+      try {
   const photoFiles = selectedExpensePhotos.slice();
 
   const payload = {
@@ -476,8 +497,19 @@ ${field('Photos',`
   syncEntrySequence();
 
 } catch(err){status(err.message||'Unable to save expense. Please try again.','error')}
-      finally{btn.disabled=false;btn.textContent=editRecord?'Update':'Save'}
-    };
+finally {
+  // Save పూర్తయిన తర్వాత అన్ని controls పాత స్థితికి రావాలి
+  previousControlStates.forEach(item => {
+    if (item.control.isConnected) {
+      item.control.disabled = item.disabled;
+    }
+  });
+
+  // Save Button text తిరిగి మార్చాలి
+  if (btn.isConnected) {
+    btn.textContent = editRecord ? 'Update' : 'Save';
+  }
+}    };
     $('expenseResetBtn').onclick=()=>setTimeout(()=>{ selectedExpensePhotos=[null,null,null];updateExpensePhotoSlots();$('exDate').value=dateToday();$('exSpentBySearch').value='';$('exSpentBySearch').disabled=true;$('exAmount').value='';$('exAmount').disabled=true;setPhotoSelectionEnabled(false);vehicleFields.classList.add('hidden');$('exNormalDescription').classList.remove('hidden');sub.innerHTML=selectOptions([],'Select Subcategory');subRow.classList.remove('hidden');sub.required=true;syncEntrySequence();status('');},0);
   }
   function renderSensitiveGate(kind){
