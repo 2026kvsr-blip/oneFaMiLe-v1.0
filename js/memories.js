@@ -298,11 +298,7 @@ function openAddMemoryScreen() {
     document.getElementById("memoryBackBtn").onclick = () => {
         memoriesBtn.click();
     };
-   const memoryFileCounts = [
-    ['memoryPhotos', 'memoryPhotosCount', 'photos'],
-    ['memoryVideos', 'memoryVideosCount', 'videos'],
-    ['memoryVoice', 'memoryVoiceCount', 'voice messages']
-];
+  
 
 
 const memoryFileCounts = [
