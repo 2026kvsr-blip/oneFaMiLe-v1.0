@@ -304,14 +304,123 @@ function openAddMemoryScreen() {
     ['memoryVoice', 'memoryVoiceCount', 'voice messages']
 ];
 
-memoryFileCounts.forEach(([inputId, countId, label]) => {
+
+const memoryFileCounts = [
+    ['memoryPhotos', 'memoryPhotosCount', 'photos', 5],
+    ['memoryVideos', 'memoryVideosCount', 'videos', 3],
+    ['memoryVoice', 'memoryVoiceCount', 'voice messages', 3]
+];
+
+memoryFileCounts.forEach(([inputId, countId, label, max]) => {
     const input = document.getElementById(inputId);
     const count = document.getElementById(countId);
 
     input.addEventListener('change', () => {
-        const total = input.files.length;
-        count.textContent = `${total} ${label} selected`;
+        if (input.files.length > max) {
+            alert(`Maximum ${max} ${label} only allowed.`);
+            input.value = '';
+            count.textContent = `0 ${label} selected`;
+            return;
+        }
+
+        count.textContent = `${input.files.length} ${label} selected`;
     });
+});
+const memoryVideosInput = document.getElementById('memoryVideos');
+
+memoryVideosInput.addEventListener('change', async () => {
+    const files = Array.from(memoryVideosInput.files);
+
+    if (!files.length) return;
+
+    let totalDuration = 0;
+
+    for (const file of files) {
+        const url = URL.createObjectURL(file);
+
+        const duration = await new Promise(resolve => {
+            const video = document.createElement('video');
+            video.preload = 'metadata';
+
+            video.onloadedmetadata = () => {
+                const seconds = video.duration;
+                URL.revokeObjectURL(url);
+                resolve(seconds);
+            };
+
+            video.onerror = () => {
+                URL.revokeObjectURL(url);
+                resolve(NaN);
+            };
+
+            video.src = url;
+        });
+
+        if (!Number.isFinite(duration)) {
+            alert('Unable to read video duration. Please select a valid video.');
+            memoryVideosInput.value = '';
+            document.getElementById('memoryVideosCount').textContent = '0 videos selected';
+            return;
+        }
+
+        if (duration > 600) {
+            alert('Each video must not exceed 10 minutes.');
+            memoryVideosInput.value = '';
+            document.getElementById('memoryVideosCount').textContent = '0 videos selected';
+            return;
+        }
+
+        totalDuration += duration;
+    }
+
+    if (totalDuration > 1200) {
+        alert('Total duration of all videos must not exceed 20 minutes.');
+        memoryVideosInput.value = '';
+        document.getElementById('memoryVideosCount').textContent = '0 videos selected';
+    }
+});
+   const memoryVoiceInput = document.getElementById('memoryVoice');
+
+memoryVoiceInput.addEventListener('change', async () => {
+    const files = Array.from(memoryVoiceInput.files);
+
+    if (!files.length) return;
+
+    for (const file of files) {
+        const url = URL.createObjectURL(file);
+
+        const duration = await new Promise(resolve => {
+            const audio = document.createElement('audio');
+            audio.preload = 'metadata';
+
+            audio.onloadedmetadata = () => {
+                const seconds = audio.duration;
+                URL.revokeObjectURL(url);
+                resolve(seconds);
+            };
+
+            audio.onerror = () => {
+                URL.revokeObjectURL(url);
+                resolve(NaN);
+            };
+
+            audio.src = url;
+        });
+
+        if (!Number.isFinite(duration)) {
+            alert('Unable to read voice message duration. Please select a valid audio file.');
+            memoryVoiceInput.value = '';
+            document.getElementById('memoryVoiceCount').textContent = '0 voice messages selected';
+            return;
+        }
+
+        if (duration > 600) {
+            alert('Each voice message must not exceed 10 minutes.');
+            memoryVoiceInput.value = '';
+            document.getElementById('memoryVoiceCount').textContent = '0 voice messages selected';
+            return;
+        }
+    }
 });
 }
 
