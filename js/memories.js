@@ -190,31 +190,30 @@ function openAddMemoryScreen() {
                         </div>
 
                         <div class="expense-field">
-                            <label class="expense-label">Description</label>
-                            <textarea id="memoryDescription" rows="3"
-                                placeholder="Write your memories here"></textarea>
+                           <label class="expense-label">Description</label>
+<textarea id="memoryDescription" rows="3"
+    placeholder="About Memory"></textarea>
                         </div>
 
                         <div class="expense-field">
-                            <label class="expense-label">Photos (Maximum 5)</label>
+                            <label class="expense-label">Photos (Max 5)</label>
                             <input type="file" id="memoryPhotos"
                                 accept="image/*" multiple>
-                            <small>Maximum 5 photos</small>
+                            <small>Max 5 photos</small>
                         </div>
 
                         <div class="expense-field">
-                            <label class="expense-label">Videos (Maximum 3)</label>
+                            <label class="expense-label">Videos (Max 3)</label>
                             <input type="file" id="memoryVideos"
                                 accept="video/*" multiple>
-                            <small>Each video: Maximum 10 minutes.
-                                Total duration: Maximum 20 minutes.</small>
+                            <small>Each max 10min, Total 20min</small>
                         </div>
 
                         <div class="expense-field">
-                            <label class="expense-label">Voice Messages (Maximum 3)</label>
+                            <label class="expense-label">Voice Messages (Max 3)</label>
                             <input type="file" id="memoryVoice"
                                 accept="audio/*" multiple>
-                            <small>Each voice message: Maximum 10 minutes</small>
+                            <small>Each max 10min</small>
                         </div>
 
                     </div>
