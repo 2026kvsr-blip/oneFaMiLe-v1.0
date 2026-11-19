@@ -405,6 +405,12 @@ function memoryStyleOnce() {
         margin-top: 0px;
     }
 }
+/* DESKTOP MICROPHONE SIZE */
+.memory-page .memory-mic-icon {
+    width: 42px !important;
+    height: 42px !important;
+    stroke-width: 1.5 !important;
+}
 @media (max-width: 600px) {
     .memory-page .memory-mic-icon {
     width: 25px !important;
