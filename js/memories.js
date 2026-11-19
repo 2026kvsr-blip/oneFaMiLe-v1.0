@@ -1025,6 +1025,8 @@ document.getElementById('memoryForm').addEventListener('reset', () => {
 const memoryVoiceInput = document.getElementById('memoryVoice');
 const memoryVoiceSlots = document.getElementById('memoryVoiceSlots');
 const memoryVoiceCount = document.getElementById('memoryVoiceCount');
+   const MEMORY_API =
+    "https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 // DESCRIPTION VOICE TO TEXT
 const memoryDescription =
     document.getElementById('memoryDescription');
@@ -1063,14 +1065,58 @@ memorySpeechBtn.addEventListener('click', () => {
 });
 
 memorySpeechRecognition && (
-    memorySpeechRecognition.onresult = (event) => {
-        const spokenText =
-            event.results[0][0].transcript;
+    memorySpeechRecognition.onresult = async (event) => {
+        try {
+            const spokenText =
+                event.results[0][0].transcript;
 
-        memoryDescription.value +=
-            (memoryDescription.value ? ' ' : '') + spokenText;
+            const f = (() => {
+                try {
+                    return JSON.parse(
+                        localStorage.getItem('currentFamily') || '{}'
+                    );
+                } catch (_) {
+                    return {};
+                }
+            })();
+
+            const body = new URLSearchParams({
+                action: 'translateMemorySpeech',
+                sessionToken: sessionStorage.getItem('sessionToken') || '',
+                familyId: String(f.familyId || ''),
+                text: spokenText,
+                targetLanguage: memorySpeechOutputLang.value
+            });
+
+            const response = await fetch(MEMORY_API, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body
+            });
+
+            const result = await response.json();
+
+            if (result.status !== 'success') {
+                throw new Error(
+                    result.message || 'Translation failed.'
+                );
+            }
+
+            memoryDescription.value +=
+                (memoryDescription.value ? ' ' : '') +
+                result.translatedText;
+
+        } catch (error) {
+            showMemoryMessage(
+                'Translation Error',
+                error.message || 'Unable to translate speech.'
+            );
+        }
     }
 );
+   
 let selectedMemoryVoices = [];
 
 
