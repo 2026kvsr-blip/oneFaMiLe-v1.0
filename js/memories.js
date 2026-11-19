@@ -366,14 +366,14 @@ function memoryStyleOnce() {
     }
 
     .memory-page .memory-record-button small {
-        font-size: 8px !important;
+        font-size: 6px !important;
         margin-top: 0px;
     }
 }
 @media (max-width: 600px) {
     .memory-page .memory-mic-icon {
-    width: 22px !important;
-    height: 22px !important;
+    width: 25px !important;
+    height: 25px !important;
     stroke-width: 1.3 !important;
     display: block;
     margin: 0 auto;
