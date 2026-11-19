@@ -1025,7 +1025,52 @@ document.getElementById('memoryForm').addEventListener('reset', () => {
 const memoryVoiceInput = document.getElementById('memoryVoice');
 const memoryVoiceSlots = document.getElementById('memoryVoiceSlots');
 const memoryVoiceCount = document.getElementById('memoryVoiceCount');
+// DESCRIPTION VOICE TO TEXT
+const memoryDescription =
+    document.getElementById('memoryDescription');
 
+const memorySpeechBtn =
+    document.getElementById('memorySpeechBtn');
+
+const memorySpeechInputLang =
+    document.getElementById('memorySpeechInputLang');
+
+const memorySpeechOutputLang =
+    document.getElementById('memorySpeechOutputLang');
+
+const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+let memorySpeechRecognition = null;
+
+if (SpeechRecognition) {
+    memorySpeechRecognition = new SpeechRecognition();
+    memorySpeechRecognition.continuous = false;
+    memorySpeechRecognition.interimResults = false;
+}
+
+memorySpeechBtn.addEventListener('click', () => {
+    if (!memorySpeechRecognition) {
+        showMemoryMessage(
+            'Not Supported',
+            'Please use Chrome browser for Voice to Text.'
+        );
+        return;
+    }
+
+    memorySpeechRecognition.lang = memorySpeechInputLang.value;
+    memorySpeechRecognition.start();
+});
+
+memorySpeechRecognition && (
+    memorySpeechRecognition.onresult = (event) => {
+        const spokenText =
+            event.results[0][0].transcript;
+
+        memoryDescription.value +=
+            (memoryDescription.value ? ' ' : '') + spokenText;
+    }
+);
 let selectedMemoryVoices = [];
 
 
