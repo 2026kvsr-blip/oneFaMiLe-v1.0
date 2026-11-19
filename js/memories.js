@@ -741,7 +741,11 @@ function updateMemoryPhotoSlots() {
 
     memoryPhotosCount.textContent =
         `${selectedMemoryPhotos.length} photos selected`;
+const clearPhotosBtn =
+    document.getElementById('clearMemoryPhotos');
 
+clearPhotosBtn.style.display =
+    selectedMemoryPhotos.length > 0 ? 'inline-flex' : 'none';
     const transfer = new DataTransfer();
 
     selectedMemoryPhotos.forEach(photo => {
@@ -880,7 +884,11 @@ function updateMemoryVideoSlots() {
 
     memoryVideosCount.textContent =
         `${selectedMemoryVideos.length} videos selected`;
+const clearVideosBtn =
+    document.getElementById('clearMemoryVideos');
 
+clearVideosBtn.style.display =
+    selectedMemoryVideos.length > 0 ? 'inline-flex' : 'none';
     const transfer = new DataTransfer();
 
     selectedMemoryVideos.forEach(video => {
@@ -1092,6 +1100,11 @@ slot.innerHTML = `
 
     memoryVoiceCount.textContent =
         `${selectedMemoryVoices.length} voice selected`;
+   const clearVoicesBtn =
+    document.getElementById('clearMemoryVoices');
+
+clearVoicesBtn.style.display =
+    selectedMemoryVoices.length > 0 ? 'inline-flex' : 'none';
 }
 
 memoryVoiceInput.addEventListener('change', () => {  
