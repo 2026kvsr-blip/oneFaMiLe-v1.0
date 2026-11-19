@@ -1060,9 +1060,28 @@ memorySpeechBtn.addEventListener('click', () => {
         return;
     }
 
+    if (memorySpeechActive) {
+        return;
+    }
+
     memorySpeechRecognition.lang = memorySpeechInputLang.value;
-    memorySpeechRecognition.start();
+
+    try {
+        memorySpeechRecognition.start();
+        memorySpeechActive = true;
+    } catch (error) {
+        memorySpeechActive = false;
+        console.error('Speech Recognition Error:', error);
+    }
 });
+
+memorySpeechRecognition.onend = () => {
+    memorySpeechActive = false;
+};
+
+memorySpeechRecognition.onerror = () => {
+    memorySpeechActive = false;
+};
 
 memorySpeechRecognition && (
     memorySpeechRecognition.onresult = async (event) => {
