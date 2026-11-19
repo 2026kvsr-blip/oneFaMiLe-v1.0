@@ -1052,6 +1052,12 @@ if (SpeechRecognition) {
 }
 
 memorySpeechBtn.addEventListener('click', () => {
+
+       // iPhone: Use native keyboard dictation
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        memoryDescription.focus();
+        return;
+    }
     if (!memorySpeechRecognition) {
         showMemoryMessage(
             'Not Supported',
