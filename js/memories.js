@@ -329,7 +329,23 @@ function memoryStyleOnce() {
     border: none !important;
     box-shadow: none !important;
 }
+/* TIMER OUTSIDE FOURTH BOX - RIGHT SIDE */
+.memory-page .memory-voice-slot:nth-child(4) {
+    width: calc(100% - 42px) !important;
+    overflow: visible !important;
+    position: relative !important;
+}
 
+.memory-page .memory-record-timer {
+    position: absolute !important;
+    left: calc(100% + 5px) !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #176b36 !important;
+    white-space: nowrap !important;
+}
 
 .memory-page .memory-record-button {
     width: 100%;
