@@ -926,12 +926,23 @@ function updateMemoryVoiceSlots() {
 
         // FOURTH BOX - RECORD BUTTON
         if (i === 3) {
-            slot.innerHTML = `
-                <button type="button" class="memory-record-button">
-                    🎙️
-                    <small>Record</small>
-                </button>
-            `;
+          
+          
+slot.innerHTML = `
+    <button type="button" class="memory-record-button">
+        <svg class="memory-mic-icon" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor"
+             stroke-width="1.4" stroke-linecap="round"
+             stroke-linejoin="round">
+            <rect x="9" y="2" width="6" height="12" rx="3"/>
+            <path d="M5 10a7 7 0 0 0 14 0"/>
+            <path d="M12 17v5"/>
+            <path d="M8 22h8"/>
+        </svg>
+        <small>Record</small>
+    </button>
+`;
+
 
         } else if (selectedMemoryVoices[i]) {
 
