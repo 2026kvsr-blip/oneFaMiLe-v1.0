@@ -610,11 +610,32 @@ function openAddMemoryScreen() {
                         </div>
 
                         <div class="expense-field">
-                           <label class="expense-label">Description</label>
-<textarea id="memoryDescription" rows="3"
-    maxlength="500"
-    placeholder="About Memory"></textarea>
-                        </div>
+    <label class="expense-label">Description</label>
+
+    <textarea id="memoryDescription" rows="3"
+        maxlength="500"
+        placeholder="About Memory"></textarea>
+
+    <div class="memory-speech-controls">
+
+        <label class="expense-label">Speaking Language</label>
+        <select id="memorySpeechInputLang">
+            <option value="te-IN" selected>తెలుగు</option>
+            <option value="en-IN">English</option>
+        </select>
+
+        <label class="expense-label">Text Language</label>
+        <select id="memorySpeechOutputLang">
+            <option value="te">తెలుగు</option>
+            <option value="en" selected>English</option>
+        </select>
+
+        <button type="button" id="memorySpeechBtn">
+            🎙 Speak
+        </button>
+
+    </div>
+</div>
 
                   <div class="expense-field memory-photo-field">
     <label class="expense-label">Photos (Max 5)</label>
