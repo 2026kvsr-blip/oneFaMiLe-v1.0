@@ -1183,9 +1183,7 @@ memoryVoiceSlots.addEventListener('click', async (event) => {
 if (finalTimer) {
     finalTimer.style.display = 'block';
 
-    setTimeout(() => {
-        finalTimer.style.display = 'none';
-    }, 2000);
+   finalTimer.style.display = 'none';
 }
             }
 
