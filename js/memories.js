@@ -279,9 +279,16 @@ function memoryStyleOnce() {
 }
 
 /* VOICE 3 EQUAL SIZE BOXES */
+
+/* VOICE 4 BOXES */
+
+.memory-page .memory-voice-field input[type="file"] {
+    display: none !important;
+}
+
 .memory-page .memory-voice-slots {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 5px;
     margin: 2px 0;
     padding: 5px;
@@ -289,21 +296,28 @@ function memoryStyleOnce() {
     border-radius: 8px;
     background: #fff;
     box-sizing: border-box;
+    align-items: center;
 }
 
 .memory-page .memory-voice-slot {
+    position: relative;
     width: 100%;
     aspect-ratio: 1 / 1;
     min-width: 0;
     border: 1px dashed #9bb9d4;
-    border-radius: 6px;
+    border-radius: 7px;
     background: #f7faff;
-    position: relative;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer !important;
     box-sizing: border-box;
+}
+
+.memory-page .memory-voice-slot audio {
+    width: 100%;
+    max-width: 100%;
 }
 
 .memory-page .memory-voice-slot:has(audio) {
@@ -860,28 +874,30 @@ let selectedMemoryVoices = [];
 
 function updateMemoryVoiceSlots() {
     memoryVoiceSlots.innerHTML = '';
-
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
         const slot = document.createElement('div');
         slot.className = 'memory-voice-slot';
-
+       if (i === 3) {
+    slot.innerHTML = `
+        <button type="button" class="memory-record-button">
+            🎙️
+            <small>Record</small>
+        </button>
+    `;
+} else if (selectedMemoryVoices[i]) {
         if (selectedMemoryVoices[i]) {
             const audio = document.createElement('audio');
             audio.src = selectedMemoryVoices[i].url;
             audio.controls = true;
             slot.appendChild(audio);
-
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button';
             removeBtn.className = 'memory-photo-remove';
             removeBtn.textContent = '×';
-
             removeBtn.onclick = (event) => {
                 event.stopPropagation();
-
                 const overlay = document.createElement('div');
                 overlay.className = 'memory-delete-overlay';
-
                 overlay.innerHTML = `
                     <div class="memory-delete-box">
                         <h3>Delete Voice Message?</h3>
@@ -1003,11 +1019,16 @@ memoryVideosInput.addEventListener('change', async () => {
             video.src = url;
         });
 
-        if (!Number.isFinite(duration)) {
-            alert('Unable to read video duration. Please select a valid video.');
-            clearMemoryVideos();
-            return;
-        }
+       
+if (!Number.isFinite(duration)) {
+    showMemoryMessage(
+        'Invalid Video',
+        'Unable to read video duration. Please select a valid video.'
+    );
+    clearMemoryVideos();
+    return;
+}
+
 
         if (duration > 600) {
             alert('Each video must not exceed 10 minutes.');
