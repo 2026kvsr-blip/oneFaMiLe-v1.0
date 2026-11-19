@@ -849,21 +849,119 @@ document.getElementById('memoryForm').addEventListener('reset', () => {
     updateMemoryVideoSlots();
 });
 
-// VOICE FILE COUNT
+
+// VOICE MESSAGE SELECTION
+
 const memoryVoiceInput = document.getElementById('memoryVoice');
+const memoryVoiceSlots = document.getElementById('memoryVoiceSlots');
 const memoryVoiceCount = document.getElementById('memoryVoiceCount');
 
-memoryVoiceInput.addEventListener('change', () => {
-    if (memoryVoiceInput.files.length > 3) {
-        alert('Maximum 3 voice messages only allowed.');
-        memoryVoiceInput.value = '';
-        memoryVoiceCount.textContent = '0 voice messages selected';
-        return;
+let selectedMemoryVoices = [];
+
+function updateMemoryVoiceSlots() {
+    memoryVoiceSlots.innerHTML = '';
+
+    for (let i = 0; i < 3; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'memory-voice-slot';
+
+        if (selectedMemoryVoices[i]) {
+            const audio = document.createElement('audio');
+            audio.src = selectedMemoryVoices[i].url;
+            audio.controls = true;
+            slot.appendChild(audio);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'memory-photo-remove';
+            removeBtn.textContent = '×';
+
+            removeBtn.onclick = (event) => {
+                event.stopPropagation();
+
+                const overlay = document.createElement('div');
+                overlay.className = 'memory-delete-overlay';
+
+                overlay.innerHTML = `
+                    <div class="memory-delete-box">
+                        <h3>Delete Voice Message?</h3>
+                        <p>Are you sure you want to delete this voice message?</p>
+                        <div class="memory-delete-actions">
+                            <button type="button" class="memory-delete-cancel">Cancel</button>
+                            <button type="button" class="memory-delete-confirm">Delete</button>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(overlay);
+
+                overlay.querySelector('.memory-delete-cancel').onclick = () => {
+                    overlay.remove();
+                };
+
+                overlay.querySelector('.memory-delete-confirm').onclick = () => {
+                    URL.revokeObjectURL(selectedMemoryVoices[i].url);
+                    selectedMemoryVoices.splice(i, 1);
+
+                    const dt = new DataTransfer();
+                    selectedMemoryVoices.forEach(item => dt.items.add(item.file));
+                    memoryVoiceInput.files = dt.files;
+
+                    updateMemoryVoiceSlots();
+                    overlay.remove();
+                };
+            };
+
+            slot.appendChild(removeBtn);
+        } else {
+            slot.textContent = '+';
+
+            slot.onclick = () => {
+                memoryVoiceInput.click();
+            };
+        }
+
+        memoryVoiceSlots.appendChild(slot);
     }
 
     memoryVoiceCount.textContent =
-        `${memoryVoiceInput.files.length} voice messages selected`;
+        `${selectedMemoryVoices.length} voice messages selected`;
+}
+
+memoryVoiceInput.addEventListener('change', () => {
+    const newFiles = Array.from(memoryVoiceInput.files);
+    const remaining = 3 - selectedMemoryVoices.length;
+
+    if (newFiles.length > remaining) {
+        if (selectedMemoryVoices.length === 0) {
+            showMemoryMessage(
+                'Maximum Limit Reached',
+                'You can select max 3 voice messages only.'
+            );
+        } else {
+            showMemoryMessage(
+                'Maximum Limit Reached',
+                `You can select only ${remaining} more voice messages.`
+            );
+        }
+    }
+
+    newFiles.slice(0, remaining).forEach(file => {
+        selectedMemoryVoices.push({
+            file: file,
+            url: URL.createObjectURL(file)
+        });
+    });
+
+    const dt = new DataTransfer();
+    selectedMemoryVoices.forEach(item => dt.items.add(item.file));
+    memoryVoiceInput.files = dt.files;
+
+    updateMemoryVoiceSlots();
 });
+
+updateMemoryVoiceSlots();
+
 
 // VIDEO DURATION VALIDATION
 memoryVideosInput.addEventListener('change', async () => {
