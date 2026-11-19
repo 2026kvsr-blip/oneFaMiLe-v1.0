@@ -1043,7 +1043,7 @@ slot.innerHTML = `
     }
 
     memoryVoiceCount.textContent =
-        `${selectedMemoryVoices.length} voice messages selected`;
+        `${selectedMemoryVoices.length} voice selected`;
 }
 
 
