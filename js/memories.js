@@ -1297,6 +1297,26 @@ function clearMemoryVoices() {
 
     updateMemoryVoiceSlots();
 }
+   // CLEAR PHOTOS
+document.getElementById('clearMemoryPhotos').addEventListener('click', () => {
+    selectedMemoryPhotos.forEach(photo => {
+        URL.revokeObjectURL(photo.url);
+    });
+
+    selectedMemoryPhotos = [];
+    memoryPhotosInput.value = '';
+    updateMemoryPhotoSlots();
+});
+
+// CLEAR VIDEOS
+document.getElementById('clearMemoryVideos').addEventListener('click', () => {
+    clearMemoryVideos();
+});
+
+// CLEAR VOICE MESSAGES
+document.getElementById('clearMemoryVoices').addEventListener('click', () => {
+    clearMemoryVoices();
+});
    
 }
 
