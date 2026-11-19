@@ -984,6 +984,7 @@ slot.innerHTML = `
         </svg>
        
     </button>
+    <small class="memory-record-timer" style="display:none;">00:00</small>
 `;
 
 
@@ -1088,7 +1089,8 @@ let memoryRecorder = null;
 let memoryRecordingChunks = [];
 let memoryRecordingStream = null;
 let memoryRecordingTimer = null;
-
+let memoryRecordingInterval = null;
+let memoryRecordingStartTime = null;
 memoryVoiceSlots.addEventListener('click', async (event) => {
 
     const recordButton = event.target.closest('.memory-record-button');
@@ -1126,7 +1128,8 @@ memoryVoiceSlots.addEventListener('click', async (event) => {
         memoryRecorder.onstop = () => {
 
             clearTimeout(memoryRecordingTimer);
-
+    clearInterval(memoryRecordingInterval);
+    memoryRecordingInterval = null;
             const mimeType = memoryRecorder.mimeType || 'audio/webm';
 
             const audioBlob = new Blob(memoryRecordingChunks, {
@@ -1157,6 +1160,16 @@ memoryVoiceSlots.addEventListener('click', async (event) => {
                 memoryVoiceInput.files = dt.files;
 
                 updateMemoryVoiceSlots();
+               const finalTimer =
+    memoryVoiceSlots.querySelector('.memory-record-timer');
+
+if (finalTimer) {
+    finalTimer.style.display = 'block';
+
+    setTimeout(() => {
+        finalTimer.style.display = 'none';
+    }, 2000);
+}
             }
 
             memoryRecordingStream.getTracks().forEach(track => {
@@ -1169,7 +1182,31 @@ memoryVoiceSlots.addEventListener('click', async (event) => {
         };
 
         memoryRecorder.start();
+// START RECORDING TIMER
+memoryRecordingStartTime = Date.now();
 
+const timerDisplay =
+    memoryVoiceSlots.querySelector('.memory-record-timer');
+
+if (timerDisplay) {
+    timerDisplay.style.display = 'block';
+    timerDisplay.textContent = '00:00';
+}
+
+memoryRecordingInterval = setInterval(() => {
+    const elapsed = Math.floor(
+        (Date.now() - memoryRecordingStartTime) / 1000
+    );
+
+    const minutes = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const seconds = String(elapsed % 60).padStart(2, '0');
+
+    const timer = memoryVoiceSlots.querySelector('.memory-record-timer');
+
+    if (timer) {
+        timer.textContent = `${minutes}:${seconds}`;
+    }
+}, 1000);
         recordButton.innerHTML = `
             ■
             <small>Stop</small>
