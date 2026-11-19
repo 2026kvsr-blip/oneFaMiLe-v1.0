@@ -351,6 +351,29 @@ function memoryStyleOnce() {
     color: #176b36;
 }
 
+/* MOBILE RECORD BUTTON SIZE AND CENTER */
+
+@media (max-width: 600px) {
+    .memory-page .memory-record-button {
+        width: 100% !important;
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 16px !important;
+        line-height: 1 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        text-align: center !important;
+    }
+
+    .memory-page .memory-record-button small {
+        font-size: 9px !important;
+        margin-top: 3px;
+    }
+}
+
 .memory-page .memory-photo-remove {
     position: absolute;
     top: 2px;
