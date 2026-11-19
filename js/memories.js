@@ -1044,7 +1044,7 @@ const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
 
 let memorySpeechRecognition = null;
-
+let memorySpeechActive = false;
 if (SpeechRecognition) {
     memorySpeechRecognition = new SpeechRecognition();
     memorySpeechRecognition.continuous = false;
