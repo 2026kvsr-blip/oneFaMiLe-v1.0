@@ -803,7 +803,6 @@ memoryVoiceInput.addEventListener('change', () => {
     memoryVoiceCount.textContent =
         `${memoryVoiceInput.files.length} voice messages selected`;
 });
-const memoryVideosInput = document.getElementById('memoryVideos');
 
 // VIDEO DURATION VALIDATION
 memoryVideosInput.addEventListener('change', async () => {
