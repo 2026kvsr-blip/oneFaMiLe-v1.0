@@ -612,6 +612,7 @@ function openAddMemoryScreen() {
         Sensitive
     </label>
 </div>
+
                     <div class="expense-actions">
                         <button type="button" class="expense-primary"
                             id="memorySaveBtn">Save</button>
