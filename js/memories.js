@@ -552,7 +552,34 @@ const memoryPhotoSlots = document.getElementById('memoryPhotoSlots');
 const memoryPhotosCount = document.getElementById('memoryPhotosCount');
 
 let selectedMemoryPhotos = [];
+// CUSTOM MEMORY MESSAGE WINDOW
+function showMemoryMessage(title, message) {
+    const overlay = document.createElement('div');
+    overlay.className = 'memory-delete-overlay';
 
+    overlay.innerHTML = `
+        <div class="memory-delete-box">
+            <h3>${title}</h3>
+            <p>${message}</p>
+            <div class="memory-delete-actions">
+                <button type="button"
+                    class="memory-delete-confirm">OK</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('.memory-delete-confirm').onclick = () => {
+        overlay.remove();
+    };
+
+    overlay.addEventListener('click', event => {
+        if (event.target === overlay) {
+            overlay.remove();
+        }
+    });
+}
 function updateMemoryPhotoSlots() {
     memoryPhotoSlots.innerHTML = '';
 
