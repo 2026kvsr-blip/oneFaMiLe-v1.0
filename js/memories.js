@@ -330,40 +330,55 @@ function memoryStyleOnce() {
     border: none !important;
     box-shadow: none !important;
 }
-/* TIMER OUTSIDE FOURTH BOX - RIGHT SIDE */
-.memory-page .memory-voice-slot:nth-child(4) {
-    width: calc(100% - 42px) !important;
-    overflow: visible !important;
-    position: relative !important;
-}
-
-.memory-page .memory-record-timer {
-    position: absolute !important;
-    left: calc(100% + 5px) !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    font-size: 13px !important;
-    font-weight: 600 !important;
-    color: #176b36 !important;
-    white-space: nowrap !important;
-}
-
+/* RECORD BUTTON */
 .memory-page .memory-record-button {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    border: none !important;
-    background: transparent !important;
-    color: #176b36 !important;
-    font-size: 23px;
-    cursor: pointer !important;
-    padding: 2px !important;
+    display: grid !important;
+    grid-template-columns: auto auto !important;
+    grid-template-rows: auto auto !important;
+    align-content: center !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 2px 4px !important;
+    width: 100% !important;
+    height: 100% !important;
 }
 
+/* MICROPHONE */
+.memory-page .memory-record-button .memory-mic-icon {
+    grid-column: 1 / 3;
+    justify-self: center;
+    transform: translateX(8px);
+}
+
+/* GREEN SQUARE */
+.memory-page .memory-record-stop-square {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: end;
+    color: #176b36 !important;
+    font-size: 18px !important;
+}
+
+/* TIMER BELOW */
+.memory-page .memory-record-timer {
+    grid-column: 1 / 3;
+    grid-row: 2;
+    justify-self: center;
+    position: static !important;
+    transform: none !important;
+    color: #176b36 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+}
+
+/* STOP BESIDE GREEN SQUARE */
+.memory-page .memory-record-label {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: start;
+    color: #52677b !important;
+    font-size: 10px !important;
+}
 
 
 /* MOBILE RECORD BUTTON SIZE AND CENTER */
@@ -999,9 +1014,13 @@ slot.innerHTML = `
             <path d="M12 17v5"/>
             <path d="M8 22h8"/>
         </svg>
-       
+
+        <span class="memory-record-timer"
+              style="display:none;">00:00</span>
+
+        <small class="memory-record-label"
+               style="display:none;">Stop</small>
     </button>
-    <small class="memory-record-timer" style="display:none;">00:00</small>
 `;
 
 
@@ -1222,11 +1241,12 @@ memoryRecordingInterval = setInterval(() => {
         timer.textContent = `${minutes}:${seconds}`;
     }
 }, 1000);
-        recordButton.innerHTML = `
-            ■
-            <small>Stop</small>
-        `;
-
+       
+       recordButton.innerHTML = `
+    <span class="memory-record-stop-square">■</span>
+    <span class="memory-record-timer">00:00</span>
+    <small class="memory-record-label">Stop</small>
+`;
         // AUTOMATIC STOP AFTER 30 SECONDS
         memoryRecordingTimer = setTimeout(() => {
             if (memoryRecorder && memoryRecorder.state === 'recording') {
