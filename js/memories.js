@@ -477,6 +477,29 @@ function memoryStyleOnce() {
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
         }
+ /* Memory Count and Clear Button */
+.memory-page .memory-count-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 3px;
+}
+
+.memory-page .memory-count-row small {
+    font-size: 11px;
+    color: #666;
+}
+
+.memory-page .memory-clear-btn {
+    border: none !important;
+    background: transparent !important;
+    color: #e53935 !important;
+    font-size: 11px !important;
+    font-weight: 600;
+    padding: 2px 5px !important;
+    cursor: pointer !important;
+}
     `;
 
     document.head.appendChild(style);
@@ -1024,10 +1047,30 @@ slot.innerHTML = `
 }
 
 
-memoryVoiceInput.addEventListener('change', () => {    const newFiles = Array.from(memoryVoiceInput.files);    const remaining = 3 - selectedMemoryVoices.length;    if (newFiles.length > remaining) {        if (selectedMemoryVoices.length === 0) {
-            showMemoryMessage(                'Maximum Limit Reached',                'You can select max 3 voice messages only.'            );        } else {            showMemoryMessage(                'Maximum Limit Reached',
-                `You can select only ${remaining} more voice messages.`            );       }    }    newFiles.slice(0, remaining).forEach(file => {        selectedMemoryVoices.push({            file: file,
-            url: URL.createObjectURL(file)        });    });    const dt = new DataTransfer();    selectedMemoryVoices.forEach(item => dt.items.add(item.file));    memoryVoiceInput.files = dt.files;    updateMemoryVoiceSlots();
+memoryVoiceInput.addEventListener('change', () => {  
+   const newFiles = Array.from(memoryVoiceInput.files);   
+   const remaining = 3 - selectedMemoryVoices.length;  
+   if (newFiles.length > remaining) {      
+      if (selectedMemoryVoices.length === 0) {
+         
+            showMemoryMessage(          
+               'Maximum Limit Reached',  
+               'You can select max 3 voice messages only.'  
+            );      
+      } else {            showMemoryMessage(   
+         'Maximum Limit Reached',
+                `You can select only ${remaining}
+                more voice messages.`        
+      );       }    }  
+   newFiles.slice(0, remaining).forEach(file => {  
+      selectedMemoryVoices.push({           
+         file: file,
+            url: URL.createObjectURL(file)  
+      });    });   
+   const dt = new DataTransfer();  
+   selectedMemoryVoices.forEach(item => dt.items.add(item.file));   
+   memoryVoiceInput.files = dt.files;    
+   updateMemoryVoiceSlots();
 });
    updateMemoryVoiceSlots();
    
