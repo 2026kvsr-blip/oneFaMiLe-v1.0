@@ -1062,19 +1062,25 @@ memoryVoiceInput.addEventListener('change', async () => {
             audio.src = url;
         });
 
-        if (!Number.isFinite(duration)) {
-            alert('Unable to read voice message duration. Please select a valid audio file.');
-            memoryVoiceInput.value = '';
-            document.getElementById('memoryVoiceCount').textContent = '0 voice messages selected';
-            return;
-        }
+      
+if (!Number.isFinite(duration)) {
+    showMemoryMessage(
+        'Invalid Voice Message',
+        'Unable to read voice message duration. Please select a valid audio file.'
+    );
+    clearMemoryVoices();
+    return;
+}
 
-        if (duration > 600) {
-            alert('Each voice message must not exceed 10 minutes.');
-            memoryVoiceInput.value = '';
-            document.getElementById('memoryVoiceCount').textContent = '0 voice messages selected';
-            return;
-        }
+if (duration > 600) {
+    showMemoryMessage(
+        'Duration Limit Exceeded',
+        'Each voice message must not exceed 10 minutes.'
+    );
+    clearMemoryVoices();
+    return;
+}
+
     }
 });
 }
