@@ -346,10 +346,7 @@ function memoryStyleOnce() {
     padding: 2px !important;
 }
 
-.memory-page .memory-record-button small {
-    font-size: 11px;
-    color: #176b36;
-}
+
 
 /* MOBILE RECORD BUTTON SIZE AND CENTER */
 
@@ -369,18 +366,18 @@ function memoryStyleOnce() {
     }
 
     .memory-page .memory-record-button small {
-        font-size: 9px !important;
-        margin-top: 3px;
+        font-size: 8px !important;
+        margin-top: 0px;
     }
 }
 @media (max-width: 600px) {
     .memory-page .memory-mic-icon {
-        width: 19px !important;
-        height: 19px !important;
-        stroke-width: 1.3 !important;
-        display: block;
-        margin: 0 auto;
-    }
+    width: 22px !important;
+    height: 22px !important;
+    stroke-width: 1.3 !important;
+    display: block;
+    margin: 0 auto;
+}
 }
 .memory-page .memory-photo-remove {
     position: absolute;
