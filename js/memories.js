@@ -278,9 +278,8 @@ function memoryStyleOnce() {
     color: #fff !important;
 }
 
-/* VOICE 3 EQUAL SIZE BOXES */
 
-/* VOICE 4 BOXES */
+/* VOICE MESSAGE - FOUR EQUAL BOXES */
 
 .memory-page .memory-voice-field input[type="file"] {
     display: none !important;
@@ -296,13 +295,13 @@ function memoryStyleOnce() {
     border-radius: 8px;
     background: #fff;
     box-sizing: border-box;
-    align-items: center;
+    align-items: stretch;
 }
 
 .memory-page .memory-voice-slot {
     position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 5 / 4;
     min-width: 0;
     border: 1px dashed #9bb9d4;
     border-radius: 7px;
@@ -311,7 +310,7 @@ function memoryStyleOnce() {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer !important;
+    cursor: pointer;
     box-sizing: border-box;
 }
 
@@ -325,9 +324,31 @@ function memoryStyleOnce() {
     border: 2px solid #2e8b57 !important;
 }
 
-.memory-page .memory-voice-remove {
-    background: #d93025 !important;
-    color: #fff !important;
+/* FOURTH BOX - RECORDING */
+.memory-page .memory-voice-slot:nth-child(4) {
+    background: #dff3e3 !important;
+    border: 2px solid #176b36 !important;
+}
+
+.memory-page .memory-record-button {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    border: none !important;
+    background: transparent !important;
+    color: #176b36 !important;
+    font-size: 23px;
+    cursor: pointer !important;
+    padding: 2px !important;
+}
+
+.memory-page .memory-record-button small {
+    font-size: 11px;
+    color: #176b36;
 }
 
 .memory-page .memory-photo-remove {
