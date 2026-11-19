@@ -323,6 +323,7 @@ function memoryStyleOnce() {
     border: 2px solid #2e8b57 !important;
 }
 
+
 /* FOURTH BOX - RECORDING */
 .memory-page .memory-voice-slot:nth-child(4) {
     background: transparent !important;
