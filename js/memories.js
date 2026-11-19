@@ -500,6 +500,12 @@ function memoryStyleOnce() {
     padding: 2px 5px !important;
     cursor: pointer !important;
 }
+/* PHOTO PLUS - NORMAL FONT */
+.memory-page .memory-photo-slot .memory-photo-add {
+    font-weight: 400 !important;
+    font-family: Arial, sans-serif !important;
+    -webkit-text-stroke: 0 !important;
+}
     `;
 
     document.head.appendChild(style);
