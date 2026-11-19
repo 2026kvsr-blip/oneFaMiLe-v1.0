@@ -341,6 +341,8 @@ function memoryStyleOnce() {
     gap: 2px 4px !important;
     width: 100% !important;
     height: 100% !important;
+        background: transparent !important;
+    border: none !important;
 }
 
 /* MICROPHONE */
