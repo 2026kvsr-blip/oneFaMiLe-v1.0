@@ -553,16 +553,20 @@ function openAddMemoryScreen() {
 
     <div id="memoryPhotoSlots" class="memory-photo-slots"></div>
 
+<div class="memory-count-row">
     <small id="memoryPhotosCount">0 photos selected</small>
-</div>
+    <button type="button" class="memory-clear-btn" id="clearMemoryPhotos">Clear</button>
+</div></div>
 
                     <div class="expense-field memory-video-field">
     <label class="expense-label">Videos (Max 3)</label>
     <input type="file" id="memoryVideos"
         accept="video/*" multiple hidden>
     <div id="memoryVideoSlots" class="memory-video-slots"></div>
+<div class="memory-count-row">
     <small id="memoryVideosCount">0 videos selected</small>
-</div>
+    <button type="button" class="memory-clear-btn" id="clearMemoryVideos">Clear</button>
+</div></div>
 
                      <div class="expense-field memory-voice-field">
     <label class="expense-label">Voice Messages (Max 3)</label>
@@ -572,8 +576,10 @@ function openAddMemoryScreen() {
 
     <div id="memoryVoiceSlots" class="memory-voice-slots"></div>
 
+<div class="memory-count-row">
     <small id="memoryVoiceCount">0 voice selected</small>
-</div>
+    <button type="button" class="memory-clear-btn" id="clearMemoryVoices">Clear</button>
+</div></div>
 
                     </div>
 
