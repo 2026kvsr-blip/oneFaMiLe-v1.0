@@ -326,8 +326,9 @@ function memoryStyleOnce() {
 
 /* FOURTH BOX - RECORDING */
 .memory-page .memory-voice-slot:nth-child(4) {
-    background: #dff3e3 !important;
-    border: 2px solid #176b36 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 
@@ -572,6 +573,7 @@ function openAddMemoryScreen() {
                         <div class="expense-field">
                            <label class="expense-label">Description</label>
 <textarea id="memoryDescription" rows="3"
+    maxlength="500"
     placeholder="About Memory"></textarea>
                         </div>
 
@@ -981,7 +983,7 @@ slot.innerHTML = `
             <path d="M12 17v5"/>
             <path d="M8 22h8"/>
         </svg>
-        <small>Record</small>
+        //<small>Record</small>
     </button>
 `;
 
