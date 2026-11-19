@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe - MEMORIES FRONTEND
 ===================================== */
@@ -983,7 +982,7 @@ slot.innerHTML = `
             <path d="M12 17v5"/>
             <path d="M8 22h8"/>
         </svg>
-        //<small>Record</small>
+       
     </button>
 `;
 
