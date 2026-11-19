@@ -1079,10 +1079,16 @@ memorySpeechRecognition.onend = () => {
     memorySpeechActive = false;
 };
 
-memorySpeechRecognition.onerror = () => {
+memorySpeechRecognition.onerror = (event) => {
     memorySpeechActive = false;
-};
 
+    console.error('Microphone Error:', event.error);
+
+    showMemoryMessage(
+        'Microphone Error',
+        'Error: ' + event.error
+    );
+};
 memorySpeechRecognition && (
     memorySpeechRecognition.onresult = async (event) => {
         try {
