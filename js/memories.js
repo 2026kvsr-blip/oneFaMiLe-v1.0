@@ -872,32 +872,41 @@ const memoryVoiceCount = document.getElementById('memoryVoiceCount');
 
 let selectedMemoryVoices = [];
 
+
 function updateMemoryVoiceSlots() {
     memoryVoiceSlots.innerHTML = '';
+
     for (let i = 0; i < 4; i++) {
         const slot = document.createElement('div');
         slot.className = 'memory-voice-slot';
-       if (i === 3) {
-    slot.innerHTML = `
-        <button type="button" class="memory-record-button">
-            🎙️
-            <small>Record</small>
-        </button>
-    `;
-} else if (selectedMemoryVoices[i]) {
-        if (selectedMemoryVoices[i]) {
+
+        // FOURTH BOX - RECORD BUTTON
+        if (i === 3) {
+            slot.innerHTML = `
+                <button type="button" class="memory-record-button">
+                    🎙️
+                    <small>Record</small>
+                </button>
+            `;
+
+        } else if (selectedMemoryVoices[i]) {
+
             const audio = document.createElement('audio');
             audio.src = selectedMemoryVoices[i].url;
             audio.controls = true;
             slot.appendChild(audio);
+
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button';
             removeBtn.className = 'memory-photo-remove';
             removeBtn.textContent = '×';
+
             removeBtn.onclick = (event) => {
                 event.stopPropagation();
+
                 const overlay = document.createElement('div');
                 overlay.className = 'memory-delete-overlay';
+
                 overlay.innerHTML = `
                     <div class="memory-delete-box">
                         <h3>Delete Voice Message?</h3>
@@ -920,7 +929,10 @@ function updateMemoryVoiceSlots() {
                     selectedMemoryVoices.splice(i, 1);
 
                     const dt = new DataTransfer();
-                    selectedMemoryVoices.forEach(item => dt.items.add(item.file));
+                    selectedMemoryVoices.forEach(item => {
+                        dt.items.add(item.file);
+                    });
+
                     memoryVoiceInput.files = dt.files;
 
                     updateMemoryVoiceSlots();
@@ -929,8 +941,9 @@ function updateMemoryVoiceSlots() {
             };
 
             slot.appendChild(removeBtn);
+
         } else {
-            slot.textContent = '+';
+            slot.innerHTML = `<span class="memory-photo-add">+</span>`;
 
             slot.onclick = () => {
                 memoryVoiceInput.click();
@@ -944,49 +957,13 @@ function updateMemoryVoiceSlots() {
         `${selectedMemoryVoices.length} voice messages selected`;
 }
 
-memoryVoiceInput.addEventListener('change', () => {
-    const newFiles = Array.from(memoryVoiceInput.files);
-    const remaining = 3 - selectedMemoryVoices.length;
 
-    if (newFiles.length > remaining) {
-        if (selectedMemoryVoices.length === 0) {
-            showMemoryMessage(
-                'Maximum Limit Reached',
-                'You can select max 3 voice messages only.'
-            );
-        } else {
-            showMemoryMessage(
-                'Maximum Limit Reached',
-                `You can select only ${remaining} more voice messages.`
-            );
-        }
-    }
-
-    newFiles.slice(0, remaining).forEach(file => {
-        selectedMemoryVoices.push({
-            file: file,
-            url: URL.createObjectURL(file)
-        });
-    });
-
-    const dt = new DataTransfer();
-    selectedMemoryVoices.forEach(item => dt.items.add(item.file));
-    memoryVoiceInput.files = dt.files;
-
-    updateMemoryVoiceSlots();
-});
-
-updateMemoryVoiceSlots();
-
-document.getElementById('memoryForm').addEventListener('reset', () => {
-    selectedMemoryVoices.forEach(voice => {
-        URL.revokeObjectURL(voice.url);
-    });
-
-    selectedMemoryVoices = [];
-    memoryVoiceInput.value = '';
-
-    updateMemoryVoiceSlots();
+memoryVoiceInput.addEventListener('change', () => {    const newFiles = Array.from(memoryVoiceInput.files);    const remaining = 3 - selectedMemoryVoices.length;    if (newFiles.length > remaining) {        if (selectedMemoryVoices.length === 0) {
+            showMemoryMessage(                'Maximum Limit Reached',                'You can select max 3 voice messages only.'            );        } else {            showMemoryMessage(                'Maximum Limit Reached',
+                `You can select only ${remaining} more voice messages.`            );       }    }    newFiles.slice(0, remaining).forEach(file => {        selectedMemoryVoices.push({            file: file,
+            url: URL.createObjectURL(file)        });    });    const dt = new DataTransfer();    selectedMemoryVoices.forEach(item => dt.items.add(item.file));    memoryVoiceInput.files = dt.files;    updateMemoryVoiceSlots();
+});updateMemoryVoiceSlots();document.getElementById('memoryForm').addEventListener('reset', () => {    selectedMemoryVoices.forEach(voice => {        URL.revokeObjectURL(voice.url);    });    selectedMemoryVoices = [];
+    memoryVoiceInput.value = '';    updateMemoryVoiceSlots();
 });
 
 
