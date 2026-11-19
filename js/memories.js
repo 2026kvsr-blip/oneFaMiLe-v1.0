@@ -572,7 +572,7 @@ function openAddMemoryScreen() {
 
     <div id="memoryVoiceSlots" class="memory-voice-slots"></div>
 
-    <small id="memoryVoiceCount">0 voice messages selected</small>
+    <small id="memoryVoiceCount">0 voice selected</small>
 </div>
 
                     </div>
