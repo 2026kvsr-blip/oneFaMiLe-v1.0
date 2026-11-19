@@ -962,6 +962,17 @@ memoryVoiceInput.addEventListener('change', () => {
 
 updateMemoryVoiceSlots();
 
+document.getElementById('memoryForm').addEventListener('reset', () => {
+    selectedMemoryVoices.forEach(voice => {
+        URL.revokeObjectURL(voice.url);
+    });
+
+    selectedMemoryVoices = [];
+    memoryVoiceInput.value = '';
+
+    updateMemoryVoiceSlots();
+});
+
 
 // VIDEO DURATION VALIDATION
 memoryVideosInput.addEventListener('change', async () => {
