@@ -864,7 +864,7 @@ function clearMemoryVideos() {
     memoryVideosInput.value = '';
 
     updateMemoryVideoSlots();
-}   const memoryVoiceInput = document.getElementById('memoryVoice');
+}   
 
 memoryVoiceInput.addEventListener('change', async () => {
     const files = Array.from(memoryVoiceInput.files);
