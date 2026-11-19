@@ -218,7 +218,7 @@ function memoryStyleOnce() {
 
 .memory-page .memory-photo-slot .memory-photo-add {
     color: #245b91;
-    font-size: 25px;
+    font-size: 18px;
     font-weight: normal;
 }
 /* VIDEO 3 EQUAL RECTANGULAR BOXES */
