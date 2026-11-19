@@ -244,7 +244,8 @@ function memoryStyleOnce() {
 .memory-page .memory-video-slot {
     position: relative;
     width: 100%;
-    height: 100px;
+    aspect-ratio: 5 / 3;
+    height: auto;
     min-width: 0;
     border: 1px dashed #7fa6cc;
     border-radius: 7px;
