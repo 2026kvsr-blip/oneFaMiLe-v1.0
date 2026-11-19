@@ -1038,51 +1038,37 @@ function clearMemoryVideos() {
 
 memoryVoiceInput.addEventListener('change', async () => {
     const files = Array.from(memoryVoiceInput.files);
-
     if (!files.length) return;
-
     for (const file of files) {
         const url = URL.createObjectURL(file);
-
         const duration = await new Promise(resolve => {
             const audio = document.createElement('audio');
             audio.preload = 'metadata';
-
             audio.onloadedmetadata = () => {
                 const seconds = audio.duration;
                 URL.revokeObjectURL(url);
-                resolve(seconds);
-            };
-
+                resolve(seconds);            };
             audio.onerror = () => {
                 URL.revokeObjectURL(url);
-                resolve(NaN);
-            };
-
-            audio.src = url;
-        });
-
-      
+                resolve(NaN);            };
+            audio.src = url;        });
 if (!Number.isFinite(duration)) {
-    showMemoryMessage(
-        'Invalid Voice Message',
-        'Unable to read voice message duration. Please select a valid audio file.'
-    );
-    clearMemoryVoices();
-    return;
-}
-
-if (duration > 600) {
-    showMemoryMessage(
-        'Duration Limit Exceeded',
-        'Each voice message must not exceed 10 minutes.'
-    );
-    clearMemoryVoices();
-    return;
-}
-
-    }
+    showMemoryMessage(        'Invalid Voice Message',
+        'Unable to read voice message duration. Please select a valid audio file.'    );    clearMemoryVoices();    return;}
+if (duration > 600) {    showMemoryMessage(        'Duration Limit Exceeded',        'Each voice message must not exceed 10 minutes.'    );    clearMemoryVoices();    return;}    }
 });
+
+function clearMemoryVoices() {
+    selectedMemoryVoices.forEach(voice => {
+        URL.revokeObjectURL(voice.url);
+    });
+
+    selectedMemoryVoices = [];
+    memoryVoiceInput.value = '';
+
+    updateMemoryVoiceSlots();
+}
+   
 }
 
 
