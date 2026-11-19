@@ -222,7 +222,12 @@ function memoryStyleOnce() {
     font-size: 25px;
     font-weight: bold;
 }
-/* VIDEO 3 EQUAL SIZE BOXES */
+/* VIDEO 3 EQUAL RECTANGULAR BOXES */
+
+.memory-page .memory-video-field input[type="file"] {
+    display: none !important;
+}
+
 .memory-page .memory-video-slots {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -233,28 +238,37 @@ function memoryStyleOnce() {
     border-radius: 8px;
     background: #fff;
     box-sizing: border-box;
+    align-items: center;
 }
 
 .memory-page .memory-video-slot {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    min-width: 0;
-    border: 1px dashed #9bb9d4;
-    border-radius: 6px;
-    background: #f7faff;
     position: relative;
+    width: 100%;
+    height: 100px;
+    min-width: 0;
+    border: 1px dashed #7fa6cc;
+    border-radius: 7px;
+    background: #fff;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
     box-sizing: border-box;
+}
+
+.memory-page .memory-video-slot video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .memory-page .memory-video-slot:has(video) {
     background: #dff3e3 !important;
     border: 2px solid #2e8b57 !important;
 }
-
 
 
 
