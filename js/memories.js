@@ -1047,7 +1047,6 @@ slot.innerHTML = `
         `${selectedMemoryVoices.length} voice selected`;
 }
 
-
 memoryVoiceInput.addEventListener('change', () => {  
    const newFiles = Array.from(memoryVoiceInput.files);   
    const remaining = 3 - selectedMemoryVoices.length;  
