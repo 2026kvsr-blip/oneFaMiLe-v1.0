@@ -677,7 +677,17 @@ memoryPhotosInput.addEventListener('change', () => {
     const remaining = 5 - selectedMemoryPhotos.length;
 
     if (newFiles.length > remaining) {
-        alert(`You can select only ${remaining} more photos.`);
+        if (selectedMemoryPhotos.length === 0) {
+            showMemoryMessage(
+                'Maximum Limit Reached',
+                'You can select max 5 photos only.'
+            );
+        } else {
+            showMemoryMessage(
+                'Maximum Limit Reached',
+                `You can select only ${remaining} more photos.`
+            );
+        }
     }
 
     newFiles.slice(0, remaining).forEach(file => {
@@ -804,8 +814,17 @@ memoryVideosInput.addEventListener('change', () => {
     const remaining = 3 - selectedMemoryVideos.length;
 
     if (newFiles.length > remaining) {
-        alert(`You can select only ${remaining} more videos.`);
-    }
+if (selectedMemoryVideos.length === 0) {
+    showMemoryMessage(
+        'Maximum Limit Reached',
+        'You can select max 3 videos only.'
+    );
+} else {
+    showMemoryMessage(
+        'Maximum Limit Reached',
+        `You can select only ${remaining} more videos.`
+    );
+}    }
 
     newFiles.slice(0, remaining).forEach(file => {
         selectedMemoryVideos.push({
