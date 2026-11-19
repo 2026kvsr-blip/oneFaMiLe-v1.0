@@ -373,7 +373,15 @@ function memoryStyleOnce() {
         margin-top: 3px;
     }
 }
-
+@media (max-width: 600px) {
+    .memory-page .memory-mic-icon {
+        width: 19px !important;
+        height: 19px !important;
+        stroke-width: 1.3 !important;
+        display: block;
+        margin: 0 auto;
+    }
+}
 .memory-page .memory-photo-remove {
     position: absolute;
     top: 2px;
