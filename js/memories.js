@@ -330,6 +330,7 @@ function memoryStyleOnce() {
     border: 2px solid #176b36 !important;
 }
 
+
 .memory-page .memory-record-button {
     width: 100%;
     height: 100%;
