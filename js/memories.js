@@ -1022,7 +1022,129 @@ memoryVoiceInput.addEventListener('change', () => {    const newFiles = Array.fr
             showMemoryMessage(                'Maximum Limit Reached',                'You can select max 3 voice messages only.'            );        } else {            showMemoryMessage(                'Maximum Limit Reached',
                 `You can select only ${remaining} more voice messages.`            );       }    }    newFiles.slice(0, remaining).forEach(file => {        selectedMemoryVoices.push({            file: file,
             url: URL.createObjectURL(file)        });    });    const dt = new DataTransfer();    selectedMemoryVoices.forEach(item => dt.items.add(item.file));    memoryVoiceInput.files = dt.files;    updateMemoryVoiceSlots();
-});updateMemoryVoiceSlots();document.getElementById('memoryForm').addEventListener('reset', () => {    selectedMemoryVoices.forEach(voice => {        URL.revokeObjectURL(voice.url);    });    selectedMemoryVoices = [];
+});
+   updateMemoryVoiceSlots();
+   
+// DIRECT VOICE RECORDING - TESTING 30 SECONDS
+
+let memoryRecorder = null;
+let memoryRecordingChunks = [];
+let memoryRecordingStream = null;
+let memoryRecordingTimer = null;
+
+memoryVoiceSlots.addEventListener('click', async (event) => {
+
+    const recordButton = event.target.closest('.memory-record-button');
+    if (!recordButton) return;
+
+    // IF ALREADY RECORDING, STOP IT
+    if (memoryRecorder && memoryRecorder.state === 'recording') {
+        memoryRecorder.stop();
+        return;
+    }
+
+    // MAXIMUM 3 VOICE MESSAGES
+    if (selectedMemoryVoices.length >= 3) {
+        showMemoryMessage(
+            'Maximum Limit Reached',
+            'You can add maximum 3 voice messages only.'
+        );
+        return;
+    }
+
+    try {
+        memoryRecordingStream =
+            await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        memoryRecordingChunks = [];
+
+        memoryRecorder = new MediaRecorder(memoryRecordingStream);
+
+        memoryRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                memoryRecordingChunks.push(event.data);
+            }
+        };
+
+        memoryRecorder.onstop = () => {
+
+            clearTimeout(memoryRecordingTimer);
+
+            const mimeType = memoryRecorder.mimeType || 'audio/webm';
+
+            const audioBlob = new Blob(memoryRecordingChunks, {
+                type: mimeType
+            });
+
+            const extension = mimeType.includes('mp4') ? 'mp4' : 'webm';
+
+            const audioFile = new File(
+                [audioBlob],
+                `Voice_${Date.now()}.${extension}`,
+                { type: mimeType }
+            );
+
+            if (audioFile.size > 0 && selectedMemoryVoices.length < 3) {
+
+                selectedMemoryVoices.push({
+                    file: audioFile,
+                    url: URL.createObjectURL(audioFile)
+                });
+
+                const dt = new DataTransfer();
+
+                selectedMemoryVoices.forEach(item => {
+                    dt.items.add(item.file);
+                });
+
+                memoryVoiceInput.files = dt.files;
+
+                updateMemoryVoiceSlots();
+            }
+
+            memoryRecordingStream.getTracks().forEach(track => {
+                track.stop();
+            });
+
+            memoryRecordingStream = null;
+            memoryRecorder = null;
+            memoryRecordingChunks = [];
+        };
+
+        memoryRecorder.start();
+
+        recordButton.innerHTML = `
+            ■
+            <small>Stop</small>
+        `;
+
+        // AUTOMATIC STOP AFTER 30 SECONDS
+        memoryRecordingTimer = setTimeout(() => {
+            if (memoryRecorder && memoryRecorder.state === 'recording') {
+                memoryRecorder.stop();
+            }
+        }, 30000);
+
+    } catch (error) {
+
+        showMemoryMessage(
+            'Microphone Error',
+            'Microphone permission is required for voice recording.'
+        );
+
+        if (memoryRecordingStream) {
+            memoryRecordingStream.getTracks().forEach(track => {
+                track.stop();
+            });
+        }
+
+        memoryRecordingStream = null;
+        memoryRecorder = null;
+    }
+});
+
+   document.getElementById('memoryForm').addEventListener('reset', () => {  
+      selectedMemoryVoices.forEach(voice => {        URL.revokeObjectURL(voice.url);    });    selectedMemoryVoices = [];
     memoryVoiceInput.value = '';    updateMemoryVoiceSlots();
 });
 
