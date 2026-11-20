@@ -194,7 +194,7 @@ function memoryStyleOnce() {
     gap: 5px;
     margin: 0 !important;
     padding: 4px;
-    height: 46px !important;
+    height: 36px !important;
     border: 1px solid #9bb9d4;
     border-radius: 8px;
     background: #fff;
