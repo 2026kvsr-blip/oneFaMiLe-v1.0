@@ -571,22 +571,25 @@ function memoryStyleOnce() {
 }
 
 .memory-page .memory-description-header {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    align-items: center;
-    gap: 5px;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    align-items: center !important;
+    gap: 4px !important;
+    width: 100% !important;
 }
 
 .memory-page .memory-description-header > .expense-label {
-    text-align: left;
+    text-align: left !important;
+    font-size: 14px !important;
+    white-space: nowrap !important;
 }
 
 .memory-page .memory-language-group:first-child {
-    justify-content: center;
+    justify-content: center !important;
 }
 
 .memory-page .memory-language-group:last-child {
-    justify-content: flex-end;
+    justify-content: flex-end !important;
 }
 
 .memory-page .memory-speech-controls {
