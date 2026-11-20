@@ -116,8 +116,8 @@ function memoryStyleOnce() {
             line-height: 1.25;
         }
         .memory-page .memory-sensitive-line {
-    margin-top: 22px !important;
-    margin-bottom: 5px !important;
+    margin-top: 12px !important;
+    margin-bottom: 0 !important;
     padding-bottom: 0 !important;
 }
 .memory-page .memory-sensitive-line label {
