@@ -728,7 +728,6 @@ function openAddMemoryScreen() {
         </select>
     </div>
 
-    <button type="button" id="memorySpeechBtn">🎙 Speak</button>
 
 </div>
     </div>
