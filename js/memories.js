@@ -23,12 +23,18 @@ function memoryStyleOnce() {
             box-sizing: border-box;
         }
 
-        .memory-page .memory-fields-grid {
-            display: grid !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            gap: 10px !important;
-            align-items: start;
-        }
+       .memory-page .memory-fields-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    align-items: stretch !important;
+}
+
+.memory-page .memory-fields-grid > .expense-field {
+    min-width: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
 
         .memory-page .expense-field {
             min-width: 0;
@@ -64,7 +70,12 @@ function memoryStyleOnce() {
             color: #222;
             font: inherit;
         }
-
+.memory-page #memoryDescription {
+    height: 72px !important;
+    min-height: 72px !important;
+    max-height: 72px !important;
+    resize: vertical;
+}
        .memory-page .expense-field input[type="file"] {
     width: 100% !important;
     font-size: 0 !important;
