@@ -839,7 +839,15 @@ function openAddMemoryScreen() {
             </div>
         </div>
     `);
+const memoryDateInput = document.getElementById('memoryDate');
 
+const today = new Date();
+const localToday =
+    today.getFullYear() + '-' +
+    String(today.getMonth() + 1).padStart(2, '0') + '-' +
+    String(today.getDate()).padStart(2, '0');
+
+memoryDateInput.max = localToday;
     document.querySelector('.memory-page')
         ?.classList.add('memory-form-view');
 
