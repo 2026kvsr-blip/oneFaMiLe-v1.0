@@ -593,13 +593,8 @@ function memoryStyleOnce() {
 }
 
 .memory-page .memory-speech-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    flex-wrap: nowrap;
+    display: contents !important;
 }
-
 .memory-page .memory-language-group {
     display: flex;
     align-items: center;
