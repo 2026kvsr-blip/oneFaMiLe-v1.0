@@ -613,7 +613,7 @@ function memoryStyleOnce() {
     background: transparent !important;
     appearance: none !important;
     -webkit-appearance: none !important;
-font-size: 14px !important;
+font-size: 12px !important;
 font-weight: 400 !important;
 color: #2d5274 !important;
 }
