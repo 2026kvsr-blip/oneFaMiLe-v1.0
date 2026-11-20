@@ -742,8 +742,8 @@ function openAddMemoryScreen() {
         <div class="memory-speech-controls">
 
             <div class="memory-language-group">
-                <label class="expense-label">Speaking:</label>
-                <select id="memorySpeechInputLang">
+<label class="expense-label">Speaking</label>
+<select id="memorySpeechInputLang">
                     <option value="te-IN" selected>తెలుగు</option>
                     <option value="en-IN">English</option>
                     <option value="hi-IN">हिन्दी</option>
@@ -754,8 +754,8 @@ function openAddMemoryScreen() {
             </div>
 
             <div class="memory-language-group">
-                <label class="expense-label">Text:</label>
-                <select id="memorySpeechOutputLang">
+<label class="expense-label">Text</label>
+<select id="memorySpeechOutputLang">
                     <option value="te">తెలుగు</option>
                     <option value="en" selected>English</option>
                     <option value="hi">हिन्दी</option>
