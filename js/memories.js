@@ -715,53 +715,65 @@ function openAddMemoryScreen() {
         </div>
     </div>
 
-    <!-- Row 5: Description -->
-  <div class="expense-field memory-description-field">
+   <!-- Row 5: Description -->
+<div class="expense-field memory-description-field">
+
     <div class="memory-description-header">
+
         <label class="expense-label">Description</label>
+
+        <div class="memory-speech-controls">
+
+            <div class="memory-language-group">
+                <label class="expense-label">Speaking:</label>
+                <select id="memorySpeechInputLang">
+                    <option value="te-IN" selected>తెలుగు</option>
+                    <option value="en-IN">English</option>
+                    <option value="hi-IN">हिन्दी</option>
+                    <option value="kn-IN">ಕನ್ನಡ</option>
+                    <option value="ta-IN">தமிழ்</option>
+                    <option value="ml-IN">മലയാളം</option>
+                </select>
+            </div>
+
+            <div class="memory-language-group">
+                <label class="expense-label">Text:</label>
+                <select id="memorySpeechOutputLang">
+                    <option value="te">తెలుగు</option>
+                    <option value="en" selected>English</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="kn">ಕನ್ನಡ</option>
+                    <option value="ta">தமிழ்</option>
+                    <option value="ml">മലയാളം</option>
+                </select>
+            </div>
+
+        </div>
     </div>
 
-      <div class="memory-description-input-wrap">
-    <textarea id="memoryDescription" rows="3"
-        maxlength="500"
-        placeholder="About Memory"></textarea>
+    <div class="memory-description-input-wrap">
 
-    <button type="button" id="memorySpeechBtn"
-        class="memory-description-mic">🎙</button>
+        <textarea id="memoryDescription" rows="3"
+            maxlength="500"
+            placeholder="About Memory"></textarea>
+
+        <button type="button" id="memorySpeechBtn"
+            class="memory-description-mic">
+
+            <svg class="memory-mic-icon" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="1.4" stroke-linecap="round"
+                 stroke-linejoin="round">
+                <rect x="9" y="2" width="6" height="12" rx="3"/>
+                <path d="M5 10a7 7 0 0 0 14 0"/>
+                <path d="M12 17v5"/>
+                <path d="M8 22h8"/>
+            </svg>
+
+        </button>
+    </div>
+
 </div>
-
-       <div class="memory-speech-controls">
-
-    <div class="memory-language-group">
-        <label class="expense-label">Speaking:</label>
-        <select id="memorySpeechInputLang">
-            <option value="te-IN" selected>తెలుగు</option>
-            <option value="en-IN">English</option>
-            <option value="hi-IN">हिन्दी</option>
-            <option value="kn-IN">ಕನ್ನಡ</option>
-            <option value="ta-IN">தமிழ்</option>
-            <option value="ml-IN">മലയാളം</option>
-        </select>
-    </div>
-
-    <div class="memory-language-group">
-        <label class="expense-label">Text:</label>
-        <select id="memorySpeechOutputLang">
-            <option value="te">తెలుగు</option>
-            <option value="en" selected>English</option>
-            <option value="hi">हिन्दी</option>
-            <option value="kn">ಕನ್ನಡ</option>
-            <option value="ta">தமிழ்</option>
-            <option value="ml">മലയാളം</option>
-        </select>
-    </div>
-
-
-</div>
-    </div>
-
-</div>
-
 
                     </div>
 
