@@ -35,7 +35,9 @@ function memoryStyleOnce() {
     width: 100% !important;
     box-sizing: border-box !important;
 }
-
+.memory-page #memoryDescription {
+    grid-column: 1 / -1 !important;
+}
         .memory-page .expense-field {
             min-width: 0;
             display: flex;
@@ -662,30 +664,44 @@ function openAddMemoryScreen() {
     </div>
 
     <!-- Row 5: Description -->
-    <div class="expense-field memory-description-field">
+  <div class="expense-field memory-description-field">
+    <div class="memory-description-header">
         <label class="expense-label">Description</label>
+    </div>
 
         <textarea id="memoryDescription" rows="3"
             maxlength="500"
             placeholder="About Memory"></textarea>
 
-        <div class="memory-speech-controls">
-            <label class="expense-label">Speaking Language</label>
-            <select id="memorySpeechInputLang">
-                <option value="te-IN" selected>తెలుగు</option>
-                <option value="en-IN">English</option>
-            </select>
+       <div class="memory-speech-controls">
 
-            <label class="expense-label">Text Language</label>
-            <select id="memorySpeechOutputLang">
-                <option value="te">తెలుగు</option>
-                <option value="en" selected>English</option>
-            </select>
+    <div class="memory-language-group">
+        <label class="expense-label">Speaking:</label>
+        <select id="memorySpeechInputLang">
+            <option value="te-IN" selected>తెలుగు</option>
+            <option value="en-IN">English</option>
+            <option value="hi-IN">हिन्दी</option>
+            <option value="kn-IN">ಕನ್ನಡ</option>
+            <option value="ta-IN">தமிழ்</option>
+            <option value="ml-IN">മലയാളം</option>
+        </select>
+    </div>
 
-            <button type="button" id="memorySpeechBtn">
-                🎙 Speak
-            </button>
-        </div>
+    <div class="memory-language-group">
+        <label class="expense-label">Text:</label>
+        <select id="memorySpeechOutputLang">
+            <option value="te">తెలుగు</option>
+            <option value="en" selected>English</option>
+            <option value="hi">हिन्दी</option>
+            <option value="kn">ಕನ್ನಡ</option>
+            <option value="ta">தமிழ்</option>
+            <option value="ml">മലയാളം</option>
+        </select>
+    </div>
+
+    <button type="button" id="memorySpeechBtn">🎙 Speak</button>
+
+</div>
     </div>
 
 </div>
