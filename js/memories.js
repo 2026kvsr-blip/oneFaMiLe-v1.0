@@ -43,7 +43,7 @@ function memoryStyleOnce() {
             min-width: 0;
             display: flex;
             flex-direction: column;
-            gap: 2px !important;
+            gap: 5px !important;
         }
 
         .memory-page .expense-label {
