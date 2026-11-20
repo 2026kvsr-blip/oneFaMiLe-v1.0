@@ -560,6 +560,30 @@ function memoryStyleOnce() {
     font-family: Arial, sans-serif !important;
     -webkit-text-stroke: 0 !important;
 }
+.memory-page .memory-description-field {
+    grid-column: 1 / -1 !important;
+}
+
+.memory-page .memory-description-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.memory-page .memory-speech-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.memory-page .memory-language-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
     `;
 
     document.head.appendChild(style);
