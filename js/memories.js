@@ -562,116 +562,123 @@ function openAddMemoryScreen() {
             <div class="expense-panel">
                 <form id="memoryForm" class="expense-form" autocomplete="off">
 
-                    <div class="expense-filter-grid memory-fields-grid">
+            
+<div class="expense-filter-grid memory-fields-grid">
 
-                        <div class="expense-field">
-                            <label class="expense-label">Title *</label>
-                            <input type="text" id="memoryTitle"
-                                placeholder="Memory title" required>
-                        </div>
-
-                        <div class="expense-field">
-                            <label class="expense-label">Memory Date *</label>
-                            <input type="date" id="memoryDate" required>
-                        </div>
-
-                        <div class="expense-field">
-                            <label class="expense-label">Memory Type *</label>
-                            <select id="memoryType" required>
-                                <option value="">Memory Type</option>
-                                <option>Text</option>
-                                <option>Photo</option>
-                                <option>Video</option>
-                                <option>Voice</option>
-                                <option>Mixed</option>
-                            </select>
-                        </div>
-
-                        <div class="expense-field">
-                            <label class="expense-label">Category</label>
-                            <select id="memoryCategory">
-                                <option value="">Category</option>
-                                <option>Family</option>
-                                <option>Childhood</option>
-                                <option>Birthdays</option>
-                                <option>Festivals</option>
-                                <option>Functions</option>
-                                <option>Education</option>
-                                <option>Trips</option>
-                                <option>Achievements</option>
-                                <option>Others</option>
-                            </select>
-                        </div>
-
-                        <div class="expense-field">
-                            <label class="expense-label">Memory Place</label>
-                            <input type="text" id="memoryPlace"
-                                placeholder="Enter place">
-                        </div>
-
-                        <div class="expense-field">
-    <label class="expense-label">Description</label>
-
-    <textarea id="memoryDescription" rows="3"
-        maxlength="500"
-        placeholder="About Memory"></textarea>
-
-    <div class="memory-speech-controls">
-
-        <label class="expense-label">Speaking Language</label>
-        <select id="memorySpeechInputLang">
-            <option value="te-IN" selected>తెలుగు</option>
-            <option value="en-IN">English</option>
-        </select>
-
-        <label class="expense-label">Text Language</label>
-        <select id="memorySpeechOutputLang">
-            <option value="te">తెలుగు</option>
-            <option value="en" selected>English</option>
-        </select>
-
-        <button type="button" id="memorySpeechBtn">
-            🎙 Speak
-        </button>
-
+    <!-- Row 1 -->
+    <div class="expense-field">
+        <label class="expense-label">Title *</label>
+        <input type="text" id="memoryTitle"
+            placeholder="Memory title" required>
     </div>
+
+    <div class="expense-field">
+        <label class="expense-label">Memory Date *</label>
+        <input type="date" id="memoryDate" required>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="expense-field">
+        <label class="expense-label">Memory Type *</label>
+        <select id="memoryType" required>
+            <option value="">Memory Type</option>
+            <option>Text</option>
+            <option>Photo</option>
+            <option>Video</option>
+            <option>Voice</option>
+            <option>Mixed</option>
+        </select>
+    </div>
+
+    <div class="expense-field">
+        <label class="expense-label">Category</label>
+        <select id="memoryCategory">
+            <option value="">Category</option>
+            <option>Family</option>
+            <option>Childhood</option>
+            <option>Birthdays</option>
+            <option>Festivals</option>
+            <option>Functions</option>
+            <option>Education</option>
+            <option>Trips</option>
+            <option>Achievements</option>
+            <option>Others</option>
+        </select>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="expense-field">
+        <label class="expense-label">Memory Place</label>
+        <input type="text" id="memoryPlace"
+            placeholder="Enter place">
+    </div>
+
+    <div class="expense-field memory-photo-field">
+        <label class="expense-label">Photos (Max 5)</label>
+        <input type="file" id="memoryPhotos"
+            accept="image/*" multiple hidden>
+        <div id="memoryPhotoSlots" class="memory-photo-slots"></div>
+        <div class="memory-count-row">
+            <small id="memoryPhotosCount">0 photos selected</small>
+            <button type="button" class="memory-clear-btn"
+                id="clearMemoryPhotos">Clear</button>
+        </div>
+    </div>
+
+    <!-- Row 4 -->
+    <div class="expense-field memory-video-field">
+        <label class="expense-label">Videos (Max 3)</label>
+        <input type="file" id="memoryVideos"
+            accept="video/*" multiple hidden>
+        <div id="memoryVideoSlots" class="memory-video-slots"></div>
+        <div class="memory-count-row">
+            <small id="memoryVideosCount">0 videos selected</small>
+            <button type="button" class="memory-clear-btn"
+                id="clearMemoryVideos">Clear</button>
+        </div>
+    </div>
+
+    <div class="expense-field memory-voice-field">
+        <label class="expense-label">Voice Messages (Max 3)</label>
+        <input type="file" id="memoryVoice"
+            accept="audio/*" multiple hidden>
+        <div id="memoryVoiceSlots" class="memory-voice-slots"></div>
+        <div class="memory-count-row">
+            <small id="memoryVoiceCount">0 voice selected</small>
+            <button type="button" class="memory-clear-btn"
+                id="clearMemoryVoices">Clear</button>
+        </div>
+    </div>
+
+    <!-- Row 5: Description -->
+    <div class="expense-field memory-description-field">
+        <label class="expense-label">Description</label>
+
+        <textarea id="memoryDescription" rows="3"
+            maxlength="500"
+            placeholder="About Memory"></textarea>
+
+        <div class="memory-speech-controls">
+            <label class="expense-label">Speaking Language</label>
+            <select id="memorySpeechInputLang">
+                <option value="te-IN" selected>తెలుగు</option>
+                <option value="en-IN">English</option>
+            </select>
+
+            <label class="expense-label">Text Language</label>
+            <select id="memorySpeechOutputLang">
+                <option value="te">తెలుగు</option>
+                <option value="en" selected>English</option>
+            </select>
+
+            <button type="button" id="memorySpeechBtn">
+                🎙 Speak
+            </button>
+        </div>
+    </div>
+
 </div>
 
-                  <div class="expense-field memory-photo-field">
-    <label class="expense-label">Photos (Max 5)</label>
-
-    <input type="file" id="memoryPhotos"
-        accept="image/*" multiple hidden>
-
-    <div id="memoryPhotoSlots" class="memory-photo-slots"></div>
-
-<div class="memory-count-row">
-    <small id="memoryPhotosCount">0 photos selected</small>
-    <button type="button" class="memory-clear-btn" id="clearMemoryPhotos">Clear</button>
-</div></div>
-
-                    <div class="expense-field memory-video-field">
-    <label class="expense-label">Videos (Max 3)</label>
-    <input type="file" id="memoryVideos"
-        accept="video/*" multiple hidden>
-    <div id="memoryVideoSlots" class="memory-video-slots"></div>
-<div class="memory-count-row">
-    <small id="memoryVideosCount">0 videos selected</small>
-    <button type="button" class="memory-clear-btn" id="clearMemoryVideos">Clear</button>
-</div></div>
-
-                     <div class="expense-field memory-voice-field">
-    <label class="expense-label">Voice Messages (Max 3)</label>
-
-    <input type="file" id="memoryVoice"
-        accept="audio/*" multiple hidden>
-
-    <div id="memoryVoiceSlots" class="memory-voice-slots"></div>
-
-<div class="memory-count-row">
-    <small id="memoryVoiceCount">0 voice selected</small>
-    <button type="button" class="memory-clear-btn" id="clearMemoryVoices">Clear</button>
-</div></div>
 
                     </div>
 
