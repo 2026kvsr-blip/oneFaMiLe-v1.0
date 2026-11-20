@@ -693,9 +693,14 @@ function openAddMemoryScreen() {
         <label class="expense-label">Description</label>
     </div>
 
-        <textarea id="memoryDescription" rows="3"
-            maxlength="500"
-            placeholder="About Memory"></textarea>
+      <div class="memory-description-input-wrap">
+    <textarea id="memoryDescription" rows="3"
+        maxlength="500"
+        placeholder="About Memory"></textarea>
+
+    <button type="button" id="memorySpeechBtn"
+        class="memory-description-mic">🎙</button>
+</div>
 
        <div class="memory-speech-controls">
 
