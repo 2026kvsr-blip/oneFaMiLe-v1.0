@@ -146,7 +146,7 @@ function memoryStyleOnce() {
         }
 
         .memory-page.memory-form-view #memoryForm {
-            padding-bottom: 40px !important;
+            padding-bottom: 30px !important;
         }
 
         .memory-page.memory-form-view #memoryForm .expense-actions {
