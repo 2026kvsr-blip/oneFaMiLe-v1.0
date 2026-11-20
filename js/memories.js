@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe - MEMORIES FRONTEND
 ===================================== */
@@ -583,6 +584,33 @@ function memoryStyleOnce() {
     display: flex;
     align-items: center;
     gap: 5px;
+}
+.memory-page .memory-description-input-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.memory-page .memory-description-input-wrap textarea {
+    width: 100% !important;
+    height: 72px !important;
+    min-height: 72px !important;
+    max-height: 72px !important;
+    padding-right: 42px !important;
+    box-sizing: border-box !important;
+}
+
+.memory-page .memory-description-mic {
+    position: absolute;
+    right: 8px;
+    bottom: 7px;
+    width: 30px !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    font-size: 20px !important;
+    cursor: pointer;
 }
     `;
 
