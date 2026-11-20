@@ -862,6 +862,19 @@ const memoryPhotoSlots = document.getElementById('memoryPhotoSlots');
 const memoryPhotosCount = document.getElementById('memoryPhotosCount');
 
 let selectedMemoryPhotos = [];
+
+function memoryFileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(
+            new Error("Unable to read selected photo.")
+        );
+
+        reader.readAsDataURL(file);
+    });
+}
    
 async function compressMemoryPhoto(file) {
 
