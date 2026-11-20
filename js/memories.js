@@ -209,9 +209,9 @@ function memoryStyleOnce() {
 .memory-page .memory-photo-slot {
     position: relative;
     width: 100% !important;
-    height: 36px !important;
-    min-height: 36px !important;
-    max-height: 36px !important;
+    height: 26px !important;
+    min-height: 26px !important;
+    max-height: 26px !important;
     aspect-ratio: auto !important;
     min-width: 0 !important;
     border: 1px dashed #7fa6cc;
