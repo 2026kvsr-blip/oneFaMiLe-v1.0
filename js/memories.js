@@ -1257,13 +1257,10 @@ clearVideosBtn.style.display =
 
 memoryVideoSlots.addEventListener('click', event => {
     const removeButton = event.target.closest('[data-remove-video]');
-
     if (removeButton) {
         const index = Number(removeButton.dataset.removeVideo);
-
         const overlay = document.createElement('div');
         overlay.className = 'memory-delete-overlay';
-
         overlay.innerHTML = `
             <div class="memory-delete-box">
                 <h3>Delete Video?</h3>
@@ -1276,9 +1273,7 @@ memoryVideoSlots.addEventListener('click', event => {
                 </div>
             </div>
         `;
-
         document.body.appendChild(overlay);
-
         overlay.querySelector('.memory-delete-cancel').onclick = () => {
             overlay.remove();
         };
@@ -1304,9 +1299,45 @@ memoryVideoSlots.addEventListener('click', event => {
 
     const emptySlot = event.target.closest('[data-empty="true"]');
 
-    if (emptySlot) {
-        memoryVideosInput.click();
+if (emptySlot) {
+
+    let totalDuration = 0;
+
+    for (const video of selectedMemoryVideos) {
+
+        const url = video.url;
+
+        const duration = await new Promise(resolve => {
+            const tempVideo = document.createElement('video');
+
+            tempVideo.preload = 'metadata';
+
+            tempVideo.onloadedmetadata = () => {
+                resolve(tempVideo.duration);
+            };
+
+            tempVideo.onerror = () => {
+                resolve(0);
+            };
+
+            tempVideo.src = url;
+        });
+
+        totalDuration += duration;
     }
+
+    if (totalDuration >= 1200) {
+
+        showMemoryMessage(
+            'Maximum Duration Reached',
+            'Total video duration cannot exceed 20 minutes.'
+        );
+
+        return;
+    }
+
+    memoryVideosInput.click();
+}
 });
 
 memoryVideosInput.addEventListener('change', () => {
