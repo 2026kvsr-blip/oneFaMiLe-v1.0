@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe - MEMORIES FRONTEND
 ===================================== */
@@ -1044,34 +1043,45 @@ memoryPhotoSlots.addEventListener('click', event => {
     }
 });
 
-memoryPhotosInput.addEventListener('change', () => {
+memoryPhotosInput.addEventListener('change', async () => {
+
     const newFiles = Array.from(memoryPhotosInput.files);
     const remaining = 5 - selectedMemoryPhotos.length;
 
     if (newFiles.length > remaining) {
-        if (selectedMemoryPhotos.length === 0) {
-            showMemoryMessage(
-                'Maximum Limit Reached',
-                'You can select max 5 photos only.'
-            );
-        } else {
-            showMemoryMessage(
-                'Maximum Limit Reached',
-                `You can select only ${remaining} more photos.`
-            );
-        }
+        showMemoryMessage(
+            'Maximum Limit Reached',
+            `You can select only ${remaining} more photos.`
+        );
     }
 
-    newFiles.slice(0, remaining).forEach(file => {
-        selectedMemoryPhotos.push({
-            file: file,
-            url: URL.createObjectURL(file)
-        });
-    });
+    const filesToAdd = newFiles.slice(0, remaining);
 
-    updateMemoryPhotoSlots();
+    memoryPhotosInput.disabled = true;
+
+    try {
+        for (const file of filesToAdd) {
+
+            const compressedFile = await compressMemoryPhoto(file);
+
+            selectedMemoryPhotos.push({
+                file: compressedFile,
+                url: URL.createObjectURL(compressedFile)
+            });
+        }
+
+        updateMemoryPhotoSlots();
+
+    } catch (error) {
+        showMemoryMessage(
+            'Photo Error',
+            'Unable to process the selected photo.'
+        );
+
+    } finally {
+        memoryPhotosInput.disabled = false;
+    }
 });
-
 updateMemoryPhotoSlots();
 document.getElementById('memoryForm').addEventListener('reset', () => {
     selectedMemoryPhotos.forEach(photo => {
