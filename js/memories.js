@@ -862,9 +862,9 @@ const memoryPhotoSlots = document.getElementById('memoryPhotoSlots');
 const memoryPhotosCount = document.getElementById('memoryPhotosCount');
 
 let selectedMemoryPhotos = [];
+   
 async function compressMemoryPhoto(file) {
 
-    // Original photo size limit లో ఉంటే మార్చకుండా అలాగే ఉంచాలి
     if (file.size <= 700 * 1024) {
         return file;
     }
@@ -882,37 +882,52 @@ async function compressMemoryPhoto(file) {
         let width = image.naturalWidth;
         let height = image.naturalHeight;
 
-        // అవసరమైనప్పుడు మాత్రమే dimensions తగ్గించాలి
         const maxDimension = 2560;
 
-        if (width > maxDimension || height > maxDimension) {
+        if (Math.max(width, height) > maxDimension) {
             const scale = maxDimension / Math.max(width, height);
             width = Math.round(width * scale);
             height = Math.round(height * scale);
         }
 
         const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-
         const ctx = canvas.getContext('2d');
-        ctx.drawImage(image, 0, 0, width, height);
 
-        let quality = 0.92;
+        const targetSize = 700 * 1024;
+        let blob = null;
 
-        const blob = await new Promise(resolve => {
-            canvas.toBlob(resolve, 'image/jpeg', quality);
-        });
+        while (true) {
 
-        if (!blob) {
-            throw new Error('Photo compression failed.');
+            canvas.width = width;
+            canvas.height = height;
+
+            ctx.clearRect(0, 0, width, height);
+            ctx.drawImage(image, 0, 0, width, height);
+
+            for (let quality = 0.92; quality >= 0.60; quality -= 0.04) {
+
+                blob = await new Promise(resolve => {
+                    canvas.toBlob(resolve, 'image/jpeg', quality);
+                });
+
+                if (blob && blob.size <= targetSize) {
+                    return new File(
+                        [blob],
+                        file.name.replace(/\.[^/.]+$/, '') + '.jpg',
+                        { type: 'image/jpeg' }
+                    );
+                }
+            }
+
+            if (Math.max(width, height) <= 1200) {
+                break;
+            }
+
+            width = Math.round(width * 0.9);
+            height = Math.round(height * 0.9);
         }
 
-        return new File(
-            [blob],
-            file.name.replace(/\.[^/.]+$/, '') + '.jpg',
-            { type: 'image/jpeg' }
-        );
+        throw new Error('Photo could not be compressed within 700 KB.');
 
     } finally {
         URL.revokeObjectURL(imageUrl);
