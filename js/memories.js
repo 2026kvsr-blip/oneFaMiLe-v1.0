@@ -187,12 +187,13 @@ function memoryStyleOnce() {
     color: #2d5274 !important;
     box-shadow: none !important;
 }
-     .memory-page .memory-photo-slots {
+    .memory-page .memory-photo-slots {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 5px;
-    margin: 2px 0;
-    padding: 5px;
+    margin: 0 !important;
+    padding: 4px;
+    height: 36px;
     border: 1px solid #9bb9d4;
     border-radius: 8px;
     background: #fff;
@@ -599,8 +600,9 @@ function memoryStyleOnce() {
     background: transparent !important;
     appearance: none !important;
     -webkit-appearance: none !important;
-    font: inherit !important;
-    color: #2d5274 !important;
+font-size: 14px !important;
+font-weight: 400 !important;
+color: #2d5274 !important;
 }
 .memory-page .memory-description-input-wrap {
     position: relative;
@@ -621,12 +623,17 @@ function memoryStyleOnce() {
     right: 8px;
     bottom: 7px;
     width: 30px !important;
+    min-width: 30px !important;
+    max-width: 30px !important;
     height: 30px !important;
     min-height: 30px !important;
+    max-height: 30px !important;
     padding: 0 !important;
     border: none !important;
     background: transparent !important;
-    font-size: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     cursor: pointer;
 }
     `;
