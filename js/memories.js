@@ -576,14 +576,31 @@ function memoryStyleOnce() {
 .memory-page .memory-speech-controls {
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: nowrap;
 }
 
 .memory-page .memory-language-group {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 3px;
+    white-space: nowrap;
+}
+
+.memory-page .memory-language-group select {
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 0 !important;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    font: inherit !important;
+    color: #2d5274 !important;
 }
 .memory-page .memory-description-input-wrap {
     position: relative;
