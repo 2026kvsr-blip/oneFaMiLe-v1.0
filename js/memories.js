@@ -875,6 +875,92 @@ function memoryFileToBase64(file) {
         reader.readAsDataURL(file);
     });
 }
+
+document.getElementById('memorySaveBtn').addEventListener('click', async () => {
+    const saveBtn = document.getElementById('memorySaveBtn');
+
+    try {
+        const family = JSON.parse(
+            localStorage.getItem('currentFamily') || '{}'
+        );
+
+        const sessionToken =
+            sessionStorage.getItem('sessionToken') || '';
+
+        if (!sessionToken || !family.familyId) {
+            showMemoryMessage(
+                'Login Required',
+                'Please login again and select your family.'
+            );
+            return;
+        }
+
+        const title =
+            document.getElementById('memoryTitle').value.trim();
+
+        if (!title) {
+            showMemoryMessage('Required', 'Please enter Memory Title.');
+            return;
+        }
+
+        const body = new URLSearchParams({
+            action: 'saveMemory',
+            sessionToken: sessionToken,
+            familyId: String(family.familyId),
+            title: title,
+            memoryDate: document.getElementById('memoryDate').value,
+            memoryType: document.getElementById('memoryType').value,
+            category: document.getElementById('memoryCategory').value,
+            memoryPlace: document.getElementById('memoryPlace').value,
+            description: document.getElementById('memoryDescription').value,
+            isSensitive: String(
+                document.getElementById('memorySensitive').checked
+            )
+        });
+
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
+
+        for (let i = 0; i < selectedMemoryPhotos.length; i++) {
+            const base64 = await memoryFileToBase64(
+                selectedMemoryPhotos[i].file
+            );
+
+            body.append('photo' + (i + 1) + 'Data', base64);
+        }
+
+        const response = await fetch(MEMORY_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: body
+        });
+
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+            throw new Error(result.message || 'Memory save failed.');
+        }
+
+        showMemoryMessage(
+            'Success',
+            'Memory saved successfully.'
+        );
+
+    } catch (error) {
+        console.error('Memory Save Error:', error);
+
+        showMemoryMessage(
+            'Save Failed',
+            error.message || 'Unable to save Memory.'
+        );
+
+    } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save';
+    }
+});
    
 async function compressMemoryPhoto(file) {
 
