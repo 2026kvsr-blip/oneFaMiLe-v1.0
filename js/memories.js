@@ -208,8 +208,9 @@ function memoryStyleOnce() {
 .memory-page .memory-photo-slot {
     position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1;
-    min-width: 0;
+aspect-ratio: auto;
+height: 36px;
+min-width: 0;
     border: 1px dashed #7fa6cc;
     border-radius: 7px;
     background: #fff;
@@ -319,7 +320,7 @@ function memoryStyleOnce() {
     min-width: 0;
     border: 1px dashed #9bb9d4;
     border-radius: 7px;
-    background: #f7faff;
+    background: transparent;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -567,11 +568,22 @@ function memoryStyleOnce() {
 }
 
 .memory-page .memory-description-header {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.memory-page .memory-description-header > .expense-label {
+    text-align: left;
+}
+
+.memory-page .memory-language-group:first-child {
+    justify-content: center;
+}
+
+.memory-page .memory-language-group:last-child {
+    justify-content: flex-end;
 }
 
 .memory-page .memory-speech-controls {
