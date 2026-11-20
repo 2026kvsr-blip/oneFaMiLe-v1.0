@@ -1250,7 +1250,6 @@ document.getElementById('memoryForm').addEventListener('reset', () => {
     updateMemoryVideoSlots();
 });
 
-
 // VOICE MESSAGE SELECTION
 
 const memoryVoiceInput = document.getElementById('memoryVoice');
