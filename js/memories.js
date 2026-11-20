@@ -187,18 +187,19 @@ function memoryStyleOnce() {
     color: #2d5274 !important;
     box-shadow: none !important;
 }
-    .memory-page .memory-photo-slots {
+   .memory-page .memory-photo-slots {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-auto-rows: 36px;
     gap: 5px;
     margin: 0 !important;
     padding: 4px;
-    height: 36px;
+    height: 46px !important;
     border: 1px solid #9bb9d4;
     border-radius: 8px;
     background: #fff;
     box-sizing: border-box;
-    align-items: center;
+    align-items: stretch;
 }
 
 .memory-page .memory-photo-field input[type="file"] {
@@ -207,10 +208,12 @@ function memoryStyleOnce() {
 
 .memory-page .memory-photo-slot {
     position: relative;
-    width: 100%;
-aspect-ratio: auto;
-height: 36px;
-min-width: 0;
+    width: 100% !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    max-height: 36px !important;
+    aspect-ratio: auto !important;
+    min-width: 0 !important;
     border: 1px dashed #7fa6cc;
     border-radius: 7px;
     background: #fff;
