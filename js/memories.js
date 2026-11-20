@@ -863,6 +863,63 @@ const memoryPhotoSlots = document.getElementById('memoryPhotoSlots');
 const memoryPhotosCount = document.getElementById('memoryPhotosCount');
 
 let selectedMemoryPhotos = [];
+async function compressMemoryPhoto(file) {
+
+    // Original photo size limit లో ఉంటే మార్చకుండా అలాగే ఉంచాలి
+    if (file.size <= 700 * 1024) {
+        return file;
+    }
+
+    const image = new Image();
+    const imageUrl = URL.createObjectURL(file);
+
+    try {
+        await new Promise((resolve, reject) => {
+            image.onload = resolve;
+            image.onerror = reject;
+            image.src = imageUrl;
+        });
+
+        let width = image.naturalWidth;
+        let height = image.naturalHeight;
+
+        // అవసరమైనప్పుడు మాత్రమే dimensions తగ్గించాలి
+        const maxDimension = 2560;
+
+        if (width > maxDimension || height > maxDimension) {
+            const scale = maxDimension / Math.max(width, height);
+            width = Math.round(width * scale);
+            height = Math.round(height * scale);
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(image, 0, 0, width, height);
+
+        let quality = 0.92;
+
+        const blob = await new Promise(resolve => {
+            canvas.toBlob(resolve, 'image/jpeg', quality);
+        });
+
+        if (!blob) {
+            throw new Error('Photo compression failed.');
+        }
+
+        return new File(
+            [blob],
+            file.name.replace(/\.[^/.]+$/, '') + '.jpg',
+            { type: 'image/jpeg' }
+        );
+
+    } finally {
+        URL.revokeObjectURL(imageUrl);
+    }
+}
+   
 // CUSTOM MEMORY MESSAGE WINDOW
 function showMemoryMessage(title, message) {
     const overlay = document.createElement('div');
