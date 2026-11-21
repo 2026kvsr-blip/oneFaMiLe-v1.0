@@ -529,6 +529,18 @@ function memoryStyleOnce() {
     border: 1px solid #d93025;
     color: #fff;
 }
+.memory-success-overlay .memory-delete-box {
+    border-color: #2e8b57 !important;
+}
+
+.memory-success-overlay .memory-delete-box h3 {
+    color: #2e8b57 !important;
+}
+
+.memory-success-overlay .memory-delete-confirm {
+    background: #2e8b57 !important;
+    border-color: #2e8b57 !important;
+}
 @media (max-width: 600px) {
     .memory-page .memory-photo-slots {
         grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1059,7 +1071,9 @@ async function compressMemoryPhoto(file) {
 function showMemoryMessage(title, message) {
     const overlay = document.createElement('div');
     overlay.className = 'memory-delete-overlay';
-
+if (title === 'Success') {
+    overlay.classList.add('memory-success-overlay');
+}
     overlay.innerHTML = `
         <div class="memory-delete-box">
             <h3>${title}</h3>
