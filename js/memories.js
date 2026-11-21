@@ -1528,14 +1528,7 @@ async function uploadMemoryVideoToDrive(file) {
         uploadedFile.id + "/view";
 }
 
-   
-   const testDriveButton = document.createElement("button");
-testDriveButton.textContent = "Connect Google Drive";
-testDriveButton.type = "button";
-
-testDriveButton.onclick = connectGoogleDrive;
-
-document.body.appendChild(testDriveButton);
+  
    // DESCRIPTION VOICE TO TEXT
 const memoryDescription =
     document.getElementById('memoryDescription');
