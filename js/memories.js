@@ -1218,8 +1218,22 @@ memoryPhotosInput.addEventListener('change', async () => {
             `You can select only ${remaining} more photos.`
         );
     }
+const maxPhotoSize = 8 * 1024 * 1024;
 
-    const filesToAdd = newFiles.slice(0, remaining);
+const oversizedFiles = newFiles.filter(
+    file => file.size > maxPhotoSize
+);
+
+if (oversizedFiles.length > 0) {
+    showMemoryMessage(
+        'Photo Size Limit',
+        'Each photo must be 8 MB or less.'
+    );
+
+    memoryPhotosInput.value = '';
+    return;
+}
+   const filesToAdd = newFiles.slice(0, remaining);
 
     memoryPhotosInput.disabled = true;
 
