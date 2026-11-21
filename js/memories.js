@@ -981,7 +981,7 @@ if (selectedMemoryVideos.length > 0) {
             'Success',
             'Memory saved successfully.'
         );
-
+document.getElementById('memoryForm').reset();
     } catch (error) {
         console.error('Memory Save Error:', error);
 
