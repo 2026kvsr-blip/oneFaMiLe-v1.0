@@ -1389,6 +1389,20 @@ const memoryVoiceCount = document.getElementById('memoryVoiceCount');
     "https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 const GOOGLE_CLIENT_ID = "216923084943-pjo421a0hake4ml4qtem2rsn4teso9cf.apps.googleusercontent.com";
 const GOOGLE_DRIVE_FOLDER_ID = "11-usnNbFwJN8pRr4kGgpOVilqFwGxAI0";
+   let googleAccessToken = null;
+
+const googleTokenClient = google.accounts.oauth2.initTokenClient({
+  client_id: GOOGLE_CLIENT_ID,
+  scope: "https://www.googleapis.com/auth/drive.file",
+  callback: (response) => {
+    if (response.access_token) {
+      googleAccessToken = response.access_token;
+      console.log("Google Drive connected successfully");
+    } else {
+      console.error("Google login failed", response);
+    }
+  }
+});
    
    
    // DESCRIPTION VOICE TO TEXT
