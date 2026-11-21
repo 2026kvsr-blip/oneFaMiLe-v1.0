@@ -248,7 +248,17 @@ function memoryStyleOnce() {
 .memory-page .memory-video-field input[type="file"] {
     display: none !important;
 }
-
+.memory-page .memory-coming-soon {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 6px;
+    border-radius: 5px;
+    background: #e8f0e8;
+    color: #2e8b57;
+    font-size: 10px;
+    font-weight: 600;
+    vertical-align: middle;
+}
 .memory-page .memory-video-slots {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -744,9 +754,13 @@ function openAddMemoryScreen() {
 
     <!-- Row 4 -->
     <div class="expense-field memory-video-field">
-        <label class="expense-label">Videos (Max 3)</label>
-        <input type="file" id="memoryVideos"
-            accept="video/*" multiple hidden>
+    <label class="expense-label">
+        Videos (Max 3)
+        <span class="memory-coming-soon">Coming Soon</span>
+    </label>
+    <input type="file" id="memoryVideos"
+        accept="video/*" multiple hidden disabled>
+            
         <div id="memoryVideoSlots" class="memory-video-slots"></div>
         <div class="memory-count-row">
             <small id="memoryVideosCount">0 videos selected</small>
@@ -1247,6 +1261,11 @@ document.getElementById('memoryForm').addEventListener('reset', () => {
 // VIDEO SELECTION - MAX 3
 const memoryVideosInput = document.getElementById('memoryVideos');
 const memoryVideoSlots = document.getElementById('memoryVideoSlots');
+   memoryVideoSlots.style.pointerEvents = 'none';
+memoryVideoSlots.style.opacity = '0.45';
+
+document.getElementById('clearMemoryVideos').disabled = true;
+document.getElementById('clearMemoryVideos').style.display = 'none';
 const memoryVideosCount = document.getElementById('memoryVideosCount');
 
 let selectedMemoryVideos = [];
