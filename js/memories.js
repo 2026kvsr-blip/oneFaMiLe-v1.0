@@ -930,7 +930,27 @@ document.getElementById('memorySaveBtn').addEventListener('click', async () => {
 
             body.append('photo' + (i + 1) + 'Data', base64);
         }
+// UPLOAD VIDEOS TO GOOGLE DRIVE
+if (selectedMemoryVideos.length > 0) {
+    if (!googleAccessToken) {
+        showMemoryMessage("Please connect Google Drive first.");
+        return;
+    }
 
+    if (!GOOGLE_DRIVE_FOLDER_ID) {
+        throw new Error("Google Drive folder ID is missing.");
+    }
+
+    saveBtn.textContent = "Uploading Videos...";
+
+    for (let i = 0; i < selectedMemoryVideos.length; i++) {
+        const videoFile = selectedMemoryVideos[i].file;
+
+        const videoUrl = await uploadMemoryVideoToDrive(videoFile);
+
+        body.append("video" + (i + 1) + "Url", videoUrl);
+    }
+}
         const response = await fetch(MEMORY_API, {
             method: 'POST',
             headers: {
