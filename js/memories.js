@@ -12,6 +12,7 @@ function memoryStyleOnce() {
     style.textContent = `
         .memory-page {
             max-width: 1100px;
+    
             margin: 0 auto;
         }
 
