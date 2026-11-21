@@ -1387,7 +1387,11 @@ const memoryVoiceSlots = document.getElementById('memoryVoiceSlots');
 const memoryVoiceCount = document.getElementById('memoryVoiceCount');
    const MEMORY_API =
     "https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
-// DESCRIPTION VOICE TO TEXT
+const GOOGLE_CLIENT_ID = "216923084943-pjo421a0hake4ml4qtem2rsn4teso9cf.apps.googleusercontent.com";
+const GOOGLE_DRIVE_FOLDER_ID = "11-usnNbFwJN8pRr4kGgpOVilqFwGxAI0";
+   
+   
+   // DESCRIPTION VOICE TO TEXT
 const memoryDescription =
     document.getElementById('memoryDescription');
 
