@@ -1040,8 +1040,8 @@ async function compressMemoryPhoto(file) {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
 
-        const targetSize = 700 * 1024;
-        let blob = null;
+const targetSize = 1 * 1024 * 1024;
+       let blob = null;
 
         while (true) {
 
