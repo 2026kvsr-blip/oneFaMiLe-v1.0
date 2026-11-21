@@ -1256,8 +1256,8 @@ clearVideosBtn.style.display =
     memoryVideosInput.files = transfer.files;
 }
 
-memoryVideoSlots.addEventListener('click', event => {
-    const removeButton = event.target.closest('[data-remove-video]');
+memoryVideoSlots.addEventListener('click', async event => {
+   const removeButton = event.target.closest('[data-remove-video]');
     if (removeButton) {
         const index = Number(removeButton.dataset.removeVideo);
         const overlay = document.createElement('div');
