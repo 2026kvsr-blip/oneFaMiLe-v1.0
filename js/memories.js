@@ -1413,6 +1413,69 @@ const googleTokenClient = google.accounts.oauth2.initTokenClient({
 
   googleTokenClient.requestAccessToken();
 } 
+
+async function uploadMemoryVideoToDrive(file) {
+    if (!googleAccessToken) {
+        throw new Error("Please connect Google Drive first.");
+    }
+
+    if (!GOOGLE_DRIVE_FOLDER_ID) {
+        throw new Error("Google Drive folder ID is missing.");
+    }
+
+    const metadata = {
+        name: file.name,
+        mimeType: file.type,
+        parents: [GOOGLE_DRIVE_FOLDER_ID]
+    };
+
+    const response = await fetch(
+        "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable",
+        {
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + googleAccessToken,
+                "Content-Type": "application/json; charset=UTF-8",
+                "X-Upload-Content-Type": file.type,
+                "X-Upload-Content-Length": String(file.size)
+            },
+            body: JSON.stringify(metadata)
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Google Drive upload session failed: " + response.status
+        );
+    }
+
+    const uploadUrl = response.headers.get("Location");
+
+    if (!uploadUrl) {
+        throw new Error("Google Drive upload URL not received.");
+    }
+
+    const uploadResponse = await fetch(uploadUrl, {
+        method: "PUT",
+        headers: {
+            "Content-Type": file.type
+        },
+        body: file
+    });
+
+    if (!uploadResponse.ok) {
+        throw new Error(
+            "Video upload failed: " + uploadResponse.status
+        );
+    }
+
+    const uploadedFile = await uploadResponse.json();
+
+    return "https://drive.google.com/file/d/" +
+        uploadedFile.id + "/view";
+}
+
+   
    const testDriveButton = document.createElement("button");
 testDriveButton.textContent = "Connect Google Drive";
 testDriveButton.type = "button";
