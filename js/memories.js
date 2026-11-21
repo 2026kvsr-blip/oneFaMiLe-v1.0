@@ -1403,8 +1403,21 @@ const googleTokenClient = google.accounts.oauth2.initTokenClient({
     }
   }
 });
-   
-   
+  function connectGoogleDrive() {
+  if (!window.google || !google.accounts || !google.accounts.oauth2) {
+    alert("Google Login library is not loaded. Please refresh the page.");
+    return;
+  }
+
+  googleTokenClient.requestAccessToken();
+} 
+   const testDriveButton = document.createElement("button");
+testDriveButton.textContent = "Connect Google Drive";
+testDriveButton.type = "button";
+
+testDriveButton.onclick = connectGoogleDrive;
+
+document.body.appendChild(testDriveButton);
    // DESCRIPTION VOICE TO TEXT
 const memoryDescription =
     document.getElementById('memoryDescription');
