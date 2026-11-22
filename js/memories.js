@@ -998,7 +998,22 @@ if (selectedMemoryVideos.length > 0) {
             throw new Error(result.message || 'Memory save failed.');
         }
 
-        console.log('Individual Photo Upload Times:', result.photoUploadTimes);
+
+console.log(
+  'MEMORY SAVE TIMINGS:',
+  result.timings
+);
+
+console.log(
+  'INDIVIDUAL PHOTO UPLOAD TIMES:',
+  result.photoUploadTimes
+);
+
+console.log(
+  'TOTAL MEMORY SAVE TIME:',
+  result.totalSaveSeconds,
+  'seconds'
+);
 console.log(
   'TOTAL MEMORY SAVE TIME:',
   result.totalSaveSeconds,
