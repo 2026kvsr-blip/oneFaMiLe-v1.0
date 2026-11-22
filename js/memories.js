@@ -999,7 +999,11 @@ if (selectedMemoryVideos.length > 0) {
         }
 
         console.log('Individual Photo Upload Times:', result.photoUploadTimes);
-
+console.log(
+  'TOTAL MEMORY SAVE TIME:',
+  result.totalSaveSeconds,
+  'seconds'
+);
 showMemoryMessage(
     'Success',
     'Memory saved successfully. Check Console for photo upload timings.'
