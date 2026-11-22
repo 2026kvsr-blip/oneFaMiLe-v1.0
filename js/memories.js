@@ -1038,9 +1038,12 @@ document.getElementById('memoryForm').reset();
     }
 });
    
+
 async function compressMemoryPhoto(file) {
 
-    if (file.size <= 700 * 1024) {
+    const targetSize = 300 * 1024; // 300 KB
+
+    if (file.size <= targetSize) {
         return file;
     }
 
@@ -1057,7 +1060,7 @@ async function compressMemoryPhoto(file) {
         let width = image.naturalWidth;
         let height = image.naturalHeight;
 
-        const maxDimension = 2560;
+        const maxDimension = 1920;
 
         if (Math.max(width, height) > maxDimension) {
             const scale = maxDimension / Math.max(width, height);
@@ -1068,20 +1071,16 @@ async function compressMemoryPhoto(file) {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
 
-const targetSize = 1 * 1024 * 1024;
-       let blob = null;
-
         while (true) {
 
             canvas.width = width;
             canvas.height = height;
 
-            ctx.clearRect(0, 0, width, height);
             ctx.drawImage(image, 0, 0, width, height);
 
-            for (let quality = 0.92; quality >= 0.60; quality -= 0.04) {
+            for (let quality = 0.82; quality >= 0.45; quality -= 0.05) {
 
-                blob = await new Promise(resolve => {
+                const blob = await new Promise(resolve => {
                     canvas.toBlob(resolve, 'image/jpeg', quality);
                 });
 
@@ -1094,20 +1093,21 @@ const targetSize = 1 * 1024 * 1024;
                 }
             }
 
-            if (Math.max(width, height) <= 1200) {
+            if (Math.max(width, height) <= 900) {
                 break;
             }
 
-            width = Math.round(width * 0.9);
-            height = Math.round(height * 0.9);
+            width = Math.round(width * 0.85);
+            height = Math.round(height * 0.85);
         }
 
-        throw new Error('Photo could not be compressed within 700 KB.');
+        throw new Error('Photo could not be compressed within 300 KB.');
 
     } finally {
         URL.revokeObjectURL(imageUrl);
     }
 }
+
    
 // CUSTOM MEMORY MESSAGE WINDOW
 function showMemoryMessage(title, message) {
