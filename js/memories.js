@@ -1570,6 +1570,84 @@ async function uploadMemoryVideoToDrive(file) {
         uploadedFile.id + "/view";
 }
 
+// TEMPORARY GOOGLE DRIVE DIRECT PHOTO UPLOAD TEST
+
+const directUploadTestBtn = document.createElement("button");
+
+directUploadTestBtn.type = "button";
+directUploadTestBtn.textContent = "Test Direct Photo Upload";
+directUploadTestBtn.style.cssText =
+    "margin-top:10px;padding:9px 14px;background:#287a45;color:white;border:0;border-radius:7px;cursor:pointer;";
+
+document.querySelector(".memory-photo-field")
+    .appendChild(directUploadTestBtn);
+
+directUploadTestBtn.addEventListener("click", async () => {
+
+    try {
+
+        if (!selectedMemoryPhotos.length) {
+            alert("Please select one photo first.");
+            return;
+        }
+
+        // First obtain Google Drive permission
+        if (!googleAccessToken) {
+            connectGoogleDrive();
+
+            alert(
+                "Google permission requested. Complete Google sign-in, then click Test Direct Photo Upload again."
+            );
+            return;
+        }
+
+        directUploadTestBtn.disabled = true;
+        directUploadTestBtn.textContent = "Uploading...";
+
+        const originalFile = selectedMemoryPhotos[0].file;
+
+        const extension =
+            originalFile.type === "image/png" ? ".png" :
+            originalFile.type === "image/webp" ? ".webp" : ".jpg";
+
+        const testFile = new File(
+            [originalFile],
+            "oneFaMiLe_DirectUpload_TEST_" +
+                Date.now() + extension,
+            { type: originalFile.type }
+        );
+
+        const start = performance.now();
+
+        const uploadedUrl =
+            await uploadMemoryVideoToDrive(testFile);
+
+        const seconds =
+            ((performance.now() - start) / 1000).toFixed(2);
+
+        console.log("DIRECT PHOTO UPLOAD SUCCESS");
+        console.log("Upload URL:", uploadedUrl);
+        console.log("Upload Time:", seconds, "seconds");
+
+        alert(
+            "Direct Upload Successful!\nTime: " +
+            seconds + " seconds"
+        );
+
+    } catch (error) {
+
+        console.error("DIRECT UPLOAD TEST ERROR:", error);
+
+        alert("Upload failed: " + error.message);
+
+    } finally {
+
+        directUploadTestBtn.disabled = false;
+        directUploadTestBtn.textContent =
+            "Test Direct Photo Upload";
+    }
+});
+
   
    // DESCRIPTION VOICE TO TEXT
 const memoryDescription =
