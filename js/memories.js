@@ -890,19 +890,6 @@ const memoryPhotoSlots = document.getElementById('memoryPhotoSlots');
 const memoryPhotosCount = document.getElementById('memoryPhotosCount');
 
 let selectedMemoryPhotos = [];
-window.getSelectedMemoryPhotos = () => selectedMemoryPhotos;
-function memoryFileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = () => reject(
-            new Error("Unable to read selected photo.")
-        );
-
-        reader.readAsDataURL(file);
-    });
-}
 
 document.getElementById('memorySaveBtn').addEventListener('click', async () => {
     const saveBtn = document.getElementById('memorySaveBtn');
@@ -948,42 +935,75 @@ document.getElementById('memorySaveBtn').addEventListener('click', async () => {
 
         saveBtn.disabled = true;
         saveBtn.textContent = 'Saving...';
-const photoStartTime = performance.now();
-       const photoBase64List = await Promise.all(
-    selectedMemoryPhotos.map(photo =>
-        memoryFileToBase64(photo.file)
-    )
-);
 
-photoBase64List.forEach((base64, index) => {
-    body.append('photo' + (index + 1) + 'Data', base64);
-});
-       console.log(
-    'Photo Base64 conversion time:',
-    ((performance.now() - photoStartTime) / 1000).toFixed(2),
-    'seconds'
-);
-// UPLOAD VIDEOS TO GOOGLE DRIVE
-if (selectedMemoryVideos.length > 0) {
-    if (!googleAccessToken) {
-        showMemoryMessage("Please connect Google Drive first.");
-        return;
-    }
+        // PHOTOS: upload directly from the browser to Google Drive in parallel.
+        const photoUploadStart = performance.now();
+        if (selectedMemoryPhotos.length > 0) {
+            if (!googleAccessToken) {
+                connectGoogleDrive();
+                showMemoryMessage(
+                    'Google Drive Permission',
+                    'Please allow Google Drive access. After permission is granted, tap Save again.'
+                );
+                return;
+            }
 
-    if (!GOOGLE_DRIVE_FOLDER_ID) {
-        throw new Error("Google Drive folder ID is missing.");
-    }
+            if (!GOOGLE_DRIVE_FOLDER_ID) {
+                throw new Error('Google Drive folder ID is missing.');
+            }
 
-    saveBtn.textContent = "Uploading Videos...";
+            saveBtn.textContent = 'Uploading Photos...';
 
-    for (let i = 0; i < selectedMemoryVideos.length; i++) {
-        const videoFile = selectedMemoryVideos[i].file;
+            const photoUrls = await Promise.all(
+                selectedMemoryPhotos.slice(0, 5).map((photo, index) => {
+                    const originalFile = photo.file;
+                    const extension =
+                        originalFile.type === 'image/png' ? '.png' :
+                        originalFile.type === 'image/webp' ? '.webp' : '.jpg';
+                    const uploadFile = new File(
+                        [originalFile],
+                        'MemoryPhoto_' + Date.now() + '_' + (index + 1) + extension,
+                        { type: originalFile.type }
+                    );
+                    return uploadMemoryVideoToDrive(uploadFile);
+                })
+            );
 
-        const videoUrl = await uploadMemoryVideoToDrive(videoFile);
+            photoUrls.forEach((url, index) => {
+                body.append('photo' + (index + 1) + 'Url', url);
+            });
 
-        body.append("video" + (i + 1) + "Url", videoUrl);
-    }
-}
+            console.log('Direct photo upload count:', photoUrls.length);
+            console.log(
+                'Direct photo upload time:',
+                ((performance.now() - photoUploadStart) / 1000).toFixed(2),
+                'seconds'
+            );
+        }
+
+        // VIDEOS: retain the existing upload flow.
+        if (selectedMemoryVideos.length > 0) {
+            if (!googleAccessToken) {
+                connectGoogleDrive();
+                showMemoryMessage(
+                    'Google Drive Permission',
+                    'Please allow Google Drive access. After permission is granted, tap Save again.'
+                );
+                return;
+            }
+
+            if (!GOOGLE_DRIVE_FOLDER_ID) {
+                throw new Error('Google Drive folder ID is missing.');
+            }
+
+            saveBtn.textContent = 'Uploading Videos...';
+
+            for (let i = 0; i < selectedMemoryVideos.length; i++) {
+                const videoFile = selectedMemoryVideos[i].file;
+                const videoUrl = await uploadMemoryVideoToDrive(videoFile);
+                body.append('video' + (i + 1) + 'Url', videoUrl);
+            }
+        }
         const response = await fetch(MEMORY_API, {
             method: 'POST',
             headers: {
@@ -1005,11 +1025,6 @@ console.log(
 );
 
 console.log(
-  'INDIVIDUAL PHOTO UPLOAD TIMES:',
-  result.photoUploadTimes
-);
-
-console.log(
   'TOTAL MEMORY SAVE TIME:',
   result.totalSaveSeconds,
   'seconds'
@@ -1021,7 +1036,7 @@ console.log(
 );
 showMemoryMessage(
     'Success',
-    'Memory saved successfully. Check Console for photo upload timings.'
+    'Memory saved successfully.'
 );
 document.getElementById('memoryForm').reset();
     } catch (error) {
@@ -1570,161 +1585,6 @@ async function uploadMemoryVideoToDrive(file) {
         uploadedFile.id + "/view";
 }
 
-// TEMPORARY: TEST 5 PHOTOS PARALLEL DIRECT UPLOAD
-
-async function testFivePhotoDirectUpload() {
-    if (!selectedMemoryPhotos.length) {
-        alert("Please select photos first.");
-        return;
-    }
-
-    if (!googleAccessToken) {
-        connectGoogleDrive();
-        alert("Google permission complete అయిన తర్వాత మళ్లీ Test నొక్కండి.");
-        return;
-    }
-
-    const files = selectedMemoryPhotos.slice(0, 5);
-
-    const testButton = document.getElementById("testFivePhotoUpload");
-    testButton.disabled = true;
-    testButton.textContent = "Uploading 5 Photos...";
-
-    const start = performance.now();
-
-    try {
-        const urls = await Promise.all(
-            files.map((item, index) => {
-                const originalFile = item.file;
-                const extension =
-                    originalFile.type === "image/png" ? ".png" :
-                    originalFile.type === "image/webp" ? ".webp" : ".jpg";
-
-                const testFile = new File(
-                    [originalFile],
-                    "oneFaMiLe_5Photo_TEST_" +
-                        Date.now() + "_" + (index + 1) + extension,
-                    { type: originalFile.type }
-                );
-
-                return uploadMemoryVideoToDrive(testFile);
-            })
-        );
-
-        const seconds = ((performance.now() - start) / 1000).toFixed(2);
-
-        console.log("5 PHOTO DIRECT UPLOAD SUCCESS");
-        console.log("Uploaded URLs:", urls);
-        console.log("Total time:", seconds, "seconds");
-
-        alert(
-            "5 Photos uploaded successfully!\n" +
-            "Total time: " + seconds + " seconds"
-        );
-
-    } catch (error) {
-        console.error("5 PHOTO UPLOAD ERROR:", error);
-        alert("Upload failed: " + error.message);
-    } finally {
-        testButton.disabled = false;
-        testButton.textContent = "Test 5 Photos Direct Upload";
-    }
-}
-
-// Add temporary test button
-const fivePhotoTestButton = document.createElement("button");
-fivePhotoTestButton.id = "testFivePhotoUpload";
-fivePhotoTestButton.type = "button";
-fivePhotoTestButton.textContent = "Test 5 Photos Direct Upload";
-fivePhotoTestButton.style.cssText =
-    "margin:10px;padding:10px 15px;background:#287a45;color:white;border:0;border-radius:7px;cursor:pointer;";
-
-fivePhotoTestButton.addEventListener(
-    "click",
-    testFivePhotoDirectUpload
-);
-
-memoryPhotoSlots.parentElement.appendChild(fivePhotoTestButton);
-
-// TEMPORARY GOOGLE DRIVE DIRECT PHOTO UPLOAD TEST
-
-const directUploadTestBtn = document.createElement("button");
-
-directUploadTestBtn.type = "button";
-directUploadTestBtn.textContent = "Test Direct Photo Upload";
-directUploadTestBtn.style.cssText =
-    "margin-top:10px;padding:9px 14px;background:#287a45;color:white;border:0;border-radius:7px;cursor:pointer;";
-
-document.querySelector(".memory-photo-field")
-    .appendChild(directUploadTestBtn);
-
-directUploadTestBtn.addEventListener("click", async () => {
-
-    try {
-
-        if (!selectedMemoryPhotos.length) {
-            alert("Please select one photo first.");
-            return;
-        }
-
-        // First obtain Google Drive permission
-        if (!googleAccessToken) {
-            connectGoogleDrive();
-
-            alert(
-                "Google permission requested. Complete Google sign-in, then click Test Direct Photo Upload again."
-            );
-            return;
-        }
-
-        directUploadTestBtn.disabled = true;
-        directUploadTestBtn.textContent = "Uploading...";
-
-        const originalFile = selectedMemoryPhotos[0].file;
-
-        const extension =
-            originalFile.type === "image/png" ? ".png" :
-            originalFile.type === "image/webp" ? ".webp" : ".jpg";
-
-        const testFile = new File(
-            [originalFile],
-            "oneFaMiLe_DirectUpload_TEST_" +
-                Date.now() + extension,
-            { type: originalFile.type }
-        );
-
-        const start = performance.now();
-
-        const uploadedUrl =
-            await uploadMemoryVideoToDrive(testFile);
-
-        const seconds =
-            ((performance.now() - start) / 1000).toFixed(2);
-
-        console.log("DIRECT PHOTO UPLOAD SUCCESS");
-        console.log("Upload URL:", uploadedUrl);
-        console.log("Upload Time:", seconds, "seconds");
-
-        alert(
-            "Direct Upload Successful!\nTime: " +
-            seconds + " seconds"
-        );
-
-    } catch (error) {
-
-        console.error("DIRECT UPLOAD TEST ERROR:", error);
-
-        alert("Upload failed: " + error.message);
-
-    } finally {
-
-        directUploadTestBtn.disabled = false;
-        directUploadTestBtn.textContent =
-            "Test Direct Photo Upload";
-    }
-});
-
-  
    // DESCRIPTION VOICE TO TEXT
 const memoryDescription =
     document.getElementById('memoryDescription');
