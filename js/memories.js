@@ -839,6 +839,12 @@ function openAddMemoryScreen() {
         </button>
     </div>
 
+    <div class="memory-count-row">
+        <small></small>
+        <button type="button" class="memory-clear-btn"
+            id="clearMemoryDescription" style="display:none;">Clear Text</button>
+    </div>
+
 </div>
 
                     </div>
@@ -1500,7 +1506,7 @@ const memoryVoiceCount = document.getElementById('memoryVoiceCount');
    const MEMORY_API =
     "https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 const GOOGLE_CLIENT_ID = "216923084943-pjo421a0hake4ml4qtem2rsn4teso9cf.apps.googleusercontent.com";
-const GOOGLE_DRIVE_FOLDER_ID = "1qEYuDvWWkGY0FIRfvgQOnk7UdyzTkETo";
+const GOOGLE_DRIVE_FOLDER_ID = "11-usnNbFwJN8pRr4kGgpOVilqFwGxAI0";
    let googleAccessToken = null;
 
 const googleTokenClient = google.accounts.oauth2.initTokenClient({
@@ -1588,6 +1594,22 @@ async function uploadMemoryVideoToDrive(file) {
    // DESCRIPTION VOICE TO TEXT
 const memoryDescription =
     document.getElementById('memoryDescription');
+
+const clearMemoryDescriptionBtn =
+    document.getElementById('clearMemoryDescription');
+
+function updateMemoryDescriptionClearButton() {
+    clearMemoryDescriptionBtn.style.display =
+        memoryDescription.value.trim().length > 0 ? 'inline-flex' : 'none';
+}
+
+memoryDescription.addEventListener('input', updateMemoryDescriptionClearButton);
+
+clearMemoryDescriptionBtn.addEventListener('click', () => {
+    memoryDescription.value = '';
+    updateMemoryDescriptionClearButton();
+    memoryDescription.focus();
+});
 
 const memorySpeechBtn =
     document.getElementById('memorySpeechBtn');
@@ -1696,6 +1718,7 @@ memorySpeechRecognition && (
             memoryDescription.value +=
                 (memoryDescription.value ? ' ' : '') +
                 result.translatedText;
+            updateMemoryDescriptionClearButton();
 
         } catch (error) {
             showMemoryMessage(
