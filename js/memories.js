@@ -948,7 +948,7 @@ document.getElementById('memorySaveBtn').addEventListener('click', async () => {
 
         saveBtn.disabled = true;
         saveBtn.textContent = 'Saving...';
-
+const photoStartTime = performance.now();
        const photoBase64List = await Promise.all(
     selectedMemoryPhotos.map(photo =>
         memoryFileToBase64(photo.file)
@@ -958,6 +958,11 @@ document.getElementById('memorySaveBtn').addEventListener('click', async () => {
 photoBase64List.forEach((base64, index) => {
     body.append('photo' + (index + 1) + 'Data', base64);
 });
+       console.log(
+    'Photo Base64 conversion time:',
+    ((performance.now() - photoStartTime) / 1000).toFixed(2),
+    'seconds'
+);
 // UPLOAD VIDEOS TO GOOGLE DRIVE
 if (selectedMemoryVideos.length > 0) {
     if (!googleAccessToken) {
