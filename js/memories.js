@@ -890,7 +890,7 @@ const memoryPhotoSlots = document.getElementById('memoryPhotoSlots');
 const memoryPhotosCount = document.getElementById('memoryPhotosCount');
 
 let selectedMemoryPhotos = [];
-
+window.getSelectedMemoryPhotos = () => selectedMemoryPhotos;
 function memoryFileToBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
