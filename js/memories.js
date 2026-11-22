@@ -949,13 +949,15 @@ document.getElementById('memorySaveBtn').addEventListener('click', async () => {
         saveBtn.disabled = true;
         saveBtn.textContent = 'Saving...';
 
-        for (let i = 0; i < selectedMemoryPhotos.length; i++) {
-            const base64 = await memoryFileToBase64(
-                selectedMemoryPhotos[i].file
-            );
+       const photoBase64List = await Promise.all(
+    selectedMemoryPhotos.map(photo =>
+        memoryFileToBase64(photo.file)
+    )
+);
 
-            body.append('photo' + (i + 1) + 'Data', base64);
-        }
+photoBase64List.forEach((base64, index) => {
+    body.append('photo' + (index + 1) + 'Data', base64);
+});
 // UPLOAD VIDEOS TO GOOGLE DRIVE
 if (selectedMemoryVideos.length > 0) {
     if (!googleAccessToken) {
