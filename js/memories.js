@@ -741,7 +741,7 @@ function openAddMemoryScreen() {
     </div>
 
     <div class="expense-field memory-photo-field">
-        <label class="expense-label">Photos (Max 5)</label>
+        <label class="expense-label">Photos (Max 2)</label>
         <input type="file" id="memoryPhotos"
             accept="image/*" multiple hidden>
         <div id="memoryPhotoSlots" class="memory-photo-slots"></div>
@@ -755,11 +755,10 @@ function openAddMemoryScreen() {
     <!-- Row 4 -->
     <div class="expense-field memory-video-field">
     <label class="expense-label">
-        Videos (Max 3)
-        <span class="memory-coming-soon">Coming Soon</span>
+        Videos (Max 1)
     </label>
     <input type="file" id="memoryVideos"
-        accept="video/*" multiple hidden disabled>
+        accept="video/*" hidden>
             
         <div id="memoryVideoSlots" class="memory-video-slots"></div>
         <div class="memory-count-row">
@@ -770,9 +769,9 @@ function openAddMemoryScreen() {
     </div>
 
     <div class="expense-field memory-voice-field">
-        <label class="expense-label">Voice Messages (Max 3)</label>
+        <label class="expense-label">Voice Messages (Max 1)</label>
         <input type="file" id="memoryVoice"
-            accept="audio/*" multiple hidden>
+            accept="audio/*" hidden>
         <div id="memoryVoiceSlots" class="memory-voice-slots"></div>
         <div class="memory-count-row">
             <small id="memoryVoiceCount">0 voice selected</small>
@@ -890,7 +889,7 @@ memoryDateInput.max = localToday;
   
 
 
-// PHOTO SELECTION - MAX 5
+// PHOTO SELECTION - MAX 2 (SLOTS 3-5 DISABLED)
 const memoryPhotosInput = document.getElementById('memoryPhotos');
 const memoryPhotoSlots = document.getElementById('memoryPhotoSlots');
 const memoryPhotosCount = document.getElementById('memoryPhotosCount');
@@ -961,7 +960,7 @@ document.getElementById('memorySaveBtn').addEventListener('click', async () => {
             saveBtn.textContent = 'Uploading Photos...';
 
             const photoUrls = await Promise.all(
-                selectedMemoryPhotos.slice(0, 5).map((photo, index) => {
+                selectedMemoryPhotos.slice(0, 2).map((photo, index) => {
                     const originalFile = photo.file;
                     const extension =
                         originalFile.type === 'image/png' ? '.png' :
@@ -1168,6 +1167,12 @@ function updateMemoryPhotoSlots() {
         const slot = document.createElement('div');
 
         slot.className = 'memory-photo-slot';
+        if (i >= 2) {
+            slot.classList.add('memory-slot-disabled');
+            slot.style.opacity = '0.35';
+            slot.style.cursor = 'not-allowed';
+            slot.style.pointerEvents = 'none';
+        }
 
         if (photo) {
             slot.innerHTML = `
@@ -1259,7 +1264,7 @@ memoryPhotoSlots.addEventListener('click', event => {
 memoryPhotosInput.addEventListener('change', async () => {
 
     const newFiles = Array.from(memoryPhotosInput.files);
-    const remaining = 5 - selectedMemoryPhotos.length;
+    const remaining = 2 - selectedMemoryPhotos.length;
 
     if (newFiles.length > remaining) {
         showMemoryMessage(
@@ -1321,14 +1326,9 @@ document.getElementById('memoryForm').addEventListener('reset', () => {
     updateMemoryPhotoSlots();
 });
 
-// VIDEO SELECTION - MAX 3
+// VIDEO SELECTION - MAX 1 (SLOTS 2-3 DISABLED)
 const memoryVideosInput = document.getElementById('memoryVideos');
 const memoryVideoSlots = document.getElementById('memoryVideoSlots');
-   memoryVideoSlots.style.pointerEvents = 'none';
-memoryVideoSlots.style.opacity = '0.45';
-
-document.getElementById('clearMemoryVideos').disabled = true;
-document.getElementById('clearMemoryVideos').style.display = 'none';
 const memoryVideosCount = document.getElementById('memoryVideosCount');
 
 let selectedMemoryVideos = [];
@@ -1341,6 +1341,12 @@ function updateMemoryVideoSlots() {
         const slot = document.createElement('div');
 
         slot.className = 'memory-video-slot';
+        if (i >= 1) {
+            slot.classList.add('memory-slot-disabled');
+            slot.style.opacity = '0.35';
+            slot.style.cursor = 'not-allowed';
+            slot.style.pointerEvents = 'none';
+        }
 
         if (video) {
             slot.innerHTML = `
@@ -1444,11 +1450,11 @@ if (emptySlot) {
         totalDuration += duration;
     }
 
-    if (totalDuration >= 1200) {
+    if (totalDuration >= 600) {
 
         showMemoryMessage(
             'Maximum Duration Reached',
-            'Total video duration cannot exceed 20 minutes.'
+            'Only one video is allowed, with a maximum duration of 10 minutes.'
         );
 
         return;
@@ -1460,13 +1466,13 @@ if (emptySlot) {
 
 memoryVideosInput.addEventListener('change', () => {
     const newFiles = Array.from(memoryVideosInput.files);
-    const remaining = 3 - selectedMemoryVideos.length;
+    const remaining = 1 - selectedMemoryVideos.length;
 
     if (newFiles.length > remaining) {
 if (selectedMemoryVideos.length === 0) {
     showMemoryMessage(
         'Maximum Limit Reached',
-        'You can select max 3 videos only.'
+        'You can select max 1 video only.'
     );
 } else {
     showMemoryMessage(
@@ -1498,7 +1504,7 @@ document.getElementById('memoryForm').addEventListener('reset', () => {
     updateMemoryVideoSlots();
 });
 
-// VOICE MESSAGE SELECTION
+// VOICE MESSAGE SELECTION - MAX 1 (VOICE SLOTS 2-3 DISABLED)
 
 const memoryVoiceInput = document.getElementById('memoryVoice');
 const memoryVoiceSlots = document.getElementById('memoryVoiceSlots');
@@ -1506,7 +1512,7 @@ const memoryVoiceCount = document.getElementById('memoryVoiceCount');
    const MEMORY_API =
     "https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
 const GOOGLE_CLIENT_ID = "216923084943-pjo421a0hake4ml4qtem2rsn4teso9cf.apps.googleusercontent.com";
-const GOOGLE_DRIVE_FOLDER_ID = "11-usnNbFwJN8pRr4kGgpOVilqFwGxAI0";
+const GOOGLE_DRIVE_FOLDER_ID = "1qEYuDvWWkGY0FIRfvgQOnk7UdyzTkETo";
    let googleAccessToken = null;
 
 const googleTokenClient = google.accounts.oauth2.initTokenClient({
@@ -1741,10 +1747,14 @@ function updateMemoryVoiceSlots() {
 
         // FOURTH BOX - RECORD BUTTON
         if (i === 3) {
-          
-          
+            const recordDisabled = selectedMemoryVoices.length >= 1;
+            if (recordDisabled) {
+                slot.style.opacity = '0.35';
+                slot.style.cursor = 'not-allowed';
+            }
+
 slot.innerHTML = `
-    <button type="button" class="memory-record-button">
+    <button type="button" class="memory-record-button" ${recordDisabled ? 'disabled' : ''} style="${recordDisabled ? 'opacity:.35;cursor:not-allowed;' : ''}">
         <svg class="memory-mic-icon" viewBox="0 0 24 24"
              fill="none" stroke="currentColor"
              stroke-width="1.4" stroke-linecap="round"
@@ -1763,6 +1773,13 @@ slot.innerHTML = `
     </button>
 `;
 
+
+        } else if (i >= 1) {
+            slot.classList.add('memory-slot-disabled');
+            slot.style.opacity = '0.35';
+            slot.style.cursor = 'not-allowed';
+            slot.style.pointerEvents = 'none';
+            slot.innerHTML = `<span class="memory-photo-add">—</span>`;
 
         } else if (selectedMemoryVoices[i]) {
 
@@ -1839,13 +1856,13 @@ clearVoicesBtn.style.display =
 
 memoryVoiceInput.addEventListener('change', () => {  
    const newFiles = Array.from(memoryVoiceInput.files);   
-   const remaining = 3 - selectedMemoryVoices.length;  
+   const remaining = 1 - selectedMemoryVoices.length;  
    if (newFiles.length > remaining) {      
       if (selectedMemoryVoices.length === 0) {
          
             showMemoryMessage(          
                'Maximum Limit Reached',  
-               'You can select max 3 voice messages only.'  
+               'You can select only 1 voice message.'  
             );      
       } else {            showMemoryMessage(   
          'Maximum Limit Reached',
@@ -1883,11 +1900,11 @@ memoryVoiceSlots.addEventListener('click', async (event) => {
         return;
     }
 
-    // MAXIMUM 3 VOICE MESSAGES
-    if (selectedMemoryVoices.length >= 3) {
+    // ONLY ONE VOICE MESSAGE IS ALLOWED
+    if (selectedMemoryVoices.length >= 1) {
         showMemoryMessage(
             'Maximum Limit Reached',
-            'You can add maximum 3 voice messages only.'
+            'Only one voice message is allowed.'
         );
         return;
     }
@@ -1925,7 +1942,7 @@ memoryVoiceSlots.addEventListener('click', async (event) => {
                 { type: mimeType }
             );
 
-            if (audioFile.size > 0 && selectedMemoryVoices.length < 3) {
+            if (audioFile.size > 0 && selectedMemoryVoices.length < 1) {
 
                 selectedMemoryVoices.push({
                     file: audioFile,
@@ -2072,8 +2089,8 @@ if (!Number.isFinite(duration)) {
         totalDuration += duration;
     }
 
-    if (totalDuration > 1200) {
-        alert('Total duration of all videos must not exceed 20 minutes.');
+    if (totalDuration > 600) {
+        alert('Video duration must not exceed 10 minutes.');
         clearMemoryVideos();
         return;
     }
@@ -2158,4 +2175,3 @@ document.addEventListener("click", function(event) {
     }
 
 });
-
