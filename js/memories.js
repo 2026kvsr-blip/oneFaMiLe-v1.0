@@ -1570,6 +1570,82 @@ async function uploadMemoryVideoToDrive(file) {
         uploadedFile.id + "/view";
 }
 
+// TEMPORARY: TEST 5 PHOTOS PARALLEL DIRECT UPLOAD
+
+async function testFivePhotoDirectUpload() {
+    if (!selectedMemoryPhotos.length) {
+        alert("Please select photos first.");
+        return;
+    }
+
+    if (!googleAccessToken) {
+        connectGoogleDrive();
+        alert("Google permission complete అయిన తర్వాత మళ్లీ Test నొక్కండి.");
+        return;
+    }
+
+    const files = selectedMemoryPhotos.slice(0, 5);
+
+    const testButton = document.getElementById("testFivePhotoUpload");
+    testButton.disabled = true;
+    testButton.textContent = "Uploading 5 Photos...";
+
+    const start = performance.now();
+
+    try {
+        const urls = await Promise.all(
+            files.map((item, index) => {
+                const originalFile = item.file;
+                const extension =
+                    originalFile.type === "image/png" ? ".png" :
+                    originalFile.type === "image/webp" ? ".webp" : ".jpg";
+
+                const testFile = new File(
+                    [originalFile],
+                    "oneFaMiLe_5Photo_TEST_" +
+                        Date.now() + "_" + (index + 1) + extension,
+                    { type: originalFile.type }
+                );
+
+                return uploadMemoryVideoToDrive(testFile);
+            })
+        );
+
+        const seconds = ((performance.now() - start) / 1000).toFixed(2);
+
+        console.log("5 PHOTO DIRECT UPLOAD SUCCESS");
+        console.log("Uploaded URLs:", urls);
+        console.log("Total time:", seconds, "seconds");
+
+        alert(
+            "5 Photos uploaded successfully!\n" +
+            "Total time: " + seconds + " seconds"
+        );
+
+    } catch (error) {
+        console.error("5 PHOTO UPLOAD ERROR:", error);
+        alert("Upload failed: " + error.message);
+    } finally {
+        testButton.disabled = false;
+        testButton.textContent = "Test 5 Photos Direct Upload";
+    }
+}
+
+// Add temporary test button
+const fivePhotoTestButton = document.createElement("button");
+fivePhotoTestButton.id = "testFivePhotoUpload";
+fivePhotoTestButton.type = "button";
+fivePhotoTestButton.textContent = "Test 5 Photos Direct Upload";
+fivePhotoTestButton.style.cssText =
+    "margin:10px;padding:10px 15px;background:#287a45;color:white;border:0;border-radius:7px;cursor:pointer;";
+
+fivePhotoTestButton.addEventListener(
+    "click",
+    testFivePhotoDirectUpload
+);
+
+memoryPhotoSlots.parentElement.appendChild(fivePhotoTestButton);
+
 // TEMPORARY GOOGLE DRIVE DIRECT PHOTO UPLOAD TEST
 
 const directUploadTestBtn = document.createElement("button");
