@@ -998,10 +998,12 @@ if (selectedMemoryVideos.length > 0) {
             throw new Error(result.message || 'Memory save failed.');
         }
 
-        showMemoryMessage(
-            'Success',
-            'Memory saved successfully.'
-        );
+        console.log('Individual Photo Upload Times:', result.photoUploadTimes);
+
+showMemoryMessage(
+    'Success',
+    'Memory saved successfully. Check Console for photo upload timings.'
+);
 document.getElementById('memoryForm').reset();
     } catch (error) {
         console.error('Memory Save Error:', error);
