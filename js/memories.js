@@ -842,7 +842,7 @@ function openAddMemoryScreen() {
     <div class="memory-count-row">
         <small></small>
         <button type="button" class="memory-clear-btn"
-            id="clearMemoryDescription" style="display:none;">Clear Text</button>
+            id="clearMemoryDescription" style="display:none;">Clear</button>
     </div>
 
 </div>
