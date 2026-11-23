@@ -1139,9 +1139,9 @@ document.getElementById('memorySaveBtn').addEventListener('click', async () => {
             return;
         }
 
-       const shareSelection = [];
+      const shareSelection = [];
 
-if (selectedMemoryShareType === 'custom') {
+if (['group', 'custom'].includes(selectedMemoryShareType)) {
 
     shareGroupsContainer.querySelectorAll('.memory-share-group').forEach(card => {
 
@@ -1149,16 +1149,22 @@ if (selectedMemoryShareType === 'custom') {
 
         if (!groupCheck || !groupCheck.checked) return;
 
-        const selectedUserIds = Array.from(
-            card.querySelectorAll('.memory-share-member-check:checked')
-        ).map(cb => cb.value);
+        const allMemberChecks = Array.from(
+            card.querySelectorAll('.memory-share-member-check')
+        );
 
-        if (selectedUserIds.length) {
-            const first = card.querySelector('.memory-share-member-check');
+        const first = allMemberChecks[0];
 
+        const userIds = selectedMemoryShareType === 'group'
+            ? allMemberChecks.map(cb => cb.value)
+            : allMemberChecks
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+
+        if (userIds.length && first) {
             shareSelection.push({
-                familyId: first ? first.dataset.familyId : '',
-                userIds: selectedUserIds
+                familyId: first.dataset.familyId,
+                userIds: userIds
             });
         }
     });
@@ -1166,7 +1172,9 @@ if (selectedMemoryShareType === 'custom') {
     if (!shareSelection.length) {
         showMemoryMessage(
             'Select Members',
-            'Please select at least one member for Custom sharing.'
+            selectedMemoryShareType === 'group'
+                ? 'Please select at least one Family Group.'
+                : 'Please select at least one member for Custom sharing.'
         );
         return;
     }
