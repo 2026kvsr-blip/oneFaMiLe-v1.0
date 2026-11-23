@@ -972,8 +972,7 @@ let memoryShareGroupsData = [];
     // Entire Group: member selection అవసరం లేదు
     // Favourites: Favourite List ఆధారంగా access
     // Custom: individual members ఎంపిక
-    sharePicker.hidden = selectedMemoryShareType !== 'custom';
-
+sharePicker.hidden = !['group', 'custom'].includes(selectedMemoryShareType);
     // Sharing ఎంపిక చేసినప్పుడు Sensitive OFF
     sensitiveLine.style.display = selectedMemoryShareType ? 'none' : '';
 
