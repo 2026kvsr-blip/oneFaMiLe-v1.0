@@ -909,8 +909,20 @@ function openAddMemoryScreen() {
     </div>
 
     <div id="memorySharePicker" class="memory-share-picker" hidden>
-        <div id="memoryShareGroups"></div>
-    </div>
+    <div id="memoryShareGroups"></div>
+</div>
+
+<div id="memoryFavouritesPanel" class="memory-share-picker" hidden>
+    <div class="memory-share-help">Favourite Members</div>
+
+    <div id="memoryFavouriteList"></div>
+
+    <button type="button"
+        id="addMemoryFavouriteBtn"
+        class="expense-secondary">
+        + Add Favourite
+    </button>
+</div>
 </div>
 
                     <div class="memory-sensitive-line" id="memorySensitiveLine">
