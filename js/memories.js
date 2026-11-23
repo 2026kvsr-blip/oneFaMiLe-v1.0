@@ -1124,22 +1124,38 @@ document.getElementById('memorySaveBtn').addEventListener('click', async () => {
             return;
         }
 
-        const shareSelection = [];
-        if (visibleToFamilyCheckbox.checked) {
-            shareGroupsContainer.querySelectorAll('.memory-share-group').forEach(card => {
-                const groupCheck = card.querySelector('.memory-share-group-check');
-                if (!groupCheck || !groupCheck.checked) return;
-                const selectedUserIds = Array.from(card.querySelectorAll('.memory-share-member-check:checked')).map(cb => cb.value);
-                if (selectedUserIds.length) {
-                    const first = card.querySelector('.memory-share-member-check');
-                    shareSelection.push({familyId:first ? first.dataset.familyId : '', userIds:selectedUserIds});
-                }
+       const shareSelection = [];
+
+if (selectedMemoryShareType === 'custom') {
+
+    shareGroupsContainer.querySelectorAll('.memory-share-group').forEach(card => {
+
+        const groupCheck = card.querySelector('.memory-share-group-check');
+
+        if (!groupCheck || !groupCheck.checked) return;
+
+        const selectedUserIds = Array.from(
+            card.querySelectorAll('.memory-share-member-check:checked')
+        ).map(cb => cb.value);
+
+        if (selectedUserIds.length) {
+            const first = card.querySelector('.memory-share-member-check');
+
+            shareSelection.push({
+                familyId: first ? first.dataset.familyId : '',
+                userIds: selectedUserIds
             });
-            if (!shareSelection.length) {
-                showMemoryMessage('Select Members', 'Please select at least one Family Group member to share this Memory.');
-                return;
-            }
         }
+    });
+
+    if (!shareSelection.length) {
+        showMemoryMessage(
+            'Select Members',
+            'Please select at least one member for Custom sharing.'
+        );
+        return;
+    }
+}
 
         const title =
             document.getElementById('memoryTitle').value.trim();
@@ -1159,10 +1175,11 @@ document.getElementById('memorySaveBtn').addEventListener('click', async () => {
             memoryPlace: document.getElementById('memoryPlace').value,
             description: document.getElementById('memoryDescription').value,
             isSensitive: String(
-                !visibleToFamilyCheckbox.checked && document.getElementById('memorySensitive').checked
-            ),
-            visibleToFamily: String(visibleToFamilyCheckbox.checked),
-            shareSelection: JSON.stringify(shareSelection)
+    !selectedMemoryShareType &&
+    document.getElementById('memorySensitive').checked
+),
+            shareType: selectedMemoryShareType,
+shareSelection: JSON.stringify(shareSelection)
         });
 
         saveBtn.disabled = true;
