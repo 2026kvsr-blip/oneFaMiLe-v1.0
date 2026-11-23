@@ -679,6 +679,32 @@ color: #2d5274 !important;
 .memory-page .memory-share-toggle { display:flex; align-items:center; gap:8px; font-size:14px; color:#2d5274; font-weight:600; }
 .memory-page .memory-share-toggle input { width:18px !important; height:18px !important; min-height:18px !important; margin:0 !important; }
 .memory-page .memory-share-picker { margin-top:10px; padding-top:8px; border-top:1px solid #d8e3f4; }
+.memory-page .memory-share-options {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: nowrap;
+    margin: 8px 0;
+}
+
+.memory-page .memory-share-options label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2d5274;
+    cursor: pointer;
+}
+
+.memory-page .memory-share-options input[type="radio"] {
+    width: 16px !important;
+    height: 16px !important;
+    min-height: 16px !important;
+    margin: 0 !important;
+    cursor: pointer;
+}
 .memory-page .memory-share-help { font-size:12px; color:#52677b; margin-bottom:8px; }
 .memory-page .memory-share-group { border:1px solid #d8e3f4; border-radius:8px; padding:8px; margin:7px 0; background:#fff; }
 .memory-page .memory-share-group-title { display:flex; align-items:center; gap:8px; font-weight:600; color:#2d5274; }
@@ -862,13 +888,28 @@ function openAddMemoryScreen() {
 
                     </div>
 
-                    <div class="memory-sharing-line">
-    <label class="memory-share-toggle">
-        <input type="checkbox" id="memoryVisibleToFamily">
-        Visible to Family Members
-    </label>
+                 <div class="memory-sharing-line">
+    <div class="memory-share-options">
+        <label>
+            <input type="radio" name="memoryShareType"
+                   value="group" id="memoryShareGroup">
+            Entire Group
+        </label>
+
+        <label>
+            <input type="radio" name="memoryShareType"
+                   value="favourites" id="memoryShareFavourites">
+            Favourites
+        </label>
+
+        <label>
+            <input type="radio" name="memoryShareType"
+                   value="custom" id="memoryShareCustom">
+            Custom
+        </label>
+    </div>
+
     <div id="memorySharePicker" class="memory-share-picker" hidden>
-        <div class="memory-share-help">Select Family Group(s), then choose only the members who can view this Memory.</div>
         <div id="memoryShareGroups"></div>
     </div>
 </div>
@@ -911,19 +952,35 @@ memoryDateInput.max = localToday;
     document.getElementById("memoryBackBtn").onclick = () => {
         memoriesBtn.click();
     };
-    const visibleToFamilyCheckbox = document.getElementById('memoryVisibleToFamily');
-    const sharePicker = document.getElementById('memorySharePicker');
-    const shareGroupsContainer = document.getElementById('memoryShareGroups');
-    const sensitiveLine = document.getElementById('memorySensitiveLine');
-    let memoryShareOptionsLoaded = false;
-    let memoryShareGroupsData = [];
+   const shareTypeOptions = document.querySelectorAll('input[name="memoryShareType"]');
+const sharePicker = document.getElementById('memorySharePicker');
+const shareGroupsContainer = document.getElementById('memoryShareGroups');
+const sensitiveLine = document.getElementById('memorySensitiveLine');
 
-    function updateMemoryVisibilityControls() {
-        const sharing = visibleToFamilyCheckbox.checked;
-        sharePicker.hidden = !sharing;
-        sensitiveLine.style.display = sharing ? 'none' : '';
-        if (sharing) document.getElementById('memorySensitive').checked = false;
+let selectedMemoryShareType = '';
+let memoryShareOptionsLoaded = false;
+let memoryShareGroupsData = [];
+   
+
+   function updateMemoryVisibilityControls() {
+    const selected = document.querySelector(
+        'input[name="memoryShareType"]:checked'
+    );
+
+    selectedMemoryShareType = selected ? selected.value : '';
+
+    // Entire Group: member selection అవసరం లేదు
+    // Favourites: Favourite List ఆధారంగా access
+    // Custom: individual members ఎంపిక
+    sharePicker.hidden = selectedMemoryShareType !== 'custom';
+
+    // Sharing ఎంపిక చేసినప్పుడు Sensitive OFF
+    sensitiveLine.style.display = selectedMemoryShareType ? 'none' : '';
+
+    if (selectedMemoryShareType) {
+        document.getElementById('memorySensitive').checked = false;
     }
+}
 
     async function loadMemoryShareOptions() {
         if (memoryShareOptionsLoaded) return;
@@ -985,36 +1042,66 @@ memoryDateInput.max = localToday;
             shareGroupsContainer.appendChild(card);
         });
     }
-
-    visibleToFamilyCheckbox.addEventListener('change', async () => {
+shareTypeOptions.forEach(option => {
+    option.addEventListener('change', async () => {
         updateMemoryVisibilityControls();
-        if (!visibleToFamilyCheckbox.checked) return;
-        try { await loadMemoryShareOptions(); }
-        catch (error) {
-            visibleToFamilyCheckbox.checked = false;
+
+        if (option.value !== 'custom') {
+            shareGroupsContainer.innerHTML = '';
+            return;
+        }
+
+        try {
+            await loadMemoryShareOptions();
+        } catch (error) {
+            option.checked = false;
             updateMemoryVisibilityControls();
             showMemoryMessage('Sharing Options', error.message);
         }
     });
+});
 
     // Sensitive and Family Sharing are mutually exclusive.
     // Selecting Sensitive automatically clears and hides Family Sharing.
     document.getElementById('memorySensitive').addEventListener('change', () => {
-        if (document.getElementById('memorySensitive').checked) {
-            visibleToFamilyCheckbox.checked = false;
-            updateMemoryVisibilityControls();
-            shareGroupsContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-            shareGroupsContainer.querySelectorAll('.memory-share-members').forEach(el => el.hidden = true);
-        }
-    });
-    document.getElementById('memoryForm').addEventListener('reset', () => {
-        setTimeout(() => {
-            updateMemoryVisibilityControls();
-            shareGroupsContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-            shareGroupsContainer.querySelectorAll('.memory-share-members').forEach(el => el.hidden = true);
-        }, 0);
-    });
+    if (document.getElementById('memorySensitive').checked) {
+        shareTypeOptions.forEach(option => {
+            option.checked = false;
+        });
 
+        selectedMemoryShareType = '';
+        updateMemoryVisibilityControls();
+
+        shareGroupsContainer.querySelectorAll('input[type="checkbox"]')
+            .forEach(cb => cb.checked = false);
+
+        shareGroupsContainer.querySelectorAll('.memory-share-members')
+            .forEach(el => el.hidden = true);
+    }
+});
+   document.getElementById('memoryForm').addEventListener('reset', () => {
+    setTimeout(() => {
+
+        // మూడు Sharing Options‌ను Unselect చేయడం
+        shareTypeOptions.forEach(option => {
+            option.checked = false;
+        });
+
+        selectedMemoryShareType = '';
+
+        // Sharing మరియు Sensitive controls‌ను Reset చేయడం
+        updateMemoryVisibilityControls();
+
+        // పాత Member Selections అన్నీ Clear చేయడం
+        shareGroupsContainer.querySelectorAll('input[type="checkbox"]')
+            .forEach(cb => cb.checked = false);
+
+        // Member Lists అన్నీ Hide చేయడం
+        shareGroupsContainer.querySelectorAll('.memory-share-members')
+            .forEach(el => el.hidden = true);
+
+    }, 0);
+});
   
 
 
