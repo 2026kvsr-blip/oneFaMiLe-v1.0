@@ -893,7 +893,7 @@ function openAddMemoryScreen() {
         <label>
             <input type="radio" name="memoryShareType"
                    value="group" id="memoryShareGroup">
-            Entire Group
+            Family Group
         </label>
 
         <label>
