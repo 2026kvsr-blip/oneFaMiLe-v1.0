@@ -708,6 +708,7 @@ color: #2d5274 !important;
 .memory-page .memory-share-group { border:1px solid #d8e3f4; border-radius:8px; padding:8px; margin:7px 0; background:#fff; }
 .memory-page .memory-share-group-title { display:flex; align-items:center; gap:8px; font-weight:600; color:#2d5274; }
 .memory-page .memory-share-members { margin:8px 0 0 24px; display:grid; gap:6px; }
+.memory-page .memory-share-members[hidden] {    display: none !important;}
 .memory-page .memory-share-member { display:flex; align-items:center; gap:7px; font-size:13px; }
 .memory-page .memory-share-member input, .memory-page .memory-share-group-title input { width:16px !important; height:16px !important; min-height:16px !important; margin:0 !important; }
 
@@ -1097,9 +1098,8 @@ shareGroupsContainer.querySelectorAll('.memory-share-group').forEach(card => {
     );
 });
 if (!['group', 'custom'].includes(option.value)) {
-   shareGroupsContainer.innerHTML = '';
-            return;
-        }
+    return;
+}
 
         try {
             await loadMemoryShareOptions();
