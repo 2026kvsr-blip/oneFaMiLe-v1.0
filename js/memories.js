@@ -674,7 +674,20 @@ color: #2d5274 !important;
     justify-content: center !important;
     cursor: pointer;
 }
+
+.memory-page .memory-sharing-line { grid-column:1 / -1; margin-top:8px; padding:10px; border:1px solid #c4d4ff; border-radius:9px; background:#f8fbff; }
+.memory-page .memory-share-toggle { display:flex; align-items:center; gap:8px; font-size:14px; color:#2d5274; font-weight:600; }
+.memory-page .memory-share-toggle input { width:18px !important; height:18px !important; min-height:18px !important; margin:0 !important; }
+.memory-page .memory-share-picker { margin-top:10px; padding-top:8px; border-top:1px solid #d8e3f4; }
+.memory-page .memory-share-help { font-size:12px; color:#52677b; margin-bottom:8px; }
+.memory-page .memory-share-group { border:1px solid #d8e3f4; border-radius:8px; padding:8px; margin:7px 0; background:#fff; }
+.memory-page .memory-share-group-title { display:flex; align-items:center; gap:8px; font-weight:600; color:#2d5274; }
+.memory-page .memory-share-members { margin:8px 0 0 24px; display:grid; gap:6px; }
+.memory-page .memory-share-member { display:flex; align-items:center; gap:7px; font-size:13px; }
+.memory-page .memory-share-member input, .memory-page .memory-share-group-title input { width:16px !important; height:16px !important; min-height:16px !important; margin:0 !important; }
+
     `;
+
 
     document.head.appendChild(style);
 }
@@ -849,7 +862,18 @@ function openAddMemoryScreen() {
 
                     </div>
 
-                    <div class="memory-sensitive-line">
+                    <div class="memory-sharing-line">
+    <label class="memory-share-toggle">
+        <input type="checkbox" id="memoryVisibleToFamily">
+        Visible to Family Members
+    </label>
+    <div id="memorySharePicker" class="memory-share-picker" hidden>
+        <div class="memory-share-help">Select Family Group(s), then choose only the members who can view this Memory.</div>
+        <div id="memoryShareGroups"></div>
+    </div>
+</div>
+
+                    <div class="memory-sensitive-line" id="memorySensitiveLine">
     <label>
         <input type="checkbox" id="memorySensitive">
         Sensitive
@@ -887,6 +911,99 @@ memoryDateInput.max = localToday;
     document.getElementById("memoryBackBtn").onclick = () => {
         memoriesBtn.click();
     };
+    const visibleToFamilyCheckbox = document.getElementById('memoryVisibleToFamily');
+    const sharePicker = document.getElementById('memorySharePicker');
+    const shareGroupsContainer = document.getElementById('memoryShareGroups');
+    const sensitiveLine = document.getElementById('memorySensitiveLine');
+    let memoryShareOptionsLoaded = false;
+    let memoryShareGroupsData = [];
+
+    function updateMemoryVisibilityControls() {
+        const sharing = visibleToFamilyCheckbox.checked;
+        sharePicker.hidden = !sharing;
+        sensitiveLine.style.display = sharing ? 'none' : '';
+        if (sharing) document.getElementById('memorySensitive').checked = false;
+    }
+
+    async function loadMemoryShareOptions() {
+        if (memoryShareOptionsLoaded) return;
+        const token = sessionStorage.getItem('sessionToken') || '';
+        if (!token) throw new Error('Login session expired. Please login again.');
+        const params = new URLSearchParams({action:'getMemoryShareOptions', sessionToken:token});
+        const response = await fetch(MEMORY_API, {
+            method:'POST',
+            headers:{'Content-Type':'application/x-www-form-urlencoded'},
+            body:params
+        });
+        const result = await response.json();
+        if (result.status !== 'success') throw new Error(result.message || 'Unable to load Family Groups.');
+        memoryShareGroupsData = Array.isArray(result.groups) ? result.groups : [];
+        memoryShareOptionsLoaded = true;
+        renderMemoryShareGroups();
+        if (!memoryShareGroupsData.length) {
+            shareGroupsContainer.textContent = 'No Family Groups with registered app members were found for your account.';
+        }
+    }
+
+    function renderMemoryShareGroups() {
+        shareGroupsContainer.innerHTML = '';
+        memoryShareGroupsData.forEach((group, groupIndex) => {
+            const card = document.createElement('div');
+            card.className = 'memory-share-group';
+            const title = document.createElement('label');
+            title.className = 'memory-share-group-title';
+            const groupCheck = document.createElement('input');
+            groupCheck.type = 'checkbox';
+            groupCheck.className = 'memory-share-group-check';
+            groupCheck.dataset.groupIndex = String(groupIndex);
+            const groupName = document.createElement('span');
+            groupName.textContent = (group.familyName || 'Family') + ' (' + group.familyId + ')';
+            title.append(groupCheck, groupName);
+            card.appendChild(title);
+
+            const membersBox = document.createElement('div');
+            membersBox.className = 'memory-share-members';
+            membersBox.hidden = true;
+            (group.members || []).forEach(member => {
+                const memberLabel = document.createElement('label');
+                memberLabel.className = 'memory-share-member';
+                const memberCheck = document.createElement('input');
+                memberCheck.type = 'checkbox';
+                memberCheck.className = 'memory-share-member-check';
+                memberCheck.dataset.familyId = group.familyId;
+                memberCheck.value = member.userId;
+                const memberName = document.createElement('span');
+                memberName.textContent = member.name + (member.loginUserName ? ' (' + member.loginUserName + ')' : '');
+                memberLabel.append(memberCheck, memberName);
+                membersBox.appendChild(memberLabel);
+            });
+            groupCheck.addEventListener('change', () => {
+                membersBox.hidden = !groupCheck.checked;
+                if (!groupCheck.checked) membersBox.querySelectorAll('input').forEach(cb => cb.checked = false);
+            });
+            card.appendChild(membersBox);
+            shareGroupsContainer.appendChild(card);
+        });
+    }
+
+    visibleToFamilyCheckbox.addEventListener('change', async () => {
+        updateMemoryVisibilityControls();
+        if (!visibleToFamilyCheckbox.checked) return;
+        try { await loadMemoryShareOptions(); }
+        catch (error) {
+            visibleToFamilyCheckbox.checked = false;
+            updateMemoryVisibilityControls();
+            showMemoryMessage('Sharing Options', error.message);
+        }
+    });
+    document.getElementById('memoryForm').addEventListener('reset', () => {
+        setTimeout(() => {
+            updateMemoryVisibilityControls();
+            shareGroupsContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            shareGroupsContainer.querySelectorAll('.memory-share-members').forEach(el => el.hidden = true);
+        }, 0);
+    });
+
   
 
 
@@ -901,19 +1018,29 @@ document.getElementById('memorySaveBtn').addEventListener('click', async () => {
     const saveBtn = document.getElementById('memorySaveBtn');
 
     try {
-        const family = JSON.parse(
-            localStorage.getItem('currentFamily') || '{}'
-        );
-
         const sessionToken =
             sessionStorage.getItem('sessionToken') || '';
 
-        if (!sessionToken || !family.familyId) {
-            showMemoryMessage(
-                'Login Required',
-                'Please login again and select your family.'
-            );
+        if (!sessionToken) {
+            showMemoryMessage('Login Required', 'Please login again.');
             return;
+        }
+
+        const shareSelection = [];
+        if (visibleToFamilyCheckbox.checked) {
+            shareGroupsContainer.querySelectorAll('.memory-share-group').forEach(card => {
+                const groupCheck = card.querySelector('.memory-share-group-check');
+                if (!groupCheck || !groupCheck.checked) return;
+                const selectedUserIds = Array.from(card.querySelectorAll('.memory-share-member-check:checked')).map(cb => cb.value);
+                if (selectedUserIds.length) {
+                    const first = card.querySelector('.memory-share-member-check');
+                    shareSelection.push({familyId:first ? first.dataset.familyId : '', userIds:selectedUserIds});
+                }
+            });
+            if (!shareSelection.length) {
+                showMemoryMessage('Select Members', 'Please select at least one Family Group member to share this Memory.');
+                return;
+            }
         }
 
         const title =
@@ -927,7 +1054,6 @@ document.getElementById('memorySaveBtn').addEventListener('click', async () => {
         const body = new URLSearchParams({
             action: 'saveMemory',
             sessionToken: sessionToken,
-            familyId: String(family.familyId),
             title: title,
             memoryDate: document.getElementById('memoryDate').value,
             memoryType: document.getElementById('memoryType').value,
@@ -935,8 +1061,10 @@ document.getElementById('memorySaveBtn').addEventListener('click', async () => {
             memoryPlace: document.getElementById('memoryPlace').value,
             description: document.getElementById('memoryDescription').value,
             isSensitive: String(
-                document.getElementById('memorySensitive').checked
-            )
+                !visibleToFamilyCheckbox.checked && document.getElementById('memorySensitive').checked
+            ),
+            visibleToFamily: String(visibleToFamilyCheckbox.checked),
+            shareSelection: JSON.stringify(shareSelection)
         });
 
         saveBtn.disabled = true;
