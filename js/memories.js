@@ -1335,7 +1335,7 @@ const memoryVideosCount = document.getElementById('memoryVideosCount');
 // Video uploads are temporarily disabled until upload performance is improved.
 memoryVideosInput.disabled = true;
 memoryVideoSlots.style.pointerEvents = 'none';
-memoryVideoSlots.style.opacity = '0.4';
+memoryVideoSlots.style.opacity = '0.45';
 document.getElementById('clearMemoryVideos').disabled = true;
 document.getElementById('clearMemoryVideos').style.display = 'none';
 
@@ -1348,13 +1348,10 @@ function updateMemoryVideoSlots() {
         const video = selectedMemoryVideos[i];
         const slot = document.createElement('div');
 
-        slot.className = 'memory-video-slot';
-        if (i >= 1) {
-            slot.classList.add('memory-slot-disabled');
-            slot.style.opacity = '0.35';
-            slot.style.cursor = 'not-allowed';
-            slot.style.pointerEvents = 'none';
-        }
+        slot.className = 'memory-video-slot memory-slot-disabled';
+        // Keep all three Coming Soon boxes visually identical and non-interactive.
+        slot.style.cursor = 'not-allowed';
+        slot.style.pointerEvents = 'none';
 
         if (video) {
             slot.innerHTML = `
