@@ -1045,8 +1045,8 @@ shareTypeOptions.forEach(option => {
     option.addEventListener('change', async () => {
         updateMemoryVisibilityControls();
 
-        if (option.value !== 'custom') {
-            shareGroupsContainer.innerHTML = '';
+if (!['group', 'custom'].includes(option.value)) {
+   shareGroupsContainer.innerHTML = '';
             return;
         }
 
