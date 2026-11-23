@@ -755,16 +755,17 @@ function openAddMemoryScreen() {
     <!-- Row 4 -->
     <div class="expense-field memory-video-field">
     <label class="expense-label">
-        Videos (Max 1)
+        Videos <span class="memory-coming-soon">Coming Soon</span>
     </label>
     <input type="file" id="memoryVideos"
-        accept="video/*" hidden>
-            
-        <div id="memoryVideoSlots" class="memory-video-slots"></div>
-        <div class="memory-count-row">
+        accept="video/*" hidden disabled>
+
+        <div id="memoryVideoSlots" class="memory-video-slots"
+            style="pointer-events:none; opacity:0.4; cursor:not-allowed;"></div>
+        <div class="memory-count-row" style="display:none;">
             <small id="memoryVideosCount">0 videos selected</small>
             <button type="button" class="memory-clear-btn"
-                id="clearMemoryVideos">Clear</button>
+                id="clearMemoryVideos" disabled>Clear</button>
         </div>
     </div>
 
@@ -1330,6 +1331,13 @@ document.getElementById('memoryForm').addEventListener('reset', () => {
 const memoryVideosInput = document.getElementById('memoryVideos');
 const memoryVideoSlots = document.getElementById('memoryVideoSlots');
 const memoryVideosCount = document.getElementById('memoryVideosCount');
+
+// Video uploads are temporarily disabled until upload performance is improved.
+memoryVideosInput.disabled = true;
+memoryVideoSlots.style.pointerEvents = 'none';
+memoryVideoSlots.style.opacity = '0.4';
+document.getElementById('clearMemoryVideos').disabled = true;
+document.getElementById('clearMemoryVideos').style.display = 'none';
 
 let selectedMemoryVideos = [];
 
