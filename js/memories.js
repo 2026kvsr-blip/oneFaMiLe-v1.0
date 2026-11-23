@@ -678,6 +678,8 @@ color: #2d5274 !important;
 .memory-page .memory-share-toggle { display:flex; align-items:center; gap:8px; font-size:14px; color:#2d5274; font-weight:600; }
 .memory-page .memory-share-toggle input { width:18px !important; height:18px !important; min-height:18px !important; margin:0 !important; }
 .memory-page .memory-share-picker { margin-top:10px; padding-top:8px; border-top:1px solid #d8e3f4; }
+.memory-page #addMemoryFavouriteBtn {    display: inline-flex !important;    align-items: center !important;    justify-content: center !important;    padding: 9px 16px !important;    margin-top: 10px !important;
+    background: #2d5274 !important;    color: #ffffff !important;    border: 1px solid #2d5274 !important;    border-radius: 7px !important;    font-weight: 600 !important;    cursor: pointer !important;}
 .memory-page .memory-share-options {
     display: flex;
     align-items: center;
