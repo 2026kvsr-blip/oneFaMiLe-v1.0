@@ -675,16 +675,10 @@ color: #2d5274 !important;
     cursor: pointer;
 }
 
-.memory-page .memory-sharing-line {
-    grid-column:1 / -1;
-    margin-top:12px !important;
-    margin-bottom:0 !important;
-    padding:0 !important;
-    border:0 !important;
-    border-radius:0 !important;
-    background:transparent !important;
-}
-.memory-page .memory-share-picker { margin-top:10px; padding-top:8px; }
+.memory-page .memory-sharing-line { grid-column:1 / -1; margin-top:8px; padding:10px; border:1px solid #c4d4ff; border-radius:9px; background:#f8fbff; }
+.memory-page .memory-share-toggle { display:flex; align-items:center; gap:8px; font-size:14px; color:#2d5274; font-weight:600; }
+.memory-page .memory-share-toggle input { width:18px !important; height:18px !important; min-height:18px !important; margin:0 !important; }
+.memory-page .memory-share-picker { margin-top:10px; padding-top:8px; border-top:1px solid #d8e3f4; }
 .memory-page .memory-share-help { font-size:12px; color:#52677b; margin-bottom:8px; }
 .memory-page .memory-share-group { border:1px solid #d8e3f4; border-radius:8px; padding:8px; margin:7px 0; background:#fff; }
 .memory-page .memory-share-group-title { display:flex; align-items:center; gap:8px; font-weight:600; color:#2d5274; }
@@ -868,8 +862,8 @@ function openAddMemoryScreen() {
 
                     </div>
 
-                    <div class="memory-sensitive-line memory-sharing-line">
-    <label>
+                    <div class="memory-sharing-line">
+    <label class="memory-share-toggle">
         <input type="checkbox" id="memoryVisibleToFamily">
         Visible to Family Members
     </label>
@@ -1000,6 +994,17 @@ memoryDateInput.max = localToday;
             visibleToFamilyCheckbox.checked = false;
             updateMemoryVisibilityControls();
             showMemoryMessage('Sharing Options', error.message);
+        }
+    });
+
+    // Sensitive and Family Sharing are mutually exclusive.
+    // Selecting Sensitive automatically clears and hides Family Sharing.
+    document.getElementById('memorySensitive').addEventListener('change', () => {
+        if (document.getElementById('memorySensitive').checked) {
+            visibleToFamilyCheckbox.checked = false;
+            updateMemoryVisibilityControls();
+            shareGroupsContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            shareGroupsContainer.querySelectorAll('.memory-share-members').forEach(el => el.hidden = true);
         }
     });
     document.getElementById('memoryForm').addEventListener('reset', () => {
