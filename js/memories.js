@@ -1031,6 +1031,24 @@ sharePicker.hidden = !['group', 'custom'].includes(selectedMemoryShareType);
                 memberName.textContent = member.name + (member.loginUserName ? ' (' + member.loginUserName + ')' : '');
                 memberLabel.append(memberCheck, memberName);
                 membersBox.appendChild(memberLabel);
+               memberCheck.addEventListener('change', () => {
+
+    if (selectedMemoryShareType !== 'custom') return;
+
+    const selectedCount = shareGroupsContainer
+        .querySelectorAll('.memory-share-member-check:checked')
+        .length;
+
+    if (selectedCount > 5) {
+        memberCheck.checked = false;
+
+        showMemoryMessage(
+            'Maximum Limit',
+            'You can select maximum 5 members only.'
+        );
+    }
+
+});
             });
           groupCheck.addEventListener('change', () => {
 
