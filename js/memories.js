@@ -967,7 +967,8 @@ memoryDateInput.max = localToday;
 const sharePicker = document.getElementById('memorySharePicker');
 const shareGroupsContainer = document.getElementById('memoryShareGroups');
 const sensitiveLine = document.getElementById('memorySensitiveLine');
-
+const favouritesPanel = document.getElementById('memoryFavouritesPanel');
+const favouriteList = document.getElementById('memoryFavouriteList');
 let selectedMemoryShareType = '';
 let memoryShareOptionsLoaded = false;
 let memoryShareGroupsData = [];
@@ -984,6 +985,8 @@ let memoryShareGroupsData = [];
     // Favourites: Favourite List ఆధారంగా access
     // Custom: individual members ఎంపిక
 sharePicker.hidden = !['group', 'custom'].includes(selectedMemoryShareType);
+      sharePicker.hidden = !['group', 'custom'].includes(selectedMemoryShareType);
+favouritesPanel.hidden = selectedMemoryShareType !== 'favourites';
     // Sharing ఎంపిక చేసినప్పుడు Sensitive OFF
     sensitiveLine.style.display = selectedMemoryShareType ? 'none' : '';
 
