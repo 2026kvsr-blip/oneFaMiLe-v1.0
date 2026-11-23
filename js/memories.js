@@ -1033,10 +1033,17 @@ sharePicker.hidden = !['group', 'custom'].includes(selectedMemoryShareType);
                 memberLabel.append(memberCheck, memberName);
                 membersBox.appendChild(memberLabel);
             });
-            groupCheck.addEventListener('change', () => {
-                membersBox.hidden = !groupCheck.checked;
-                if (!groupCheck.checked) membersBox.querySelectorAll('input').forEach(cb => cb.checked = false);
-            });
+           groupCheck.addEventListener('change', () => {
+    const showMembers =
+        selectedMemoryShareType === 'custom' && groupCheck.checked;
+
+    membersBox.hidden = !showMembers;
+
+    if (!groupCheck.checked) {
+        membersBox.querySelectorAll('input')
+            .forEach(cb => cb.checked = false);
+    }
+});
             card.appendChild(membersBox);
             shareGroupsContainer.appendChild(card);
         });
@@ -1044,7 +1051,16 @@ sharePicker.hidden = !['group', 'custom'].includes(selectedMemoryShareType);
 shareTypeOptions.forEach(option => {
     option.addEventListener('change', async () => {
         updateMemoryVisibilityControls();
+shareGroupsContainer.querySelectorAll('.memory-share-group').forEach(card => {
+    const groupCheck = card.querySelector('.memory-share-group-check');
+    const membersBox = card.querySelector('.memory-share-members');
 
+    membersBox.hidden = !(
+        selectedMemoryShareType === 'custom' &&
+        groupCheck &&
+        groupCheck.checked
+    );
+});
 if (!['group', 'custom'].includes(option.value)) {
    shareGroupsContainer.innerHTML = '';
             return;
