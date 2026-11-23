@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe - MEMORIES FRONTEND
 ===================================== */
@@ -1033,16 +1032,19 @@ sharePicker.hidden = !['group', 'custom'].includes(selectedMemoryShareType);
                 memberLabel.append(memberCheck, memberName);
                 membersBox.appendChild(memberLabel);
             });
-           groupCheck.addEventListener('change', () => {
+          groupCheck.addEventListener('change', () => {
+
     const showMembers =
-        selectedMemoryShareType === 'custom' && groupCheck.checked;
+        selectedMemoryShareType === 'custom' &&
+        groupCheck.checked;
 
     membersBox.hidden = !showMembers;
 
-    if (!groupCheck.checked) {
+    if (!showMembers) {
         membersBox.querySelectorAll('input')
             .forEach(cb => cb.checked = false);
     }
+
 });
             card.appendChild(membersBox);
             shareGroupsContainer.appendChild(card);
