@@ -1190,64 +1190,7 @@ favouritesPanel.hidden = selectedMemoryShareType !== 'favourites';
             shareGroupsContainer.appendChild(card);
         });
     }
-   // ADD FAVOURITE BUTTON - OPEN WINDOW
-document.getElementById('addMemoryFavouriteBtn')
-    .addEventListener('click', async () => {
-
-    const token = sessionStorage.getItem('sessionToken') || '';
-
-    if (!token) {
-        showMemoryMessage('Login Required', 'Please login again.');
-        return;
-    }
-
-    try {
-        const params = new URLSearchParams({
-            action: 'getMemoryShareOptions',
-            sessionToken: token
-        });
-
-        const response = await fetch(MEMORY_API, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: params
-        });
-
-        const result = await response.json();
-
-        if (result.status !== 'success') {
-            throw new Error(result.message || 'Unable to load Family Groups.');
-        }
-
-        const overlay = document.createElement('div');
-        overlay.className = 'memory-delete-overlay';
-
-        const box = document.createElement('div');
-        box.className = 'memory-delete-box';
-
-        const heading = document.createElement('h3');
-        heading.textContent = 'Add Favourite Member';
-
-        const message = document.createElement('p');
-        message.textContent = 'Family Groups loaded successfully.';
-
-        const closeButton = document.createElement('button');
-        closeButton.type = 'button';
-        closeButton.className = 'memory-delete-confirm';
-        closeButton.textContent = 'Close';
-
-        closeButton.onclick = () => overlay.remove();
-
-        box.append(heading, message, closeButton);
-        overlay.appendChild(box);
-        document.body.appendChild(overlay);
-
-    } catch (error) {
-        showMemoryMessage('Favourite Members', error.message);
-    }
-});
+  
 shareTypeOptions.forEach(option => {
     option.addEventListener('change', async () => {
         updateMemoryVisibilityControls();
