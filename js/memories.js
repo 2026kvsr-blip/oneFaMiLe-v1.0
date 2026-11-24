@@ -1128,7 +1128,7 @@ action: 'getMemoryFavourites',
         if (!overlay.isConnected) return;
 
         itemsBox.innerHTML = '';
-
+let openFavouriteMenu = null;
        lists.forEach(item => {
     const row = document.createElement('div');
    row.style.cssText =
