@@ -912,9 +912,17 @@ function openAddMemoryScreen() {
                     </div>
 
                  <div class="memory-sharing-line">
-                 <div class="memory-share-heading">
+                <div class="memory-share-heading">
     <span>Visible To</span>
-    <span>My Favourite List</span>
+
+    <span>
+        My Favourite List
+        <button type="button"
+            id="addMemoryFavouriteBtn"
+            class="expense-secondary">
+            + Add Favourite
+        </button>
+    </span>
 </div>
     <div class="memory-share-options">
         <label>
@@ -945,11 +953,7 @@ function openAddMemoryScreen() {
 
     <div id="memoryFavouriteList"></div>
 
-    <button type="button"
-        id="addMemoryFavouriteBtn"
-        class="expense-secondary">
-        + Add Favourite
-    </button>
+   
 </div>
 </div>
 
