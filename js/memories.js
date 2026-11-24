@@ -710,6 +710,8 @@ color: #2d5274 !important;
     align-items: center;
     width: 100%;
     margin-bottom: 8px;
+    border-bottom: 1px solid #d8e3f4;
+padding-bottom: 7px;
 }
 
 .memory-page .memory-share-top a {
@@ -1388,8 +1390,7 @@ let memoryShareGroupsData = [];
     // Entire Group: member selection అవసరం లేదు
     // Favourites: Favourite List ఆధారంగా access
     // Custom: individual members ఎంపిక
-sharePicker.hidden = !['group', 'custom'].includes(selectedMemoryShareType);
-      sharePicker.hidden = !['group', 'custom'].includes(selectedMemoryShareType);
+
 favouritesPanel.hidden = selectedMemoryShareType !== 'favourites';
     // Sharing ఎంపిక చేసినప్పుడు Sensitive OFF
     sensitiveLine.style.display = selectedMemoryShareType ? 'none' : '';
