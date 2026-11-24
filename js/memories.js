@@ -1134,13 +1134,6 @@ action: 'getMemoryFavourites',
    row.style.cssText =
     'display:flex; align-items:center; gap:10px; width:100%; box-sizing:border-box; padding:8px; margin:6px 0;';
 
-name.style.flex = '1';
-name.style.minWidth = '0';
-
-menuBtn.style.width = '32px';
-menuBtn.style.minWidth = '32px';
-menuBtn.style.marginLeft = 'auto';
-
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
 const membersBox = document.createElement('div');
@@ -1226,6 +1219,13 @@ menuBtn.textContent = '⋮';
 menuBtn.title = 'Favourite List Options';
 menuBtn.style.cssText =
     'border:none; background:transparent; font-size:24px; cursor:pointer; padding:4px 10px; color:#2d5274;';
+          name.style.flex = '1';
+name.style.minWidth = '0';
+
+menuBtn.style.width = '32px';
+menuBtn.style.minWidth = '32px';
+menuBtn.style.marginLeft = 'auto';
+menuBtn.style.textAlign = 'center';
             let pressTimer = null;
             let longPressed = false;
 
