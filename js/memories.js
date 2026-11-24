@@ -1237,8 +1237,16 @@ menuBox.style.cssText =
 
 menuBtn.addEventListener('click', function(event) {
     event.stopPropagation();
-    menuBox.style.display =
-        menuBox.style.display === 'none' ? 'block' : 'none';
+
+    if (openFavouriteMenu && openFavouriteMenu !== menuBox) {
+        openFavouriteMenu.style.display = 'none';
+    }
+
+    const isOpen = menuBox.style.display !== 'none';
+
+    menuBox.style.display = isOpen ? 'none' : 'block';
+
+    openFavouriteMenu = isOpen ? null : menuBox;
 });
           name.style.flex = '1';
 name.style.minWidth = '0';
