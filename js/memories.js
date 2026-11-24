@@ -1159,7 +1159,46 @@ removeBtn.textContent = '×';
 removeBtn.title = 'Remove from this Favourite List';
 removeBtn.style.cssText =
     'color:red; border:none; background:none; font-size:20px; cursor:pointer;';
+removeBtn.addEventListener('click', async function() {
 
+    if (!confirm('Remove this member from this Favourite List?')) return;
+
+    removeBtn.disabled = true;
+
+    const removeParams = new URLSearchParams({
+        action: 'removeMemoryFavourite',
+        sessionToken: token,
+        familyId: group.familyId,
+        userId: member.userId,
+        favouriteListId: item.favouriteListId
+    });
+
+    try {
+        const response = await fetch(MEMORY_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: removeParams
+        });
+
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+            throw new Error(result.message || 'Member removal failed.');
+        }
+
+        memberRow.remove();
+
+        group.members = group.members.filter(
+            m => m.userId !== member.userId
+        );
+
+    } catch (error) {
+        removeBtn.disabled = false;
+        showMemoryMessage('Error', error.message);
+    }
+});
 memberRow.append(memberName, removeBtn);
 membersBox.appendChild(memberRow);
             });
