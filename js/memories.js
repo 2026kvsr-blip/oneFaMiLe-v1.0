@@ -1251,7 +1251,9 @@ favouriteListId: item.favouriteListId,
             });
 
 row.append(checkbox, name);
-itemsBox.appendChild(row);        });
+itemsBox.appendChild(row);   
+       itemsBox.appendChild(membersBox);
+       });
 
     } catch (error) {
         itemsBox.textContent = 'Unable to load Favourite Lists.';
