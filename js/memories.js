@@ -1136,7 +1136,28 @@ action: 'getMemoryFavourites',
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
+const membersBox = document.createElement('div');
+membersBox.style.cssText =
+    'display:none; padding:8px 25px; margin-bottom:8px;';
 
+checkbox.addEventListener('change', function() {
+    membersBox.innerHTML = '';
+
+    if (checkbox.checked) {
+        (item.groups || []).forEach(group => {
+            (group.members || []).forEach(member => {
+                const memberName = document.createElement('div');
+                memberName.textContent = member.name || member.loginUserName || '';
+                memberName.style.padding = '5px 0';
+                membersBox.appendChild(memberName);
+            });
+        });
+
+        membersBox.style.display = 'block';
+    } else {
+        membersBox.style.display = 'none';
+    }
+});
     const name = document.createElement('div');
     name.textContent = item.listName || '';
             name.style.cssText =
