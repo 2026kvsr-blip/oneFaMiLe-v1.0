@@ -1011,6 +1011,8 @@ const shareGroupsContainer = document.getElementById('memoryShareGroups');
 const sensitiveLine = document.getElementById('memorySensitiveLine');
 const favouritesPanel = document.getElementById('memoryFavouritesPanel');
 const favouriteList = document.getElementById('memoryFavouriteList');
+  const MEMORY_API =
+    "https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
    // PRELOAD FAVOURITE LISTS WHEN MEMORY PAGE OPENS
 window.memoryFavouriteListsCache = null;
 
@@ -2077,8 +2079,7 @@ document.getElementById('memoryForm').addEventListener('reset', () => {
 const memoryVoiceInput = document.getElementById('memoryVoice');
 const memoryVoiceSlots = document.getElementById('memoryVoiceSlots');
 const memoryVoiceCount = document.getElementById('memoryVoiceCount');
-   const MEMORY_API =
-    "https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
+ 
 const GOOGLE_CLIENT_ID = "216923084943-pjo421a0hake4ml4qtem2rsn4teso9cf.apps.googleusercontent.com";
 const GOOGLE_DRIVE_FOLDER_ID = "1qEYuDvWWkGY0FIRfvgQOnk7UdyzTkETo";
    let googleAccessToken = null;
