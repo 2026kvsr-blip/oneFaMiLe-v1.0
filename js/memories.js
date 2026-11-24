@@ -1013,6 +1013,7 @@ const favouritesPanel = document.getElementById('memoryFavouritesPanel');
 const favouriteList = document.getElementById('memoryFavouriteList');
    // MY FAVOURITE LIST WINDOW
 
+
 document.getElementById('memoryFavouriteListsBtn')
     .addEventListener('click', async function(event) {
 
@@ -1051,32 +1052,88 @@ document.getElementById('memoryFavouriteListsBtn')
         const box = document.createElement('div');
         box.className = 'memory-delete-box';
 
-        const listItems = (result.lists || [])
-.map(item => {
-    const div = document.createElement('div');
-    div.textContent = item.listName || '';
-    return div.outerHTML;
-})            .join('');
+        const heading = document.createElement('h3');
+        heading.textContent = 'My Favourites';
+        box.appendChild(heading);
 
-        box.innerHTML = `
-            <h3>My Favourites</h3>
+        const itemsBox = document.createElement('div');
+        itemsBox.className = 'memory-favourite-items';
 
-            <div class="memory-favourite-items">
-                ${listItems}
-            </div>
+        (result.lists || []).forEach(item => {
+            const row = document.createElement('div');
+            row.style.cssText =
+                'display:flex; justify-content:space-between; align-items:center; gap:12px; margin:10px 0;';
 
-            <button type="button"
-                class="memory-delete-confirm"
-                id="closeFavouriteWindow">
-                Close
-            </button>
-        `;
+            const name = document.createElement('span');
+            name.textContent = item.listName || '';
 
+            const renameBtn = document.createElement('button');
+            renameBtn.type = 'button';
+            renameBtn.textContent = 'Rename';
+
+            renameBtn.onclick = async () => {
+                const newName = prompt(
+                    'Enter new Favourite List name:',
+                    item.listName || ''
+                );
+
+                if (newName === null) return;
+
+                if (!newName.trim()) {
+                    showMemoryMessage('Invalid Name', 'Please enter a list name.');
+                    return;
+                }
+
+                const renameParams = new URLSearchParams({
+                    action: 'renameMemoryFavouriteList',
+                    sessionToken: token,
+                    favouriteListID: item.favouriteListID,
+                    listName: newName.trim()
+                });
+
+                try {
+                    const renameResponse = await fetch(MEMORY_API, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: renameParams
+                    });
+
+                    const renameResult = await renameResponse.json();
+
+                    if (renameResult.status !== 'success') {
+                        throw new Error(renameResult.message || 'Rename failed.');
+                    }
+
+                    item.listName = newName.trim();
+                    name.textContent = item.listName;
+
+                    showMemoryMessage(
+                        'Success',
+                        'Favourite List renamed successfully.'
+                    );
+
+                } catch (error) {
+                    showMemoryMessage('Error', error.message);
+                }
+            };
+
+            row.append(name, renameBtn);
+            itemsBox.appendChild(row);
+        });
+
+        box.appendChild(itemsBox);
+
+        const closeBtn = document.createElement('button');
+        closeBtn.type = 'button';
+        closeBtn.className = 'memory-delete-confirm';
+        closeBtn.textContent = 'Close';
+        closeBtn.onclick = () => overlay.remove();
+
+        box.appendChild(closeBtn);
         overlay.appendChild(box);
         document.body.appendChild(overlay);
-
-        document.getElementById('closeFavouriteWindow')
-            .onclick = () => overlay.remove();
 
     } catch (error) {
         showMemoryMessage('Error', error.message);
