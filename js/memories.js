@@ -1213,7 +1213,12 @@ membersBox.appendChild(memberRow);
     name.textContent = item.listName || '';
             name.style.cssText =
                 'padding:12px 8px; margin:6px 0; cursor:pointer; user-select:none;';
-
+const menuBtn = document.createElement('button');
+menuBtn.type = 'button';
+menuBtn.textContent = '⋮';
+menuBtn.title = 'Favourite List Options';
+menuBtn.style.cssText =
+    'border:none; background:transparent; font-size:24px; cursor:pointer; padding:4px 10px; color:#2d5274;';
             let pressTimer = null;
             let longPressed = false;
 
@@ -1301,8 +1306,8 @@ favouriteListId: item.favouriteListId,
                 clearTimeout(pressTimer);
             });
 
-row.append(checkbox, name);
-itemsBox.appendChild(row);   
+row.append(checkbox, name, menuBtn);
+          itemsBox.appendChild(row);   
        itemsBox.appendChild(membersBox);
        });
 
