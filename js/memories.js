@@ -1222,6 +1222,24 @@ menuBtn.textContent = '⋮';
 menuBtn.title = 'Favourite List Options';
 menuBtn.style.cssText =
     'border:none; background:transparent; font-size:24px; cursor:pointer; padding:4px 10px; color:#2d5274;';
+          const menuBox = document.createElement('div');
+menuBox.style.cssText =
+    'display:none; margin:0 0 8px 35px; padding:8px 12px; background:#f5f8fc; border:1px solid #c4d4ff; border-radius:8px;';
+
+['List', 'Rename', 'Delete'].forEach(option => {
+    const optionBtn = document.createElement('button');
+    optionBtn.type = 'button';
+    optionBtn.textContent = option;
+    optionBtn.style.cssText =
+        'display:block; width:100%; text-align:left; padding:9px; border:none; background:transparent; cursor:pointer; color:#2d5274;';
+    menuBox.appendChild(optionBtn);
+});
+
+menuBtn.addEventListener('click', function(event) {
+    event.stopPropagation();
+    menuBox.style.display =
+        menuBox.style.display === 'none' ? 'block' : 'none';
+});
           name.style.flex = '1';
 name.style.minWidth = '0';
 
@@ -1317,8 +1335,9 @@ favouriteListId: item.favouriteListId,
             });
 
 row.append(checkbox, name, menuBtn);
-          itemsBox.appendChild(row);   
-       itemsBox.appendChild(membersBox);
+         itemsBox.appendChild(row);
+itemsBox.appendChild(menuBox);
+itemsBox.appendChild(membersBox);
        });
 
     } catch (error) {
