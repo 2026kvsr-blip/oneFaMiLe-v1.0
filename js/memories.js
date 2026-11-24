@@ -673,7 +673,29 @@ color: #2d5274 !important;
     justify-content: center !important;
     cursor: pointer;
 }
-.memory-page .memory-sharing-line { grid-column:1 / -1; margin-top:8px; padding:10px; border:1px solid #c4d4ff; border-radius:9px; background:#f8fbff; }
+.memory-page .memory-sharing-line {
+    grid-column:1 / -1;
+    margin-top:6px;
+    padding:5px 9px;
+    border:1px solid #c4d4ff;
+    border-radius:9px;
+    background:#f8fbff;
+}
+
+.memory-page .memory-share-heading {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:11px;
+    font-weight:600;
+    color:#52677b;
+    margin-bottom:3px;
+}
+
+.memory-page .memory-share-options {
+    margin:3px 0 !important;
+    gap:14px;
+}
 .memory-page .memory-share-toggle { display:flex; align-items:center; gap:8px; font-size:14px; color:#2d5274; font-weight:600; }
 .memory-page .memory-share-toggle input { width:18px !important; height:18px !important; min-height:18px !important; margin:0 !important; }
 .memory-page .memory-share-picker { margin-top:10px; padding-top:8px; border-top:1px solid #d8e3f4; }
@@ -890,6 +912,10 @@ function openAddMemoryScreen() {
                     </div>
 
                  <div class="memory-sharing-line">
+                 <div class="memory-share-heading">
+    <span>Visible To</span>
+    <span>My Favourite List</span>
+</div>
     <div class="memory-share-options">
         <label>
             <input type="radio" name="memoryShareType"
@@ -903,11 +929,11 @@ function openAddMemoryScreen() {
             Favourites
         </label>
 
-        <label>
-            <input type="radio" name="memoryShareType"
-                   value="custom" id="memoryShareCustom">
-            Custom
-        </label>
+       <label>
+    <input type="radio" name="memoryShareType"
+           value="" id="memoryShareNone" checked>
+    None
+</label>
     </div>
 
     <div id="memorySharePicker" class="memory-share-picker" hidden>
