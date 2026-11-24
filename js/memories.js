@@ -1213,6 +1213,9 @@ membersBox.appendChild(memberRow);
     name.textContent = item.listName || '';
             name.style.cssText =
                 'padding:12px 8px; margin:6px 0; cursor:pointer; user-select:none;';
+          name.style.flex = '1';
+name.style.minWidth = '0';
+name.style.textAlign = 'left';
 const menuBtn = document.createElement('button');
 menuBtn.type = 'button';
 menuBtn.textContent = '⋮';
