@@ -916,12 +916,10 @@ function openAddMemoryScreen() {
     <span>Visible To</span>
 
     <span>
-        My Favourite List
-        <button type="button"
-            id="addMemoryFavouriteBtn"
-            class="expense-secondary">
-            + Add Favourite
-        </button>
+        <a href="#" id="memoryFavouriteListsBtn"
+           style="color:#52677b; text-decoration:none;">
+            My Favourite List
+        </a>
     </span>
 </div>
     <div class="memory-share-options">
