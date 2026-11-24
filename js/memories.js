@@ -356,8 +356,11 @@ function memoryStyleOnce() {
 .memory-page .memory-voice-slot audio {
     width: 100%;
     max-width: 100%;
+    height: 22px !important;
+    min-height: 22px !important;
+    display: block;
+    object-fit: contain;
 }
-
 .memory-page .memory-voice-slot:has(audio) {
     background: #dff3e3 !important;
     border: 2px solid #2e8b57 !important;
