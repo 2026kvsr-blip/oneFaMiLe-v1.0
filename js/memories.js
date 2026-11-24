@@ -673,7 +673,6 @@ color: #2d5274 !important;
     justify-content: center !important;
     cursor: pointer;
 }
-
 .memory-page .memory-sharing-line { grid-column:1 / -1; margin-top:8px; padding:10px; border:1px solid #c4d4ff; border-radius:9px; background:#f8fbff; }
 .memory-page .memory-share-toggle { display:flex; align-items:center; gap:8px; font-size:14px; color:#2d5274; font-weight:600; }
 .memory-page .memory-share-toggle input { width:18px !important; height:18px !important; min-height:18px !important; margin:0 !important; }
