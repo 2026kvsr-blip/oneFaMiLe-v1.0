@@ -1011,6 +1011,43 @@ const shareGroupsContainer = document.getElementById('memoryShareGroups');
 const sensitiveLine = document.getElementById('memorySensitiveLine');
 const favouritesPanel = document.getElementById('memoryFavouritesPanel');
 const favouriteList = document.getElementById('memoryFavouriteList');
+   // PRELOAD FAVOURITE LISTS WHEN MEMORY PAGE OPENS
+window.memoryFavouriteListsCache = null;
+
+window.memoryFavouriteListsPromise = (async () => {
+
+    const token = sessionStorage.getItem('sessionToken') || '';
+
+    if (!token) return [];
+
+    const params = new URLSearchParams({
+        action: 'getOrCreateMemoryFavouriteLists',
+        sessionToken: token
+    });
+
+    const response = await fetch(MEMORY_API, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: params
+    });
+
+    const result = await response.json();
+
+    if (result.status !== 'success') {
+        throw new Error(result.message || 'Favourite Lists loading failed.');
+    }
+
+    window.memoryFavouriteListsCache = result.lists || [];
+
+    return window.memoryFavouriteListsCache;
+
+})().catch(error => {
+    console.error('Favourite Lists preload error:', error);
+    window.memoryFavouriteListsPromise = null;
+    return [];
+});
    // MY FAVOURITE LIST WINDOW
 
 
