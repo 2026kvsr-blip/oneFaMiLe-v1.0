@@ -340,11 +340,31 @@ function memoryStyleOnce() {
     gap: 5px;
     margin: 2px 0;
     padding: 5px;
+    height: 60px !important;
+    min-height: 60px !important;
     border: 1px solid #9bb9d4;
     border-radius: 8px;
     background: #fff;
     box-sizing: border-box;
     align-items: stretch;
+}
+
+.memory-page .memory-voice-slot {
+    position: relative;
+    width: 100%;
+    height: 44px !important;
+    min-height: 44px !important;
+    aspect-ratio: auto !important;
+    min-width: 0;
+    border: 1px dashed #9bb9d4;
+    border-radius: 7px;
+    background: transparent;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-sizing: border-box;
 }
 
 .memory-page .memory-voice-slot {
