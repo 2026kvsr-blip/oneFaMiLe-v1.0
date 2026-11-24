@@ -1146,10 +1146,22 @@ checkbox.addEventListener('change', function() {
     if (checkbox.checked) {
         (item.groups || []).forEach(group => {
             (group.members || []).forEach(member => {
-                const memberName = document.createElement('div');
-                memberName.textContent = member.name || member.loginUserName || '';
-                memberName.style.padding = '5px 0';
-                membersBox.appendChild(memberName);
+                const memberRow = document.createElement('div');
+memberRow.style.cssText =
+    'display:flex; align-items:center; justify-content:space-between; padding:5px 0;';
+
+const memberName = document.createElement('span');
+memberName.textContent = member.name || member.loginUserName || '';
+
+const removeBtn = document.createElement('button');
+removeBtn.type = 'button';
+removeBtn.textContent = '×';
+removeBtn.title = 'Remove from this Favourite List';
+removeBtn.style.cssText =
+    'color:red; border:none; background:none; font-size:20px; cursor:pointer;';
+
+memberRow.append(memberName, removeBtn);
+membersBox.appendChild(memberRow);
             });
         });
 
