@@ -1488,22 +1488,58 @@ favouritesPanel.hidden = selectedMemoryShareType !== 'favourites';
             shareGroupsContainer.appendChild(card);
         });
     }
-  document.getElementById('memoryFamilyGroupsBtn')
+ 
+document.getElementById('memoryFamilyGroupsBtn')
     .addEventListener('click', async function(event) {
 
     event.preventDefault();
 
-    sharePicker.hidden = !sharePicker.hidden;
+    const token = sessionStorage.getItem('sessionToken') || '';
 
-    if (!sharePicker.hidden) {
-        try {
-            await loadMemoryShareOptions();
-        } catch (error) {
-            sharePicker.hidden = true;
-            showMemoryMessage('Family Groups', error.message);
-        }
+    if (!token) {
+        showMemoryMessage('Login Required', 'Please login again.');
+        return;
+    }
+
+    const originalParent = sharePicker.parentNode;
+    const originalNext = sharePicker.nextSibling;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'memory-delete-overlay';
+
+    const box = document.createElement('div');
+    box.className = 'memory-delete-box';
+
+    const heading = document.createElement('h3');
+    heading.textContent = 'My Family Groups';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'memory-delete-confirm';
+    closeBtn.textContent = 'Close';
+
+    const closePopup = () => {
+        sharePicker.hidden = true;
+        originalParent.insertBefore(sharePicker, originalNext);
+        overlay.remove();
+    };
+
+    closeBtn.onclick = closePopup;
+
+    box.append(heading, sharePicker, closeBtn);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    sharePicker.hidden = false;
+
+    try {
+        await loadMemoryShareOptions();
+    } catch (error) {
+        closePopup();
+        showMemoryMessage('Family Groups', error.message);
     }
 });
+
 shareTypeOptions.forEach(option => {
     option.addEventListener('change', async () => {
         updateMemoryVisibilityControls();
