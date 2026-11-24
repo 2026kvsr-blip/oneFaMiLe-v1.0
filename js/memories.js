@@ -694,6 +694,7 @@ color: #2d5274 !important;
     background:#f8fbff;
 }
 
+
 .memory-page .memory-share-heading {
     display:flex;
     justify-content:space-between;
@@ -702,6 +703,20 @@ color: #2d5274 !important;
     font-weight:600;
     color:#52677b;
     margin-bottom:3px;
+}
+.memory-page .memory-share-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.memory-page .memory-share-top a {
+    color: #52677b;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
 }
 
 .memory-page .memory-share-options {
@@ -924,15 +939,18 @@ function openAddMemoryScreen() {
                     </div>
 
                  <div class="memory-sharing-line">
-                <div class="memory-share-heading">
-    <span>Visible To</span>
+               <div class="memory-share-top">
+    <a href="#" id="memoryFamilyGroupsBtn">
+        My Family Groups
+    </a>
 
-    <span>
-        <a href="#" id="memoryFavouriteListsBtn"
-           style="color:#52677b; text-decoration:none;">
-            My Favourite List
-        </a>
-    </span>
+    <a href="#" id="memoryFavouriteListsBtn">
+        My Favourite List
+    </a>
+</div>
+
+<div class="memory-share-heading">
+    <span>Visible To</span>
 </div>
     <div class="memory-share-options">
         <label>
@@ -1469,7 +1487,22 @@ favouritesPanel.hidden = selectedMemoryShareType !== 'favourites';
             shareGroupsContainer.appendChild(card);
         });
     }
-  
+  document.getElementById('memoryFamilyGroupsBtn')
+    .addEventListener('click', async function(event) {
+
+    event.preventDefault();
+
+    sharePicker.hidden = !sharePicker.hidden;
+
+    if (!sharePicker.hidden) {
+        try {
+            await loadMemoryShareOptions();
+        } catch (error) {
+            sharePicker.hidden = true;
+            showMemoryMessage('Family Groups', error.message);
+        }
+    }
+});
 shareTypeOptions.forEach(option => {
     option.addEventListener('change', async () => {
         updateMemoryVisibilityControls();
