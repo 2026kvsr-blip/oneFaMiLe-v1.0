@@ -1052,8 +1052,11 @@ document.getElementById('memoryFavouriteListsBtn')
         box.className = 'memory-delete-box';
 
         const listItems = (result.lists || [])
-            .map(item => `<div>${escapeHtml(item.listName)}</div>`)
-            .join('');
+.map(item => {
+    const div = document.createElement('div');
+    div.textContent = item.listName || '';
+    return div.outerHTML;
+})            .join('');
 
         box.innerHTML = `
             <h3>My Favourites</h3>
