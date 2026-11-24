@@ -1014,6 +1014,7 @@ const favouriteList = document.getElementById('memoryFavouriteList');
    // MY FAVOURITE LIST WINDOW
 
 
+
 document.getElementById('memoryFavouriteListsBtn')
     .addEventListener('click', async function(event) {
 
@@ -1026,69 +1027,110 @@ document.getElementById('memoryFavouriteListsBtn')
         return;
     }
 
-    try {
-        const params = new URLSearchParams({
-            action: 'getOrCreateMemoryFavouriteLists',
-            sessionToken: token
-        });
+    // Open window immediately
+    const overlay = document.createElement('div');
+    overlay.className = 'memory-delete-overlay';
 
-        const response = await fetch(MEMORY_API, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: params
-        });
+    const box = document.createElement('div');
+    box.className = 'memory-delete-box';
 
-        const result = await response.json();
+    const heading = document.createElement('h3');
+    heading.textContent = 'My Favourites';
 
-        if (result.status !== 'success') {
-            throw new Error(result.message || 'Unable to load Favourite Lists.');
+    const itemsBox = document.createElement('div');
+    itemsBox.className = 'memory-favourite-items';
+    itemsBox.textContent = 'Loading...';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'memory-delete-confirm';
+    closeBtn.textContent = 'Close';
+    closeBtn.onclick = () => overlay.remove();
+
+    box.append(heading, itemsBox, closeBtn);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    // Reuse cached lists when available
+    if (!window.memoryFavouriteListsCache) {
+        if (!window.memoryFavouriteListsPromise) {
+            window.memoryFavouriteListsPromise = (async () => {
+                const params = new URLSearchParams({
+                    action: 'getOrCreateMemoryFavouriteLists',
+                    sessionToken: token
+                });
+
+                const response = await fetch(MEMORY_API, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: params
+                });
+
+                const result = await response.json();
+
+                if (result.status !== 'success') {
+                    throw new Error(
+                        result.message || 'Unable to load Favourite Lists.'
+                    );
+                }
+
+                window.memoryFavouriteListsCache = result.lists || [];
+                return window.memoryFavouriteListsCache;
+            })();
         }
+    }
 
-        const overlay = document.createElement('div');
-        overlay.className = 'memory-delete-overlay';
+    try {
+        const lists = window.memoryFavouriteListsCache ||
+            await window.memoryFavouriteListsPromise;
 
-        const box = document.createElement('div');
-        box.className = 'memory-delete-box';
+        if (!overlay.isConnected) return;
 
-        const heading = document.createElement('h3');
-        heading.textContent = 'My Favourites';
-        box.appendChild(heading);
+        itemsBox.innerHTML = '';
 
-        const itemsBox = document.createElement('div');
-        itemsBox.className = 'memory-favourite-items';
+        lists.forEach(item => {
+            const name = document.createElement('div');
 
-        (result.lists || []).forEach(item => {
-            const row = document.createElement('div');
-            row.style.cssText =
-                'display:flex; justify-content:space-between; align-items:center; gap:12px; margin:10px 0;';
-
-            const name = document.createElement('span');
             name.textContent = item.listName || '';
+            name.style.cssText =
+                'padding:12px 8px; margin:6px 0; cursor:pointer; user-select:none;';
 
-            const renameBtn = document.createElement('button');
-            renameBtn.type = 'button';
-            renameBtn.textContent = 'Rename';
+            let pressTimer = null;
+            let longPressed = false;
 
-            renameBtn.onclick = async () => {
+            const renameList = async () => {
+                const oldName = item.listName || '';
+
                 const newName = prompt(
                     'Enter new Favourite List name:',
-                    item.listName || ''
+                    oldName
                 );
 
                 if (newName === null) return;
 
-                if (!newName.trim()) {
-                    showMemoryMessage('Invalid Name', 'Please enter a list name.');
+                const cleanName = newName.trim();
+
+                if (!cleanName) {
+                    showMemoryMessage(
+                        'Invalid Name',
+                        'Please enter a list name.'
+                    );
                     return;
                 }
+
+                if (cleanName === oldName) return;
+
+                // Update UI immediately
+                item.listName = cleanName;
+                name.textContent = cleanName;
 
                 const renameParams = new URLSearchParams({
                     action: 'renameMemoryFavouriteList',
                     sessionToken: token,
                     favouriteListID: item.favouriteListID,
-                    listName: newName.trim()
+                    listName: cleanName
                 });
 
                 try {
@@ -1103,40 +1145,52 @@ document.getElementById('memoryFavouriteListsBtn')
                     const renameResult = await renameResponse.json();
 
                     if (renameResult.status !== 'success') {
-                        throw new Error(renameResult.message || 'Rename failed.');
+                        throw new Error(
+                            renameResult.message || 'Rename failed.'
+                        );
                     }
 
-                    item.listName = newName.trim();
-                    name.textContent = item.listName;
-
-                    showMemoryMessage(
-                        'Success',
-                        'Favourite List renamed successfully.'
-                    );
-
                 } catch (error) {
+                    // Restore old name if saving fails
+                    item.listName = oldName;
+                    name.textContent = oldName;
+
                     showMemoryMessage('Error', error.message);
                 }
             };
 
-            row.append(name, renameBtn);
-            itemsBox.appendChild(row);
+            // Desktop: Double click to rename
+            name.addEventListener('dblclick', renameList);
+
+            // Mobile: Long press to rename
+            name.addEventListener('touchstart', () => {
+                longPressed = false;
+
+                pressTimer = setTimeout(() => {
+                    longPressed = true;
+                    renameList();
+                }, 650);
+            }, { passive: true });
+
+            name.addEventListener('touchend', () => {
+                clearTimeout(pressTimer);
+            });
+
+            name.addEventListener('touchmove', () => {
+                clearTimeout(pressTimer);
+            });
+
+            name.addEventListener('touchcancel', () => {
+                clearTimeout(pressTimer);
+            });
+
+            itemsBox.appendChild(name);
         });
 
-        box.appendChild(itemsBox);
-
-        const closeBtn = document.createElement('button');
-        closeBtn.type = 'button';
-        closeBtn.className = 'memory-delete-confirm';
-        closeBtn.textContent = 'Close';
-        closeBtn.onclick = () => overlay.remove();
-
-        box.appendChild(closeBtn);
-        overlay.appendChild(box);
-        document.body.appendChild(overlay);
-
     } catch (error) {
+        itemsBox.textContent = 'Unable to load Favourite Lists.';
         showMemoryMessage('Error', error.message);
+        window.memoryFavouriteListsPromise = null;
     }
 });
 
