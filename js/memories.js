@@ -999,6 +999,44 @@ const shareGroupsContainer = document.getElementById('memoryShareGroups');
 const sensitiveLine = document.getElementById('memorySensitiveLine');
 const favouritesPanel = document.getElementById('memoryFavouritesPanel');
 const favouriteList = document.getElementById('memoryFavouriteList');
+   // MY FAVOURITE LIST WINDOW
+document.getElementById('memoryFavouriteListsBtn')
+    .addEventListener('click', function(event) {
+
+    event.preventDefault();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'memory-delete-overlay';
+
+    const box = document.createElement('div');
+    box.className = 'memory-delete-box';
+
+    box.innerHTML = `
+        <h3>My Favourites</h3>
+
+        <div class="memory-favourite-items">
+            <div>Favourite 1</div>
+            <div>Favourite 2</div>
+            <div>Favourite 3</div>
+            <div id="addNewFavourite"
+                 style="color:#2d8b57; cursor:pointer; margin-top:12px;">
+                + Add Favourite
+            </div>
+        </div>
+
+        <button type="button"
+            class="memory-delete-confirm"
+            id="closeFavouriteWindow">
+            Close
+        </button>
+    `;
+
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    document.getElementById('closeFavouriteWindow')
+        .onclick = () => overlay.remove();
+});
 let selectedMemoryShareType = '';
 let memoryShareOptionsLoaded = false;
 let memoryShareGroupsData = [];
