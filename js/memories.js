@@ -1012,43 +1012,74 @@ const sensitiveLine = document.getElementById('memorySensitiveLine');
 const favouritesPanel = document.getElementById('memoryFavouritesPanel');
 const favouriteList = document.getElementById('memoryFavouriteList');
    // MY FAVOURITE LIST WINDOW
+
 document.getElementById('memoryFavouriteListsBtn')
-    .addEventListener('click', function(event) {
+    .addEventListener('click', async function(event) {
 
     event.preventDefault();
 
-    const overlay = document.createElement('div');
-    overlay.className = 'memory-delete-overlay';
+    const token = sessionStorage.getItem('sessionToken') || '';
 
-    const box = document.createElement('div');
-    box.className = 'memory-delete-box';
+    if (!token) {
+        showMemoryMessage('Login Required', 'Please login again.');
+        return;
+    }
 
-    box.innerHTML = `
-        <h3>My Favourites</h3>
+    try {
+        const params = new URLSearchParams({
+            action: 'getOrCreateMemoryFavouriteLists',
+            sessionToken: token
+        });
 
-        <div class="memory-favourite-items">
-            <div>Favourite 1</div>
-            <div>Favourite 2</div>
-            <div>Favourite 3</div>
-            <div id="addNewFavourite"
-                 style="color:#2d8b57; cursor:pointer; margin-top:12px;">
-                + Add Favourite
+        const response = await fetch(MEMORY_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+            throw new Error(result.message || 'Unable to load Favourite Lists.');
+        }
+
+        const overlay = document.createElement('div');
+        overlay.className = 'memory-delete-overlay';
+
+        const box = document.createElement('div');
+        box.className = 'memory-delete-box';
+
+        const listItems = (result.lists || [])
+            .map(item => `<div>${escapeHtml(item.listName)}</div>`)
+            .join('');
+
+        box.innerHTML = `
+            <h3>My Favourites</h3>
+
+            <div class="memory-favourite-items">
+                ${listItems}
             </div>
-        </div>
 
-        <button type="button"
-            class="memory-delete-confirm"
-            id="closeFavouriteWindow">
-            Close
-        </button>
-    `;
+            <button type="button"
+                class="memory-delete-confirm"
+                id="closeFavouriteWindow">
+                Close
+            </button>
+        `;
 
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
 
-    document.getElementById('closeFavouriteWindow')
-        .onclick = () => overlay.remove();
+        document.getElementById('closeFavouriteWindow')
+            .onclick = () => overlay.remove();
+
+    } catch (error) {
+        showMemoryMessage('Error', error.message);
+    }
 });
+
 let selectedMemoryShareType = '';
 let memoryShareOptionsLoaded = false;
 let memoryShareGroupsData = [];
