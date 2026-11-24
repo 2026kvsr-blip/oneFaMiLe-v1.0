@@ -1129,10 +1129,16 @@ action: 'getMemoryFavourites',
 
         itemsBox.innerHTML = '';
 
-        lists.forEach(item => {
-            const name = document.createElement('div');
+       lists.forEach(item => {
+    const row = document.createElement('div');
+    row.style.cssText =
+        'display:flex; align-items:center; gap:10px; padding:8px; margin:6px 0;';
 
-            name.textContent = item.listName || '';
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+
+    const name = document.createElement('div');
+    name.textContent = item.listName || '';
             name.style.cssText =
                 'padding:12px 8px; margin:6px 0; cursor:pointer; user-select:none;';
 
@@ -1168,8 +1174,8 @@ action: 'getMemoryFavourites',
                 const renameParams = new URLSearchParams({
                     action: 'renameMemoryFavouriteList',
                     sessionToken: token,
-                    favouriteListID: item.favouriteListID,
-                    listName: cleanName
+favouriteListId: item.favouriteListId,
+                   listName: cleanName
                 });
 
                 try {
