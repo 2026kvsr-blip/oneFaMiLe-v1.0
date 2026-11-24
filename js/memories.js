@@ -1131,8 +1131,15 @@ action: 'getMemoryFavourites',
 
        lists.forEach(item => {
     const row = document.createElement('div');
-    row.style.cssText =
-        'display:flex; align-items:center; gap:10px; padding:8px; margin:6px 0;';
+   row.style.cssText =
+    'display:flex; align-items:center; gap:10px; width:100%; box-sizing:border-box; padding:8px; margin:6px 0;';
+
+name.style.flex = '1';
+name.style.minWidth = '0';
+
+menuBtn.style.width = '32px';
+menuBtn.style.minWidth = '32px';
+menuBtn.style.marginLeft = 'auto';
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
