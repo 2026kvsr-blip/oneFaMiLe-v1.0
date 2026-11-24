@@ -1,4 +1,5 @@
 
+
 /* =====================================
 oneFaMiLe V1
 Part 1A.3
@@ -4514,6 +4515,32 @@ const formData = new FormData();
            );
 
             
+// PRELOAD MEMORY FAVOURITE LISTS IN BACKGROUND
+window.memoryFavouriteListsPromise = fetch(API_URL, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: new URLSearchParams({
+        action: "getOrCreateMemoryFavouriteLists",
+        sessionToken: result.sessionToken
+    })
+})
+.then(response => response.json())
+.then(data => {
+    if (data.status !== "success") {
+        throw new Error(data.message || "Favourite Lists loading failed.");
+    }
+
+    window.memoryFavouriteListsCache = data.lists || [];
+    return window.memoryFavouriteListsCache;
+})
+.catch(error => {
+    window.memoryFavouriteListsPromise = null;
+    console.error("Favourite Lists preload error:", error);
+    return [];
+});
+
 //restoreFamilyCache(result);
 
 // =====================================
