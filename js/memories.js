@@ -1023,8 +1023,8 @@ window.memoryFavouriteListsPromise = (async () => {
     if (!token) return [];
 
     const params = new URLSearchParams({
-        action: 'getOrCreateMemoryFavouriteLists',
-        sessionToken: token
+action: 'getMemoryFavourites',
+       sessionToken: token
     });
 
     const response = await fetch(MEMORY_API, {
@@ -1095,8 +1095,8 @@ document.getElementById('memoryFavouriteListsBtn')
         if (!window.memoryFavouriteListsPromise) {
             window.memoryFavouriteListsPromise = (async () => {
                 const params = new URLSearchParams({
-                    action: 'getOrCreateMemoryFavouriteLists',
-                    sessionToken: token
+action: 'getMemoryFavourites',
+                   sessionToken: token
                 });
 
                 const response = await fetch(MEMORY_API, {
