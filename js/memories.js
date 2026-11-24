@@ -262,10 +262,11 @@ function memoryStyleOnce() {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 5px;
-    margin: 2px 0;
-    padding: 5px;
-    height: 60px !important;
-    min-height: 60px !important;
+    margin: 0 !important;
+    padding: 4px;
+    height: 36px !important;
+    min-height: 36px !important;
+    max-height: 36px !important;
     border: 1px solid #9bb9d4;
     border-radius: 8px;
     background: #fff;
@@ -276,25 +277,10 @@ function memoryStyleOnce() {
 .memory-page .memory-video-slot {
     position: relative;
     width: 100%;
-    height: 44px !important;
-    min-height: 44px !important;
+    height: 26px !important;
+    min-height: 26px !important;
+    max-height: 26px !important;
     aspect-ratio: auto !important;
-    min-width: 0;
-    border: 1px dashed #7fa6cc;
-    border-radius: 7px;
-    background: #fff;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-}
-
-.memory-page .memory-video-slot {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 5 / 3;
-    height: auto;
     min-width: 0;
     border: 1px dashed #7fa6cc;
     border-radius: 7px;
@@ -306,7 +292,6 @@ function memoryStyleOnce() {
     cursor: pointer;
     box-sizing: border-box;
 }
-
 .memory-page .memory-video-slot video {
     position: absolute;
     inset: 0;
@@ -338,10 +323,11 @@ function memoryStyleOnce() {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 5px;
-    margin: 2px 0;
-    padding: 5px;
-    height: 60px !important;
-    min-height: 60px !important;
+    margin: 0 !important;
+    padding: 4px;
+    height: 36px !important;
+    min-height: 36px !important;
+    max-height: 36px !important;
     border: 1px solid #9bb9d4;
     border-radius: 8px;
     background: #fff;
@@ -352,8 +338,9 @@ function memoryStyleOnce() {
 .memory-page .memory-voice-slot {
     position: relative;
     width: 100%;
-    height: 44px !important;
-    min-height: 44px !important;
+    height: 26px !important;
+    min-height: 26px !important;
+    max-height: 26px !important;
     aspect-ratio: auto !important;
     min-width: 0;
     border: 1px dashed #9bb9d4;
@@ -366,23 +353,6 @@ function memoryStyleOnce() {
     cursor: pointer;
     box-sizing: border-box;
 }
-
-.memory-page .memory-voice-slot {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 5 / 4;
-    min-width: 0;
-    border: 1px dashed #9bb9d4;
-    border-radius: 7px;
-    background: transparent;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-sizing: border-box;
-}
-
 .memory-page .memory-voice-slot audio {
     width: 100%;
     max-width: 100%;
