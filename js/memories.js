@@ -1401,6 +1401,7 @@ menuBtn.style.cssText =
           menuBox.classList.add('memory-favourite-menu');
 menuBox.style.cssText =
     'display:none; margin:0 0 8px 35px; padding:8px 12px; background:#f5f8fc; border:1px solid #c4d4ff; border-radius:8px;';
+       const parentFavouritesOverlay = overlay;   
 async function openAddFavouriteMembers(item) {
 
     const token = sessionStorage.getItem('sessionToken') || '';
