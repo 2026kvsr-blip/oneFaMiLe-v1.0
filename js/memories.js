@@ -1618,7 +1618,14 @@ showMemoryMessage(
     }
 }
        menuBox.style.cssText =
-    'display:flex; flex-direction:row; align-items:center; justify-content:space-between; gap:4px; margin:0 0 8px 35px; padding:5px 6px; background:#f5f8fc; border:1px solid #c4d4ff; border-radius:8px;';
+    'display:none; flex-direction:row; align-items:center; justify-content:space-between; gap:5px; margin:0 0 8px 35px; padding:6px; background:#f5f8fc; border:1px solid #c4d4ff; border-radius:8px;';
+
+const menuColors = {
+    List: '#7952b3',
+    Add: '#2e8b57',
+    Rename: '#ed8b24',
+    Delete: '#d93025'
+};
 
 ['List', 'Add', 'Rename', 'Delete'].forEach(option => {
 
@@ -1627,7 +1634,7 @@ showMemoryMessage(
     optionBtn.textContent = option;
 
     optionBtn.style.cssText =
-        'flex:1; min-width:0; padding:7px 3px; border:none; border-radius:5px; background:transparent; cursor:pointer; color:#2d5274; font-size:12px; font-weight:600; white-space:nowrap;';
+        `flex:1; min-width:0; padding:8px 2px; border:none; border-radius:5px; background:${menuColors[option]}; color:#fff; cursor:pointer; font-size:12px; font-weight:600; white-space:nowrap;`;
 
     menuBox.appendChild(optionBtn);
 
@@ -1656,7 +1663,7 @@ showMemoryMessage(
     if (option === 'Delete') {
         optionBtn.onclick = function() {
             menuBox.style.display = 'none';
-            // Delete action will be connected after confirming backend API.
+            // Delete action will be added separately.
         };
     }
 });
