@@ -1668,14 +1668,28 @@ const menuColors = {
 menuBtn.addEventListener('click', function(event) {
     event.stopPropagation();
 
+    // ఇప్పటికే open అయిన menu ఉంటే దాన్ని close చేయాలి
     if (openFavouriteMenu && openFavouriteMenu !== menuBox) {
         openFavouriteMenu.style.display = 'none';
     }
 
     const isOpen = menuBox.style.display !== 'none';
 
-menuBox.style.display = isOpen ? 'none' : 'flex';
-    openFavouriteMenu = isOpen ? null : menuBox;
+    if (!isOpen) {
+        // Favourite List members list ను deselect చేసి close చేయాలి
+        if (checkbox.checked) {
+            checkbox.checked = false;
+            checkbox.dispatchEvent(new Event('change'));
+        }
+
+        // 4 menu buttons చూపించాలి
+        menuBox.style.display = 'flex';
+        openFavouriteMenu = menuBox;
+
+    } else {
+        menuBox.style.display = 'none';
+        openFavouriteMenu = null;
+    }
 });
           name.style.flex = '1';
 name.style.minWidth = '0';
