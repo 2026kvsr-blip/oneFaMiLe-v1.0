@@ -516,6 +516,54 @@ function memoryStyleOnce() {
     text-align: center;
 }
 
+/* FAMILY GROUPS POPUP DESIGN */
+.memory-family-groups-box {
+    width: calc(100% - 36px) !important;
+    max-width: 420px !important;
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+    padding: 20px !important;
+}
+
+.memory-family-groups-box h3 {
+    font-size: 20px !important;
+    margin-bottom: 16px !important;
+}
+
+.memory-family-groups-box .memory-share-group {
+    display: block !important;
+    margin: 8px 0 !important;
+    padding: 10px 12px !important;
+    border: 1px solid #d8e3f4 !important;
+    border-radius: 9px !important;
+    background: #f8fbff !important;
+    text-align: left !important;
+}
+
+.memory-family-groups-box .memory-share-group-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+}
+
+.memory-family-groups-box .memory-share-group-title input {
+    width: 19px !important;
+    height: 19px !important;
+    flex: 0 0 19px !important;
+    margin: 0 !important;
+}
+
+.memory-family-groups-box .memory-delete-confirm {
+    margin-top: 14px !important;
+    padding: 9px 28px !important;
+    border-radius: 7px !important;
+    background: #2d5274 !important;
+    border-color: #2d5274 !important;
+}
+
 .memory-delete-box h3 {
     margin: 0 0 10px;
     color: #2d5274;
@@ -1508,8 +1556,7 @@ document.getElementById('memoryFamilyGroupsBtn')
     overlay.className = 'memory-delete-overlay';
 
     const box = document.createElement('div');
-    box.className = 'memory-delete-box';
-
+box.className = 'memory-delete-box memory-family-groups-box';
     const heading = document.createElement('h3');
     heading.textContent = 'My Family Groups';
 
