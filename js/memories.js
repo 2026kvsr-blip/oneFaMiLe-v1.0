@@ -1617,28 +1617,47 @@ showMemoryMessage(
         showMemoryMessage('Error', error.message);
     }
 }
-        ['List', 'Add', 'Rename', 'Delete'].forEach(option => {
+       menuBox.style.cssText =
+    'display:flex; flex-direction:row; align-items:center; justify-content:space-between; gap:4px; margin:0 0 8px 35px; padding:5px 6px; background:#f5f8fc; border:1px solid #c4d4ff; border-radius:8px;';
+
+['List', 'Add', 'Rename', 'Delete'].forEach(option => {
+
     const optionBtn = document.createElement('button');
     optionBtn.type = 'button';
     optionBtn.textContent = option;
+
     optionBtn.style.cssText =
-        'display:block; width:100%; text-align:left; padding:9px; border:none; background:transparent; cursor:pointer; color:#2d5274;';
+        'flex:1; min-width:0; padding:7px 3px; border:none; border-radius:5px; background:transparent; cursor:pointer; color:#2d5274; font-size:12px; font-weight:600; white-space:nowrap;';
 
     menuBox.appendChild(optionBtn);
 
     if (option === 'List') {
-        optionBtn.addEventListener('click', function() {
+        optionBtn.onclick = function() {
             menuBox.style.display = 'none';
             checkbox.checked = !checkbox.checked;
             checkbox.dispatchEvent(new Event('change'));
-        });
+        };
     }
 
     if (option === 'Add') {
-        optionBtn.addEventListener('click', function() {
+        optionBtn.onclick = function() {
             menuBox.style.display = 'none';
             openAddFavouriteMembers(item);
-        });
+        };
+    }
+
+    if (option === 'Rename') {
+        optionBtn.onclick = function() {
+            menuBox.style.display = 'none';
+            renameList();
+        };
+    }
+
+    if (option === 'Delete') {
+        optionBtn.onclick = function() {
+            menuBox.style.display = 'none';
+            // Delete action will be connected after confirming backend API.
+        };
     }
 });
 
