@@ -1268,10 +1268,39 @@ memberName.textContent = member.name || member.loginUserName || '';
 const memberCheckbox = document.createElement('input');
 memberCheckbox.type = 'checkbox';
 memberCheckbox.className = 'memory-favourite-member-checkbox';
-               memberCheckbox.addEventListener('change', function() {
+               const savedMembers =
+    selectedFavouriteMembers[String(item.favouriteListId)] || [];
+
+memberCheckbox.checked = savedMembers.some(
+    m => m.userId === member.userId &&
+         m.familyId === group.familyId
+);
+               if (showSelectedOnly.checked && !memberCheckbox.checked) {
+    memberRow.style.display = 'none';
+}
+             memberCheckbox.addEventListener('change', function() {
+
     if (showSelectedOnly.checked) {
         memberRow.style.display =
             memberCheckbox.checked ? 'flex' : 'none';
+    }
+
+    const listId = String(item.favouriteListId);
+
+    if (!selectedFavouriteMembers[listId]) {
+        selectedFavouriteMembers[listId] = [];
+    }
+
+    selectedFavouriteMembers[listId] =
+        selectedFavouriteMembers[listId].filter(
+            m => m.userId !== member.userId
+        );
+
+    if (memberCheckbox.checked) {
+        selectedFavouriteMembers[listId].push({
+            familyId: group.familyId,
+            userId: member.userId
+        });
     }
 });
 const removeBtn = document.createElement('button');
@@ -1475,7 +1504,7 @@ itemsBox.appendChild(membersBox);
         window.memoryFavouriteListsPromise = null;
     }
 });
-
+let selectedFavouriteMembers = {};
 let selectedMemoryShareType = '';
 let memoryShareOptionsLoaded = false;
 let memoryShareGroupsData = [];
