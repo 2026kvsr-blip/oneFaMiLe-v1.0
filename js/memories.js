@@ -1617,7 +1617,7 @@ showMemoryMessage(
         showMemoryMessage('Error', error.message);
     }
 }menuBox.style.cssText =
-    'display:none; flex-direction:row; align-items:center; justify-content:space-around; gap:0; width:calc(100% - 35px); box-sizing:border-box; margin:0 0 8px 35px; padding:10px 4px; background:#f5f8fc; border:1px solid #c4d4ff; border-radius:8px;';
+    'display:none; flex-direction:row; align-items:center; justify-content:space-around; gap:0; width:calc(100% - 35px); box-sizing:border-box; margin:0 0 8px 35px; padding:4px 4px; background:#f5f8fc; border:1px solid #c4d4ff; border-radius:8px;';
 
 const menuColors = {
     List: '#7952b3',
