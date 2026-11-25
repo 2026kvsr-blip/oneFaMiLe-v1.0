@@ -525,7 +525,31 @@ function memoryStyleOnce() {
     box-sizing: border-box !important;
     padding: 20px !important;
 }
+/* FAVOURITE LIST POPUP DESIGN */
+.memory-favourite-popup {
+    width: calc(100% - 36px) !important;
+    max-width: 420px !important;
+    max-height: 75vh !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+    padding: 18px !important;
+    text-align: left !important;
+}
 
+.memory-favourite-popup h3 {
+    text-align: center !important;
+    margin-bottom: 14px !important;
+}
+
+.memory-favourite-items {
+    max-height: 55vh;
+    overflow-y: auto;
+}
+
+.memory-favourite-popup .memory-delete-confirm {
+    display: block;
+    margin: 14px auto 0;
+}
 .memory-family-groups-box h3 {
     font-size: 20px !important;
     margin-bottom: 16px !important;
@@ -1139,8 +1163,7 @@ document.getElementById('memoryFavouriteListsBtn')
     overlay.className = 'memory-delete-overlay';
 
     const box = document.createElement('div');
-    box.className = 'memory-delete-box';
-
+box.className = 'memory-delete-box memory-favourite-popup';
     const heading = document.createElement('h3');
     heading.textContent = 'My Favourites';
 
@@ -1196,9 +1219,30 @@ action: 'getMemoryFavourites',
         if (!overlay.isConnected) return;
 
         itemsBox.innerHTML = '';
+       const filterLabel = document.createElement('label');
+filterLabel.style.cssText =
+    'display:flex; align-items:center; gap:8px; padding:10px 5px; font-weight:600;';
+
+const showSelectedOnly = document.createElement('input');
+showSelectedOnly.type = 'checkbox';
+
+filterLabel.append(showSelectedOnly, 'Show Selected Only');
+itemsBox.appendChild(filterLabel);
+       showSelectedOnly.addEventListener('change', function() {
+    itemsBox.querySelectorAll('.memory-favourite-member-row')
+        .forEach(memberRow => {
+            const memberCheckbox = memberRow.querySelector('input[type="checkbox"]');
+
+            memberRow.style.display =
+                showSelectedOnly.checked && !memberCheckbox.checked
+                    ? 'none'
+                    : 'flex';
+        });
+});
 let openFavouriteMenu = null;
        lists.forEach(item => {
     const row = document.createElement('div');
+          row.classList.add('memory-favourite-list-row');
    row.style.cssText =
     'display:flex; align-items:center; gap:10px; width:100%; box-sizing:border-box; padding:8px; margin:6px 0;';
 
@@ -1215,12 +1259,21 @@ checkbox.addEventListener('change', function() {
         (item.groups || []).forEach(group => {
             (group.members || []).forEach(member => {
                 const memberRow = document.createElement('div');
+               memberRow.classList.add('memory-favourite-member-row');
 memberRow.style.cssText =
     'display:flex; align-items:center; justify-content:space-between; padding:5px 0;';
 
 const memberName = document.createElement('span');
 memberName.textContent = member.name || member.loginUserName || '';
-
+const memberCheckbox = document.createElement('input');
+memberCheckbox.type = 'checkbox';
+memberCheckbox.className = 'memory-favourite-member-checkbox';
+               memberCheckbox.addEventListener('change', function() {
+    if (showSelectedOnly.checked) {
+        memberRow.style.display =
+            memberCheckbox.checked ? 'flex' : 'none';
+    }
+});
 const removeBtn = document.createElement('button');
 removeBtn.type = 'button';
 removeBtn.textContent = '×';
@@ -1267,8 +1320,8 @@ removeBtn.addEventListener('click', async function() {
         showMemoryMessage('Error', error.message);
     }
 });
-memberRow.append(memberName, removeBtn);
-membersBox.appendChild(memberRow);
+memberRow.append(memberCheckbox, memberName, removeBtn);
+               membersBox.appendChild(memberRow);
             });
         });
 
