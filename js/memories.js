@@ -1398,6 +1398,7 @@ menuBtn.title = 'Favourite List Options';
 menuBtn.style.cssText =
     'border:none; background:transparent; font-size:24px; cursor:pointer; padding:4px 10px; color:#2d5274;';
           const menuBox = document.createElement('div');
+          menuBox.classList.add('memory-favourite-menu');
 menuBox.style.cssText =
     'display:none; margin:0 0 8px 35px; padding:8px 12px; background:#f5f8fc; border:1px solid #c4d4ff; border-radius:8px;';
 async function openAddFavouriteMembers(item) {
@@ -1719,7 +1720,8 @@ const closeFavouriteMembersOnOutsideClick = function(event) {
 
     if (
         !openFavouriteMembers.box.contains(event.target) &&
-        !event.target.closest('.memory-favourite-list-row')
+!event.target.closest('.memory-favourite-list-row') &&
+!event.target.closest('.memory-favourite-menu')
     ) {
         openFavouriteMembers.box.style.display = 'none';
         openFavouriteMembers.checkbox.checked = false;
