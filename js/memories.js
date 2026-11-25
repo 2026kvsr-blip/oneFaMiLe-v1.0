@@ -1175,8 +1175,8 @@ box.className = 'memory-delete-box memory-favourite-popup';
 
     const closeBtn = document.createElement('button');
     closeBtn.type = 'button';
-    closeBtn.className = 'memory-delete-confirm';
-    closeBtn.textContent = 'Close';
+closeBtn.style.cssText =
+    'background:#1976d2; color:white; border:none; border-radius:7px; padding:11px 30px; font-size:16px; font-weight:600; cursor:pointer; min-width:110px;';    closeBtn.textContent = 'Close';
     closeBtn.onclick = () => overlay.remove();
 
     box.append(heading, itemsBox, closeBtn);
@@ -1221,26 +1221,7 @@ action: 'getMemoryFavourites',
         if (!overlay.isConnected) return;
 
         itemsBox.innerHTML = '';
-       const filterLabel = document.createElement('label');
-filterLabel.style.cssText =
-    'display:flex; align-items:center; gap:8px; padding:10px 5px; font-weight:600;';
-
-const showSelectedOnly = document.createElement('input');
-showSelectedOnly.type = 'checkbox';
-
-filterLabel.append(showSelectedOnly, 'Show Selected Only');
-itemsBox.appendChild(filterLabel);
-       showSelectedOnly.addEventListener('change', function() {
-    itemsBox.querySelectorAll('.memory-favourite-member-row')
-        .forEach(memberRow => {
-            const memberCheckbox = memberRow.querySelector('input[type="checkbox"]');
-
-            memberRow.style.display =
-                showSelectedOnly.checked && !memberCheckbox.checked
-                    ? 'none'
-                    : 'flex';
-        });
-});
+      
 let openFavouriteMenu = null;
        let openFavouriteMembers = null;
        lists.forEach(item => {
@@ -1578,16 +1559,25 @@ membersBox.appendChild(memberLabel);
             groupsBox.append(groupLabel, membersBox);
         });
 
-        const saveBtn = document.createElement('button');
-        saveBtn.type = 'button';
-        saveBtn.textContent = 'Save';
+        const buttonRow = document.createElement('div');
+buttonRow.style.cssText =
+    'display:flex; gap:12px; justify-content:center; margin-top:15px;';
 
-        saveBtn.className = 'memory-delete-confirm';
+const saveBtn = document.createElement('button');
+saveBtn.type = 'button';
+saveBtn.textContent = 'Save';
+saveBtn.style.cssText =
+    'flex:1; background:#2e8b57; color:white; border:none; border-radius:7px; padding:12px; font-size:16px; font-weight:600; cursor:pointer;';
 
-        const closeBtn = document.createElement('button');
-        closeBtn.type = 'button';
-        closeBtn.textContent = 'Close';
-        closeBtn.className = 'memory-delete-confirm';
+const closeBtn = document.createElement('button');
+closeBtn.type = 'button';
+closeBtn.textContent = 'Close';
+closeBtn.style.cssText =
+    'flex:1; background:#1976d2; color:white; border:none; border-radius:7px; padding:12px; font-size:16px; font-weight:600; cursor:pointer;';
+
+closeBtn.onclick = () => overlay.remove();
+
+buttonRow.append(saveBtn, closeBtn);
         closeBtn.onclick = () => overlay.remove();
 
         saveBtn.onclick = async () => {
@@ -1638,7 +1628,6 @@ membersBox.appendChild(memberLabel);
 window.memoryFavouriteListsPromise = null;
 
 overlay.remove();
-
 // Close existing My Favourites window
 parentFavouritesOverlay.remove();
 
@@ -1656,7 +1645,7 @@ showMemoryMessage(
             }
         };
 
-box.append(heading, filterLabel, groupsBox, saveBtn, closeBtn);
+box.append(heading, filterLabel, groupsBox, buttonRow);
        overlay.appendChild(box);
         document.body.appendChild(overlay);
 
@@ -1937,7 +1926,6 @@ favouritesPanel.hidden = selectedMemoryShareType !== 'favourites';
             shareGroupsContainer.textContent = 'No Family Groups with registered app members were found for your account.';
         }
     }
-
     function renderMemoryShareGroups() {
         shareGroupsContainer.innerHTML = '';
         memoryShareGroupsData.forEach((group, groupIndex) => {
