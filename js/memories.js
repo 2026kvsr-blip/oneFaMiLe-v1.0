@@ -1439,8 +1439,30 @@ async function openAddFavouriteMembers(item) {
         const groupsBox = document.createElement('div');
         groupsBox.style.cssText =
             'max-height:60vh; overflow-y:auto; padding:10px;';
+const filterLabel = document.createElement('label');
+filterLabel.style.cssText =
+    'display:none; align-items:center; gap:8px; padding:8px 10px; font-weight:600;';
 
-const existingParams = new URLSearchParams({
+const showSelectedOnly = document.createElement('input');
+showSelectedOnly.type = 'checkbox';
+
+filterLabel.append(showSelectedOnly, 'Show Selected Only');
+filterLabel.style.display = 'none';
+       function updateShowSelectedOnlyVisibility() {
+    const hasSelection = groupsBox.querySelector(
+        '.add-favourite-member-check:checked'
+    );
+
+    filterLabel.style.display = hasSelection ? 'flex' : 'none';
+
+    if (!hasSelection) {
+        showSelectedOnly.checked = false;
+
+        groupsBox.querySelectorAll('.add-favourite-member-row')
+            .forEach(row => row.style.display = 'flex');
+    }
+}
+       const existingParams = new URLSearchParams({
     action: 'getMemoryFavourites',
     sessionToken: token
 });
@@ -1505,7 +1527,7 @@ availableMembers.forEach(member => {
                 const memberLabel = document.createElement('label');
                 memberLabel.style.cssText =
                     'display:flex; gap:10px; padding:7px 0;';
-
+memberLabel.classList.add('add-favourite-member-row');
                 const memberCheck = document.createElement('input');
                 memberCheck.type = 'checkbox';
                 memberCheck.className = 'add-favourite-member-check';
@@ -1515,18 +1537,42 @@ availableMembers.forEach(member => {
                 const memberName = document.createElement('span');
                 memberName.textContent = member.name || member.loginUserName || '';
 
-                memberLabel.append(memberCheck, memberName);
-                membersBox.appendChild(memberLabel);
+             memberCheck.addEventListener('change', function() {
+    updateShowSelectedOnlyVisibility();
+
+    if (showSelectedOnly.checked) {
+        memberLabel.style.display =
+            memberCheck.checked ? 'flex' : 'none';
+    }
+});
+
+memberLabel.append(memberCheck, memberName);
+membersBox.appendChild(memberLabel);
             });
 
+           showSelectedOnly.addEventListener('change', function() {
+    groupsBox.querySelectorAll('.add-favourite-member-row')
+        .forEach(memberLabel => {
+            const memberCheck = memberLabel.querySelector(
+                '.add-favourite-member-check'
+            );
+
+            memberLabel.style.display =
+                showSelectedOnly.checked && !memberCheck.checked
+                    ? 'none'
+                    : 'flex';
+        });
+});
             groupCheck.addEventListener('change', () => {
                 membersBox.style.display =
                     groupCheck.checked ? 'block' : 'none';
 
-                if (!groupCheck.checked) {
-                    membersBox.querySelectorAll('input')
-                        .forEach(cb => cb.checked = false);
-                }
+               if (!groupCheck.checked) {
+    membersBox.querySelectorAll('input')
+        .forEach(cb => cb.checked = false);
+
+    updateShowSelectedOnlyVisibility();
+}
             });
 
             groupsBox.append(groupLabel, membersBox);
@@ -1610,8 +1656,8 @@ showMemoryMessage(
             }
         };
 
-        box.append(heading, groupsBox, saveBtn, closeBtn);
-        overlay.appendChild(box);
+box.append(heading, filterLabel, groupsBox, saveBtn, closeBtn);
+       overlay.appendChild(box);
         document.body.appendChild(overlay);
 
     } catch (error) {
