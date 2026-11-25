@@ -1282,11 +1282,14 @@ checkbox.addEventListener('change', function() {
 memberRow.style.cssText =
     'display:flex; align-items:center; justify-content:flex-start; gap:10px; width:100%; padding:7px 0; box-sizing:border-box;';
 
-memberName.style.flex = '1';
-memberName.style.textAlign = 'left';
+
 
 const memberName = document.createElement('span');
 memberName.textContent = member.name || member.loginUserName || '';
+memberName.style.flex = '1';
+memberName.style.textAlign = 'left';
+
+               
 const memberCheckbox = document.createElement('input');
 memberCheckbox.type = 'checkbox';
 memberCheckbox.className = 'memory-favourite-member-checkbox';
