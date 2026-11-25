@@ -1544,19 +1544,29 @@ async function openAddFavouriteMembers(item) {
         showMemoryMessage('Error', error.message);
     }
 }
-          ['List', 'Add', 'Rename', 'Delete'].forEach(option => {
-   const optionBtn = document.createElement('button');
+        ['List', 'Add', 'Rename', 'Delete'].forEach(option => {
+    const optionBtn = document.createElement('button');
     optionBtn.type = 'button';
     optionBtn.textContent = option;
     optionBtn.style.cssText =
         'display:block; width:100%; text-align:left; padding:9px; border:none; background:transparent; cursor:pointer; color:#2d5274;';
+
     menuBox.appendChild(optionBtn);
-   if (option === 'Add') {
-    optionBtn.addEventListener('click', function() {
-        menuBox.style.display = 'none';
-        openAddFavouriteMembers(item);
-    });
-}
+
+    if (option === 'List') {
+        optionBtn.addEventListener('click', function() {
+            menuBox.style.display = 'none';
+            checkbox.checked = !checkbox.checked;
+            checkbox.dispatchEvent(new Event('change'));
+        });
+    }
+
+    if (option === 'Add') {
+        optionBtn.addEventListener('click', function() {
+            menuBox.style.display = 'none';
+            openAddFavouriteMembers(item);
+        });
+    }
 });
 
 menuBtn.addEventListener('click', function(event) {
