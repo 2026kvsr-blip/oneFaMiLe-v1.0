@@ -1493,7 +1493,13 @@ groupCheck.disabled = !availableMembers.length;
             const membersBox = document.createElement('div');
             membersBox.style.cssText =
                 'display:none; padding:5px 25px;';
-
+if (!availableMembers.length) {
+    membersBox.textContent = 'Members not available';
+    membersBox.style.display = 'block';
+    membersBox.style.color = '#888';
+    membersBox.style.fontSize = '13px';
+    membersBox.style.padding = '5px 25px';
+}
 availableMembers.forEach(member => {
                 const memberLabel = document.createElement('label');
                 memberLabel.style.cssText =
