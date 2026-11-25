@@ -1544,16 +1544,21 @@ async function openAddFavouriteMembers(item) {
                     }
                 }
 
-                window.memoryFavouriteListsCache = null;
-                window.memoryFavouriteListsPromise = null;
+               window.memoryFavouriteListsCache = null;
+window.memoryFavouriteListsPromise = null;
 
-                overlay.remove();
+overlay.remove();
 
-                showMemoryMessage(
-                    'Success',
-                    'Selected Members added to ' + item.listName +
-                    '. Please close and reopen My Favourites.'
-                );
+// Close existing My Favourites window
+parentFavouritesOverlay.remove();
+
+// Reopen My Favourites with fresh data
+document.getElementById('memoryFavouriteListsBtn').click();
+
+showMemoryMessage(
+    'Success',
+    'Selected Members added to ' + item.listName + '.'
+);
 
             } catch (error) {
                 saveBtn.disabled = false;
