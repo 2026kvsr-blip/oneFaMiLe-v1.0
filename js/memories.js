@@ -1799,7 +1799,35 @@ if (['group', 'custom'].includes(selectedMemoryShareType)) {
         return;
     }
 }
+if (selectedMemoryShareType === 'favourites') {
 
+    Object.values(selectedFavouriteMembers).flat().forEach(member => {
+
+        let group = shareSelection.find(
+            item => item.familyId === member.familyId
+        );
+
+        if (!group) {
+            group = {
+                familyId: member.familyId,
+                userIds: []
+            };
+            shareSelection.push(group);
+        }
+
+        if (!group.userIds.includes(member.userId)) {
+            group.userIds.push(member.userId);
+        }
+    });
+
+    if (!shareSelection.length) {
+        showMemoryMessage(
+            'Select Members',
+            'Please select at least one member from Favourite Lists.'
+        );
+        return;
+    }
+}
         const title =
             document.getElementById('memoryTitle').value.trim();
 
