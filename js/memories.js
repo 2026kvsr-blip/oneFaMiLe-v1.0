@@ -1262,7 +1262,10 @@ checkbox.addEventListener('change', function() {
                 const memberRow = document.createElement('div');
                memberRow.classList.add('memory-favourite-member-row');
 memberRow.style.cssText =
-    'display:flex; align-items:center; justify-content:space-between; padding:5px 0;';
+    'display:flex; align-items:center; justify-content:flex-start; gap:10px; width:100%; padding:7px 0; box-sizing:border-box;';
+
+memberName.style.flex = '1';
+memberName.style.textAlign = 'left';
 
 const memberName = document.createElement('span');
 memberName.textContent = member.name || member.loginUserName || '';
@@ -1309,7 +1312,7 @@ removeBtn.type = 'button';
 removeBtn.textContent = '×';
 removeBtn.title = 'Remove from this Favourite List';
 removeBtn.style.cssText =
-    'color:red; border:none; background:none; font-size:20px; cursor:pointer;';
+    'color:red; border:none; background:none; font-size:20px; cursor:pointer; margin-left:auto; flex:0 0 24px;';
 removeBtn.addEventListener('click', async function() {
 
     if (!confirm('Remove this member from this Favourite List?')) return;
