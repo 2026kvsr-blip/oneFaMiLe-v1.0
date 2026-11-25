@@ -1484,15 +1484,7 @@ const availableMembers = (group.members || []).filter(member =>
             const groupCheck = document.createElement('input');
             groupCheck.type = 'checkbox';
 groupCheck.disabled = !availableMembers.length;
-           const membersBox = document.createElement('div');
-membersBox.style.cssText =
-    'display:none; padding:5px 25px;';
-           if (!availableMembers.length) {
-    membersBox.textContent = 'Members not available';
-    membersBox.style.display = 'block';
-    membersBox.style.color = '#888';
-    membersBox.style.fontSize = '13px';
-}
+          
             groupLabel.append(
                 groupCheck,
                 document.createTextNode(group.familyName || 'Family')
