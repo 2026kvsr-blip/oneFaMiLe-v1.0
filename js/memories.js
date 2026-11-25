@@ -1132,7 +1132,8 @@ action: 'getMemoryFavourites',
     if (result.status !== 'success') {
         throw new Error(result.message || 'Favourite Lists loading failed.');
     }
-
+console.log('Favourite Lists API Response:', result);
+console.log('Favourite Lists:', result.lists);
     window.memoryFavouriteListsCache = result.lists || [];
 
     return window.memoryFavouriteListsCache;
