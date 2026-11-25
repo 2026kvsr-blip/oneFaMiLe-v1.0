@@ -1376,14 +1376,187 @@ menuBtn.style.cssText =
           const menuBox = document.createElement('div');
 menuBox.style.cssText =
     'display:none; margin:0 0 8px 35px; padding:8px 12px; background:#f5f8fc; border:1px solid #c4d4ff; border-radius:8px;';
+async function openAddFavouriteMembers(item) {
 
-['List', 'Rename', 'Delete'].forEach(option => {
-    const optionBtn = document.createElement('button');
+    const token = sessionStorage.getItem('sessionToken') || '';
+
+    try {
+        const params = new URLSearchParams({
+            action: 'getMemoryShareOptions',
+            sessionToken: token
+        });
+
+        const response = await fetch(MEMORY_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+            throw new Error(result.message || 'Unable to load Family Groups.');
+        }
+
+        const overlay = document.createElement('div');
+        overlay.className = 'memory-delete-overlay';
+
+        const box = document.createElement('div');
+        box.className = 'memory-delete-box memory-favourite-popup';
+
+        const heading = document.createElement('h3');
+        heading.textContent = 'Add Members - ' + item.listName;
+
+        const groupsBox = document.createElement('div');
+        groupsBox.style.cssText =
+            'max-height:60vh; overflow-y:auto; padding:10px;';
+
+        (result.groups || []).forEach(group => {
+
+            const groupLabel = document.createElement('label');
+            groupLabel.style.cssText =
+                'display:flex; gap:10px; padding:12px 5px; font-weight:600;';
+
+            const groupCheck = document.createElement('input');
+            groupCheck.type = 'checkbox';
+
+            groupLabel.append(
+                groupCheck,
+                document.createTextNode(group.familyName || 'Family')
+            );
+
+            const membersBox = document.createElement('div');
+            membersBox.style.cssText =
+                'display:none; padding:5px 25px;';
+
+            (group.members || []).forEach(member => {
+
+                const memberLabel = document.createElement('label');
+                memberLabel.style.cssText =
+                    'display:flex; gap:10px; padding:7px 0;';
+
+                const memberCheck = document.createElement('input');
+                memberCheck.type = 'checkbox';
+                memberCheck.className = 'add-favourite-member-check';
+                memberCheck.value = member.userId;
+                memberCheck.dataset.familyId = group.familyId;
+
+                const memberName = document.createElement('span');
+                memberName.textContent = member.name || member.loginUserName || '';
+
+                memberLabel.append(memberCheck, memberName);
+                membersBox.appendChild(memberLabel);
+            });
+
+            groupCheck.addEventListener('change', () => {
+                membersBox.style.display =
+                    groupCheck.checked ? 'block' : 'none';
+
+                if (!groupCheck.checked) {
+                    membersBox.querySelectorAll('input')
+                        .forEach(cb => cb.checked = false);
+                }
+            });
+
+            groupsBox.append(groupLabel, membersBox);
+        });
+
+        const saveBtn = document.createElement('button');
+        saveBtn.type = 'button';
+        saveBtn.textContent = 'Save';
+
+        saveBtn.className = 'memory-delete-confirm';
+
+        const closeBtn = document.createElement('button');
+        closeBtn.type = 'button';
+        closeBtn.textContent = 'Close';
+        closeBtn.className = 'memory-delete-confirm';
+        closeBtn.onclick = () => overlay.remove();
+
+        saveBtn.onclick = async () => {
+
+            const selected = Array.from(
+                groupsBox.querySelectorAll('.add-favourite-member-check:checked')
+            );
+
+            if (!selected.length) {
+                showMemoryMessage(
+                    'Select Members',
+                    'Please select at least one member.'
+                );
+                return;
+            }
+
+            saveBtn.disabled = true;
+
+            try {
+                for (const cb of selected) {
+
+                    const saveParams = new URLSearchParams({
+                        action: 'addMemoryFavourite',
+                        sessionToken: token,
+                        familyId: cb.dataset.familyId,
+                        userId: cb.value,
+                        favouriteListId: item.favouriteListId
+                    });
+
+                    const saveResponse = await fetch(MEMORY_API, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: saveParams
+                    });
+
+                    const saveResult = await saveResponse.json();
+
+                    if (saveResult.status !== 'success') {
+                        throw new Error(
+                            saveResult.message || 'Member save failed.'
+                        );
+                    }
+                }
+
+                window.memoryFavouriteListsCache = null;
+                window.memoryFavouriteListsPromise = null;
+
+                overlay.remove();
+
+                showMemoryMessage(
+                    'Success',
+                    'Selected Members added to ' + item.listName +
+                    '. Please close and reopen My Favourites.'
+                );
+
+            } catch (error) {
+                saveBtn.disabled = false;
+                showMemoryMessage('Error', error.message);
+            }
+        };
+
+        box.append(heading, groupsBox, saveBtn, closeBtn);
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+
+    } catch (error) {
+        showMemoryMessage('Error', error.message);
+    }
+}
+          ['List', 'Add', 'Rename', 'Delete'].forEach(option => {
+   const optionBtn = document.createElement('button');
     optionBtn.type = 'button';
     optionBtn.textContent = option;
     optionBtn.style.cssText =
         'display:block; width:100%; text-align:left; padding:9px; border:none; background:transparent; cursor:pointer; color:#2d5274;';
     menuBox.appendChild(optionBtn);
+   if (option === 'Add') {
+    optionBtn.addEventListener('click', function() {
+        menuBox.style.display = 'none';
+        openAddFavouriteMembers(item);
+    });
+}
 });
 
 menuBtn.addEventListener('click', function(event) {
