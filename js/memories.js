@@ -1477,14 +1477,22 @@ const availableMembers = (group.members || []).filter(member =>
     !alreadyAdded.has(group.familyId + ':' + member.userId)
 );
 
-if (!availableMembers.length) return;
             const groupLabel = document.createElement('label');
             groupLabel.style.cssText =
                 'display:flex; gap:10px; padding:12px 5px; font-weight:600;';
 
             const groupCheck = document.createElement('input');
             groupCheck.type = 'checkbox';
-
+groupCheck.disabled = !availableMembers.length;
+           const membersBox = document.createElement('div');
+membersBox.style.cssText =
+    'display:none; padding:5px 25px;';
+           if (!availableMembers.length) {
+    membersBox.textContent = 'Members not available';
+    membersBox.style.display = 'block';
+    membersBox.style.color = '#888';
+    membersBox.style.fontSize = '13px';
+}
             groupLabel.append(
                 groupCheck,
                 document.createTextNode(group.familyName || 'Family')
