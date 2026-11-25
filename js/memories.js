@@ -1616,9 +1616,8 @@ showMemoryMessage(
     } catch (error) {
         showMemoryMessage('Error', error.message);
     }
-}
-       menuBox.style.cssText =
-    'display:none; flex-direction:row; align-items:center; justify-content:space-between; gap:5px; margin:0 0 8px 35px; padding:6px; background:#f5f8fc; border:1px solid #c4d4ff; border-radius:8px;';
+}menuBox.style.cssText =
+    'display:none; flex-direction:row; align-items:center; justify-content:space-around; gap:0; width:calc(100% - 35px); box-sizing:border-box; margin:0 0 8px 35px; padding:10px 4px; background:#f5f8fc; border:1px solid #c4d4ff; border-radius:8px;';
 
 const menuColors = {
     List: '#7952b3',
@@ -1634,7 +1633,7 @@ const menuColors = {
     optionBtn.textContent = option;
 
     optionBtn.style.cssText =
-        `flex:1; min-width:0; padding:8px 2px; border:none; border-radius:5px; background:${menuColors[option]}; color:#fff; cursor:pointer; font-size:12px; font-weight:600; white-space:nowrap;`;
+        `flex:1 1 0; width:25%; padding:5px 0; border:none; background:transparent; color:${menuColors[option]}; cursor:pointer; font-size:14px; font-weight:700; text-align:center; white-space:nowrap;`;
 
     menuBox.appendChild(optionBtn);
 
@@ -1663,11 +1662,9 @@ const menuColors = {
     if (option === 'Delete') {
         optionBtn.onclick = function() {
             menuBox.style.display = 'none';
-            // Delete action will be added separately.
         };
     }
 });
-
 menuBtn.addEventListener('click', function(event) {
     event.stopPropagation();
 
@@ -1677,8 +1674,7 @@ menuBtn.addEventListener('click', function(event) {
 
     const isOpen = menuBox.style.display !== 'none';
 
-    menuBox.style.display = isOpen ? 'none' : 'block';
-
+menuBox.style.display = isOpen ? 'none' : 'flex';
     openFavouriteMenu = isOpen ? null : menuBox;
 });
           name.style.flex = '1';
