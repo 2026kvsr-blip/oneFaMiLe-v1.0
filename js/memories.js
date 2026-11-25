@@ -947,9 +947,7 @@ function openAddMemoryScreen() {
 
    <!-- Row 5: Description -->
 <div class="expense-field memory-description-field">
-
     <div class="memory-description-header">
-
         <label class="expense-label">Description</label>
 
         <div class="memory-speech-controls">
@@ -1176,7 +1174,8 @@ box.className = 'memory-delete-box memory-favourite-popup';
     const closeBtn = document.createElement('button');
     closeBtn.type = 'button';
 closeBtn.style.cssText =
-    'background:#1976d2; color:white; border:none; border-radius:7px; padding:11px 30px; font-size:16px; font-weight:600; cursor:pointer; min-width:110px;';    closeBtn.textContent = 'Close';
+    'display:block; margin:15px auto 0; background:#2196f3; color:white; border:none; border-radius:7px; padding:8px 24px; font-size:15px; font-weight:600; cursor:pointer; min-width:95px;';
+       closeBtn.textContent = 'Close';
     closeBtn.onclick = () => overlay.remove();
 
     box.append(heading, itemsBox, closeBtn);
