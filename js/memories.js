@@ -1241,6 +1241,7 @@ itemsBox.appendChild(filterLabel);
         });
 });
 let openFavouriteMenu = null;
+       let openFavouriteMembers = null;
        lists.forEach(item => {
     const row = document.createElement('div');
           row.classList.add('memory-favourite-list-row');
@@ -1254,7 +1255,23 @@ membersBox.style.cssText =
     'display:none; padding:8px 25px; margin-bottom:8px;';
 
 checkbox.addEventListener('change', function() {
-    membersBox.innerHTML = '';
+   if (checkbox.checked) {
+    if (openFavouriteMembers && openFavouriteMembers.box !== membersBox) {
+        openFavouriteMembers.box.style.display = 'none';
+        openFavouriteMembers.checkbox.checked = false;
+    }
+
+    openFavouriteMembers = {
+        box: membersBox,
+        checkbox: checkbox
+    };
+} else if (
+    openFavouriteMembers &&
+    openFavouriteMembers.box === membersBox
+) {
+    openFavouriteMembers = null;
+}
+   membersBox.innerHTML = '';
 
     if (checkbox.checked) {
         (item.groups || []).forEach(group => {
