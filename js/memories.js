@@ -1701,7 +1701,32 @@ row.append(checkbox, name, menuBtn);
 itemsBox.appendChild(menuBox);
 itemsBox.appendChild(membersBox);
        });
+// Close expanded Favourite List when clicking outside it
+const closeFavouriteMembersOnOutsideClick = function(event) {
+    if (!overlay.isConnected) {
+        document.removeEventListener(
+            'click',
+            closeFavouriteMembersOnOutsideClick
+        );
+        return;
+    }
 
+    if (!openFavouriteMembers) return;
+
+    if (
+        !openFavouriteMembers.box.contains(event.target) &&
+        !event.target.closest('.memory-favourite-list-row')
+    ) {
+        openFavouriteMembers.box.style.display = 'none';
+        openFavouriteMembers.checkbox.checked = false;
+        openFavouriteMembers = null;
+    }
+};
+
+document.addEventListener(
+    'click',
+    closeFavouriteMembersOnOutsideClick
+);
     } catch (error) {
         itemsBox.textContent = 'Unable to load Favourite Lists.';
         showMemoryMessage('Error', error.message);
