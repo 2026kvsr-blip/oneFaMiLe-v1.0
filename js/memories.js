@@ -1392,6 +1392,7 @@ memberRow.append(memberCheckbox, memberName, removeBtn);
 name.style.minWidth = '0';
 name.style.textAlign = 'left';
 const menuBtn = document.createElement('button');
+          menuBtn.classList.add('memory-favourite-menu-trigger');
 menuBtn.type = 'button';
 menuBtn.textContent = '⋮';
 menuBtn.title = 'Favourite List Options';
@@ -1802,6 +1803,29 @@ document.addEventListener(
     'click',
     closeFavouriteMembersOnOutsideClick
 );
+       // Close Favourite Menu when clicking anywhere else
+document.addEventListener('click', function(event) {
+
+    if (!openFavouriteMenu) return;
+
+    const clickedInsideMenu =
+        event.target.closest('.memory-favourite-menu');
+
+    const clickedMenuButton =
+        event.target.closest('.memory-favourite-menu-trigger');
+
+    if (clickedInsideMenu || clickedMenuButton) {
+        if (clickedInsideMenu) {
+            openFavouriteMenu.style.display = 'none';
+            openFavouriteMenu = null;
+        }
+        return;
+    }
+
+    openFavouriteMenu.style.display = 'none';
+    openFavouriteMenu = null;
+
+});
     } catch (error) {
         itemsBox.textContent = 'Unable to load Favourite Lists.';
         showMemoryMessage('Error', error.message);
