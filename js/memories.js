@@ -1439,8 +1439,45 @@ async function openAddFavouriteMembers(item) {
         groupsBox.style.cssText =
             'max-height:60vh; overflow-y:auto; padding:10px;';
 
-        (result.groups || []).forEach(group => {
+const existingParams = new URLSearchParams({
+    action: 'getMemoryFavourites',
+    sessionToken: token
+});
 
+const existingResponse = await fetch(MEMORY_API, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: existingParams
+});
+
+const existingResult = await existingResponse.json();
+
+if (existingResult.status !== 'success') {
+    throw new Error(
+        existingResult.message || 'Unable to load existing Favourite Members.'
+    );
+}
+
+const currentList = (existingResult.lists || []).find(
+    list => list.favouriteListId === item.favouriteListId
+);
+
+const alreadyAdded = new Set();
+
+(currentList?.groups || []).forEach(group => {
+    (group.members || []).forEach(member => {
+        alreadyAdded.add(group.familyId + ':' + member.userId);
+    });
+});
+
+        (result.groups || []).forEach(group => {
+const availableMembers = (group.members || []).filter(member =>
+    !alreadyAdded.has(group.familyId + ':' + member.userId)
+);
+
+if (!availableMembers.length) return;
             const groupLabel = document.createElement('label');
             groupLabel.style.cssText =
                 'display:flex; gap:10px; padding:12px 5px; font-weight:600;';
@@ -1457,8 +1494,7 @@ async function openAddFavouriteMembers(item) {
             membersBox.style.cssText =
                 'display:none; padding:5px 25px;';
 
-            (group.members || []).forEach(member => {
-
+availableMembers.forEach(member => {
                 const memberLabel = document.createElement('label');
                 memberLabel.style.cssText =
                     'display:flex; gap:10px; padding:7px 0;';
