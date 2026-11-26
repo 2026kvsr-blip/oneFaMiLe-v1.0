@@ -1408,18 +1408,17 @@ menuBox.style.cssText =
         messageText.textContent = message;
 
         const buttons = document.createElement('div');
-        buttons.style.cssText =
-            'display:flex; justify-content:center; gap:10px; margin-top:15px;';
+      buttons.style.cssText =
+    'display:flex; justify-content:center; gap:10px; margin-top:15px; width:100%;';
 
         const yesBtn = document.createElement('button');
         yesBtn.textContent = 'Yes';
         yesBtn.style.cssText =
-            'background:#d93025; color:white; border:0; border-radius:6px; padding:7px 20px; cursor:pointer;';
-
+    'flex:1; max-width:110px; height:36px; background:#d93025; color:white; border:0; border-radius:6px; cursor:pointer;';
         const noBtn = document.createElement('button');
         noBtn.textContent = 'Cancel';
-        noBtn.style.cssText =
-            'background:#2196f3; color:white; border:0; border-radius:6px; padding:7px 20px; cursor:pointer;';
+       noBtn.style.cssText =
+    'flex:1; max-width:110px; height:36px; background:#2196f3; color:white; border:0; border-radius:6px; cursor:pointer;';
 
         yesBtn.onclick = () => {
             confirmOverlay.remove();
