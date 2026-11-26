@@ -1791,17 +1791,64 @@ menuBtn.style.textAlign = 'center';
             let longPressed = false;
 
             const renameList = async () => {
-                const oldName = item.listName || '';
+               
+              const oldName = item.listName || '';
 
-                const newName = prompt(
-                    'Enter new Favourite List name:',
-                    oldName
-                );
+const newName = await new Promise(resolve => {
 
-                if (newName === null) return;
+    const renameOverlay = document.createElement('div');
+    renameOverlay.className = 'memory-delete-overlay';
 
-                const cleanName = newName.trim();
+    const renameBox = document.createElement('div');
+    renameBox.className =
+        'memory-delete-box memory-favourite-popup';
 
+    const heading = document.createElement('h3');
+    heading.textContent = 'Rename Favourite List';
+
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.value = oldName;
+    nameInput.placeholder = 'Enter Favourite List Name';
+    nameInput.style.cssText =
+        'width:100%; box-sizing:border-box; padding:10px; border:1px solid #9bb9d4; border-radius:7px; font-size:15px;';
+
+    const buttons = document.createElement('div');
+    buttons.style.cssText =
+        'display:flex; gap:10px; justify-content:center; margin-top:15px; width:100%;';
+
+    const saveBtn = document.createElement('button');
+    saveBtn.textContent = 'Save';
+    saveBtn.style.cssText =
+        'flex:1; max-width:110px; height:36px; background:#2e8b57; color:white; border:0; border-radius:6px; cursor:pointer;';
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.style.cssText =
+        'flex:1; max-width:110px; height:36px; background:#2196f3; color:white; border:0; border-radius:6px; cursor:pointer;';
+
+    saveBtn.onclick = () => {
+        renameOverlay.remove();
+        resolve(nameInput.value);
+    };
+
+    cancelBtn.onclick = () => {
+        renameOverlay.remove();
+        resolve(null);
+    };
+
+    buttons.append(saveBtn, cancelBtn);
+    renameBox.append(heading, nameInput, buttons);
+    renameOverlay.appendChild(renameBox);
+    document.body.appendChild(renameOverlay);
+
+    nameInput.focus();
+    nameInput.select();
+});
+
+if (newName === null) return;
+
+const cleanName = newName.trim();
                 if (!cleanName) {
                     showMemoryMessage(
                         'Invalid Name',
