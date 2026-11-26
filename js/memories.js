@@ -848,7 +848,22 @@ padding-bottom: 7px;
 .memory-page .memory-share-members[hidden] {    display: none !important;}
 .memory-page .memory-share-member { display:flex; align-items:center; gap:7px; font-size:13px; }
 .memory-page .memory-share-member input, .memory-page .memory-share-group-title input { width:16px !important; height:16px !important; min-height:16px !important; margin:0 !important; }
+/* COMMON BUTTON PRESSED EFFECT */
 
+.memory-page button,
+.memory-delete-overlay button {
+    transition: transform 0.08s ease,
+                filter 0.08s ease,
+                box-shadow 0.08s ease !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.memory-page button:not(:disabled):active,
+.memory-delete-overlay button:not(:disabled):active {
+    transform: scale(0.96) !important;
+    filter: brightness(0.82) !important;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.18) !important;
+}
     `;
 
 
