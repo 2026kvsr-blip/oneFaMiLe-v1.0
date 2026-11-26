@@ -1117,12 +1117,12 @@ const favouriteList = document.getElementById('memoryFavouriteList');
   const MEMORY_API =
     "https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
    // PRELOAD FAVOURITE LISTS WHEN MEMORY PAGE OPENS
-window.memoryFavouriteListsCache = null;
-
-window.memoryFavouriteListsPromise = (async () => {
+if (!Array.isArray(window.memoryFavouriteListsCache)) {
+    window.memoryFavouriteListsCache = null;
+}
+   window.memoryFavouriteListsPromise = (async () => {
 
     const token = sessionStorage.getItem('sessionToken') || '';
-
     if (!token) return [];
 
     const params = new URLSearchParams({
@@ -1225,8 +1225,9 @@ action: 'getMemoryFavourites',
     }
 
     try {
-        const lists = window.memoryFavouriteListsCache ||
-            await window.memoryFavouriteListsPromise;
+        const lists = window.memoryFavouriteListsPromise
+    ? await window.memoryFavouriteListsPromise
+    : (window.memoryFavouriteListsCache || []);
 
         if (!overlay.isConnected) return;
 
