@@ -4541,6 +4541,20 @@ window.memoryFavouriteListsPromise = fetch(API_URL, {
     return [];
 });
 
+// PRELOAD MEMORY MENU ICONS IN BACKGROUND
+[
+    "images/colorbtns/Memories1.png",
+    "images/colorbtns/Add1.png",
+    "images/colorbtns/Reports1.png",
+    "images/colorbtns/SensitiveReports1.png",
+    "images/colorbtns/AllReports1.png",
+    "images/colorbtns/CustomSearch1.png",
+    "images/colorbtns/About1.png"
+].forEach(src => {
+    const img = new Image();
+    img.src = src;
+});
+
 //restoreFamilyCache(result);
 
 // =====================================
