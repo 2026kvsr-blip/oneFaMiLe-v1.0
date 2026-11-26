@@ -1752,15 +1752,49 @@ if (option === 'Delete') {
         menuBox.style.display = 'none';
 
         const confirmed = await showFavouriteConfirm(
-            'Do you want delete this Favourite List?'
+            'ఈ Favourite List delete చేయాలనుకుంటున్నారా? ఈ List లో సేవ్ చేసిన Members కూడా తొలగించబడతారు.'
         );
 
         if (!confirmed) return;
 
-        showMemoryMessage(
-            'Confirmation',
-            'Confirmation window working successfully.'
-        );
+        try {
+            const deleteParams = new URLSearchParams({
+                action: 'deleteMemoryFavouriteList',
+                sessionToken: token,
+                favouriteListID: item.favouriteListId
+            });
+
+            const deleteResponse = await fetch(MEMORY_API, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: deleteParams
+            });
+
+            const deleteResult = await deleteResponse.json();
+
+            if (deleteResult.status !== 'success') {
+                throw new Error(
+                    deleteResult.message || 'Delete failed.'
+                );
+            }
+
+            window.memoryFavouriteListsCache = null;
+            window.memoryFavouriteListsPromise = null;
+
+            parentFavouritesOverlay.remove();
+
+            showMemoryMessage(
+                'Success',
+                'Favourite List reset successfully.'
+            );
+
+            document.getElementById('memoryFavouriteListsBtn').click();
+
+        } catch (error) {
+            showMemoryMessage('Error', error.message);
+        }
     };
 }
 });
