@@ -1291,18 +1291,10 @@ memberCheckbox.checked = savedMembers.some(
     m => m.userId === member.userId &&
          m.familyId === group.familyId
 );
-               if (showSelectedOnly.checked && !memberCheckbox.checked) {
-    memberRow.style.display = 'none';
-}
-             memberCheckbox.addEventListener('change', function() {
-
-    if (showSelectedOnly.checked) {
-        memberRow.style.display =
-            memberCheckbox.checked ? 'flex' : 'none';
-    }
+              
+           memberCheckbox.addEventListener('change', function() {
 
     const listId = String(item.favouriteListId);
-
     if (!selectedFavouriteMembers[listId]) {
         selectedFavouriteMembers[listId] = [];
     }
@@ -1528,13 +1520,17 @@ memberLabel.classList.add('add-favourite-member-row');
                 const memberName = document.createElement('span');
                 memberName.textContent = member.name || member.loginUserName || '';
 
-             memberCheck.addEventListener('change', function() {
+            memberCheck.addEventListener('change', function() {
     updateShowSelectedOnlyVisibility();
 
     if (showSelectedOnly.checked) {
         memberLabel.style.display =
             memberCheck.checked ? 'flex' : 'none';
     }
+
+    saveBtn.disabled = !groupsBox.querySelector(
+        '.add-favourite-member-check:checked'
+    );
 });
 
 memberLabel.append(memberCheck, memberName);
@@ -1571,20 +1567,18 @@ membersBox.appendChild(memberLabel);
 
         const buttonRow = document.createElement('div');
 buttonRow.style.cssText =
-    'display:flex; gap:12px; justify-content:center; margin-top:15px;';
-
+    'display:flex; gap:10px; justify-content:center; margin-top:12px;';
 const saveBtn = document.createElement('button');
 saveBtn.type = 'button';
-saveBtn.textContent = 'Save';
+saveBtn.textContent = 'Add';
+saveBtn.disabled = true;
 saveBtn.style.cssText =
-    'flex:1; background:#2e8b57; color:white; border:none; border-radius:7px; padding:12px; font-size:16px; font-weight:600; cursor:pointer;';
-
+    'flex:1; max-width:110px; height:34px; padding:6px 10px; background:#2e8b57; color:white; border:none; border-radius:6px; font-size:14px; font-weight:600; cursor:pointer;';
 const closeBtn = document.createElement('button');
 closeBtn.type = 'button';
 closeBtn.textContent = 'Close';
 closeBtn.style.cssText =
-    'flex:1; background:#1976d2; color:white; border:none; border-radius:7px; padding:12px; font-size:16px; font-weight:600; cursor:pointer;';
-
+    'flex:1; max-width:110px; height:34px; padding:6px 10px; background:#2196f3; color:white; border:none; border-radius:6px; font-size:14px; font-weight:600; cursor:pointer;';
 closeBtn.onclick = () => overlay.remove();
 
 buttonRow.append(saveBtn, closeBtn);
