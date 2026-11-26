@@ -1357,7 +1357,12 @@ removeBtn.addEventListener('click', async function() {
         showMemoryMessage('Error', error.message);
     }
 });
-memberRow.append(memberCheckbox, memberName, removeBtn);
+const serialNo = document.createElement('span');
+serialNo.textContent = (membersBox.children.length + 1) + '.';
+serialNo.style.cssText =
+    'width:22px; flex:0 0 22px; text-align:right; color:#555;';
+
+memberRow.append(serialNo, memberName, removeBtn);
                membersBox.appendChild(memberRow);
             });
         });
