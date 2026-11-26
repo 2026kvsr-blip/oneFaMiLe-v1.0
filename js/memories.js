@@ -1752,8 +1752,7 @@ if (option === 'Delete') {
         menuBox.style.display = 'none';
 
         const confirmed = await showFavouriteConfirm(
-            'ఈ Favourite List delete చేయాలనుకుంటున్నారా? ఈ List లో సేవ్ చేసిన Members కూడా తొలగించబడతారు.'
-        );
+'Are you sure you want to delete this Favourite List?'        );
 
         if (!confirmed) return;
 
