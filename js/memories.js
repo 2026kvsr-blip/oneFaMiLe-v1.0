@@ -1704,8 +1704,8 @@ buttonRow.append(saveBtn, closeBtn);
                     }
                 }
 
-               window.memoryFavouriteListsCache = null;
-window.memoryFavouriteListsPromise = null;
+             window.memoryFavouritesDataCache = null;
+window.memoryFavouritesDataPromise = null;
 
 overlay.remove();
 // Close existing My Favourites window
