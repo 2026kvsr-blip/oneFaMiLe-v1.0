@@ -1319,8 +1319,9 @@ removeBtn.style.cssText =
     'color:red; border:none; background:none; font-size:20px; cursor:pointer; margin-left:auto; flex:0 0 24px;';
 removeBtn.addEventListener('click', async function() {
 
-    if (!confirm('Remove this member from this Favourite List?')) return;
-
+if (!await showFavouriteConfirm(
+    'Remove this member from this Favourite List?'
+)) return;
     removeBtn.disabled = true;
 
     const removeParams = new URLSearchParams({
@@ -1390,7 +1391,52 @@ menuBtn.style.cssText =
           menuBox.classList.add('memory-favourite-menu');
 menuBox.style.cssText =
     'display:none; margin:0 0 8px 35px; padding:8px 12px; background:#f5f8fc; border:1px solid #c4d4ff; border-radius:8px;';
-       const parentFavouritesOverlay = overlay;   
+       const parentFavouritesOverlay = overlay;  
+          function showFavouriteConfirm(message) {
+    return new Promise(resolve => {
+        const confirmOverlay = document.createElement('div');
+        confirmOverlay.className = 'memory-delete-overlay';
+
+        const confirmBox = document.createElement('div');
+        confirmBox.className =
+            'memory-delete-box memory-favourite-popup';
+
+        const heading = document.createElement('h3');
+        heading.textContent = 'Confirm Delete';
+
+        const messageText = document.createElement('p');
+        messageText.textContent = message;
+
+        const buttons = document.createElement('div');
+        buttons.style.cssText =
+            'display:flex; justify-content:center; gap:10px; margin-top:15px;';
+
+        const yesBtn = document.createElement('button');
+        yesBtn.textContent = 'Yes';
+        yesBtn.style.cssText =
+            'background:#d93025; color:white; border:0; border-radius:6px; padding:7px 20px; cursor:pointer;';
+
+        const noBtn = document.createElement('button');
+        noBtn.textContent = 'Cancel';
+        noBtn.style.cssText =
+            'background:#2196f3; color:white; border:0; border-radius:6px; padding:7px 20px; cursor:pointer;';
+
+        yesBtn.onclick = () => {
+            confirmOverlay.remove();
+            resolve(true);
+        };
+
+        noBtn.onclick = () => {
+            confirmOverlay.remove();
+            resolve(false);
+        };
+
+        buttons.append(yesBtn, noBtn);
+        confirmBox.append(heading, messageText, buttons);
+        confirmOverlay.appendChild(confirmBox);
+        document.body.appendChild(confirmOverlay);
+    });
+}
 async function openAddFavouriteMembers(item) {
 
     const token = sessionStorage.getItem('sessionToken') || '';
