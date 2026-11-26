@@ -1116,44 +1116,59 @@ const favouritesPanel = document.getElementById('memoryFavouritesPanel');
 const favouriteList = document.getElementById('memoryFavouriteList');
   const MEMORY_API =
     "https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
-   // PRELOAD FAVOURITE LISTS WHEN MEMORY PAGE OPENS
-if (!Array.isArray(window.memoryFavouriteListsCache)) {
-    window.memoryFavouriteListsCache = null;
+  
+// PRELOAD FAVOURITE LISTS WHEN MEMORY PAGE OPENS
+
+if (!Array.isArray(window.memoryFavouritesDataCache)) {
+    window.memoryFavouritesDataCache = null;
 }
-   window.memoryFavouriteListsPromise = (async () => {
 
-    const token = sessionStorage.getItem('sessionToken') || '';
-    if (!token) return [];
+if (
+    !window.memoryFavouritesDataCache &&
+    !window.memoryFavouritesDataPromise
+) {
+    window.memoryFavouritesDataPromise = (async () => {
 
-    const params = new URLSearchParams({
-action: 'getMemoryFavourites',
-       sessionToken: token
+        const token = sessionStorage.getItem('sessionToken') || '';
+        if (!token) return [];
+
+        const params = new URLSearchParams({
+            action: 'getMemoryFavourites',
+            sessionToken: token
+        });
+
+        const response = await fetch(MEMORY_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+            throw new Error(
+                result.message || 'Favourite Lists loading failed.'
+            );
+        }
+
+        window.memoryFavouritesDataCache = result.lists || [];
+
+        console.log(
+            'Favourite Lists Loaded:',
+            window.memoryFavouritesDataCache
+        );
+
+        return window.memoryFavouritesDataCache;
+
+    })().catch(error => {
+        console.error('Favourite Lists preload error:', error);
+        window.memoryFavouritesDataPromise = null;
+        return [];
     });
-
-    const response = await fetch(MEMORY_API, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: params
-    });
-
-    const result = await response.json();
-
-    if (result.status !== 'success') {
-        throw new Error(result.message || 'Favourite Lists loading failed.');
-    }
-console.log('Favourite Lists API Response:', result);
-console.log('Favourite Lists:', result.lists);
-    window.memoryFavouriteListsCache = result.lists || [];
-
-    return window.memoryFavouriteListsCache;
-
-})().catch(error => {
-    console.error('Favourite Lists preload error:', error);
-    window.memoryFavouriteListsPromise = null;
-    return [];
-});
+}
+;
    // MY FAVOURITE LIST WINDOW
 
 
@@ -1193,41 +1208,12 @@ closeBtn.textContent = 'Close';
     overlay.appendChild(box);
     document.body.appendChild(overlay);
 
-    // Reuse cached lists when available
-    if (!window.memoryFavouriteListsCache) {
-        if (!window.memoryFavouriteListsPromise) {
-            window.memoryFavouriteListsPromise = (async () => {
-                const params = new URLSearchParams({
-action: 'getMemoryFavourites',
-                   sessionToken: token
-                });
-
-                const response = await fetch(MEMORY_API, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: params
-                });
-
-                const result = await response.json();
-
-                if (result.status !== 'success') {
-                    throw new Error(
-                        result.message || 'Unable to load Favourite Lists.'
-                    );
-                }
-
-                window.memoryFavouriteListsCache = result.lists || [];
-                return window.memoryFavouriteListsCache;
-            })();
-        }
-    }
-
+       
+// Reuse cached lists when available
+    
     try {
-        const lists = window.memoryFavouriteListsPromise
-    ? await window.memoryFavouriteListsPromise
-    : (window.memoryFavouriteListsCache || []);
+        const lists = window.memoryFavouritesDataCache ||
+    await window.memoryFavouritesDataPromise;
 
         if (!overlay.isConnected) return;
 
@@ -1388,9 +1374,8 @@ function showFavouriteMembers() {
                     });
 
                     // Update cached list data
-                    window.memoryFavouriteListsCache = null;
-                    window.memoryFavouriteListsPromise = null;
-
+window.memoryFavouritesDataCache = null;
+window.memoryFavouritesDataPromise = null;
                     showMemoryMessage(
                         'Success',
                         'Member removed from Favourite List.'
@@ -1551,10 +1536,7 @@ filterLabel.style.display = 'none';
             .forEach(row => row.style.display = 'flex');
     }
 }
-       const existingParams = new URLSearchParams({
-    action: 'getMemoryFavourites',
-    sessionToken: token
-});
+      
 
 const existingResponse = await fetch(MEMORY_API, {
     method: 'POST',
@@ -1566,11 +1548,12 @@ const existingResponse = await fetch(MEMORY_API, {
 
 const existingResult = await existingResponse.json();
 
-if (existingResult.status !== 'success') {
-    throw new Error(
-        existingResult.message || 'Unable to load existing Favourite Members.'
-    );
-}
+const existingLists = window.memoryFavouritesDataCache ||
+    await window.memoryFavouritesDataPromise;
+
+const currentList = (existingLists || []).find(
+    list => list.favouriteListId === item.favouriteListId
+);
 
 const currentList = (existingResult.lists || []).find(
     list => list.favouriteListId === item.favouriteListId
