@@ -1863,13 +1863,12 @@ const cleanName = newName.trim();
                 item.listName = cleanName;
                 name.textContent = cleanName;
 
-                const renameParams = new URLSearchParams({
-                    action: 'renameMemoryFavouriteList',
-                    sessionToken: token,
-favouriteListId: item.favouriteListId,
-                   listName: cleanName
-                });
-
+               const renameParams = new URLSearchParams({
+    action: 'renameMemoryFavouriteList',
+    sessionToken: token,
+    favouriteListID: item.favouriteListID,
+    listName: cleanName
+});
                 try {
                     const renameResponse = await fetch(MEMORY_API, {
                         method: 'POST',
