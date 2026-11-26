@@ -546,9 +546,22 @@ function memoryStyleOnce() {
     overflow-y: auto;
 }
 
-.memory-favourite-popup .memory-delete-confirm {
-    display: block;
-    margin: 14px auto 0;
+.memory-favourite-popup .memory-favourite-close-btn {
+    display: block !important;
+    margin: 14px auto 0 !important;
+    background: #2196f3 !important;
+    background-color: #2196f3 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 7px !important;
+    padding: 7px 20px !important;
+    width: auto !important;
+    min-width: 85px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
 }
 .memory-family-groups-box h3 {
     font-size: 20px !important;
@@ -1171,10 +1184,9 @@ box.className = 'memory-delete-box memory-favourite-popup';
     itemsBox.textContent = 'Loading...';
 
     const closeBtn = document.createElement('button');
-    closeBtn.type = 'button';
-closeBtn.style.cssText =
-    'display:block; margin:15px auto 0; background:#2196f3; color:white; border:none; border-radius:7px; padding:8px 24px; font-size:15px; font-weight:600; cursor:pointer; min-width:95px;';
-       closeBtn.textContent = 'Close';
+   closeBtn.type = 'button';
+closeBtn.className = 'memory-favourite-close-btn';
+closeBtn.textContent = 'Close';
     closeBtn.onclick = () => overlay.remove();
 
     box.append(heading, itemsBox, closeBtn);
