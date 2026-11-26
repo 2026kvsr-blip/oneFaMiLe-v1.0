@@ -1211,13 +1211,54 @@ closeBtn.textContent = 'Close';
        
 // Reuse cached lists when available
     
-    try {
-        const lists = window.memoryFavouritesDataCache ||
-    await window.memoryFavouritesDataPromise;
+   try {
 
-        if (!overlay.isConnected) return;
+    let lists = window.memoryFavouritesDataCache;
 
-        itemsBox.innerHTML = '';
+    // Fetch fresh data when cache is empty
+    if (!Array.isArray(lists)) {
+
+        if (!window.memoryFavouritesDataPromise) {
+
+            window.memoryFavouritesDataPromise = (async () => {
+
+                const params = new URLSearchParams({
+                    action: 'getMemoryFavourites',
+                    sessionToken: token
+                });
+
+                const response = await fetch(MEMORY_API, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: params
+                });
+
+                const result = await response.json();
+
+                if (result.status !== 'success') {
+                    throw new Error(
+                        result.message || 'Favourite Lists loading failed.'
+                    );
+                }
+
+                window.memoryFavouritesDataCache = result.lists || [];
+
+                return window.memoryFavouritesDataCache;
+
+            })().catch(error => {
+                window.memoryFavouritesDataPromise = null;
+                throw error;
+            });
+        }
+
+        lists = await window.memoryFavouritesDataPromise;
+    }
+
+    if (!overlay.isConnected) return;
+
+    itemsBox.innerHTML = '';
       
 let openFavouriteMenu = null;
        let openFavouriteMembers = null;
