@@ -1780,7 +1780,27 @@ const menuColors = {
         `flex:1 1 0; width:25%; padding:5px 0; border:none; background:transparent; color:${menuColors[option]}; cursor:pointer; font-size:14px; font-weight:700; text-align:center; white-space:nowrap;`;
 
     menuBox.appendChild(optionBtn);
+if (option === 'Delete') {
 
+    const isSystemFavouriteList =
+        /^Favourite\s*[123]$/i.test(
+            String(item.listName || '').trim()
+        );
+
+    const memberCount = (item.groups || []).reduce(
+        (total, group) =>
+            total + (group.members || []).length,
+        0
+    );
+
+    if (isSystemFavouriteList && memberCount === 0) {
+        optionBtn.disabled = true;
+
+        optionBtn.style.color = '#aaaaaa';
+        optionBtn.style.cursor = 'not-allowed';
+        optionBtn.style.opacity = '0.5';
+    }
+}
     if (option === 'List') {
     optionBtn.onclick = function(event) {
         event.stopPropagation();
