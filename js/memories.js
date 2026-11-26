@@ -1254,79 +1254,180 @@ checkbox.addEventListener('change', function() {
 });
 
 
-
 function showFavouriteMembers() {
+
+    // Previous open list close
     if (openFavouriteMembers) {
         openFavouriteMembers.box.style.display = 'none';
     }
 
     membersBox.innerHTML = '';
 
-    const listHeading = document.createElement('h4');
+    // HEADER: Favourite Name + List title
+    const header = document.createElement('div');
+    header.style.cssText =
+        'display:flex; align-items:center; justify-content:space-between; gap:10px; padding:8px 0; margin-bottom:8px; border-bottom:1px solid #c4d4ff;';
+
+    const listHeading = document.createElement('strong');
     listHeading.textContent = item.listName || '';
     listHeading.style.cssText =
-        'margin:0 0 10px 0; padding:8px 0; font-size:16px; font-weight:700;';
+        'font-size:15px; color:#2d5274; flex:1;';
 
-    membersBox.appendChild(listHeading);
+    const listTitle = document.createElement('span');
+    listTitle.textContent = 'List';
+    listTitle.style.cssText =
+        'font-size:14px; font-weight:700; color:#7952b3;';
+
+    header.append(listHeading, listTitle);
+    membersBox.appendChild(header);
+
+    let serialNumber = 0;
 
     (item.groups || []).forEach(group => {
+
         (group.members || []).forEach(member => {
+
+            serialNumber++;
+
             const memberRow = document.createElement('div');
             memberRow.className = 'memory-favourite-member-row';
+
             memberRow.style.cssText =
-                'display:flex; align-items:center; gap:10px; width:100%; padding:7px 0;';
+                'display:flex; align-items:center; gap:10px; width:100%; padding:7px 0; border-bottom:1px solid #eeeeee;';
 
-            const memberName = document.createElement('span');
-            memberName.textContent =
-                member.name || member.loginUserName || '';
-            memberName.style.flex = '1';
-
-            const memberCheckbox = document.createElement('input');
-            memberCheckbox.type = 'checkbox';
-            memberCheckbox.className =
-                'memory-favourite-member-checkbox';
-
-            const listId = String(item.favouriteListId);
-            const savedMembers =
-                selectedFavouriteMembers[listId] || [];
-
-            memberCheckbox.checked = savedMembers.some(
-                m => m.userId === member.userId &&
-                     m.familyId === group.familyId
-            );
-
-            memberCheckbox.addEventListener('change', function() {
-                if (!selectedFavouriteMembers[listId]) {
-                    selectedFavouriteMembers[listId] = [];
-                }
-
-                selectedFavouriteMembers[listId] =
-                    selectedFavouriteMembers[listId].filter(
-                        m => m.userId !== member.userId
-                    );
-
-                if (memberCheckbox.checked) {
-                    selectedFavouriteMembers[listId].push({
-                        familyId: group.familyId,
-                        userId: member.userId
-                    });
-                }
-            });
-
+            // Serial Number
             const serialNo = document.createElement('span');
-            serialNo.textContent =
-                (membersBox.querySelectorAll('.memory-favourite-member-row').length + 1) + '.';
+            serialNo.textContent = serialNumber + '.';
             serialNo.style.cssText =
                 'width:22px; flex:0 0 22px; text-align:right; color:#555;';
 
-            memberRow.append(serialNo, memberName, memberCheckbox);
+            // Member Name
+            const memberName = document.createElement('span');
+            memberName.textContent =
+                member.name || member.loginUserName || '';
+            memberName.style.cssText =
+                'flex:1; text-align:left;';
+
+            // DELETE BUTTON
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.textContent = '×';
+            removeBtn.title = 'Remove Member';
+            removeBtn.style.cssText =
+                'width:28px; height:28px; flex:0 0 28px; border:none; border-radius:50%; background:transparent; color:#d93025; font-size:23px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;';
+
+            removeBtn.addEventListener('click', async function(event) {
+
+                event.stopPropagation();
+
+                const confirmed = await showFavouriteConfirm(
+                    'Remove this member from this Favourite List?'
+                );
+
+                if (!confirmed) return;
+
+                removeBtn.disabled = true;
+
+                const removeParams = new URLSearchParams({
+                    action: 'removeMemoryFavourite',
+                    sessionToken: token,
+                    familyId: group.familyId,
+                    userId: member.userId,
+                    favouriteListId: item.favouriteListId
+                });
+
+                try {
+
+                    const response = await fetch(MEMORY_API, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: removeParams
+                    });
+
+                    const result = await response.json();
+
+                    if (result.status !== 'success') {
+                        throw new Error(
+                            result.message || 'Member removal failed.'
+                        );
+                    }
+
+                    // Remove member from current data
+                    group.members = group.members.filter(m =>
+                        !(
+                            m.userId === member.userId
+&& m.familyId === group.familyId
+                        )
+                    );
+
+                    // Remove from selected members cache
+                    const listId = String(item.favouriteListId);
+
+                    if (selectedFavouriteMembers[listId]) {
+                        selectedFavouriteMembers[listId] =
+                            selectedFavouriteMembers[listId].filter(m =>
+                                !(
+                                    m.userId === member.userId
+                                    && m.familyId === group.familyId
+                                )
+                            );
+                    }
+
+                    // Remove row from screen
+                    memberRow.remove();
+
+                    // Update serial numbers
+                    membersBox.querySelectorAll(
+                        '.memory-favourite-member-row'
+                    ).forEach((row, index) => {
+                        row.querySelector('span').textContent =
+                            (index + 1) + '.';
+                    });
+
+                    // Update cached list data
+                    window.memoryFavouriteListsCache = null;
+                    window.memoryFavouriteListsPromise = null;
+
+                    showMemoryMessage(
+                        'Success',
+                        'Member removed from Favourite List.'
+                    );
+
+                } catch (error) {
+
+                    removeBtn.disabled = false;
+                    showMemoryMessage('Error', error.message);
+
+                }
+
+            });
+
+            memberRow.append(serialNo, memberName, removeBtn);
             membersBox.appendChild(memberRow);
+
         });
+
     });
 
+    if (serialNumber === 0) {
+        const emptyMessage = document.createElement('div');
+        emptyMessage.textContent = 'No Members in this Favourite List.';
+        emptyMessage.style.cssText =
+            'padding:12px 0; text-align:center; color:#888; font-size:13px;';
+
+        membersBox.appendChild(emptyMessage);
+    }
+
     membersBox.style.display = 'block';
-    openFavouriteMembers = { box: membersBox };
+
+    openFavouriteMembers = {
+        box: membersBox
+    };
 }
+
+
     const name = document.createElement('div');
     name.textContent = item.listName || '';
             name.style.cssText =
