@@ -1863,10 +1863,10 @@ const cleanName = newName.trim();
                 item.listName = cleanName;
                 name.textContent = cleanName;
 
-               const renameParams = new URLSearchParams({
+              const renameParams = new URLSearchParams({
     action: 'renameMemoryFavouriteList',
     sessionToken: token,
-    favouriteListID: item.favouriteListID,
+    favouriteListID: item.favouriteListId,
     listName: cleanName
 });
                 try {
