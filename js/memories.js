@@ -1555,10 +1555,6 @@ const currentList = (existingLists || []).find(
     list => list.favouriteListId === item.favouriteListId
 );
 
-const currentList = (existingResult.lists || []).find(
-    list => list.favouriteListId === item.favouriteListId
-);
-
 const alreadyAdded = new Set();
 
 (currentList?.groups || []).forEach(group => {
