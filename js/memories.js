@@ -1538,15 +1538,6 @@ filterLabel.style.display = 'none';
 }
       
 
-const existingResponse = await fetch(MEMORY_API, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: existingParams
-});
-
-const existingResult = await existingResponse.json();
 
 const existingLists = window.memoryFavouritesDataCache ||
     await window.memoryFavouritesDataPromise;
