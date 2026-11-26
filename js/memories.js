@@ -1747,12 +1747,22 @@ const menuColors = {
             renameList();
         };
     }
+if (option === 'Delete') {
+    optionBtn.onclick = async function() {
+        menuBox.style.display = 'none';
 
-    if (option === 'Delete') {
-        optionBtn.onclick = function() {
-            menuBox.style.display = 'none';
-        };
-    }
+        const confirmed = await showFavouriteConfirm(
+            'Do you want delete this Favourite List?'
+        );
+
+        if (!confirmed) return;
+
+        showMemoryMessage(
+            'Confirmation',
+            'Confirmation window working successfully.'
+        );
+    };
+}
 });
 menuBtn.addEventListener('click', function(event) {
     event.stopPropagation();
