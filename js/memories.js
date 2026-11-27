@@ -785,10 +785,11 @@ color: #2d5274 !important;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    font-size:11px;
+    font-size:12px;
     font-weight:600;
     color:#52677b;
-    margin-bottom:3px;
+margin-top: 5px;
+margin-bottom: 5px;
 }
 .memory-page .memory-share-top {
     display: flex;
