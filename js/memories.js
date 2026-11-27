@@ -665,7 +665,10 @@ function memoryStyleOnce() {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    min-height: 26px;
     margin-top: 3px;
+    margin-bottom: 5px;
+    box-sizing: border-box;
 }
 
 .memory-page .memory-count-row small {
@@ -777,10 +780,9 @@ color: #2d5274 !important;
     padding: 5px 7px;
     border: 1px solid #c4d4ff;
     border-radius: 9px;
-    background: #f8fbff;
+    background: #ffffff;
     box-sizing: border-box;
 }
-
 .memory-page .memory-share-heading {
     display:flex;
     justify-content:space-between;
