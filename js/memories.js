@@ -824,8 +824,8 @@ padding-bottom: 7px;
     margin: 8px 0;
 }
 .memory-page .memory-share-title {
-    font-size: 11px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
     color: #52677b;
     white-space: nowrap;
     flex-shrink: 0;
@@ -1058,7 +1058,7 @@ function openAddMemoryScreen() {
 
 
 <div class="memory-share-options">
-    <span class="memory-share-title">Visible To</span>
+    <span class="memory-share-title">Visible To : </span>
 
     <label>
         <input type="radio" name="memoryShareType"
