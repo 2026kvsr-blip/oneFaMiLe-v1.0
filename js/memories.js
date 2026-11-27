@@ -772,14 +772,14 @@ color: #2d5274 !important;
     cursor: pointer;
 }
 .memory-page .memory-sharing-line {
-    grid-column:1 / -1;
-    margin-top:6px;
-    padding:5px 9px;
-    border:1px solid #c4d4ff;
-    border-radius:9px;
-    background:#f8fbff;
+    grid-column: 1 / -1;
+    margin-top: 2px;
+    padding: 2px 3px;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-sizing: border-box;
 }
-
 
 .memory-page .memory-share-heading {
     display:flex;
@@ -823,7 +823,13 @@ padding-bottom: 7px;
     flex-wrap: nowrap;
     margin: 8px 0;
 }
-
+.memory-page .memory-share-title {
+    font-size: 11px;
+    font-weight: 500;
+    color: #52677b;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
 .memory-page .memory-share-options label {
     display: inline-flex;
     align-items: center;
