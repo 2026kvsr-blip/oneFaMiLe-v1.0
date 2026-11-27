@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe - MEMORIES FRONTEND
 ===================================== */
@@ -28,8 +27,8 @@ function memoryStyleOnce() {
        .memory-page .memory-fields-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-    align-items: stretch !important;
+gap: 7px 10px !important;
+align-items: stretch !important;
 }
 
 .memory-page .memory-fields-grid > .expense-field {
@@ -665,9 +664,10 @@ function memoryStyleOnce() {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin-top: 3px;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    line-height: 1.1;
 }
-
 .memory-page .memory-count-row small {
     font-size: 11px;
     color: #666;
@@ -690,15 +690,6 @@ function memoryStyleOnce() {
 }
 .memory-page .memory-description-field {
     grid-column: 1 / -1 !important;
-    margin-top: -4px !important;
-}
-
-/* Keep the Description Clear row reserved so it cannot move the sharing box */
-.memory-page .memory-description-field .memory-count-row {
-    min-height: 18px !important;
-    height: 18px !important;
-    box-sizing: border-box !important;
-    align-items: center !important;
 }
 
 .memory-page .memory-description-header {
@@ -781,15 +772,14 @@ color: #2d5274 !important;
     cursor: pointer;
 }
 .memory-page .memory-sharing-line {
-    grid-column:1 / -1;
-    margin-top:12px;
-    padding:5px 9px;
-    border:1px solid #c4d4ff;
-    border-radius:9px;
-    background:#f8fbff;
+    grid-column: 1 / -1;
+    margin-top: 8px;
+    padding: 5px 7px;
+    border: 1px solid #c4d4ff;
+    border-radius: 9px;
+    background: #ffffff;
+    box-sizing: border-box;
 }
-
-
 .memory-page .memory-share-heading {
     display:flex;
     justify-content:space-between;
@@ -804,9 +794,9 @@ color: #2d5274 !important;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin-bottom: 8px;
+    margin-bottom: 3px;
     border-bottom: 1px solid #d8e3f4;
-padding-bottom: 8px;
+padding-bottom: 3px;
 }
 
 .memory-page .memory-share-top a {
@@ -832,14 +822,20 @@ padding-bottom: 8px;
     flex-wrap: nowrap;
     margin: 8px 0;
 }
-
+.memory-page .memory-share-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #52677b;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
 .memory-page .memory-share-options label {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 3px;
     white-space: nowrap;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 11px;
+    font-weight: 400;
     color: #2d5274;
     cursor: pointer;
 }
@@ -978,8 +974,8 @@ function openAddMemoryScreen() {
         <div class="memory-count-row">
             <small id="memoryVoiceCount">0 voice selected</small>
             <button type="button" class="memory-clear-btn"
-                id="clearMemoryVoices">Clear</button>
-        </div>
+id="clearMemoryVoices" style="display:none;">Clear</button>
+</div>
     </div>
 
    <!-- Row 5: Description -->
@@ -1059,28 +1055,28 @@ function openAddMemoryScreen() {
     </a>
 </div>
 
-<div class="memory-share-heading">
-    <span>Visible To</span>
+
+<div class="memory-share-options">
+    <span class="memory-share-title">Visible To : </span>
+
+    <label>
+        <input type="radio" name="memoryShareType"
+               value="group" id="memoryShareGroup">
+        My Groups
+    </label>
+
+    <label>
+        <input type="radio" name="memoryShareType"
+               value="favourites" id="memoryShareFavourites">
+        Favourites
+    </label>
+
+    <label>
+        <input type="radio" name="memoryShareType"
+               value="" id="memoryShareNone" checked>
+        None
+    </label>
 </div>
-    <div class="memory-share-options">
-        <label>
-            <input type="radio" name="memoryShareType"
-                   value="group" id="memoryShareGroup">
-            Family Group
-        </label>
-
-        <label>
-            <input type="radio" name="memoryShareType"
-                   value="favourites" id="memoryShareFavourites">
-            Favourites
-        </label>
-
-       <label>
-    <input type="radio" name="memoryShareType"
-           value="" id="memoryShareNone" checked>
-    None
-</label>
-    </div>
 
     <div id="memorySharePicker" class="memory-share-picker" hidden>
     <div id="memoryShareGroups"></div>
@@ -2085,16 +2081,26 @@ const cleanName = newName.trim();
 
                     const renameResult = await renameResponse.json();
 
-// Enable Delete button after successful rename
+// Update Delete button based on renamed list
 const deleteBtn = Array.from(
     menuBox.querySelectorAll('button')
-).find(btn => btn.textContent === 'Delete');
+).find(btn => btn.textContent.trim() === 'Delete');
+
+const isSystemName = /^Favourite\s*[123]$/i.test(cleanName);
+
+const memberCount = (item.groups || []).reduce(
+    (total, group) =>
+        total + (group.members || []).length,
+    0
+);
 
 if (deleteBtn) {
-    deleteBtn.disabled = false;
-    deleteBtn.style.color = '#d93025';
-    deleteBtn.style.cursor = 'pointer';
-    deleteBtn.style.opacity = '1';
+    const shouldDisable = isSystemName && memberCount === 0;
+
+    deleteBtn.disabled = shouldDisable;
+    deleteBtn.style.color = shouldDisable ? '#aaaaaa' : '#d93025';
+    deleteBtn.style.cursor = shouldDisable ? 'not-allowed' : 'pointer';
+    deleteBtn.style.opacity = shouldDisable ? '0.5' : '1';
 }
                 } catch (error) {
                     // Restore old name if saving fails
