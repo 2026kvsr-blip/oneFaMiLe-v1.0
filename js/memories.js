@@ -796,7 +796,9 @@ color: #2d5274 !important;
     width: 100%;
     margin-bottom: 3px;
     border-bottom: 1px solid #d8e3f4;
-padding-bottom: 3px;
+
+    padding-top: 6px;
+    padding-bottom: 6px;
 }
 
 .memory-page .memory-share-top a {
