@@ -1916,7 +1916,11 @@ item.groups = [];
 
 name.textContent = item.listName;
 checkbox.checked = false;
-
+// Disable Delete button after Favourite reset
+optionBtn.disabled = true;
+optionBtn.style.color = '#aaaaaa';
+optionBtn.style.cursor = 'not-allowed';
+optionBtn.style.opacity = '0.5';
 // Clear selected members cache
 const resetListId = String(item.favouriteListId);
 
