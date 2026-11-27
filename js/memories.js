@@ -771,6 +771,7 @@ color: #2d5274 !important;
     justify-content: center !important;
     cursor: pointer;
 }
+
 .memory-page .memory-sharing-line {
     grid-column: 1 / -1;
     margin-top: 15px;
