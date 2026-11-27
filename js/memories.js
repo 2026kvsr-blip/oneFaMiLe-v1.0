@@ -775,7 +775,7 @@ color: #2d5274 !important;
 
 .memory-page .memory-sharing-line {
     grid-column: 1 / -1;
-    margin-top: 19px!important;
+    margin-top: 23px!important;
     padding: 5px 7px;
     border: 1px solid #c4d4ff;
     border-radius: 9px;
