@@ -673,7 +673,26 @@ align-items: stretch !important;
     font-size: 11px;
     color: #666;
 }
+/* Description Clear button - fixed space */
+.memory-page .memory-description-field .memory-count-row {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
 
+.memory-page #clearMemoryDescription {
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    margin: 0 !important;
+    height: 20px !important;
+}
 .memory-page .memory-clear-btn {
     border: none !important;
     background: transparent !important;
@@ -774,8 +793,9 @@ color: #2d5274 !important;
 }
 
 .memory-page .memory-sharing-line {
-    grid-column: 1 / -1;
-    margin-top: 23px!important;
+    display: block !important;
+    width: 100% !important;
+    margin-top: 23px !important;
     padding: 5px 7px;
     border: 1px solid #c4d4ff;
     border-radius: 9px;
