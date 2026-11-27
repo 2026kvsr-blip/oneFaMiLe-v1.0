@@ -693,6 +693,14 @@ function memoryStyleOnce() {
     margin-top: -4px !important;
 }
 
+/* Keep the Description Clear row reserved so it cannot move the sharing box */
+.memory-page .memory-description-field .memory-count-row {
+    min-height: 18px !important;
+    height: 18px !important;
+    box-sizing: border-box !important;
+    align-items: center !important;
+}
+
 .memory-page .memory-description-header {
     display: grid !important;
     grid-template-columns: 1fr 1fr 1fr !important;
@@ -774,7 +782,7 @@ color: #2d5274 !important;
 }
 .memory-page .memory-sharing-line {
     grid-column:1 / -1;
-    margin-top:11px;
+    margin-top:15px;
     padding:5px 9px;
     border:1px solid #c4d4ff;
     border-radius:9px;
