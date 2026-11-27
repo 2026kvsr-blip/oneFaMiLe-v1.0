@@ -1,4 +1,5 @@
 
+
 /* =====================================
    oneFaMiLe - MEMORIES FRONTEND
 ===================================== */
@@ -2075,16 +2076,26 @@ const cleanName = newName.trim();
 
                     const renameResult = await renameResponse.json();
 
-// Enable Delete button after successful rename
+// Update Delete button based on renamed list
 const deleteBtn = Array.from(
     menuBox.querySelectorAll('button')
-).find(btn => btn.textContent === 'Delete');
+).find(btn => btn.textContent.trim() === 'Delete');
+
+const isSystemName = /^Favourite\s*[123]$/i.test(cleanName);
+
+const memberCount = (item.groups || []).reduce(
+    (total, group) =>
+        total + (group.members || []).length,
+    0
+);
 
 if (deleteBtn) {
-    deleteBtn.disabled = false;
-    deleteBtn.style.color = '#d93025';
-    deleteBtn.style.cursor = 'pointer';
-    deleteBtn.style.opacity = '1';
+    const shouldDisable = isSystemName && memberCount === 0;
+
+    deleteBtn.disabled = shouldDisable;
+    deleteBtn.style.color = shouldDisable ? '#aaaaaa' : '#d93025';
+    deleteBtn.style.cursor = shouldDisable ? 'not-allowed' : 'pointer';
+    deleteBtn.style.opacity = shouldDisable ? '0.5' : '1';
 }
                 } catch (error) {
                     // Restore old name if saving fails
