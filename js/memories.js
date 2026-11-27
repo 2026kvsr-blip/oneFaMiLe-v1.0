@@ -1906,17 +1906,37 @@ if (option === 'Delete') {
                 );
             }
 
-            window.memoryFavouriteListsCache = null;
-            window.memoryFavouriteListsPromise = null;
+           // Clear correct Favourite cache
+window.memoryFavouritesDataCache = null;
+window.memoryFavouritesDataPromise = null;
 
-            parentFavouritesOverlay.remove();
+// Reset current list immediately in UI
+item.listName = 'Favourite ' + item.sortOrder;
+item.groups = [];
 
-            showMemoryMessage(
-                'Success',
-                'Favourite List reset successfully.'
-            );
+name.textContent = item.listName;
+checkbox.checked = false;
 
-            document.getElementById('memoryFavouriteListsBtn').click();
+// Clear selected members cache
+const resetListId = String(item.favouriteListId);
+
+if (selectedFavouriteMembers[resetListId]) {
+    selectedFavouriteMembers[resetListId] = [];
+}
+
+// Close Members popup if open
+if (openFavouriteMembers) {
+    openFavouriteMembers.box.remove();
+    openFavouriteMembers = null;
+}
+
+membersBox.innerHTML = '';
+
+// Show success message
+showMemoryMessage(
+    'Success',
+    'Favourite List reset successfully.'
+);
 
         } catch (error) {
             showMemoryMessage('Error', error.message);
