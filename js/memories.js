@@ -782,7 +782,7 @@ color: #2d5274 !important;
 }
 .memory-page .memory-sharing-line {
     grid-column:1 / -1;
-    margin-top:15px;
+    margin-top:12px;
     padding:5px 9px;
     border:1px solid #c4d4ff;
     border-radius:9px;
