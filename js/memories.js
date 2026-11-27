@@ -1050,28 +1050,28 @@ function openAddMemoryScreen() {
     </a>
 </div>
 
-<div class="memory-share-heading">
-    <span>Visible To</span>
+
+<div class="memory-share-options">
+    <span class="memory-share-title">Visible To</span>
+
+    <label>
+        <input type="radio" name="memoryShareType"
+               value="group" id="memoryShareGroup">
+        My Groups
+    </label>
+
+    <label>
+        <input type="radio" name="memoryShareType"
+               value="favourites" id="memoryShareFavourites">
+        Favourites
+    </label>
+
+    <label>
+        <input type="radio" name="memoryShareType"
+               value="" id="memoryShareNone" checked>
+        None
+    </label>
 </div>
-    <div class="memory-share-options">
-        <label>
-            <input type="radio" name="memoryShareType"
-                   value="group" id="memoryShareGroup">
-            Family Group
-        </label>
-
-        <label>
-            <input type="radio" name="memoryShareType"
-                   value="favourites" id="memoryShareFavourites">
-            Favourites
-        </label>
-
-       <label>
-    <input type="radio" name="memoryShareType"
-           value="" id="memoryShareNone" checked>
-    None
-</label>
-    </div>
 
     <div id="memorySharePicker" class="memory-share-picker" hidden>
     <div id="memoryShareGroups"></div>
