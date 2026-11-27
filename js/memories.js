@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe - MEMORIES FRONTEND
 ===================================== */
@@ -28,8 +27,8 @@ function memoryStyleOnce() {
        .memory-page .memory-fields-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-    align-items: stretch !important;
+gap: 7px 10px !important;
+align-items: stretch !important;
 }
 
 .memory-page .memory-fields-grid > .expense-field {
@@ -665,12 +664,10 @@ function memoryStyleOnce() {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    min-height: 26px;
-    margin-top: 3px;
-    margin-bottom: 5px;
-    box-sizing: border-box;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    line-height: 1.1;
 }
-
 .memory-page .memory-count-row small {
     font-size: 11px;
     color: #666;
@@ -977,8 +974,8 @@ function openAddMemoryScreen() {
         <div class="memory-count-row">
             <small id="memoryVoiceCount">0 voice selected</small>
             <button type="button" class="memory-clear-btn"
-                id="clearMemoryVoices">Clear</button>
-        </div>
+id="clearMemoryVoices" style="display:none;">Clear</button>
+</div>
     </div>
 
    <!-- Row 5: Description -->
