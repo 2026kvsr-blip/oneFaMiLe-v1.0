@@ -2075,12 +2075,17 @@ const cleanName = newName.trim();
 
                     const renameResult = await renameResponse.json();
 
-                    if (renameResult.status !== 'success') {
-                        throw new Error(
-                            renameResult.message || 'Rename failed.'
-                        );
-                    }
+// Enable Delete button after successful rename
+const deleteBtn = Array.from(
+    menuBox.querySelectorAll('button')
+).find(btn => btn.textContent === 'Delete');
 
+if (deleteBtn) {
+    deleteBtn.disabled = false;
+    deleteBtn.style.color = '#d93025';
+    deleteBtn.style.cursor = 'pointer';
+    deleteBtn.style.opacity = '1';
+}
                 } catch (error) {
                     // Restore old name if saving fails
                     item.listName = oldName;
