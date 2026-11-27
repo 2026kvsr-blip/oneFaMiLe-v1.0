@@ -1463,11 +1463,36 @@ window.memoryFavouritesDataPromise = null;
         membersBox.appendChild(emptyMessage);
     }
 
-    membersBox.style.display = 'block';
+   membersBox.style.display = 'block';
 
-    openFavouriteMembers = {
-        box: membersBox
-    };
+// Create separate List Popup
+const listOverlay = document.createElement('div');
+listOverlay.className = 'memory-delete-overlay';
+
+const listPopup = document.createElement('div');
+listPopup.className =
+    'memory-delete-box memory-favourite-popup';
+
+const popupHeading = document.createElement('h3');
+popupHeading.textContent = item.listName || 'Favourite List';
+
+const closeBtn = document.createElement('button');
+closeBtn.type = 'button';
+closeBtn.textContent = 'Close';
+closeBtn.className = 'memory-favourite-close-btn';
+
+closeBtn.onclick = function() {
+    listOverlay.remove();
+    openFavouriteMembers = null;
+};
+
+listPopup.append(popupHeading, membersBox, closeBtn);
+listOverlay.appendChild(listPopup);
+document.body.appendChild(listOverlay);
+
+openFavouriteMembers = {
+    box: listOverlay
+};
 }
 
 
