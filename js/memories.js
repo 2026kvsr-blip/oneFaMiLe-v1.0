@@ -827,10 +827,10 @@ padding-bottom: 7px;
 .memory-page .memory-share-options label {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 3px;
     white-space: nowrap;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 11px;
+    font-weight: 400;
     color: #2d5274;
     cursor: pointer;
 }
