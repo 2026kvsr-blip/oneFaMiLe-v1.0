@@ -1824,10 +1824,14 @@ buttonRow.append(saveBtn, closeBtn);
                 return;
             }
 
-            saveBtn.disabled = true;
+           saveBtn.disabled = true;
 
-            try {
-                for (const cb of selected) {
+const closeProcessing = showFavouriteProcessing(
+    'Adding members... Please wait.'
+);
+
+try {
+    for (const cb of selected) {
 
                     const saveParams = new URLSearchParams({
                         action: 'addMemoryFavourite',
@@ -1853,7 +1857,7 @@ buttonRow.append(saveBtn, closeBtn);
                         );
                     }
                 }
-
+closeProcessing();
              window.memoryFavouritesDataCache = null;
 window.memoryFavouritesDataPromise = null;
 
