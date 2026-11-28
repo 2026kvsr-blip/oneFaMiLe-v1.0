@@ -2012,9 +2012,8 @@ membersBox.innerHTML = '';
 // Show success message
 showMemoryMessage(
     'Success',
-    'Favourite List reset successfully.'
+    'Favourite List deleted successfully.'
 );
-
         } catch (error) {
             showMemoryMessage('Error', error.message);
         }
