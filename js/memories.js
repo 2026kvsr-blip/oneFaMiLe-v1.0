@@ -1607,21 +1607,16 @@ menuBox.style.cssText =
     return new Promise(resolve => {
         const confirmOverlay = document.createElement('div');
         confirmOverlay.className = 'memory-delete-overlay';
-
         const confirmBox = document.createElement('div');
         confirmBox.className =
             'memory-delete-box memory-favourite-popup';
-
         const heading = document.createElement('h3');
         heading.textContent = 'Confirm Delete';
-
         const messageText = document.createElement('p');
         messageText.textContent = message;
-
         const buttons = document.createElement('div');
       buttons.style.cssText =
     'display:flex; justify-content:center; gap:10px; margin-top:15px; width:100%;';
-
         const yesBtn = document.createElement('button');
         yesBtn.textContent = 'Yes';
         yesBtn.style.cssText =
@@ -1647,6 +1642,30 @@ menuBox.style.cssText =
         document.body.appendChild(confirmOverlay);
     });
 }
+
+// Block all screen actions while Favourite operation is processing
+function showFavouriteProcessing(message) {
+
+    const processingOverlay = document.createElement('div');
+    processingOverlay.className = 'memory-delete-overlay';
+    processingOverlay.style.zIndex = '2000000';
+
+    const processingBox = document.createElement('div');
+    processingBox.className = 'memory-delete-box';
+
+    const processingText = document.createElement('p');
+    processingText.textContent = message;
+    processingText.style.margin = '0';
+
+    processingBox.appendChild(processingText);
+    processingOverlay.appendChild(processingBox);
+    document.body.appendChild(processingOverlay);
+
+    return function closeProcessing() {
+        processingOverlay.remove();
+    };
+}
+          
 async function openAddFavouriteMembers(item) {
 
     const token = sessionStorage.getItem('sessionToken') || '';
