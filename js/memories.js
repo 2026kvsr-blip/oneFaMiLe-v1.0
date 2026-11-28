@@ -1477,52 +1477,7 @@ if (!membersBox.querySelector('.memory-favourite-member-row')) {
 window.memoryFavouritesDataPromise = null;
 
 
-                    // Remove from selected members cache
-                    const listId = String(item.favouriteListId);
 
-                    if (selectedFavouriteMembers[listId]) {
-                        selectedFavouriteMembers[listId] =
-                            selectedFavouriteMembers[listId].filter(m =>
-                                !(
-                                    m.userId === member.userId
-                                    && m.familyId === group.familyId
-                                )
-                            );
-                    }
-
-                    // Remove row from screen
-                    memberRow.remove();
-
-                    // Update serial numbers
-                    membersBox.querySelectorAll(
-                        '.memory-favourite-member-row'
-                    ).forEach((row, index) => {
-                        row.querySelector('span').textContent =
-                            (index + 1) + '.';
-                    });
-
-                    // Update cached list data
-// Update current Favourite List and global cache
-const currentListId = String(item.favouriteListId);
-
-if (Array.isArray(window.memoryFavouritesDataCache)) {
-    const cachedList = window.memoryFavouritesDataCache.find(
-        list => String(list.favouriteListId) === currentListId
-    );
-
-    if (cachedList) {
-        cachedList.groups = item.groups;
-    }
-}
-
-window.memoryFavouritesDataPromise = null;
-// Show empty message if no members remain
-if (
-    !membersBox.querySelector('.memory-favourite-member-row')
-) {
-    membersBox.innerHTML =
-        '<div style="padding:12px 0;text-align:center;color:#888;font-size:13px;">No Members in this Favourite List.</div>';
-}
                    closeProcessing();
                    showMemoryMessage(
                         'Success',
