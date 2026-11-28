@@ -2022,9 +2022,11 @@ showMemoryMessage(
     'Success',
     'Favourite List deleted successfully.'
 );
-        } catch (error) {
-            showMemoryMessage('Error', error.message);
-        }
+       } catch (error) {
+    closeProcessing();
+    optionBtn.disabled = false;
+    showMemoryMessage('Error', error.message);
+}
     };
 }
 });
