@@ -1956,8 +1956,14 @@ if (option === 'Delete') {
 
         if (!confirmed) return;
 
-        try {
-            const deleteParams = new URLSearchParams({
+optionBtn.disabled = true;
+
+const closeProcessing = showFavouriteProcessing(
+    'Deleting Favourite List... Please wait.'
+);
+
+try {
+    const deleteParams = new URLSearchParams({
                 action: 'deleteMemoryFavouriteList',
                 sessionToken: token,
                 favouriteListID: item.favouriteListId
@@ -2010,6 +2016,8 @@ if (openFavouriteMembers) {
 membersBox.innerHTML = '';
 
 // Show success message
+   closeProcessing();
+
 showMemoryMessage(
     'Success',
     'Favourite List deleted successfully.'
