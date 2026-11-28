@@ -1400,7 +1400,9 @@ function showFavouriteMembers() {
                 if (!confirmed) return;
 
                 removeBtn.disabled = true;
-
+const closeProcessing = showFavouriteProcessing(
+    'Removing member... Please wait.'
+);
                 const removeParams = new URLSearchParams({
                     action: 'removeMemoryFavourite',
                     sessionToken: token,
@@ -1521,12 +1523,14 @@ if (
     membersBox.innerHTML =
         '<div style="padding:12px 0;text-align:center;color:#888;font-size:13px;">No Members in this Favourite List.</div>';
 }
-                    showMemoryMessage(
+                   closeProcessing();
+                   showMemoryMessage(
                         'Success',
                         'Member removed from Favourite List.'
                     );
 
                 } catch (error) {
+    closeProcessing();
 
                     removeBtn.disabled = false;
                     showMemoryMessage('Error', error.message);
@@ -1669,7 +1673,9 @@ function showFavouriteProcessing(message) {
 async function openAddFavouriteMembers(item) {
 
     const token = sessionStorage.getItem('sessionToken') || '';
-
+const closeProcessing = showFavouriteProcessing(
+        'Loading members... Please wait.'
+    );
     try {
         const params = new URLSearchParams({
             action: 'getMemoryShareOptions',
@@ -1689,7 +1695,7 @@ async function openAddFavouriteMembers(item) {
         if (result.status !== 'success') {
             throw new Error(result.message || 'Unable to load Family Groups.');
         }
-
+closeProcessing();
         const overlay = document.createElement('div');
         overlay.className = 'memory-delete-overlay';
 
@@ -1919,8 +1925,8 @@ box.append(heading, filterLabel, groupsBox, buttonRow);
         document.body.appendChild(overlay);
 
     } catch (error) {
-        showMemoryMessage('Error', error.message);
-    }
+closeProcessing();
+showMemoryMessage('Error', error.message);    }
 }menuBox.style.cssText =
     'display:none; flex-direction:row; align-items:center; justify-content:space-around; gap:0; width:calc(100% - 35px); box-sizing:border-box; margin:0 0 8px 35px; padding:4px 4px; background:#f5f8fc; border:1px solid #c4d4ff; border-radius:8px;';
 const menuColors = {
