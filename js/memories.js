@@ -1872,10 +1872,11 @@ showMemoryMessage(
     'Selected Members added to ' + item.listName + '.'
 );
 
-            } catch (error) {
-                saveBtn.disabled = false;
-                showMemoryMessage('Error', error.message);
-            }
+           } catch (error) {
+    closeProcessing();
+    saveBtn.disabled = false;
+    showMemoryMessage('Error', error.message);
+}
         };
 
 box.append(heading, filterLabel, groupsBox, buttonRow);
