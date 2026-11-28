@@ -510,8 +510,9 @@ align-items: stretch !important;
     max-width: 320px;
     padding: 20px;
     background: #fff;
-    border: 1px solid #c4d4ff;
-    border-radius: 14px;
+border: 2px solid #17365D !important;
+color: #1E5AA8 !important;
+border-radius: 14px;
     box-shadow: 0 5px 25px rgba(0,0,0,0.2);
     text-align: center;
 }
@@ -600,17 +601,15 @@ align-items: stretch !important;
     background: #2d5274 !important;
     border-color: #2d5274 !important;
 }
-
 .memory-delete-box h3 {
     margin: 0 0 10px;
-    color: #2d5274;
+    color: #17365D !important;
 }
 
 .memory-delete-box p {
     margin: 0 0 18px;
-    color: #52677b;
+    color: #1E5AA8 !important;
 }
-
 .memory-delete-actions {
     display: flex;
     gap: 10px;
