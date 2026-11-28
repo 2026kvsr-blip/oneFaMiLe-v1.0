@@ -3930,8 +3930,9 @@ function memoryReportsStyleOnce() {
       .memory-report-page .memory-check-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
       .memory-report-page .memory-check-row label{display:inline-flex;align-items:center;gap:5px;color:#2d5274;font-size:13px;white-space:nowrap}
       .memory-report-page .memory-check-row input[type=checkbox]{width:17px;height:17px;margin:0}
-      .memory-report-page .memory-report-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%;margin-top:24px}
-      .memory-report-page .memory-report-actions button{width:100%;min-width:0;height:40px;margin:0;box-sizing:border-box}
+      .memory-report-page .memory-report-actions{position:fixed;left:0;right:0;bottom:0;z-index:9990;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;margin:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #d7e2ee;box-shadow:0 -3px 12px rgba(0,0,0,.08);box-sizing:border-box}
+      .memory-report-page .memory-report-actions button{display:block;width:100%;min-width:0;max-width:100%;height:40px;min-height:40px;margin:0;padding:0 6px;box-sizing:border-box;flex:none;font-size:14px;white-space:nowrap}
+      .memory-report-page{padding-bottom:76px}
       .memory-report-page .memory-report-status{margin-top:12px;color:#245b91;text-align:center;font-size:13px}
       .memory-report-page .memory-custom-grid #memRptFrom{grid-row:1;grid-column:1}
       .memory-report-page .memory-custom-grid #memRptTo{grid-row:1;grid-column:2}
@@ -3996,7 +3997,7 @@ function memoryReportsFilterPageNew(backFunction, customSearch = false) {
               <label><input type="checkbox" id="memRptFavourites" checked>Favourites</label>
             </div></div>
           </div>
-          <div class="memory-report-actions"><button type="button" class="expense-primary" id="memRptGenerate">Show Report</button><button type="button" class="expense-secondary" id="memRptBack">← Back</button></div>
+          <div class="memory-report-actions"><button type="button" class="expense-primary" id="memRptGenerate">Show Report</button><button type="button" class="expense-secondary" id="memRptBack">← Back</button><button type="button" class="expense-secondary" id="memRptHome">⌂ Home</button></div>
           <div id="memRptStatus" class="memory-report-status" role="status" aria-live="polite"></div>
         </div>
         <div id="memRptResults"></div>
@@ -4054,6 +4055,7 @@ function memoryReportsFilterPageNew(backFunction, customSearch = false) {
     type.dispatchEvent(new Event('change'));updatePeriodDisplay();
     document.addEventListener('click',event=>{if(!periodPicker.hidden&&!event.target.closest('#memRptPeriodPicker')&&!event.target.closest('#memRptPeriodDisplay'))closePicker();},{once:false});
     $('memRptBack').onclick=backFunction;
+    $('memRptHome').onclick=()=>{ if(typeof homeBtn!=='undefined' && homeBtn) homeBtn.click(); };
     $('memRptGenerate').onclick=async()=>{
       const token=sessionStorage.getItem('sessionToken')||'';
       if(!token){showMessage('Please login again.','warning',3000);return;}
