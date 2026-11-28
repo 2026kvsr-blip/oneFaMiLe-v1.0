@@ -3883,3 +3883,191 @@ document.addEventListener("click", function(event) {
     }
 
 });
+
+
+/* ==========================================================
+   MEMORIES REPORTS + CUSTOM SEARCH
+   Kept in memories.js so app.js only needs small route changes.
+========================================================== */
+
+function memoryReportsStyleOnce() {
+    if (document.getElementById('memoryReportsStyles')) return;
+    const style = document.createElement('style');
+    style.id = 'memoryReportsStyles';
+    style.textContent = `
+      .memory-report-page{max-width:1100px;margin:0 auto;padding:0 8px;box-sizing:border-box}
+      .memory-report-page .expense-panel{max-width:900px;margin:0 auto;padding:14px;background:#f0f7ff;border:1px solid #c4d4ff;border-radius:14px;box-sizing:border-box}
+      .memory-report-page .expense-filter-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:12px!important;row-gap:10px!important;align-content:start}
+      .memory-report-page .expense-field{display:flex;flex-direction:column;gap:7px!important;min-width:0;margin:0!important}
+      .memory-report-page .expense-label{display:block;color:#2d5274;font-weight:600;line-height:1.2;margin:0!important;white-space:normal}
+      .memory-report-page input:not([type=checkbox]):not([type=hidden]),.memory-report-page select{display:block;width:100%;min-width:0;max-width:100%;height:40px;min-height:40px;padding:6px 9px;box-sizing:border-box;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#222;font:inherit}
+      .memory-report-page .memory-period-label-row{display:grid;grid-template-columns:minmax(0,45fr) minmax(0,55fr);align-items:center;gap:0;width:100%}
+      .memory-report-page .memory-period-context{text-align:right!important;justify-self:end!important}
+      .memory-report-page .memory-period-controls{display:grid;grid-template-columns:minmax(0,45fr) minmax(0,55fr);width:100%;min-width:0;align-items:end}
+      .memory-report-page .memory-period-controls.is-full{grid-template-columns:minmax(0,1fr)}
+      .memory-report-page #memRptPeriod{width:100%;height:40px;min-width:0;padding:0 4px!important;text-align:center;text-align-last:center;appearance:none;background-image:none!important;border-radius:8px 0 0 8px;border-right:0}
+      .memory-report-page .memory-period-controls.is-full #memRptPeriod{border-radius:8px;text-align:left;text-align-last:left;padding:0 10px!important}
+      .memory-report-page .memory-period-value{position:relative;display:flex;align-items:center;justify-content:center;width:100%;min-width:0;height:40px;z-index:5}
+      .memory-report-page .memory-period-trigger{display:flex;align-items:center;justify-content:center;width:100%;height:40px;min-width:0;margin:0;padding:0 4px;border:1px solid #9bb9d4;border-radius:0 8px 8px 0;background:#fff;color:#222;font:inherit;font-size:16px;white-space:nowrap;cursor:pointer;box-sizing:border-box}
+      .memory-report-page .memory-period-value input[type=number]{height:40px!important;text-align:center;border-radius:0 8px 8px 0!important;border-left:1px solid #9bb9d4!important}
+      .memory-report-page .memory-period-picker{position:absolute;top:calc(100% + 6px);right:0;z-index:100000;width:290px;max-width:calc(100vw - 32px);padding:10px;border:1px solid #9bb9d4;border-radius:9px;background:#fff;color:#222;box-shadow:0 5px 18px rgba(0,0,0,.22);font-size:14px;text-align:center;box-sizing:border-box}
+      .memory-report-page .memory-period-picker[hidden],.memory-report-page [hidden]{display:none!important}
+      .memory-report-page .memory-picker-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+      .memory-report-page .memory-picker-header strong{flex:1;text-align:center;font-size:15px}
+      .memory-report-page .memory-picker-nav{width:32px;height:30px;padding:0;border:1px solid #c4d4ff;border-radius:6px;background:#f0f7ff;color:#2d5274;font-size:18px;line-height:1;box-shadow:none}
+      .memory-report-page .memory-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+      .memory-report-page .memory-calendar-weekday{padding:5px 0;color:#526b80;font-weight:700;font-size:12px}
+      .memory-report-page .memory-calendar-day{height:32px;min-width:0;padding:0;border:0;border-radius:5px;background:#fff;color:#222;font-size:13px;box-shadow:none}
+      .memory-report-page .memory-calendar-day.outside-month{color:#a4acb5}
+      .memory-report-page .memory-calendar-day.today{outline:1px solid #2477c8}
+      .memory-report-page .memory-calendar-day.selected{background:#2477c8;color:#fff;font-weight:700}
+      .memory-report-page .memory-picker-footer{display:flex;gap:4px;margin-top:9px;padding-top:7px;border-top:1px solid #e2e8f0}
+      .memory-report-page .memory-picker-action{flex:1;min-width:0;padding:5px 2px;border:0;border-radius:5px;background:transparent;color:#2477c8;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:none}
+      .memory-report-page .memory-month-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+      .memory-report-page .memory-month-choice{height:34px;padding:0 4px;border:1px solid #e2e8f0;border-radius:6px;background:#fff;color:#222;font-size:13px;box-shadow:none}
+      .memory-report-page .memory-month-choice.selected{background:#2477c8;border-color:#2477c8;color:#fff;font-weight:700}
+      .memory-report-page .memory-check-field{grid-column:1/-1;display:flex;flex-direction:column;gap:7px;min-width:0}
+      .memory-report-page .memory-check-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+      .memory-report-page .memory-check-row label{display:inline-flex;align-items:center;gap:5px;color:#2d5274;font-size:13px;white-space:nowrap}
+      .memory-report-page .memory-check-row input[type=checkbox]{width:17px;height:17px;margin:0}
+      .memory-report-page .memory-report-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%;margin-top:24px}
+      .memory-report-page .memory-report-actions button{width:100%;min-width:0;height:40px;margin:0;box-sizing:border-box}
+      .memory-report-page .memory-report-status{margin-top:12px;color:#245b91;text-align:center;font-size:13px}
+      .memory-report-page .memory-custom-grid #memRptFrom{grid-row:1;grid-column:1}
+      .memory-report-page .memory-custom-grid #memRptTo{grid-row:1;grid-column:2}
+      @media(max-width:600px){.memory-report-page .expense-panel{padding:12px}.memory-report-page .expense-filter-grid{column-gap:8px!important;row-gap:9px!important}.memory-report-page .memory-period-picker{width:290px;max-width:calc(100vw - 28px);right:0;padding:9px}.memory-report-page .memory-calendar-day{height:34px}}
+    `;
+    document.head.appendChild(style);
+}
+
+function memoryReportsFilterPageNew(backFunction, customSearch = false) {
+    memoryReportsStyleOnce();
+    const todayDate = new Date();
+    const todayISO = `${todayDate.getFullYear()}-${String(todayDate.getMonth()+1).padStart(2,'0')}-${String(todayDate.getDate()).padStart(2,'0')}`;
+    const todayYear = todayDate.getFullYear();
+    const heading = customSearch ? 'Memories — Custom Search' : 'Memories Reports';
+
+    showPage(`
+      <div class="memory-report-page">
+        <h2 class="page-title">${heading}</h2>
+        <div class="expense-panel">
+          <div class="expense-filter-grid ${customSearch ? 'memory-custom-grid' : ''}">
+            <div class="expense-field">
+              <label class="expense-label" for="memRptType">Report Type</label>
+              <select id="memRptType"><option value="Abstract" selected>Abstract</option><option value="Detailed">Detailed</option></select>
+            </div>
+            <div class="expense-field">
+              <div class="memory-period-label-row">
+                <label class="expense-label" for="memRptPeriod">Report Period</label>
+                <label class="expense-label memory-period-context" id="memRptPeriodContext">Today</label>
+              </div>
+              <div class="memory-period-controls" id="memRptPeriodControls">
+                <select id="memRptPeriod"><option>Date</option><option>Week</option><option>Month</option><option>Year</option><option>All</option></select>
+                <div class="memory-period-value">
+                  <button type="button" class="memory-period-trigger" id="memRptPeriodDisplay" aria-haspopup="dialog" aria-expanded="false">${todayDate.toLocaleDateString('en-GB')}</button>
+                  <input type="hidden" id="memRptPeriodDate" value="${todayISO}">
+                  <input type="hidden" id="memRptPeriodWeek" value="${todayISO}">
+                  <input type="hidden" id="memRptPeriodMonth" value="${todayISO.slice(0,7)}">
+                  <input type="number" id="memRptPeriodYear" min="1900" max="2100" value="${todayYear}" hidden>
+                  <div class="memory-period-picker" id="memRptPeriodPicker" role="dialog" aria-label="Choose report period" hidden></div>
+                </div>
+              </div>
+            </div>
+            ${customSearch ? `
+              <div class="expense-field"><label class="expense-label" for="memRptFrom">From Date</label><input type="date" id="memRptFrom"></div>
+              <div class="expense-field"><label class="expense-label" for="memRptTo">To Date</label><input type="date" id="memRptTo"></div>
+            ` : ''}
+            <div class="expense-field"><label class="expense-label" for="memRptTitle">Title</label><input type="search" id="memRptTitle" placeholder="Search Title"></div>
+            <div class="expense-field"><label class="expense-label" for="memRptMemoryType">Memory Type</label><select id="memRptMemoryType"><option value="">All</option><option>Text</option><option>Photo</option><option>Video</option><option>Voice</option><option>Mixed</option></select></div>
+            <div class="expense-field"><label class="expense-label" for="memRptCategory">Category</label><select id="memRptCategory"><option value="">All</option><option>Family</option><option>Childhood</option><option>Birthdays</option><option>Festivals</option><option>Functions</option><option>Education</option><option>Trips</option><option>Achievements</option><option>Others</option></select></div>
+            <div class="expense-field"><label class="expense-label" for="memRptPlace">Memory Place</label><input type="search" id="memRptPlace" placeholder="Search Memory Place"></div>
+            <div class="expense-field"><label class="expense-label" for="memRptPriority">Priority</label><select id="memRptPriority"><option value="">All Priorities</option><option>High</option><option>Medium</option><option>Low</option></select></div>
+            <div class="expense-field" style="grid-column:1/-1"><label class="expense-label" for="memRptDescription">Description</label><input type="search" id="memRptDescription" placeholder="Search Description"></div>
+            <div class="memory-check-field"><label class="expense-label">Media Type</label><div class="memory-check-row">
+              <label><input type="checkbox" name="memRptMedia" value="Photos">Photos</label>
+              <label><input type="checkbox" name="memRptMedia" value="Videos">Videos</label>
+              <label><input type="checkbox" name="memRptMedia" value="Voice Msg">Voice Msg</label>
+              <label><input type="checkbox" name="memRptMedia" value="Text Msg">Text Msg</label>
+              <label><input type="checkbox" name="memRptMedia" value="All">All</label>
+            </div></div>
+            <div class="memory-check-field"><label class="expense-label">Visible To</label><div class="memory-check-row">
+              <label><input type="checkbox" id="memRptGroups" checked>My Groups</label>
+              <label><input type="checkbox" id="memRptFavourites" checked>Favourites</label>
+            </div></div>
+            <div class="expense-field" id="memRptColumnsField"><label class="expense-label" for="memRptColumns">Show Columns</label><select id="memRptColumns"><option value="Limited" selected>Limited</option><option value="All">All</option></select></div>
+          </div>
+          <div class="memory-report-actions"><button type="button" class="expense-primary" id="memRptGenerate">Show Report</button><button type="button" class="expense-secondary" id="memRptBack">← Back</button></div>
+          <div id="memRptStatus" class="memory-report-status" role="status" aria-live="polite"></div>
+        </div>
+        <div id="memRptResults"></div>
+      </div>
+    `);
+
+    const $ = id => document.getElementById(id);
+    const type = $('memRptType');
+    const period = $('memRptPeriod');
+    const periodControls = $('memRptPeriodControls');
+    const periodDisplay = $('memRptPeriodDisplay');
+    const periodPicker = $('memRptPeriodPicker');
+    const periodContext = $('memRptPeriodContext');
+    const columnsField = $('memRptColumnsField');
+    const parseDate = value => { const m=String(value||'').match(/^(\d{4})-(\d{2})-(\d{2})$/); return m?new Date(+m[1],+m[2]-1,+m[3]):new Date(); };
+    const iso = date => `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+    const displayDate = value => { const d=parseDate(value); return `${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`; };
+    const monday = value => { const d=parseDate(value); d.setDate(d.getDate()-((d.getDay()+6)%7)); return d; };
+    let pickerMonth = new Date(todayYear,todayDate.getMonth(),1);
+    let pickerMode = 'calendar';
+    const closePicker = () => { periodPicker.hidden=true; periodDisplay.setAttribute('aria-expanded','false'); };
+    const updatePeriodDisplay = () => {
+      const p=period.value; let text='',caption='';
+      if(p==='Date') { const v=$('memRptPeriodDate').value||todayISO; text=displayDate(v); const diff=Math.round((parseDate(v)-parseDate(todayISO))/86400000); caption=diff===0?'Today':diff===-1?'Yesterday':diff===1?'Tomorrow':''; }
+      else if(p==='Week') { const v=$('memRptPeriodWeek').value||todayISO; const start=monday(v),end=new Date(start);end.setDate(start.getDate()+6);text=`${displayDate(iso(start))} – ${displayDate(iso(end))}`;caption=iso(start)===iso(monday(todayISO))?'This Week':''; }
+      else if(p==='Month') { const v=$('memRptPeriodMonth').value||todayISO.slice(0,7); const [y,m]=v.split('-').map(Number);text=new Date(y,m-1,1).toLocaleDateString('en-US',{month:'short',year:'numeric'});caption=v===todayISO.slice(0,7)?'This Month':''; }
+      else if(p==='Year') { text=$('memRptPeriodYear').value||todayYear;caption=Number(text)===todayYear?'This Year':''; }
+      else { text='All';caption=''; }
+      periodDisplay.textContent=text;periodContext.textContent=caption;
+      const hasValue=p!=='All';periodControls.classList.toggle('has-value',hasValue);periodControls.classList.toggle('is-full',!hasValue);
+      periodDisplay.hidden=!(p==='Date'||p==='Week'||p==='Month');$('memRptPeriodYear').hidden=p!=='Year';
+    };
+    const renderCalendar = () => {
+      pickerMode='calendar';const y=pickerMonth.getFullYear(),m=pickerMonth.getMonth();
+      const first=new Date(y,m,1),start=new Date(y,m,1);start.setDate(1-((first.getDay()+6)%7));
+      let html=`<div class="memory-picker-header"><button type="button" class="memory-picker-nav" data-move="-1">‹</button><strong>${pickerMonth.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</strong><button type="button" class="memory-picker-nav" data-move="1">›</button></div><div class="memory-calendar-grid">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<span class="memory-calendar-weekday">${d}</span>`).join('')}`;
+      for(let i=0;i<42;i++){const d=new Date(start);d.setDate(start.getDate()+i);const value=iso(d);const selected=period.value==='Week'?iso(monday($('memRptPeriodWeek').value||todayISO))===iso(monday(value)):($('memRptPeriodDate').value||todayISO)===value;html+=`<button type="button" class="memory-calendar-day ${d.getMonth()!==m?'outside-month':''} ${value===todayISO?'today':''} ${selected?'selected':''}" data-date="${value}">${d.getDate()}</button>`;}
+      html+=`</div><div class="memory-picker-footer"><button type="button" class="memory-picker-action" data-action="today">Today</button><button type="button" class="memory-picker-action" data-action="month">Choose Month</button><button type="button" class="memory-picker-action" data-action="close">Close</button></div>`;periodPicker.innerHTML=html;
+    };
+    const renderMonths = () => { pickerMode='months';const y=pickerMonth.getFullYear();const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];const current=$('memRptPeriodMonth').value||todayISO.slice(0,7);periodPicker.innerHTML=`<div class="memory-picker-header"><button type="button" class="memory-picker-nav" data-year="-1">‹</button><strong>${y}</strong><button type="button" class="memory-picker-nav" data-year="1">›</button></div><div class="memory-month-grid">${months.map((name,i)=>`<button type="button" class="memory-month-choice ${current===`${y}-${String(i+1).padStart(2,'0')}`?'selected':''}" data-month="${String(i+1).padStart(2,'0')}">${name}</button>`).join('')}</div><div class="memory-picker-footer"><button type="button" class="memory-picker-action" data-action="close">Close</button></div>`; };
+    const openPicker = () => { const v=period.value;const current=v==='Month'?($('memRptPeriodMonth').value||todayISO.slice(0,7)+'-01'):v==='Week'?($('memRptPeriodWeek').value||todayISO):($('memRptPeriodDate').value||todayISO);pickerMonth=parseDate(current);pickerMonth.setDate(1);if(v==='Month')renderMonths();else renderCalendar();periodPicker.hidden=false;periodDisplay.setAttribute('aria-expanded','true'); };
+    periodDisplay.onclick=()=>periodPicker.hidden?openPicker():closePicker();
+    periodPicker.addEventListener('click',event=>{
+      const btn=event.target.closest('button');if(!btn)return;
+      if(btn.dataset.move){pickerMonth.setMonth(pickerMonth.getMonth()+Number(btn.dataset.move));renderCalendar();return;}
+      if(btn.dataset.year){pickerMonth.setFullYear(pickerMonth.getFullYear()+Number(btn.dataset.year));renderMonths();return;}
+      if(btn.dataset.action==='close'){closePicker();return;}
+      if(btn.dataset.action==='today'){if(period.value==='Week')$('memRptPeriodWeek').value=todayISO;else $('memRptPeriodDate').value=todayISO;pickerMonth=parseDate(todayISO);renderCalendar();updatePeriodDisplay();closePicker();return;}
+      if(btn.dataset.action==='month'){renderMonths();return;}
+      if(btn.dataset.date){if(period.value==='Week')$('memRptPeriodWeek').value=btn.dataset.date;else $('memRptPeriodDate').value=btn.dataset.date;updatePeriodDisplay();closePicker();return;}
+      if(btn.dataset.month){$('memRptPeriodMonth').value=`${pickerMonth.getFullYear()}-${btn.dataset.month}`;updatePeriodDisplay();closePicker();}
+    });
+    period.onchange=()=>{closePicker();updatePeriodDisplay();};
+    type.onchange=()=>{columnsField.hidden=type.value!=='Detailed';};
+    type.dispatchEvent(new Event('change'));updatePeriodDisplay();
+    document.addEventListener('click',event=>{if(!periodPicker.hidden&&!event.target.closest('#memRptPeriodPicker')&&!event.target.closest('#memRptPeriodDisplay'))closePicker();},{once:false});
+    $('memRptBack').onclick=backFunction;
+    $('memRptGenerate').onclick=async()=>{
+      const token=sessionStorage.getItem('sessionToken')||'';
+      if(!token){showMessage('Please login again.','warning',3000);return;}
+      const from=$('memRptFrom')?.value||'',to=$('memRptTo')?.value||'';
+      if(customSearch&&from&&to&&from>to){showMessage('From Date cannot be later than To Date.','warning',3000);return;}
+      const filters={reportType:type.value,period:period.value,periodDate:$('memRptPeriodDate').value,periodWeek:$('memRptPeriodWeek').value,periodMonth:$('memRptPeriodMonth').value,periodYear:$('memRptPeriodYear').value,fromDate:customSearch?from:'',toDate:customSearch?to:'',title:$('memRptTitle').value.trim(),memoryType:$('memRptMemoryType').value,category:$('memRptCategory').value,place:$('memRptPlace').value.trim(),priority:$('memRptPriority').value,mediaTypes:Array.from(document.querySelectorAll('input[name="memRptMedia"]:checked')).map(cb=>cb.value),myGroups:$('memRptGroups').checked,favourites:$('memRptFavourites').checked,description:$('memRptDescription').value.trim(),columns:$('memRptColumns').value,customSearch};
+      const status=$('memRptStatus'),resultBox=$('memRptResults'),run=$('memRptGenerate');run.disabled=true;status.textContent='Loading Memories Reports...';
+      try{
+        const api='https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec';
+        const params=new URLSearchParams({action:'getMemoryReports',sessionToken:token});
+        const response=await fetch(api,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params});
+        const data=await response.json();if(data.status!=='success')throw new Error(data.message||'Unable to load Memories.');
+        window.memoryReportData={filters,myMemories:data.myMemories||[],sharedMemories:data.sharedMemories||[]};
+        status.textContent='';resultBox.innerHTML='<div style="text-align:center;color:#245b91;padding:12px;">Memories loaded: '+(window.memoryReportData.myMemories.length+window.memoryReportData.sharedMemories.length)+'<br><small>Report filtering and display are not yet connected to the loaded records.</small></div>';
+      }catch(error){status.textContent=error.message||'Unable to load Memories.';}finally{run.disabled=false;}
+    };
+}
