@@ -3899,7 +3899,7 @@ function memoryReportsStyleOnce() {
       .memory-report-page .expense-panel{max-width:900px;margin:0 auto;padding:14px;background:#f0f7ff;border:1px solid #c4d4ff;border-radius:14px;box-sizing:border-box}
       .memory-report-page .expense-filter-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:12px!important;row-gap:10px!important;align-content:start}
       .memory-report-page .expense-field{display:flex;flex-direction:column;gap:7px!important;min-width:0;margin:0!important}
-      .memory-report-page .expense-label{display:block;color:#2d5274;font-weight:600;line-height:1.2;margin:0!important;white-space:normal}
+      .memory-report-page .expense-label{display:block;color:#2d5274;font-weight:400;font-size:12px;line-height:1.2;margin:0!important;white-space:normal}
       .memory-report-page input:not([type=checkbox]):not([type=hidden]),.memory-report-page select{display:block;width:100%;min-width:0;max-width:100%;height:40px;min-height:40px;padding:6px 9px;box-sizing:border-box;border:1px solid #9bb9d4;border-radius:8px;background:#fff;color:#222;font:inherit}
       .memory-report-page .memory-period-label-row{display:grid;grid-template-columns:minmax(0,45fr) minmax(0,55fr);align-items:center;gap:0;width:100%}
       .memory-report-page .memory-period-context{text-align:right!important;justify-self:end!important}
@@ -3982,7 +3982,8 @@ function memoryReportsFilterPageNew(backFunction, customSearch = false) {
             <div class="expense-field"><label class="expense-label" for="memRptCategory">Category</label><select id="memRptCategory"><option value="">All</option><option>Family</option><option>Childhood</option><option>Birthdays</option><option>Festivals</option><option>Functions</option><option>Education</option><option>Trips</option><option>Achievements</option><option>Others</option></select></div>
             <div class="expense-field"><label class="expense-label" for="memRptPlace">Memory Place</label><input type="search" id="memRptPlace" placeholder="Search Memory Place"></div>
             <div class="expense-field"><label class="expense-label" for="memRptPriority">Priority</label><select id="memRptPriority"><option value="">All Priorities</option><option>High</option><option>Medium</option><option>Low</option></select></div>
-            <div class="expense-field" style="grid-column:1/-1"><label class="expense-label" for="memRptDescription">Description</label><input type="search" id="memRptDescription" placeholder="Search Description"></div>
+            <div class="expense-field"><label class="expense-label" for="memRptDescription">Description</label><input type="search" id="memRptDescription" placeholder="Search Description"></div>
+            <div class="expense-field" id="memRptColumnsField"><label class="expense-label" for="memRptColumns">Show Columns</label><select id="memRptColumns"><option value="Limited" selected>Limited</option><option value="All">All</option></select></div>
             <div class="memory-check-field"><label class="expense-label">Media Type</label><div class="memory-check-row">
               <label><input type="checkbox" name="memRptMedia" value="Photos">Photos</label>
               <label><input type="checkbox" name="memRptMedia" value="Videos">Videos</label>
@@ -3994,7 +3995,6 @@ function memoryReportsFilterPageNew(backFunction, customSearch = false) {
               <label><input type="checkbox" id="memRptGroups" checked>My Groups</label>
               <label><input type="checkbox" id="memRptFavourites" checked>Favourites</label>
             </div></div>
-            <div class="expense-field" id="memRptColumnsField"><label class="expense-label" for="memRptColumns">Show Columns</label><select id="memRptColumns"><option value="Limited" selected>Limited</option><option value="All">All</option></select></div>
           </div>
           <div class="memory-report-actions"><button type="button" class="expense-primary" id="memRptGenerate">Show Report</button><button type="button" class="expense-secondary" id="memRptBack">← Back</button></div>
           <div id="memRptStatus" class="memory-report-status" role="status" aria-live="polite"></div>
