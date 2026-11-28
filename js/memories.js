@@ -1428,12 +1428,12 @@ function showFavouriteMembers() {
                     }
 
                     // Remove member from current data
-                    group.members = group.members.filter(m =>
-                        !(
-                            m.userId === member.userId
-&& m.familyId === group.familyId
-                        )
-                    );
+                    group.members = (group.members || []).filter(m =>
+    !(
+        String(m.userId) === String(member.userId) &&
+        String(m.familyId) === String(group.familyId)
+    )
+);
 
                     // Remove from selected members cache
                     const listId = String(item.favouriteListId);
@@ -1460,35 +1460,20 @@ function showFavouriteMembers() {
                     });
 
                     // Update cached list data
-// Update Favourite List cache immediately
+// Update current Favourite List and global cache
+const currentListId = String(item.favouriteListId);
+
 if (Array.isArray(window.memoryFavouritesDataCache)) {
-    window.memoryFavouritesDataCache =
-        window.memoryFavouritesDataCache.map(list => {
+    const cachedList = window.memoryFavouritesDataCache.find(
+        list => String(list.favouriteListId) === currentListId
+    );
 
-            if (
-                String(list.favouriteListId) !==
-                String(item.favouriteListId)
-            ) {
-                return list;
-            }
-
-            return {
-                ...list,
-                groups: (list.groups || []).map(g => ({
-                    ...g,
-                    members: (g.members || []).filter(m =>
-                        !(
-                            String(m.userId) === String(member.userId) &&
-                            String(g.familyId) === String(group.familyId)
-                        )
-                    )
-                }))
-            };
-        });
+    if (cachedList) {
+        cachedList.groups = item.groups;
+    }
 }
 
 window.memoryFavouritesDataPromise = null;
-
 // Show empty message if no members remain
 if (
     !membersBox.querySelector('.memory-favourite-member-row')
