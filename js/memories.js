@@ -1461,8 +1461,42 @@ function showFavouriteMembers() {
                     });
 
                     // Update cached list data
-window.memoryFavouritesDataCache = null;
+// Update Favourite List cache immediately
+if (Array.isArray(window.memoryFavouritesDataCache)) {
+    window.memoryFavouritesDataCache =
+        window.memoryFavouritesDataCache.map(list => {
+
+            if (
+                String(list.favouriteListId) !==
+                String(item.favouriteListId)
+            ) {
+                return list;
+            }
+
+            return {
+                ...list,
+                groups: (list.groups || []).map(g => ({
+                    ...g,
+                    members: (g.members || []).filter(m =>
+                        !(
+                            String(m.userId) === String(member.userId) &&
+                            String(g.familyId) === String(group.familyId)
+                        )
+                    )
+                }))
+            };
+        });
+}
+
 window.memoryFavouritesDataPromise = null;
+
+// Show empty message if no members remain
+if (
+    !membersBox.querySelector('.memory-favourite-member-row')
+) {
+    membersBox.innerHTML =
+        '<div style="padding:12px 0;text-align:center;color:#888;font-size:13px;">No Members in this Favourite List.</div>';
+}
                     showMemoryMessage(
                         'Success',
                         'Member removed from Favourite List.'
