@@ -1,5 +1,4 @@
 
-
 /* =====================================
    oneFaMiLe - MEMORIES FRONTEND
 ===================================== */
@@ -678,9 +677,9 @@ align-items: stretch !important;
     position: relative !important;
     display: block !important;
     width: 100% !important;
-    height: 18px !important;
-    min-height: 18px !important;
-    max-height: 18px !important;
+    height: 16px !important;
+    min-height: 16px !important;
+    max-height: 16px !important;
     margin: 0 !important;
     padding: 0 !important;
     box-sizing: border-box !important;
