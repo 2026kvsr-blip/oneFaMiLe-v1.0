@@ -1427,13 +1427,53 @@ function showFavouriteMembers() {
                         );
                     }
 
-                    // Remove member from current data
-                    group.members = (group.members || []).filter(m =>
-    !(
-        String(m.userId) === String(member.userId) &&
-        String(m.familyId) === String(group.familyId)
-    )
+                  
+// Remove member from current group immediately
+group.members = (group.members || []).filter(m =>
+    String(m.userId) !== String(member.userId)
 );
+
+// Update selected members cache
+const listId = String(item.favouriteListId);
+
+if (selectedFavouriteMembers[listId]) {
+    selectedFavouriteMembers[listId] =
+        selectedFavouriteMembers[listId].filter(m =>
+            !(
+                String(m.userId) === String(member.userId) &&
+                String(m.familyId) === String(group.familyId)
+            )
+        );
+}
+
+// Update global Favourite List cache
+if (Array.isArray(window.memoryFavouritesDataCache)) {
+    const cachedList = window.memoryFavouritesDataCache.find(
+        list => String(list.favouriteListId) === listId
+    );
+
+    if (cachedList) {
+        cachedList.groups = item.groups;
+    }
+}
+
+// Remove member row immediately
+memberRow.remove();
+
+// Update serial numbers
+membersBox.querySelectorAll('.memory-favourite-member-row')
+    .forEach((row, index) => {
+        row.querySelector('span').textContent = (index + 1) + '.';
+    });
+
+// Show empty message if no members remain
+if (!membersBox.querySelector('.memory-favourite-member-row')) {
+    membersBox.innerHTML =
+        '<div style="padding:12px 0;text-align:center;color:#888;font-size:13px;">No Members in this Favourite List.</div>';
+}
+
+window.memoryFavouritesDataPromise = null;
+
 
                     // Remove from selected members cache
                     const listId = String(item.favouriteListId);
