@@ -5101,8 +5101,17 @@ class="back-btn">
 
 document.getElementById("memoryReports").onclick = ()=>{
 
-    memoryReportsFilterPage(
-        ()=>memoriesBtn.click()
+    memoryReportsFilterPageNew(
+        ()=>memoriesBtn.click(),
+        false
+    );
+
+};
+    document.getElementById("memorySearch").onclick = ()=>{
+
+    memoryReportsFilterPageNew(
+        ()=>memoriesBtn.click(),
+        true
     );
 
 };
@@ -5955,11 +5964,11 @@ document.getElementById("catReports").onclick = ()=>{
     const backFunction = () =>
         reportCategory(module, fromBottomReports);
 
-    if (module === "Memories") {
-        memoryReportsFilterPage(backFunction);
-    } else {
-        reportsLayout(module + " Reports", backFunction);
-    }
+   if (module === "Memories") {
+    memoryReportsFilterPageNew(backFunction, false);
+} else {
+    reportsLayout(module + " Reports", backFunction);
+}
 
 };
 
