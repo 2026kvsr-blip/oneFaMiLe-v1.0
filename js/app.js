@@ -5697,6 +5697,189 @@ lockState.sensitive.attempts = 0;
 }
 
 
+function memoryReportsFilterPage(backFunction) {
+    showPage(`
+        <h2 class="page-title">Memories Reports</h2>
+
+        <div class="expense-panel" style="max-width:900px;margin:auto;">
+            <div class="expense-fields-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+
+                <div class="expense-field">
+                    <label class="expense-label">Report Type</label>
+                    <select id="memRptType">
+                        <option value="Abstract">Abstract</option>
+                        <option value="Detailed">Detailed</option>
+                    </select>
+                </div>
+
+                <div class="expense-field">
+                    <label class="expense-label">Memory Date – From</label>
+                    <input type="date" id="memRptFrom">
+                </div>
+
+                <div class="expense-field">
+                    <label class="expense-label">Memory Date – To</label>
+                    <input type="date" id="memRptTo">
+                </div>
+
+                <div class="expense-field">
+                    <label class="expense-label">Title</label>
+                    <input type="text" id="memRptTitle" placeholder="Search Title">
+                </div>
+
+                <div class="expense-field">
+                    <label class="expense-label">Memory Type</label>
+                    <input type="text" id="memRptMemoryType" placeholder="Memory Type">
+                </div>
+
+                <div class="expense-field">
+                    <label class="expense-label">Category</label>
+                    <input type="text" id="memRptCategory" placeholder="Category">
+                </div>
+
+                <div class="expense-field">
+                    <label class="expense-label">Memory Place</label>
+                    <input type="text" id="memRptPlace" placeholder="Memory Place">
+                </div>
+
+                <div class="expense-field">
+                    <label class="expense-label">Priority</label>
+                    <select id="memRptPriority">
+                        <option value="">All Priorities</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-top:12px;">
+                <label class="expense-label">Media Type</label>
+                <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:7px;">
+                    <label><input type="checkbox" name="memRptMedia" value="Photos"> Photos</label>
+                    <label><input type="checkbox" name="memRptMedia" value="Videos"> Videos</label>
+                    <label><input type="checkbox" name="memRptMedia" value="Voice Msg"> Voice Msg</label>
+                    <label><input type="checkbox" name="memRptMedia" value="Text Msg"> Text Msg</label>
+                    <label><input type="checkbox" name="memRptMedia" value="All"> All</label>
+                </div>
+            </div>
+
+            <div style="margin-top:12px;">
+                <label class="expense-label">Visible To</label>
+                <div style="display:flex;gap:20px;margin-top:7px;">
+                    <label><input type="checkbox" id="memRptGroups" checked> My Groups</label>
+                    <label><input type="checkbox" id="memRptFavourites" checked> Favourites</label>
+                </div>
+            </div>
+
+            <div class="expense-field" style="margin-top:12px;">
+                <label class="expense-label">Description</label>
+                <input type="text" id="memRptDescription" placeholder="Search Description">
+            </div>
+
+            <div id="memRptColumnsBox" style="margin-top:12px;">
+                <label class="expense-label">Show Columns</label>
+                <select id="memRptColumns">
+                    <option value="Limited">Limited</option>
+                    <option value="All">All</option>
+                </select>
+            </div>
+
+            <div style="display:flex;justify-content:center;gap:12px;margin-top:18px;">
+                <button class="grid-btn" id="memRptGenerate">View Report</button>
+                <button class="back-btn" id="memRptBack">← Back</button>
+            </div>
+        </div>
+
+        <div id="memRptResults" style="margin-top:16px;"></div>
+    `);
+
+    const typeSelect = document.getElementById("memRptType");
+    const columnsBox = document.getElementById("memRptColumnsBox");
+
+    typeSelect.onchange = () => {
+        columnsBox.style.display =
+            typeSelect.value === "Detailed" ? "" : "none";
+    };
+    typeSelect.dispatchEvent(new Event("change"));
+
+    document.getElementById("memRptBack").onclick = backFunction;
+
+    document.getElementById("memRptGenerate").onclick = async () => {
+        const resultBox = document.getElementById("memRptResults");
+        const token = sessionStorage.getItem("sessionToken") || "";
+
+        if (!token) {
+            showMessage("Please login again.", "warning", 3000);
+            return;
+        }
+
+        const selectedMedia = Array.from(
+            document.querySelectorAll('input[name="memRptMedia"]:checked')
+        ).map(cb => cb.value);
+
+        const filters = {
+            reportType: typeSelect.value,
+            fromDate: document.getElementById("memRptFrom").value,
+            toDate: document.getElementById("memRptTo").value,
+            title: document.getElementById("memRptTitle").value.trim(),
+            memoryType: document.getElementById("memRptMemoryType").value.trim(),
+            category: document.getElementById("memRptCategory").value.trim(),
+            place: document.getElementById("memRptPlace").value.trim(),
+            priority: document.getElementById("memRptPriority").value,
+            mediaTypes: selectedMedia,
+            myGroups: document.getElementById("memRptGroups").checked,
+            favourites: document.getElementById("memRptFavourites").checked,
+            description: document.getElementById("memRptDescription").value.trim(),
+            columns: document.getElementById("memRptColumns").value
+        };
+
+        if (filters.fromDate && filters.toDate &&
+            filters.fromDate > filters.toDate) {
+            showMessage("From Date cannot be later than To Date.", "warning", 3000);
+            return;
+        }
+
+        resultBox.textContent = "Loading Memories Reports...";
+
+        try {
+            const api = "https://script.google.com/macros/s/AKfycbzYblwgxrGFDF2MKhiWLvrlSLdJTIgQoplD0Z2-A_tLmwrdUPWsTqzOF9-txnug4DFLpg/exec";
+            const params = new URLSearchParams({
+                action: "getMemoryReports",
+                sessionToken: token
+            });
+
+            const response = await fetch(api, {
+                method: "POST",
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: params
+            });
+
+            const data = await response.json();
+
+            if (data.status !== "success") {
+                throw new Error(data.message || "Unable to load Memories.");
+            }
+
+            window.memoryReportData = {
+                filters: filters,
+                myMemories: data.myMemories || [],
+                sharedMemories: data.sharedMemories || []
+            };
+
+            resultBox.innerHTML =
+                '<div style="text-align:center;color:#245b91;padding:12px;">' +
+                'Memories loaded: ' +
+                (window.memoryReportData.myMemories.length +
+                 window.memoryReportData.sharedMemories.length) +
+                '<br><small>Filter and report display will be applied in the next step.</small></div>';
+
+        } catch (error) {
+            resultBox.textContent = error.message;
+        }
+    };
+}
+
 function reportCategory(module, fromBottomReports = false){
 
 showPage(`
@@ -5774,10 +5957,14 @@ class="back-btn">
 
 document.getElementById("catReports").onclick = ()=>{
 
-    reportsLayout(
-        module + " Reports",
-        ()=>reportCategory(module, fromBottomReports)
-    );
+    const backFunction = () =>
+        reportCategory(module, fromBottomReports);
+
+    if (module === "Memories") {
+        memoryReportsFilterPage(backFunction);
+    } else {
+        reportsLayout(module + " Reports", backFunction);
+    }
 
 };
 
