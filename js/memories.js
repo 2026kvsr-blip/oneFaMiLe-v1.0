@@ -2791,13 +2791,16 @@ async function compressMemoryPhoto(file) {
 }
 
    
+
 // CUSTOM MEMORY MESSAGE WINDOW
 function showMemoryMessage(title, message) {
     const overlay = document.createElement('div');
     overlay.className = 'memory-delete-overlay';
-if (title === 'Success') {
-    overlay.classList.add('memory-success-overlay');
-}
+
+    if (title === 'Success') {
+        overlay.classList.add('memory-success-overlay');
+    }
+
     overlay.innerHTML = `
         <div class="memory-delete-box">
             <h3>${title}</h3>
@@ -2811,16 +2814,32 @@ if (title === 'Success') {
 
     document.body.appendChild(overlay);
 
-    overlay.querySelector('.memory-delete-confirm').onclick = () => {
+    let closeTimer = null;
+
+    function closeMessage() {
+        if (closeTimer) {
+            clearTimeout(closeTimer);
+            closeTimer = null;
+        }
         overlay.remove();
-    };
+    }
+
+    overlay.querySelector('.memory-delete-confirm').onclick =
+        closeMessage;
 
     overlay.addEventListener('click', event => {
         if (event.target === overlay) {
-            overlay.remove();
+            closeMessage();
         }
     });
+
+    // Success message: auto close after 2 seconds
+    if (title === 'Success') {
+        closeTimer = setTimeout(closeMessage, 2000);
+    }
 }
+
+   
 function updateMemoryPhotoSlots() {
     memoryPhotoSlots.innerHTML = '';
 
