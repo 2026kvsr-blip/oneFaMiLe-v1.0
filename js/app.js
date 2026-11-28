@@ -5101,16 +5101,11 @@ class="back-btn">
 
 document.getElementById("memoryReports").onclick = ()=>{
 
-    reportsLayout(
-
-    "Memory Reports",
-
-    ()=>memoriesBtn.click()
-
-);
+    memoryReportsFilterPage(
+        ()=>memoriesBtn.click()
+    );
 
 };
-
 document.getElementById("memorySensitive").onclick = ()=>{
 
     openSensitive(
