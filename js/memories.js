@@ -2558,6 +2558,7 @@ document.getElementById('memorySaveBtn').addEventListener('click', async () => {
 
       const shareSelection = [];
 
+       
 if (['group', 'custom'].includes(selectedMemoryShareType)) {
 
     shareGroupsContainer.querySelectorAll('.memory-share-group').forEach(card => {
